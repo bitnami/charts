@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/kong
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kong
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -22,7 +24,7 @@ Extra functionalities beyond the Kong core are extended through plugins. Kong is
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Kong in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Kong in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -35,8 +37,10 @@ Looking to use Kong in production? Try [VMware Application Catalog](https://bitn
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/kong
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kong
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy kong on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -77,16 +81,15 @@ helm delete my-release
 
 ### Kong common parameters
 
-| Name                | Description                                                                                          | Value                |
-| ------------------- | ---------------------------------------------------------------------------------------------------- | -------------------- |
-| `image.registry`    | kong image registry                                                                                  | `docker.io`          |
-| `image.repository`  | kong image repository                                                                                | `bitnami/kong`       |
-| `image.tag`         | kong image tag (immutable tags are recommended)                                                      | `3.4.2-debian-11-r0` |
-| `image.digest`      | kong image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
-| `image.pullPolicy`  | kong image pull policy                                                                               | `IfNotPresent`       |
-| `image.pullSecrets` | Specify docker-registry secret names as an array                                                     | `[]`                 |
-| `image.debug`       | Enable image debug mode                                                                              | `false`              |
-| `database`          | Select which database backend Kong will use. Can be 'postgresql', 'cassandra' or 'off'               | `postgresql`         |
+| Name                | Description                                                                                          | Value                  |
+| ------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`    | kong image registry                                                                                  | `REGISTRY_NAME`        |
+| `image.repository`  | kong image repository                                                                                | `REPOSITORY_NAME/kong` |
+| `image.digest`      | kong image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `image.pullPolicy`  | kong image pull policy                                                                               | `IfNotPresent`         |
+| `image.pullSecrets` | Specify docker-registry secret names as an array                                                     | `[]`                   |
+| `image.debug`       | Enable image debug mode                                                                              | `false`                |
+| `database`          | Select which database backend Kong will use. Can be 'postgresql', 'cassandra' or 'off'               | `postgresql`           |
 
 ### Kong deployment / daemonset parameters
 
@@ -210,54 +213,53 @@ helm delete my-release
 
 ### Kong Ingress Controller Container Parameters
 
-| Name                                                            | Description                                                                                                                                   | Value                             |
-| --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
-| `ingressController.enabled`                                     | Enable/disable the Kong Ingress Controller                                                                                                    | `true`                            |
-| `ingressController.image.registry`                              | Kong Ingress Controller image registry                                                                                                        | `docker.io`                       |
-| `ingressController.image.repository`                            | Kong Ingress Controller image name                                                                                                            | `bitnami/kong-ingress-controller` |
-| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.12.0-debian-11-r10`            |
-| `ingressController.image.digest`                                | Kong Ingress Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                       | `""`                              |
-| `ingressController.image.pullPolicy`                            | Kong Ingress Controller image pull policy                                                                                                     | `IfNotPresent`                    |
-| `ingressController.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                              | `[]`                              |
-| `ingressController.proxyReadyTimeout`                           | Maximum time (in seconds) to wait for the Kong container to be ready                                                                          | `300`                             |
-| `ingressController.ingressClass`                                | Name of the class to register Kong Ingress Controller (useful when having other Ingress Controllers in the cluster)                           | `kong`                            |
-| `ingressController.command`                                     | Override default container command (useful when using custom images)                                                                          | `[]`                              |
-| `ingressController.args`                                        | Override default container args (useful when using custom images)                                                                             | `[]`                              |
-| `ingressController.extraEnvVars`                                | Array containing extra env vars to configure Kong                                                                                             | `[]`                              |
-| `ingressController.extraEnvVarsCM`                              | ConfigMap containing extra env vars to configure Kong Ingress Controller                                                                      | `""`                              |
-| `ingressController.extraEnvVarsSecret`                          | Secret containing extra env vars to configure Kong Ingress Controller (in case of sensitive data)                                             | `""`                              |
-| `ingressController.extraVolumeMounts`                           | Array of extra volume mounts to be added to the Kong Ingress Controller container (evaluated as template). Normally used with `extraVolumes`. | `[]`                              |
-| `ingressController.containerPorts.health`                       | Kong Ingress Controller health container port                                                                                                 | `10254`                           |
-| `ingressController.resources.limits`                            | The resources limits for the Kong Ingress Controller container                                                                                | `{}`                              |
-| `ingressController.resources.requests`                          | The requested resources for the Kong Ingress Controller container                                                                             | `{}`                              |
-| `ingressController.livenessProbe.enabled`                       | Enable livenessProbe on Kong Ingress Controller containers                                                                                    | `true`                            |
-| `ingressController.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                                                                       | `120`                             |
-| `ingressController.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                                                              | `10`                              |
-| `ingressController.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                                                             | `5`                               |
-| `ingressController.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                                                           | `6`                               |
-| `ingressController.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                                                           | `1`                               |
-| `ingressController.readinessProbe.enabled`                      | Enable readinessProbe on Kong Ingress Controller containers                                                                                   | `true`                            |
-| `ingressController.readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                                                                      | `30`                              |
-| `ingressController.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                                                             | `10`                              |
-| `ingressController.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                                                            | `5`                               |
-| `ingressController.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                                                          | `6`                               |
-| `ingressController.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                                                          | `1`                               |
-| `ingressController.startupProbe.enabled`                        | Enable startupProbe on Kong Ingress Controller containers                                                                                     | `false`                           |
-| `ingressController.startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                                                                        | `10`                              |
-| `ingressController.startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                                                                               | `15`                              |
-| `ingressController.startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                                                                              | `3`                               |
-| `ingressController.startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                                                                            | `20`                              |
-| `ingressController.startupProbe.successThreshold`               | Success threshold for startupProbe                                                                                                            | `1`                               |
-| `ingressController.customLivenessProbe`                         | Override default liveness probe (Kong Ingress Controller container)                                                                           | `{}`                              |
-| `ingressController.customReadinessProbe`                        | Override default readiness probe (Kong Ingress Controller container)                                                                          | `{}`                              |
-| `ingressController.customStartupProbe`                          | Override default startup probe (Kong Ingress Controller container)                                                                            | `{}`                              |
-| `ingressController.lifecycleHooks`                              | Lifecycle hooks (Kong Ingress Controller container)                                                                                           | `{}`                              |
-| `ingressController.serviceAccount.create`                       | Enable the creation of a ServiceAccount for Keycloak pods                                                                                     | `true`                            |
-| `ingressController.serviceAccount.name`                         | Name of the created ServiceAccount (name generated using common.names.fullname template otherwise)                                            | `""`                              |
-| `ingressController.serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod                                                                                               | `true`                            |
-| `ingressController.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                          | `{}`                              |
-| `ingressController.rbac.create`                                 | Create the necessary RBAC resources for the Ingress Controller to work                                                                        | `true`                            |
-| `ingressController.rbac.rules`                                  | Custom RBAC rules                                                                                                                             | `[]`                              |
+| Name                                                            | Description                                                                                                                                   | Value                                     |
+| --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| `ingressController.enabled`                                     | Enable/disable the Kong Ingress Controller                                                                                                    | `true`                                    |
+| `ingressController.image.registry`                              | Kong Ingress Controller image registry                                                                                                        | `REGISTRY_NAME`                           |
+| `ingressController.image.repository`                            | Kong Ingress Controller image name                                                                                                            | `REPOSITORY_NAME/kong-ingress-controller` |
+| `ingressController.image.digest`                                | Kong Ingress Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                       | `""`                                      |
+| `ingressController.image.pullPolicy`                            | Kong Ingress Controller image pull policy                                                                                                     | `IfNotPresent`                            |
+| `ingressController.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                              | `[]`                                      |
+| `ingressController.proxyReadyTimeout`                           | Maximum time (in seconds) to wait for the Kong container to be ready                                                                          | `300`                                     |
+| `ingressController.ingressClass`                                | Name of the class to register Kong Ingress Controller (useful when having other Ingress Controllers in the cluster)                           | `kong`                                    |
+| `ingressController.command`                                     | Override default container command (useful when using custom images)                                                                          | `[]`                                      |
+| `ingressController.args`                                        | Override default container args (useful when using custom images)                                                                             | `[]`                                      |
+| `ingressController.extraEnvVars`                                | Array containing extra env vars to configure Kong                                                                                             | `[]`                                      |
+| `ingressController.extraEnvVarsCM`                              | ConfigMap containing extra env vars to configure Kong Ingress Controller                                                                      | `""`                                      |
+| `ingressController.extraEnvVarsSecret`                          | Secret containing extra env vars to configure Kong Ingress Controller (in case of sensitive data)                                             | `""`                                      |
+| `ingressController.extraVolumeMounts`                           | Array of extra volume mounts to be added to the Kong Ingress Controller container (evaluated as template). Normally used with `extraVolumes`. | `[]`                                      |
+| `ingressController.containerPorts.health`                       | Kong Ingress Controller health container port                                                                                                 | `10254`                                   |
+| `ingressController.resources.limits`                            | The resources limits for the Kong Ingress Controller container                                                                                | `{}`                                      |
+| `ingressController.resources.requests`                          | The requested resources for the Kong Ingress Controller container                                                                             | `{}`                                      |
+| `ingressController.livenessProbe.enabled`                       | Enable livenessProbe on Kong Ingress Controller containers                                                                                    | `true`                                    |
+| `ingressController.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                                                                       | `120`                                     |
+| `ingressController.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                                                              | `10`                                      |
+| `ingressController.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                                                             | `5`                                       |
+| `ingressController.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                                                           | `6`                                       |
+| `ingressController.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                                                           | `1`                                       |
+| `ingressController.readinessProbe.enabled`                      | Enable readinessProbe on Kong Ingress Controller containers                                                                                   | `true`                                    |
+| `ingressController.readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                                                                      | `30`                                      |
+| `ingressController.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                                                             | `10`                                      |
+| `ingressController.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                                                            | `5`                                       |
+| `ingressController.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                                                          | `6`                                       |
+| `ingressController.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                                                          | `1`                                       |
+| `ingressController.startupProbe.enabled`                        | Enable startupProbe on Kong Ingress Controller containers                                                                                     | `false`                                   |
+| `ingressController.startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                                                                        | `10`                                      |
+| `ingressController.startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                                                                               | `15`                                      |
+| `ingressController.startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                                                                              | `3`                                       |
+| `ingressController.startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                                                                            | `20`                                      |
+| `ingressController.startupProbe.successThreshold`               | Success threshold for startupProbe                                                                                                            | `1`                                       |
+| `ingressController.customLivenessProbe`                         | Override default liveness probe (Kong Ingress Controller container)                                                                           | `{}`                                      |
+| `ingressController.customReadinessProbe`                        | Override default readiness probe (Kong Ingress Controller container)                                                                          | `{}`                                      |
+| `ingressController.customStartupProbe`                          | Override default startup probe (Kong Ingress Controller container)                                                                            | `{}`                                      |
+| `ingressController.lifecycleHooks`                              | Lifecycle hooks (Kong Ingress Controller container)                                                                                           | `{}`                                      |
+| `ingressController.serviceAccount.create`                       | Enable the creation of a ServiceAccount for Keycloak pods                                                                                     | `true`                                    |
+| `ingressController.serviceAccount.name`                         | Name of the created ServiceAccount (name generated using common.names.fullname template otherwise)                                            | `""`                                      |
+| `ingressController.serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod                                                                                               | `true`                                    |
+| `ingressController.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                          | `{}`                                      |
+| `ingressController.rbac.create`                                 | Create the necessary RBAC resources for the Ingress Controller to work                                                                        | `true`                                    |
+| `ingressController.rbac.rules`                                  | Custom RBAC rules                                                                                                                             | `[]`                                      |
 
 ### Kong Migration job Parameters
 
@@ -278,27 +280,26 @@ helm delete my-release
 
 ### PostgreSQL Parameters
 
-| Name                                            | Description                                                                                                | Value                  |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `postgresql.enabled`                            | Switch to enable or disable the PostgreSQL helm chart                                                      | `true`                 |
-| `postgresql.auth.postgresPassword`              | Password for the "postgres" admin user                                                                     | `""`                   |
-| `postgresql.auth.username`                      | Name for a custom user to create                                                                           | `kong`                 |
-| `postgresql.auth.password`                      | Password for the custom user to create                                                                     | `""`                   |
-| `postgresql.auth.database`                      | Name for a custom database to create                                                                       | `kong`                 |
-| `postgresql.auth.existingSecret`                | Name of existing secret to use for PostgreSQL credentials                                                  | `""`                   |
-| `postgresql.auth.usePasswordFiles`              | Mount credentials as a files instead of using an environment variable                                      | `false`                |
-| `postgresql.architecture`                       | PostgreSQL architecture (`standalone` or `replication`)                                                    | `standalone`           |
-| `postgresql.image.registry`                     | PostgreSQL image registry                                                                                  | `docker.io`            |
-| `postgresql.image.repository`                   | PostgreSQL image repository                                                                                | `bitnami/postgresql`   |
-| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                                                      | `14.9.0-debian-11-r56` |
-| `postgresql.image.digest`                       | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `postgresql.external.host`                      | Database host                                                                                              | `""`                   |
-| `postgresql.external.port`                      | Database port number                                                                                       | `5432`                 |
-| `postgresql.external.user`                      | Non-root username for Kong                                                                                 | `kong`                 |
-| `postgresql.external.password`                  | Password for the non-root username for Kong                                                                | `""`                   |
-| `postgresql.external.database`                  | Kong database name                                                                                         | `kong`                 |
-| `postgresql.external.existingSecret`            | Name of an existing secret resource containing the database credentials                                    | `""`                   |
-| `postgresql.external.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                         | `""`                   |
+| Name                                            | Description                                                                                                | Value                        |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `postgresql.enabled`                            | Switch to enable or disable the PostgreSQL helm chart                                                      | `true`                       |
+| `postgresql.auth.postgresPassword`              | Password for the "postgres" admin user                                                                     | `""`                         |
+| `postgresql.auth.username`                      | Name for a custom user to create                                                                           | `kong`                       |
+| `postgresql.auth.password`                      | Password for the custom user to create                                                                     | `""`                         |
+| `postgresql.auth.database`                      | Name for a custom database to create                                                                       | `kong`                       |
+| `postgresql.auth.existingSecret`                | Name of existing secret to use for PostgreSQL credentials                                                  | `""`                         |
+| `postgresql.auth.usePasswordFiles`              | Mount credentials as a files instead of using an environment variable                                      | `false`                      |
+| `postgresql.architecture`                       | PostgreSQL architecture (`standalone` or `replication`)                                                    | `standalone`                 |
+| `postgresql.image.registry`                     | PostgreSQL image registry                                                                                  | `REGISTRY_NAME`              |
+| `postgresql.image.repository`                   | PostgreSQL image repository                                                                                | `REPOSITORY_NAME/postgresql` |
+| `postgresql.image.digest`                       | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
+| `postgresql.external.host`                      | Database host                                                                                              | `""`                         |
+| `postgresql.external.port`                      | Database port number                                                                                       | `5432`                       |
+| `postgresql.external.user`                      | Non-root username for Kong                                                                                 | `kong`                       |
+| `postgresql.external.password`                  | Password for the non-root username for Kong                                                                | `""`                         |
+| `postgresql.external.database`                  | Kong database name                                                                                         | `kong`                       |
+| `postgresql.external.existingSecret`            | Name of an existing secret resource containing the database credentials                                    | `""`                         |
+| `postgresql.external.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                         | `""`                         |
 
 ### Cassandra Parameters
 
@@ -344,17 +345,20 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 helm install my-release \
-  --set service.exposeAdmin=true oci://registry-1.docker.io/bitnamicharts/kong
+  --set service.exposeAdmin=true oci://REGISTRY_NAME/REPOSITORY_NAME/kong
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command exposes the Kong admin ports inside the Kong service.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/kong
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/kong
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -372,32 +376,38 @@ The Bitnami Kong chart allows setting two database backends: PostgreSQL or Cassa
 - Deploy the PostgreSQL sub-chart (default)
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/kong
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kong
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 - Use an external PostgreSQL database
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/kong \
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kong \
     --set postgresql.enabled=false \
     --set postgresql.external.host=_HOST_OF_YOUR_POSTGRESQL_INSTALLATION_ \
     --set postgresql.external.password=_PASSWORD_OF_YOUR_POSTGRESQL_INSTALLATION_ \
     --set postgresql.external.user=_USER_OF_YOUR_POSTGRESQL_INSTALLATION_
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
 - Deploy the Cassandra sub-chart
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/kong \
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kong \
     --set database=cassandra \
     --set postgresql.enabled=false \
     --set cassandra.enabled=true
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
 - Use an existing Cassandra installation
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/kong \
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kong \
     --set database=cassandra \
     --set postgresql.enabled=false \
     --set cassandra.enabled=false \
@@ -407,6 +417,8 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/kong \
     --set cassandra.external.user=_USER_OF_YOUR_CASSANDRA_INSTALLATION_ \
     --set cassandra.external.password=_PASSWORD_OF_YOUR_CASSANDRA_INSTALLATION_
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ### DB-less
 
@@ -511,13 +523,14 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `postgresql.postgresqlPassword` or `cassandra.password` parameters when upgrading the chart:
 
 ```console
-helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/kong \
+helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kong \
     --set database=postgresql
     --set postgresql.enabled=true
     --set
     --set postgresql.postgresqlPassword=[POSTGRESQL_PASSWORD]
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
 ### To 10.0.0
@@ -586,10 +599,12 @@ kubectl delete statefulsets.apps kong-postgresql --cascade=false
 ##### Upgrade the chart release
 
 ```console
-helm upgrade kong oci://registry-1.docker.io/bitnamicharts/kong \
+helm upgrade kong oci://REGISTRY_NAME/REPOSITORY_NAME/kong \
     --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
     --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ##### Force new statefulset to create a new pod for postgresql
 

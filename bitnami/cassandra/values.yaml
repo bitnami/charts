@@ -65,9 +65,9 @@ diagnosticMode:
 
 ## Bitnami Cassandra image
 ## ref: https://hub.docker.com/r/bitnami/cassandra/tags/
-## @param image.registry Cassandra image registry
-## @param image.repository Cassandra image repository
-## @param image.tag Cassandra image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Cassandra image registry
+## @param image.repository [default: REPOSITORY_NAME/cassandra] Cassandra image repository
+## @skip image.tag Cassandra image tag (immutable tags are recommended)
 ## @param image.digest Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy image pull policy
 ## @param image.pullSecrets Cassandra image pull secrets
@@ -606,9 +606,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume image registry
-  ## @param volumePermissions.image.repository Init container volume image repository
-  ## @param volumePermissions.image.tag Init container volume image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume image repository
+  ## @skip volumePermissions.image.tag Init container volume image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
@@ -674,9 +674,9 @@ metrics:
   enabled: false
   ## Bitnami Cassandra Exporter image
   ## ref: https://hub.docker.com/r/bitnami/cassandra-exporter/tags/
-  ## @param metrics.image.registry Cassandra exporter image registry
-  ## @param metrics.image.repository Cassandra exporter image name
-  ## @param metrics.image.tag Cassandra exporter image tag
+  ## @param metrics.image.registry [default: REGISTRY_NAME] Cassandra exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/cassandra-exporter] Cassandra exporter image name
+  ## @skip metrics.image.tag Cassandra exporter image tag
   ## @param metrics.image.digest Cassandra exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array

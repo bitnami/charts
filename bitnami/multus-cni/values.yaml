@@ -66,9 +66,9 @@ diagnosticMode:
 
 ## Bitnami Multus CNI image version
 ## ref: https://hub.docker.com/r/bitnami/multus-cni/tags/
-## @param image.registry Multus CNI image registry
-## @param image.repository Multus CNI Image name
-## @param image.tag Multus CNI Image tag
+## @param image.registry [default: REGISTRY_NAME] Multus CNI image registry
+## @param image.repository [default: REPOSITORY_NAME/multus-cni] Multus CNI Image name
+## @skip image.tag Multus CNI Image tag
 ## @param image.digest Multus CNI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Multus CNI image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array

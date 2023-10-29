@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kubernetes-event-exporter
-      image: docker.io/bitnami/kubernetes-event-exporter:1.4.0-debian-11-r60
+      image: docker.io/bitnami/kubernetes-event-exporter:1.5.0-debian-11-r0
 apiVersion: v2
-appVersion: 1.4.0
+appVersion: 1.5.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -31,4 +31,4 @@ maintainers:
 name: kubernetes-event-exporter
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kubernetes-event-exporter
-version: 2.7.5
+version: 2.7.6

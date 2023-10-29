@@ -66,9 +66,9 @@ diagnosticMode:
 
 ## Bitnami Whereabouts image version
 ## ref: https://hub.docker.com/r/bitnami/whereabouts/tags/
-## @param image.registry Whereabouts image registry
-## @param image.repository Whereabouts Image name
-## @param image.tag Whereabouts Image tag
+## @param image.registry [default: REGISTRY_NAME] Whereabouts image registry
+## @param image.repository [default: REPOSITORY_NAME/whereabouts] Whereabouts Image name
+## @skip image.tag Whereabouts Image tag
 ## @param image.digest Whereabouts image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Whereabouts image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array

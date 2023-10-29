@@ -84,9 +84,9 @@ diagnosticMode:
 
 ## Bitnami Spark image version
 ## ref: https://hub.docker.com/r/bitnami/spark/tags/
-## @param image.registry Spark image registry
-## @param image.repository Spark image repository
-## @param image.tag Spark image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Spark image registry
+## @param image.repository [default: REPOSITORY_NAME/spark] Spark image repository
+## @skip image.tag Spark image tag (immutable tags are recommended)
 ## @param image.digest Spark image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Spark image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -95,7 +95,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/spark
-  tag: 3.5.0-debian-11-r0
+  tag: 3.5.0-debian-11-r10
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

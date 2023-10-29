@@ -61,9 +61,9 @@ diagnosticMode:
 
 ## Bitnami Jenkins image
 ## ref: https://hub.docker.com/r/bitnami/jenkins/tags/
-## @param image.registry Jenkins image registry
-## @param image.repository Jenkins image repository
-## @param image.tag Jenkins image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Jenkins image registry
+## @param image.repository [default: REPOSITORY_NAME/jenkins] Jenkins image repository
+## @skip image.tag Jenkins image tag (immutable tags are recommended)
 ## @param image.digest Jenkins image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Jenkins image pull policy
 ## @param image.pullSecrets Jenkins image pull secrets
@@ -312,16 +312,26 @@ configAsCode:
     extraVolumeMounts: []
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param configAsCode.autoReload.containerSecurityContext.enabled Enabled %%MAIN_CONTAINER_NAME%% containers' Security Context
-    ## @param configAsCode.autoReload.containerSecurityContext.runAsUser Set %%MAIN_CONTAINER_NAME%% containers' Security Context runAsUser
-    ## @param configAsCode.autoReload.containerSecurityContext.runAsNonRoot Set %%MAIN_CONTAINER_NAME%% containers' Security Context runAsNonRoot
-    ## @param configAsCode.autoReload.containerSecurityContext.readOnlyRootFilesystem Set %%MAIN_CONTAINER_NAME%% containers' Security Context runAsNonRoot
+    ## @param configAsCode.autoReload.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param configAsCode.autoReload.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param configAsCode.autoReload.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param configAsCode.autoReload.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param configAsCode.autoReload.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param configAsCode.autoReload.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param configAsCode.autoReload.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param configAsCode.autoReload.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
       runAsUser: 1001
       runAsNonRoot: true
+      privileged: false
       readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
 
 ## Jenkins agents (EXPERIMENTAL)
 ## This feature won't take effect if ConfigAsCode is not enabled.
@@ -333,9 +343,9 @@ agent:
   enabled: false
   ## Bitnami Jenkins agent image
   ## ref: https://hub.docker.com/r/bitnami/jenkins/tags/
-  ## @param agent.image.registry Jenkins image registry
-  ## @param agent.image.repository Jenkins image repository
-  ## @param agent.image.tag Jenkins image tag (immutable tags are recommended)
+  ## @param agent.image.registry [default: REGISTRY_NAME] Jenkins image registry
+  ## @param agent.image.repository [default: REPOSITORY_NAME/jenkins-agent] Jenkins image repository
+  ## @skip agent.image.tag Jenkins image tag (immutable tags are recommended)
   ## @param agent.image.digest Jenkins image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param agent.image.pullPolicy Jenkins image pull policy
   ## @param agent.image.pullSecrets Jenkins image pull secrets
@@ -554,14 +564,26 @@ podSecurityContext:
   fsGroup: 1001
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enabled Jenkins containers' Security Context
-## @param containerSecurityContext.runAsUser Set Jenkins container's Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set Jenkins container's Security Context runAsNonRoot
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## Configure extra options for Jenkins containers' startup, liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param startupProbe.enabled Enable startupProbe
@@ -888,9 +910,9 @@ volumePermissions:
   enabled: false
   ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param volumePermissions.image.registry OS Shell + Utility image registry
-  ## @param volumePermissions.image.repository OS Shell + Utility image repository
-  ## @param volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
   ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets

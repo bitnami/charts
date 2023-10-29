@@ -1,0 +1,52 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.metrics.enabled .Values.metrics.podMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ default .Release.Namespace .Values.metrics.podMonitor.namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- if .Values.metrics.podMonitor.additionalLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podMonitor.additionalLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  podMetricsEndpoints:
+    - port: http-metrics
+      {{- if .Values.metrics.podMonitor.interval }}
+      interval: {{ .Values.metrics.podMonitor.interval }}
+      {{- end }}
+      {{- if .Values.metrics.podMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.metrics.podMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.metrics.podMonitor.honorLabels }}
+      honorLabels: {{ .Values.metrics.podMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.metrics.podMonitor.relabellings }}
+      relabelings: {{- toYaml .Values.metrics.podMonitor.relabellings | nindent 6 }}
+      {{- end }}
+      {{- if .Values.metrics.podMonitor.metricRelabelings }}
+      metricRelabelings: {{- toYaml .Values.metrics.podMonitor.metricRelabelings | nindent 6 }}
+      {{- end }}
+  {{- if .Values.metrics.serviceMonitor.podTargetLabels }}
+  podTargetLabels: {{- toYaml .Values.metrics.podMonitor.podTargetLabels | nindent 4 }}
+  {{- end }}
+  {{- with .Values.metrics.podMonitor.sampleLimit -}}
+  sampleLimit: {{ . }}
+  {{- end }}
+  {{- with .Values.metrics.podMonitor.targetLimit -}}
+  targetLimit: {{ . }}
+  {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: metrics
+{{- end }}

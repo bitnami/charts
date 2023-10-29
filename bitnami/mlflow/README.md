@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/mlflow
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mlflow
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -22,7 +24,7 @@ Python is built for full integration into Python that enables you to use it with
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use MLflow in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use MLflow in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -36,8 +38,10 @@ Looking to use MLflow in production? Try [VMware Application Catalog](https://bi
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/mlflow
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mlflow
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys mlflow on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -81,21 +85,19 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### MLflow common Parameters
 
-| Name                   | Description                                                                                                                                       | Value                  |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`       | mlflow image registry                                                                                                                             | `docker.io`            |
-| `image.repository`     | mlflow image repository                                                                                                                           | `bitnami/mlflow`       |
-| `image.tag`            | mlflow image tag (immutable tags are recommended)                                                                                                 | `2.7.1-debian-11-r0`   |
-| `image.digest`         | mlflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                   |
-| `image.pullPolicy`     | mlflow image pull policy                                                                                                                          | `IfNotPresent`         |
-| `image.pullSecrets`    | mlflow image pull secrets                                                                                                                         | `[]`                   |
-| `image.debug`          | Enable mlflow image debug mode                                                                                                                    | `false`                |
-| `gitImage.registry`    | Git image registry                                                                                                                                | `docker.io`            |
-| `gitImage.repository`  | Git image repository                                                                                                                              | `bitnami/git`          |
-| `gitImage.tag`         | Git image tag (immutable tags are recommended)                                                                                                    | `2.42.0-debian-11-r45` |
-| `gitImage.digest`      | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                               | `""`                   |
-| `gitImage.pullPolicy`  | Git image pull policy                                                                                                                             | `IfNotPresent`         |
-| `gitImage.pullSecrets` | Specify docker-registry secret names as an array                                                                                                  | `[]`                   |
+| Name                   | Description                                                                                                                                       | Value                    |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `image.registry`       | mlflow image registry                                                                                                                             | `REGISTRY_NAME`          |
+| `image.repository`     | mlflow image repository                                                                                                                           | `REPOSITORY_NAME/mlflow` |
+| `image.digest`         | mlflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                     |
+| `image.pullPolicy`     | mlflow image pull policy                                                                                                                          | `IfNotPresent`           |
+| `image.pullSecrets`    | mlflow image pull secrets                                                                                                                         | `[]`                     |
+| `image.debug`          | Enable mlflow image debug mode                                                                                                                    | `false`                  |
+| `gitImage.registry`    | Git image registry                                                                                                                                | `REGISTRY_NAME`          |
+| `gitImage.repository`  | Git image repository                                                                                                                              | `REPOSITORY_NAME/git`    |
+| `gitImage.digest`      | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                               | `""`                     |
+| `gitImage.pullPolicy`  | Git image pull policy                                                                                                                             | `IfNotPresent`           |
+| `gitImage.pullSecrets` | Specify docker-registry secret names as an array                                                                                                  | `[]`                     |
 
 ### MLflow Tracking parameters
 
@@ -378,30 +380,28 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init Container Parameters
 
-| Name                                                              | Description                                                                                                                   | Value              |
-| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `volumePermissions.enabled`                                       | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                               | `false`            |
-| `volumePermissions.image.registry`                                | OS Shell + Utility image registry                                                                                             | `docker.io`        |
-| `volumePermissions.image.repository`                              | OS Shell + Utility image repository                                                                                           | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                                     | OS Shell + Utility image tag (immutable tags are recommended)                                                                 | `11-debian-11-r90` |
-| `volumePermissions.image.pullPolicy`                              | OS Shell + Utility image pull policy                                                                                          | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`                             | OS Shell + Utility image pull secrets                                                                                         | `[]`               |
-| `volumePermissions.resources.limits`                              | The resources limits for the init container                                                                                   | `{}`               |
-| `volumePermissions.resources.requests`                            | The requested resources for the init container                                                                                | `{}`               |
-| `volumePermissions.containerSecurityContext.enabled`              | Set container security context settings                                                                                       | `true`             |
-| `volumePermissions.containerSecurityContext.runAsUser`            | Set init container's Security Context runAsUser                                                                               | `0`                |
-| `waitContainer.image.registry`                                    | Init container wait-container image registry                                                                                  | `docker.io`        |
-| `waitContainer.image.repository`                                  | Init container wait-container image name                                                                                      | `bitnami/os-shell` |
-| `waitContainer.image.tag`                                         | Init container wait-container image tag                                                                                       | `11-debian-11-r90` |
-| `waitContainer.image.digest`                                      | Init container wait-container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `waitContainer.image.pullPolicy`                                  | Init container wait-container image pull policy                                                                               | `IfNotPresent`     |
-| `waitContainer.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                              | `[]`               |
-| `waitContainer.containerSecurityContext.enabled`                  | Enabled APISIX containers' Security Context                                                                                   | `true`             |
-| `waitContainer.containerSecurityContext.runAsUser`                | Set APISIX containers' Security Context runAsUser                                                                             | `1001`             |
-| `waitContainer.containerSecurityContext.runAsNonRoot`             | Set APISIX containers' Security Context runAsNonRoot                                                                          | `true`             |
-| `waitContainer.containerSecurityContext.readOnlyRootFilesystem`   | Set APISIX containers' Security Context runAsNonRoot                                                                          | `true`             |
-| `waitContainer.containerSecurityContext.allowPrivilegeEscalation` | Set APISIX container's privilege escalation                                                                                   | `false`            |
-| `waitContainer.containerSecurityContext.capabilities.drop`        | Set APISIX container's Security Context runAsNonRoot                                                                          | `["ALL"]`          |
+| Name                                                              | Description                                                                                                                   | Value                      |
+| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`                                       | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                               | `false`                    |
+| `volumePermissions.image.registry`                                | OS Shell + Utility image registry                                                                                             | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                              | OS Shell + Utility image repository                                                                                           | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.pullPolicy`                              | OS Shell + Utility image pull policy                                                                                          | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                             | OS Shell + Utility image pull secrets                                                                                         | `[]`                       |
+| `volumePermissions.resources.limits`                              | The resources limits for the init container                                                                                   | `{}`                       |
+| `volumePermissions.resources.requests`                            | The requested resources for the init container                                                                                | `{}`                       |
+| `volumePermissions.containerSecurityContext.enabled`              | Set container security context settings                                                                                       | `true`                     |
+| `volumePermissions.containerSecurityContext.runAsUser`            | Set init container's Security Context runAsUser                                                                               | `0`                        |
+| `waitContainer.image.registry`                                    | Init container wait-container image registry                                                                                  | `REGISTRY_NAME`            |
+| `waitContainer.image.repository`                                  | Init container wait-container image name                                                                                      | `REPOSITORY_NAME/os-shell` |
+| `waitContainer.image.digest`                                      | Init container wait-container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `waitContainer.image.pullPolicy`                                  | Init container wait-container image pull policy                                                                               | `IfNotPresent`             |
+| `waitContainer.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                              | `[]`                       |
+| `waitContainer.containerSecurityContext.enabled`                  | Enabled APISIX containers' Security Context                                                                                   | `true`                     |
+| `waitContainer.containerSecurityContext.runAsUser`                | Set APISIX containers' Security Context runAsUser                                                                             | `1001`                     |
+| `waitContainer.containerSecurityContext.runAsNonRoot`             | Set APISIX containers' Security Context runAsNonRoot                                                                          | `true`                     |
+| `waitContainer.containerSecurityContext.readOnlyRootFilesystem`   | Set APISIX containers' Security Context runAsNonRoot                                                                          | `true`                     |
+| `waitContainer.containerSecurityContext.allowPrivilegeEscalation` | Set APISIX container's privilege escalation                                                                                   | `false`                    |
+| `waitContainer.containerSecurityContext.capabilities.drop`        | Set APISIX container's Security Context runAsNonRoot                                                                          | `["ALL"]`                  |
 
 ### PostgreSQL chart configuration
 

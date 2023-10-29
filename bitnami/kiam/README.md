@@ -11,9 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/kiam
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kiam
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > NOTE: KIAM has been designed to work on a Kubernetes cluster deployed on top of AWS, although it is possible to deploy it in other environments.
 
 ## Introduction
@@ -24,7 +25,7 @@ This chart bootstraps a [kiam](https://github.com/bitnami/containers/tree/main/b
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Kiam in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Kiam in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -36,8 +37,10 @@ Looking to use Kiam in production? Try [VMware Application Catalog](https://bitn
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/kiam
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kiam
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy a kiam application on the Kubernetes cluster in the default configuration.
 
@@ -81,9 +84,8 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                | Description                                                                                          | Value                  |
 | ------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`    | kiam image registry                                                                                  | `docker.io`            |
-| `image.repository`  | kiam image name                                                                                      | `bitnami/kiam`         |
-| `image.tag`         | kiam image tag                                                                                       | `4.2.0-debian-11-r421` |
+| `image.registry`    | kiam image registry                                                                                  | `REGISTRY_NAME`        |
+| `image.repository`  | kiam image name                                                                                      | `REPOSITORY_NAME/kiam` |
 | `image.digest`      | kiam image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`  | kiam image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                     | `[]`                   |
@@ -345,17 +347,20 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-helm install my-release --set server.resourceType=deployment oci://registry-1.docker.io/bitnamicharts/kiam
+helm install my-release --set server.resourceType=deployment oci://REGISTRY_NAME/REPOSITORY_NAME/kiam
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the server nodes to be deployed as Deployment objects.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/kiam
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/kiam
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details

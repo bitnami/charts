@@ -69,9 +69,9 @@ diagnosticMode:
 
 ## Bitnami MariaDB Galera image
 ## ref: https://hub.docker.com/r/bitnami/mariadb-galera/tags/
-## @param image.registry MariaDB Galera image registry
-## @param image.repository MariaDB Galera image repository
-## @param image.tag MariaDB Galera image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] MariaDB Galera image registry
+## @param image.repository [default: REPOSITORY_NAME/mariadb-galera] MariaDB Galera image repository
+## @skip image.tag MariaDB Galera image tag (immutable tags are recommended)
 ## @param image.digest MariaDB Galera image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy MariaDB Galera image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -80,7 +80,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 11.1.2-debian-11-r0
+  tag: 11.1.2-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -789,9 +789,9 @@ metrics:
   enabled: false
   ## Bitnami MySQL Prometheus exporter image
   ## ref: https://hub.docker.com/r/bitnami/mysqld-exporter/tags/
-  ## @param metrics.image.registry MariaDB Prometheus exporter image registry
-  ## @param metrics.image.repository MariaDB Prometheus exporter image repository
-  ## @param metrics.image.tag MariaDB Prometheus exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.registry [default: REGISTRY_NAME] MariaDB Prometheus exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/mysqld-exporter] MariaDB Prometheus exporter image repository
+  ## @skip metrics.image.tag MariaDB Prometheus exporter image tag (immutable tags are recommended)
   ## @param metrics.image.digest MariaDB Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy MariaDB Prometheus exporter image pull policy
   ## @param metrics.image.pullSecrets MariaDB Prometheus exporter image pull secrets

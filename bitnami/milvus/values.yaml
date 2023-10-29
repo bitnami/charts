@@ -65,9 +65,9 @@ diagnosticMode:
 milvus:
   ## Bitnami Milvus image
   ## ref: https://hub.docker.com/r/bitnami/milvus/tags/
-  ## @param milvus.image.registry Milvus image registry
-  ## @param milvus.image.repository Milvus image repository
-  ## @param milvus.image.tag Milvus image tag (immutable tags are recommended)
+  ## @param milvus.image.registry [default: REGISTRY_NAME] Milvus image registry
+  ## @param milvus.image.repository [default: REPOSITORY_NAME/milvus] Milvus image repository
+  ## @skip milvus.image.tag Milvus image tag (immutable tags are recommended)
   ## @param milvus.image.digest Milvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param milvus.image.pullPolicy Milvus image pull policy
   ## @param milvus.image.pullSecrets Milvus image pull secrets
@@ -245,9 +245,9 @@ initJob:
   forceRun: false
   ## Bitnami PyMilvus image
   ## ref: https://hub.docker.com/r/bitnami/jwt-cli/tags/
-  ## @param initJob.image.registry PyMilvus image registry
-  ## @param initJob.image.repository PyMilvus image repository
-  ## @param initJob.image.tag PyMilvus image tag (immutable tags are recommended)
+  ## @param initJob.image.registry [default: REGISTRY_NAME] PyMilvus image registry
+  ## @param initJob.image.repository [default: REPOSITORY_NAME/pymilvus] PyMilvus image repository
+  ## @skip initJob.image.tag PyMilvus image tag (immutable tags are recommended)
   ## @param initJob.image.digest PyMilvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param initJob.image.pullPolicy PyMilvus image pull policy
   ## @param initJob.image.pullSecrets PyMilvus image pull secrets
@@ -4253,9 +4253,9 @@ attu:
   enabled: true
   ## Bitnami Attu image
   ## ref: https://hub.docker.com/r/bitnami/attu/tags/
-  ## @param attu.image.registry Attu image registry
-  ## @param attu.image.repository Attu image repository
-  ## @param attu.image.tag Attu image tag (immutable tags are recommended)
+  ## @param attu.image.registry [default: REGISTRY_NAME] Attu image registry
+  ## @param attu.image.repository [default: REPOSITORY_NAME/attu] Attu image repository
+  ## @skip attu.image.tag Attu image tag (immutable tags are recommended)
   ## @param attu.image.digest Attu image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param attu.image.pullPolicy Attu image pull policy
   ## @param attu.image.pullSecrets Attu image pull secrets
@@ -4795,9 +4795,9 @@ attu:
 ##
 
 waitContainer:
-  ## @param waitContainer.image.registry Init container wait-container image registry
-  ## @param waitContainer.image.repository Init container wait-container image name
-  ## @param waitContainer.image.tag Init container wait-container image tag
+  ## @param waitContainer.image.registry [default: REGISTRY_NAME] Init container wait-container image registry
+  ## @param waitContainer.image.repository [default: REPOSITORY_NAME/os-shell] Init container wait-container image name
+  ## @skip waitContainer.image.tag Init container wait-container image tag
   ## @param waitContainer.image.digest Init container wait-container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
@@ -4836,7 +4836,7 @@ waitContainer:
     capabilities:
       drop: ["ALL"]
 
-## @section External etcd parameters
+## @section External etcd settings
 ##
 externalEtcd:
   ## @param externalEtcd.servers List of hostnames of the external etcd
@@ -4845,6 +4845,18 @@ externalEtcd:
   ## @param externalEtcd.port Port of the external etcd instance
   ##
   port: 2379
+  ## @param externalEtcd.user User of the external etcd instance
+  ##
+  user: root
+  ## @param externalEtcd.password Password of the external etcd instance
+  ##
+  password: ""
+  ## @param externalEtcd.existingSecret Name of a secret containing the external etcd password
+  ##
+  existingSecret: ""
+  ## @param externalEtcd.existingSecretPasswordKey Key inside the secret containing the external etcd password
+  ##
+  existingSecretPasswordKey: "etcd-root-password"
   ## @param externalEtcd.secureTransport Use TLS for client-to-server communications
   ##
   secureTransport: false

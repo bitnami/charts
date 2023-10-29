@@ -74,9 +74,9 @@ diagnosticMode:
 
 ## Bitnami MySQL image
 ## ref: https://hub.docker.com/r/bitnami/mysql/tags/
-## @param image.registry MySQL image registry
-## @param image.repository MySQL image repository
-## @param image.tag MySQL image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] MySQL image registry
+## @param image.repository [default: REPOSITORY_NAME/mysql] MySQL image repository
+## @skip image.tag MySQL image tag (immutable tags are recommended)
 ## @param image.digest MySQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy MySQL image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -85,7 +85,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 8.0.34-debian-11-r75
+  tag: 8.0.35-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -150,6 +150,10 @@ auth:
   ##   replicator: /vault/secrets/mysql-replicator
   ##
   customPasswordFiles: {}
+  ## @param auth.defaultAuthenticationPlugin Sets the default authentication plugin, by default it will use `mysql_native_password`
+  ## NOTE: `mysql_native_password` will be deprecated in future mysql version and it is used here for compatibility with previous version. If you want to use the new default authentication method set it to `caching_sha2_password`.
+  ##
+  defaultAuthenticationPlugin: ""
 ## @param initdbScripts Dictionary of initdb scripts
 ## Specify dictionary of scripts to be run at first boot
 ## Example:
@@ -200,7 +204,7 @@ primary:
   ##
   configuration: |-
     [mysqld]
-    default_authentication_plugin=mysql_native_password
+    default_authentication_plugin={{- .Values.auth.defaultAuthPlugin | default "mysql_native_password" }}
     skip-name-resolve
     explicit_defaults_for_timestamp
     basedir=/opt/bitnami/mysql
@@ -316,11 +320,19 @@ primary:
   ## @param primary.containerSecurityContext.enabled MySQL primary container securityContext
   ## @param primary.containerSecurityContext.runAsUser User ID for the MySQL primary container
   ## @param primary.containerSecurityContext.runAsNonRoot Set MySQL primary container's Security Context runAsNonRoot
+  ## @param primary.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
+  ## @param primary.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ## @param primary.containerSecurityContext.seccompProfile.type Set Client container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## MySQL primary container's resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -694,11 +706,19 @@ secondary:
   ## @param secondary.containerSecurityContext.enabled MySQL secondary container securityContext
   ## @param secondary.containerSecurityContext.runAsUser User ID for the MySQL secondary container
   ## @param secondary.containerSecurityContext.runAsNonRoot Set MySQL secondary container's Security Context runAsNonRoot
+  ## @param secondary.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
+  ## @param secondary.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ## @param secondary.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## MySQL secondary container's resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1009,9 +1029,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
@@ -1043,9 +1063,9 @@ metrics:
   ## @param metrics.enabled Start a side-car prometheus exporter
   ##
   enabled: false
-  ## @param metrics.image.registry Exporter image registry
-  ## @param metrics.image.repository Exporter image repository
-  ## @param metrics.image.tag Exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.registry [default: REGISTRY_NAME] Exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/mysqld-exporter] Exporter image repository
+  ## @skip metrics.image.tag Exporter image tag (immutable tags are recommended)
   ## @param metrics.image.digest Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Exporter image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array

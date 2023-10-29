@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/nginx-ingress-controller
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/nginx-ingress-controller
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -22,7 +24,7 @@ This chart bootstraps a [ingress-nginx](https://github.com/kubernetes/ingress-ng
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use NGINX Ingress Controller in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use NGINX Ingress Controller in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -34,8 +36,10 @@ Looking to use NGINX Ingress Controller in production? Try [VMware Application C
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/nginx-ingress-controller
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/nginx-ingress-controller
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy nginx-ingress-controller on the Kubernetes cluster in the default configuration.
 
@@ -75,46 +79,45 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Nginx Ingress Controller parameters
 
-| Name                                   | Description                                                                                                                                        | Value                              |
-| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| `image.registry`                       | Nginx Ingress Controller image registry                                                                                                            | `docker.io`                        |
-| `image.repository`                     | Nginx Ingress Controller image repository                                                                                                          | `bitnami/nginx-ingress-controller` |
-| `image.tag`                            | Nginx Ingress Controller image tag (immutable tags are recommended)                                                                                | `1.9.3-debian-11-r0`               |
-| `image.digest`                         | Nginx Ingress Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                           | `""`                               |
-| `image.pullPolicy`                     | Nginx Ingress Controller image pull policy                                                                                                         | `IfNotPresent`                     |
-| `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                   | `[]`                               |
-| `containerPorts`                       | Controller container ports to open                                                                                                                 | `{}`                               |
-| `hostAliases`                          | Deployment pod host aliases                                                                                                                        | `[]`                               |
-| `config`                               | Custom configuration options for NGINX                                                                                                             | `{}`                               |
-| `proxySetHeaders`                      | Custom headers before sending traffic to backends                                                                                                  | `{}`                               |
-| `addHeaders`                           | Custom headers before sending response traffic to the client                                                                                       | `{}`                               |
-| `defaultBackendService`                | Default 404 backend service; required only if `defaultBackend.enabled = false`                                                                     | `""`                               |
-| `electionID`                           | Election ID to use for status update                                                                                                               | `ingress-controller-leader`        |
-| `reportNodeInternalIp`                 | If using `hostNetwork=true`, setting `reportNodeInternalIp=true`, will pass the flag `report-node-internal-ip-address` to Nginx Ingress Controller | `false`                            |
-| `watchIngressWithoutClass`             | Process Ingress objects without ingressClass annotation/ingressClassName field                                                                     | `false`                            |
-| `ingressClassResource.name`            | Name of the IngressClass resource                                                                                                                  | `nginx`                            |
-| `ingressClassResource.enabled`         | Create the IngressClass resource                                                                                                                   | `true`                             |
-| `ingressClassResource.default`         | Set the created IngressClass resource as default class                                                                                             | `false`                            |
-| `ingressClassResource.controllerClass` | IngressClass identifier for the controller                                                                                                         | `k8s.io/ingress-nginx`             |
-| `ingressClassResource.parameters`      | Optional parameters for the controller                                                                                                             | `{}`                               |
-| `publishService.enabled`               | Set the endpoint records on the Ingress objects to reflect those on the service                                                                    | `false`                            |
-| `publishService.pathOverride`          | Allows overriding of the publish service to bind to                                                                                                | `""`                               |
-| `scope.enabled`                        | Limit the scope of the controller.                                                                                                                 | `false`                            |
-| `scope.namespace`                      | Scope namespace. Defaults to `.Release.Namespace`                                                                                                  | `""`                               |
-| `configMapNamespace`                   | Allows customization of the configmap / nginx-configmap namespace                                                                                  | `""`                               |
-| `tcpConfigMapNamespace`                | Allows customization of the tcp-services-configmap namespace                                                                                       | `""`                               |
-| `udpConfigMapNamespace`                | Allows customization of the udp-services-configmap namespace                                                                                       | `""`                               |
-| `maxmindLicenseKey`                    | License key used to download Geolite2 database                                                                                                     | `""`                               |
-| `dhParam`                              | A base64ed Diffie-Hellman parameter                                                                                                                | `""`                               |
-| `tcp`                                  | TCP service key:value pairs                                                                                                                        | `{}`                               |
-| `udp`                                  | UDP service key:value pairs                                                                                                                        | `{}`                               |
-| `command`                              | Override default container command (useful when using custom images)                                                                               | `[]`                               |
-| `args`                                 | Override default container args (useful when using custom images)                                                                                  | `[]`                               |
-| `lifecycleHooks`                       | for the %%MAIN_CONTAINER_NAME%% container(s) to automate configuration before or after startup                                                     | `{}`                               |
-| `extraArgs`                            | Additional command line arguments to pass to nginx-ingress-controller                                                                              | `{}`                               |
-| `extraEnvVars`                         | Extra environment variables to be set on Nginx Ingress container                                                                                   | `[]`                               |
-| `extraEnvVarsCM`                       | Name of a existing ConfigMap containing extra environment variables                                                                                | `""`                               |
-| `extraEnvVarsSecret`                   | Name of a existing Secret containing extra environment variables                                                                                   | `""`                               |
+| Name                                   | Description                                                                                                                                        | Value                                      |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| `image.registry`                       | Nginx Ingress Controller image registry                                                                                                            | `REGISTRY_NAME`                            |
+| `image.repository`                     | Nginx Ingress Controller image repository                                                                                                          | `REPOSITORY_NAME/nginx-ingress-controller` |
+| `image.digest`                         | Nginx Ingress Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                           | `""`                                       |
+| `image.pullPolicy`                     | Nginx Ingress Controller image pull policy                                                                                                         | `IfNotPresent`                             |
+| `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                   | `[]`                                       |
+| `containerPorts`                       | Controller container ports to open                                                                                                                 | `{}`                                       |
+| `hostAliases`                          | Deployment pod host aliases                                                                                                                        | `[]`                                       |
+| `config`                               | Custom configuration options for NGINX                                                                                                             | `{}`                                       |
+| `proxySetHeaders`                      | Custom headers before sending traffic to backends                                                                                                  | `{}`                                       |
+| `addHeaders`                           | Custom headers before sending response traffic to the client                                                                                       | `{}`                                       |
+| `defaultBackendService`                | Default 404 backend service; required only if `defaultBackend.enabled = false`                                                                     | `""`                                       |
+| `electionID`                           | Election ID to use for status update                                                                                                               | `ingress-controller-leader`                |
+| `reportNodeInternalIp`                 | If using `hostNetwork=true`, setting `reportNodeInternalIp=true`, will pass the flag `report-node-internal-ip-address` to Nginx Ingress Controller | `false`                                    |
+| `watchIngressWithoutClass`             | Process Ingress objects without ingressClass annotation/ingressClassName field                                                                     | `false`                                    |
+| `ingressClassResource.name`            | Name of the IngressClass resource                                                                                                                  | `nginx`                                    |
+| `ingressClassResource.enabled`         | Create the IngressClass resource                                                                                                                   | `true`                                     |
+| `ingressClassResource.default`         | Set the created IngressClass resource as default class                                                                                             | `false`                                    |
+| `ingressClassResource.controllerClass` | IngressClass identifier for the controller                                                                                                         | `k8s.io/ingress-nginx`                     |
+| `ingressClassResource.parameters`      | Optional parameters for the controller                                                                                                             | `{}`                                       |
+| `publishService.enabled`               | Set the endpoint records on the Ingress objects to reflect those on the service                                                                    | `false`                                    |
+| `publishService.pathOverride`          | Allows overriding of the publish service to bind to                                                                                                | `""`                                       |
+| `scope.enabled`                        | Limit the scope of the controller.                                                                                                                 | `false`                                    |
+| `scope.namespace`                      | Scope namespace. Defaults to `.Release.Namespace`                                                                                                  | `""`                                       |
+| `configMapNamespace`                   | Allows customization of the configmap / nginx-configmap namespace                                                                                  | `""`                                       |
+| `tcpConfigMapNamespace`                | Allows customization of the tcp-services-configmap namespace                                                                                       | `""`                                       |
+| `udpConfigMapNamespace`                | Allows customization of the udp-services-configmap namespace                                                                                       | `""`                                       |
+| `maxmindLicenseKey`                    | License key used to download Geolite2 database                                                                                                     | `""`                                       |
+| `dhParam`                              | A base64ed Diffie-Hellman parameter                                                                                                                | `""`                                       |
+| `tcp`                                  | TCP service key:value pairs                                                                                                                        | `{}`                                       |
+| `udp`                                  | UDP service key:value pairs                                                                                                                        | `{}`                                       |
+| `command`                              | Override default container command (useful when using custom images)                                                                               | `[]`                                       |
+| `args`                                 | Override default container args (useful when using custom images)                                                                                  | `[]`                                       |
+| `lifecycleHooks`                       | for the %%MAIN_CONTAINER_NAME%% container(s) to automate configuration before or after startup                                                     | `{}`                                       |
+| `extraArgs`                            | Additional command line arguments to pass to nginx-ingress-controller                                                                              | `{}`                                       |
+| `extraEnvVars`                         | Extra environment variables to be set on Nginx Ingress container                                                                                   | `[]`                                       |
+| `extraEnvVarsCM`                       | Name of a existing ConfigMap containing extra environment variables                                                                                | `""`                                       |
+| `extraEnvVarsSecret`                   | Name of a existing Secret containing extra environment variables                                                                                   | `""`                                       |
 
 ### Nginx Ingress deployment / daemonset parameters
 
@@ -185,78 +188,77 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Default backend parameters
 
-| Name                                                   | Description                                                                                                     | Value                  |
-| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `defaultBackend.enabled`                               | Enable a default backend based on NGINX                                                                         | `true`                 |
-| `defaultBackend.hostAliases`                           | Add deployment host aliases                                                                                     | `[]`                   |
-| `defaultBackend.image.registry`                        | Default backend image registry                                                                                  | `docker.io`            |
-| `defaultBackend.image.repository`                      | Default backend image repository                                                                                | `bitnami/nginx`        |
-| `defaultBackend.image.tag`                             | Default backend image tag (immutable tags are recommended)                                                      | `1.25.2-debian-11-r47` |
-| `defaultBackend.image.digest`                          | Default backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `defaultBackend.image.pullPolicy`                      | Image pull policy                                                                                               | `IfNotPresent`         |
-| `defaultBackend.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                | `[]`                   |
-| `defaultBackend.extraArgs`                             | Additional command line arguments to pass to Nginx container                                                    | `{}`                   |
-| `defaultBackend.containerPort`                         | HTTP container port number                                                                                      | `8080`                 |
-| `defaultBackend.serverBlockConfig`                     | NGINX backend default server block configuration                                                                | `""`                   |
-| `defaultBackend.replicaCount`                          | Desired number of default backend pods                                                                          | `1`                    |
-| `defaultBackend.podSecurityContext.enabled`            | Enable Default backend pods' Security Context                                                                   | `true`                 |
-| `defaultBackend.podSecurityContext.fsGroup`            | Group ID for the container filesystem                                                                           | `1001`                 |
-| `defaultBackend.containerSecurityContext.enabled`      | Enable Default backend containers' Security Context                                                             | `true`                 |
-| `defaultBackend.containerSecurityContext.runAsUser`    | User ID for the Default backend container                                                                       | `1001`                 |
-| `defaultBackend.containerSecurityContext.runAsNonRoot` | Set container's Security Context runAsNonRoot                                                                   | `true`                 |
-| `defaultBackend.resources.limits`                      | The resources limits for the Default backend container                                                          | `{}`                   |
-| `defaultBackend.resources.requests`                    | The requested resources for the Default backend container                                                       | `{}`                   |
-| `defaultBackend.livenessProbe.enabled`                 | Enable livenessProbe                                                                                            | `true`                 |
-| `defaultBackend.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                         | `30`                   |
-| `defaultBackend.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                | `10`                   |
-| `defaultBackend.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                               | `5`                    |
-| `defaultBackend.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                             | `3`                    |
-| `defaultBackend.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                             | `1`                    |
-| `defaultBackend.readinessProbe.enabled`                | Enable readinessProbe                                                                                           | `true`                 |
-| `defaultBackend.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                        | `0`                    |
-| `defaultBackend.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                               | `5`                    |
-| `defaultBackend.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                              | `5`                    |
-| `defaultBackend.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                            | `6`                    |
-| `defaultBackend.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                            | `1`                    |
-| `defaultBackend.startupProbe.enabled`                  | Enable startupProbe                                                                                             | `false`                |
-| `defaultBackend.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                          | `0`                    |
-| `defaultBackend.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                 | `5`                    |
-| `defaultBackend.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                | `5`                    |
-| `defaultBackend.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                              | `6`                    |
-| `defaultBackend.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                              | `1`                    |
-| `defaultBackend.customStartupProbe`                    | Custom liveness probe for the Web component                                                                     | `{}`                   |
-| `defaultBackend.customLivenessProbe`                   | Custom liveness probe for the Web component                                                                     | `{}`                   |
-| `defaultBackend.customReadinessProbe`                  | Custom readiness probe for the Web component                                                                    | `{}`                   |
-| `defaultBackend.podLabels`                             | Extra labels for Controller pods                                                                                | `{}`                   |
-| `defaultBackend.podAnnotations`                        | Annotations for Controller pods                                                                                 | `{}`                   |
-| `defaultBackend.priorityClassName`                     | priorityClassName                                                                                               | `""`                   |
-| `defaultBackend.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                  | `""`                   |
-| `defaultBackend.terminationGracePeriodSeconds`         | In seconds, time the given to the pod to terminate gracefully                                                   | `60`                   |
-| `defaultBackend.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                  | `[]`                   |
-| `defaultBackend.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                   |
-| `defaultBackend.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                        | `soft`                 |
-| `defaultBackend.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                       | `""`                   |
-| `defaultBackend.nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                                          | `""`                   |
-| `defaultBackend.nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                       | `[]`                   |
-| `defaultBackend.command`                               | Override default container command (useful when using custom images)                                            | `[]`                   |
-| `defaultBackend.args`                                  | Override default container args (useful when using custom images)                                               | `[]`                   |
-| `defaultBackend.lifecycleHooks`                        | for the %%MAIN_CONTAINER_NAME%% container(s) to automate configuration before or after startup                  | `{}`                   |
-| `defaultBackend.extraEnvVars`                          | Array with extra environment variables to add to %%MAIN_CONTAINER_NAME%% nodes                                  | `[]`                   |
-| `defaultBackend.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes                          | `""`                   |
-| `defaultBackend.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes                             | `""`                   |
-| `defaultBackend.extraVolumes`                          | Optionally specify extra list of additional volumes for the %%MAIN_CONTAINER_NAME%% pod(s)                      | `[]`                   |
-| `defaultBackend.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the %%MAIN_CONTAINER_NAME%% container(s)           | `[]`                   |
-| `defaultBackend.sidecars`                              | Add additional sidecar containers to the %%MAIN_CONTAINER_NAME%% pod(s)                                         | `[]`                   |
-| `defaultBackend.initContainers`                        | Add additional init containers to the %%MAIN_CONTAINER_NAME%% pod(s)                                            | `[]`                   |
-| `defaultBackend.affinity`                              | Affinity for pod assignment                                                                                     | `{}`                   |
-| `defaultBackend.nodeSelector`                          | Node labels for pod assignment                                                                                  | `{}`                   |
-| `defaultBackend.tolerations`                           | Tolerations for pod assignment                                                                                  | `[]`                   |
-| `defaultBackend.service.type`                          | Kubernetes Service type for default backend                                                                     | `ClusterIP`            |
-| `defaultBackend.service.ports.http`                    | Default backend service HTTP port                                                                               | `80`                   |
-| `defaultBackend.service.annotations`                   | Annotations for the default backend service                                                                     | `{}`                   |
-| `defaultBackend.pdb.create`                            | Enable/disable a Pod Disruption Budget creation for Default backend                                             | `false`                |
-| `defaultBackend.pdb.minAvailable`                      | Minimum number/percentage of Default backend pods that should remain scheduled                                  | `1`                    |
-| `defaultBackend.pdb.maxUnavailable`                    | Maximum number/percentage of Default backend pods that may be made unavailable                                  | `""`                   |
+| Name                                                   | Description                                                                                                     | Value                   |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `defaultBackend.enabled`                               | Enable a default backend based on NGINX                                                                         | `true`                  |
+| `defaultBackend.hostAliases`                           | Add deployment host aliases                                                                                     | `[]`                    |
+| `defaultBackend.image.registry`                        | Default backend image registry                                                                                  | `REGISTRY_NAME`         |
+| `defaultBackend.image.repository`                      | Default backend image repository                                                                                | `REPOSITORY_NAME/nginx` |
+| `defaultBackend.image.digest`                          | Default backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `defaultBackend.image.pullPolicy`                      | Image pull policy                                                                                               | `IfNotPresent`          |
+| `defaultBackend.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                | `[]`                    |
+| `defaultBackend.extraArgs`                             | Additional command line arguments to pass to Nginx container                                                    | `{}`                    |
+| `defaultBackend.containerPort`                         | HTTP container port number                                                                                      | `8080`                  |
+| `defaultBackend.serverBlockConfig`                     | NGINX backend default server block configuration                                                                | `""`                    |
+| `defaultBackend.replicaCount`                          | Desired number of default backend pods                                                                          | `1`                     |
+| `defaultBackend.podSecurityContext.enabled`            | Enable Default backend pods' Security Context                                                                   | `true`                  |
+| `defaultBackend.podSecurityContext.fsGroup`            | Group ID for the container filesystem                                                                           | `1001`                  |
+| `defaultBackend.containerSecurityContext.enabled`      | Enable Default backend containers' Security Context                                                             | `true`                  |
+| `defaultBackend.containerSecurityContext.runAsUser`    | User ID for the Default backend container                                                                       | `1001`                  |
+| `defaultBackend.containerSecurityContext.runAsNonRoot` | Set container's Security Context runAsNonRoot                                                                   | `true`                  |
+| `defaultBackend.resources.limits`                      | The resources limits for the Default backend container                                                          | `{}`                    |
+| `defaultBackend.resources.requests`                    | The requested resources for the Default backend container                                                       | `{}`                    |
+| `defaultBackend.livenessProbe.enabled`                 | Enable livenessProbe                                                                                            | `true`                  |
+| `defaultBackend.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                         | `30`                    |
+| `defaultBackend.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                | `10`                    |
+| `defaultBackend.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                               | `5`                     |
+| `defaultBackend.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                             | `3`                     |
+| `defaultBackend.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                             | `1`                     |
+| `defaultBackend.readinessProbe.enabled`                | Enable readinessProbe                                                                                           | `true`                  |
+| `defaultBackend.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                        | `0`                     |
+| `defaultBackend.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                               | `5`                     |
+| `defaultBackend.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                              | `5`                     |
+| `defaultBackend.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                            | `6`                     |
+| `defaultBackend.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                            | `1`                     |
+| `defaultBackend.startupProbe.enabled`                  | Enable startupProbe                                                                                             | `false`                 |
+| `defaultBackend.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                          | `0`                     |
+| `defaultBackend.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                 | `5`                     |
+| `defaultBackend.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                | `5`                     |
+| `defaultBackend.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                              | `6`                     |
+| `defaultBackend.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                              | `1`                     |
+| `defaultBackend.customStartupProbe`                    | Custom liveness probe for the Web component                                                                     | `{}`                    |
+| `defaultBackend.customLivenessProbe`                   | Custom liveness probe for the Web component                                                                     | `{}`                    |
+| `defaultBackend.customReadinessProbe`                  | Custom readiness probe for the Web component                                                                    | `{}`                    |
+| `defaultBackend.podLabels`                             | Extra labels for Controller pods                                                                                | `{}`                    |
+| `defaultBackend.podAnnotations`                        | Annotations for Controller pods                                                                                 | `{}`                    |
+| `defaultBackend.priorityClassName`                     | priorityClassName                                                                                               | `""`                    |
+| `defaultBackend.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                  | `""`                    |
+| `defaultBackend.terminationGracePeriodSeconds`         | In seconds, time the given to the pod to terminate gracefully                                                   | `60`                    |
+| `defaultBackend.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                  | `[]`                    |
+| `defaultBackend.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                    |
+| `defaultBackend.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                        | `soft`                  |
+| `defaultBackend.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                       | `""`                    |
+| `defaultBackend.nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                                          | `""`                    |
+| `defaultBackend.nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                       | `[]`                    |
+| `defaultBackend.command`                               | Override default container command (useful when using custom images)                                            | `[]`                    |
+| `defaultBackend.args`                                  | Override default container args (useful when using custom images)                                               | `[]`                    |
+| `defaultBackend.lifecycleHooks`                        | for the %%MAIN_CONTAINER_NAME%% container(s) to automate configuration before or after startup                  | `{}`                    |
+| `defaultBackend.extraEnvVars`                          | Array with extra environment variables to add to %%MAIN_CONTAINER_NAME%% nodes                                  | `[]`                    |
+| `defaultBackend.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes                          | `""`                    |
+| `defaultBackend.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes                             | `""`                    |
+| `defaultBackend.extraVolumes`                          | Optionally specify extra list of additional volumes for the %%MAIN_CONTAINER_NAME%% pod(s)                      | `[]`                    |
+| `defaultBackend.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the %%MAIN_CONTAINER_NAME%% container(s)           | `[]`                    |
+| `defaultBackend.sidecars`                              | Add additional sidecar containers to the %%MAIN_CONTAINER_NAME%% pod(s)                                         | `[]`                    |
+| `defaultBackend.initContainers`                        | Add additional init containers to the %%MAIN_CONTAINER_NAME%% pod(s)                                            | `[]`                    |
+| `defaultBackend.affinity`                              | Affinity for pod assignment                                                                                     | `{}`                    |
+| `defaultBackend.nodeSelector`                          | Node labels for pod assignment                                                                                  | `{}`                    |
+| `defaultBackend.tolerations`                           | Tolerations for pod assignment                                                                                  | `[]`                    |
+| `defaultBackend.service.type`                          | Kubernetes Service type for default backend                                                                     | `ClusterIP`             |
+| `defaultBackend.service.ports.http`                    | Default backend service HTTP port                                                                               | `80`                    |
+| `defaultBackend.service.annotations`                   | Annotations for the default backend service                                                                     | `{}`                    |
+| `defaultBackend.pdb.create`                            | Enable/disable a Pod Disruption Budget creation for Default backend                                             | `false`                 |
+| `defaultBackend.pdb.minAvailable`                      | Minimum number/percentage of Default backend pods that should remain scheduled                                  | `1`                     |
+| `defaultBackend.pdb.maxUnavailable`                    | Maximum number/percentage of Default backend pods that may be made unavailable                                  | `""`                    |
 
 ### Traffic exposure parameters
 
@@ -334,17 +336,20 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
     --set image.pullPolicy=Always \
-    oci://registry-1.docker.io/bitnamicharts/nginx-ingress-controller
+    oci://REGISTRY_NAME/REPOSITORY_NAME/nginx-ingress-controller
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the `image.pullPolicy` to `Always`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/nginx-ingress-controller
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/nginx-ingress-controller
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details

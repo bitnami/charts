@@ -63,9 +63,9 @@ diagnosticMode:
 
 ## Bitnami NGINX image version
 ## ref: https://hub.docker.com/r/bitnami/nginx/tags/
-## @param image.registry NGINX image registry
-## @param image.repository NGINX image repository
-## @param image.tag NGINX image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] NGINX image registry
+## @param image.repository [default: REPOSITORY_NAME/nginx] NGINX image repository
+## @skip image.tag NGINX image tag (immutable tags are recommended)
 ## @param image.digest NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy NGINX image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -74,7 +74,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.25.2-debian-11-r47
+  tag: 1.25.3-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -418,9 +418,9 @@ cloneStaticSiteFromGit:
   enabled: false
   ## Bitnami Git image version
   ## ref: https://hub.docker.com/r/bitnami/git/tags/
-  ## @param cloneStaticSiteFromGit.image.registry Git image registry
-  ## @param cloneStaticSiteFromGit.image.repository Git image repository
-  ## @param cloneStaticSiteFromGit.image.tag Git image tag (immutable tags are recommended)
+  ## @param cloneStaticSiteFromGit.image.registry [default: REGISTRY_NAME] Git image registry
+  ## @param cloneStaticSiteFromGit.image.repository [default: REPOSITORY_NAME/git] Git image repository
+  ## @skip cloneStaticSiteFromGit.image.tag Git image tag (immutable tags are recommended)
   ## @param cloneStaticSiteFromGit.image.digest Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param cloneStaticSiteFromGit.image.pullPolicy Git image pull policy
   ## @param cloneStaticSiteFromGit.image.pullSecrets Specify docker-registry secret names as an array
@@ -781,9 +781,9 @@ metrics:
   port: ""
   ## Bitnami NGINX Prometheus Exporter image
   ## ref: https://hub.docker.com/r/bitnami/nginx-exporter/tags/
-  ## @param metrics.image.registry NGINX Prometheus exporter image registry
-  ## @param metrics.image.repository NGINX Prometheus exporter image repository
-  ## @param metrics.image.tag NGINX Prometheus exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.registry [default: REGISTRY_NAME] NGINX Prometheus exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/nginx-exporter] NGINX Prometheus exporter image repository
+  ## @skip metrics.image.tag NGINX Prometheus exporter image tag (immutable tags are recommended)
   ## @param metrics.image.digest NGINX Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy NGINX Prometheus exporter image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
