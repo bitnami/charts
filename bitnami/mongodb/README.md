@@ -299,10 +299,10 @@ Refer to the [chart documentation for more information on each of these architec
 | Name                                      | Description                                                                                                                        | Value   |
 | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `networkPolicy.enabled`                   | Enable MongoDB(&reg;) network policies                                                                                             | `false` |
-| `networkPolicy.ingress.namespaceSelector` | Namespace selector label that is allowed to access the MongoDB(&reg;) node. This label will be used to identify the allowed namespace(s). | `{}`    |
-| `networkPolicy.ingress.podSelector`       | Pod selector label that is allowed to access the MongoDB(&reg;) node. This label will be used to identify the allowed pod(s).             | `{}`    |
-| `networkPolicy.ingress.customRules`       | Custom network policy for the MongoDB(&reg;) node.                                                                                        | `[]`    |
-| `networkPolicy.egress.customRules`        | Custom network policy for the MongoDB(&reg;) node.                                                                                        | `[]`    |
+| `networkPolicy.ingress.namespaceSelector` | Namespace selector label that is allowed to access the MongoDB node. This label will be used to identify the allowed namespace(s). | `{}`    |
+| `networkPolicy.ingress.podSelector`       | Pod selector label that is allowed to access the MongoDB node. This label will be used to identify the allowed pod(s).             | `{}`    |
+| `networkPolicy.ingress.customRules`       | Custom network policy for the MongoDB node.                                                                                        | `[]`    |
+| `networkPolicy.egress.customRules`        | Custom network policy for the MongoDB node.                                                                                        | `[]`    |
 
 ### Persistence parameters
 
