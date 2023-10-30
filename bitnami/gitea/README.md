@@ -31,7 +31,6 @@ Looking to use Gitea in production? Try [VMware Tanzu Application Catalog](https
 - Kubernetes 1.23+
 - Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
-- ReadWriteMany volumes for deployment scaling
 
 ## Installing the Chart
 
