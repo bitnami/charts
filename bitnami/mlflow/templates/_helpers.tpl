@@ -226,7 +226,7 @@ Init container definition for upgrading the database
 - name: upgrade-db
   image: {{ include "mlflow.v0.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
-  {{- if .Values.containerSecurityContext.enabled }}
+  {{- if .Values.tracking.containerSecurityContext.enabled }}
   securityContext: {{- omit .Values.tracking.containerSecurityContext "enabled" | toYaml | nindent 4 }}
   {{- end }}
   command:
@@ -509,8 +509,8 @@ Return the volume-permissions init container
     - |
       #!/bin/bash
       mkdir -p {{ .Values.persistence.mountPath }}
-      chown {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
-      find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
+      chown {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
+      find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
   {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
   securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 4 }}
   {{- end }}
