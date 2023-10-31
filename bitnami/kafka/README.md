@@ -282,6 +282,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.logPersistence.annotations`                        | Annotations for the PVC                                                                                                                                                                       | `{}`                      |
 | `controller.logPersistence.selector`                           | Selector to match an existing Persistent Volume for Kafka log data PVC. If set, the PVC can't have a PV dynamically provisioned for it                                                        | `{}`                      |
 | `controller.logPersistence.mountPath`                          | Mount path of the Kafka logs volume                                                                                                                                                           | `/opt/bitnami/kafka/logs` |
+| `controller.minReadySeconds`                                   | How many seconds a pod needs to be ready before killing the next, during update                                                                                                               | `0`                       |
 
 ### Broker-only statefulset parameters
 
@@ -380,6 +381,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `broker.logPersistence.annotations`                        | Annotations for the PVC                                                                                                                                                                       | `{}`                      |
 | `broker.logPersistence.selector`                           | Selector to match an existing Persistent Volume for Kafka log data PVC. If set, the PVC can't have a PV dynamically provisioned for it                                                        | `{}`                      |
 | `broker.logPersistence.mountPath`                          | Mount path of the Kafka logs volume                                                                                                                                                           | `/opt/bitnami/kafka/logs` |
+| `broker.minReadySeconds`                                   | How many seconds a pod needs to be ready before killing the next, during update                                                                                                               | `0`                       |
 
 ### Traffic Exposure parameters
 

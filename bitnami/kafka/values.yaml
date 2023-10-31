@@ -673,6 +673,9 @@ controller:
   ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
   ##
   podManagementPolicy: Parallel
+  ## @param controller.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
+  ##
+  minReadySeconds: 0
   ## @param controller.priorityClassName Name of the existing priority class to be used by kafka pods
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
@@ -1052,6 +1055,9 @@ broker:
   ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
   ##
   podManagementPolicy: Parallel
+  ## @param broker.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
+  ##
+  minReadySeconds: 0
   ## @param broker.priorityClassName Name of the existing priority class to be used by kafka pods
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
