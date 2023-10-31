@@ -28,7 +28,10 @@ spec:
           {{- end }}
         spec:
           {{- if .Values.backup.cronjob.securityContext.enabled }}
+          # Deprecated, use backup.cronjob.podSecurityContext
           securityContext: {{- omit .Values.backup.cronjob.securityContext "enabled" | toYaml | nindent 12 }}
+          {{- else if .Values.backup.cronjob.podSecurityContext.enabled }}
+          securityContext: {{- omit .Values.backup.cronjob.podSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           restartPolicy: OnFailure
           volumes:
