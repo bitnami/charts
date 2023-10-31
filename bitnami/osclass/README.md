@@ -24,7 +24,7 @@ It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/t
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Osclass in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Osclass in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -84,7 +84,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`    | Osclass image registry                                                                                  | `REGISTRY_NAME`           |
 | `image.repository`  | Osclass image repository                                                                                | `REPOSITORY_NAME/osclass` |
-| `image.tag`         | Osclass image tag (immutable tags are recommended)                                                      | `8.1.2-debian-11-r100`    |
 | `image.digest`      | Osclass image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `image.pullPolicy`  | Osclass image pull policy                                                                               | `IfNotPresent`            |
 | `image.pullSecrets` | Osclass image pull secrets                                                                              | `[]`                      |
@@ -114,9 +113,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hostAliases`                                        | Osclass pod host aliases                                                                                        | `[]`                                     |
 | `podSecurityContext.enabled`                         | Enabled Osclass pods' Security Context                                                                          | `true`                                   |
 | `podSecurityContext.fsGroup`                         | Set Osclass pod's Security Context fsGroup                                                                      | `1001`                                   |
-| `containerSecurityContext.enabled`                   | Enabled Osclass containers' Security Context                                                                    | `true`                                   |
-| `containerSecurityContext.runAsUser`                 | Set Osclass container's Security Context runAsUser                                                              | `1001`                                   |
-| `containerSecurityContext.runAsNonRoot`              | Set Osclass container's Security Context runAsNonRoot                                                           | `true`                                   |
+| `containerSecurityContext.enabled`                   | Enabled containers' Security Context                                                                            | `true`                                   |
+| `containerSecurityContext.runAsUser`                 | Set containers' Security Context runAsUser                                                                      | `1001`                                   |
+| `containerSecurityContext.runAsNonRoot`              | Set container's Security Context runAsNonRoot                                                                   | `true`                                   |
+| `containerSecurityContext.privileged`                | Set container's Security Context privileged                                                                     | `false`                                  |
+| `containerSecurityContext.readOnlyRootFilesystem`    | Set container's Security Context readOnlyRootFilesystem                                                         | `false`                                  |
+| `containerSecurityContext.allowPrivilegeEscalation`  | Set container's Security Context allowPrivilegeEscalation                                                       | `false`                                  |
+| `containerSecurityContext.capabilities.drop`         | List of capabilities to be dropped                                                                              | `["ALL"]`                                |
+| `containerSecurityContext.seccompProfile.type`       | Set container's Security Context seccomp profile                                                                | `RuntimeDefault`                         |
 | `startupProbe.enabled`                               | Enable startupProbe                                                                                             | `false`                                  |
 | `startupProbe.path`                                  | Path for the HTTP probe                                                                                         | `/oc-admin`                              |
 | `startupProbe.initialDelaySeconds`                   | Initial delay seconds for startupProbe                                                                          | `600`                                    |
@@ -155,7 +159,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                         | `""`                                     |
 | `certificates.image.registry`                        | Apache Exporter image registry                                                                                  | `REGISTRY_NAME`                          |
 | `certificates.image.repository`                      | Apache Exporter image repository                                                                                | `REPOSITORY_NAME/os-shell`               |
-| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`                       |
 | `certificates.image.digest`                          | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Apache Exporter image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Apache Exporter image pull secrets                                                                              | `[]`                                     |
@@ -251,7 +254,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
 | `volumePermissions.image.registry`         | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
 | `volumePermissions.image.repository`       | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.tag`              | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`         |
 | `volumePermissions.image.digest`           | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `volumePermissions.image.pullPolicy`       | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`      | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
@@ -278,7 +280,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a sidecar prometheus exporter to expose metrics                                                           | `false`                           |
 | `metrics.image.registry`                   | Apache Exporter image registry                                                                                  | `REGISTRY_NAME`                   |
 | `metrics.image.repository`                 | Apache Exporter image repository                                                                                | `REPOSITORY_NAME/apache-exporter` |
-| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                      | `1.0.2-debian-11-r10`             |
 | `metrics.image.digest`                     | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                              |
 | `metrics.image.pullPolicy`                 | Apache Exporter image pull policy                                                                               | `IfNotPresent`                    |
 | `metrics.image.pullSecrets`                | Apache Exporter image pull secrets                                                                              | `[]`                              |

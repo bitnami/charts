@@ -26,7 +26,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/prometheus/get-started/).
 
-Looking to use Prometheus in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Prometheus in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -93,7 +93,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.enabled`                                         | Alertmanager enabled                                                                                                                                    | `true`                          |
 | `alertmanager.image.registry`                                  | Alertmanager image registry                                                                                                                             | `REGISTRY_NAME`                 |
 | `alertmanager.image.repository`                                | Alertmanager image repository                                                                                                                           | `REPOSITORY_NAME/alertmanager`  |
-| `alertmanager.image.tag`                                       | Alertmanager image tag (immutable tags are recommended)                                                                                                 | `0.26.0-debian-11-r43`          |
 | `alertmanager.image.digest`                                    | Alertmanager image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                            |
 | `alertmanager.image.pullPolicy`                                | Alertmanager image pull policy                                                                                                                          | `IfNotPresent`                  |
 | `alertmanager.image.pullSecrets`                               | Alertmanager image pull secrets                                                                                                                         | `[]`                            |
@@ -208,7 +207,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | `server.image.registry`                                           | Prometheus image registry                                                                                                                                                                   | `REGISTRY_NAME`              |
 | `server.image.repository`                                         | Prometheus image repository                                                                                                                                                                 | `REPOSITORY_NAME/prometheus` |
-| `server.image.tag`                                                | Prometheus image tag (immutable tags are recommended)                                                                                                                                       | `2.47.2-debian-11-r0`        |
 | `server.image.digest`                                             | Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)                                       | `""`                         |
 | `server.image.pullPolicy`                                         | Prometheus image pull policy                                                                                                                                                                | `IfNotPresent`               |
 | `server.image.pullSecrets`                                        | Prometheus image pull secrets                                                                                                                                                               | `[]`                         |
@@ -295,7 +293,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.thanos.create`                                            | Create a Thanos sidecar container                                                                                                                                                           | `false`                      |
 | `server.thanos.image.registry`                                    | Thanos image registry                                                                                                                                                                       | `REGISTRY_NAME`              |
 | `server.thanos.image.repository`                                  | Thanos image name                                                                                                                                                                           | `REPOSITORY_NAME/thanos`     |
-| `server.thanos.image.tag`                                         | Thanos image tag                                                                                                                                                                            | `0.32.4-debian-11-r3`        |
 | `server.thanos.image.digest`                                      | Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                      | `""`                         |
 | `server.thanos.image.pullPolicy`                                  | Thanos image pull policy                                                                                                                                                                    | `IfNotPresent`               |
 | `server.thanos.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                                                                            | `[]`                         |
@@ -399,7 +396,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                    |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `REGISTRY_NAME`            |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r90`         |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`                       |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                       |

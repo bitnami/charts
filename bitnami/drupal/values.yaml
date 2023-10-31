@@ -50,7 +50,7 @@ extraDeploy: []
 ## ref: https://hub.docker.com/r/bitnami/drupal/tags/
 ## @param image.registry [default: REGISTRY_NAME] Drupal image registry
 ## @param image.repository [default: REPOSITORY_NAME/drupal] Drupal Image name
-## @param image.tag Drupal Image tag
+## @skip image.tag Drupal Image tag
 ## @param image.digest Drupal image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Drupal image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -309,14 +309,24 @@ podSecurityContext:
   fsGroup: 1001
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enable Drupal containers' Security Context
-## @param containerSecurityContext.runAsUser Drupal containers' Security Context
+## @param containerSecurityContext.enabled Enabled Drupal containers' Security Context
+## @param containerSecurityContext.runAsUser Set Drupal containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set primary container's Security Context privileged
+## @param containerSecurityContext.allowPrivilegeEscalation Set primary container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## Configure extra options for startup probe
 ## Drupal core exposes /user/login to unauthenticated requests, making it a good
 ## default startup and readiness path. However, that may not always be the
@@ -641,7 +651,7 @@ volumePermissions:
   enabled: false
   ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
   ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image name
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
@@ -691,7 +701,7 @@ metrics:
   enabled: false
   ## @param metrics.image.registry [default: REGISTRY_NAME] Apache exporter image registry
   ## @param metrics.image.repository [default: REPOSITORY_NAME/apache-exporter] Apache exporter image repository
-  ## @param metrics.image.tag Apache exporter image tag
+  ## @skip metrics.image.tag Apache exporter image tag
   ## @param metrics.image.digest Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
@@ -847,7 +857,7 @@ certificates:
   extraEnvVarsSecret: ""
   ## @param certificates.image.registry [default: REGISTRY_NAME] Container sidecar registry
   ## @param certificates.image.repository [default: REPOSITORY_NAME/os-shell] Container sidecar image
-  ## @param certificates.image.tag Container sidecar image tag
+  ## @skip certificates.image.tag Container sidecar image tag
   ## @param certificates.image.digest Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param certificates.image.pullPolicy Container sidecar image pull policy
   ## @param certificates.image.pullSecrets Container sidecar image pull secrets

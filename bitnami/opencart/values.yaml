@@ -49,7 +49,7 @@ extraDeploy: []
 ## ref: https://hub.docker.com/r/bitnami/opencart/tags/
 ## @param image.registry [default: REGISTRY_NAME] OpenCart image registry
 ## @param image.repository [default: REPOSITORY_NAME/opencart] OpenCart image repository
-## @param image.tag OpenCart image tag (immutable tags are recommended)
+## @skip image.tag OpenCart image tag (immutable tags are recommended)
 ## @param image.digest OpenCart image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy OpenCart image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -629,7 +629,7 @@ volumePermissions:
   enabled: false
   ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
   ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
@@ -679,7 +679,7 @@ metrics:
   enabled: false
   ## @param metrics.image.registry [default: REGISTRY_NAME] Apache exporter image registry
   ## @param metrics.image.repository [default: REPOSITORY_NAME/apache-exporter] Apache exporter image repository
-  ## @param metrics.image.tag Apache exporter image tag (immutable tags are recommended)
+  ## @skip metrics.image.tag Apache exporter image tag (immutable tags are recommended)
   ## @param metrics.image.digest Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
@@ -751,7 +751,7 @@ certificates:
   extraEnvVarsSecret: ""
   ## @param certificates.image.registry [default: REGISTRY_NAME] Container sidecar registry
   ## @param certificates.image.repository [default: REPOSITORY_NAME/os-shell] Container sidecar image repository
-  ## @param certificates.image.tag Container sidecar image tag (immutable tags are recommended)
+  ## @skip certificates.image.tag Container sidecar image tag (immutable tags are recommended)
   ## @param certificates.image.digest Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param certificates.image.pullPolicy Container sidecar image pull policy
   ## @param certificates.image.pullSecrets Container sidecar image pull secrets

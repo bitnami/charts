@@ -24,7 +24,7 @@ Tomcat implements several Java EE specifications including Java Servlet, JavaSer
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Apache Tomcat in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Apache Tomcat in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -85,7 +85,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `image.registry`              | Tomcat image registry                                                                                  | `REGISTRY_NAME`          |
 | `image.repository`            | Tomcat image repository                                                                                | `REPOSITORY_NAME/tomcat` |
-| `image.tag`                   | Tomcat image tag (immutable tags are recommended)                                                      | `10.1.15-debian-11-r0`   |
 | `image.digest`                | Tomcat image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `image.pullPolicy`            | Tomcat image pull policy                                                                               | `IfNotPresent`           |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                                       | `[]`                     |
@@ -207,7 +206,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory                                                       | `false`                    |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r90`         |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
@@ -222,7 +220,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.catalinaOpts`                          | custom option used to enabled JMX on tomcat jvm evaluated as template                                        | `-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=5555 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=true` |
 | `metrics.jmx.image.registry`                        | JMX exporter image registry                                                                                  | `REGISTRY_NAME`                                                                                                                                                                                                     |
 | `metrics.jmx.image.repository`                      | JMX exporter image repository                                                                                | `REPOSITORY_NAME/jmx-exporter`                                                                                                                                                                                      |
-| `metrics.jmx.image.tag`                             | JMX exporter image tag (immutable tags are recommended)                                                      | `0.19.0-debian-11-r95`                                                                                                                                                                                              |
 | `metrics.jmx.image.digest`                          | JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                                                                                                                                                                                                |
 | `metrics.jmx.image.pullPolicy`                      | JMX exporter image pull policy                                                                               | `IfNotPresent`                                                                                                                                                                                                      |
 | `metrics.jmx.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                             | `[]`                                                                                                                                                                                                                |

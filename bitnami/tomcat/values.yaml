@@ -52,7 +52,7 @@ extraDeploy: []
 ## ref: https://hub.docker.com/r/bitnami/tomcat/tags/
 ## @param image.registry [default: REGISTRY_NAME] Tomcat image registry
 ## @param image.repository [default: REPOSITORY_NAME/tomcat] Tomcat image repository
-## @param image.tag Tomcat image tag (immutable tags are recommended)
+## @skip image.tag Tomcat image tag (immutable tags are recommended)
 ## @param image.digest Tomcat image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Tomcat image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -577,7 +577,7 @@ volumePermissions:
   enabled: false
   ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
   ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
@@ -637,7 +637,7 @@ metrics:
     ## ref: https://hub.docker.com/r/bitnami/jmx-exporter/tags/
     ## @param metrics.jmx.image.registry [default: REGISTRY_NAME] JMX exporter image registry
     ## @param metrics.jmx.image.repository [default: REPOSITORY_NAME/jmx-exporter] JMX exporter image repository
-    ## @param metrics.jmx.image.tag JMX exporter image tag (immutable tags are recommended)
+    ## @skip metrics.jmx.image.tag JMX exporter image tag (immutable tags are recommended)
     ## @param metrics.jmx.image.digest JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param metrics.jmx.image.pullPolicy JMX exporter image pull policy
     ## @param metrics.jmx.image.pullSecrets Specify docker-registry secret names as an array

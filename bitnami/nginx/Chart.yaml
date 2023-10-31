@@ -10,9 +10,9 @@ annotations:
     - name: nginx-exporter
       image: docker.io/bitnami/nginx-exporter:0.11.0-debian-11-r369
     - name: nginx
-      image: docker.io/bitnami/nginx:1.25.2-debian-11-r47
+      image: docker.io/bitnami/nginx:1.25.3-debian-11-r0
 apiVersion: v2
-appVersion: 1.25.2
+appVersion: 1.25.3
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -34,4 +34,4 @@ maintainers:
 name: nginx
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/nginx
-version: 15.3.4
+version: 15.4.0

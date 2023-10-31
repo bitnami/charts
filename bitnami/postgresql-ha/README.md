@@ -27,7 +27,7 @@ This Helm chart has been developed based on [bitnami/postgresql](https://github.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use PostgreSQL HA in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use PostgreSQL HA in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -98,7 +98,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `postgresql.image.registry`                                    | PostgreSQL with Repmgr image registry                                                                                                                                                                         | `REGISTRY_NAME`                     |
 | `postgresql.image.repository`                                  | PostgreSQL with Repmgr image repository                                                                                                                                                                       | `REPOSITORY_NAME/postgresql-repmgr` |
-| `postgresql.image.tag`                                         | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `16.0.0-debian-11-r11`              |
 | `postgresql.image.digest`                                      | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                    | `""`                                |
 | `postgresql.image.pullPolicy`                                  | PostgreSQL with Repmgr image pull policy                                                                                                                                                                      | `IfNotPresent`                      |
 | `postgresql.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                                                                                              | `[]`                                |
@@ -336,7 +335,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `pgpool.image.registry`                                    | Pgpool image registry                                                                                                                           | `REGISTRY_NAME`          |
 | `pgpool.image.repository`                                  | Pgpool image repository                                                                                                                         | `REPOSITORY_NAME/pgpool` |
-| `pgpool.image.tag`                                         | Pgpool image tag                                                                                                                                | `4.4.4-debian-11-r45`    |
 | `pgpool.image.digest`                                      | Pgpool image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                          | `""`                     |
 | `pgpool.image.pullPolicy`                                  | Pgpool image pull policy                                                                                                                        | `IfNotPresent`           |
 | `pgpool.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                                | `[]`                     |
@@ -479,7 +477,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.enabled`                                | Enable PostgreSQL Prometheus exporter                                                                                                                     | `false`                             |
 | `metrics.image.registry`                         | PostgreSQL Prometheus exporter image registry                                                                                                             | `REGISTRY_NAME`                     |
 | `metrics.image.repository`                       | PostgreSQL Prometheus exporter image repository                                                                                                           | `REPOSITORY_NAME/postgres-exporter` |
-| `metrics.image.tag`                              | PostgreSQL Prometheus exporter image tag                                                                                                                  | `0.14.0-debian-11-r15`              |
 | `metrics.image.digest`                           | PostgreSQL Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                            | `""`                                |
 | `metrics.image.pullPolicy`                       | PostgreSQL Prometheus exporter image pull policy                                                                                                          | `IfNotPresent`                      |
 | `metrics.image.pullSecrets`                      | Specify docker-registry secret names as an array                                                                                                          | `[]`                                |
@@ -544,7 +541,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `volumePermissions.enabled`                                | Enable init container to adapt volume permissions                                                                                 | `false`                    |
 | `volumePermissions.image.registry`                         | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
 | `volumePermissions.image.repository`                       | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.tag`                              | Init container volume-permissions image tag                                                                                       | `11-debian-11-r90`         |
 | `volumePermissions.image.digest`                           | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `volumePermissions.image.pullPolicy`                       | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`                      | Specify docker-registry secret names as an array                                                                                  | `[]`                       |

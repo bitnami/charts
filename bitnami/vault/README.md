@@ -22,7 +22,7 @@ This chart bootstraps a [HashiCorp Vault](https://github.com/bitnami/containers/
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use HashiCorp Vault in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use HashiCorp Vault in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -84,7 +84,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.enabled`                                           | Enable Vault Server                                                                                                                                     | `true`                  |
 | `server.image.registry`                                    | Vault Server image registry                                                                                                                             | `REGISTRY_NAME`         |
 | `server.image.repository`                                  | Vault Server image repository                                                                                                                           | `REPOSITORY_NAME/vault` |
-| `server.image.tag`                                         | Vault Server image tag (immutable tags are recommended)                                                                                                 | `1.15.0-debian-11-r8`   |
 | `server.image.digest`                                      | Vault Server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                    |
 | `server.image.pullPolicy`                                  | Vault Server image pull policy                                                                                                                          | `IfNotPresent`          |
 | `server.image.pullSecrets`                                 | Vault Server image pull secrets                                                                                                                         | `[]`                    |
@@ -251,7 +250,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `csiProvider.enabled`                                                    | Enable Vault CSI Provider                                                                                                                                     | `false`                                       |
 | `csiProvider.image.registry`                                             | Vault CSI Provider image registry                                                                                                                             | `REGISTRY_NAME`                               |
 | `csiProvider.image.repository`                                           | Vault CSI Provider image repository                                                                                                                           | `REPOSITORY_NAME/vault-csi-provider`          |
-| `csiProvider.image.tag`                                                  | Vault CSI Provider image tag (immutable tags are recommended)                                                                                                 | `1.4.0-debian-11-r139`                        |
 | `csiProvider.image.digest`                                               | Vault CSI Provider image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                                          |
 | `csiProvider.image.pullPolicy`                                           | Vault CSI Provider image pull policy                                                                                                                          | `IfNotPresent`                                |
 | `csiProvider.image.pullSecrets`                                          | Vault CSI Provider image pull secrets                                                                                                                         | `[]`                                          |
@@ -374,7 +372,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `injector.enabled`                                           | Enable Vault Kubernetes Injector                                                                                                                                     | `true`                      |
 | `injector.image.registry`                                    | Vault Kubernetes Injector image registry                                                                                                                             | `REGISTRY_NAME`             |
 | `injector.image.repository`                                  | Vault Kubernetes Injector image repository                                                                                                                           | `REPOSITORY_NAME/vault-k8s` |
-| `injector.image.tag`                                         | Vault Kubernetes Injector image tag (immutable tags are recommended)                                                                                                 | `1.3.0-debian-11-r22`       |
 | `injector.image.digest`                                      | Vault Kubernetes Injector image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                        |
 | `injector.image.pullPolicy`                                  | Vault Kubernetes Injector image pull policy                                                                                                                          | `IfNotPresent`              |
 | `injector.image.pullSecrets`                                 | Vault Kubernetes Injector image pull secrets                                                                                                                         | `[]`                        |
@@ -477,7 +474,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`         |
 | `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`                       |

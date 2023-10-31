@@ -24,7 +24,7 @@ Apache Spark includes APIs for Java, Python, Scala and R.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Apache Spark in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Apache Spark in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -90,7 +90,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`    | Spark image registry                                                                                  | `REGISTRY_NAME`         |
 | `image.repository`  | Spark image repository                                                                                | `REPOSITORY_NAME/spark` |
-| `image.tag`         | Spark image tag (immutable tags are recommended)                                                      | `3.5.0-debian-11-r0`    |
 | `image.digest`      | Spark image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `image.pullPolicy`  | Spark image pull policy                                                                               | `IfNotPresent`          |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                      | `[]`                    |

@@ -22,7 +22,7 @@ This chart bootstraps a [Schema Registry](https://github.com/bitnami/containers/
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Confluent Schema Registry in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Confluent Schema Registry in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -84,7 +84,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------- |
 | `image.registry`                                | Schema Registry image registry                                                                                  | `REGISTRY_NAME`                   |
 | `image.repository`                              | Schema Registry image repository                                                                                | `REPOSITORY_NAME/schema-registry` |
-| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.5.1-debian-11-r1`              |
 | `image.digest`                                  | Schema Registry image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                              |
 | `image.pullPolicy`                              | Schema Registry image pull policy                                                                               | `IfNotPresent`                    |
 | `image.pullSecrets`                             | Schema Registry image pull secrets                                                                              | `[]`                              |
@@ -174,6 +173,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.maxReplicas`            | Maximum number of replicas                                                                                               | `11`            |
 | `autoscaling.targetCPU`              | Target CPU utilization percentage                                                                                        | `""`            |
 | `autoscaling.targetMemory`           | Target Memory utilization percentage                                                                                     | `""`            |
+| `autoscaling.customPodMetrics`       | allows you to set a list of custom metrics to trigger the scaling.                                                       | `[]`            |
 
 ### Exposure Parameters
 

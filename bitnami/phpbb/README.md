@@ -24,7 +24,7 @@ It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/t
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use phpBB in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use phpBB in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -85,7 +85,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `image.registry`                        | phpBB image registry                                                                                                                                      | `REGISTRY_NAME`            |
 | `image.repository`                      | phpBB image repository                                                                                                                                    | `REPOSITORY_NAME/phpbb`    |
-| `image.tag`                             | phpBB image tag (immutable tags are recommended)                                                                                                          | `3.3.10-debian-11-r120`    |
 | `image.digest`                          | phpBB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                     | `""`                       |
 | `image.pullPolicy`                      | phpBB image pull policy                                                                                                                                   | `IfNotPresent`             |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                          | `[]`                       |
@@ -113,7 +112,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`             | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                    |
 | `volumePermissions.image.registry`      | Init container volume-permissions image registry                                                                                                          | `REGISTRY_NAME`            |
 | `volumePermissions.image.repository`    | Init container volume-permissions image repository                                                                                                        | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.tag`           | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r90`         |
 | `volumePermissions.image.digest`        | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                       |
 | `volumePermissions.image.pullPolicy`    | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`   | Specify docker-registry secret names as an array                                                                                                          | `[]`                       |
@@ -235,7 +233,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a side-car prometheus exporter                                                                            | `false`                           |
 | `metrics.image.registry`    | Apache exporter image registry                                                                                  | `REGISTRY_NAME`                   |
 | `metrics.image.repository`  | Apache exporter image repository                                                                                | `REPOSITORY_NAME/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended)                                                      | `1.0.2-debian-11-r10`             |
 | `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                              |
 | `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`                    |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                              |

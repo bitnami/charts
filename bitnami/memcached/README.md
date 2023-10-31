@@ -22,7 +22,7 @@ This chart bootstraps a [Memcached](https://github.com/bitnami/containers/tree/m
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Memcached in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Memcached in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -84,7 +84,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `image.registry`              | Memcached image registry                                                                                  | `REGISTRY_NAME`             |
 | `image.repository`            | Memcached image repository                                                                                | `REPOSITORY_NAME/memcached` |
-| `image.tag`                   | Memcached image tag (immutable tags are recommended)                                                      | `1.6.22-debian-11-r0`       |
 | `image.digest`                | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
 | `image.pullPolicy`            | Memcached image pull policy                                                                               | `IfNotPresent`              |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                                          | `[]`                        |
@@ -211,7 +210,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                              |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`                      |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell`           |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`                   |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                 |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`                       |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                                 |
@@ -221,7 +219,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                                      | Start a side-car prometheus exporter                                                                                              | `false`                              |
 | `metrics.image.registry`                               | Memcached exporter image registry                                                                                                 | `REGISTRY_NAME`                      |
 | `metrics.image.repository`                             | Memcached exporter image repository                                                                                               | `REPOSITORY_NAME/memcached-exporter` |
-| `metrics.image.tag`                                    | Memcached exporter image tag (immutable tags are recommended)                                                                     | `0.13.0-debian-11-r121`              |
 | `metrics.image.digest`                                 | Memcached exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                                 |
 | `metrics.image.pullPolicy`                             | Image pull policy                                                                                                                 | `IfNotPresent`                       |
 | `metrics.image.pullSecrets`                            | Specify docker-registry secret names as an array                                                                                  | `[]`                                 |

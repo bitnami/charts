@@ -24,7 +24,7 @@ This chart bootstraps a [Contour](https://projectcontour.io) Ingress Controller 
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Contour in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Contour in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -94,7 +94,6 @@ helm uninstall my-release
 | `contour.enabled`                                             | Contour Deployment creation.                                                                                                       | `true`                    |
 | `contour.image.registry`                                      | Contour image registry                                                                                                             | `REGISTRY_NAME`           |
 | `contour.image.repository`                                    | Contour image name                                                                                                                 | `REPOSITORY_NAME/contour` |
-| `contour.image.tag`                                           | Contour image tag                                                                                                                  | `1.26.1-debian-11-r0`     |
 | `contour.image.digest`                                        | Contour image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                            | `""`                      |
 | `contour.image.pullPolicy`                                    | Contour Image pull policy                                                                                                          | `IfNotPresent`            |
 | `contour.image.pullSecrets`                                   | Contour Image pull secrets                                                                                                         | `[]`                      |
@@ -204,7 +203,6 @@ helm uninstall my-release
 | `envoy.enabled`                                               | Envoy Proxy creation                                                                                                  | `true`                  |
 | `envoy.image.registry`                                        | Envoy Proxy image registry                                                                                            | `REGISTRY_NAME`         |
 | `envoy.image.repository`                                      | Envoy Proxy image repository                                                                                          | `REPOSITORY_NAME/envoy` |
-| `envoy.image.tag`                                             | Envoy Proxy image tag (immutable tags are recommended)                                                                | `1.26.6-debian-11-r0`   |
 | `envoy.image.digest`                                          | Envoy Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                    |
 | `envoy.image.pullPolicy`                                      | Envoy image pull policy                                                                                               | `IfNotPresent`          |
 | `envoy.image.pullSecrets`                                     | Envoy image pull secrets                                                                                              | `[]`                    |
@@ -335,7 +333,6 @@ helm uninstall my-release
 | `defaultBackend.enabled`                               | Enable a default backend based on NGINX                                                                         | `false`                  |
 | `defaultBackend.image.registry`                        | Default backend image registry                                                                                  | `REGISTRY_NAME`          |
 | `defaultBackend.image.repository`                      | Default backend image name                                                                                      | `REPOSITORY_NAME/nginx`  |
-| `defaultBackend.image.tag`                             | Default backend image tag                                                                                       | `1.25.2-debian-11-r47`   |
 | `defaultBackend.image.digest`                          | Default backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `defaultBackend.image.pullPolicy`                      | Image pull policy                                                                                               | `IfNotPresent`           |
 | `defaultBackend.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                | `[]`                     |

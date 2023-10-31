@@ -22,7 +22,7 @@ This chart bootstraps a TensorFlow Serving ResNet deployment on a [Kubernetes](h
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use TensorFlow ResNet in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use TensorFlow ResNet in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -88,13 +88,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------ |
 | `server.image.registry`                 | TensorFlow Serving image registry                                                                                  | `REGISTRY_NAME`                      |
 | `server.image.repository`               | TensorFlow Serving image repository                                                                                | `REPOSITORY_NAME/tensorflow-serving` |
-| `server.image.tag`                      | TensorFlow Serving Image tag (immutable tags are recommended)                                                      | `2.13.1-debian-11-r5`                |
 | `server.image.digest`                   | TensorFlow Serving image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                 |
 | `server.image.pullPolicy`               | TensorFlow Serving image pull policy                                                                               | `IfNotPresent`                       |
 | `server.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                   | `[]`                                 |
 | `client.image.registry`                 | TensorFlow ResNet image registry                                                                                   | `REGISTRY_NAME`                      |
 | `client.image.repository`               | TensorFlow ResNet image repository                                                                                 | `REPOSITORY_NAME/tensorflow-resnet`  |
-| `client.image.tag`                      | TensorFlow ResNet image tag (immutable tags are recommended)                                                       | `2.13.1-debian-11-r6`                |
 | `client.image.digest`                   | TensorFlow ResNet image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag  | `""`                                 |
 | `client.image.pullPolicy`               | TensorFlow ResNet image pull policy                                                                                | `IfNotPresent`                       |
 | `client.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                   | `[]`                                 |

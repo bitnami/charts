@@ -22,7 +22,7 @@ This chart bootstraps a [Whereabouts](https://github.com/bitnami/containers/tree
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Whereabouts in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Whereabouts in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -86,7 +86,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 | `image.registry`                        | Whereabouts image registry                                                                                            | `REGISTRY_NAME`               |
 | `image.repository`                      | Whereabouts Image name                                                                                                | `REPOSITORY_NAME/whereabouts` |
-| `image.tag`                             | Whereabouts Image tag                                                                                                 | `0.6.2-debian-11-r109`        |
 | `image.digest`                          | Whereabouts image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                          |
 | `image.pullPolicy`                      | Whereabouts image pull policy                                                                                         | `IfNotPresent`                |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                          |

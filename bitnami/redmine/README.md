@@ -24,7 +24,7 @@ It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/t
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Redmine in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Redmine in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -98,7 +98,6 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redmine --set databa
 | ----------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`        | Redmine image registry                                                                                  | `REGISTRY_NAME`           |
 | `image.repository`      | Redmine image repository                                                                                | `REPOSITORY_NAME/redmine` |
-| `image.tag`             | Redmine image tag (immutable tags are recommended)                                                      | `5.0.6-debian-11-r7`      |
 | `image.digest`          | Redmine image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `image.pullPolicy`      | Redmine image pull policy                                                                               | `IfNotPresent`            |
 | `image.pullSecrets`     | Redmine image pull secrets                                                                              | `[]`                      |
@@ -344,7 +343,6 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redmine --set databa
 | `certificates.customCA`                              | Defines a list of secrets to import into the container trust store                                      | `[]`                                     |
 | `certificates.image.registry`                        | Redmine image registry                                                                                  | `REGISTRY_NAME`                          |
 | `certificates.image.repository`                      | Redmine image repository                                                                                | `REPOSITORY_NAME/os-shell`               |
-| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`                       |
 | `certificates.image.digest`                          | Redmine image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Redmine image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Redmine image pull secrets                                                                              | `[]`                                     |

@@ -22,7 +22,7 @@ This chart bootstraps a [Metrics Server](https://github.com/bitnami/containers/t
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Metrics Server in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Metrics Server in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -83,7 +83,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------- |
 | `image.registry`                                  | Metrics Server image registry                                                                                                                                            | `REGISTRY_NAME`                  |
 | `image.repository`                                | Metrics Server image repository                                                                                                                                          | `REPOSITORY_NAME/metrics-server` |
-| `image.tag`                                       | Metrics Server image tag (immutable tags are recommended)                                                                                                                | `0.6.4-debian-11-r70`            |
 | `image.digest`                                    | Metrics Server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                           | `""`                             |
 | `image.pullPolicy`                                | Metrics Server image pull policy                                                                                                                                         | `IfNotPresent`                   |
 | `image.pullSecrets`                               | Metrics Server image pull secrets                                                                                                                                        | `[]`                             |

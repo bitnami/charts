@@ -56,7 +56,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.agent.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
-      {{- include "jaeger.waitForDBInitContainer" . | nindent 8 }}
+      {{- include "jaeger.waitForDBInitContainer" (dict "component" "agent" "context" $) | nindent 8 }}
       {{- if .Values.agent.initContainers }}
       {{- include "common.tplvalues.render" (dict "value" .Values.agent.initContainers "context" $) | nindent 8 }}
       {{- end }}
