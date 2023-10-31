@@ -59,6 +59,11 @@
             "default": [],
             "items": {}
         },
+        "enableServiceLinks": {
+            "type": "boolean",
+            "description": "Whether information about services should be injected into all pods' environment variable",
+            "default": true
+        },
         "diagnosticMode": {
             "type": "object",
             "properties": {

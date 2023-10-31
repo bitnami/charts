@@ -38,6 +38,9 @@ spec:
         app.kubernetes.io/part-of: milvus
         app.kubernetes.io/component: attu
     spec:
+      {{- if semverCompare ">= 1.13" (include "common.capabilities.kubeVersion" .) }}
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
+      {{- end }}
       serviceAccountName: {{ template "milvus.attu.serviceAccountName" . }}
       {{- include "milvus.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.attu.hostAliases }}
