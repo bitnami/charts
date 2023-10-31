@@ -212,15 +212,21 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.containerPorts.grpc`                               | used by jaeger-agent to send spans in model.proto format                                   | `14250`          |
 | `collector.containerPorts.binary`                             | can accept spans directly from clients in jaeger.thrift format over binary thrift protocol | `14268`          |
 | `collector.containerPorts.admin`                              | Admin port: health check at / and metrics at /metrics                                      | `14269`          |
+| `collector.containerPorts.otlp.grpc`                          | Accepts traces in OpenTelemetry OTLP format over gRPC                                      | `4317`           |
+| `collector.containerPorts.otlp.http`                          | Accepts traces in OpenTelemetry OTLP format over HTTP                                      | `4318`           |
 | `collector.service.type`                                      | Jaeger service type                                                                        | `ClusterIP`      |
 | `collector.service.ports.zipkin`                              | can accept Zipkin spans in Thrift, JSON and Proto (disabled by default)                    | `9411`           |
 | `collector.service.ports.grpc`                                | used by jaeger-agent to send spans in model.proto format                                   | `14250`          |
 | `collector.service.ports.binary`                              | can accept spans directly from clients in jaeger.thrift format over binary thrift protocol | `14268`          |
 | `collector.service.ports.admin`                               | Admin port: health check at / and metrics at /metrics                                      | `14269`          |
+| `collector.service.ports.otlp.grpc`                           | Accepts traces in OpenTelemetry OTLP format over gRPC                                      | `4317`           |
+| `collector.service.ports.otlp.http`                           | Accepts traces in OpenTelemetry OTLP format over HTTP                                      | `4318`           |
 | `collector.service.nodePorts.zipkin`                          | can accept Zipkin spans in Thrift, JSON and Proto (disabled by default)                    | `""`             |
 | `collector.service.nodePorts.grpc`                            | used by jaeger-agent to send spans in model.proto format                                   | `""`             |
 | `collector.service.nodePorts.binary`                          | can accept spans directly from clients in jaeger.thrift format over binary thrift protocol | `""`             |
 | `collector.service.nodePorts.admin`                           | Admin port: health check at / and metrics at /metrics                                      | `""`             |
+| `collector.service.nodePorts.otlp.grpc`                       | Accepts traces in OpenTelemetry OTLP format over gRPC                                      | `""`             |
+| `collector.service.nodePorts.otlp.http`                       | Accepts traces in OpenTelemetry OTLP format over HTTP                                      | `""`             |
 | `collector.service.extraPorts`                                | Extra ports to expose in the service (normally used with the `sidecar` value)              | `[]`             |
 | `collector.service.loadBalancerIP`                            | LoadBalancerIP if service type is `LoadBalancer`                                           | `""`             |
 | `collector.service.loadBalancerSourceRanges`                  | Service Load Balancer sources                                                              | `[]`             |
