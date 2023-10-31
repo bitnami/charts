@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.4
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: httpproxies.projectcontour.io
 spec:
   preserveUnknownFields: false
@@ -69,11 +69,12 @@ spec:
                         they are merged using AND, with one exception: There can be
                         only one Prefix MatchCondition per Conditions slice. More
                         than one Prefix, or contradictory Conditions, will make the
-                        include invalid.'
+                        include invalid. Exact and Regex match conditions are not
+                        allowed on includes.'
                       items:
                         description: MatchCondition are a general holder for matching
-                          rules for HTTPProxies. One of Prefix, Exact, Header or QueryParameter
-                          must be provided.
+                          rules for HTTPProxies. One of Prefix, Exact, Regex, Header
+                          or QueryParameter must be provided.
                         properties:
                           exact:
                             description: Exact defines a exact match for a request.
@@ -91,6 +92,11 @@ spec:
                                 description: Exact specifies a string that the header
                                   value must be equal to.
                                 type: string
+                              ignoreCase:
+                                description: IgnoreCase specifies that string matching
+                                  should be case insensitive. Note that this has no
+                                  effect on the Regex parameter.
+                                type: boolean
                               name:
                                 description: Name is the name of the header to match
                                   against. Name is required. Header names are case
@@ -117,6 +123,18 @@ spec:
                                   its value. Note that setting Present to false does
                                   not make the condition true if the named header
                                   is absent.
+                                type: boolean
+                              regex:
+                                description: Regex specifies a regular expression
+                                  pattern that must match the header value.
+                                type: string
+                              treatMissingAsEmpty:
+                                description: TreatMissingAsEmpty specifies if the
+                                  header match rule specified header does not exist,
+                                  this header value will be treated as empty. Defaults
+                                  to false. Unlike the underlying Envoy implementation
+                                  this is **only** supported for negative matches
+                                  (e.g. NotContains, NotExact).
                                 type: boolean
                             required:
                             - name
@@ -168,6 +186,10 @@ spec:
                             required:
                             - name
                             type: object
+                          regex:
+                            description: Regex defines a regex match for a request.
+                              This field is not allowed in include match conditions.
+                            type: string
                         type: object
                       type: array
                     name:
@@ -215,13 +237,14 @@ spec:
                     conditions:
                       description: 'Conditions are a set of rules that are applied
                         to a Route. When applied, they are merged using AND, with
-                        one exception: There can be only one Prefix MatchCondition
-                        per Conditions slice. More than one Prefix, or contradictory
-                        Conditions, will make the route invalid.'
+                        one exception: There can be only one Prefix, Exact or Regex
+                        MatchCondition per Conditions slice. More than one of these
+                        condition types, or contradictory Conditions, will make the
+                        route invalid.'
                       items:
                         description: MatchCondition are a general holder for matching
-                          rules for HTTPProxies. One of Prefix, Exact, Header or QueryParameter
-                          must be provided.
+                          rules for HTTPProxies. One of Prefix, Exact, Regex, Header
+                          or QueryParameter must be provided.
                         properties:
                           exact:
                             description: Exact defines a exact match for a request.
@@ -239,6 +262,11 @@ spec:
                                 description: Exact specifies a string that the header
                                   value must be equal to.
                                 type: string
+                              ignoreCase:
+                                description: IgnoreCase specifies that string matching
+                                  should be case insensitive. Note that this has no
+                                  effect on the Regex parameter.
+                                type: boolean
                               name:
                                 description: Name is the name of the header to match
                                   against. Name is required. Header names are case
@@ -265,6 +293,18 @@ spec:
                                   its value. Note that setting Present to false does
                                   not make the condition true if the named header
                                   is absent.
+                                type: boolean
+                              regex:
+                                description: Regex specifies a regular expression
+                                  pattern that must match the header value.
+                                type: string
+                              treatMissingAsEmpty:
+                                description: TreatMissingAsEmpty specifies if the
+                                  header match rule specified header does not exist,
+                                  this header value will be treated as empty. Defaults
+                                  to false. Unlike the underlying Envoy implementation
+                                  this is **only** supported for negative matches
+                                  (e.g. NotContains, NotExact).
                                 type: boolean
                             required:
                             - name
@@ -316,6 +356,10 @@ spec:
                             required:
                             - name
                             type: object
+                          regex:
+                            description: Regex defines a regex match for a request.
+                              This field is not allowed in include match conditions.
+                            type: string
                         type: object
                       type: array
                     cookieRewritePolicies:
@@ -402,6 +446,33 @@ spec:
                     healthCheckPolicy:
                       description: The health check policy for this route.
                       properties:
+                        expectedStatuses:
+                          description: The ranges of HTTP response statuses considered
+                            healthy. Follow half-open semantics, i.e. for each range
+                            the start is inclusive and the end is exclusive. Must
+                            be within the range [100,600). If not specified, only
+                            a 200 response status is considered healthy.
+                          items:
+                            properties:
+                              end:
+                                description: The end (exclusive) of a range of HTTP
+                                  status codes.
+                                format: int64
+                                maximum: 600
+                                minimum: 101
+                                type: integer
+                              start:
+                                description: The start (inclusive) of a range of HTTP
+                                  status codes.
+                                format: int64
+                                maximum: 599
+                                minimum: 100
+                                type: integer
+                            required:
+                            - end
+                            - start
+                            type: object
+                          type: array
                         healthyThresholdCount:
                           description: The number of healthy health checks required
                             before a host is marked healthy
@@ -762,8 +833,13 @@ spec:
                                                 description: HeaderMatchCondition
                                                   specifies how to conditionally match
                                                   against HTTP headers. The Name field
-                                                  is required, but only one of the
-                                                  remaining fields should be be provided.
+                                                  is required, only one of Present,
+                                                  NotPresent, Contains, NotContains,
+                                                  Exact, NotExact and Regex can be
+                                                  set. For negative matching rules
+                                                  only (e.g. NotContains or NotExact)
+                                                  you can set TreatMissingAsEmpty.
+                                                  IgnoreCase has no effect for Regex.
                                                 properties:
                                                   contains:
                                                     description: Contains specifies
@@ -775,6 +851,13 @@ spec:
                                                       string that the header value
                                                       must be equal to.
                                                     type: string
+                                                  ignoreCase:
+                                                    description: IgnoreCase specifies
+                                                      that string matching should
+                                                      be case insensitive. Note that
+                                                      this has no effect on the Regex
+                                                      parameter.
+                                                    type: boolean
                                                   name:
                                                     description: Name is the name
                                                       of the header to match against.
@@ -812,6 +895,22 @@ spec:
                                                       true if the named header is
                                                       absent.
                                                     type: boolean
+                                                  regex:
+                                                    description: Regex specifies a
+                                                      regular expression pattern that
+                                                      must match the header value.
+                                                    type: string
+                                                  treatMissingAsEmpty:
+                                                    description: TreatMissingAsEmpty
+                                                      specifies if the header match
+                                                      rule specified header does not
+                                                      exist, this header value will
+                                                      be treated as empty. Defaults
+                                                      to false. Unlike the underlying
+                                                      Envoy implementation this is
+                                                      **only** supported for negative
+                                                      matches (e.g. NotContains, NotExact).
+                                                    type: boolean
                                                 required:
                                                 - name
                                                 type: object
@@ -829,6 +928,11 @@ spec:
                                 type: object
                               minItems: 1
                               type: array
+                            disabled:
+                              description: Disabled configures the HTTPProxy to not
+                                use the default global rate limit policy defined by
+                                the Contour configuration.
+                              type: boolean
                           type: object
                         local:
                           description: Local defines local rate limiting parameters,
@@ -893,8 +997,15 @@ spec:
                           type: object
                       type: object
                     requestHeadersPolicy:
-                      description: The policy for managing request headers during
-                        proxying.
+                      description: "The policy for managing request headers during
+                        proxying. \n You may dynamically rewrite the Host header to
+                        be forwarded upstream to the content of a request header using
+                        the below format \"%REQ(X-Header-Name)%\". If the value of
+                        the header is empty, it is ignored. \n *NOTE: Pay attention
+                        to the potential security implications of using this option.
+                        Provided header must come from trusted source. \n **NOTE:
+                        The header rewrite is only done while forwarding and has no
+                        bearing on the routing decision."
                       properties:
                         remove:
                           description: Remove specifies a list of HTTP header names
@@ -1136,8 +1247,15 @@ spec:
                             minimum: 1
                             type: integer
                           mirror:
-                            description: If Mirror is true the Service will receive
-                              a read only mirror of the traffic for this route.
+                            description: 'If Mirror is true the Service will receive
+                              a read only mirror of the traffic for this route. If
+                              Mirror is true, then fractional mirroring can be enabled
+                              by optionally setting the Weight field. Legal values
+                              for Weight are 1-100. Omitting the Weight field will
+                              result in 100% mirroring. NOTE: Setting Weight explicitly
+                              to 0 will unexpectedly result in 100% traffic mirroring.
+                              This occurs since we cannot distinguish omitted fields
+                              from those explicitly set to their default values'
                             type: boolean
                           name:
                             description: Name is the name of Kubernetes service to
@@ -1276,7 +1394,11 @@ spec:
                                 description: Name or namespaced name of the Kubernetes
                                   secret used to validate the certificate presented
                                   by the backend. The secret must contain key named
-                                  ca.crt.
+                                  ca.crt. The name can be optionally prefixed with
+                                  namespace "namespace/name". When cross-namespace
+                                  reference is used, TLSCertificateDelegation resource
+                                  must exist in the namespace to grant access to the
+                                  secret.
                                 type: string
                               subjectName:
                                 description: Key which is expected to be present in
@@ -1523,8 +1645,15 @@ spec:
                           minimum: 1
                           type: integer
                         mirror:
-                          description: If Mirror is true the Service will receive
-                            a read only mirror of the traffic for this route.
+                          description: 'If Mirror is true the Service will receive
+                            a read only mirror of the traffic for this route. If Mirror
+                            is true, then fractional mirroring can be enabled by optionally
+                            setting the Weight field. Legal values for Weight are
+                            1-100. Omitting the Weight field will result in 100% mirroring.
+                            NOTE: Setting Weight explicitly to 0 will unexpectedly
+                            result in 100% traffic mirroring. This occurs since we
+                            cannot distinguish omitted fields from those explicitly
+                            set to their default values'
                           type: boolean
                         name:
                           description: Name is the name of Kubernetes service to proxy
@@ -1661,7 +1790,10 @@ spec:
                               description: Name or namespaced name of the Kubernetes
                                 secret used to validate the certificate presented
                                 by the backend. The secret must contain key named
-                                ca.crt.
+                                ca.crt. The name can be optionally prefixed with namespace
+                                "namespace/name". When cross-namespace reference is
+                                used, TLSCertificateDelegation resource must exist
+                                in the namespace to grant access to the secret.
                               type: string
                             subjectName:
                               description: Key which is expected to be present in
@@ -1979,7 +2111,11 @@ spec:
                                   description: Name or namespaced name of the Kubernetes
                                     secret used to validate the certificate presented
                                     by the backend. The secret must contain key named
-                                    ca.crt.
+                                    ca.crt. The name can be optionally prefixed with
+                                    namespace "namespace/name". When cross-namespace
+                                    reference is used, TLSCertificateDelegation resource
+                                    must exist in the namespace to grant access to
+                                    the secret.
                                   type: string
                                 subjectName:
                                   description: Key which is expected to be present
@@ -2087,8 +2223,12 @@ spec:
                                               description: HeaderMatchCondition specifies
                                                 how to conditionally match against
                                                 HTTP headers. The Name field is required,
-                                                but only one of the remaining fields
-                                                should be be provided.
+                                                only one of Present, NotPresent, Contains,
+                                                NotContains, Exact, NotExact and Regex
+                                                can be set. For negative matching
+                                                rules only (e.g. NotContains or NotExact)
+                                                you can set TreatMissingAsEmpty. IgnoreCase
+                                                has no effect for Regex.
                                               properties:
                                                 contains:
                                                   description: Contains specifies
@@ -2100,6 +2240,12 @@ spec:
                                                     that the header value must be
                                                     equal to.
                                                   type: string
+                                                ignoreCase:
+                                                  description: IgnoreCase specifies
+                                                    that string matching should be
+                                                    case insensitive. Note that this
+                                                    has no effect on the Regex parameter.
+                                                  type: boolean
                                                 name:
                                                   description: Name is the name of
                                                     the header to match against. Name
@@ -2135,6 +2281,22 @@ spec:
                                                     the condition true if the named
                                                     header is absent.
                                                   type: boolean
+                                                regex:
+                                                  description: Regex specifies a regular
+                                                    expression pattern that must match
+                                                    the header value.
+                                                  type: string
+                                                treatMissingAsEmpty:
+                                                  description: TreatMissingAsEmpty
+                                                    specifies if the header match
+                                                    rule specified header does not
+                                                    exist, this header value will
+                                                    be treated as empty. Defaults
+                                                    to false. Unlike the underlying
+                                                    Envoy implementation this is **only**
+                                                    supported for negative matches
+                                                    (e.g. NotContains, NotExact).
+                                                  type: boolean
                                               required:
                                               - name
                                               type: object
@@ -2152,6 +2314,11 @@ spec:
                               type: object
                             minItems: 1
                             type: array
+                          disabled:
+                            description: Disabled configures the HTTPProxy to not
+                              use the default global rate limit policy defined by
+                              the Contour configuration.
+                            type: boolean
                         type: object
                       local:
                         description: Local defines local rate limiting parameters,
@@ -2237,6 +2404,10 @@ spec:
                               named ca.crt. The client certificate must validate against
                               the certificates in the bundle. If specified and SkipClientCertValidation
                               is true, client certificates will be required on requests.
+                              The name can be optionally prefixed with namespace "namespace/name".
+                              When cross-namespace reference is used, TLSCertificateDelegation
+                              resource must exist in the namespace to grant access
+                              to the secret.
                             minLength: 1
                             type: string
                           crlOnlyVerifyLeafCert:
@@ -2251,7 +2422,11 @@ spec:
                               to verify that a client certificate has not been revoked.
                               CRLs must be available from all CAs, unless crlOnlyVerifyLeafCert
                               is true. Large CRL lists are not supported since individual
-                              secrets are limited to 1MiB in size.
+                              secrets are limited to 1MiB in size. The name can be
+                              optionally prefixed with namespace "namespace/name".
+                              When cross-namespace reference is used, TLSCertificateDelegation
+                              resource must exist in the namespace to grant access
+                              to the secret.
                             minLength: 1
                             type: string
                           forwardClientCertificate:
@@ -2304,6 +2479,11 @@ spec:
                           should allow a default certificate to be applied which handles
                           all requests which don't match the SNI defined in this vhost.
                         type: boolean
+                      maximumProtocolVersion:
+                        description: MaximumProtocolVersion is the maximum TLS version
+                          this vhost should negotiate. Valid options are `1.2` and
+                          `1.3` (default). Any other value defaults to TLS 1.3.
+                        type: string
                       minimumProtocolVersion:
                         description: MinimumProtocolVersion is the minimum TLS version
                           this vhost should negotiate. Valid options are `1.2` (default)
@@ -2316,11 +2496,13 @@ spec:
                           not both.
                         type: boolean
                       secretName:
-                        description: SecretName is the name of a TLS secret in the
-                          current namespace. Either SecretName or Passthrough must
-                          be specified, but not both. If specified, the named secret
-                          must contain a matching certificate for the virtual host's
-                          FQDN.
+                        description: SecretName is the name of a TLS secret. Either
+                          SecretName or Passthrough must be specified, but not both.
+                          If specified, the named secret must contain a matching certificate
+                          for the virtual host's FQDN. The name can be optionally
+                          prefixed with namespace "namespace/name". When cross-namespace
+                          reference is used, TLSCertificateDelegation resource must
+                          exist in the namespace to grant access to the secret.
                         type: string
                     type: object
                 required:
