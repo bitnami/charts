@@ -134,111 +134,120 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Jenkins Configuration as Code plugin settings (EXPERIMENTAL)
 
-| Name                                                                      | Description                                                                                             | Value                           |
-| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| `configAsCode.enabled`                                                    | Enable configuration as code.                                                                           | `false`                         |
-| `configAsCode.extraConfigFiles`                                           | List of additional configuration-as-code files to be mounted                                            | `{}`                            |
-| `configAsCode.securityRealm`                                              | Content of the 'securityRealm' block                                                                    | `{}`                            |
-| `configAsCode.authorizationStrategy`                                      | Content of the 'authorizationStrategy' block                                                            | `{}`                            |
-| `configAsCode.security`                                                   | Content of the 'security' block                                                                         | `{}`                            |
-| `configAsCode.extraJenkins`                                               | Append additional settings under the 'jenkins' block                                                    | `{}`                            |
-| `configAsCode.extraConfig`                                                | Append additional settings at the root of the configuration-as-code file                                | `{}`                            |
-| `configAsCode.extraKubernetes`                                            | Append additional settings under the Kubernetes cloud block                                             | `{}`                            |
-| `configAsCode.extraClouds`                                                | Additional clouds                                                                                       | `[]`                            |
-| `configAsCode.existingConfigmap`                                          | Name of an existing configmap containing the config-as-code files.                                      | `""`                            |
-| `configAsCode.autoReload.enabled`                                         | Enable the creation of the autoReload sidecar container.                                                | `true`                          |
-| `configAsCode.autoReload.initialDelay`                                    | In seconds, time                                                                                        | `360`                           |
-| `configAsCode.autoReload.reqRetries`                                      |                                                                                                         | `12`                            |
-| `configAsCode.autoReload.interval`                                        |                                                                                                         | `10`                            |
-| `configAsCode.autoReload.command`                                         |                                                                                                         | `[]`                            |
-| `configAsCode.autoReload.args`                                            |                                                                                                         | `[]`                            |
-| `configAsCode.autoReload.extraEnvVars`                                    |                                                                                                         | `[]`                            |
-| `configAsCode.autoReload.extraEnvVarsSecret`                              |                                                                                                         | `""`                            |
-| `configAsCode.autoReload.extraEnvVarsCM`                                  |                                                                                                         | `""`                            |
-| `configAsCode.autoReload.extraVolumeMounts`                               |                                                                                                         | `[]`                            |
-| `configAsCode.autoReload.containerSecurityContext.enabled`                | Enabled %%MAIN_CONTAINER_NAME%% containers' Security Context                                            | `true`                          |
-| `configAsCode.autoReload.containerSecurityContext.runAsUser`              | Set %%MAIN_CONTAINER_NAME%% containers' Security Context runAsUser                                      | `1001`                          |
-| `configAsCode.autoReload.containerSecurityContext.runAsNonRoot`           | Set %%MAIN_CONTAINER_NAME%% containers' Security Context runAsNonRoot                                   | `true`                          |
-| `configAsCode.autoReload.containerSecurityContext.readOnlyRootFilesystem` | Set %%MAIN_CONTAINER_NAME%% containers' Security Context runAsNonRoot                                   | `false`                         |
-| `agent.enabled`                                                           | Set to true to enable the configuration of Jenkins kubernetes agents                                    | `false`                         |
-| `agent.image.registry`                                                    | Jenkins image registry                                                                                  | `REGISTRY_NAME`                 |
-| `agent.image.repository`                                                  | Jenkins image repository                                                                                | `REPOSITORY_NAME/jenkins-agent` |
-| `agent.image.digest`                                                      | Jenkins image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                            |
-| `agent.image.pullPolicy`                                                  | Jenkins image pull policy                                                                               | `IfNotPresent`                  |
-| `agent.image.pullSecrets`                                                 | Jenkins image pull secrets                                                                              | `[]`                            |
-| `agent.image.debug`                                                       | Enable image debug mode                                                                                 | `false`                         |
-| `agent.templateLabel`                                                     | Label for the Kubernetes agent template                                                                 | `kubernetes-agent`              |
-| `agent.podLabels`                                                         | Additional pod labels for the Jenkins agent pods                                                        | `{}`                            |
-| `agent.annotations`                                                       | Additional pod annotations for the Jenkins agent pods                                                   | `{}`                            |
-| `agent.sidecars`                                                          | Additional sidecar containers for the Jenkins agent pods                                                | `[]`                            |
-| `agent.command`                                                           | Override default container command (useful when using custom images)                                    | `""`                            |
-| `agent.args`                                                              | Override default container args (useful when using custom images)                                       | `""`                            |
-| `agent.containerExtraEnvVars`                                             | Additional env vars for the Jenkins agent pods                                                          | `[]`                            |
-| `agent.podExtraEnvVars`                                                   | Additional env vars for the Jenkins agent pods                                                          | `[]`                            |
-| `agent.extraAgentTemplate`                                                | Extend the default agent template                                                                       | `{}`                            |
-| `agent.extraTemplates`                                                    | Provide your own custom agent templates                                                                 | `[]`                            |
-| `agent.resources.limits`                                                  | The resources limits for the Jenkins container                                                          | `{}`                            |
-| `agent.resources.requests`                                                | The requested resources for the Jenkins container                                                       | `{}`                            |
-| `agent.containerSecurityContext.enabled`                                  | Enable container security context                                                                       | `false`                         |
-| `agent.containerSecurityContext.runAsUser`                                | User ID for the agent container                                                                         | `""`                            |
-| `agent.containerSecurityContext.runAsGroup`                               | User ID for the agent container                                                                         | `""`                            |
-| `agent.containerSecurityContext.privileged`                               | Decide if the container runs privileged.                                                                | `false`                         |
+| Name                                                                        | Description                                                                                             | Value                           |
+| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `configAsCode.enabled`                                                      | Enable configuration as code.                                                                           | `false`                         |
+| `configAsCode.extraConfigFiles`                                             | List of additional configuration-as-code files to be mounted                                            | `{}`                            |
+| `configAsCode.securityRealm`                                                | Content of the 'securityRealm' block                                                                    | `{}`                            |
+| `configAsCode.authorizationStrategy`                                        | Content of the 'authorizationStrategy' block                                                            | `{}`                            |
+| `configAsCode.security`                                                     | Content of the 'security' block                                                                         | `{}`                            |
+| `configAsCode.extraJenkins`                                                 | Append additional settings under the 'jenkins' block                                                    | `{}`                            |
+| `configAsCode.extraConfig`                                                  | Append additional settings at the root of the configuration-as-code file                                | `{}`                            |
+| `configAsCode.extraKubernetes`                                              | Append additional settings under the Kubernetes cloud block                                             | `{}`                            |
+| `configAsCode.extraClouds`                                                  | Additional clouds                                                                                       | `[]`                            |
+| `configAsCode.existingConfigmap`                                            | Name of an existing configmap containing the config-as-code files.                                      | `""`                            |
+| `configAsCode.autoReload.enabled`                                           | Enable the creation of the autoReload sidecar container.                                                | `true`                          |
+| `configAsCode.autoReload.initialDelay`                                      | In seconds, time                                                                                        | `360`                           |
+| `configAsCode.autoReload.reqRetries`                                        |                                                                                                         | `12`                            |
+| `configAsCode.autoReload.interval`                                          |                                                                                                         | `10`                            |
+| `configAsCode.autoReload.command`                                           |                                                                                                         | `[]`                            |
+| `configAsCode.autoReload.args`                                              |                                                                                                         | `[]`                            |
+| `configAsCode.autoReload.extraEnvVars`                                      |                                                                                                         | `[]`                            |
+| `configAsCode.autoReload.extraEnvVarsSecret`                                |                                                                                                         | `""`                            |
+| `configAsCode.autoReload.extraEnvVarsCM`                                    |                                                                                                         | `""`                            |
+| `configAsCode.autoReload.extraVolumeMounts`                                 |                                                                                                         | `[]`                            |
+| `configAsCode.autoReload.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                    | `true`                          |
+| `configAsCode.autoReload.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                              | `1001`                          |
+| `configAsCode.autoReload.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                           | `true`                          |
+| `configAsCode.autoReload.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                             | `false`                         |
+| `configAsCode.autoReload.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                 | `false`                         |
+| `configAsCode.autoReload.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                               | `false`                         |
+| `configAsCode.autoReload.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                      | `["ALL"]`                       |
+| `configAsCode.autoReload.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                        | `RuntimeDefault`                |
+| `agent.enabled`                                                             | Set to true to enable the configuration of Jenkins kubernetes agents                                    | `false`                         |
+| `agent.image.registry`                                                      | Jenkins image registry                                                                                  | `REGISTRY_NAME`                 |
+| `agent.image.repository`                                                    | Jenkins image repository                                                                                | `REPOSITORY_NAME/jenkins-agent` |
+| `agent.image.digest`                                                        | Jenkins image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                            |
+| `agent.image.pullPolicy`                                                    | Jenkins image pull policy                                                                               | `IfNotPresent`                  |
+| `agent.image.pullSecrets`                                                   | Jenkins image pull secrets                                                                              | `[]`                            |
+| `agent.image.debug`                                                         | Enable image debug mode                                                                                 | `false`                         |
+| `agent.templateLabel`                                                       | Label for the Kubernetes agent template                                                                 | `kubernetes-agent`              |
+| `agent.podLabels`                                                           | Additional pod labels for the Jenkins agent pods                                                        | `{}`                            |
+| `agent.annotations`                                                         | Additional pod annotations for the Jenkins agent pods                                                   | `{}`                            |
+| `agent.sidecars`                                                            | Additional sidecar containers for the Jenkins agent pods                                                | `[]`                            |
+| `agent.command`                                                             | Override default container command (useful when using custom images)                                    | `""`                            |
+| `agent.args`                                                                | Override default container args (useful when using custom images)                                       | `""`                            |
+| `agent.containerExtraEnvVars`                                               | Additional env vars for the Jenkins agent pods                                                          | `[]`                            |
+| `agent.podExtraEnvVars`                                                     | Additional env vars for the Jenkins agent pods                                                          | `[]`                            |
+| `agent.extraAgentTemplate`                                                  | Extend the default agent template                                                                       | `{}`                            |
+| `agent.extraTemplates`                                                      | Provide your own custom agent templates                                                                 | `[]`                            |
+| `agent.resources.limits`                                                    | The resources limits for the Jenkins container                                                          | `{}`                            |
+| `agent.resources.requests`                                                  | The requested resources for the Jenkins container                                                       | `{}`                            |
+| `agent.containerSecurityContext.enabled`                                    | Enable container security context                                                                       | `false`                         |
+| `agent.containerSecurityContext.runAsUser`                                  | User ID for the agent container                                                                         | `""`                            |
+| `agent.containerSecurityContext.runAsGroup`                                 | User ID for the agent container                                                                         | `""`                            |
+| `agent.containerSecurityContext.privileged`                                 | Decide if the container runs privileged.                                                                | `false`                         |
 
 ### Jenkins deployment parameters
 
-| Name                                    | Description                                                                               | Value           |
-| --------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
-| `updateStrategy.type`                   | Jenkins deployment strategy type                                                          | `RollingUpdate` |
-| `priorityClassName`                     | Jenkins pod priority class name                                                           | `""`            |
-| `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`            |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`            |
-| `hostAliases`                           | Jenkins pod host aliases                                                                  | `[]`            |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes for Jenkins pods                      | `[]`            |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Jenkins container(s)         | `[]`            |
-| `sidecars`                              | Add additional sidecar containers to the Jenkins pod                                      | `[]`            |
-| `initContainers`                        | Add additional init containers to the Jenkins pods                                        | `[]`            |
-| `lifecycleHooks`                        | Add lifecycle hooks to the Jenkins deployment                                             | `{}`            |
-| `podLabels`                             | Extra labels for Jenkins pods                                                             | `{}`            |
-| `podAnnotations`                        | Annotations for Jenkins pods                                                              | `{}`            |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set                                     | `""`            |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                  | `[]`            |
-| `affinity`                              | Affinity for pod assignment                                                               | `{}`            |
-| `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`            |
-| `tolerations`                           | Tolerations for pod assignment                                                            | `[]`            |
-| `resources.limits`                      | The resources limits for the Jenkins container                                            | `{}`            |
-| `resources.requests`                    | The requested resources for the Jenkins container                                         | `{}`            |
-| `containerPorts.http`                   | Jenkins HTTP container port                                                               | `8080`          |
-| `containerPorts.https`                  | Jenkins HTTPS container port                                                              | `8443`          |
-| `containerPorts.agentListener`          | Jenkins agent listener port, ignored if agent.enabled=false                               | `50000`         |
-| `podSecurityContext.enabled`            | Enabled Jenkins pods' Security Context                                                    | `true`          |
-| `podSecurityContext.fsGroup`            | Set Jenkins pod's Security Context fsGroup                                                | `1001`          |
-| `containerSecurityContext.enabled`      | Enabled Jenkins containers' Security Context                                              | `true`          |
-| `containerSecurityContext.runAsUser`    | Set Jenkins container's Security Context runAsUser                                        | `1001`          |
-| `containerSecurityContext.runAsNonRoot` | Set Jenkins container's Security Context runAsNonRoot                                     | `true`          |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`         |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `180`           |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`            |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `5`             |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `6`             |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`             |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`          |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `180`           |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`            |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `5`             |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `6`             |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`             |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`          |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `30`            |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `5`             |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `3`             |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `3`             |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`             |
-| `customStartupProbe`                    | Custom startupProbe that overrides the default one                                        | `{}`            |
-| `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`            |
-| `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`            |
+| Name                                                | Description                                                                               | Value            |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------- |
+| `updateStrategy.type`                               | Jenkins deployment strategy type                                                          | `RollingUpdate`  |
+| `priorityClassName`                                 | Jenkins pod priority class name                                                           | `""`             |
+| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                            | `""`             |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`             |
+| `hostAliases`                                       | Jenkins pod host aliases                                                                  | `[]`             |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for Jenkins pods                      | `[]`             |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Jenkins container(s)         | `[]`             |
+| `sidecars`                                          | Add additional sidecar containers to the Jenkins pod                                      | `[]`             |
+| `initContainers`                                    | Add additional init containers to the Jenkins pods                                        | `[]`             |
+| `lifecycleHooks`                                    | Add lifecycle hooks to the Jenkins deployment                                             | `{}`             |
+| `podLabels`                                         | Extra labels for Jenkins pods                                                             | `{}`             |
+| `podAnnotations`                                    | Annotations for Jenkins pods                                                              | `{}`             |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`             |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`           |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`             |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set                                     | `""`             |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set                                  | `[]`             |
+| `affinity`                                          | Affinity for pod assignment                                                               | `{}`             |
+| `nodeSelector`                                      | Node labels for pod assignment                                                            | `{}`             |
+| `tolerations`                                       | Tolerations for pod assignment                                                            | `[]`             |
+| `resources.limits`                                  | The resources limits for the Jenkins container                                            | `{}`             |
+| `resources.requests`                                | The requested resources for the Jenkins container                                         | `{}`             |
+| `containerPorts.http`                               | Jenkins HTTP container port                                                               | `8080`           |
+| `containerPorts.https`                              | Jenkins HTTPS container port                                                              | `8443`           |
+| `containerPorts.agentListener`                      | Jenkins agent listener port, ignored if agent.enabled=false                               | `50000`          |
+| `podSecurityContext.enabled`                        | Enabled Jenkins pods' Security Context                                                    | `true`           |
+| `podSecurityContext.fsGroup`                        | Set Jenkins pod's Security Context fsGroup                                                | `1001`           |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`           |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`           |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`           |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`          |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                   | `false`          |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                 | `false`          |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                        | `["ALL"]`        |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                          | `RuntimeDefault` |
+| `startupProbe.enabled`                              | Enable startupProbe                                                                       | `false`          |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                    | `180`            |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                           | `10`             |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                          | `5`              |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                        | `6`              |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                        | `1`              |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                      | `true`           |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                   | `180`            |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                          | `10`             |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                         | `5`              |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                       | `6`              |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                       | `1`              |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                     | `true`           |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                  | `30`             |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                         | `5`              |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                        | `3`              |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                      | `3`              |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                      | `1`              |
+| `customStartupProbe`                                | Custom startupProbe that overrides the default one                                        | `{}`             |
+| `customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                       | `{}`             |
+| `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                      | `{}`             |
 
 ### Traffic Exposure Parameters
 
