@@ -219,73 +219,77 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 
 ### Grafana Deployment parameters
 
-| Name                                         | Description                                                                                             | Value           |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------- |
-| `grafana.replicaCount`                       | Number of Grafana nodes                                                                                 | `1`             |
-| `grafana.updateStrategy.type`                | Set up update strategy for Grafana installation.                                                        | `RollingUpdate` |
-| `grafana.hostAliases`                        | Add deployment host aliases                                                                             | `[]`            |
-| `grafana.schedulerName`                      | Alternative scheduler                                                                                   | `""`            |
-| `grafana.terminationGracePeriodSeconds`      | In seconds, time the given to the Grafana pod needs to terminate gracefully                             | `""`            |
-| `grafana.priorityClassName`                  | Priority class name                                                                                     | `""`            |
-| `grafana.podLabels`                          | Extra labels for Grafana pods                                                                           | `{}`            |
-| `grafana.podAnnotations`                     | Grafana Pod annotations                                                                                 | `{}`            |
-| `grafana.podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                     | `""`            |
-| `grafana.podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `soft`          |
-| `grafana.containerPorts.grafana`             | Grafana container port                                                                                  | `3000`          |
-| `grafana.extraPorts`                         | Extra ports for Grafana deployment                                                                      | `[]`            |
-| `grafana.nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `""`            |
-| `grafana.nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                   | `""`            |
-| `grafana.nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                               | `[]`            |
-| `grafana.affinity`                           | Affinity for pod assignment                                                                             | `{}`            |
-| `grafana.nodeSelector`                       | Node labels for pod assignment                                                                          | `{}`            |
-| `grafana.tolerations`                        | Tolerations for pod assignment                                                                          | `[]`            |
-| `grafana.topologySpreadConstraints`          | Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in | `[]`            |
-| `grafana.podSecurityContext.enabled`         | Enable securityContext on for Grafana deployment                                                        | `true`          |
-| `grafana.podSecurityContext.fsGroup`         | Group to configure permissions for volumes                                                              | `1001`          |
-| `grafana.podSecurityContext.runAsUser`       | User for the security context                                                                           | `1001`          |
-| `grafana.podSecurityContext.runAsNonRoot`    | Run containers as non-root users                                                                        | `true`          |
-| `grafana.containerSecurityContext.enabled`   | Enabled Grafana containers' Security Context                                                            | `true`          |
-| `grafana.containerSecurityContext.runAsUser` | Set Grafana containers' Security Context runAsUser                                                      | `1001`          |
-| `grafana.resources.limits`                   | The resources limits for Grafana containers                                                             | `{}`            |
-| `grafana.resources.requests`                 | The requested resources for Grafana containers                                                          | `{}`            |
-| `grafana.livenessProbe.enabled`              | Enable livenessProbe                                                                                    | `true`          |
-| `grafana.livenessProbe.path`                 | Path for livenessProbe                                                                                  | `/api/health`   |
-| `grafana.livenessProbe.scheme`               | Scheme for livenessProbe                                                                                | `HTTP`          |
-| `grafana.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                 | `120`           |
-| `grafana.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                        | `10`            |
-| `grafana.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                       | `5`             |
-| `grafana.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                     | `6`             |
-| `grafana.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                     | `1`             |
-| `grafana.readinessProbe.enabled`             | Enable readinessProbe                                                                                   | `true`          |
-| `grafana.readinessProbe.path`                | Path for readinessProbe                                                                                 | `/api/health`   |
-| `grafana.readinessProbe.scheme`              | Scheme for readinessProbe                                                                               | `HTTP`          |
-| `grafana.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                | `30`            |
-| `grafana.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                       | `10`            |
-| `grafana.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                      | `5`             |
-| `grafana.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                    | `6`             |
-| `grafana.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                    | `1`             |
-| `grafana.startupProbe.enabled`               | Enable startupProbe                                                                                     | `false`         |
-| `grafana.startupProbe.path`                  | Path for readinessProbe                                                                                 | `/api/health`   |
-| `grafana.startupProbe.scheme`                | Scheme for readinessProbe                                                                               | `HTTP`          |
-| `grafana.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                  | `30`            |
-| `grafana.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                         | `10`            |
-| `grafana.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                        | `5`             |
-| `grafana.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                      | `6`             |
-| `grafana.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                      | `1`             |
-| `grafana.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                     | `{}`            |
-| `grafana.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                    | `{}`            |
-| `grafana.customStartupProbe`                 | Custom startupProbe that overrides the default one                                                      | `{}`            |
-| `grafana.lifecycleHooks`                     | for the Grafana container(s) to automate configuration before or after startup                          | `{}`            |
-| `grafana.sidecars`                           | Attach additional sidecar containers to the Grafana pod                                                 | `[]`            |
-| `grafana.initContainers`                     | Add additional init containers to the Grafana pod(s)                                                    | `[]`            |
-| `grafana.extraVolumes`                       | Additional volumes for the Grafana pod                                                                  | `[]`            |
-| `grafana.extraVolumeMounts`                  | Additional volume mounts for the Grafana container                                                      | `[]`            |
-| `grafana.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for Grafana nodes                                  | `""`            |
-| `grafana.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Grafana nodes                                     | `""`            |
-| `grafana.extraEnvVars`                       | Array containing extra env vars to configure Grafana                                                    | `[]`            |
-| `grafana.extraConfigmaps`                    | Array to mount extra ConfigMaps to configure Grafana                                                    | `[]`            |
-| `grafana.command`                            | Override default container command (useful when using custom images)                                    | `[]`            |
-| `grafana.args`                               | Override default container args (useful when using custom images)                                       | `[]`            |
+| Name                                                        | Description                                                                                             | Value            |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------- |
+| `grafana.replicaCount`                                      | Number of Grafana nodes                                                                                 | `1`              |
+| `grafana.updateStrategy.type`                               | Set up update strategy for Grafana installation.                                                        | `RollingUpdate`  |
+| `grafana.hostAliases`                                       | Add deployment host aliases                                                                             | `[]`             |
+| `grafana.schedulerName`                                     | Alternative scheduler                                                                                   | `""`             |
+| `grafana.terminationGracePeriodSeconds`                     | In seconds, time the given to the Grafana pod needs to terminate gracefully                             | `""`             |
+| `grafana.priorityClassName`                                 | Priority class name                                                                                     | `""`             |
+| `grafana.podLabels`                                         | Extra labels for Grafana pods                                                                           | `{}`             |
+| `grafana.podAnnotations`                                    | Grafana Pod annotations                                                                                 | `{}`             |
+| `grafana.podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                     | `""`             |
+| `grafana.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `soft`           |
+| `grafana.containerPorts.grafana`                            | Grafana container port                                                                                  | `3000`           |
+| `grafana.extraPorts`                                        | Extra ports for Grafana deployment                                                                      | `[]`             |
+| `grafana.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `""`             |
+| `grafana.nodeAffinityPreset.key`                            | Node label key to match Ignored if `affinity` is set.                                                   | `""`             |
+| `grafana.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                               | `[]`             |
+| `grafana.affinity`                                          | Affinity for pod assignment                                                                             | `{}`             |
+| `grafana.nodeSelector`                                      | Node labels for pod assignment                                                                          | `{}`             |
+| `grafana.tolerations`                                       | Tolerations for pod assignment                                                                          | `[]`             |
+| `grafana.topologySpreadConstraints`                         | Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in | `[]`             |
+| `grafana.podSecurityContext.enabled`                        | Enable securityContext on for Grafana deployment                                                        | `true`           |
+| `grafana.podSecurityContext.fsGroup`                        | Group to configure permissions for volumes                                                              | `1001`           |
+| `grafana.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                    | `true`           |
+| `grafana.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                              | `1001`           |
+| `grafana.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                           | `true`           |
+| `grafana.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                             | `false`          |
+| `grafana.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                 | `false`          |
+| `grafana.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                               | `false`          |
+| `grafana.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                      | `["ALL"]`        |
+| `grafana.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                        | `RuntimeDefault` |
+| `grafana.resources.limits`                                  | The resources limits for Grafana containers                                                             | `{}`             |
+| `grafana.resources.requests`                                | The requested resources for Grafana containers                                                          | `{}`             |
+| `grafana.livenessProbe.enabled`                             | Enable livenessProbe                                                                                    | `true`           |
+| `grafana.livenessProbe.path`                                | Path for livenessProbe                                                                                  | `/api/health`    |
+| `grafana.livenessProbe.scheme`                              | Scheme for livenessProbe                                                                                | `HTTP`           |
+| `grafana.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                 | `120`            |
+| `grafana.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                        | `10`             |
+| `grafana.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                       | `5`              |
+| `grafana.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                     | `6`              |
+| `grafana.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                     | `1`              |
+| `grafana.readinessProbe.enabled`                            | Enable readinessProbe                                                                                   | `true`           |
+| `grafana.readinessProbe.path`                               | Path for readinessProbe                                                                                 | `/api/health`    |
+| `grafana.readinessProbe.scheme`                             | Scheme for readinessProbe                                                                               | `HTTP`           |
+| `grafana.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                | `30`             |
+| `grafana.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                       | `10`             |
+| `grafana.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                      | `5`              |
+| `grafana.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                    | `6`              |
+| `grafana.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                    | `1`              |
+| `grafana.startupProbe.enabled`                              | Enable startupProbe                                                                                     | `false`          |
+| `grafana.startupProbe.path`                                 | Path for readinessProbe                                                                                 | `/api/health`    |
+| `grafana.startupProbe.scheme`                               | Scheme for readinessProbe                                                                               | `HTTP`           |
+| `grafana.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                  | `30`             |
+| `grafana.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                         | `10`             |
+| `grafana.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                        | `5`              |
+| `grafana.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                      | `6`              |
+| `grafana.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                      | `1`              |
+| `grafana.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                     | `{}`             |
+| `grafana.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                    | `{}`             |
+| `grafana.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                      | `{}`             |
+| `grafana.lifecycleHooks`                                    | for the Grafana container(s) to automate configuration before or after startup                          | `{}`             |
+| `grafana.sidecars`                                          | Attach additional sidecar containers to the Grafana pod                                                 | `[]`             |
+| `grafana.initContainers`                                    | Add additional init containers to the Grafana pod(s)                                                    | `[]`             |
+| `grafana.extraVolumes`                                      | Additional volumes for the Grafana pod                                                                  | `[]`             |
+| `grafana.extraVolumeMounts`                                 | Additional volume mounts for the Grafana container                                                      | `[]`             |
+| `grafana.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Grafana nodes                                  | `""`             |
+| `grafana.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Grafana nodes                                     | `""`             |
+| `grafana.extraEnvVars`                                      | Array containing extra env vars to configure Grafana                                                    | `[]`             |
+| `grafana.extraConfigmaps`                                   | Array to mount extra ConfigMaps to configure Grafana                                                    | `[]`             |
+| `grafana.command`                                           | Override default container command (useful when using custom images)                                    | `[]`             |
+| `grafana.args`                                              | Override default container args (useful when using custom images)                                       | `[]`             |
 
 ### Persistence parameters
 
