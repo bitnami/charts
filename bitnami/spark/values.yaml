@@ -183,16 +183,26 @@ master:
     seLinuxOptions: {}
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param master.containerSecurityContext.enabled Enabled master containers' Security Context
-  ## @param master.containerSecurityContext.runAsUser Set master containers' Security Context runAsUser
-  ## @param master.containerSecurityContext.runAsNonRoot Set master containers' Security Context runAsNonRoot
-  ## @param master.containerSecurityContext.readOnlyRootFilesystem Set master containers' Security Context runAsNonRoot
+  ## @param master.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param master.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param master.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param master.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param master.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param master.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param master.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param master.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param master.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -451,28 +461,34 @@ worker:
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param worker.podSecurityContext.enabled Enable security context
   ## @param worker.podSecurityContext.fsGroup Group ID for the container
-  ## @param worker.podSecurityContext.runAsUser User ID for the container
-  ## @param worker.podSecurityContext.runAsGroup Group ID for the container
   ## @param worker.podSecurityContext.seLinuxOptions SELinux options for the container
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    runAsUser: 1001
-    runAsGroup: 0
     seLinuxOptions: {}
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param worker.containerSecurityContext.enabled Enabled worker containers' Security Context
-  ## @param worker.containerSecurityContext.runAsUser Set worker containers' Security Context runAsUser
-  ## @param worker.containerSecurityContext.runAsNonRoot Set worker containers' Security Context runAsNonRoot
-  ## @param worker.containerSecurityContext.readOnlyRootFilesystem Set worker containers' Security Context runAsNonRoot
+  ## @param worker.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param worker.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param worker.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param worker.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param worker.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param worker.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param worker.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param worker.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param worker.command Override default container command (useful when using custom images)
   ##
   command: []
