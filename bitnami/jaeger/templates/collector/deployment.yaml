@@ -31,6 +31,7 @@ spec:
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.collector.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
+      {{- include "jaeger.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.collector.schedulerName }}
       schedulerName: {{ .Values.collector.schedulerName }}
       {{- end }}
@@ -115,6 +116,10 @@ spec:
               value: {{ printf ":%v" .Values.collector.containerPorts.grpc | quote }}
             - name: COLLECTOR_HTTP_SERVER_HOST_PORT
               value: {{ printf ":%v" .Values.collector.containerPorts.binary | quote }}
+            - name: COLLECTOR_OTLP_GRPC_HOST_PORT
+              value: {{ printf ":%v" .Values.collector.containerPorts.otlp.grpc | quote }}
+            - name: COLLECTOR_OTLP_HTTP_HOST_PORT
+              value: {{ printf ":%v" .Values.collector.containerPorts.otlp.http | quote }}
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             {{- if .Values.collector.extraEnvVars }}

@@ -68,6 +68,22 @@ spec:
       {{- else if eq .Values.collector.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    - name: otlp-grpc
+      port: {{ .Values.collector.service.ports.otlp.grpc }}
+      targetPort: {{ .Values.collector.containerPorts.otlp.grpc }}
+      {{- if and (or (eq .Values.collector.service.type "NodePort") (eq .Values.collector.service.type "LoadBalancer")) (not (empty .Values.collector.service.nodePorts.otlp.grpc)) }}
+      nodePort: {{ .Values.collector.service.nodePorts.otlp.grpc }}
+      {{- else if eq .Values.collector.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: otlp-http
+      port: {{ .Values.collector.service.ports.otlp.http }}
+      targetPort: {{ .Values.collector.containerPorts.otlp.http }}
+      {{- if and (or (eq .Values.collector.service.type "NodePort") (eq .Values.collector.service.type "LoadBalancer")) (not (empty .Values.collector.service.nodePorts.otlp.http)) }}
+      nodePort: {{ .Values.collector.service.nodePorts.otlp.http }}
+      {{- else if eq .Values.collector.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
     {{- if .Values.collector.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.collector.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}

@@ -25,6 +25,7 @@ spec:
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.migration.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
+      {{- include "jaeger.imagePullSecrets" . | nindent 6 }}
       restartPolicy: OnFailure
       {{- if .Values.migration.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.migration.podSecurityContext "enabled" | toYaml | nindent 8 }}
