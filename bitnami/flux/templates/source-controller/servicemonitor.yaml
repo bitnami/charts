@@ -11,7 +11,8 @@ metadata:
   namespace: {{ default (include "common.names.namespace" .) .Values.sourceController.metrics.serviceMonitor.namespace | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.sourceController.image "chart" .Chart ) ) }}  
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.sourceController.metrics.serviceMonitor.labels .Values.commonLabels $versionLabel ) "context" . ) }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}    app.kubernetes.io/part-of: flux
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: flux
     app.kubernetes.io/component: source-controller
   {{- if or .Values.sourceController.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.sourceController.metrics.serviceMonitor.annotations .Values.commonAnnotations ) "context" . ) }}

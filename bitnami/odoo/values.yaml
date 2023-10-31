@@ -108,6 +108,9 @@ odooPassword: ""
 ## @param odooSkipInstall Skip Odoo installation wizard
 ##
 odooSkipInstall: false
+## @param odooDatabaseFilter Filter odoo database by using a regex
+##
+odooDatabaseFilter: .*
 ## @param loadDemoData Whether to load demo data for all modules during initialization
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/odoo#configuration
 ##
