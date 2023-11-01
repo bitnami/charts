@@ -175,7 +175,7 @@ spec:
                   name: {{ include "keycloak.spiPasswordsSecretName" . }}
                   key: "spi-truststore-password"
             {{- end }}
-            - name: KEYCLOAK_HTTP_RELATIVE_PATH
+            - name: KC_HTTP_RELATIVE_PATH
               value: {{ .Values.httpRelativePath | quote }}
             {{- if .Values.extraStartupArgs }}
             - name: KEYCLOAK_EXTRA_ARGS
