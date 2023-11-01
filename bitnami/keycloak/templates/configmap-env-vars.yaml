@@ -50,9 +50,9 @@ data:
   KEYCLOAK_SPI_TRUSTSTORE_FILE: {{ printf "/opt/bitnami/keycloak/spi-certs/%s" .Values.spi.truststoreFilename }}
   {{- end }}
   {{- if .Values.cache.enabled }}
-  KEYCLOAK_CACHE_TYPE: "ispn"
+  KC_CACHE: "ispn"
   {{- if .Values.cache.stackName }}
-  KEYCLOAK_CACHE_STACK: {{ .Values.cache.stackName | quote }} 
+  KC_CACHE_STACK: {{ .Values.cache.stackName | quote }} 
   {{- end }}
   {{- if .Values.cache.stackFile }}
   KEYCLOAK_CACHE_CONFIG_FILE: {{ .Values.cache.stackFile | quote }} 
