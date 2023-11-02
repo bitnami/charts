@@ -168,9 +168,9 @@ initContainers: []
 useIstioLabels: true
 
 ## Bitnami OpenSearch image
-## @param image.registry OpenSearch image registry
-## @param image.repository OpenSearch image repository
-## @param image.tag OpenSearch image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] OpenSearch image registry
+## @param image.repository [default: REPOSITORY_NAME/opensearch] OpenSearch image repository
+## @skip image.tag OpenSearch image tag (immutable tags are recommended)
 ## @param image.digest OpenSearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy OpenSearch image pull policy
 ## @param image.pullSecrets OpenSearch image pull secrets
@@ -536,26 +536,32 @@ master:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param master.podSecurityContext.enabled Enabled master-elegible pods' Security Context
   ## @param master.podSecurityContext.fsGroup Set master-elegible pod's Security Context fsGroup
-  ## @param master.podSecurityContext.seccompProfile.type Set Proxy container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param master.containerSecurityContext.enabled Enabled master-elegible containers' Security Context
-  ## @param master.containerSecurityContext.runAsUser Set master-elegible containers' Security Context runAsUser
-  ## @param master.containerSecurityContext.runAsNonRoot Set master-elegible containers' Security Context runAsNonRoot
-  ## @param master.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
+  ## @param master.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param master.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param master.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param master.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param master.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param master.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param master.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param master.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
     capabilities:
-      drop: [ "ALL" ]
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param master.hostAliases master-elegible pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -930,26 +936,32 @@ data:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param data.podSecurityContext.enabled Enabled data pods' Security Context
   ## @param data.podSecurityContext.fsGroup Set data pod's Security Context fsGroup
-  ## @param data.podSecurityContext.seccompProfile.type Set Proxy container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param data.containerSecurityContext.enabled Enabled data containers' Security Context
-  ## @param data.containerSecurityContext.runAsUser Set data containers' Security Context runAsUser
-  ## @param data.containerSecurityContext.runAsNonRoot Set data containers' Security Context runAsNonRoot
-  ## @param data.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
+  ## @param data.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param data.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param data.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param data.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param data.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param data.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param data.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param data.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
     capabilities:
-      drop: [ "ALL" ]
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param data.hostAliases data pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1325,26 +1337,32 @@ coordinating:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param coordinating.podSecurityContext.enabled Enabled coordinating-only pods' Security Context
   ## @param coordinating.podSecurityContext.fsGroup Set coordinating-only pod's Security Context fsGroup
-  ## @param coordinating.podSecurityContext.seccompProfile.type Set Proxy container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param coordinating.containerSecurityContext.enabled Enabled coordinating-only containers' Security Context
-  ## @param coordinating.containerSecurityContext.runAsUser Set coordinating-only containers' Security Context runAsUser
-  ## @param coordinating.containerSecurityContext.runAsNonRoot Set coordinating-only containers' Security Context runAsNonRoot
-  ## @param coordinating.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
+  ## @param coordinating.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param coordinating.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param coordinating.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param coordinating.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param coordinating.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param coordinating.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param coordinating.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param coordinating.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
     capabilities:
-      drop: [ "ALL" ]
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param coordinating.hostAliases coordinating-only pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1683,26 +1701,32 @@ ingest:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param ingest.podSecurityContext.enabled Enabled ingest-only pods' Security Context
   ## @param ingest.podSecurityContext.fsGroup Set ingest-only pod's Security Context fsGroup
-  ## @param ingest.podSecurityContext.seccompProfile.type Set Proxy container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param ingest.containerSecurityContext.enabled Enabled ingest-only containers' Security Context
-  ## @param ingest.containerSecurityContext.runAsUser Set ingest-only containers' Security Context runAsUser
-  ## @param ingest.containerSecurityContext.runAsNonRoot Set ingest-only containers' Security Context runAsNonRoot
-  ## @param ingest.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
+  ## @param ingest.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param ingest.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param ingest.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param ingest.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param ingest.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param ingest.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param ingest.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param ingest.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
     capabilities:
-      drop: [ "ALL" ]
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param ingest.hostAliases ingest-only pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2156,9 +2180,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work)
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image name
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image name
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
@@ -2204,9 +2228,9 @@ sysctlImage:
   ## @param sysctlImage.enabled Enable kernel settings modifier image
   ##
   enabled: true
-  ## @param sysctlImage.registry Kernel settings modifier image registry
-  ## @param sysctlImage.repository Kernel settings modifier image repository
-  ## @param sysctlImage.tag Kernel settings modifier image tag
+  ## @param sysctlImage.registry [default: REGISTRY_NAME] Kernel settings modifier image registry
+  ## @param sysctlImage.repository [default: REPOSITORY_NAME/os-shell] Kernel settings modifier image repository
+  ## @skip sysctlImage.tag Kernel settings modifier image tag
   ## @param sysctlImage.digest Kernel settings modifier image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param sysctlImage.pullPolicy Kernel settings modifier image pull policy
   ## @param sysctlImage.pullSecrets Kernel settings modifier image pull secrets
@@ -2256,9 +2280,9 @@ dashboards:
   ##
   enabled: false
   ## Bitnami OpenSearch Dashboards image
-  ## @param dashboards.image.registry OpenSearch Dashboards image registry
-  ## @param dashboards.image.repository OpenSearch Dashboards image repository
-  ## @param dashboards.image.tag OpenSearch Dashboards image tag (immutable tags are recommended)
+  ## @param dashboards.image.registry [default: REGISTRY_NAME] OpenSearch Dashboards image registry
+  ## @param dashboards.image.repository [default: REPOSITORY_NAME/opensearch-dashboards] OpenSearch Dashboards image repository
+  ## @skip dashboards.image.tag OpenSearch Dashboards image tag (immutable tags are recommended)
   ## @param dashboards.image.digest OpenSearch Dashboards image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param dashboards.image.pullPolicy OpenSearch Dashboards image pull policy
   ## @param dashboards.image.pullSecrets OpenSearch Dashboards image pull secrets
@@ -2393,26 +2417,32 @@ dashboards:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dashboards.podSecurityContext.enabled Enabled data pods' Security Context
   ## @param dashboards.podSecurityContext.fsGroup Set dashboards pod's Security Context fsGroup
-  ## @param dashboards.podSecurityContext.seccompProfile.type Set Proxy container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param dashboards.containerSecurityContext.enabled Enabled data containers' Security Context
-  ## @param dashboards.containerSecurityContext.runAsUser Set data containers' Security Context runAsUser
-  ## @param dashboards.containerSecurityContext.runAsNonRoot Set data containers' Security Context runAsNonRoot
-  ## @param dashboards.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
+  ## @param dashboards.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param dashboards.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param dashboards.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param dashboards.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param dashboards.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param dashboards.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param dashboards.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param dashboards.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
     capabilities:
-      drop: [ "ALL" ]
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param dashboards.hostAliases data pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

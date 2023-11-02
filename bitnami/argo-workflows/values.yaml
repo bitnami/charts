@@ -58,9 +58,9 @@ createAggregateRoles: true
 server:
   ## Bitnami Argo Workflow CLI image
   ## ref: https://hub.docker.com/r/bitnami/argo-workflow-cli/tags/
-  ## @param server.image.registry server image registry
-  ## @param server.image.repository server image repository
-  ## @param server.image.tag server image tag (immutable tags are recommended)
+  ## @param server.image.registry [default: REGISTRY_NAME] server image registry
+  ## @param server.image.repository [default: REPOSITORY_NAME/argo-workflow-cli] server image repository
+  ## @skip server.image.tag server image tag (immutable tags are recommended)
   ## @param server.image.digest server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param server.image.pullPolicy server image pull policy
   ## @param server.image.pullSecrets server image pull secrets
@@ -167,11 +167,21 @@ server:
   ## @param server.containerSecurityContext.runAsUser Set server containers' Security Context runAsUser
   ## @param server.containerSecurityContext.runAsNonRoot Set server containers' Security Context runAsNonRoot
   ## @param server.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+  ## @param server.containerSecurityContext.privileged Set server container's Security Context privileged
+  ## @param server.containerSecurityContext.allowPrivilegeEscalation Set server container's Security Context allowPrivilegeEscalation
+  ## @param server.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param server.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
     readOnlyRootFilesystem: true
 
   ## Create RBAC resources for the Argo workflows server
@@ -467,9 +477,9 @@ server:
 controller:
   ## Bitnami Argo Workflow Controller image
   ## ref: https://hub.docker.com/r/bitnami/argo-workflow-controller/tags/
-  ## @param controller.image.registry controller image registry
-  ## @param controller.image.repository controller image repository
-  ## @param controller.image.tag controller image tag (immutable tags are recommended)
+  ## @param controller.image.registry [default: REGISTRY_NAME] controller image registry
+  ## @param controller.image.repository [default: REPOSITORY_NAME/argo-workflow-controller] controller image repository
+  ## @skip controller.image.tag controller image tag (immutable tags are recommended)
   ## @param controller.image.digest controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param controller.image.pullPolicy controller image pull policy
   ## @param controller.image.pullSecrets controller image pull secrets
@@ -573,11 +583,21 @@ controller:
   ## @param controller.containerSecurityContext.runAsUser Set controller containers' Security Context runAsUser
   ## @param controller.containerSecurityContext.runAsNonRoot Set controller containers' Security Context runAsNonRoot
   ## @param controller.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+  ## @param controller.containerSecurityContext.privileged Set controller container's Security Context privileged
+  ## @param controller.containerSecurityContext.allowPrivilegeEscalation Set controller container's Security Context allowPrivilegeEscalation
+  ## @param controller.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param controller.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
     readOnlyRootFilesystem: true
 
   ## Server container port
@@ -634,8 +654,8 @@ controller:
       {{- if .Values.executor.extraEnvVars }}
       env: {{- include "common.tplvalues.render" (dict "value" .Values.executor.extraEnvVars "context" $) | nindent 4 }}
       {{- end }}
-      {{- if .Values.executor.podSecurityContext }}
-      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.executor.containerSecurityContext "context" $) | nindent 4 }}
+      {{- if .Values.executor.containerSecurityContext }}
+      securityContext: {{- omit .Values.executor.containerSecurityContext "enabled" | toYaml | nindent 4 }}
       {{- end }}
     {{- end }}
     ## Uncomment to enable Artofact repository with the provided configuration
@@ -946,9 +966,9 @@ controller:
 executor:
   ## Bitnami Argo Workflow Executor image
   ## ref: https://hub.docker.com/r/bitnami/argo-workflow-exec/tags/
-  ## @param executor.image.registry executor image registry
-  ## @param executor.image.repository executor image repository
-  ## @param executor.image.tag executor image tag (immutable tags are recommended)
+  ## @param executor.image.registry [default: REGISTRY_NAME] executor image registry
+  ## @param executor.image.repository [default: REPOSITORY_NAME/argo-workflow-exec] executor image repository
+  ## @skip executor.image.tag executor image tag (immutable tags are recommended)
   ## @param executor.image.digest executor image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param executor.image.pullPolicy executor image pull policy
   ## @param executor.image.pullSecrets executor image pull secrets
@@ -988,13 +1008,25 @@ executor:
   extraEnvVars: []
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param executor.containerSecurityContext.enabled Enabled executor pods' Security Context
-  ## @param executor.containerSecurityContext.fsGroup Set executor pod's Security Context fsGroup
-  ## @param executor.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Context
+  ## @param executor.containerSecurityContext.enabled Enabled executor containers' Security Context
+  ## @param executor.containerSecurityContext.runAsUser Set executor containers' Security Context runAsUser
+  ## @param executor.containerSecurityContext.runAsNonRoot Set executor containers' Security Context runAsNonRoot
+  ## @param executor.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+  ## @param executor.containerSecurityContext.privileged Set executor container's Security Context privileged
+  ## @param executor.containerSecurityContext.allowPrivilegeEscalation Set executor container's Security Context allowPrivilegeEscalation
+  ## @param executor.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param executor.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    fsGroup: 1001
+    runAsUser: 1001
+    runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
     readOnlyRootFilesystem: true
 
 ## @section Traffic Exposure Parameters

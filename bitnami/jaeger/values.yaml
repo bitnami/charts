@@ -58,9 +58,9 @@ diagnosticMode:
 
 ## Bitnami Jaeger image
 ## ref: https://hub.docker.com/r/bitnami/jaeger/tags/
-## @param image.registry Jaeger image registry
-## @param image.repository Jaeger image repository
-## @param image.tag Jaeger image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Jaeger image registry
+## @param image.repository [default: REPOSITORY_NAME/jaeger] Jaeger image repository
+## @skip image.tag Jaeger image tag (immutable tags are recommended)
 ## @param image.digest Jaeger image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy image pull policy
 ## @param image.pullSecrets Jaeger image pull secrets
@@ -301,14 +301,26 @@ query:
     fsGroup: 1001
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param query.containerSecurityContext.enabled Enabled Jaeger containers' Security Context
-  ## @param query.containerSecurityContext.runAsUser Set Jaeger container's Security Context runAsUser
-  ## @param query.containerSecurityContext.runAsNonRoot Force the container to be run as non root
+  ## @param query.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param query.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param query.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param query.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param query.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param query.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param query.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param query.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param query.podAnnotations Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -616,14 +628,26 @@ collector:
     fsGroup: 1001
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param collector.containerSecurityContext.enabled Enabled Jaeger containers' Security Context
-  ## @param collector.containerSecurityContext.runAsUser Set Jaeger container's Security Context runAsUser
-  ## @param collector.containerSecurityContext.runAsNonRoot Force the container to be run as non root
+  ## @param collector.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param collector.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param collector.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param collector.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param collector.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param collector.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param collector.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param collector.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param collector.podAnnotations Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -940,14 +964,26 @@ agent:
     fsGroup: 1001
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param agent.containerSecurityContext.enabled Enabled Jaeger containers' Security Context
-  ## @param agent.containerSecurityContext.runAsUser Set Jaeger container's Security Context runAsUser
-  ## @param agent.containerSecurityContext.runAsNonRoot Force the container to be run as non root
+  ## @param agent.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param agent.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param agent.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param agent.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param agent.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param agent.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param agent.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param agent.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param agent.podAnnotations Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -1047,6 +1083,26 @@ migration:
   podSecurityContext:
     enabled: true
     fsGroup: 1001
+
+  ## @param migration.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param migration.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param migration.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param migration.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param migration.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param migration.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param migration.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param migration.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param migration.extraEnvVars Extra environment variables to be set on jaeger migration container
   ## For example:
   ##  - name: FOO
@@ -1093,9 +1149,9 @@ migration:
   extraVolumes: []
 
 ## @section Set the image to use for the migration job
-## @param cqlshImage.registry Cassandra image registry
-## @param cqlshImage.repository Cassandra image repository
-## @param cqlshImage.tag Cassandra image tag (immutable tags are recommended)
+## @param cqlshImage.registry [default: REGISTRY_NAME] Cassandra image registry
+## @param cqlshImage.repository [default: REPOSITORY_NAME/cassandra] Cassandra image repository
+## @skip cqlshImage.tag Cassandra image tag (immutable tags are recommended)
 ## @param cqlshImage.digest Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param cqlshImage.pullPolicy image pull policy
 ## @param cqlshImage.pullSecrets Cassandra image pull secrets

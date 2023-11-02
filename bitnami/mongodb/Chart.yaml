@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kubectl
-      image: docker.io/bitnami/kubectl:1.28.2-debian-11-r16
+      image: docker.io/bitnami/kubectl:1.28.3-debian-11-r0
     - name: mongodb-exporter
       image: docker.io/bitnami/mongodb-exporter:0.39.0-debian-11-r123
     - name: mongodb
-      image: docker.io/bitnami/mongodb:7.0.2-debian-11-r6
+      image: docker.io/bitnami/mongodb:7.0.2-debian-11-r7
     - name: nginx
       image: docker.io/bitnami/nginx:1.25.2-debian-11-r47
     - name: os-shell
@@ -39,4 +39,4 @@ maintainers:
 name: mongodb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mongodb
-version: 14.0.10
+version: 14.1.0

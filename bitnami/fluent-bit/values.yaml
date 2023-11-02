@@ -58,9 +58,9 @@ diagnosticMode:
 
 ## Bitnami Fluent Bit image
 ## ref: https://hub.docker.com/r/bitnami/fluent-bit/tags/
-## @param image.registry Fluent Bit image registry
-## @param image.repository Fluent Bit image repository
-## @param image.tag Fluent Bit image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Fluent Bit image registry
+## @param image.repository [default: REPOSITORY_NAME/fluent-bit] Fluent Bit image repository
+## @skip image.tag Fluent Bit image tag (immutable tags are recommended)
 ## @param image.digest Fluent Bit image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy image pull policy
 ## @param image.pullSecrets Fluent Bit image pull secrets
@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluent-bit
-  tag: 2.1.10-debian-11-r0
+  tag: 2.1.10-debian-11-r12
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -324,13 +324,25 @@ podSecurityContext:
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled Fluent Bit containers' Security Context
-## @param containerSecurityContext.runAsUser Set Fluent Bit container's Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Force the container to be run as non root
+## @param containerSecurityContext.runAsUser Set Fluent Bit containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set Fluent Bit container's Security Context runAsNonRoot
+## @param containerSecurityContext.readOnlyRootFilesystem Set Fluent Bit container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set primary container's Security Context privileged
+## @param containerSecurityContext.allowPrivilegeEscalation Set primary container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## @param podAnnotations Additional pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##

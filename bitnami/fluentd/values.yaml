@@ -62,9 +62,9 @@ diagnosticMode:
 
 ## Bitnami Fluentd image version
 ## ref: https://hub.docker.com/r/bitnami/fluentd/tags/
-## @param image.registry Fluentd image registry
-## @param image.repository Fluentd image repository
-## @param image.tag Fluentd image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Fluentd image registry
+## @param image.repository [default: REPOSITORY_NAME/fluentd] Fluentd image repository
+## @skip image.tag Fluentd image tag (immutable tags are recommended)
 ## @param image.pullPolicy Fluentd image pull policy
 ## @param image.pullSecrets Fluentd image pull secrets
 ## @param image.debug Enable image debug mode
@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.16.2-debian-11-r72
+  tag: 1.16.2-debian-11-r80
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -94,9 +94,9 @@ forwarder:
   ## @param forwarder.enabled Enable forwarder daemonset
   ##
   enabled: true
-  ## @param forwarder.image.registry Fluentd forwarder image registry override
-  ## @param forwarder.image.repository Fluentd forwarder image repository override
-  ## @param forwarder.image.tag Fluentd forwarder image tag override (immutable tags are recommended)
+  ## @param forwarder.image.registry [default: ""] Fluentd forwarder image registry override
+  ## @param forwarder.image.repository [default: ""] Fluentd forwarder image repository override
+  ## @skip forwarder.image.tag Fluentd forwarder image tag override (immutable tags are recommended)
   image:
     registry: ""
     repository: ""
@@ -641,9 +641,9 @@ aggregator:
   ## @param aggregator.enabled Enable Fluentd aggregator statefulset
   ##
   enabled: true
-  ## @param aggregator.image.registry Fluentd aggregator image registry override
-  ## @param aggregator.image.repository Fluentd aggregator image repository override
-  ## @param aggregator.image.tag Fluentd aggregator image tag override (immutable tags are recommended)
+  ## @param aggregator.image.registry [default: ""] Fluentd aggregator image registry override
+  ## @param aggregator.image.repository [default: ""] Fluentd aggregator image repository override
+  ## @skip aggregator.image.tag Fluentd aggregator image tag override (immutable tags are recommended)
   image:
     registry: ""
     repository: ""

@@ -61,9 +61,9 @@ controller:
   replicaCount: 1
   ## Bitnami cert-manager image
   ## ref: https://hub.docker.com/r/bitnami/cert-manager/tags/
-  ## @param controller.image.registry Controller image registry
-  ## @param controller.image.repository Controller image repository
-  ## @param controller.image.tag Controller image tag (immutable tags are recommended)
+  ## @param controller.image.registry [default: REGISTRY_NAME] Controller image registry
+  ## @param controller.image.repository [default: REPOSITORY_NAME/cert-manager] Controller image repository
+  ## @skip controller.image.tag Controller image tag (immutable tags are recommended)
   ## @param controller.image.digest Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param controller.image.pullPolicy Controller image pull policy
   ## @param controller.image.pullSecrets Controller image pull secrets
@@ -72,7 +72,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/cert-manager
-    tag: 1.13.1-debian-11-r11
+    tag: 1.13.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -92,9 +92,9 @@ controller:
     ##
     debug: false
   acmesolver:
-    ## @param controller.acmesolver.image.registry Controller image registry
-    ## @param controller.acmesolver.image.repository Controller image repository
-    ## @param controller.acmesolver.image.tag Controller image tag (immutable tags are recommended)
+    ## @param controller.acmesolver.image.registry [default: REGISTRY_NAME] Controller image registry
+    ## @param controller.acmesolver.image.repository [default: REPOSITORY_NAME/acmesolver] Controller image repository
+    ## @skip controller.acmesolver.image.tag Controller image tag (immutable tags are recommended)
     ## @param controller.acmesolver.image.digest Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param controller.acmesolver.image.pullPolicy Controller image pull policy
     ## @param controller.acmesolver.image.pullSecrets Controller image pull secrets
@@ -103,7 +103,7 @@ controller:
     image:
       registry: docker.io
       repository: bitnami/acmesolver
-      tag: 1.13.1-debian-11-r8
+      tag: 1.13.2-debian-11-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -139,14 +139,26 @@ controller:
     fsGroup: 1001
   ## controller containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param controller.containerSecurityContext.enabled Enabled Controller containers' Security Context
-  ## @param controller.containerSecurityContext.runAsUser Set Controller container's Security Context runAsUser
-  ## @param controller.containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
+  ## @param controller.containerSecurityContext.enabled Enabled controller containers' Security Context
+  ## @param controller.containerSecurityContext.runAsUser Set controller containers' Security Context runAsUser
+  ## @param controller.containerSecurityContext.runAsNonRoot Set controller containers' Security Context runAsNonRoot
+  ## @param controller.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+  ## @param controller.containerSecurityContext.privileged Set controller container's Security Context privileged
+  ## @param controller.containerSecurityContext.allowPrivilegeEscalation Set controller container's Security Context allowPrivilegeEscalation
+  ## @param controller.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param controller.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: false
   ## @param controller.podAffinityPreset Pod affinity preset. Ignored if `controller.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -318,9 +330,9 @@ webhook:
   replicaCount: 1
   ## Bitnami cert-manager Webhook image
   ## ref: https://hub.docker.com/r/bitnami/cert-manager-webhook/tags/
-  ## @param webhook.image.registry Webhook image registry
-  ## @param webhook.image.repository Webhook image repository
-  ## @param webhook.image.tag Webhook image tag (immutable tags are recommended)
+  ## @param webhook.image.registry [default: REGISTRY_NAME] Webhook image registry
+  ## @param webhook.image.repository [default: REPOSITORY_NAME/cert-manager-webhook] Webhook image repository
+  ## @skip webhook.image.tag Webhook image tag (immutable tags are recommended)
   ## @param webhook.image.digest Webhook image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param webhook.image.pullPolicy Webhook image pull policy
   ## @param webhook.image.pullSecrets Webhook image pull secrets
@@ -329,7 +341,7 @@ webhook:
   image:
     registry: docker.io
     repository: bitnami/cert-manager-webhook
-    tag: 1.13.1-debian-11-r10
+    tag: 1.13.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -367,14 +379,26 @@ webhook:
     fsGroup: 1001
   ## webhook containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param webhook.containerSecurityContext.enabled Enabled Webhook containers' Security Context
-  ## @param webhook.containerSecurityContext.runAsUser Set Webhook container's Security Context runAsUser
-  ## @param webhook.containerSecurityContext.runAsNonRoot Set Webhook container's Security Context runAsNonRoot
+  ## @param webhook.containerSecurityContext.enabled Enabled webhook containers' Security Context
+  ## @param webhook.containerSecurityContext.runAsUser Set webhook containers' Security Context runAsUser
+  ## @param webhook.containerSecurityContext.runAsNonRoot Set webhook containers' Security Context runAsNonRoot
+  ## @param webhook.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+  ## @param webhook.containerSecurityContext.privileged Set webhook container's Security Context privileged
+  ## @param webhook.containerSecurityContext.allowPrivilegeEscalation Set webhook container's Security Context allowPrivilegeEscalation
+  ## @param webhook.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param webhook.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: false
   ## @param webhook.podAffinityPreset Pod affinity preset. Ignored if `webhook.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -584,9 +608,9 @@ cainjector:
 
   ## Bitnami CAInjector image
   ## ref: https://hub.docker.com/r/bitnami/cainjector/tags/
-  ## @param cainjector.image.registry CAInjector image registry
-  ## @param cainjector.image.repository CAInjector image repository
-  ## @param cainjector.image.tag CAInjector image tag (immutable tags are recommended)
+  ## @param cainjector.image.registry [default: REGISTRY_NAME] CAInjector image registry
+  ## @param cainjector.image.repository [default: REPOSITORY_NAME/cainjector] CAInjector image repository
+  ## @skip cainjector.image.tag CAInjector image tag (immutable tags are recommended)
   ## @param cainjector.image.digest CAInjector image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param cainjector.image.pullPolicy CAInjector image pull policy
   ## @param cainjector.image.pullSecrets CAInjector image pull secrets
@@ -595,7 +619,7 @@ cainjector:
   image:
     registry: docker.io
     repository: bitnami/cainjector
-    tag: 1.13.1-debian-11-r9
+    tag: 1.13.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -633,14 +657,26 @@ cainjector:
     fsGroup: 1001
   ## cainjector containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param cainjector.containerSecurityContext.enabled Enabled CAInjector containers' Security Context
-  ## @param cainjector.containerSecurityContext.runAsUser Set CAInjector container's Security Context runAsUser
-  ## @param cainjector.containerSecurityContext.runAsNonRoot Set CAInjector container's Security Context runAsNonRoot
+  ## @param cainjector.containerSecurityContext.enabled Enabled cainjector containers' Security Context
+  ## @param cainjector.containerSecurityContext.runAsUser Set cainjector containers' Security Context runAsUser
+  ## @param cainjector.containerSecurityContext.runAsNonRoot Set cainjector containers' Security Context runAsNonRoot
+  ## @param cainjector.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+  ## @param cainjector.containerSecurityContext.privileged Set cainjector container's Security Context privileged
+  ## @param cainjector.containerSecurityContext.allowPrivilegeEscalation Set cainjector container's Security Context allowPrivilegeEscalation
+  ## @param cainjector.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param cainjector.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: false
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## @param cainjector.podAffinityPreset Pod affinity preset. Ignored if `cainjector.affinity` is set. Allowed values: `soft` or `hard`
   ##

@@ -141,9 +141,9 @@ operator:
   ##
   updateStrategy:
     type: Recreate
-  ## @param operator.image.registry Grafana Operator image registry
-  ## @param operator.image.repository Grafana Operator image name
-  ## @param operator.image.tag Grafana Operator image tag
+  ## @param operator.image.registry [default: REGISTRY_NAME] Grafana Operator image registry
+  ## @param operator.image.repository [default: REPOSITORY_NAME/grafana-operator] Grafana Operator image name
+  ## @skip operator.image.tag Grafana Operator image tag
   ## @param operator.image.digest Grafana Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param operator.image.pullPolicy Grafana Operator image pull policy
   ## @param operator.image.pullSecrets Grafana Operator image pull secrets
@@ -211,37 +211,33 @@ operator:
   ## Pod securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param operator.podSecurityContext.enabled Enable pods security context
-  ## @param operator.podSecurityContext.runAsUser User ID for the pods
-  ## @param operator.podSecurityContext.runAsGroup User ID for the pods
-  ## @param operator.podSecurityContext.runAsNonRoot Grafana Operator must run as nonRoot
   ## @param operator.podSecurityContext.fsGroup Group ID for the pods
-  ## @param operator.podSecurityContext.supplementalGroups Which group IDs containers add
   ##
   podSecurityContext:
     enabled: true
-    runAsUser: 1001
-    runAsGroup: 1001
-    runAsNonRoot: true
     fsGroup: 1001
-    supplementalGroups: []
   ## Container securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param operator.containerSecurityContext.enabled Enable container security context
-  ## @param operator.containerSecurityContext.runAsUser User ID for the operator container
-  ## @param operator.containerSecurityContext.runAsGroup User ID for the operator container
-  ## @param operator.containerSecurityContext.runAsNonRoot Force the container to be run as non-root
-  ## @param operator.containerSecurityContext.privileged Decide if the container runs privileged.
-  ## @param operator.containerSecurityContext.readOnlyRootFilesystem ReadOnlyRootFilesystem fot the operator container
-  ## @param operator.containerSecurityContext.allowPrivilegeEscalation Allow Privilege Escalation for the operator container
+  ## @param operator.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param operator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param operator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param operator.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param operator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param operator.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param operator.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param operator.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param operator.resources Container resource requests and limits
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
@@ -414,9 +410,9 @@ grafana:
   ## @param grafana.enabled Enabled the deployment of the Grafana CRD object into the cluster
   ##
   enabled: true
-  ## @param grafana.image.registry Grafana image registry
-  ## @param grafana.image.repository Grafana image name
-  ## @param grafana.image.tag Grafana image tag
+  ## @param grafana.image.registry [default: REGISTRY_NAME] Grafana image registry
+  ## @param grafana.image.repository [default: REPOSITORY_NAME/grafana] Grafana image name
+  ## @skip grafana.image.tag Grafana image tag
   ## @param grafana.image.digest Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param grafana.image.pullPolicy Grafana image pull policy
   ## @param grafana.image.pullSecrets Grafana image pull secrets
@@ -450,37 +446,35 @@ grafana:
   ## Pod securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param grafana.podSecurityContext.enabled Enable pods security context
-  ## @param grafana.podSecurityContext.runAsUser User ID for the pods
-  ## @param grafana.podSecurityContext.runAsGroup User ID for the pods
-  ## @param grafana.podSecurityContext.runAsNonRoot Grafana Operator must run as nonRoot
   ## @param grafana.podSecurityContext.fsGroup Group ID for the pods
-  ## @param grafana.podSecurityContext.supplementalGroups Which group IDs containers add
   ##
   podSecurityContext:
     enabled: true
-    runAsUser: 1001
-    runAsGroup: 0
-    runAsNonRoot: true
     fsGroup: 1001
-    supplementalGroups: []
   ## Container securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param grafana.containerSecurityContext.enabled Enable containers security context
-  ## @param grafana.containerSecurityContext.runAsUser User ID for the containers
-  ## @param grafana.containerSecurityContext.runAsGroup Group ID for the containers
-  ## @param grafana.containerSecurityContext.privileged Decide if the container runs privileged.
-  ## @param grafana.containerSecurityContext.runAsNonRoot Force the container to run as non-root
-  ## @param grafana.containerSecurityContext.allowPrivilegeEscalation Don't allow privilege escalation for the containers
-  ## @param grafana.containerSecurityContext.readOnlyRootFilesystem Mount / (root) as a readonly filesystem
+  ## @param grafana.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param grafana.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param grafana.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param grafana.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param grafana.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param grafana.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param grafana.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param grafana.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param grafana.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsGroup: 0
-    privileged: false
     runAsNonRoot: true
-    allowPrivilegeEscalation: false
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Grafana containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious

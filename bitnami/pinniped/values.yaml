@@ -50,9 +50,9 @@ extraDeploy: []
 
 ## Bitnami Pinniped image
 ## ref: https://hub.docker.com/r/bitnami/pinniped/tags/
-## @param image.registry Pinniped image registry
-## @param image.repository Pinniped image repository
-## @param image.tag Pinniped image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Pinniped image registry
+## @param image.repository [default: REPOSITORY_NAME/pinniped] Pinniped image repository
+## @skip image.tag Pinniped image tag (immutable tags are recommended)
 ## @param image.digest Pinniped image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Pinniped image pull policy
 ## @param image.pullSecrets Pinniped image pull secrets

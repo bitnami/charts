@@ -62,9 +62,9 @@ diagnosticMode:
 
 ## Bitnami InfluxDB&trade; image
 ## ref: https://hub.docker.com/r/bitnami/influxdb/tags/
-## @param image.registry InfluxDB&trade; image registry
-## @param image.repository InfluxDB&trade; image repository
-## @param image.tag InfluxDB&trade; image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] InfluxDB&trade; image registry
+## @param image.repository [default: REPOSITORY_NAME/influxdb] InfluxDB&trade; image repository
+## @skip image.tag InfluxDB&trade; image tag (immutable tags are recommended)
 ## @param image.digest InfluxDB&trade; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy InfluxDB&trade; image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -277,26 +277,26 @@ influxdb:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param influxdb.containerSecurityContext.enabled Enabled InfluxDB&trade; containers' Security Context
-  ## @param influxdb.containerSecurityContext.runAsUser Set InfluxDB&trade; containers' Security Context runAsUser
-  ## @param influxdb.containerSecurityContext.runAsGroup Set InfluxDB&trade; containers' Security Context runAsGroup
-  ## @param influxdb.containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
-  ## @param influxdb.containerSecurityContext.allowPrivilegeEscalation Set Controller container's Security Context allowPrivilegeEscalation
-  ## @param influxdb.containerSecurityContext.seccompProfile.type Set Controller container's Security Context seccompProfile
-  ## @param influxdb.containerSecurityContext.capabilities.drop Set Controller container's Security Context capabilities to drop
-  #
+  ## @param influxdb.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param influxdb.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param influxdb.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param influxdb.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param influxdb.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param influxdb.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param influxdb.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param influxdb.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-    runAsGroup: 0
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
-    seccompProfile:
-      type: RuntimeDefault
     capabilities:
-      drop:
-        - ALL
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## InfluxDB&trade; pods' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -825,9 +825,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume mountpoint to `runAsUser:fsGroup`
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image name
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image name
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
@@ -891,34 +891,34 @@ backup:
     podAnnotations: {}
     ## K8s Security Context for Backup Cronjob pods
     ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-    ## @param backup.cronjob.securityContext.enabled Enable security context for InfluxDB&trade; backup pods
-    ## @param backup.cronjob.securityContext.fsGroup Group ID for the InfluxDB&trade; filesystem
-    ## @param backup.cronjob.securityContext.runAsUser User ID for the InfluxDB&trade; filesystem
-    ## @param backup.cronjob.securityContext.runAsGroup Group ID for the InfluxDB&trade; runAsGroup
-    ## @param backup.cronjob.securityContext.runAsNonRoot Setting for the InfluxDB&trade; runAsNonRoot
-    ## @param backup.cronjob.securityContext.seccompProfile.type Setting for the InfluxDB&trade; seccompProfile.type
+    ## @param backup.cronjob.podSecurityContext.enabled Enable security context for InfluxDB&trade; backup pods
+    ## @param backup.cronjob.podSecurityContext.fsGroup Group ID for the InfluxDB&trade; filesystem
     ##
-    securityContext:
+    podSecurityContext:
       enabled: true
       fsGroup: 1001
-      runAsUser: 1001
-      runAsGroup: 0
-      runAsNonRoot: true
-      seccompProfile:
-        type: RuntimeDefault
 
     ## K8s Security Context for Backup Cronjob containers
     ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-    ## @param backup.cronjob.containerSecurityContext.enabled Enable security context for InfluxDB&trade; backup containers
-    ## @param backup.cronjob.containerSecurityContext.readOnlyRootFilesystem readOnlyRootFilesystem for InfluxDB&trade;
-    ## @param backup.cronjob.containerSecurityContext.allowPrivilegeEscalation allowPrivilegeEscalation for InfluxDB&trade;
-    ## @param backup.cronjob.containerSecurityContext.capabilities.drop Capabilities to drop for InfluxDB&trade;
+    ## @param backup.cronjob.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param backup.cronjob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param backup.cronjob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param backup.cronjob.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param backup.cronjob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param backup.cronjob.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param backup.cronjob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param backup.cronjob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     containerSecurityContext:
       enabled: true
+      runAsUser: 1001
+      runAsNonRoot: true
+      privileged: false
       readOnlyRootFilesystem: true
       allowPrivilegeEscalation: false
       capabilities:
-        drop: [ "ALL" ]
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
   ## @param backup.podAffinityPreset Backup &trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -976,9 +976,9 @@ backup:
       bucketName: "gs://bucket/influxdb"
       ## Bitnami Google Cloud SDK image
       ## ref: https://hub.docker.com/r/bitnami/google-cloud-sdk/tags/
-      ## @param backup.uploadProviders.google.image.registry Google Cloud SDK image registry
-      ## @param backup.uploadProviders.google.image.repository Google Cloud SDK image name
-      ## @param backup.uploadProviders.google.image.tag Google Cloud SDK image tag
+      ## @param backup.uploadProviders.google.image.registry [default: REGISTRY_NAME] Google Cloud SDK image registry
+      ## @param backup.uploadProviders.google.image.repository [default: REPOSITORY_NAME/google-cloud-sdk] Google Cloud SDK image name
+      ## @skip backup.uploadProviders.google.image.tag Google Cloud SDK image tag
       ## @param backup.uploadProviders.google.image.digest Google Cloud SDK image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
       ## @param backup.uploadProviders.google.image.pullPolicy Google Cloud SDK image pull policy
       ## @param backup.uploadProviders.google.image.pullSecrets Specify docker-registry secret names as an array
@@ -1015,9 +1015,9 @@ backup:
       containerName: "influxdb-container"
       ## Bitnami Azure CLI image
       ## ref: https://hub.docker.com/r/bitnami/azure-cli/tags/
-      ## @param backup.uploadProviders.azure.image.registry Azure CLI image registry
-      ## @param backup.uploadProviders.azure.image.repository Azure CLI image repository
-      ## @param backup.uploadProviders.azure.image.tag Azure CLI image tag (immutable tags are recommended)
+      ## @param backup.uploadProviders.azure.image.registry [default: REGISTRY_NAME] Azure CLI image registry
+      ## @param backup.uploadProviders.azure.image.repository [default: REPOSITORY_NAME/azure-cli] Azure CLI image repository
+      ## @skip backup.uploadProviders.azure.image.tag Azure CLI image tag (immutable tags are recommended)
       ## @param backup.uploadProviders.azure.image.digest Azure CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
       ## @param backup.uploadProviders.azure.image.pullPolicy Azure CLI image pull policy
       ## @param backup.uploadProviders.azure.image.pullSecrets Specify docker-registry secret names as an array
@@ -1054,9 +1054,9 @@ backup:
       bucketName: "s3://bucket/influxdb"
       ## Bitnami AWS CLI image
       ## ref: https://hub.docker.com/r/bitnami/aws-cli/tags
-      ## @param backup.uploadProviders.aws.image.registry AWS CLI image registry
-      ## @param backup.uploadProviders.aws.image.repository AWS CLI image repository
-      ## @param backup.uploadProviders.aws.image.tag AWS CLI image tag (immutable tags are recommended)
+      ## @param backup.uploadProviders.aws.image.registry [default: REGISTRY_NAME] AWS CLI image registry
+      ## @param backup.uploadProviders.aws.image.repository [default: REPOSITORY_NAME/aws-cli] AWS CLI image repository
+      ## @skip backup.uploadProviders.aws.image.tag AWS CLI image tag (immutable tags are recommended)
       ## @param backup.uploadProviders.aws.image.digest AWS CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
       ## @param backup.uploadProviders.aws.image.pullPolicy AWS CLI image pull policy
       ## @param backup.uploadProviders.aws.image.pullSecrets Specify docker-registry secret names as an array

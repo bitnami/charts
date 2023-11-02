@@ -92,9 +92,9 @@ serviceAccount:
 
 ## Bitnami Node Exporter image version
 ## ref: https://hub.docker.com/r/bitnami/node-exporter/tags/
-## @param image.registry Node Exporter image registry
-## @param image.repository Node Exporter image repository
-## @param image.tag Node Exporter image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Node Exporter image registry
+## @param image.repository [default: REPOSITORY_NAME/node-exporter] Node Exporter image repository
+## @skip image.tag Node Exporter image tag (immutable tags are recommended)
 ## @param image.digest Node Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Node Exporter image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -194,14 +194,26 @@ podSecurityContext:
   fsGroup: 1001
 ## Configure Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param containerSecurityContext.enabled Enabled Node exporter containers' Security Context
-## @param containerSecurityContext.runAsUser Set Node exporter containers' Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set Node exporter container's Security Context runAsNonRoot
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## Node Exporter Service
 ##
 service:

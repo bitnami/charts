@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/wildfly
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/wildfly
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -22,7 +24,7 @@ WildFly is written in Java, and implements the Java Platform, Enterprise Edition
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use WildFly in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use WildFly in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -36,8 +38,10 @@ Looking to use WildFly in production? Try [VMware Application Catalog](https://b
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/wildfly
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/wildfly
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy WildFly on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -80,15 +84,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WildFly Image parameters
 
-| Name                | Description                                                                                             | Value                  |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`    | WildFly image registry                                                                                  | `docker.io`            |
-| `image.repository`  | WildFly image repository                                                                                | `bitnami/wildfly`      |
-| `image.tag`         | WildFly image tag (immutable tags are recommended)                                                      | `29.0.1-debian-11-r26` |
-| `image.digest`      | WildFly image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `image.pullPolicy`  | WildFly image pull policy                                                                               | `IfNotPresent`         |
-| `image.pullSecrets` | WildFly image pull secrets                                                                              | `[]`                   |
-| `image.debug`       | Enable image debug mode                                                                                 | `false`                |
+| Name                | Description                                                                                             | Value                     |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `image.registry`    | WildFly image registry                                                                                  | `REGISTRY_NAME`           |
+| `image.repository`  | WildFly image repository                                                                                | `REPOSITORY_NAME/wildfly` |
+| `image.digest`      | WildFly image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
+| `image.pullPolicy`  | WildFly image pull policy                                                                               | `IfNotPresent`            |
+| `image.pullSecrets` | WildFly image pull secrets                                                                              | `[]`                      |
+| `image.debug`       | Enable image debug mode                                                                                 | `false`                   |
 
 ### WildFly Configuration parameters
 
@@ -204,24 +207,23 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                                          | Description                                                                                                        | Value              |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------ |
-| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                                                  | `true`             |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                                    | `""`               |
-| `persistence.existingClaim`                   | Use a existing PVC which must be created manually before bound                                                     | `""`               |
-| `persistence.accessModes`                     | Persistent Volume access modes                                                                                     | `[]`               |
-| `persistence.size`                            | Persistent Volume size                                                                                             | `8Gi`              |
-| `persistence.annotations`                     | Persistent Volume Claim annotations                                                                                | `{}`               |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`            |
-| `volumePermissions.image.registry`            | OS Shell + Utility image registry                                                                                  | `docker.io`        |
-| `volumePermissions.image.repository`          | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                 | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r90` |
-| `volumePermissions.image.digest`              | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `volumePermissions.image.pullPolicy`          | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`         | OS Shell + Utility image pull secrets                                                                              | `[]`               |
-| `volumePermissions.resources.limits`          | The resources limits for the init container                                                                        | `{}`               |
-| `volumePermissions.resources.requests`        | The requested resources for the init container                                                                     | `{}`               |
-| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                |
+| Name                                          | Description                                                                                                        | Value                      |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                                                  | `true`                     |
+| `persistence.storageClass`                    | Persistent Volume storage class                                                                                    | `""`                       |
+| `persistence.existingClaim`                   | Use a existing PVC which must be created manually before bound                                                     | `""`                       |
+| `persistence.accessModes`                     | Persistent Volume access modes                                                                                     | `[]`                       |
+| `persistence.size`                            | Persistent Volume size                                                                                             | `8Gi`                      |
+| `persistence.annotations`                     | Persistent Volume Claim annotations                                                                                | `{}`                       |
+| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
+| `volumePermissions.image.registry`            | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`          | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`              | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`          | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`         | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
+| `volumePermissions.resources.limits`          | The resources limits for the init container                                                                        | `{}`                       |
+| `volumePermissions.resources.requests`        | The requested resources for the init container                                                                     | `{}`                       |
+| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                        |
 
 The above parameters map to the env variables defined in [bitnami/wildfly](https://github.com/bitnami/containers/tree/main/bitnami/wildfly). For more information please refer to the [bitnami/wildfly](https://github.com/bitnami/containers/tree/main/bitnami/wildfly) image documentation.
 
@@ -230,8 +232,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set wildflyUser=manager,wildflyPassword=password \
-    oci://registry-1.docker.io/bitnamicharts/wildfly
+    oci://REGISTRY_NAME/REPOSITORY_NAME/wildfly
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the WildFly management username and password to `manager` and `password` respectively.
 
@@ -240,9 +244,10 @@ The above command sets the WildFly management username and password to `manager`
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/wildfly
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/wildfly
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -318,8 +323,10 @@ Consequences:
 ```console
 export WILDFLY_PASSWORD=$(kubectl get secret --namespace default wildfly -o jsonpath="{.data.wildfly-password}" | base64 -d)
 kubectl delete deployments.apps wildfly
-helm upgrade wildfly oci://registry-1.docker.io/bitnamicharts/wildfly --set wildflyPassword=$WILDFLY_PASSWORD
+helm upgrade wildfly oci://REGISTRY_NAME/REPOSITORY_NAME/wildfly --set wildflyPassword=$WILDFLY_PASSWORD
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ### To 6.0.0
 
@@ -332,14 +339,18 @@ helm upgrade wildfly oci://registry-1.docker.io/bitnamicharts/wildfly --set wild
 WildFly container was moved to a non-root approach. There shouldn't be any issue when upgrading since the corresponding `securityContext` is enabled by default. Both the container image and the chart can be upgraded by running the command below:
 
 ```console
-helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/wildfly
+helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/wildfly
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 If you use a previous container image (previous to **14.0.1-r75**) disable the `securityContext` by running the command below:
 
 ```console
-helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/wildfly --set securityContext.enabled=false,image.tag=XXX
+helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/wildfly --set securityContext.enabled=false,image.tag=XXX
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ### To 1.0.0
 

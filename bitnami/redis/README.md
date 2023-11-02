@@ -11,8 +11,10 @@ Disclaimer: Redis is a registered trademark of Redis Ltd. Any rights therein are
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/redis
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redis
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -35,7 +37,7 @@ The main features of each chart are the following:
 | Single write point (single master)                     | Multiple write points (multiple masters)                               |
 | ![Redis&reg; Topology](img/redis-topology.png) | ![Redis&reg; Cluster Topology](img/redis-cluster-topology.png) |
 
-Looking to use Redisreg; in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Redisreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -48,8 +50,10 @@ Looking to use Redisreg; in production? Try [VMware Application Catalog](https:/
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/redis
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redis
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys Redis&reg; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -97,15 +101,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis&reg; Image parameters
 
-| Name                | Description                                                                                                | Value                 |
-| ------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | Redis&reg; image registry                                                                                  | `docker.io`           |
-| `image.repository`  | Redis&reg; image repository                                                                                | `bitnami/redis`       |
-| `image.tag`         | Redis&reg; image tag (immutable tags are recommended)                                                      | `7.2.1-debian-11-r26` |
-| `image.digest`      | Redis&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | Redis&reg; image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | Redis&reg; image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Enable image debug mode                                                                                    | `false`               |
+| Name                | Description                                                                                                | Value                   |
+| ------------------- | ---------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `image.registry`    | Redis&reg; image registry                                                                                  | `REGISTRY_NAME`         |
+| `image.repository`  | Redis&reg; image repository                                                                                | `REPOSITORY_NAME/redis` |
+| `image.digest`      | Redis&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `image.pullPolicy`  | Redis&reg; image pull policy                                                                               | `IfNotPresent`          |
+| `image.pullSecrets` | Redis&reg; image pull secrets                                                                              | `[]`                    |
+| `image.debug`       | Enable image debug mode                                                                                    | `false`                 |
 
 ### Redis&reg; common configuration parameters
 
@@ -348,98 +351,97 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis&reg; Sentinel configuration parameters
 
-| Name                                                         | Description                                                                                                                                 | Value                    |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `sentinel.enabled`                                           | Use Redis&reg; Sentinel on Redis&reg; pods.                                                                                                 | `false`                  |
-| `sentinel.image.registry`                                    | Redis&reg; Sentinel image registry                                                                                                          | `docker.io`              |
-| `sentinel.image.repository`                                  | Redis&reg; Sentinel image repository                                                                                                        | `bitnami/redis-sentinel` |
-| `sentinel.image.tag`                                         | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `7.2.1-debian-11-r26`    |
-| `sentinel.image.digest`                                      | Redis&reg; Sentinel image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                     |
-| `sentinel.image.pullPolicy`                                  | Redis&reg; Sentinel image pull policy                                                                                                       | `IfNotPresent`           |
-| `sentinel.image.pullSecrets`                                 | Redis&reg; Sentinel image pull secrets                                                                                                      | `[]`                     |
-| `sentinel.image.debug`                                       | Enable image debug mode                                                                                                                     | `false`                  |
-| `sentinel.annotations`                                       | Additional custom annotations for Redis&reg; Sentinel resource                                                                              | `{}`                     |
-| `sentinel.masterSet`                                         | Master set name                                                                                                                             | `mymaster`               |
-| `sentinel.quorum`                                            | Sentinel Quorum                                                                                                                             | `2`                      |
-| `sentinel.getMasterTimeout`                                  | Amount of time to allow before get_sentinel_master_info() times out.                                                                        | `99`                     |
-| `sentinel.automateClusterRecovery`                           | Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically failover to it. | `false`                  |
-| `sentinel.redisShutdownWaitFailover`                         | Whether the Redis&reg; master container waits for the failover at shutdown (in addition to the Redis&reg; Sentinel container).              | `true`                   |
-| `sentinel.downAfterMilliseconds`                             | Timeout for detecting a Redis&reg; node is down                                                                                             | `60000`                  |
-| `sentinel.failoverTimeout`                                   | Timeout for performing a election failover                                                                                                  | `180000`                 |
-| `sentinel.parallelSyncs`                                     | Number of replicas that can be reconfigured in parallel to use the new master after a failover                                              | `1`                      |
-| `sentinel.configuration`                                     | Configuration for Redis&reg; Sentinel nodes                                                                                                 | `""`                     |
-| `sentinel.command`                                           | Override default container command (useful when using custom images)                                                                        | `[]`                     |
-| `sentinel.args`                                              | Override default container args (useful when using custom images)                                                                           | `[]`                     |
-| `sentinel.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                       | `true`                   |
-| `sentinel.preExecCmds`                                       | Additional commands to run prior to starting Redis&reg; Sentinel                                                                            | `[]`                     |
-| `sentinel.extraEnvVars`                                      | Array with extra environment variables to add to Redis&reg; Sentinel nodes                                                                  | `[]`                     |
-| `sentinel.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Redis&reg; Sentinel nodes                                                          | `""`                     |
-| `sentinel.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Redis&reg; Sentinel nodes                                                             | `""`                     |
-| `sentinel.externalMaster.enabled`                            | Use external master for bootstrapping                                                                                                       | `false`                  |
-| `sentinel.externalMaster.host`                               | External master host to bootstrap from                                                                                                      | `""`                     |
-| `sentinel.externalMaster.port`                               | Port for Redis service external master host                                                                                                 | `6379`                   |
-| `sentinel.containerPorts.sentinel`                           | Container port to open on Redis&reg; Sentinel nodes                                                                                         | `26379`                  |
-| `sentinel.startupProbe.enabled`                              | Enable startupProbe on Redis&reg; Sentinel nodes                                                                                            | `true`                   |
-| `sentinel.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                      | `10`                     |
-| `sentinel.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                             | `10`                     |
-| `sentinel.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                            | `5`                      |
-| `sentinel.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                          | `22`                     |
-| `sentinel.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                          | `1`                      |
-| `sentinel.livenessProbe.enabled`                             | Enable livenessProbe on Redis&reg; Sentinel nodes                                                                                           | `true`                   |
-| `sentinel.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                     | `20`                     |
-| `sentinel.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                            | `10`                     |
-| `sentinel.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                           | `5`                      |
-| `sentinel.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                         | `6`                      |
-| `sentinel.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                         | `1`                      |
-| `sentinel.readinessProbe.enabled`                            | Enable readinessProbe on Redis&reg; Sentinel nodes                                                                                          | `true`                   |
-| `sentinel.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                    | `20`                     |
-| `sentinel.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                           | `5`                      |
-| `sentinel.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                          | `1`                      |
-| `sentinel.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                        | `6`                      |
-| `sentinel.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                        | `1`                      |
-| `sentinel.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                          | `{}`                     |
-| `sentinel.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                         | `{}`                     |
-| `sentinel.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                        | `{}`                     |
-| `sentinel.persistence.enabled`                               | Enable persistence on Redis&reg; sentinel nodes using Persistent Volume Claims (Experimental)                                               | `false`                  |
-| `sentinel.persistence.storageClass`                          | Persistent Volume storage class                                                                                                             | `""`                     |
-| `sentinel.persistence.accessModes`                           | Persistent Volume access modes                                                                                                              | `["ReadWriteOnce"]`      |
-| `sentinel.persistence.size`                                  | Persistent Volume size                                                                                                                      | `100Mi`                  |
-| `sentinel.persistence.annotations`                           | Additional custom annotations for the PVC                                                                                                   | `{}`                     |
-| `sentinel.persistence.labels`                                | Additional custom labels for the PVC                                                                                                        | `{}`                     |
-| `sentinel.persistence.selector`                              | Additional labels to match for the PVC                                                                                                      | `{}`                     |
-| `sentinel.persistence.dataSource`                            | Custom PVC data source                                                                                                                      | `{}`                     |
-| `sentinel.persistence.medium`                                | Provide a medium for `emptyDir` volumes.                                                                                                    | `""`                     |
-| `sentinel.persistence.sizeLimit`                             | Set this to enable a size limit for `emptyDir` volumes.                                                                                     | `""`                     |
-| `sentinel.persistentVolumeClaimRetentionPolicy.enabled`      | Controls if and how PVCs are deleted during the lifecycle of a StatefulSet                                                                  | `false`                  |
-| `sentinel.persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced                                                              | `Retain`                 |
-| `sentinel.persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                                                                      | `Retain`                 |
-| `sentinel.resources.limits`                                  | The resources limits for the Redis&reg; Sentinel containers                                                                                 | `{}`                     |
-| `sentinel.resources.requests`                                | The requested resources for the Redis&reg; Sentinel containers                                                                              | `{}`                     |
-| `sentinel.containerSecurityContext.enabled`                  | Enabled Redis&reg; Sentinel containers' Security Context                                                                                    | `true`                   |
-| `sentinel.containerSecurityContext.runAsUser`                | Set Redis&reg; Sentinel containers' Security Context runAsUser                                                                              | `1001`                   |
-| `sentinel.containerSecurityContext.runAsGroup`               | Set Redis&reg; Sentinel containers' Security Context runAsGroup                                                                             | `0`                      |
-| `sentinel.containerSecurityContext.runAsNonRoot`             | Set Redis&reg; Sentinel containers' Security Context runAsNonRoot                                                                           | `true`                   |
-| `sentinel.containerSecurityContext.allowPrivilegeEscalation` | Set Redis&reg; Sentinel containers' Security Context allowPrivilegeEscalation                                                               | `false`                  |
-| `sentinel.containerSecurityContext.seccompProfile.type`      | Set Redis&reg; Sentinel containers' Security Context seccompProfile                                                                         | `RuntimeDefault`         |
-| `sentinel.containerSecurityContext.capabilities.drop`        | Set Redis&reg; Sentinel containers' Security Context capabilities to drop                                                                   | `["ALL"]`                |
-| `sentinel.lifecycleHooks`                                    | for the Redis&reg; sentinel container(s) to automate configuration before or after startup                                                  | `{}`                     |
-| `sentinel.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Redis&reg; Sentinel                                                             | `[]`                     |
-| `sentinel.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Redis&reg; Sentinel container(s)                                           | `[]`                     |
-| `sentinel.service.type`                                      | Redis&reg; Sentinel service type                                                                                                            | `ClusterIP`              |
-| `sentinel.service.ports.redis`                               | Redis&reg; service port for Redis&reg;                                                                                                      | `6379`                   |
-| `sentinel.service.ports.sentinel`                            | Redis&reg; service port for Redis&reg; Sentinel                                                                                             | `26379`                  |
-| `sentinel.service.nodePorts.redis`                           | Node port for Redis&reg;                                                                                                                    | `""`                     |
-| `sentinel.service.nodePorts.sentinel`                        | Node port for Sentinel                                                                                                                      | `""`                     |
-| `sentinel.service.externalTrafficPolicy`                     | Redis&reg; Sentinel service external traffic policy                                                                                         | `Cluster`                |
-| `sentinel.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                                                              | `[]`                     |
-| `sentinel.service.clusterIP`                                 | Redis&reg; Sentinel service Cluster IP                                                                                                      | `""`                     |
-| `sentinel.service.loadBalancerIP`                            | Redis&reg; Sentinel service Load Balancer IP                                                                                                | `""`                     |
-| `sentinel.service.loadBalancerSourceRanges`                  | Redis&reg; Sentinel service Load Balancer sources                                                                                           | `[]`                     |
-| `sentinel.service.annotations`                               | Additional custom annotations for Redis&reg; Sentinel service                                                                               | `{}`                     |
-| `sentinel.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                        | `None`                   |
-| `sentinel.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                                                 | `{}`                     |
-| `sentinel.service.headless.annotations`                      | Annotations for the headless service.                                                                                                       | `{}`                     |
-| `sentinel.terminationGracePeriodSeconds`                     | Integer setting the termination grace period for the redis-node pods                                                                        | `30`                     |
+| Name                                                         | Description                                                                                                                                 | Value                            |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| `sentinel.enabled`                                           | Use Redis&reg; Sentinel on Redis&reg; pods.                                                                                                 | `false`                          |
+| `sentinel.image.registry`                                    | Redis&reg; Sentinel image registry                                                                                                          | `REGISTRY_NAME`                  |
+| `sentinel.image.repository`                                  | Redis&reg; Sentinel image repository                                                                                                        | `REPOSITORY_NAME/redis-sentinel` |
+| `sentinel.image.digest`                                      | Redis&reg; Sentinel image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                             |
+| `sentinel.image.pullPolicy`                                  | Redis&reg; Sentinel image pull policy                                                                                                       | `IfNotPresent`                   |
+| `sentinel.image.pullSecrets`                                 | Redis&reg; Sentinel image pull secrets                                                                                                      | `[]`                             |
+| `sentinel.image.debug`                                       | Enable image debug mode                                                                                                                     | `false`                          |
+| `sentinel.annotations`                                       | Additional custom annotations for Redis&reg; Sentinel resource                                                                              | `{}`                             |
+| `sentinel.masterSet`                                         | Master set name                                                                                                                             | `mymaster`                       |
+| `sentinel.quorum`                                            | Sentinel Quorum                                                                                                                             | `2`                              |
+| `sentinel.getMasterTimeout`                                  | Amount of time to allow before get_sentinel_master_info() times out.                                                                        | `99`                             |
+| `sentinel.automateClusterRecovery`                           | Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically failover to it. | `false`                          |
+| `sentinel.redisShutdownWaitFailover`                         | Whether the Redis&reg; master container waits for the failover at shutdown (in addition to the Redis&reg; Sentinel container).              | `true`                           |
+| `sentinel.downAfterMilliseconds`                             | Timeout for detecting a Redis&reg; node is down                                                                                             | `60000`                          |
+| `sentinel.failoverTimeout`                                   | Timeout for performing a election failover                                                                                                  | `180000`                         |
+| `sentinel.parallelSyncs`                                     | Number of replicas that can be reconfigured in parallel to use the new master after a failover                                              | `1`                              |
+| `sentinel.configuration`                                     | Configuration for Redis&reg; Sentinel nodes                                                                                                 | `""`                             |
+| `sentinel.command`                                           | Override default container command (useful when using custom images)                                                                        | `[]`                             |
+| `sentinel.args`                                              | Override default container args (useful when using custom images)                                                                           | `[]`                             |
+| `sentinel.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                       | `true`                           |
+| `sentinel.preExecCmds`                                       | Additional commands to run prior to starting Redis&reg; Sentinel                                                                            | `[]`                             |
+| `sentinel.extraEnvVars`                                      | Array with extra environment variables to add to Redis&reg; Sentinel nodes                                                                  | `[]`                             |
+| `sentinel.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Redis&reg; Sentinel nodes                                                          | `""`                             |
+| `sentinel.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Redis&reg; Sentinel nodes                                                             | `""`                             |
+| `sentinel.externalMaster.enabled`                            | Use external master for bootstrapping                                                                                                       | `false`                          |
+| `sentinel.externalMaster.host`                               | External master host to bootstrap from                                                                                                      | `""`                             |
+| `sentinel.externalMaster.port`                               | Port for Redis service external master host                                                                                                 | `6379`                           |
+| `sentinel.containerPorts.sentinel`                           | Container port to open on Redis&reg; Sentinel nodes                                                                                         | `26379`                          |
+| `sentinel.startupProbe.enabled`                              | Enable startupProbe on Redis&reg; Sentinel nodes                                                                                            | `true`                           |
+| `sentinel.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                      | `10`                             |
+| `sentinel.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                             | `10`                             |
+| `sentinel.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                            | `5`                              |
+| `sentinel.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                          | `22`                             |
+| `sentinel.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                          | `1`                              |
+| `sentinel.livenessProbe.enabled`                             | Enable livenessProbe on Redis&reg; Sentinel nodes                                                                                           | `true`                           |
+| `sentinel.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                     | `20`                             |
+| `sentinel.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                            | `10`                             |
+| `sentinel.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                           | `5`                              |
+| `sentinel.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                         | `6`                              |
+| `sentinel.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                         | `1`                              |
+| `sentinel.readinessProbe.enabled`                            | Enable readinessProbe on Redis&reg; Sentinel nodes                                                                                          | `true`                           |
+| `sentinel.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                    | `20`                             |
+| `sentinel.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                           | `5`                              |
+| `sentinel.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                          | `1`                              |
+| `sentinel.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                        | `6`                              |
+| `sentinel.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                        | `1`                              |
+| `sentinel.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                          | `{}`                             |
+| `sentinel.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                         | `{}`                             |
+| `sentinel.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                        | `{}`                             |
+| `sentinel.persistence.enabled`                               | Enable persistence on Redis&reg; sentinel nodes using Persistent Volume Claims (Experimental)                                               | `false`                          |
+| `sentinel.persistence.storageClass`                          | Persistent Volume storage class                                                                                                             | `""`                             |
+| `sentinel.persistence.accessModes`                           | Persistent Volume access modes                                                                                                              | `["ReadWriteOnce"]`              |
+| `sentinel.persistence.size`                                  | Persistent Volume size                                                                                                                      | `100Mi`                          |
+| `sentinel.persistence.annotations`                           | Additional custom annotations for the PVC                                                                                                   | `{}`                             |
+| `sentinel.persistence.labels`                                | Additional custom labels for the PVC                                                                                                        | `{}`                             |
+| `sentinel.persistence.selector`                              | Additional labels to match for the PVC                                                                                                      | `{}`                             |
+| `sentinel.persistence.dataSource`                            | Custom PVC data source                                                                                                                      | `{}`                             |
+| `sentinel.persistence.medium`                                | Provide a medium for `emptyDir` volumes.                                                                                                    | `""`                             |
+| `sentinel.persistence.sizeLimit`                             | Set this to enable a size limit for `emptyDir` volumes.                                                                                     | `""`                             |
+| `sentinel.persistentVolumeClaimRetentionPolicy.enabled`      | Controls if and how PVCs are deleted during the lifecycle of a StatefulSet                                                                  | `false`                          |
+| `sentinel.persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced                                                              | `Retain`                         |
+| `sentinel.persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                                                                      | `Retain`                         |
+| `sentinel.resources.limits`                                  | The resources limits for the Redis&reg; Sentinel containers                                                                                 | `{}`                             |
+| `sentinel.resources.requests`                                | The requested resources for the Redis&reg; Sentinel containers                                                                              | `{}`                             |
+| `sentinel.containerSecurityContext.enabled`                  | Enabled Redis&reg; Sentinel containers' Security Context                                                                                    | `true`                           |
+| `sentinel.containerSecurityContext.runAsUser`                | Set Redis&reg; Sentinel containers' Security Context runAsUser                                                                              | `1001`                           |
+| `sentinel.containerSecurityContext.runAsGroup`               | Set Redis&reg; Sentinel containers' Security Context runAsGroup                                                                             | `0`                              |
+| `sentinel.containerSecurityContext.runAsNonRoot`             | Set Redis&reg; Sentinel containers' Security Context runAsNonRoot                                                                           | `true`                           |
+| `sentinel.containerSecurityContext.allowPrivilegeEscalation` | Set Redis&reg; Sentinel containers' Security Context allowPrivilegeEscalation                                                               | `false`                          |
+| `sentinel.containerSecurityContext.seccompProfile.type`      | Set Redis&reg; Sentinel containers' Security Context seccompProfile                                                                         | `RuntimeDefault`                 |
+| `sentinel.containerSecurityContext.capabilities.drop`        | Set Redis&reg; Sentinel containers' Security Context capabilities to drop                                                                   | `["ALL"]`                        |
+| `sentinel.lifecycleHooks`                                    | for the Redis&reg; sentinel container(s) to automate configuration before or after startup                                                  | `{}`                             |
+| `sentinel.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Redis&reg; Sentinel                                                             | `[]`                             |
+| `sentinel.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Redis&reg; Sentinel container(s)                                           | `[]`                             |
+| `sentinel.service.type`                                      | Redis&reg; Sentinel service type                                                                                                            | `ClusterIP`                      |
+| `sentinel.service.ports.redis`                               | Redis&reg; service port for Redis&reg;                                                                                                      | `6379`                           |
+| `sentinel.service.ports.sentinel`                            | Redis&reg; service port for Redis&reg; Sentinel                                                                                             | `26379`                          |
+| `sentinel.service.nodePorts.redis`                           | Node port for Redis&reg;                                                                                                                    | `""`                             |
+| `sentinel.service.nodePorts.sentinel`                        | Node port for Sentinel                                                                                                                      | `""`                             |
+| `sentinel.service.externalTrafficPolicy`                     | Redis&reg; Sentinel service external traffic policy                                                                                         | `Cluster`                        |
+| `sentinel.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                                                              | `[]`                             |
+| `sentinel.service.clusterIP`                                 | Redis&reg; Sentinel service Cluster IP                                                                                                      | `""`                             |
+| `sentinel.service.loadBalancerIP`                            | Redis&reg; Sentinel service Load Balancer IP                                                                                                | `""`                             |
+| `sentinel.service.loadBalancerSourceRanges`                  | Redis&reg; Sentinel service Load Balancer sources                                                                                           | `[]`                             |
+| `sentinel.service.annotations`                               | Additional custom annotations for Redis&reg; Sentinel service                                                                               | `{}`                             |
+| `sentinel.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                        | `None`                           |
+| `sentinel.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                                                 | `{}`                             |
+| `sentinel.service.headless.annotations`                      | Annotations for the headless service.                                                                                                       | `{}`                             |
+| `sentinel.terminationGracePeriodSeconds`                     | Integer setting the termination grace period for the redis-node pods                                                                        | `30`                             |
 
 ### Other Parameters
 
@@ -478,102 +480,110 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics Parameters
 
-| Name                                                        | Description                                                                                                         | Value                    |
-| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `metrics.enabled`                                           | Start a sidecar prometheus exporter to expose Redis&reg; metrics                                                    | `false`                  |
-| `metrics.image.registry`                                    | Redis&reg; Exporter image registry                                                                                  | `docker.io`              |
-| `metrics.image.repository`                                  | Redis&reg; Exporter image repository                                                                                | `bitnami/redis-exporter` |
-| `metrics.image.tag`                                         | Redis&reg; Exporter image tag (immutable tags are recommended)                                                      | `1.55.0-debian-11-r0`    |
-| `metrics.image.digest`                                      | Redis&reg; Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
-| `metrics.image.pullPolicy`                                  | Redis&reg; Exporter image pull policy                                                                               | `IfNotPresent`           |
-| `metrics.image.pullSecrets`                                 | Redis&reg; Exporter image pull secrets                                                                              | `[]`                     |
-| `metrics.startupProbe.enabled`                              | Enable startupProbe on Redis&reg; replicas nodes                                                                    | `false`                  |
-| `metrics.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                              | `10`                     |
-| `metrics.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                     | `10`                     |
-| `metrics.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                    | `5`                      |
-| `metrics.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                  | `5`                      |
-| `metrics.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                  | `1`                      |
-| `metrics.livenessProbe.enabled`                             | Enable livenessProbe on Redis&reg; replicas nodes                                                                   | `true`                   |
-| `metrics.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                             | `10`                     |
-| `metrics.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                    | `10`                     |
-| `metrics.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                   | `5`                      |
-| `metrics.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                 | `5`                      |
-| `metrics.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                 | `1`                      |
-| `metrics.readinessProbe.enabled`                            | Enable readinessProbe on Redis&reg; replicas nodes                                                                  | `true`                   |
-| `metrics.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                            | `5`                      |
-| `metrics.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                   | `10`                     |
-| `metrics.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                  | `1`                      |
-| `metrics.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                | `3`                      |
-| `metrics.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                | `1`                      |
-| `metrics.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                  | `{}`                     |
-| `metrics.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                 | `{}`                     |
-| `metrics.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                | `{}`                     |
-| `metrics.command`                                           | Override default metrics container init command (useful when using custom images)                                   | `[]`                     |
-| `metrics.redisTargetHost`                                   | A way to specify an alternative Redis&reg; hostname                                                                 | `localhost`              |
-| `metrics.extraArgs`                                         | Extra arguments for Redis&reg; exporter, for example:                                                               | `{}`                     |
-| `metrics.extraEnvVars`                                      | Array with extra environment variables to add to Redis&reg; exporter                                                | `[]`                     |
-| `metrics.containerSecurityContext.enabled`                  | Enabled Redis&reg; exporter containers' Security Context                                                            | `true`                   |
-| `metrics.containerSecurityContext.runAsUser`                | Set Redis&reg; exporter containers' Security Context runAsUser                                                      | `1001`                   |
-| `metrics.containerSecurityContext.runAsGroup`               | Set Redis&reg; exporter containers' Security Context runAsGroup                                                     | `0`                      |
-| `metrics.containerSecurityContext.runAsNonRoot`             | Set Redis&reg; exporter containers' Security Context runAsNonRoot                                                   | `true`                   |
-| `metrics.containerSecurityContext.allowPrivilegeEscalation` | Set Redis&reg; exporter containers' Security Context allowPrivilegeEscalation                                       | `false`                  |
-| `metrics.containerSecurityContext.seccompProfile.type`      | Set Redis&reg; exporter containers' Security Context seccompProfile                                                 | `RuntimeDefault`         |
-| `metrics.containerSecurityContext.capabilities.drop`        | Set Redis&reg; exporter containers' Security Context capabilities to drop                                           | `["ALL"]`                |
-| `metrics.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Redis&reg; metrics sidecar                              | `[]`                     |
-| `metrics.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Redis&reg; metrics sidecar                         | `[]`                     |
-| `metrics.resources.limits`                                  | The resources limits for the Redis&reg; exporter container                                                          | `{}`                     |
-| `metrics.resources.requests`                                | The requested resources for the Redis&reg; exporter container                                                       | `{}`                     |
-| `metrics.podLabels`                                         | Extra labels for Redis&reg; exporter pods                                                                           | `{}`                     |
-| `metrics.podAnnotations`                                    | Annotations for Redis&reg; exporter pods                                                                            | `{}`                     |
-| `metrics.service.type`                                      | Redis&reg; exporter service type                                                                                    | `ClusterIP`              |
-| `metrics.service.port`                                      | Redis&reg; exporter service port                                                                                    | `9121`                   |
-| `metrics.service.externalTrafficPolicy`                     | Redis&reg; exporter service external traffic policy                                                                 | `Cluster`                |
-| `metrics.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                                      | `[]`                     |
-| `metrics.service.loadBalancerIP`                            | Redis&reg; exporter service Load Balancer IP                                                                        | `""`                     |
-| `metrics.service.loadBalancerSourceRanges`                  | Redis&reg; exporter service Load Balancer sources                                                                   | `[]`                     |
-| `metrics.service.annotations`                               | Additional custom annotations for Redis&reg; exporter service                                                       | `{}`                     |
-| `metrics.service.clusterIP`                                 | Redis&reg; exporter service Cluster IP                                                                              | `""`                     |
-| `metrics.serviceMonitor.enabled`                            | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator                                     | `false`                  |
-| `metrics.serviceMonitor.namespace`                          | The namespace in which the ServiceMonitor will be created                                                           | `""`                     |
-| `metrics.serviceMonitor.interval`                           | The interval at which metrics should be scraped                                                                     | `30s`                    |
-| `metrics.serviceMonitor.scrapeTimeout`                      | The timeout after which the scrape is ended                                                                         | `""`                     |
-| `metrics.serviceMonitor.relabellings`                       | Metrics RelabelConfigs to apply to samples before scraping.                                                         | `[]`                     |
-| `metrics.serviceMonitor.metricRelabelings`                  | Metrics RelabelConfigs to apply to samples before ingestion.                                                        | `[]`                     |
-| `metrics.serviceMonitor.honorLabels`                        | Specify honorLabels parameter to add the scrape endpoint                                                            | `false`                  |
-| `metrics.serviceMonitor.additionalLabels`                   | Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus                    | `{}`                     |
-| `metrics.serviceMonitor.podTargetLabels`                    | Labels from the Kubernetes pod to be transferred to the created metrics                                             | `[]`                     |
-| `metrics.serviceMonitor.sampleLimit`                        | Limit of how many samples should be scraped from every Pod                                                          | `false`                  |
-| `metrics.serviceMonitor.targetLimit`                        | Limit of how many targets should be scraped                                                                         | `false`                  |
-| `metrics.prometheusRule.enabled`                            | Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator                               | `false`                  |
-| `metrics.prometheusRule.namespace`                          | The namespace in which the prometheusRule will be created                                                           | `""`                     |
-| `metrics.prometheusRule.additionalLabels`                   | Additional labels for the prometheusRule                                                                            | `{}`                     |
-| `metrics.prometheusRule.rules`                              | Custom Prometheus rules                                                                                             | `[]`                     |
+| Name                                                        | Description                                                                                                         | Value                            |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| `metrics.enabled`                                           | Start a sidecar prometheus exporter to expose Redis&reg; metrics                                                    | `false`                          |
+| `metrics.image.registry`                                    | Redis&reg; Exporter image registry                                                                                  | `REGISTRY_NAME`                  |
+| `metrics.image.repository`                                  | Redis&reg; Exporter image repository                                                                                | `REPOSITORY_NAME/redis-exporter` |
+| `metrics.image.digest`                                      | Redis&reg; Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                             |
+| `metrics.image.pullPolicy`                                  | Redis&reg; Exporter image pull policy                                                                               | `IfNotPresent`                   |
+| `metrics.image.pullSecrets`                                 | Redis&reg; Exporter image pull secrets                                                                              | `[]`                             |
+| `metrics.startupProbe.enabled`                              | Enable startupProbe on Redis&reg; replicas nodes                                                                    | `false`                          |
+| `metrics.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                              | `10`                             |
+| `metrics.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                     | `10`                             |
+| `metrics.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                    | `5`                              |
+| `metrics.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                  | `5`                              |
+| `metrics.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                  | `1`                              |
+| `metrics.livenessProbe.enabled`                             | Enable livenessProbe on Redis&reg; replicas nodes                                                                   | `true`                           |
+| `metrics.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                             | `10`                             |
+| `metrics.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                    | `10`                             |
+| `metrics.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                   | `5`                              |
+| `metrics.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                 | `5`                              |
+| `metrics.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                 | `1`                              |
+| `metrics.readinessProbe.enabled`                            | Enable readinessProbe on Redis&reg; replicas nodes                                                                  | `true`                           |
+| `metrics.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                            | `5`                              |
+| `metrics.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                   | `10`                             |
+| `metrics.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                  | `1`                              |
+| `metrics.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                | `3`                              |
+| `metrics.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                | `1`                              |
+| `metrics.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                  | `{}`                             |
+| `metrics.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                 | `{}`                             |
+| `metrics.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                | `{}`                             |
+| `metrics.command`                                           | Override default metrics container init command (useful when using custom images)                                   | `[]`                             |
+| `metrics.redisTargetHost`                                   | A way to specify an alternative Redis&reg; hostname                                                                 | `localhost`                      |
+| `metrics.extraArgs`                                         | Extra arguments for Redis&reg; exporter, for example:                                                               | `{}`                             |
+| `metrics.extraEnvVars`                                      | Array with extra environment variables to add to Redis&reg; exporter                                                | `[]`                             |
+| `metrics.containerSecurityContext.enabled`                  | Enabled Redis&reg; exporter containers' Security Context                                                            | `true`                           |
+| `metrics.containerSecurityContext.runAsUser`                | Set Redis&reg; exporter containers' Security Context runAsUser                                                      | `1001`                           |
+| `metrics.containerSecurityContext.runAsGroup`               | Set Redis&reg; exporter containers' Security Context runAsGroup                                                     | `0`                              |
+| `metrics.containerSecurityContext.runAsNonRoot`             | Set Redis&reg; exporter containers' Security Context runAsNonRoot                                                   | `true`                           |
+| `metrics.containerSecurityContext.allowPrivilegeEscalation` | Set Redis&reg; exporter containers' Security Context allowPrivilegeEscalation                                       | `false`                          |
+| `metrics.containerSecurityContext.seccompProfile.type`      | Set Redis&reg; exporter containers' Security Context seccompProfile                                                 | `RuntimeDefault`                 |
+| `metrics.containerSecurityContext.capabilities.drop`        | Set Redis&reg; exporter containers' Security Context capabilities to drop                                           | `["ALL"]`                        |
+| `metrics.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Redis&reg; metrics sidecar                              | `[]`                             |
+| `metrics.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Redis&reg; metrics sidecar                         | `[]`                             |
+| `metrics.resources.limits`                                  | The resources limits for the Redis&reg; exporter container                                                          | `{}`                             |
+| `metrics.resources.requests`                                | The requested resources for the Redis&reg; exporter container                                                       | `{}`                             |
+| `metrics.podLabels`                                         | Extra labels for Redis&reg; exporter pods                                                                           | `{}`                             |
+| `metrics.podAnnotations`                                    | Annotations for Redis&reg; exporter pods                                                                            | `{}`                             |
+| `metrics.service.type`                                      | Redis&reg; exporter service type                                                                                    | `ClusterIP`                      |
+| `metrics.service.port`                                      | Redis&reg; exporter service port                                                                                    | `9121`                           |
+| `metrics.service.externalTrafficPolicy`                     | Redis&reg; exporter service external traffic policy                                                                 | `Cluster`                        |
+| `metrics.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                                      | `[]`                             |
+| `metrics.service.loadBalancerIP`                            | Redis&reg; exporter service Load Balancer IP                                                                        | `""`                             |
+| `metrics.service.loadBalancerSourceRanges`                  | Redis&reg; exporter service Load Balancer sources                                                                   | `[]`                             |
+| `metrics.service.annotations`                               | Additional custom annotations for Redis&reg; exporter service                                                       | `{}`                             |
+| `metrics.service.clusterIP`                                 | Redis&reg; exporter service Cluster IP                                                                              | `""`                             |
+| `metrics.serviceMonitor.enabled`                            | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator                                     | `false`                          |
+| `metrics.serviceMonitor.namespace`                          | The namespace in which the ServiceMonitor will be created                                                           | `""`                             |
+| `metrics.serviceMonitor.interval`                           | The interval at which metrics should be scraped                                                                     | `30s`                            |
+| `metrics.serviceMonitor.scrapeTimeout`                      | The timeout after which the scrape is ended                                                                         | `""`                             |
+| `metrics.serviceMonitor.relabellings`                       | Metrics RelabelConfigs to apply to samples before scraping.                                                         | `[]`                             |
+| `metrics.serviceMonitor.metricRelabelings`                  | Metrics RelabelConfigs to apply to samples before ingestion.                                                        | `[]`                             |
+| `metrics.serviceMonitor.honorLabels`                        | Specify honorLabels parameter to add the scrape endpoint                                                            | `false`                          |
+| `metrics.serviceMonitor.additionalLabels`                   | Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus                    | `{}`                             |
+| `metrics.serviceMonitor.podTargetLabels`                    | Labels from the Kubernetes pod to be transferred to the created metrics                                             | `[]`                             |
+| `metrics.serviceMonitor.sampleLimit`                        | Limit of how many samples should be scraped from every Pod                                                          | `false`                          |
+| `metrics.serviceMonitor.targetLimit`                        | Limit of how many targets should be scraped                                                                         | `false`                          |
+| `metrics.podMonitor.enabled`                                | Create PodMonitor resource(s) for scraping metrics using PrometheusOperator                                         | `false`                          |
+| `metrics.podMonitor.namespace`                              | The namespace in which the PodMonitor will be created                                                               | `""`                             |
+| `metrics.podMonitor.interval`                               | The interval at which metrics should be scraped                                                                     | `30s`                            |
+| `metrics.podMonitor.scrapeTimeout`                          | The timeout after which the scrape is ended                                                                         | `""`                             |
+| `metrics.podMonitor.relabellings`                           | Metrics RelabelConfigs to apply to samples before scraping.                                                         | `[]`                             |
+| `metrics.podMonitor.metricRelabelings`                      | Metrics RelabelConfigs to apply to samples before ingestion.                                                        | `[]`                             |
+| `metrics.podMonitor.honorLabels`                            | Specify honorLabels parameter to add the scrape endpoint                                                            | `false`                          |
+| `metrics.podMonitor.additionalLabels`                       | Additional labels that can be used so PodMonitor resource(s) can be discovered by Prometheus                        | `{}`                             |
+| `metrics.podMonitor.podTargetLabels`                        | Labels from the Kubernetes pod to be transferred to the created metrics                                             | `[]`                             |
+| `metrics.podMonitor.sampleLimit`                            | Limit of how many samples should be scraped from every Pod                                                          | `false`                          |
+| `metrics.podMonitor.targetLimit`                            | Limit of how many targets should be scraped                                                                         | `false`                          |
+| `metrics.prometheusRule.enabled`                            | Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator                               | `false`                          |
+| `metrics.prometheusRule.namespace`                          | The namespace in which the prometheusRule will be created                                                           | `""`                             |
+| `metrics.prometheusRule.additionalLabels`                   | Additional labels for the prometheusRule                                                                            | `{}`                             |
+| `metrics.prometheusRule.rules`                              | Custom Prometheus rules                                                                                             | `[]`                             |
 
 ### Init Container Parameters
 
-| Name                                                   | Description                                                                                                        | Value              |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------ |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`            |
-| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `docker.io`        |
-| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r90` |
-| `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`               |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                        | `{}`               |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                     | `{}`               |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                |
-| `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                                    | `false`            |
-| `sysctl.image.registry`                                | OS Shell + Utility image registry                                                                                  | `docker.io`        |
-| `sysctl.image.repository`                              | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
-| `sysctl.image.tag`                                     | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r90` |
-| `sysctl.image.digest`                                  | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `sysctl.image.pullPolicy`                              | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
-| `sysctl.image.pullSecrets`                             | OS Shell + Utility image pull secrets                                                                              | `[]`               |
-| `sysctl.command`                                       | Override default init-sysctl container command (useful when using custom images)                                   | `[]`               |
-| `sysctl.mountHostSys`                                  | Mount the host `/sys` folder to `/host-sys`                                                                        | `false`            |
-| `sysctl.resources.limits`                              | The resources limits for the init container                                                                        | `{}`               |
-| `sysctl.resources.requests`                            | The requested resources for the init container                                                                     | `{}`               |
+| Name                                                   | Description                                                                                                        | Value                      |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
+| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
+| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                        | `{}`                       |
+| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                     | `{}`                       |
+| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                        |
+| `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                                    | `false`                    |
+| `sysctl.image.registry`                                | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
+| `sysctl.image.repository`                              | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `sysctl.image.digest`                                  | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `sysctl.image.pullPolicy`                              | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
+| `sysctl.image.pullSecrets`                             | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
+| `sysctl.command`                                       | Override default init-sysctl container command (useful when using custom images)                                   | `[]`                       |
+| `sysctl.mountHostSys`                                  | Mount the host `/sys` folder to `/host-sys`                                                                        | `false`                    |
+| `sysctl.resources.limits`                              | The resources limits for the init container                                                                        | `{}`                       |
+| `sysctl.resources.requests`                            | The requested resources for the init container                                                                     | `{}`                       |
 
 ### useExternalDNS Parameters
 
@@ -589,8 +599,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set auth.password=secretpassword \
-    oci://registry-1.docker.io/bitnamicharts/redis
+    oci://REGISTRY_NAME/REPOSITORY_NAME/redis
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the Redis&reg; server password to `secretpassword`.
 
@@ -599,9 +611,10 @@ The above command sets the Redis&reg; server password to `secretpassword`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/redis
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/redis
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -763,8 +776,10 @@ By default, the chart mounts a [Persistent Volume](https://kubernetes.io/docs/co
 3. Install the chart
 
 ```console
-helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://registry-1.docker.io/bitnamicharts/redis
+helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://REGISTRY_NAME/REPOSITORY_NAME/redis
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Backup and restore
 
@@ -798,9 +813,9 @@ For example, on a rolling update `master-0` and `replica-2` are updated first fr
 This issue can be mitigated by splitting the upgrade into two stages: one for all replicas and another for any master.
 
 - Stage 1 (replicas only, as there's no master with an ordinal higher than 99):
-`helm upgrade oci://registry-1.docker.io/bitnamicharts/redis --set master.updateStrategy.rollingUpdate.partition=99`
+`helm upgrade oci://REGISTRY_NAME/REPOSITORY_NAME/redis --set master.updateStrategy.rollingUpdate.partition=99`
 - Stage 2 (anything else that is not up to date, in this case only master):
-`helm upgrade oci://registry-1.docker.io/bitnamicharts/redis`
+`helm upgrade oci://REGISTRY_NAME/REPOSITORY_NAME/redis`
 
 ### To 18.0.0
 
@@ -858,8 +873,10 @@ Backwards compatibility is not guaranteed. To upgrade to `14.0.0`, install a new
 - Reuse the PVC used to hold the master data on your previous release. To do so, use the `master.persistence.existingClaim` parameter. The following example assumes that the release name is `redis`:
 
 ```console
-helm install redis oci://registry-1.docker.io/bitnamicharts/redis --set auth.password=[PASSWORD] --set master.persistence.existingClaim=[EXISTING_PVC]
+helm install redis oci://REGISTRY_NAME/REPOSITORY_NAME/redis --set auth.password=[PASSWORD] --set master.persistence.existingClaim=[EXISTING_PVC]
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 | Note: you need to substitute the placeholder *[EXISTING_PVC]* with the name of the PVC used on your previous release, and *[PASSWORD]* with the password used in your previous release.
 
@@ -922,15 +939,19 @@ This version causes a change in the Redis&reg; Master StatefulSet definition, so
 - Recommended: Create a clone of the Redis&reg; Master PVC (for example, using projects like [this one](https://github.com/edseymour/pvc-transfer)). Then launch a fresh release reusing this cloned PVC.
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/redis --set persistence.existingClaim=<NEW PVC>
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redis --set persistence.existingClaim=<NEW PVC>
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 - Alternative (not recommended, do at your own risk): `helm delete --purge` does not remove the PVC assigned to the Redis&reg; Master StatefulSet. As a consequence, the following commands can be done to upgrade the release
 
 ```console
 helm delete --purge <RELEASE>
-helm install <RELEASE> oci://registry-1.docker.io/bitnamicharts/redis
+helm install <RELEASE> oci://REGISTRY_NAME/REPOSITORY_NAME/redis
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 Previous versions of the chart were not using persistence in the slaves, so this upgrade would add it to them. Another important change is that no values are inherited from master to slaves. For example, in 6.0.0 `slaves.readinessProbe.periodSeconds`, if empty, would be set to `master.readinessProbe.periodSeconds`. This approach lacked transparency and was difficult to maintain. From now on, all the slave parameters must be configured just as it is done with the masters.
 

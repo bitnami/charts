@@ -62,9 +62,9 @@ diagnosticMode:
 
 ## Bitnami EJBCA image version
 ## ref: https://hub.docker.com/r/bitnami/ejbca/tags/
-## @param image.registry EJBCA image registry
-## @param image.repository EJBCA image name
-## @param image.tag EJBCA image tag
+## @param image.registry [default: REGISTRY_NAME] EJBCA image registry
+## @param image.repository [default: REPOSITORY_NAME/ejbca] EJBCA image name
+## @skip image.tag EJBCA image tag
 ## @param image.digest EJBCA image image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy EJBCA image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -328,12 +328,22 @@ resources:
 ## K8s Security Context for EJBCA container
 ## @param containerSecurityContext.enabled Enabled EJBCA containers' Security Context
 ## @param containerSecurityContext.runAsUser Set EJBCA containers' Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set EJBCA container's Security Context runAsNonRoot
+## @param containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set primary container's Security Context privileged
+## @param containerSecurityContext.allowPrivilegeEscalation Set primary container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## EJBCA pod extra options for startup probe
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param startupProbe.enabled Enable/disable startupProbe

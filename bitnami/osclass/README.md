@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/osclass
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/osclass
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -22,7 +24,7 @@ It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/t
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Osclass in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Osclass in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -36,8 +38,10 @@ Looking to use Osclass in production? Try [VMware Application Catalog](https://b
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/osclass
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/osclass
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys Osclass on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -76,15 +80,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Osclass Image parameters
 
-| Name                | Description                                                                                             | Value                  |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`    | Osclass image registry                                                                                  | `docker.io`            |
-| `image.repository`  | Osclass image repository                                                                                | `bitnami/osclass`      |
-| `image.tag`         | Osclass image tag (immutable tags are recommended)                                                      | `8.1.2-debian-11-r100` |
-| `image.digest`      | Osclass image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `image.pullPolicy`  | Osclass image pull policy                                                                               | `IfNotPresent`         |
-| `image.pullSecrets` | Osclass image pull secrets                                                                              | `[]`                   |
-| `image.debug`       | Enable Bitnami debug mode in Osclass image                                                              | `false`                |
+| Name                | Description                                                                                             | Value                     |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `image.registry`    | Osclass image registry                                                                                  | `REGISTRY_NAME`           |
+| `image.repository`  | Osclass image repository                                                                                | `REPOSITORY_NAME/osclass` |
+| `image.digest`      | Osclass image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
+| `image.pullPolicy`  | Osclass image pull policy                                                                               | `IfNotPresent`            |
+| `image.pullSecrets` | Osclass image pull secrets                                                                              | `[]`                      |
+| `image.debug`       | Enable Bitnami debug mode in Osclass image                                                              | `false`                   |
 
 ### Osclass Configuration parameters
 
@@ -110,9 +113,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hostAliases`                                        | Osclass pod host aliases                                                                                        | `[]`                                     |
 | `podSecurityContext.enabled`                         | Enabled Osclass pods' Security Context                                                                          | `true`                                   |
 | `podSecurityContext.fsGroup`                         | Set Osclass pod's Security Context fsGroup                                                                      | `1001`                                   |
-| `containerSecurityContext.enabled`                   | Enabled Osclass containers' Security Context                                                                    | `true`                                   |
-| `containerSecurityContext.runAsUser`                 | Set Osclass container's Security Context runAsUser                                                              | `1001`                                   |
-| `containerSecurityContext.runAsNonRoot`              | Set Osclass container's Security Context runAsNonRoot                                                           | `true`                                   |
+| `containerSecurityContext.enabled`                   | Enabled containers' Security Context                                                                            | `true`                                   |
+| `containerSecurityContext.runAsUser`                 | Set containers' Security Context runAsUser                                                                      | `1001`                                   |
+| `containerSecurityContext.runAsNonRoot`              | Set container's Security Context runAsNonRoot                                                                   | `true`                                   |
+| `containerSecurityContext.privileged`                | Set container's Security Context privileged                                                                     | `false`                                  |
+| `containerSecurityContext.readOnlyRootFilesystem`    | Set container's Security Context readOnlyRootFilesystem                                                         | `false`                                  |
+| `containerSecurityContext.allowPrivilegeEscalation`  | Set container's Security Context allowPrivilegeEscalation                                                       | `false`                                  |
+| `containerSecurityContext.capabilities.drop`         | List of capabilities to be dropped                                                                              | `["ALL"]`                                |
+| `containerSecurityContext.seccompProfile.type`       | Set container's Security Context seccomp profile                                                                | `RuntimeDefault`                         |
 | `startupProbe.enabled`                               | Enable startupProbe                                                                                             | `false`                                  |
 | `startupProbe.path`                                  | Path for the HTTP probe                                                                                         | `/oc-admin`                              |
 | `startupProbe.initialDelaySeconds`                   | Initial delay seconds for startupProbe                                                                          | `600`                                    |
@@ -149,9 +157,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVars`                          | An array to add extra env vars                                                                                  | `[]`                                     |
 | `certificates.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                      | `""`                                     |
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                         | `""`                                     |
-| `certificates.image.registry`                        | Apache Exporter image registry                                                                                  | `docker.io`                              |
-| `certificates.image.repository`                      | Apache Exporter image repository                                                                                | `bitnami/os-shell`                       |
-| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`                       |
+| `certificates.image.registry`                        | Apache Exporter image registry                                                                                  | `REGISTRY_NAME`                          |
+| `certificates.image.repository`                      | Apache Exporter image repository                                                                                | `REPOSITORY_NAME/os-shell`               |
 | `certificates.image.digest`                          | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Apache Exporter image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Apache Exporter image pull secrets                                                                              | `[]`                                     |
@@ -219,40 +226,39 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database Parameters
 
-| Name                                       | Description                                                                                                        | Value              |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------ |
-| `externalDatabase.host`                    | External Database server host                                                                                      | `""`               |
-| `externalDatabase.port`                    | External Database server port                                                                                      | `3306`             |
-| `externalDatabase.user`                    | External Database username                                                                                         | `bn_osclass`       |
-| `externalDatabase.password`                | External Database user password                                                                                    | `""`               |
-| `externalDatabase.database`                | External Database database name                                                                                    | `bitnami_osclass`  |
-| `externalDatabase.existingSecret`          | Name of an existing secret resource containing the DB password                                                     | `""`               |
-| `mariadb.enabled`                          | Deploy a MariaDB server to satisfy the applications database requirements                                          | `true`             |
-| `mariadb.architecture`                     | MariaDB architecture. Allowed values: `standalone` or `replication`                                                | `standalone`       |
-| `mariadb.auth.rootPassword`                | MariaDB root password                                                                                              | `""`               |
-| `mariadb.auth.database`                    | MariaDB custom database                                                                                            | `bitnami_osclass`  |
-| `mariadb.auth.username`                    | MariaDB custom user name                                                                                           | `bn_osclass`       |
-| `mariadb.auth.password`                    | MariaDB custom user password                                                                                       | `""`               |
-| `mariadb.primary.persistence.enabled`      | Enable persistence on MariaDB using PVC(s)                                                                         | `true`             |
-| `mariadb.primary.persistence.storageClass` | Persistent Volume storage class                                                                                    | `""`               |
-| `mariadb.primary.persistence.accessModes`  | Persistent Volume access modes                                                                                     | `[]`               |
-| `mariadb.primary.persistence.size`         | Persistent Volume size                                                                                             | `8Gi`              |
-| `persistence.enabled`                      | Enable persistence using Persistent Volume Claims                                                                  | `true`             |
-| `persistence.storageClass`                 | Persistent Volume storage class                                                                                    | `""`               |
-| `persistence.accessModes`                  | Persistent Volume access modes                                                                                     | `[]`               |
-| `persistence.size`                         | Persistent Volume size                                                                                             | `8Gi`              |
-| `persistence.existingClaim`                | The name of an existing PVC to use for persistence                                                                 | `""`               |
-| `persistence.hostPath`                     | If defined, the osclass-data volume will mount to the specified hostPath.                                          | `""`               |
-| `persistence.annotations`                  | Persistent Volume Claim annotations                                                                                | `{}`               |
-| `volumePermissions.enabled`                | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`            |
-| `volumePermissions.image.registry`         | OS Shell + Utility image registry                                                                                  | `docker.io`        |
-| `volumePermissions.image.repository`       | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`              | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r90` |
-| `volumePermissions.image.digest`           | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `volumePermissions.image.pullPolicy`       | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`      | OS Shell + Utility image pull secrets                                                                              | `[]`               |
-| `volumePermissions.resources.limits`       | The resources limits for the init container                                                                        | `{}`               |
-| `volumePermissions.resources.requests`     | The requested resources for the init container                                                                     | `{}`               |
+| Name                                       | Description                                                                                                        | Value                      |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| `externalDatabase.host`                    | External Database server host                                                                                      | `""`                       |
+| `externalDatabase.port`                    | External Database server port                                                                                      | `3306`                     |
+| `externalDatabase.user`                    | External Database username                                                                                         | `bn_osclass`               |
+| `externalDatabase.password`                | External Database user password                                                                                    | `""`                       |
+| `externalDatabase.database`                | External Database database name                                                                                    | `bitnami_osclass`          |
+| `externalDatabase.existingSecret`          | Name of an existing secret resource containing the DB password                                                     | `""`                       |
+| `mariadb.enabled`                          | Deploy a MariaDB server to satisfy the applications database requirements                                          | `true`                     |
+| `mariadb.architecture`                     | MariaDB architecture. Allowed values: `standalone` or `replication`                                                | `standalone`               |
+| `mariadb.auth.rootPassword`                | MariaDB root password                                                                                              | `""`                       |
+| `mariadb.auth.database`                    | MariaDB custom database                                                                                            | `bitnami_osclass`          |
+| `mariadb.auth.username`                    | MariaDB custom user name                                                                                           | `bn_osclass`               |
+| `mariadb.auth.password`                    | MariaDB custom user password                                                                                       | `""`                       |
+| `mariadb.primary.persistence.enabled`      | Enable persistence on MariaDB using PVC(s)                                                                         | `true`                     |
+| `mariadb.primary.persistence.storageClass` | Persistent Volume storage class                                                                                    | `""`                       |
+| `mariadb.primary.persistence.accessModes`  | Persistent Volume access modes                                                                                     | `[]`                       |
+| `mariadb.primary.persistence.size`         | Persistent Volume size                                                                                             | `8Gi`                      |
+| `persistence.enabled`                      | Enable persistence using Persistent Volume Claims                                                                  | `true`                     |
+| `persistence.storageClass`                 | Persistent Volume storage class                                                                                    | `""`                       |
+| `persistence.accessModes`                  | Persistent Volume access modes                                                                                     | `[]`                       |
+| `persistence.size`                         | Persistent Volume size                                                                                             | `8Gi`                      |
+| `persistence.existingClaim`                | The name of an existing PVC to use for persistence                                                                 | `""`                       |
+| `persistence.hostPath`                     | If defined, the osclass-data volume will mount to the specified hostPath.                                          | `""`                       |
+| `persistence.annotations`                  | Persistent Volume Claim annotations                                                                                | `{}`                       |
+| `volumePermissions.enabled`                | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
+| `volumePermissions.image.registry`         | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`       | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`           | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`       | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`      | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
+| `volumePermissions.resources.limits`       | The resources limits for the init container                                                                        | `{}`                       |
+| `volumePermissions.resources.requests`     | The requested resources for the init container                                                                     | `{}`                       |
 
 ### Other Parameters
 
@@ -269,31 +275,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics Parameters
 
-| Name                                       | Description                                                                                                     | Value                     |
-| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `metrics.enabled`                          | Start a sidecar prometheus exporter to expose metrics                                                           | `false`                   |
-| `metrics.image.registry`                   | Apache Exporter image registry                                                                                  | `docker.io`               |
-| `metrics.image.repository`                 | Apache Exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                      | `1.0.2-debian-11-r10`     |
-| `metrics.image.digest`                     | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
-| `metrics.image.pullPolicy`                 | Apache Exporter image pull policy                                                                               | `IfNotPresent`            |
-| `metrics.image.pullSecrets`                | Apache Exporter image pull secrets                                                                              | `[]`                      |
-| `metrics.resources.limits`                 | The resources limits for the Prometheus exporter container                                                      | `{}`                      |
-| `metrics.resources.requests`               | The requested resources for the Prometheus exporter container                                                   | `{}`                      |
-| `metrics.podAnnotations`                   | Annotations to add                                                                                              | `{}`                      |
-| `metrics.service.type`                     | Metrics service type                                                                                            | `ClusterIP`               |
-| `metrics.service.port`                     | Metrics service port                                                                                            | `9117`                    |
-| `metrics.service.annotations`              | Additional custom annotations for Metrics service                                                               | `{}`                      |
-| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                    | `false`                   |
-| `metrics.serviceMonitor.namespace`         | The namespace in which the ServiceMonitor will be created                                                       | `""`                      |
-| `metrics.serviceMonitor.interval`          | The interval at which metrics should be scraped                                                                 | `30s`                     |
-| `metrics.serviceMonitor.scrapeTimeout`     | The timeout after which the scrape is ended                                                                     | `""`                      |
-| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                              | `[]`                      |
-| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                       | `[]`                      |
-| `metrics.serviceMonitor.honorLabels`       | Labels to honor to add to the scrape endpoint                                                                   | `false`                   |
-| `metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                                                                  | `{}`                      |
-| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                             | `{}`                      |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                               | `""`                      |
+| Name                                       | Description                                                                                                     | Value                             |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `metrics.enabled`                          | Start a sidecar prometheus exporter to expose metrics                                                           | `false`                           |
+| `metrics.image.registry`                   | Apache Exporter image registry                                                                                  | `REGISTRY_NAME`                   |
+| `metrics.image.repository`                 | Apache Exporter image repository                                                                                | `REPOSITORY_NAME/apache-exporter` |
+| `metrics.image.digest`                     | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                              |
+| `metrics.image.pullPolicy`                 | Apache Exporter image pull policy                                                                               | `IfNotPresent`                    |
+| `metrics.image.pullSecrets`                | Apache Exporter image pull secrets                                                                              | `[]`                              |
+| `metrics.resources.limits`                 | The resources limits for the Prometheus exporter container                                                      | `{}`                              |
+| `metrics.resources.requests`               | The requested resources for the Prometheus exporter container                                                   | `{}`                              |
+| `metrics.podAnnotations`                   | Annotations to add                                                                                              | `{}`                              |
+| `metrics.service.type`                     | Metrics service type                                                                                            | `ClusterIP`                       |
+| `metrics.service.port`                     | Metrics service port                                                                                            | `9117`                            |
+| `metrics.service.annotations`              | Additional custom annotations for Metrics service                                                               | `{}`                              |
+| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                    | `false`                           |
+| `metrics.serviceMonitor.namespace`         | The namespace in which the ServiceMonitor will be created                                                       | `""`                              |
+| `metrics.serviceMonitor.interval`          | The interval at which metrics should be scraped                                                                 | `30s`                             |
+| `metrics.serviceMonitor.scrapeTimeout`     | The timeout after which the scrape is ended                                                                     | `""`                              |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                              | `[]`                              |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                       | `[]`                              |
+| `metrics.serviceMonitor.honorLabels`       | Labels to honor to add to the scrape endpoint                                                                   | `false`                           |
+| `metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                                                                  | `{}`                              |
+| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                             | `{}`                              |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                               | `""`                              |
 
 ### NetworkPolicy parameters
 
@@ -322,8 +327,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set osclassUsername=admin,osclassPassword=password,mariadb.auth.rootPassword=secretpassword \
-    oci://registry-1.docker.io/bitnamicharts/osclass
+    oci://REGISTRY_NAME/REPOSITORY_NAME/osclass
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the Osclass administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
 
@@ -332,9 +339,10 @@ The above command sets the Osclass administrator account username and password t
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/osclass
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/osclass
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -469,8 +477,10 @@ export APP_PASSWORD=$(kubectl get secret --namespace default osclass -o jsonpath
 export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default osclass-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
 export MARIADB_PASSWORD=$(kubectl get secret --namespace default osclass-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 kubectl delete deployments.apps osclass
-helm upgrade osclass oci://registry-1.docker.io/bitnamicharts/osclass --set osclassHost=$APP_HOST,osclassPassword=$APP_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
+helm upgrade osclass oci://REGISTRY_NAME/REPOSITORY_NAME/osclass --set osclassHost=$APP_HOST,osclassPassword=$APP_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ### To 8.0.0
 
@@ -533,8 +543,10 @@ Delete the Osclass deployment and delete the MariaDB statefulset. Notice the opt
 Now the upgrade works:
 
 ```console
-helm upgrade osclass oci://registry-1.docker.io/bitnamicharts/osclass --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set osclassPassword=$OSCLASS_PASSWORD --set osclassHost=$OSCLASS_HOST
+helm upgrade osclass oci://REGISTRY_NAME/REPOSITORY_NAME/osclass --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set osclassPassword=$OSCLASS_PASSWORD --set osclassHost=$OSCLASS_HOST
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 You will have to delete the existing MariaDB pod and the new statefulset is going to create a new one
 

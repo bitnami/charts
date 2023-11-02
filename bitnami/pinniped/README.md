@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/pinniped
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/pinniped
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -24,7 +26,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/pinniped/get-started/).
 
-Looking to use Pinniped in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Pinniped in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -36,8 +38,10 @@ Looking to use Pinniped in production? Try [VMware Application Catalog](https://
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/pinniped
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/pinniped
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys pinniped on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -65,22 +69,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                                                                              | Value                 |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | --------------------- |
-| `kubeVersion`       | Override Kubernetes version                                                                              | `""`                  |
-| `nameOverride`      | String to partially override common.names.name                                                           | `""`                  |
-| `fullnameOverride`  | String to fully override common.names.fullname                                                           | `""`                  |
-| `namespaceOverride` | String to fully override common.names.namespace                                                          | `""`                  |
-| `commonLabels`      | Labels to add to all deployed objects                                                                    | `{}`                  |
-| `commonAnnotations` | Annotations to add to all deployed objects                                                               | `{}`                  |
-| `clusterDomain`     | Kubernetes cluster domain name                                                                           | `cluster.local`       |
-| `extraDeploy`       | Array of extra objects to deploy with the release                                                        | `[]`                  |
-| `image.registry`    | Pinniped image registry                                                                                  | `docker.io`           |
-| `image.repository`  | Pinniped image repository                                                                                | `bitnami/pinniped`    |
-| `image.tag`         | Pinniped image tag (immutable tags are recommended)                                                      | `0.27.0-debian-11-r0` |
-| `image.digest`      | Pinniped image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | Pinniped image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | Pinniped image pull secrets                                                                              | `[]`                  |
+| Name                | Description                                                                                              | Value                      |
+| ------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `kubeVersion`       | Override Kubernetes version                                                                              | `""`                       |
+| `nameOverride`      | String to partially override common.names.name                                                           | `""`                       |
+| `fullnameOverride`  | String to fully override common.names.fullname                                                           | `""`                       |
+| `namespaceOverride` | String to fully override common.names.namespace                                                          | `""`                       |
+| `commonLabels`      | Labels to add to all deployed objects                                                                    | `{}`                       |
+| `commonAnnotations` | Annotations to add to all deployed objects                                                               | `{}`                       |
+| `clusterDomain`     | Kubernetes cluster domain name                                                                           | `cluster.local`            |
+| `extraDeploy`       | Array of extra objects to deploy with the release                                                        | `[]`                       |
+| `image.registry`    | Pinniped image registry                                                                                  | `REGISTRY_NAME`            |
+| `image.repository`  | Pinniped image repository                                                                                | `REPOSITORY_NAME/pinniped` |
+| `image.digest`      | Pinniped image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `image.pullPolicy`  | Pinniped image pull policy                                                                               | `IfNotPresent`             |
+| `image.pullSecrets` | Pinniped image pull secrets                                                                              | `[]`                       |
 
 ### Concierge Parameters
 
@@ -318,17 +321,20 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set supervisor.enabled=false \
-    oci://registry-1.docker.io/bitnamicharts/pinniped
+    oci://REGISTRY_NAME/REPOSITORY_NAME/pinniped
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets disables the supervisor compoment deployment.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/pinniped
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/pinniped
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details

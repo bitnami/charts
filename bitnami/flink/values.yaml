@@ -61,9 +61,9 @@ diagnosticMode:
 
 ## Bitnami Apache Flink image
 ## ref: https://hub.docker.com/r/bitnami/flink/tags/
-## @param image.registry Apache Flink image registry
-## @param image.repository Apache Flink image repository
-## @param image.tag Apache Flink image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Apache Flink image registry
+## @param image.repository [default: REPOSITORY_NAME/flink] Apache Flink image repository
+## @skip image.tag Apache Flink image tag (immutable tags are recommended)
 ## @param image.digest Apache Flink image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy image pull policy
 ## @param image.pullSecrets Apache Flink image pull secrets
@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/flink
-  tag: 1.17.1-debian-11-r120
+  tag: 1.18.0-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -302,28 +302,30 @@ jobmanager:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param jobmanager.podSecurityContext.enabled Enabled Apache Flink pods' Security Context
   ## @param jobmanager.podSecurityContext.fsGroup Set Apache Flink pod's Security Context fsGroup
-  ## @param jobmanager.podSecurityContext.seccompProfile.type Rules specifying actions to take based on the requested syscall
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param jobmanager.containerSecurityContext.enabled Enabled Apache Flink containers' Security Context
   ## @param jobmanager.containerSecurityContext.runAsUser Set Apache Flink container's Security Context runAsUser
   ## @param jobmanager.containerSecurityContext.runAsNonRoot Force the container to be run as non root
   ## @param jobmanager.containerSecurityContext.allowPrivilegeEscalation Allows privilege escalation
+  ## @param jobmanager.containerSecurityContext.privileged Set primary container's Security Context privileged
   ## @param jobmanager.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param jobmanager.containerSecurityContext.seccompProfile.type Rules specifying actions to take based on the requested syscall
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
+    privileged: false
     capabilities:
-      drop: [ "ALL" ]
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param jobmanager.podAnnotations Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -601,28 +603,30 @@ taskmanager:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param taskmanager.podSecurityContext.enabled Enabled Apache Flink pods' Security Context
   ## @param taskmanager.podSecurityContext.fsGroup Set Apache Flink pod's Security Context fsGroup
-  ## @param taskmanager.podSecurityContext.seccompProfile.type Rules specifying actions to take based on the requested syscall
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param taskmanager.containerSecurityContext.enabled Enabled Apache Flink containers' Security Context
   ## @param taskmanager.containerSecurityContext.runAsUser Set Apache Flink container's Security Context runAsUser
   ## @param taskmanager.containerSecurityContext.runAsNonRoot Force the container to be run as non root
+  ## @param taskmanager.containerSecurityContext.privileged Set primary container's Security Context privileged
   ## @param taskmanager.containerSecurityContext.allowPrivilegeEscalation Allows privilege escalation
   ## @param taskmanager.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param taskmanager.containerSecurityContext.seccompProfile.type Rules specifying actions to take based on the requested syscall
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     allowPrivilegeEscalation: false
     capabilities:
-      drop: [ "ALL" ]
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param taskmanager.podAnnotations Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##

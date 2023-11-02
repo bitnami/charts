@@ -65,9 +65,9 @@ diagnosticMode:
 
 ## Bitnami Appsmith image
 ## ref: https://hub.docker.com/r/bitnami/appsmith/tags/
-## @param image.registry Appsmith image registry
-## @param image.repository Appsmith image repository
-## @param image.tag Appsmith image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Appsmith image registry
+## @param image.repository [default: REPOSITORY_NAME/appsmith] Appsmith image repository
+## @skip image.tag Appsmith image tag (immutable tags are recommended)
 ## @param image.digest Appsmith image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
 ## @param image.pullPolicy Appsmith image pull policy
 ## @param image.pullSecrets Appsmith image pull secrets
@@ -181,12 +181,22 @@ client:
   ## @param client.containerSecurityContext.runAsUser Set Appsmith client containers' Security Context runAsUser
   ## @param client.containerSecurityContext.runAsNonRoot Set Appsmith client containers' Security Context runAsNonRoot
   ## @param client.containerSecurityContext.readOnlyRootFilesystem Set Appsmith client containers' Security Context runAsNonRoot
+  ## @param client.containerSecurityContext.privileged Set client container's Security Context privileged
+  ## @param client.containerSecurityContext.allowPrivilegeEscalation Set client container's Security Context allowPrivilegeEscalation
+  ## @param client.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param client.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param client.command Override default container command (useful when using custom images)
   ##
@@ -586,12 +596,22 @@ backend:
   ## @param backend.containerSecurityContext.runAsUser Set Appsmith backend containers' Security Context runAsUser
   ## @param backend.containerSecurityContext.runAsNonRoot Set Appsmith backend containers' Security Context runAsNonRoot
   ## @param backend.containerSecurityContext.readOnlyRootFilesystem Set Appsmith backend containers' Security Context runAsNonRoot
+  ## @param backend.containerSecurityContext.privileged Set backend container's Security Context privileged
+  ## @param backend.containerSecurityContext.allowPrivilegeEscalation Set backend container's Security Context allowPrivilegeEscalation
+  ## @param backend.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param backend.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param backend.command Override default container command (useful when using custom images)
   ##
@@ -910,12 +930,22 @@ rts:
   ## @param rts.containerSecurityContext.runAsUser Set Appsmith rts containers' Security Context runAsUser
   ## @param rts.containerSecurityContext.runAsNonRoot Set Appsmith rts containers' Security Context runAsNonRoot
   ## @param rts.containerSecurityContext.readOnlyRootFilesystem Set Appsmith rts containers' Security Context runAsNonRoot
+  ## @param rts.containerSecurityContext.privileged Set rts container's Security Context privileged
+  ## @param rts.containerSecurityContext.allowPrivilegeEscalation Set rts container's Security Context allowPrivilegeEscalation
+  ## @param rts.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param rts.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param rts.command Override default container command (useful when using custom images)
   ##
@@ -1108,9 +1138,9 @@ volumePermissions:
   enabled: false
   ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param volumePermissions.image.registry OS Shell + Utility image registry
-  ## @param volumePermissions.image.repository OS Shell + Utility image repository
-  ## @param volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
   ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
   ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
   ##

@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/whereabouts
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/whereabouts
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -20,7 +22,7 @@ This chart bootstraps a [Whereabouts](https://github.com/bitnami/containers/tree
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Whereabouts in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Whereabouts in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -34,8 +36,10 @@ Looking to use Whereabouts in production? Try [VMware Application Catalog](https
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/whereabouts
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/whereabouts
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys Whereabouts on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -78,72 +82,71 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Whereabouts parameters
 
-| Name                                    | Description                                                                                                           | Value                       |
-| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `image.registry`                        | Whereabouts image registry                                                                                            | `docker.io`                 |
-| `image.repository`                      | Whereabouts Image name                                                                                                | `bitnami/whereabouts`       |
-| `image.tag`                             | Whereabouts Image tag                                                                                                 | `0.6.2-debian-11-r109`      |
-| `image.digest`                          | Whereabouts image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                        |
-| `image.pullPolicy`                      | Whereabouts image pull policy                                                                                         | `IfNotPresent`              |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                        |
-| `image.debug`                           | Specify if debug logs should be enabled                                                                               | `false`                     |
-| `hostCNIBinDir`                         | CNI binary dir in the host machine to mount                                                                           | `/opt/cni/bin`              |
-| `hostCNINetDir`                         | CNI net.d dir in the host machine to mount                                                                            | `/etc/cni/net.d`            |
-| `CNIMountPath`                          | Path inside the container to mount the CNI dirs                                                                       | `/bitnami/whereabouts/host` |
-| `command`                               | Override default container command (useful when using custom images)                                                  | `[]`                        |
-| `args`                                  | Override default container args (useful when using custom images)                                                     | `[]`                        |
-| `updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                                        | `RollingUpdate`             |
-| `priorityClassName`                     | Whereabouts pods' priorityClassName                                                                                   | `""`                        |
-| `schedulerName`                         | Name of the k8s scheduler (other than default)                                                                        | `""`                        |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                        | `[]`                        |
-| `hostAliases`                           | Add deployment host aliases                                                                                           | `[]`                        |
-| `extraEnvVars`                          | Extra environment variables                                                                                           | `[]`                        |
-| `extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                                   | `""`                        |
-| `extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                          | `""`                        |
-| `extraVolumes`                          | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `[]`                        |
-| `extraVolumeMounts`                     | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                        |
-| `initContainers`                        | Add additional init containers to the pod (evaluated as a template)                                                   | `[]`                        |
-| `sidecars`                              | Attach additional containers to the pod (evaluated as a template)                                                     | `[]`                        |
-| `tolerations`                           | Tolerations for pod assignment                                                                                        | `[]`                        |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                        |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                      |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                        |
-| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                        |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                        |
-| `affinity`                              | Affinity for pod assignment                                                                                           | `{}`                        |
-| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                                              | `{}`                        |
-| `resources.requests`                    | The requested resources for the init container                                                                        | `{}`                        |
-| `resources.limits`                      | The resources limits for the init container                                                                           | `{}`                        |
-| `podSecurityContext.enabled`            | Enable Whereabouts pods' Security Context                                                                             | `true`                      |
-| `podSecurityContext.fsGroup`            | Whereabouts pods' group ID                                                                                            | `0`                         |
-| `containerSecurityContext.enabled`      | Enable Whereabouts containers' Security Context                                                                       | `true`                      |
-| `containerSecurityContext.runAsUser`    | Whereabouts containers' Security Context                                                                              | `0`                         |
-| `containerSecurityContext.runAsNonRoot` | Set Whereabouts container's Security Context runAsNonRoot                                                             | `false`                     |
-| `containerSecurityContext.privileged`   | Set Whereabouts container's Security Context privileged                                                               | `true`                      |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                                                   | `false`                     |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                | `10`                        |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                       | `10`                        |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                      | `5`                         |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                    | `5`                         |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                    | `1`                         |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                                  | `true`                      |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                               | `10`                        |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                      | `10`                        |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                     | `5`                         |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                   | `5`                         |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                   | `1`                         |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                                                 | `false`                     |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                              | `10`                        |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                     | `5`                         |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                    | `1`                         |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                  | `5`                         |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                  | `1`                         |
-| `customStartupProbe`                    | Override default startup probe                                                                                        | `{}`                        |
-| `customLivenessProbe`                   | Override default liveness probe                                                                                       | `{}`                        |
-| `customReadinessProbe`                  | Override default readiness probe                                                                                      | `{}`                        |
-| `lifecycleHooks`                        | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | `{}`                        |
-| `podAnnotations`                        | Pod annotations                                                                                                       | `{}`                        |
-| `podLabels`                             | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                        |
+| Name                                    | Description                                                                                                           | Value                         |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `image.registry`                        | Whereabouts image registry                                                                                            | `REGISTRY_NAME`               |
+| `image.repository`                      | Whereabouts Image name                                                                                                | `REPOSITORY_NAME/whereabouts` |
+| `image.digest`                          | Whereabouts image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                          |
+| `image.pullPolicy`                      | Whereabouts image pull policy                                                                                         | `IfNotPresent`                |
+| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                          |
+| `image.debug`                           | Specify if debug logs should be enabled                                                                               | `false`                       |
+| `hostCNIBinDir`                         | CNI binary dir in the host machine to mount                                                                           | `/opt/cni/bin`                |
+| `hostCNINetDir`                         | CNI net.d dir in the host machine to mount                                                                            | `/etc/cni/net.d`              |
+| `CNIMountPath`                          | Path inside the container to mount the CNI dirs                                                                       | `/bitnami/whereabouts/host`   |
+| `command`                               | Override default container command (useful when using custom images)                                                  | `[]`                          |
+| `args`                                  | Override default container args (useful when using custom images)                                                     | `[]`                          |
+| `updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                                        | `RollingUpdate`               |
+| `priorityClassName`                     | Whereabouts pods' priorityClassName                                                                                   | `""`                          |
+| `schedulerName`                         | Name of the k8s scheduler (other than default)                                                                        | `""`                          |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                        | `[]`                          |
+| `hostAliases`                           | Add deployment host aliases                                                                                           | `[]`                          |
+| `extraEnvVars`                          | Extra environment variables                                                                                           | `[]`                          |
+| `extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                                   | `""`                          |
+| `extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                          | `""`                          |
+| `extraVolumes`                          | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `[]`                          |
+| `extraVolumeMounts`                     | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                          |
+| `initContainers`                        | Add additional init containers to the pod (evaluated as a template)                                                   | `[]`                          |
+| `sidecars`                              | Attach additional containers to the pod (evaluated as a template)                                                     | `[]`                          |
+| `tolerations`                           | Tolerations for pod assignment                                                                                        | `[]`                          |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                          |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                        |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                          |
+| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                          |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                          |
+| `affinity`                              | Affinity for pod assignment                                                                                           | `{}`                          |
+| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                                              | `{}`                          |
+| `resources.requests`                    | The requested resources for the init container                                                                        | `{}`                          |
+| `resources.limits`                      | The resources limits for the init container                                                                           | `{}`                          |
+| `podSecurityContext.enabled`            | Enable Whereabouts pods' Security Context                                                                             | `true`                        |
+| `podSecurityContext.fsGroup`            | Whereabouts pods' group ID                                                                                            | `0`                           |
+| `containerSecurityContext.enabled`      | Enable Whereabouts containers' Security Context                                                                       | `true`                        |
+| `containerSecurityContext.runAsUser`    | Whereabouts containers' Security Context                                                                              | `0`                           |
+| `containerSecurityContext.runAsNonRoot` | Set Whereabouts container's Security Context runAsNonRoot                                                             | `false`                       |
+| `containerSecurityContext.privileged`   | Set Whereabouts container's Security Context privileged                                                               | `true`                        |
+| `startupProbe.enabled`                  | Enable startupProbe                                                                                                   | `false`                       |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                | `10`                          |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                       | `10`                          |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                      | `5`                           |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                    | `5`                           |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                    | `1`                           |
+| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                                  | `true`                        |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                               | `10`                          |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                      | `10`                          |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                     | `5`                           |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                   | `5`                           |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                   | `1`                           |
+| `readinessProbe.enabled`                | Enable readinessProbe                                                                                                 | `false`                       |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                              | `10`                          |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                     | `5`                           |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                    | `1`                           |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                  | `5`                           |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                  | `1`                           |
+| `customStartupProbe`                    | Override default startup probe                                                                                        | `{}`                          |
+| `customLivenessProbe`                   | Override default liveness probe                                                                                       | `{}`                          |
+| `customReadinessProbe`                  | Override default readiness probe                                                                                      | `{}`                          |
+| `lifecycleHooks`                        | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | `{}`                          |
+| `podAnnotations`                        | Pod annotations                                                                                                       | `{}`                          |
+| `podLabels`                             | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                          |
 
 ### Other Parameters
 
@@ -160,17 +163,20 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set schedulerName=high-priority \
-    oci://registry-1.docker.io/bitnamicharts/whereabouts
+    oci://REGISTRY_NAME/REPOSITORY_NAME/whereabouts
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the Whereabouts scheduler to high-priority.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/whereabouts
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/whereabouts
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details

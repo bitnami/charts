@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/appsmith
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/appsmith
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -24,7 +26,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/apps/appsmith/get-started/).
 
-Looking to use Appsmith in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Appsmith in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -38,8 +40,10 @@ Looking to use Appsmith in production? Try [VMware Application Catalog](https://
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/appsmith
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/appsmith
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys Appsmith on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -67,88 +71,91 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                                                                                         | Value                 |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `kubeVersion`            | Override Kubernetes version                                                                                                                         | `""`                  |
-| `nameOverride`           | String to partially override common.names.name                                                                                                      | `""`                  |
-| `fullnameOverride`       | String to fully override common.names.fullname                                                                                                      | `""`                  |
-| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                     | `""`                  |
-| `commonLabels`           | Labels to add to all deployed objects                                                                                                               | `{}`                  |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                  |
-| `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`       |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                  |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`               |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`           |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`        |
-| `image.registry`         | Appsmith image registry                                                                                                                             | `docker.io`           |
-| `image.repository`       | Appsmith image repository                                                                                                                           | `bitnami/appsmith`    |
-| `image.tag`              | Appsmith image tag (immutable tags are recommended)                                                                                                 | `1.9.38-debian-11-r1` |
-| `image.digest`           | Appsmith image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                  |
-| `image.pullPolicy`       | Appsmith image pull policy                                                                                                                          | `IfNotPresent`        |
-| `image.pullSecrets`      | Appsmith image pull secrets                                                                                                                         | `[]`                  |
-| `image.debug`            | Enable Appsmith image debug mode                                                                                                                    | `false`               |
+| Name                     | Description                                                                                                                                         | Value                      |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `kubeVersion`            | Override Kubernetes version                                                                                                                         | `""`                       |
+| `nameOverride`           | String to partially override common.names.name                                                                                                      | `""`                       |
+| `fullnameOverride`       | String to fully override common.names.fullname                                                                                                      | `""`                       |
+| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                     | `""`                       |
+| `commonLabels`           | Labels to add to all deployed objects                                                                                                               | `{}`                       |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                       |
+| `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`            |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                       |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`                    |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`                |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`             |
+| `image.registry`         | Appsmith image registry                                                                                                                             | `REGISTRY_NAME`            |
+| `image.repository`       | Appsmith image repository                                                                                                                           | `REPOSITORY_NAME/appsmith` |
+| `image.digest`           | Appsmith image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                       |
+| `image.pullPolicy`       | Appsmith image pull policy                                                                                                                          | `IfNotPresent`             |
+| `image.pullSecrets`      | Appsmith image pull secrets                                                                                                                         | `[]`                       |
+| `image.debug`            | Enable Appsmith image debug mode                                                                                                                    | `false`                    |
 
 ### Appsmith Client Parameters
 
-| Name                                                     | Description                                                                                                              | Value           |
-| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------- |
-| `client.replicaCount`                                    | Number of Appsmith client replicas to deploy                                                                             | `1`             |
-| `client.containerPorts.http`                             | Appsmith client HTTP container port                                                                                      | `8080`          |
-| `client.livenessProbe.enabled`                           | Enable livenessProbe on Appsmith client containers                                                                       | `true`          |
-| `client.livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                                  | `30`            |
-| `client.livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                                                         | `10`            |
-| `client.livenessProbe.timeoutSeconds`                    | Timeout seconds for livenessProbe                                                                                        | `5`             |
-| `client.livenessProbe.failureThreshold`                  | Failure threshold for livenessProbe                                                                                      | `6`             |
-| `client.livenessProbe.successThreshold`                  | Success threshold for livenessProbe                                                                                      | `1`             |
-| `client.readinessProbe.enabled`                          | Enable readinessProbe on Appsmith client containers                                                                      | `true`          |
-| `client.readinessProbe.initialDelaySeconds`              | Initial delay seconds for readinessProbe                                                                                 | `30`            |
-| `client.readinessProbe.periodSeconds`                    | Period seconds for readinessProbe                                                                                        | `10`            |
-| `client.readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                                                       | `5`             |
-| `client.readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                                                                     | `6`             |
-| `client.readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                                                                     | `1`             |
-| `client.startupProbe.enabled`                            | Enable startupProbe on Appsmith client containers                                                                        | `false`         |
-| `client.startupProbe.initialDelaySeconds`                | Initial delay seconds for startupProbe                                                                                   | `30`            |
-| `client.startupProbe.periodSeconds`                      | Period seconds for startupProbe                                                                                          | `10`            |
-| `client.startupProbe.timeoutSeconds`                     | Timeout seconds for startupProbe                                                                                         | `5`             |
-| `client.startupProbe.failureThreshold`                   | Failure threshold for startupProbe                                                                                       | `6`             |
-| `client.startupProbe.successThreshold`                   | Success threshold for startupProbe                                                                                       | `1`             |
-| `client.customLivenessProbe`                             | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
-| `client.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
-| `client.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                       | `{}`            |
-| `client.resources.limits`                                | The resources limits for the Appsmith client containers                                                                  | `{}`            |
-| `client.resources.requests`                              | The requested resources for the Appsmith client containers                                                               | `{}`            |
-| `client.podSecurityContext.enabled`                      | Enabled Appsmith client pods' Security Context                                                                           | `true`          |
-| `client.podSecurityContext.fsGroup`                      | Set Appsmith client pod's Security Context fsGroup                                                                       | `1001`          |
-| `client.containerSecurityContext.enabled`                | Enabled Appsmith client containers' Security Context                                                                     | `true`          |
-| `client.containerSecurityContext.runAsUser`              | Set Appsmith client containers' Security Context runAsUser                                                               | `1001`          |
-| `client.containerSecurityContext.runAsNonRoot`           | Set Appsmith client containers' Security Context runAsNonRoot                                                            | `true`          |
-| `client.containerSecurityContext.readOnlyRootFilesystem` | Set Appsmith client containers' Security Context runAsNonRoot                                                            | `false`         |
-| `client.command`                                         | Override default container command (useful when using custom images)                                                     | `[]`            |
-| `client.args`                                            | Override default container args (useful when using custom images)                                                        | `[]`            |
-| `client.hostAliases`                                     | Appsmith client pods host aliases                                                                                        | `[]`            |
-| `client.podLabels`                                       | Extra labels for Appsmith client pods                                                                                    | `{}`            |
-| `client.podAnnotations`                                  | Annotations for Appsmith client pods                                                                                     | `{}`            |
-| `client.podAffinityPreset`                               | Pod affinity preset. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`                               | `""`            |
-| `client.podAntiAffinityPreset`                           | Pod anti-affinity preset. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`                          | `soft`          |
-| `client.nodeAffinityPreset.type`                         | Node affinity preset type. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`                         | `""`            |
-| `client.nodeAffinityPreset.key`                          | Node label key to match. Ignored if `client.affinity` is set                                                             | `""`            |
-| `client.nodeAffinityPreset.values`                       | Node label values to match. Ignored if `client.affinity` is set                                                          | `[]`            |
-| `client.affinity`                                        | Affinity for Appsmith client pods assignment                                                                             | `{}`            |
-| `client.nodeSelector`                                    | Node labels for Appsmith client pods assignment                                                                          | `{}`            |
-| `client.tolerations`                                     | Tolerations for Appsmith client pods assignment                                                                          | `[]`            |
-| `client.updateStrategy.type`                             | Appsmith client statefulset strategy type                                                                                | `RollingUpdate` |
-| `client.priorityClassName`                               | Appsmith client pods' priorityClassName                                                                                  | `""`            |
-| `client.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
-| `client.schedulerName`                                   | Name of the k8s scheduler (other than default) for Appsmith client pods                                                  | `""`            |
-| `client.terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`            |
-| `client.lifecycleHooks`                                  | for the Appsmith client container(s) to automate configuration before or after startup                                   | `{}`            |
-| `client.extraEnvVars`                                    | Array with extra environment variables to add to Appsmith client nodes                                                   | `[]`            |
-| `client.extraEnvVarsCM`                                  | Name of existing ConfigMap containing extra env vars for Appsmith client nodes                                           | `""`            |
-| `client.extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars for Appsmith client nodes                                              | `""`            |
-| `client.extraVolumes`                                    | Optionally specify extra list of additional volumes for the Appsmith client pod(s)                                       | `[]`            |
-| `client.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the Appsmith client container(s)                            | `[]`            |
-| `client.sidecars`                                        | Add additional sidecar containers to the Appsmith client pod(s)                                                          | `[]`            |
-| `client.initContainers`                                  | Add additional init containers to the Appsmith client pod(s)                                                             | `[]`            |
+| Name                                                       | Description                                                                                                              | Value            |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------- |
+| `client.replicaCount`                                      | Number of Appsmith client replicas to deploy                                                                             | `1`              |
+| `client.containerPorts.http`                               | Appsmith client HTTP container port                                                                                      | `8080`           |
+| `client.livenessProbe.enabled`                             | Enable livenessProbe on Appsmith client containers                                                                       | `true`           |
+| `client.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `30`             |
+| `client.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `10`             |
+| `client.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `5`              |
+| `client.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                      | `6`              |
+| `client.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                      | `1`              |
+| `client.readinessProbe.enabled`                            | Enable readinessProbe on Appsmith client containers                                                                      | `true`           |
+| `client.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                 | `30`             |
+| `client.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                        | `10`             |
+| `client.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                       | `5`              |
+| `client.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                     | `6`              |
+| `client.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                     | `1`              |
+| `client.startupProbe.enabled`                              | Enable startupProbe on Appsmith client containers                                                                        | `false`          |
+| `client.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                   | `30`             |
+| `client.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                          | `10`             |
+| `client.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                         | `5`              |
+| `client.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                       | `6`              |
+| `client.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                       | `1`              |
+| `client.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                      | `{}`             |
+| `client.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`             |
+| `client.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`             |
+| `client.resources.limits`                                  | The resources limits for the Appsmith client containers                                                                  | `{}`             |
+| `client.resources.requests`                                | The requested resources for the Appsmith client containers                                                               | `{}`             |
+| `client.podSecurityContext.enabled`                        | Enabled Appsmith client pods' Security Context                                                                           | `true`           |
+| `client.podSecurityContext.fsGroup`                        | Set Appsmith client pod's Security Context fsGroup                                                                       | `1001`           |
+| `client.containerSecurityContext.enabled`                  | Enabled Appsmith client containers' Security Context                                                                     | `true`           |
+| `client.containerSecurityContext.runAsUser`                | Set Appsmith client containers' Security Context runAsUser                                                               | `1001`           |
+| `client.containerSecurityContext.runAsNonRoot`             | Set Appsmith client containers' Security Context runAsNonRoot                                                            | `true`           |
+| `client.containerSecurityContext.readOnlyRootFilesystem`   | Set Appsmith client containers' Security Context runAsNonRoot                                                            | `false`          |
+| `client.containerSecurityContext.privileged`               | Set client container's Security Context privileged                                                                       | `false`          |
+| `client.containerSecurityContext.allowPrivilegeEscalation` | Set client container's Security Context allowPrivilegeEscalation                                                         | `false`          |
+| `client.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`        |
+| `client.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
+| `client.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
+| `client.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `client.hostAliases`                                       | Appsmith client pods host aliases                                                                                        | `[]`             |
+| `client.podLabels`                                         | Extra labels for Appsmith client pods                                                                                    | `{}`             |
+| `client.podAnnotations`                                    | Annotations for Appsmith client pods                                                                                     | `{}`             |
+| `client.podAffinityPreset`                                 | Pod affinity preset. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`                               | `""`             |
+| `client.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`                          | `soft`           |
+| `client.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`                         | `""`             |
+| `client.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `client.affinity` is set                                                             | `""`             |
+| `client.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `client.affinity` is set                                                          | `[]`             |
+| `client.affinity`                                          | Affinity for Appsmith client pods assignment                                                                             | `{}`             |
+| `client.nodeSelector`                                      | Node labels for Appsmith client pods assignment                                                                          | `{}`             |
+| `client.tolerations`                                       | Tolerations for Appsmith client pods assignment                                                                          | `[]`             |
+| `client.updateStrategy.type`                               | Appsmith client statefulset strategy type                                                                                | `RollingUpdate`  |
+| `client.priorityClassName`                                 | Appsmith client pods' priorityClassName                                                                                  | `""`             |
+| `client.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`             |
+| `client.schedulerName`                                     | Name of the k8s scheduler (other than default) for Appsmith client pods                                                  | `""`             |
+| `client.terminationGracePeriodSeconds`                     | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`             |
+| `client.lifecycleHooks`                                    | for the Appsmith client container(s) to automate configuration before or after startup                                   | `{}`             |
+| `client.extraEnvVars`                                      | Array with extra environment variables to add to Appsmith client nodes                                                   | `[]`             |
+| `client.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Appsmith client nodes                                           | `""`             |
+| `client.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Appsmith client nodes                                              | `""`             |
+| `client.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Appsmith client pod(s)                                       | `[]`             |
+| `client.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Appsmith client container(s)                            | `[]`             |
+| `client.sidecars`                                          | Add additional sidecar containers to the Appsmith client pod(s)                                                          | `[]`             |
+| `client.initContainers`                                    | Add additional init containers to the Appsmith client pod(s)                                                             | `[]`             |
 
 ### Appsmith Client Traffic Exposure Parameters
 
@@ -182,74 +189,78 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Appsmith Backend Parameters
 
-| Name                                                      | Description                                                                                                              | Value                 |
-| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
-| `backend.replicaCount`                                    | Number of Appsmith backend replicas to deploy                                                                            | `1`                   |
-| `backend.adminUser`                                       | Appsmith admin user                                                                                                      | `user`                |
-| `backend.adminEmail`                                      | Appsmith admin email                                                                                                     | `user@example.com`    |
-| `backend.adminPassword`                                   | Appsmith admin password                                                                                                  | `""`                  |
-| `backend.encryptionSalt`                                  | Appsmith database encryption salt                                                                                        | `""`                  |
-| `backend.encryptionPassword`                              | Appsmith database encryption password                                                                                    | `""`                  |
-| `backend.existingSecret`                                  | Name of a secret containing the admin password, encryption salt and encryption password                                  | `""`                  |
-| `backend.existingSecretPasswordKey`                       | Key inside the existing secret containing the admin password                                                             | `admin-password`      |
-| `backend.existingSecretEncryptionSaltKey`                 | Key inside the existing secret containing the encryption salt                                                            | `encryption-salt`     |
-| `backend.existingSecretEncryptionPasswordKey`             | Key inside the existing secret containing the encryption password                                                        | `encryption-password` |
-| `backend.containerPorts.http`                             | Appsmith backend HTTP container port                                                                                     | `8080`                |
-| `backend.livenessProbe.enabled`                           | Enable livenessProbe on Appsmith backend containers                                                                      | `true`                |
-| `backend.livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                                  | `30`                  |
-| `backend.livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                                                         | `10`                  |
-| `backend.livenessProbe.timeoutSeconds`                    | Timeout seconds for livenessProbe                                                                                        | `5`                   |
-| `backend.livenessProbe.failureThreshold`                  | Failure threshold for livenessProbe                                                                                      | `6`                   |
-| `backend.livenessProbe.successThreshold`                  | Success threshold for livenessProbe                                                                                      | `1`                   |
-| `backend.readinessProbe.enabled`                          | Enable readinessProbe on Appsmith backend containers                                                                     | `true`                |
-| `backend.readinessProbe.initialDelaySeconds`              | Initial delay seconds for readinessProbe                                                                                 | `30`                  |
-| `backend.readinessProbe.periodSeconds`                    | Period seconds for readinessProbe                                                                                        | `10`                  |
-| `backend.readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                                                       | `5`                   |
-| `backend.readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                                                                     | `6`                   |
-| `backend.readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                                                                     | `1`                   |
-| `backend.startupProbe.enabled`                            | Enable startupProbe on Appsmith backend containers                                                                       | `false`               |
-| `backend.startupProbe.initialDelaySeconds`                | Initial delay seconds for startupProbe                                                                                   | `30`                  |
-| `backend.startupProbe.periodSeconds`                      | Period seconds for startupProbe                                                                                          | `10`                  |
-| `backend.startupProbe.timeoutSeconds`                     | Timeout seconds for startupProbe                                                                                         | `5`                   |
-| `backend.startupProbe.failureThreshold`                   | Failure threshold for startupProbe                                                                                       | `6`                   |
-| `backend.startupProbe.successThreshold`                   | Success threshold for startupProbe                                                                                       | `1`                   |
-| `backend.customLivenessProbe`                             | Custom livenessProbe that overrides the default one                                                                      | `{}`                  |
-| `backend.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                     | `{}`                  |
-| `backend.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                       | `{}`                  |
-| `backend.resources.limits`                                | The resources limits for the Appsmith backend containers                                                                 | `{}`                  |
-| `backend.resources.requests`                              | The requested resources for the Appsmith backend containers                                                              | `{}`                  |
-| `backend.podSecurityContext.enabled`                      | Enabled Appsmith backend pods' Security Context                                                                          | `true`                |
-| `backend.podSecurityContext.fsGroup`                      | Set Appsmith backend pod's Security Context fsGroup                                                                      | `1001`                |
-| `backend.containerSecurityContext.enabled`                | Enabled Appsmith backend containers' Security Context                                                                    | `true`                |
-| `backend.containerSecurityContext.runAsUser`              | Set Appsmith backend containers' Security Context runAsUser                                                              | `1001`                |
-| `backend.containerSecurityContext.runAsNonRoot`           | Set Appsmith backend containers' Security Context runAsNonRoot                                                           | `true`                |
-| `backend.containerSecurityContext.readOnlyRootFilesystem` | Set Appsmith backend containers' Security Context runAsNonRoot                                                           | `false`               |
-| `backend.command`                                         | Override default container command (useful when using custom images)                                                     | `[]`                  |
-| `backend.args`                                            | Override default container args (useful when using custom images)                                                        | `[]`                  |
-| `backend.hostAliases`                                     | Appsmith backend pods host aliases                                                                                       | `[]`                  |
-| `backend.podLabels`                                       | Extra labels for Appsmith backend pods                                                                                   | `{}`                  |
-| `backend.podAnnotations`                                  | Annotations for Appsmith backend pods                                                                                    | `{}`                  |
-| `backend.podAffinityPreset`                               | Pod affinity preset. Ignored if `backend.affinity` is set. Allowed values: `soft` or `hard`                              | `""`                  |
-| `backend.podAntiAffinityPreset`                           | Pod anti-affinity preset. Ignored if `backend.affinity` is set. Allowed values: `soft` or `hard`                         | `soft`                |
-| `backend.nodeAffinityPreset.type`                         | Node affinity preset type. Ignored if `backend.affinity` is set. Allowed values: `soft` or `hard`                        | `""`                  |
-| `backend.nodeAffinityPreset.key`                          | Node label key to match. Ignored if `backend.affinity` is set                                                            | `""`                  |
-| `backend.nodeAffinityPreset.values`                       | Node label values to match. Ignored if `backend.affinity` is set                                                         | `[]`                  |
-| `backend.affinity`                                        | Affinity for Appsmith backend pods assignment                                                                            | `{}`                  |
-| `backend.nodeSelector`                                    | Node labels for Appsmith backend pods assignment                                                                         | `{}`                  |
-| `backend.tolerations`                                     | Tolerations for Appsmith backend pods assignment                                                                         | `[]`                  |
-| `backend.updateStrategy.type`                             | Appsmith backend statefulset strategy type                                                                               | `RollingUpdate`       |
-| `backend.priorityClassName`                               | Appsmith backend pods' priorityClassName                                                                                 | `""`                  |
-| `backend.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                  |
-| `backend.schedulerName`                                   | Name of the k8s scheduler (other than default) for Appsmith backend pods                                                 | `""`                  |
-| `backend.terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`                  |
-| `backend.lifecycleHooks`                                  | for the Appsmith backend container(s) to automate configuration before or after startup                                  | `{}`                  |
-| `backend.extraEnvVars`                                    | Array with extra environment variables to add to Appsmith backend nodes                                                  | `[]`                  |
-| `backend.extraEnvVarsCM`                                  | Name of existing ConfigMap containing extra env vars for Appsmith backend nodes                                          | `""`                  |
-| `backend.extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars for Appsmith backend nodes                                             | `""`                  |
-| `backend.extraVolumes`                                    | Optionally specify extra list of additional volumes for the Appsmith backend pod(s)                                      | `[]`                  |
-| `backend.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the Appsmith backend container(s)                           | `[]`                  |
-| `backend.sidecars`                                        | Add additional sidecar containers to the Appsmith backend pod(s)                                                         | `[]`                  |
-| `backend.initContainers`                                  | Add additional init containers to the Appsmith backend pod(s)                                                            | `[]`                  |
+| Name                                                        | Description                                                                                                              | Value                 |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
+| `backend.replicaCount`                                      | Number of Appsmith backend replicas to deploy                                                                            | `1`                   |
+| `backend.adminUser`                                         | Appsmith admin user                                                                                                      | `user`                |
+| `backend.adminEmail`                                        | Appsmith admin email                                                                                                     | `user@example.com`    |
+| `backend.adminPassword`                                     | Appsmith admin password                                                                                                  | `""`                  |
+| `backend.encryptionSalt`                                    | Appsmith database encryption salt                                                                                        | `""`                  |
+| `backend.encryptionPassword`                                | Appsmith database encryption password                                                                                    | `""`                  |
+| `backend.existingSecret`                                    | Name of a secret containing the admin password, encryption salt and encryption password                                  | `""`                  |
+| `backend.existingSecretPasswordKey`                         | Key inside the existing secret containing the admin password                                                             | `admin-password`      |
+| `backend.existingSecretEncryptionSaltKey`                   | Key inside the existing secret containing the encryption salt                                                            | `encryption-salt`     |
+| `backend.existingSecretEncryptionPasswordKey`               | Key inside the existing secret containing the encryption password                                                        | `encryption-password` |
+| `backend.containerPorts.http`                               | Appsmith backend HTTP container port                                                                                     | `8080`                |
+| `backend.livenessProbe.enabled`                             | Enable livenessProbe on Appsmith backend containers                                                                      | `true`                |
+| `backend.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `30`                  |
+| `backend.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `10`                  |
+| `backend.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `5`                   |
+| `backend.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                      | `6`                   |
+| `backend.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                      | `1`                   |
+| `backend.readinessProbe.enabled`                            | Enable readinessProbe on Appsmith backend containers                                                                     | `true`                |
+| `backend.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                 | `30`                  |
+| `backend.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                        | `10`                  |
+| `backend.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                       | `5`                   |
+| `backend.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                     | `6`                   |
+| `backend.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                     | `1`                   |
+| `backend.startupProbe.enabled`                              | Enable startupProbe on Appsmith backend containers                                                                       | `false`               |
+| `backend.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                   | `30`                  |
+| `backend.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                          | `10`                  |
+| `backend.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                         | `5`                   |
+| `backend.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                       | `6`                   |
+| `backend.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                       | `1`                   |
+| `backend.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                      | `{}`                  |
+| `backend.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`                  |
+| `backend.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`                  |
+| `backend.resources.limits`                                  | The resources limits for the Appsmith backend containers                                                                 | `{}`                  |
+| `backend.resources.requests`                                | The requested resources for the Appsmith backend containers                                                              | `{}`                  |
+| `backend.podSecurityContext.enabled`                        | Enabled Appsmith backend pods' Security Context                                                                          | `true`                |
+| `backend.podSecurityContext.fsGroup`                        | Set Appsmith backend pod's Security Context fsGroup                                                                      | `1001`                |
+| `backend.containerSecurityContext.enabled`                  | Enabled Appsmith backend containers' Security Context                                                                    | `true`                |
+| `backend.containerSecurityContext.runAsUser`                | Set Appsmith backend containers' Security Context runAsUser                                                              | `1001`                |
+| `backend.containerSecurityContext.runAsNonRoot`             | Set Appsmith backend containers' Security Context runAsNonRoot                                                           | `true`                |
+| `backend.containerSecurityContext.readOnlyRootFilesystem`   | Set Appsmith backend containers' Security Context runAsNonRoot                                                           | `false`               |
+| `backend.containerSecurityContext.privileged`               | Set backend container's Security Context privileged                                                                      | `false`               |
+| `backend.containerSecurityContext.allowPrivilegeEscalation` | Set backend container's Security Context allowPrivilegeEscalation                                                        | `false`               |
+| `backend.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`             |
+| `backend.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault`      |
+| `backend.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`                  |
+| `backend.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`                  |
+| `backend.hostAliases`                                       | Appsmith backend pods host aliases                                                                                       | `[]`                  |
+| `backend.podLabels`                                         | Extra labels for Appsmith backend pods                                                                                   | `{}`                  |
+| `backend.podAnnotations`                                    | Annotations for Appsmith backend pods                                                                                    | `{}`                  |
+| `backend.podAffinityPreset`                                 | Pod affinity preset. Ignored if `backend.affinity` is set. Allowed values: `soft` or `hard`                              | `""`                  |
+| `backend.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `backend.affinity` is set. Allowed values: `soft` or `hard`                         | `soft`                |
+| `backend.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `backend.affinity` is set. Allowed values: `soft` or `hard`                        | `""`                  |
+| `backend.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `backend.affinity` is set                                                            | `""`                  |
+| `backend.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `backend.affinity` is set                                                         | `[]`                  |
+| `backend.affinity`                                          | Affinity for Appsmith backend pods assignment                                                                            | `{}`                  |
+| `backend.nodeSelector`                                      | Node labels for Appsmith backend pods assignment                                                                         | `{}`                  |
+| `backend.tolerations`                                       | Tolerations for Appsmith backend pods assignment                                                                         | `[]`                  |
+| `backend.updateStrategy.type`                               | Appsmith backend statefulset strategy type                                                                               | `RollingUpdate`       |
+| `backend.priorityClassName`                                 | Appsmith backend pods' priorityClassName                                                                                 | `""`                  |
+| `backend.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                  |
+| `backend.schedulerName`                                     | Name of the k8s scheduler (other than default) for Appsmith backend pods                                                 | `""`                  |
+| `backend.terminationGracePeriodSeconds`                     | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`                  |
+| `backend.lifecycleHooks`                                    | for the Appsmith backend container(s) to automate configuration before or after startup                                  | `{}`                  |
+| `backend.extraEnvVars`                                      | Array with extra environment variables to add to Appsmith backend nodes                                                  | `[]`                  |
+| `backend.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Appsmith backend nodes                                          | `""`                  |
+| `backend.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Appsmith backend nodes                                             | `""`                  |
+| `backend.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Appsmith backend pod(s)                                      | `[]`                  |
+| `backend.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Appsmith backend container(s)                           | `[]`                  |
+| `backend.sidecars`                                          | Add additional sidecar containers to the Appsmith backend pod(s)                                                         | `[]`                  |
+| `backend.initContainers`                                    | Add additional init containers to the Appsmith backend pod(s)                                                            | `[]`                  |
 
 ### Appsmith Backend Traffic Exposure Parameters
 
@@ -285,65 +296,69 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Appsmith RTS Parameters
 
-| Name                                                  | Description                                                                                                              | Value           |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------- |
-| `rts.replicaCount`                                    | Number of Appsmith rts replicas to deploy                                                                                | `1`             |
-| `rts.containerPorts.http`                             | Appsmith rts HTTP container port                                                                                         | `8080`          |
-| `rts.livenessProbe.enabled`                           | Enable livenessProbe on Appsmith rts containers                                                                          | `true`          |
-| `rts.livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                                  | `30`            |
-| `rts.livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                                                         | `10`            |
-| `rts.livenessProbe.timeoutSeconds`                    | Timeout seconds for livenessProbe                                                                                        | `5`             |
-| `rts.livenessProbe.failureThreshold`                  | Failure threshold for livenessProbe                                                                                      | `6`             |
-| `rts.livenessProbe.successThreshold`                  | Success threshold for livenessProbe                                                                                      | `1`             |
-| `rts.readinessProbe.enabled`                          | Enable readinessProbe on Appsmith rts containers                                                                         | `true`          |
-| `rts.readinessProbe.initialDelaySeconds`              | Initial delay seconds for readinessProbe                                                                                 | `30`            |
-| `rts.readinessProbe.periodSeconds`                    | Period seconds for readinessProbe                                                                                        | `10`            |
-| `rts.readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                                                       | `5`             |
-| `rts.readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                                                                     | `6`             |
-| `rts.readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                                                                     | `1`             |
-| `rts.startupProbe.enabled`                            | Enable startupProbe on Appsmith rts containers                                                                           | `false`         |
-| `rts.startupProbe.initialDelaySeconds`                | Initial delay seconds for startupProbe                                                                                   | `30`            |
-| `rts.startupProbe.periodSeconds`                      | Period seconds for startupProbe                                                                                          | `10`            |
-| `rts.startupProbe.timeoutSeconds`                     | Timeout seconds for startupProbe                                                                                         | `5`             |
-| `rts.startupProbe.failureThreshold`                   | Failure threshold for startupProbe                                                                                       | `6`             |
-| `rts.startupProbe.successThreshold`                   | Success threshold for startupProbe                                                                                       | `1`             |
-| `rts.customLivenessProbe`                             | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
-| `rts.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
-| `rts.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                       | `{}`            |
-| `rts.resources.limits`                                | The resources limits for the Appsmith rts containers                                                                     | `{}`            |
-| `rts.resources.requests`                              | The requested resources for the Appsmith rts containers                                                                  | `{}`            |
-| `rts.podSecurityContext.enabled`                      | Enabled Appsmith rts pods' Security Context                                                                              | `true`          |
-| `rts.podSecurityContext.fsGroup`                      | Set Appsmith rts pod's Security Context fsGroup                                                                          | `1001`          |
-| `rts.containerSecurityContext.enabled`                | Enabled Appsmith rts containers' Security Context                                                                        | `true`          |
-| `rts.containerSecurityContext.runAsUser`              | Set Appsmith rts containers' Security Context runAsUser                                                                  | `1001`          |
-| `rts.containerSecurityContext.runAsNonRoot`           | Set Appsmith rts containers' Security Context runAsNonRoot                                                               | `true`          |
-| `rts.containerSecurityContext.readOnlyRootFilesystem` | Set Appsmith rts containers' Security Context runAsNonRoot                                                               | `false`         |
-| `rts.command`                                         | Override default container command (useful when using custom images)                                                     | `[]`            |
-| `rts.args`                                            | Override default container args (useful when using custom images)                                                        | `[]`            |
-| `rts.hostAliases`                                     | Appsmith rts pods host aliases                                                                                           | `[]`            |
-| `rts.podLabels`                                       | Extra labels for Appsmith rts pods                                                                                       | `{}`            |
-| `rts.podAnnotations`                                  | Annotations for Appsmith rts pods                                                                                        | `{}`            |
-| `rts.podAffinityPreset`                               | Pod affinity preset. Ignored if `rts.affinity` is set. Allowed values: `soft` or `hard`                                  | `""`            |
-| `rts.podAntiAffinityPreset`                           | Pod anti-affinity preset. Ignored if `rts.affinity` is set. Allowed values: `soft` or `hard`                             | `soft`          |
-| `rts.nodeAffinityPreset.type`                         | Node affinity preset type. Ignored if `rts.affinity` is set. Allowed values: `soft` or `hard`                            | `""`            |
-| `rts.nodeAffinityPreset.key`                          | Node label key to match. Ignored if `rts.affinity` is set                                                                | `""`            |
-| `rts.nodeAffinityPreset.values`                       | Node label values to match. Ignored if `rts.affinity` is set                                                             | `[]`            |
-| `rts.affinity`                                        | Affinity for Appsmith rts pods assignment                                                                                | `{}`            |
-| `rts.nodeSelector`                                    | Node labels for Appsmith rts pods assignment                                                                             | `{}`            |
-| `rts.tolerations`                                     | Tolerations for Appsmith rts pods assignment                                                                             | `[]`            |
-| `rts.updateStrategy.type`                             | Appsmith rts statefulset strategy type                                                                                   | `RollingUpdate` |
-| `rts.priorityClassName`                               | Appsmith rts pods' priorityClassName                                                                                     | `""`            |
-| `rts.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
-| `rts.schedulerName`                                   | Name of the k8s scheduler (other than default) for Appsmith rts pods                                                     | `""`            |
-| `rts.terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`            |
-| `rts.lifecycleHooks`                                  | for the Appsmith rts container(s) to automate configuration before or after startup                                      | `{}`            |
-| `rts.extraEnvVars`                                    | Array with extra environment variables to add to Appsmith rts nodes                                                      | `[]`            |
-| `rts.extraEnvVarsCM`                                  | Name of existing ConfigMap containing extra env vars for Appsmith rts nodes                                              | `""`            |
-| `rts.extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars for Appsmith rts nodes                                                 | `""`            |
-| `rts.extraVolumes`                                    | Optionally specify extra list of additional volumes for the Appsmith rts pod(s)                                          | `[]`            |
-| `rts.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the Appsmith rts container(s)                               | `[]`            |
-| `rts.sidecars`                                        | Add additional sidecar containers to the Appsmith rts pod(s)                                                             | `[]`            |
-| `rts.initContainers`                                  | Add additional init containers to the Appsmith rts pod(s)                                                                | `[]`            |
+| Name                                                    | Description                                                                                                              | Value            |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------- |
+| `rts.replicaCount`                                      | Number of Appsmith rts replicas to deploy                                                                                | `1`              |
+| `rts.containerPorts.http`                               | Appsmith rts HTTP container port                                                                                         | `8080`           |
+| `rts.livenessProbe.enabled`                             | Enable livenessProbe on Appsmith rts containers                                                                          | `true`           |
+| `rts.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `30`             |
+| `rts.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `10`             |
+| `rts.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `5`              |
+| `rts.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                      | `6`              |
+| `rts.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                      | `1`              |
+| `rts.readinessProbe.enabled`                            | Enable readinessProbe on Appsmith rts containers                                                                         | `true`           |
+| `rts.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                 | `30`             |
+| `rts.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                        | `10`             |
+| `rts.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                       | `5`              |
+| `rts.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                     | `6`              |
+| `rts.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                     | `1`              |
+| `rts.startupProbe.enabled`                              | Enable startupProbe on Appsmith rts containers                                                                           | `false`          |
+| `rts.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                   | `30`             |
+| `rts.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                          | `10`             |
+| `rts.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                         | `5`              |
+| `rts.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                       | `6`              |
+| `rts.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                       | `1`              |
+| `rts.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                      | `{}`             |
+| `rts.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`             |
+| `rts.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`             |
+| `rts.resources.limits`                                  | The resources limits for the Appsmith rts containers                                                                     | `{}`             |
+| `rts.resources.requests`                                | The requested resources for the Appsmith rts containers                                                                  | `{}`             |
+| `rts.podSecurityContext.enabled`                        | Enabled Appsmith rts pods' Security Context                                                                              | `true`           |
+| `rts.podSecurityContext.fsGroup`                        | Set Appsmith rts pod's Security Context fsGroup                                                                          | `1001`           |
+| `rts.containerSecurityContext.enabled`                  | Enabled Appsmith rts containers' Security Context                                                                        | `true`           |
+| `rts.containerSecurityContext.runAsUser`                | Set Appsmith rts containers' Security Context runAsUser                                                                  | `1001`           |
+| `rts.containerSecurityContext.runAsNonRoot`             | Set Appsmith rts containers' Security Context runAsNonRoot                                                               | `true`           |
+| `rts.containerSecurityContext.readOnlyRootFilesystem`   | Set Appsmith rts containers' Security Context runAsNonRoot                                                               | `false`          |
+| `rts.containerSecurityContext.privileged`               | Set rts container's Security Context privileged                                                                          | `false`          |
+| `rts.containerSecurityContext.allowPrivilegeEscalation` | Set rts container's Security Context allowPrivilegeEscalation                                                            | `false`          |
+| `rts.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`        |
+| `rts.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
+| `rts.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
+| `rts.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `rts.hostAliases`                                       | Appsmith rts pods host aliases                                                                                           | `[]`             |
+| `rts.podLabels`                                         | Extra labels for Appsmith rts pods                                                                                       | `{}`             |
+| `rts.podAnnotations`                                    | Annotations for Appsmith rts pods                                                                                        | `{}`             |
+| `rts.podAffinityPreset`                                 | Pod affinity preset. Ignored if `rts.affinity` is set. Allowed values: `soft` or `hard`                                  | `""`             |
+| `rts.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `rts.affinity` is set. Allowed values: `soft` or `hard`                             | `soft`           |
+| `rts.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `rts.affinity` is set. Allowed values: `soft` or `hard`                            | `""`             |
+| `rts.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `rts.affinity` is set                                                                | `""`             |
+| `rts.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `rts.affinity` is set                                                             | `[]`             |
+| `rts.affinity`                                          | Affinity for Appsmith rts pods assignment                                                                                | `{}`             |
+| `rts.nodeSelector`                                      | Node labels for Appsmith rts pods assignment                                                                             | `{}`             |
+| `rts.tolerations`                                       | Tolerations for Appsmith rts pods assignment                                                                             | `[]`             |
+| `rts.updateStrategy.type`                               | Appsmith rts statefulset strategy type                                                                                   | `RollingUpdate`  |
+| `rts.priorityClassName`                                 | Appsmith rts pods' priorityClassName                                                                                     | `""`             |
+| `rts.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`             |
+| `rts.schedulerName`                                     | Name of the k8s scheduler (other than default) for Appsmith rts pods                                                     | `""`             |
+| `rts.terminationGracePeriodSeconds`                     | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`             |
+| `rts.lifecycleHooks`                                    | for the Appsmith rts container(s) to automate configuration before or after startup                                      | `{}`             |
+| `rts.extraEnvVars`                                      | Array with extra environment variables to add to Appsmith rts nodes                                                      | `[]`             |
+| `rts.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Appsmith rts nodes                                              | `""`             |
+| `rts.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Appsmith rts nodes                                                 | `""`             |
+| `rts.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Appsmith rts pod(s)                                          | `[]`             |
+| `rts.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Appsmith rts container(s)                               | `[]`             |
+| `rts.sidecars`                                          | Add additional sidecar containers to the Appsmith rts pod(s)                                                             | `[]`             |
+| `rts.initContainers`                                    | Add additional init containers to the Appsmith rts pod(s)                                                                | `[]`             |
 
 ### Appsmith RTS Traffic Exposure Parameters
 
@@ -363,17 +378,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init Container Parameters
 
-| Name                                                   | Description                                                                                     | Value              |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ------------------ |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`            |
-| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `docker.io`        |
-| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r90` |
-| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`               |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`               |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`               |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                |
+| Name                                                   | Description                                                                                     | Value                      |
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                    |
+| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`                       |
+| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                       |
+| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                       |
+| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                        |
 
 ### Other Parameters
 
@@ -439,8 +453,10 @@ helm install my-release \
   --set appsmithUsername=admin \
   --set appsmithPassword=password \
   --set mariadb.auth.rootPassword=secretpassword \
-    oci://registry-1.docker.io/bitnamicharts/appsmith
+    oci://REGISTRY_NAME/REPOSITORY_NAME/appsmith
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the appsmith administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
 
@@ -449,9 +465,10 @@ The above command sets the appsmith administrator account username and password 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/appsmith
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/appsmith
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details

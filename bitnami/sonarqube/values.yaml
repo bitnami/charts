@@ -65,9 +65,9 @@ diagnosticMode:
 
 ## Bitnami SonarQube&trade; image
 ## ref: https://hub.docker.com/r/bitnami/sonarqube/tags/
-## @param image.registry SonarQube&trade; image registry
-## @param image.repository SonarQube&trade; image repository
-## @param image.tag SonarQube&trade; image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] SonarQube&trade; image registry
+## @param image.repository [default: REPOSITORY_NAME/sonarqube] SonarQube&trade; image repository
+## @skip image.tag SonarQube&trade; image tag (immutable tags are recommended)
 ## @param image.digest SonarQube&trade; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy SonarQube&trade; image pull policy
 ## @param image.pullSecrets SonarQube&trade; image pull secrets
@@ -321,14 +321,26 @@ podSecurityContext:
   fsGroup: 1001
 ## Configure Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param containerSecurityContext.enabled Enabled SonarQube&trade; containers' Security Context
-## @param containerSecurityContext.runAsUser Set SonarQube&trade; containers' Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set SonarQube&trade; containers' Security Context runAsNonRoot
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## @param hostAliases SonarQube&trade; pods host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -606,9 +618,9 @@ caCerts:
   enabled: false
   ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param caCerts.image.registry OS Shell + Utility image registry
-  ## @param caCerts.image.repository OS Shell + Utility image repository
-  ## @param caCerts.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param caCerts.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param caCerts.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip caCerts.image.tag OS Shell + Utility image tag (immutable tags are recommended)
   ## @param caCerts.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param caCerts.image.pullPolicy OS Shell + Utility image pull policy
   ## @param caCerts.image.pullSecrets OS Shell + Utility image pull secrets
@@ -667,9 +679,9 @@ plugins:
   noCheckCertificate: true
   ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param plugins.image.registry OS Shell + Utility image registry
-  ## @param plugins.image.repository OS Shell + Utility image repository
-  ## @param plugins.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param plugins.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param plugins.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip plugins.image.tag OS Shell + Utility image tag (immutable tags are recommended)
   ## @param plugins.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param plugins.image.pullPolicy OS Shell + Utility image pull policy
   ## @param plugins.image.pullSecrets OS Shell + Utility image pull secrets
@@ -748,9 +760,9 @@ volumePermissions:
   enabled: false
   ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param volumePermissions.image.registry OS Shell + Utility image registry
-  ## @param volumePermissions.image.repository OS Shell + Utility image repository
-  ## @param volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
   ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
@@ -798,9 +810,9 @@ sysctl:
   enabled: true
   ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param sysctl.image.registry OS Shell + Utility image registry
-  ## @param sysctl.image.repository OS Shell + Utility image repository
-  ## @param sysctl.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param sysctl.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param sysctl.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip sysctl.image.tag OS Shell + Utility image tag (immutable tags are recommended)
   ## @param sysctl.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param sysctl.image.pullPolicy OS Shell + Utility image pull policy
   ## @param sysctl.image.pullSecrets OS Shell + Utility image pull secrets
@@ -878,9 +890,9 @@ metrics:
     enabled: false
     ## Bitnami JMX exporter image
     ## ref: https://hub.docker.com/r/bitnami/jmx-exporter/tags/
-    ## @param metrics.jmx.image.registry JMX exporter image registry
-    ## @param metrics.jmx.image.repository JMX exporter image repository
-    ## @param metrics.jmx.image.tag JMX exporter image tag (immutable tags are recommended)
+    ## @param metrics.jmx.image.registry [default: REGISTRY_NAME] JMX exporter image registry
+    ## @param metrics.jmx.image.repository [default: REPOSITORY_NAME/jmx-exporter] JMX exporter image repository
+    ## @skip metrics.jmx.image.tag JMX exporter image tag (immutable tags are recommended)
     ## @param metrics.jmx.image.digest JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param metrics.jmx.image.pullPolicy JMX exporter image pull policy
     ## @param metrics.jmx.image.pullSecrets Specify docker-registry secret names as an array

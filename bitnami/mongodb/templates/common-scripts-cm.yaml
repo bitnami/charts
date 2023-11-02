@@ -19,14 +19,14 @@ data:
     #!/bin/bash
     {{- if .Values.tls.enabled }}
     # Probes are using localhost/127.0.0.1 to tests if the service is up, ready or healthy. If TLS is enabled, we shouldn't validate the certificate hostname.
-    TLS_OPTIONS='--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert --tlsAllowInvalidHostnames'
+    TLS_OPTIONS='--tls {{ if .Values.tls.mTLS.enabled }}--tlsCertificateKeyFile=/certs/mongodb.pem {{ end }}--tlsCAFile=/certs/mongodb-ca-cert--tlsAllowInvalidHostnames'
     {{- end }}
     mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep 'true'
   readiness-probe.sh: |
     #!/bin/bash
     {{- if .Values.tls.enabled }}
     # Probes are using localhost/127.0.0.1 to tests if the service is up, ready or healthy. If TLS is enabled, we shouldn't validate the certificate hostname.
-    TLS_OPTIONS='--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert --tlsAllowInvalidHostnames'
+    TLS_OPTIONS='--tls {{ if .Values.tls.mTLS.enabled }}--tlsCertificateKeyFile=/certs/mongodb.pem {{ end }}--tlsCAFile=/certs/mongodb-ca-cert --tlsAllowInvalidHostnames'
     {{- end }}
     # Run the proper check depending on the version
     [[ $(mongod -version | grep "db version") =~ ([0-9]+\.[0-9]+\.[0-9]+) ]] && VERSION=${BASH_REMATCH[1]}
@@ -43,7 +43,7 @@ data:
     #!/bin/bash
     {{- if .Values.tls.enabled }}
     # Probes are using localhost/127.0.0.1 to tests if the service is up, ready or healthy. If TLS is enabled, we shouldn't validate the certificate hostname.
-    TLS_OPTIONS='--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert --tlsAllowInvalidHostnames'
+    TLS_OPTIONS='--tls {{ if .Values.tls.mTLS.enabled }}--tlsCertificateKeyFile=/certs/mongodb.pem {{ end }}--tlsCAFile=/certs/mongodb-ca-cert --tlsAllowInvalidHostnames'
     {{- end }}
     mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
   {{- if .Values.tls.enabled }}

@@ -65,9 +65,9 @@ diagnosticMode:
 
 ## Bitnami Apache MXNet (Incubating) image version
 ## ref: https://hub.docker.com/r/bitnami/mxnet/tags/
-## @param image.registry Apache MXNet (Incubating) image registry
-## @param image.repository Apache MXNet (Incubating) image repository
-## @param image.tag Apache MXNet (Incubating) image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Apache MXNet (Incubating) image registry
+## @param image.repository [default: REPOSITORY_NAME/mxnet] Apache MXNet (Incubating) image repository
+## @skip image.tag Apache MXNet (Incubating) image tag (immutable tags are recommended)
 ## @param image.digest Apache MXNet (Incubating) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Apache MXNet (Incubating) image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -266,14 +266,26 @@ standalone:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param standalone.containerSecurityContext.enabled Enabled Mxnet standalone containers' Security Context
-  ## @param standalone.containerSecurityContext.runAsUser Set Mxnet standalone containers' Security Context runAsUser
-  ## @param standalone.containerSecurityContext.runAsNonRoot Set Mxnet standalone container's Security Context runAsNonRoot
+  ## @param standalone.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param standalone.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param standalone.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param standalone.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param standalone.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param standalone.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param standalone.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param standalone.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param standalone.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -495,14 +507,26 @@ server:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param server.containerSecurityContext.enabled Enabled Mxnet server containers' Security Context
-  ## @param server.containerSecurityContext.runAsUser Set Mxnet server containers' Security Context runAsUser
-  ## @param server.containerSecurityContext.runAsNonRoot Set Mxnet server container's Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param server.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param server.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param server.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param server.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -723,14 +747,25 @@ worker:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param worker.containerSecurityContext.enabled Enabled Mxnet worker containers' Security Context
-  ## @param worker.containerSecurityContext.runAsUser Set Mxnet worker containers' Security Context runAsUser
-  ## @param worker.containerSecurityContext.runAsNonRoot Set Mxnet worker container's Security Context runAsNonRoot
-  ##
+  ## @param worker.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param worker.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param worker.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param worker.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param worker.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param worker.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param worker.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param worker.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param worker.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -953,14 +988,26 @@ scheduler:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param scheduler.containerSecurityContext.enabled Enabled Mxnet scheduler containers' Security Context
-  ## @param scheduler.containerSecurityContext.runAsUser Set Mxnet scheduler containers' Security Context runAsUser
-  ## @param scheduler.containerSecurityContext.runAsNonRoot Set Mxnet scheduler container's Security Context runAsNonRoot
+  ## @param scheduler.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param scheduler.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param scheduler.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param scheduler.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param scheduler.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param scheduler.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param scheduler.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param scheduler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param scheduler.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -1167,9 +1214,9 @@ scheduler:
 ## @section Init containers parameters
 ## Bitnami git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
-## @param git.registry Git image registry
-## @param git.repository Git image repository
-## @param git.tag Git image tag (immutable tags are recommended)
+## @param git.registry [default: REGISTRY_NAME] Git image registry
+## @param git.repository [default: REPOSITORY_NAME/git] Git image repository
+## @skip git.tag Git image tag (immutable tags are recommended)
 ## @param git.digest Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param git.pullPolicy Git image pull policy
 ## @param git.pullSecrets Specify docker-registry secret names as an array
@@ -1195,9 +1242,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes volume permissions in the data directory
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
