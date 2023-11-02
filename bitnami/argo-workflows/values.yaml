@@ -167,11 +167,21 @@ server:
   ## @param server.containerSecurityContext.runAsUser Set server containers' Security Context runAsUser
   ## @param server.containerSecurityContext.runAsNonRoot Set server containers' Security Context runAsNonRoot
   ## @param server.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+  ## @param server.containerSecurityContext.privileged Set server container's Security Context privileged
+  ## @param server.containerSecurityContext.allowPrivilegeEscalation Set server container's Security Context allowPrivilegeEscalation
+  ## @param server.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param server.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
     readOnlyRootFilesystem: true
 
   ## Create RBAC resources for the Argo workflows server
@@ -573,11 +583,21 @@ controller:
   ## @param controller.containerSecurityContext.runAsUser Set controller containers' Security Context runAsUser
   ## @param controller.containerSecurityContext.runAsNonRoot Set controller containers' Security Context runAsNonRoot
   ## @param controller.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+  ## @param controller.containerSecurityContext.privileged Set controller container's Security Context privileged
+  ## @param controller.containerSecurityContext.allowPrivilegeEscalation Set controller container's Security Context allowPrivilegeEscalation
+  ## @param controller.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param controller.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
     readOnlyRootFilesystem: true
 
   ## Server container port
@@ -634,8 +654,8 @@ controller:
       {{- if .Values.executor.extraEnvVars }}
       env: {{- include "common.tplvalues.render" (dict "value" .Values.executor.extraEnvVars "context" $) | nindent 4 }}
       {{- end }}
-      {{- if .Values.executor.podSecurityContext }}
-      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.executor.containerSecurityContext "context" $) | nindent 4 }}
+      {{- if .Values.executor.containerSecurityContext }}
+      securityContext: {{- omit .Values.executor.containerSecurityContext "enabled" | toYaml | nindent 4 }}
       {{- end }}
     {{- end }}
     ## Uncomment to enable Artofact repository with the provided configuration
@@ -988,13 +1008,25 @@ executor:
   extraEnvVars: []
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param executor.containerSecurityContext.enabled Enabled executor pods' Security Context
-  ## @param executor.containerSecurityContext.fsGroup Set executor pod's Security Context fsGroup
-  ## @param executor.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Context
+  ## @param executor.containerSecurityContext.enabled Enabled executor containers' Security Context
+  ## @param executor.containerSecurityContext.runAsUser Set executor containers' Security Context runAsUser
+  ## @param executor.containerSecurityContext.runAsNonRoot Set executor containers' Security Context runAsNonRoot
+  ## @param executor.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+  ## @param executor.containerSecurityContext.privileged Set executor container's Security Context privileged
+  ## @param executor.containerSecurityContext.allowPrivilegeEscalation Set executor container's Security Context allowPrivilegeEscalation
+  ## @param executor.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param executor.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    fsGroup: 1001
+    runAsUser: 1001
+    runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
     readOnlyRootFilesystem: true
 
 ## @section Traffic Exposure Parameters

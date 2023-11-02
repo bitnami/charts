@@ -1169,9 +1169,9 @@ The changes introduced in this version are:
   - TLS settings have been moved from `auth.tls.*` to `tls.*`.
   - Zookeeper TLS settings have been moved from `auth.zookeeper*` to `tls.zookeeper.*`
 - Refactor externalAccess to support the new architecture:
-  - `externalAccess.service.*` have been renamed to `externalAccess.controller.service.*` and `externalAccess.controller.service.*`.
-  - Controller pods will not configure externalAccess unless:
-    - `controller.controllerOnly=false` (default), meaning the pods are running as 'controller+broker' nodes.
+  - `externalAccess.service.*` have been renamed to `externalAccess.controller.service.*` and `externalAccess.broker.service.*`.
+  - Controller pods will not configure externalAccess unless either:
+    - `controller.controllerOnly=false` (default), meaning the pods are running as 'controller+broker' nodes; or
     - `externalAccess.controller.service.forceExpose=true`, for use cases where controller-only nodes want to be exposed externally.
 
 #### Upgrading from Kraft mode
