@@ -26,7 +26,7 @@ It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/t
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use SuiteCRM in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use SuiteCRM in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -82,87 +82,92 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### SuiteCRM parameters
 
-| Name                                    | Description                                                                                              | Value                      |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `image.registry`                        | SuiteCRM image registry                                                                                  | `REGISTRY_NAME`            |
-| `image.repository`                      | SuiteCRM image repository                                                                                | `REPOSITORY_NAME/suitecrm` |
-| `image.digest`                          | SuiteCRM image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `image.pullPolicy`                      | SuiteCRM image pull policy                                                                               | `IfNotPresent`             |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                         | `[]`                       |
-| `image.debug`                           | Specify if debug logs should be enabled                                                                  | `false`                    |
-| `replicaCount`                          | Number of replicas (requires ReadWriteMany PVC support)                                                  | `1`                        |
-| `suitecrmSkipInstall`                   | Skip SuiteCRM installation wizard. Useful for migrations and restoring from SQL dump                     | `false`                    |
-| `suitecrmValidateUserIP`                | Whether to validate the user IP address or not                                                           | `false`                    |
-| `suitecrmHost`                          | SuiteCRM host to create application URLs                                                                 | `""`                       |
-| `suitecrmUsername`                      | User of the application                                                                                  | `user`                     |
-| `suitecrmPassword`                      | Application password                                                                                     | `""`                       |
-| `suitecrmEmail`                         | Admin email                                                                                              | `user@example.com`         |
-| `allowEmptyPassword`                    | Allow DB blank passwords                                                                                 | `false`                    |
-| `command`                               | Override default container command (useful when using custom images)                                     | `[]`                       |
-| `args`                                  | Override default container args (useful when using custom images)                                        | `[]`                       |
-| `hostAliases`                           | Deployment pod host aliases                                                                              | `[]`                       |
-| `updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                           | `RollingUpdate`            |
-| `extraEnvVars`                          | An array to add extra environment variables                                                              | `[]`                       |
-| `extraEnvVarsCM`                        | ConfigMap containing extra environment variables                                                         | `""`                       |
-| `extraEnvVarsSecret`                    | Secret containing extra environment variables                                                            | `""`                       |
-| `extraVolumes`                          | Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`                             | `[]`                       |
-| `extraVolumeMounts`                     | Extra volume mounts to add to the container. Requires setting `extraVolumeMounts                         | `[]`                       |
-| `initContainers`                        | Extra init containers to add to the deployment                                                           | `[]`                       |
-| `sidecars`                              | Extra sidecar containers to add to the deployment                                                        | `[]`                       |
-| `tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                                 | `[]`                       |
-| `priorityClassName`                     | SuiteCRM pods' priorityClassName                                                                         | `""`                       |
-| `schedulerName`                         | Name of the k8s scheduler (other than default)                                                           | `""`                       |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                           | `[]`                       |
-| `existingSecret`                        | Name of a secret with the application password                                                           | `""`                       |
-| `suitecrmSmtpHost`                      | SMTP host                                                                                                | `""`                       |
-| `suitecrmSmtpPort`                      | SMTP port                                                                                                | `""`                       |
-| `suitecrmSmtpUser`                      | SMTP user                                                                                                | `""`                       |
-| `suitecrmSmtpPassword`                  | SMTP password                                                                                            | `""`                       |
-| `suitecrmSmtpProtocol`                  | SMTP protocol [`ssl`, `tls`]                                                                             | `""`                       |
-| `suitecrmNotifyAddress`                 | SuiteCRM notify address                                                                                  | `""`                       |
-| `suitecrmNotifyName`                    | SuiteCRM notify name                                                                                     | `""`                       |
-| `containerPorts`                        | Container ports                                                                                          | `{}`                       |
-| `sessionAffinity`                       | Control where client requests go, to the same pod or round-robin                                         | `None`                     |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                      | `""`                       |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                 | `soft`                     |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `""`                       |
-| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                    | `""`                       |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                | `[]`                       |
-| `affinity`                              | Affinity for pod assignment                                                                              | `{}`                       |
-| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                                 | `{}`                       |
-| `resources.requests`                    | The requested resources for the container                                                                | `{}`                       |
-| `podSecurityContext.enabled`            | Enable SuiteCRM pods' Security Context                                                                   | `true`                     |
-| `podSecurityContext.fsGroup`            | SuiteCRM pods' group ID                                                                                  | `1001`                     |
-| `containerSecurityContext.enabled`      | Enable SuiteCRM containers' Security Context                                                             | `true`                     |
-| `containerSecurityContext.runAsUser`    | SuiteCRM containers' Security Context runAsUser                                                          | `1001`                     |
-| `containerSecurityContext.runAsNonRoot` | SuiteCRM containers' Security Context runAsNonRoot                                                       | `true`                     |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                     | `true`                     |
-| `livenessProbe.path`                    | Request path for livenessProbe                                                                           | `/index.php`               |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                  | `600`                      |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                         | `10`                       |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                        | `5`                        |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                      | `6`                        |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                      | `1`                        |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                                    | `true`                     |
-| `readinessProbe.path`                   | Request path for readinessProbe                                                                          | `/index.php`               |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                 | `30`                       |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                        | `5`                        |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                       | `3`                        |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                     | `6`                        |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                     | `1`                        |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                                      | `false`                    |
-| `startupProbe.path`                     | Request path for startupProbe                                                                            | `/index.php`               |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                   | `0`                        |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                          | `10`                       |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                         | `3`                        |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                       | `60`                       |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                       | `1`                        |
-| `customLivenessProbe`                   | Override default liveness probe                                                                          | `{}`                       |
-| `customReadinessProbe`                  | Override default readiness probe                                                                         | `{}`                       |
-| `customStartupProbe`                    | Override default startup probe                                                                           | `{}`                       |
-| `lifecycleHooks`                        | lifecycleHooks for the container to automate configuration before or after startup                       | `{}`                       |
-| `podAnnotations`                        | Pod annotations                                                                                          | `{}`                       |
-| `podLabels`                             | Pod extra labels                                                                                         | `{}`                       |
+| Name                                                | Description                                                                                              | Value                      |
+| --------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `image.registry`                                    | SuiteCRM image registry                                                                                  | `REGISTRY_NAME`            |
+| `image.repository`                                  | SuiteCRM image repository                                                                                | `REPOSITORY_NAME/suitecrm` |
+| `image.digest`                                      | SuiteCRM image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `image.pullPolicy`                                  | SuiteCRM image pull policy                                                                               | `IfNotPresent`             |
+| `image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                         | `[]`                       |
+| `image.debug`                                       | Specify if debug logs should be enabled                                                                  | `false`                    |
+| `replicaCount`                                      | Number of replicas (requires ReadWriteMany PVC support)                                                  | `1`                        |
+| `suitecrmSkipInstall`                               | Skip SuiteCRM installation wizard. Useful for migrations and restoring from SQL dump                     | `false`                    |
+| `suitecrmValidateUserIP`                            | Whether to validate the user IP address or not                                                           | `false`                    |
+| `suitecrmHost`                                      | SuiteCRM host to create application URLs                                                                 | `""`                       |
+| `suitecrmUsername`                                  | User of the application                                                                                  | `user`                     |
+| `suitecrmPassword`                                  | Application password                                                                                     | `""`                       |
+| `suitecrmEmail`                                     | Admin email                                                                                              | `user@example.com`         |
+| `allowEmptyPassword`                                | Allow DB blank passwords                                                                                 | `false`                    |
+| `command`                                           | Override default container command (useful when using custom images)                                     | `[]`                       |
+| `args`                                              | Override default container args (useful when using custom images)                                        | `[]`                       |
+| `hostAliases`                                       | Deployment pod host aliases                                                                              | `[]`                       |
+| `updateStrategy.type`                               | Update strategy - only really applicable for deployments with RWO PVs attached                           | `RollingUpdate`            |
+| `extraEnvVars`                                      | An array to add extra environment variables                                                              | `[]`                       |
+| `extraEnvVarsCM`                                    | ConfigMap containing extra environment variables                                                         | `""`                       |
+| `extraEnvVarsSecret`                                | Secret containing extra environment variables                                                            | `""`                       |
+| `extraVolumes`                                      | Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`                             | `[]`                       |
+| `extraVolumeMounts`                                 | Extra volume mounts to add to the container. Requires setting `extraVolumeMounts                         | `[]`                       |
+| `initContainers`                                    | Extra init containers to add to the deployment                                                           | `[]`                       |
+| `sidecars`                                          | Extra sidecar containers to add to the deployment                                                        | `[]`                       |
+| `tolerations`                                       | Tolerations for pod assignment. Evaluated as a template.                                                 | `[]`                       |
+| `priorityClassName`                                 | SuiteCRM pods' priorityClassName                                                                         | `""`                       |
+| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                           | `""`                       |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                           | `[]`                       |
+| `existingSecret`                                    | Name of a secret with the application password                                                           | `""`                       |
+| `suitecrmSmtpHost`                                  | SMTP host                                                                                                | `""`                       |
+| `suitecrmSmtpPort`                                  | SMTP port                                                                                                | `""`                       |
+| `suitecrmSmtpUser`                                  | SMTP user                                                                                                | `""`                       |
+| `suitecrmSmtpPassword`                              | SMTP password                                                                                            | `""`                       |
+| `suitecrmSmtpProtocol`                              | SMTP protocol [`ssl`, `tls`]                                                                             | `""`                       |
+| `suitecrmNotifyAddress`                             | SuiteCRM notify address                                                                                  | `""`                       |
+| `suitecrmNotifyName`                                | SuiteCRM notify name                                                                                     | `""`                       |
+| `containerPorts`                                    | Container ports                                                                                          | `{}`                       |
+| `sessionAffinity`                                   | Control where client requests go, to the same pod or round-robin                                         | `None`                     |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                      | `""`                       |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                 | `soft`                     |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `""`                       |
+| `nodeAffinityPreset.key`                            | Node label key to match Ignored if `affinity` is set.                                                    | `""`                       |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                                | `[]`                       |
+| `affinity`                                          | Affinity for pod assignment                                                                              | `{}`                       |
+| `nodeSelector`                                      | Node labels for pod assignment. Evaluated as a template.                                                 | `{}`                       |
+| `resources.requests`                                | The requested resources for the container                                                                | `{}`                       |
+| `podSecurityContext.enabled`                        | Enable SuiteCRM pods' Security Context                                                                   | `true`                     |
+| `podSecurityContext.fsGroup`                        | SuiteCRM pods' group ID                                                                                  | `1001`                     |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                     | `true`                     |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                               | `1001`                     |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                            | `true`                     |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                              | `false`                    |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                  | `false`                    |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                | `false`                    |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                       | `["ALL"]`                  |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                         | `RuntimeDefault`           |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                                     | `true`                     |
+| `livenessProbe.path`                                | Request path for livenessProbe                                                                           | `/index.php`               |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                  | `600`                      |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                         | `10`                       |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                        | `5`                        |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                      | `6`                        |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                      | `1`                        |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                                    | `true`                     |
+| `readinessProbe.path`                               | Request path for readinessProbe                                                                          | `/index.php`               |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                 | `30`                       |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                        | `5`                        |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                       | `3`                        |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                     | `6`                        |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                     | `1`                        |
+| `startupProbe.enabled`                              | Enable startupProbe                                                                                      | `false`                    |
+| `startupProbe.path`                                 | Request path for startupProbe                                                                            | `/index.php`               |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                   | `0`                        |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                          | `10`                       |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                         | `3`                        |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                       | `60`                       |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                       | `1`                        |
+| `customLivenessProbe`                               | Override default liveness probe                                                                          | `{}`                       |
+| `customReadinessProbe`                              | Override default readiness probe                                                                         | `{}`                       |
+| `customStartupProbe`                                | Override default startup probe                                                                           | `{}`                       |
+| `lifecycleHooks`                                    | lifecycleHooks for the container to automate configuration before or after startup                       | `{}`                       |
+| `podAnnotations`                                    | Pod annotations                                                                                          | `{}`                       |
+| `podLabels`                                         | Pod extra labels                                                                                         | `{}`                       |
 
 ### Database parameters
 

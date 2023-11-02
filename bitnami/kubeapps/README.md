@@ -32,7 +32,7 @@ With Kubeapps you can:
 
 It also packages the [Bitnami PostgreSQL chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql), which is required for bootstrapping a deployment for the database requirements of the Kubeapps application.
 
-Looking to use Kubeapps in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Kubeapps in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 

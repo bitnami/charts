@@ -37,7 +37,7 @@ The main features of each chart are the following:
 | Single write point (single master)                     | Multiple write points (multiple masters)                               |
 | ![Redis&reg; Topology](img/redis-topology.png) | ![Redis&reg; Cluster Topology](img/redis-cluster-topology.png) |
 
-Looking to use Redisreg; in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Redisreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -545,6 +545,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.podTargetLabels`                    | Labels from the Kubernetes pod to be transferred to the created metrics                                             | `[]`                             |
 | `metrics.serviceMonitor.sampleLimit`                        | Limit of how many samples should be scraped from every Pod                                                          | `false`                          |
 | `metrics.serviceMonitor.targetLimit`                        | Limit of how many targets should be scraped                                                                         | `false`                          |
+| `metrics.podMonitor.enabled`                                | Create PodMonitor resource(s) for scraping metrics using PrometheusOperator                                         | `false`                          |
+| `metrics.podMonitor.namespace`                              | The namespace in which the PodMonitor will be created                                                               | `""`                             |
+| `metrics.podMonitor.interval`                               | The interval at which metrics should be scraped                                                                     | `30s`                            |
+| `metrics.podMonitor.scrapeTimeout`                          | The timeout after which the scrape is ended                                                                         | `""`                             |
+| `metrics.podMonitor.relabellings`                           | Metrics RelabelConfigs to apply to samples before scraping.                                                         | `[]`                             |
+| `metrics.podMonitor.metricRelabelings`                      | Metrics RelabelConfigs to apply to samples before ingestion.                                                        | `[]`                             |
+| `metrics.podMonitor.honorLabels`                            | Specify honorLabels parameter to add the scrape endpoint                                                            | `false`                          |
+| `metrics.podMonitor.additionalLabels`                       | Additional labels that can be used so PodMonitor resource(s) can be discovered by Prometheus                        | `{}`                             |
+| `metrics.podMonitor.podTargetLabels`                        | Labels from the Kubernetes pod to be transferred to the created metrics                                             | `[]`                             |
+| `metrics.podMonitor.sampleLimit`                            | Limit of how many samples should be scraped from every Pod                                                          | `false`                          |
+| `metrics.podMonitor.targetLimit`                            | Limit of how many targets should be scraped                                                                         | `false`                          |
 | `metrics.prometheusRule.enabled`                            | Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator                               | `false`                          |
 | `metrics.prometheusRule.namespace`                          | The namespace in which the prometheusRule will be created                                                           | `""`                             |
 | `metrics.prometheusRule.additionalLabels`                   | Additional labels for the prometheusRule                                                                            | `{}`                             |

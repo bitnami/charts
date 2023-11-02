@@ -22,7 +22,7 @@ This chart bootstraps a [Kafka](https://github.com/bitnami/containers/tree/main/
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Apache Kafka in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Apache Kafka in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -161,6 +161,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.keystorePassword`                       | Password to access the JKS keystore when it is password-protected. Ignored when 'tls.passwordsSecret' is provided.                      | `""`                       |
 | `tls.truststorePassword`                     | Password to access the JKS truststore when it is password-protected. Ignored when 'tls.passwordsSecret' is provided.                    | `""`                       |
 | `tls.keyPassword`                            | Password to access the PEM key when it is password-protected.                                                                           | `""`                       |
+| `tls.jksKeystoreKey`                         | The secret key from the `tls.existingSecret` containing the keystore                                                                    | `""`                       |
 | `tls.jksTruststoreSecret`                    | Name of the existing secret containing your truststore if truststore not existing or different from the one in the `tls.existingSecret` | `""`                       |
 | `tls.jksTruststoreKey`                       | The secret key from the `tls.existingSecret` or `tls.jksTruststoreSecret` containing the truststore                                     | `""`                       |
 | `tls.endpointIdentificationAlgorithm`        | The endpoint identification algorithm to validate server hostname using server certificate                                              | `https`                    |
@@ -1168,9 +1169,9 @@ The changes introduced in this version are:
   - TLS settings have been moved from `auth.tls.*` to `tls.*`.
   - Zookeeper TLS settings have been moved from `auth.zookeeper*` to `tls.zookeeper.*`
 - Refactor externalAccess to support the new architecture:
-  - `externalAccess.service.*` have been renamed to `externalAccess.controller.service.*` and `externalAccess.controller.service.*`.
-  - Controller pods will not configure externalAccess unless:
-    - `controller.controllerOnly=false` (default), meaning the pods are running as 'controller+broker' nodes.
+  - `externalAccess.service.*` have been renamed to `externalAccess.controller.service.*` and `externalAccess.broker.service.*`.
+  - Controller pods will not configure externalAccess unless either:
+    - `controller.controllerOnly=false` (default), meaning the pods are running as 'controller+broker' nodes; or
     - `externalAccess.controller.service.forceExpose=true`, for use cases where controller-only nodes want to be exposed externally.
 
 #### Upgrading from Kraft mode

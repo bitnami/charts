@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/consul
-  tag: 1.16.2-debian-11-r17
+  tag: 1.16.2-debian-11-r18
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -282,16 +282,26 @@ podSecurityContext:
   fsGroup: 1001
 ## Container security context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled HashiCorp Consul Container securityContext
-## @param containerSecurityContext.runAsUser User ID for the HashiCorp Consul container
-## @param containerSecurityContext.runAsNonRoot Force the container to be run as non root
-## @param containerSecurityContext.allowPrivilegeEscalation Force the child process to be run as nonprivilege
+## @param containerSecurityContext.enabled Enabled Consul containers' Security Context
+## @param containerSecurityContext.runAsUser Set Consul containers' Security Context runAsUser
+## @param containerSecurityContext.allowPrivilegeEscalation Set Consul containers' Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop Set Argo CD containers' repo server Security Context capabilities to be dropped
+## @param containerSecurityContext.readOnlyRootFilesystem Set Argo CD containers' repo server Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.runAsNonRoot Set Consul containers' Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
   allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
+  readOnlyRootFilesystem: false
 ## Container's resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious

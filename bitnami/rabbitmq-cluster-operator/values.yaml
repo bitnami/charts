@@ -216,26 +216,26 @@ clusterOperator:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param clusterOperator.containerSecurityContext.enabled Enabled RabbitMQ Cluster Operator containers' Security Context
-  ## @param clusterOperator.containerSecurityContext.runAsUser Set RabbitMQ Cluster Operator containers' Security Context runAsUser
-  ## @param clusterOperator.containerSecurityContext.runAsNonRoot Force running the container as non root
-  ## @param clusterOperator.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on cluster operator containers
-  ## @param clusterOperator.containerSecurityContext.capabilities.drop Drop all linux capabilities except the ones explicitly defined
-  ## @param clusterOperator.containerSecurityContext.allowPrivilegeEscalation Allow privilege escalation for cluster operator containers
-  ## @param clusterOperator.containerSecurityContext.seccompProfile.type Enable seccomp profile for cluster operator containers
-
+  ## @param clusterOperator.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param clusterOperator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param clusterOperator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param clusterOperator.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param clusterOperator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param clusterOperator.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param clusterOperator.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param clusterOperator.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    readOnlyRootFilesystem: true
-    capabilities:
-      drop:
-        - ALL
+    privileged: false
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
-      type: RuntimeDefault
+      type: "RuntimeDefault"
 
 
   ## @param clusterOperator.command Override default container command (useful when using custom images)
@@ -678,16 +678,26 @@ msgTopologyOperator:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param msgTopologyOperator.containerSecurityContext.enabled Enabled RabbitMQ Messaging Topology Operator containers' Security Context
-  ## @param msgTopologyOperator.containerSecurityContext.runAsUser Set RabbitMQ Messaging Topology Operator containers' Security Context runAsUser
-  ## @param msgTopologyOperator.containerSecurityContext.runAsNonRoot Force running the container as non root
-  ## @param msgTopologyOperator.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Messaging Topology Operator
+  ## @param msgTopologyOperator.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param msgTopologyOperator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param msgTopologyOperator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param msgTopologyOperator.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param msgTopologyOperator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param msgTopologyOperator.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param msgTopologyOperator.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param msgTopologyOperator.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    readOnlyRootFilesystem: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param msgTopologyOperator.fullnameOverride String to fully override rmqco.msgTopologyOperator.fullname template
   ##

@@ -26,7 +26,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/clickhouse/get-started/).
 
-Looking to use ClickHouse in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use ClickHouse in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -138,12 +138,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.requests`                                | The requested resources for the ClickHouse containers                                                      | `{}`                         |
 | `podSecurityContext.enabled`                        | Enabled ClickHouse pods' Security Context                                                                  | `true`                       |
 | `podSecurityContext.fsGroup`                        | Set ClickHouse pod's Security Context fsGroup                                                              | `1001`                       |
-| `podSecurityContext.seccompProfile.type`            | Set ClickHouse container's Security Context seccomp profile                                                | `RuntimeDefault`             |
-| `containerSecurityContext.enabled`                  | Enabled ClickHouse containers' Security Context                                                            | `true`                       |
-| `containerSecurityContext.runAsUser`                | Set ClickHouse containers' Security Context runAsUser                                                      | `1001`                       |
-| `containerSecurityContext.runAsNonRoot`             | Set ClickHouse containers' Security Context runAsNonRoot                                                   | `true`                       |
-| `containerSecurityContext.allowPrivilegeEscalation` | Set ClickHouse container's privilege escalation                                                            | `false`                      |
-| `containerSecurityContext.capabilities.drop`        | Set ClickHouse container's Security Context runAsNonRoot                                                   | `["ALL"]`                    |
+| `containerSecurityContext.enabled`                  | Enable containers' Security Context                                                                        | `true`                       |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                 | `1001`                       |
+| `containerSecurityContext.runAsNonRoot`             | Set containers' Security Context runAsNonRoot                                                              | `true`                       |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set read only root file system pod's                                                                       | `false`                      |
+| `containerSecurityContext.privileged`               | Set contraller container's Security Context privileged                                                     | `false`                      |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set contraller container's Security Context allowPrivilegeEscalation                                       | `false`                      |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be droppedn                                                                        | `["ALL"]`                    |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                           | `RuntimeDefault`             |
 | `auth.username`                                     | ClickHouse Admin username                                                                                  | `default`                    |
 | `auth.password`                                     | ClickHouse Admin password                                                                                  | `""`                         |
 | `auth.existingSecret`                               | Name of a secret containing the Admin password                                                             | `""`                         |

@@ -22,7 +22,7 @@ It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/t
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use WordPress in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use WordPress in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -172,13 +172,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraContainerPorts`                               | Optionally specify extra list of additional ports for WordPress container(s)                                             | `[]`             |
 | `podSecurityContext.enabled`                        | Enabled WordPress pods' Security Context                                                                                 | `true`           |
 | `podSecurityContext.fsGroup`                        | Set WordPress pod's Security Context fsGroup                                                                             | `1001`           |
-| `podSecurityContext.seccompProfile.type`            | Set WordPress container's Security Context seccomp profile                                                               | `RuntimeDefault` |
-| `containerSecurityContext.enabled`                  | Enabled WordPress containers' Security Context                                                                           | `true`           |
-| `containerSecurityContext.runAsUser`                | Set WordPress container's Security Context runAsUser                                                                     | `1001`           |
-| `containerSecurityContext.runAsNonRoot`             | Set WordPress container's Security Context runAsNonRoot                                                                  | `true`           |
-| `containerSecurityContext.allowPrivilegeEscalation` | Set WordPress container's privilege escalation                                                                           | `false`          |
-| `containerSecurityContext.readOnlyRootFilesystem`   | Set WordPress container's Security Context readOnlyRootFilesystem                                                        | `false`          |
-| `containerSecurityContext.capabilities.drop`        | Set WordPress container's Security Context runAsNonRoot                                                                  | `["ALL"]`        |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                  | `false`          |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                | `false`          |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`        |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `livenessProbe.enabled`                             | Enable livenessProbe on WordPress containers                                                                             | `true`           |
 | `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `120`            |
 | `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `10`             |

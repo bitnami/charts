@@ -40,4 +40,4 @@ maintainers:
 name: osclass
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/osclass
-version: 17.0.1
+version: 17.1.0

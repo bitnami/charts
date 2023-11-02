@@ -34,7 +34,7 @@ The main features of each chart are the following:
 | Single write point (single master)                     | Multiple write points (multiple masters)                               |
 | ![Redis&reg; Topology](img/redis-topology.png) | ![Redis&reg; Cluster Topology](img/redis-cluster-topology.png) |
 
-Looking to use Redisreg; Cluster in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Redisreg; Cluster in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -115,14 +115,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.role.rules`                                       | Rules to create. It follows the role specification                                                                                                  | `[]`                            |
 | `podSecurityContext.enabled`                            | Enable Redis&reg; pod Security Context                                                                                                              | `true`                          |
 | `podSecurityContext.fsGroup`                            | Group ID for the pods                                                                                                                               | `1001`                          |
-| `podSecurityContext.runAsUser`                          | User ID for the pods                                                                                                                                | `1001`                          |
 | `podSecurityContext.sysctls`                            | Set namespaced sysctls for the pods                                                                                                                 | `[]`                            |
 | `podDisruptionBudget`                                   | Limits the number of pods of the replicated application that are down simultaneously from voluntary disruptions                                     | `{}`                            |
 | `minAvailable`                                          | Min number of pods that must still be available after the eviction                                                                                  | `""`                            |
 | `maxUnavailable`                                        | Max number of pods that can be unavailable after the eviction                                                                                       | `""`                            |
-| `containerSecurityContext.enabled`                      | Enable Containers' Security Context                                                                                                                 | `true`                          |
-| `containerSecurityContext.runAsUser`                    | User ID for the containers.                                                                                                                         | `1001`                          |
-| `containerSecurityContext.runAsNonRoot`                 | Run container as non root                                                                                                                           | `true`                          |
+| `containerSecurityContext.enabled`                      | Enabled containers' Security Context                                                                                                                | `true`                          |
+| `containerSecurityContext.runAsUser`                    | Set containers' Security Context runAsUser                                                                                                          | `1001`                          |
+| `containerSecurityContext.runAsNonRoot`                 | Set container's Security Context runAsNonRoot                                                                                                       | `true`                          |
+| `containerSecurityContext.privileged`                   | Set container's Security Context privileged                                                                                                         | `false`                         |
+| `containerSecurityContext.readOnlyRootFilesystem`       | Set container's Security Context readOnlyRootFilesystem                                                                                             | `false`                         |
+| `containerSecurityContext.allowPrivilegeEscalation`     | Set container's Security Context allowPrivilegeEscalation                                                                                           | `false`                         |
+| `containerSecurityContext.capabilities.drop`            | List of capabilities to be dropped                                                                                                                  | `["ALL"]`                       |
+| `containerSecurityContext.seccompProfile.type`          | Set container's Security Context seccomp profile                                                                                                    | `RuntimeDefault`                |
 | `usePassword`                                           | Use password authentication                                                                                                                         | `true`                          |
 | `password`                                              | Redis&reg; password (ignored if existingSecret set)                                                                                                 | `""`                            |
 | `existingSecret`                                        | Name of existing secret object (for password authentication)                                                                                        | `""`                            |

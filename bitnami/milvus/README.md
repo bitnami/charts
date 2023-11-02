@@ -26,7 +26,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/milvus/get-started/).
 
-Looking to use Milvus in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Milvus in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -113,15 +113,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.backoffLimit`                                      | set backoff limit of the job                                                                                                                        | `10`                       |
 | `initJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the credential init job                                                                     | `[]`                       |
 | `initJob.extraCommands`                                     | Extra commands to pass to the generation job                                                                                                        | `""`                       |
-| `initJob.containerSecurityContext.enabled`                  | Enabled credential init job containers' Security Context                                                                                            | `true`                     |
-| `initJob.containerSecurityContext.runAsUser`                | Set credential init job containers' Security Context runAsUser                                                                                      | `1001`                     |
-| `initJob.containerSecurityContext.runAsNonRoot`             | Set credential init job containers' Security Context runAsNonRoot                                                                                   | `true`                     |
-| `initJob.containerSecurityContext.readOnlyRootFilesystem`   | Set credential init job containers' Security Context runAsNonRoot                                                                                   | `true`                     |
-| `initJob.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                                                | `false`                    |
-| `initJob.containerSecurityContext.capabilities.drop`        | Set container's Security Context runAsNonRoot                                                                                                       | `["ALL"]`                  |
+| `initJob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                | `true`                     |
+| `initJob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                          | `1001`                     |
+| `initJob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                       | `true`                     |
+| `initJob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                         | `false`                    |
+| `initJob.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                             | `true`                     |
+| `initJob.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                           | `false`                    |
+| `initJob.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                  | `["ALL"]`                  |
+| `initJob.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                    | `RuntimeDefault`           |
 | `initJob.podSecurityContext.enabled`                        | Enabled credential init job pods' Security Context                                                                                                  | `true`                     |
 | `initJob.podSecurityContext.fsGroup`                        | Set credential init job pod's Security Context fsGroup                                                                                              | `1001`                     |
-| `initJob.podSecurityContext.seccompProfile.type`            | Set container's Security Context seccomp profile                                                                                                    | `RuntimeDefault`           |
 | `initJob.extraEnvVars`                                      | Array containing extra env vars to configure the credential init job                                                                                | `[]`                       |
 | `initJob.extraEnvVarsCM`                                    | ConfigMap containing extra env vars to configure the credential init job                                                                            | `""`                       |
 | `initJob.extraEnvVarsSecret`                                | Secret containing extra env vars to configure the credential init job (in case of sensitive data)                                                   | `""`                       |
@@ -175,13 +176,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataCoord.resources.requests`                                | The requested resources for the data coordinator containers                                                | `{}`             |
 | `dataCoord.podSecurityContext.enabled`                        | Enabled Data Coordinator pods' Security Context                                                            | `true`           |
 | `dataCoord.podSecurityContext.fsGroup`                        | Set Data Coordinator pod's Security Context fsGroup                                                        | `1001`           |
-| `dataCoord.podSecurityContext.seccompProfile.type`            | Set Data Coordinator container's Security Context seccomp profile                                          | `RuntimeDefault` |
-| `dataCoord.containerSecurityContext.enabled`                  | Enabled Data Coordinator containers' Security Context                                                      | `true`           |
-| `dataCoord.containerSecurityContext.runAsUser`                | Set Data Coordinator containers' Security Context runAsUser                                                | `1001`           |
-| `dataCoord.containerSecurityContext.runAsNonRoot`             | Set Data Coordinator containers' Security Context runAsNonRoot                                             | `true`           |
-| `dataCoord.containerSecurityContext.readOnlyRootFilesystem`   | Set Data Coordinator containers' Security Context runAsNonRoot                                             | `true`           |
-| `dataCoord.containerSecurityContext.allowPrivilegeEscalation` | Set Data Coordinator container's privilege escalation                                                      | `false`          |
-| `dataCoord.containerSecurityContext.capabilities.drop`        | Set Data Coordinator container's Security Context runAsNonRoot                                             | `["ALL"]`        |
+| `dataCoord.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                       | `true`           |
+| `dataCoord.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                 | `1001`           |
+| `dataCoord.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                              | `true`           |
+| `dataCoord.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                | `false`          |
+| `dataCoord.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                    | `true`           |
+| `dataCoord.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                  | `false`          |
+| `dataCoord.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                         | `["ALL"]`        |
+| `dataCoord.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                           | `RuntimeDefault` |
 | `dataCoord.lifecycleHooks`                                    | for the data coordinator container(s) to automate configuration before or after startup                    | `{}`             |
 | `dataCoord.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                             | `""`             |
 | `dataCoord.hostAliases`                                       | data coordinator pods host aliases                                                                         | `[]`             |
@@ -314,13 +316,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rootCoord.resources.requests`                                | The requested resources for the data coordinator containers                                                | `{}`             |
 | `rootCoord.podSecurityContext.enabled`                        | Enabled Root Coordinator pods' Security Context                                                            | `true`           |
 | `rootCoord.podSecurityContext.fsGroup`                        | Set Root Coordinator pod's Security Context fsGroup                                                        | `1001`           |
-| `rootCoord.podSecurityContext.seccompProfile.type`            | Set Root Coordinator container's Security Context seccomp profile                                          | `RuntimeDefault` |
-| `rootCoord.containerSecurityContext.enabled`                  | Enabled Root Coordinator containers' Security Context                                                      | `true`           |
-| `rootCoord.containerSecurityContext.runAsUser`                | Set Root Coordinator containers' Security Context runAsUser                                                | `1001`           |
-| `rootCoord.containerSecurityContext.runAsNonRoot`             | Set Root Coordinator containers' Security Context runAsNonRoot                                             | `true`           |
-| `rootCoord.containerSecurityContext.readOnlyRootFilesystem`   | Set Root Coordinator containers' Security Context runAsNonRoot                                             | `true`           |
-| `rootCoord.containerSecurityContext.allowPrivilegeEscalation` | Set Root Coordinator container's privilege escalation                                                      | `false`          |
-| `rootCoord.containerSecurityContext.capabilities.drop`        | Set Root Coordinator container's Security Context runAsNonRoot                                             | `["ALL"]`        |
+| `rootCoord.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                       | `true`           |
+| `rootCoord.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                 | `1001`           |
+| `rootCoord.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                              | `true`           |
+| `rootCoord.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                | `false`          |
+| `rootCoord.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                    | `true`           |
+| `rootCoord.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                  | `false`          |
+| `rootCoord.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                         | `["ALL"]`        |
+| `rootCoord.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                           | `RuntimeDefault` |
 | `rootCoord.lifecycleHooks`                                    | for the data coordinator container(s) to automate configuration before or after startup                    | `{}`             |
 | `rootCoord.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                             | `""`             |
 | `rootCoord.hostAliases`                                       | data coordinator pods host aliases                                                                         | `[]`             |
@@ -453,13 +456,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryCoord.resources.requests`                                | The requested resources for the data coordinator containers                                                | `{}`             |
 | `queryCoord.podSecurityContext.enabled`                        | Enabled Query Coordinator pods' Security Context                                                           | `true`           |
 | `queryCoord.podSecurityContext.fsGroup`                        | Set Query Coordinator pod's Security Context fsGroup                                                       | `1001`           |
-| `queryCoord.podSecurityContext.seccompProfile.type`            | Set Query Coordinator container's Security Context seccomp profile                                         | `RuntimeDefault` |
-| `queryCoord.containerSecurityContext.enabled`                  | Enabled Query Coordinator containers' Security Context                                                     | `true`           |
-| `queryCoord.containerSecurityContext.runAsUser`                | Set Query Coordinator containers' Security Context runAsUser                                               | `1001`           |
-| `queryCoord.containerSecurityContext.runAsNonRoot`             | Set Query Coordinator containers' Security Context runAsNonRoot                                            | `true`           |
-| `queryCoord.containerSecurityContext.readOnlyRootFilesystem`   | Set Query Coordinator containers' Security Context runAsNonRoot                                            | `true`           |
-| `queryCoord.containerSecurityContext.allowPrivilegeEscalation` | Set Query Coordinator container's privilege escalation                                                     | `false`          |
-| `queryCoord.containerSecurityContext.capabilities.drop`        | Set Query Coordinator container's Security Context runAsNonRoot                                            | `["ALL"]`        |
+| `queryCoord.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                       | `true`           |
+| `queryCoord.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                 | `1001`           |
+| `queryCoord.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                              | `true`           |
+| `queryCoord.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                | `false`          |
+| `queryCoord.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                    | `true`           |
+| `queryCoord.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                  | `false`          |
+| `queryCoord.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                         | `["ALL"]`        |
+| `queryCoord.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                           | `RuntimeDefault` |
 | `queryCoord.lifecycleHooks`                                    | for the data coordinator container(s) to automate configuration before or after startup                    | `{}`             |
 | `queryCoord.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                             | `""`             |
 | `queryCoord.hostAliases`                                       | data coordinator pods host aliases                                                                         | `[]`             |
@@ -592,13 +596,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexCoord.resources.requests`                                | The requested resources for the data coordinator containers                                                | `{}`             |
 | `indexCoord.podSecurityContext.enabled`                        | Enabled Index Coordinator pods' Security Context                                                           | `true`           |
 | `indexCoord.podSecurityContext.fsGroup`                        | Set Index Coordinator pod's Security Context fsGroup                                                       | `1001`           |
-| `indexCoord.podSecurityContext.seccompProfile.type`            | Set Index Coordinator container's Security Context seccomp profile                                         | `RuntimeDefault` |
-| `indexCoord.containerSecurityContext.enabled`                  | Enabled Index Coordinator containers' Security Context                                                     | `true`           |
-| `indexCoord.containerSecurityContext.runAsUser`                | Set Index Coordinator containers' Security Context runAsUser                                               | `1001`           |
-| `indexCoord.containerSecurityContext.runAsNonRoot`             | Set Index Coordinator containers' Security Context runAsNonRoot                                            | `true`           |
-| `indexCoord.containerSecurityContext.readOnlyRootFilesystem`   | Set Index Coordinator containers' Security Context runAsNonRoot                                            | `true`           |
-| `indexCoord.containerSecurityContext.allowPrivilegeEscalation` | Set Index Coordinator container's privilege escalation                                                     | `false`          |
-| `indexCoord.containerSecurityContext.capabilities.drop`        | Set Index Coordinator container's Security Context runAsNonRoot                                            | `["ALL"]`        |
+| `indexCoord.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                       | `true`           |
+| `indexCoord.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                 | `1001`           |
+| `indexCoord.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                              | `true`           |
+| `indexCoord.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                | `false`          |
+| `indexCoord.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                    | `true`           |
+| `indexCoord.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                  | `false`          |
+| `indexCoord.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                         | `["ALL"]`        |
+| `indexCoord.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                           | `RuntimeDefault` |
 | `indexCoord.lifecycleHooks`                                    | for the data coordinator container(s) to automate configuration before or after startup                    | `{}`             |
 | `indexCoord.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                             | `""`             |
 | `indexCoord.hostAliases`                                       | data coordinator pods host aliases                                                                         | `[]`             |
@@ -731,13 +736,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataNode.resources.requests`                                | The requested resources for the data node containers                                                | `{}`             |
 | `dataNode.podSecurityContext.enabled`                        | Enabled Data Node pods' Security Context                                                            | `true`           |
 | `dataNode.podSecurityContext.fsGroup`                        | Set Data Node pod's Security Context fsGroup                                                        | `1001`           |
-| `dataNode.podSecurityContext.seccompProfile.type`            | Set Data Node container's Security Context seccomp profile                                          | `RuntimeDefault` |
-| `dataNode.containerSecurityContext.enabled`                  | Enabled Data Node containers' Security Context                                                      | `true`           |
-| `dataNode.containerSecurityContext.runAsUser`                | Set Data Node containers' Security Context runAsUser                                                | `1001`           |
-| `dataNode.containerSecurityContext.runAsNonRoot`             | Set Data Node containers' Security Context runAsNonRoot                                             | `true`           |
-| `dataNode.containerSecurityContext.readOnlyRootFilesystem`   | Set Data Node containers' Security Context runAsNonRoot                                             | `true`           |
-| `dataNode.containerSecurityContext.allowPrivilegeEscalation` | Set Data Node container's privilege escalation                                                      | `false`          |
-| `dataNode.containerSecurityContext.capabilities.drop`        | Set Data Node container's Security Context runAsNonRoot                                             | `["ALL"]`        |
+| `dataNode.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                | `true`           |
+| `dataNode.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                          | `1001`           |
+| `dataNode.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                       | `true`           |
+| `dataNode.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                         | `false`          |
+| `dataNode.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                             | `true`           |
+| `dataNode.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                           | `false`          |
+| `dataNode.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                  | `["ALL"]`        |
+| `dataNode.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                    | `RuntimeDefault` |
 | `dataNode.lifecycleHooks`                                    | for the data node container(s) to automate configuration before or after startup                    | `{}`             |
 | `dataNode.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                      | `""`             |
 | `dataNode.hostAliases`                                       | data node pods host aliases                                                                         | `[]`             |
@@ -870,13 +876,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryNode.resources.requests`                                | The requested resources for the data node containers                                                | `{}`             |
 | `queryNode.podSecurityContext.enabled`                        | Enabled Query Node pods' Security Context                                                           | `true`           |
 | `queryNode.podSecurityContext.fsGroup`                        | Set Query Node pod's Security Context fsGroup                                                       | `1001`           |
-| `queryNode.podSecurityContext.seccompProfile.type`            | Set Query Node container's Security Context seccomp profile                                         | `RuntimeDefault` |
-| `queryNode.containerSecurityContext.enabled`                  | Enabled Query Node containers' Security Context                                                     | `true`           |
-| `queryNode.containerSecurityContext.runAsUser`                | Set Query Node containers' Security Context runAsUser                                               | `1001`           |
-| `queryNode.containerSecurityContext.runAsNonRoot`             | Set Query Node containers' Security Context runAsNonRoot                                            | `true`           |
-| `queryNode.containerSecurityContext.readOnlyRootFilesystem`   | Set Query Node containers' Security Context runAsNonRoot                                            | `true`           |
-| `queryNode.containerSecurityContext.allowPrivilegeEscalation` | Set Query Node container's privilege escalation                                                     | `false`          |
-| `queryNode.containerSecurityContext.capabilities.drop`        | Set Query Node container's Security Context runAsNonRoot                                            | `["ALL"]`        |
+| `queryNode.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                | `true`           |
+| `queryNode.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                          | `1001`           |
+| `queryNode.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                       | `true`           |
+| `queryNode.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                         | `false`          |
+| `queryNode.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                             | `true`           |
+| `queryNode.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                           | `false`          |
+| `queryNode.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                  | `["ALL"]`        |
+| `queryNode.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                    | `RuntimeDefault` |
 | `queryNode.lifecycleHooks`                                    | for the data node container(s) to automate configuration before or after startup                    | `{}`             |
 | `queryNode.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                      | `""`             |
 | `queryNode.hostAliases`                                       | data node pods host aliases                                                                         | `[]`             |
@@ -1009,13 +1016,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexNode.resources.requests`                                | The requested resources for the data node containers                                                | `{}`             |
 | `indexNode.podSecurityContext.enabled`                        | Enabled Index Node pods' Security Context                                                           | `true`           |
 | `indexNode.podSecurityContext.fsGroup`                        | Set Index Node pod's Security Context fsGroup                                                       | `1001`           |
-| `indexNode.podSecurityContext.seccompProfile.type`            | Set Index Node container's Security Context seccomp profile                                         | `RuntimeDefault` |
-| `indexNode.containerSecurityContext.enabled`                  | Enabled Index Node containers' Security Context                                                     | `true`           |
-| `indexNode.containerSecurityContext.runAsUser`                | Set Index Node containers' Security Context runAsUser                                               | `1001`           |
-| `indexNode.containerSecurityContext.runAsNonRoot`             | Set Index Node containers' Security Context runAsNonRoot                                            | `true`           |
-| `indexNode.containerSecurityContext.readOnlyRootFilesystem`   | Set Index Node containers' Security Context runAsNonRoot                                            | `true`           |
-| `indexNode.containerSecurityContext.allowPrivilegeEscalation` | Set Index Node container's privilege escalation                                                     | `false`          |
-| `indexNode.containerSecurityContext.capabilities.drop`        | Set Index Node container's Security Context runAsNonRoot                                            | `["ALL"]`        |
+| `indexNode.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                | `true`           |
+| `indexNode.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                          | `1001`           |
+| `indexNode.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                       | `true`           |
+| `indexNode.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                         | `false`          |
+| `indexNode.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                             | `true`           |
+| `indexNode.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                           | `false`          |
+| `indexNode.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                  | `["ALL"]`        |
+| `indexNode.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                    | `RuntimeDefault` |
 | `indexNode.lifecycleHooks`                                    | for the data node container(s) to automate configuration before or after startup                    | `{}`             |
 | `indexNode.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                      | `""`             |
 | `indexNode.hostAliases`                                       | data node pods host aliases                                                                         | `[]`             |
@@ -1149,13 +1157,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.resources.requests`                                | The requested resources for the proxy containers                                                | `{}`             |
 | `proxy.podSecurityContext.enabled`                        | Enabled Proxy pods' Security Context                                                            | `true`           |
 | `proxy.podSecurityContext.fsGroup`                        | Set Proxy pod's Security Context fsGroup                                                        | `1001`           |
-| `proxy.podSecurityContext.seccompProfile.type`            | Set Proxy container's Security Context seccomp profile                                          | `RuntimeDefault` |
-| `proxy.containerSecurityContext.enabled`                  | Enabled Proxy containers' Security Context                                                      | `true`           |
-| `proxy.containerSecurityContext.runAsUser`                | Set Proxy containers' Security Context runAsUser                                                | `1001`           |
-| `proxy.containerSecurityContext.runAsNonRoot`             | Set Proxy containers' Security Context runAsNonRoot                                             | `true`           |
-| `proxy.containerSecurityContext.readOnlyRootFilesystem`   | Set Proxy containers' Security Context runAsNonRoot                                             | `true`           |
-| `proxy.containerSecurityContext.allowPrivilegeEscalation` | Set Proxy container's privilege escalation                                                      | `false`          |
-| `proxy.containerSecurityContext.capabilities.drop`        | Set Proxy container's Security Context runAsNonRoot                                             | `["ALL"]`        |
+| `proxy.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                            | `true`           |
+| `proxy.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                      | `1001`           |
+| `proxy.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                   | `true`           |
+| `proxy.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                     | `false`          |
+| `proxy.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                         | `true`           |
+| `proxy.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                       | `false`          |
+| `proxy.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                              | `["ALL"]`        |
+| `proxy.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                | `RuntimeDefault` |
 | `proxy.lifecycleHooks`                                    | for the proxy container(s) to automate configuration before or after startup                    | `{}`             |
 | `proxy.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                  | `""`             |
 | `proxy.hostAliases`                                       | proxy pods host aliases                                                                         | `[]`             |
@@ -1289,13 +1298,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `attu.resources.requests`                                | The requested resources for the attu containers                                                      | `{}`                   |
 | `attu.podSecurityContext.enabled`                        | Enabled Attu pods' Security Context                                                                  | `true`                 |
 | `attu.podSecurityContext.fsGroup`                        | Set Attu pod's Security Context fsGroup                                                              | `1001`                 |
-| `attu.podSecurityContext.seccompProfile.type`            | Set Attu container's Security Context seccomp profile                                                | `RuntimeDefault`       |
-| `attu.containerSecurityContext.enabled`                  | Enabled Attu containers' Security Context                                                            | `true`                 |
-| `attu.containerSecurityContext.runAsUser`                | Set Attu containers' Security Context runAsUser                                                      | `1001`                 |
-| `attu.containerSecurityContext.runAsNonRoot`             | Set Attu containers' Security Context runAsNonRoot                                                   | `true`                 |
-| `attu.containerSecurityContext.readOnlyRootFilesystem`   | Set Attu containers' Security Context runAsNonRoot                                                   | `true`                 |
-| `attu.containerSecurityContext.allowPrivilegeEscalation` | Set Attu container's privilege escalation                                                            | `false`                |
-| `attu.containerSecurityContext.capabilities.drop`        | Set Attu container's Security Context runAsNonRoot                                                   | `["ALL"]`              |
+| `attu.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                 | `true`                 |
+| `attu.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                           | `1001`                 |
+| `attu.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                        | `true`                 |
+| `attu.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                          | `false`                |
+| `attu.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                              | `true`                 |
+| `attu.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                            | `false`                |
+| `attu.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                   | `["ALL"]`              |
+| `attu.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                     | `RuntimeDefault`       |
 | `attu.lifecycleHooks`                                    | for the attu container(s) to automate configuration before or after startup                          | `{}`                   |
 | `attu.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                       | `""`                   |
 | `attu.hostAliases`                                       | attu pods host aliases                                                                               | `[]`                   |
@@ -1389,20 +1399,26 @@ The command removes all the Kubernetes components associated with the chart and 
 | `waitContainer.image.digest`                                      | Init container wait-container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `waitContainer.image.pullPolicy`                                  | Init container wait-container image pull policy                                                                               | `IfNotPresent`             |
 | `waitContainer.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                              | `[]`                       |
-| `waitContainer.containerSecurityContext.enabled`                  | Enabled Milvus containers' Security Context                                                                                   | `true`                     |
-| `waitContainer.containerSecurityContext.runAsUser`                | Set Milvus containers' Security Context runAsUser                                                                             | `1001`                     |
-| `waitContainer.containerSecurityContext.runAsNonRoot`             | Set Milvus containers' Security Context runAsNonRoot                                                                          | `true`                     |
-| `waitContainer.containerSecurityContext.readOnlyRootFilesystem`   | Set Milvus containers' Security Context runAsNonRoot                                                                          | `true`                     |
-| `waitContainer.containerSecurityContext.allowPrivilegeEscalation` | Set Milvus container's privilege escalation                                                                                   | `false`                    |
-| `waitContainer.containerSecurityContext.capabilities.drop`        | Set Milvus container's Security Context runAsNonRoot                                                                          | `["ALL"]`                  |
+| `waitContainer.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                          | `true`                     |
+| `waitContainer.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                    | `1001`                     |
+| `waitContainer.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                 | `true`                     |
+| `waitContainer.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                   | `false`                    |
+| `waitContainer.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                       | `true`                     |
+| `waitContainer.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                     | `false`                    |
+| `waitContainer.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                            | `["ALL"]`                  |
+| `waitContainer.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                              | `RuntimeDefault`           |
 
-### External etcd parameters
+### External etcd settings
 
-| Name                           | Description                                 | Value   |
-| ------------------------------ | ------------------------------------------- | ------- |
-| `externalEtcd.servers`         | List of hostnames of the external etcd      | `[]`    |
-| `externalEtcd.port`            | Port of the external etcd instance          | `2379`  |
-| `externalEtcd.secureTransport` | Use TLS for client-to-server communications | `false` |
+| Name                                     | Description                                                 | Value                |
+| ---------------------------------------- | ----------------------------------------------------------- | -------------------- |
+| `externalEtcd.servers`                   | List of hostnames of the external etcd                      | `[]`                 |
+| `externalEtcd.port`                      | Port of the external etcd instance                          | `2379`               |
+| `externalEtcd.user`                      | User of the external etcd instance                          | `root`               |
+| `externalEtcd.password`                  | Password of the external etcd instance                      | `""`                 |
+| `externalEtcd.existingSecret`            | Name of a secret containing the external etcd password      | `""`                 |
+| `externalEtcd.existingSecretPasswordKey` | Key inside the secret containing the external etcd password | `etcd-root-password` |
+| `externalEtcd.secureTransport`           | Use TLS for client-to-server communications                 | `false`              |
 
 ### External S3 parameters
 
