@@ -104,62 +104,25 @@ image:
 environment: production
 ## @param adminUser Mastodon admin username
 ##
-adminUser: user
+adminUser: ""
 ## @param adminEmail Mastodon admin email
 ##
-adminEmail: user@changeme.com
+adminEmail: ""
 ## @param adminPassword Mastodon admin password
 ##
 adminPassword: ""
-
-## @param defaultConfig [string] Default configuration for Mastodon in the form of environment variables
+## @param otpSecret Mastodon one time password secret. Generate with rake secret. Changing it will break two-factor authentication.
 ##
-defaultConfig: |
-  MASTODON_ADMIN_USERNAME: {{ .Values.adminUser | quote }}
-  MASTODON_ADMIN_EMAIL: {{ .Values.adminEmail | quote }}
-  DB_HOST: {{ include "mastodon.database.host" . | quote }}
-  DB_PORT: {{ include "mastodon.database.port" . | quote }}
-  DB_NAME: {{ include "mastodon.database.name" . | quote }}
-  DB_USER: {{ include "mastodon.database.user" . | quote }}
-  ES_ENABLED: {{ .Values.enableSearches | quote }}
-  ES_HOST: {{ include "mastodon.elasticsearch.host" . | quote }}
-  ES_PORT: {{ include "mastodon.elasticsearch.port" . | quote }}
-  WEB_DOMAIN: {{ include "mastodon.web.domain" . | quote }}
-  LOCAL_DOMAIN: {{ .Values.localDomain | quote }}
-  LOCAL_HTTPS: {{ .Values.local_https | quote }}
-  DEFAULT_LOCALE: {{ .Values.defaultLocale | quote }}
-  STREAMING_API_BASE_URL: {{ include "mastodon.streaming.url" . | quote }}
-  REDIS_HOST: {{ include "mastodon.redis.host" . | quote }}
-  REDIS_PORT: {{ include "mastodon.redis.port" . | quote }}
-  SMTP_SERVER: {{ .Values.smtp.server | quote }}
-  SMTP_PORT: {{ .Values.smtp.port | quote }}
-  SMTP_FROM_ADDRESS: {{ .Values.smtp.from_address | quote }}
-  SMTP_DOMAIN: {{ .Values.smtp.domain | quote }}
-  SMTP_REPLY_TO: {{ .Values.smtp.reply_to | quote }}
-  SMTP_DELIVERY_METHOD: {{ .Values.smtp.delivery_method | quote }}
-  SMTP_CA_FILE: {{ .Values.smtp.ca_file | quote }}
-  SMTP_OPENSSL_VERIFY_MODE: {{ .Values.smtp.openssl_verify_mode | quote }}
-  SMTP_ENABLE_STARTTLS_AUTO: {{ .Values.smtp.enable_starttls_auto | quote }}
-  SMTP_TLS: {{ .Values.smtp.tls | quote }}
-  SMTP_AUTH_METHOD: {{ .Values.smtp.auth_method | quote }}
-  RAILS_ENV: {{ .Values.environment | quote }}
-  NODE_ENV: {{ .Values.environment | quote }}
-  {{- if .Values.enableS3 }}
-  S3_ENABLED: "true"
-  S3_BUCKET: {{ include "mastodon.s3.bucket" . | quote }}
-  S3_ENDPOINT: {{ include "mastodon.s3.endpoint" . | quote }}
-  S3_HOSTNAME: {{ include "mastodon.s3.host" . | quote }}
-  S3_REGION: {{ include "mastodon.s3.region" . | quote }}
-  S3_ALIAS_HOST: {{ include "mastodon.s3.aliasHost" . | quote }}
-  S3_PROTOCOL: {{ include "mastodon.s3.protocol.setting" . | quote }}
-  {{- end }}
-
-## @param defaultSecretConfig [string] Default secret configuration for Mastodon in the form of environment variables
+otpSecret: ""
+## @param secretKeyBase Mastodon secret key base. Generate with rake secret. Changing it will break all active browser sessions.
 ##
-defaultSecretConfig: |
-  MASTODON_ADMIN_PASSWORD: {{ include "common.secrets.passwords.manage" (dict "secret" (printf "%s-default" (include "common.names.fullname" .)) "key" "MASTODON_ADMIN_PASSWORD" "providedValues" (list "adminPassword") "context" $) }}
-  SECRET_KEY_BASE: {{ include "common.secrets.passwords.manage" (dict "secret" (printf "%s-default" (include "common.names.fullname" .)) "key" "SECRET_KEY_BASE" "providedValues" (list "secretKeyBase") "context" $) }}
-  OTP_SECRET: {{ include "common.secrets.passwords.manage" (dict "secret" (printf "%s-default" (include "common.names.fullname" .)) "key" "OTP_SECRET" "providedValues" (list "otpSecret") "context" $) }}
+secretKeyBase: ""
+## @param vapidPrivateKey Mastodon vapid private key. Generate with rake mastodon:webpush:generate_vapid_key. Changing it will break push notifications.
+##
+vapidPrivateKey: ""
+## @param vapidPublicKey Mastodon vapid public key. Generate with rake mastodon:webpush:generate_vapid_key. Changing it will break push notifications.
+##
+vapidPublicKey: ""
 
 ## @param extraConfig Extra configuration for Mastodon in the form of environment variables
 ##
@@ -273,6 +236,9 @@ smtp:
   ## @param smtp.existingSecretPasswordKey Name of the key for the SMTP password credential
   ## stored in the existingSecret resource
   existingSecretPasswordKey: ""
+  ## @param smtp.existingSecretServerKey Name of the key for the SMTP hostname
+  ## stored in the existingSecret resource
+  existingSecretServerKey: ""
 
 ## @section Mastodon Web Parameters
 ##
@@ -349,30 +315,32 @@ web:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param web.podSecurityContext.enabled Enabled Mastodon web pods' Security Context
   ## @param web.podSecurityContext.fsGroup Set Mastodon web pod's Security Context fsGroup
-  ## @param web.podSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param web.containerSecurityContext.enabled Enabled Mastodon web containers' Security Context
-  ## @param web.containerSecurityContext.runAsUser Set Mastodon web containers' Security Context runAsUser
-  ## @param web.containerSecurityContext.runAsNonRoot Set Mastodon web containers' Security Context runAsNonRoot
-  ## @param web.containerSecurityContext.readOnlyRootFilesystem Set Mastodon web containers' Security Context runAsNonRoot
-  ## @param web.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
-  ## @param web.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ## @param web.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param web.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param web.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param web.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param web.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param web.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param web.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param web.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param web.command Override default container command (useful when using custom images)
   ##
@@ -625,30 +593,32 @@ sidekiq:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param sidekiq.podSecurityContext.enabled Enabled Mastodon sidekiq pods' Security Context
   ## @param sidekiq.podSecurityContext.fsGroup Set Mastodon sidekiq pod's Security Context fsGroup
-  ## @param sidekiq.podSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param sidekiq.containerSecurityContext.enabled Enabled Mastodon sidekiq containers' Security Context
-  ## @param sidekiq.containerSecurityContext.runAsUser Set Mastodon sidekiq containers' Security Context runAsUser
-  ## @param sidekiq.containerSecurityContext.runAsNonRoot Set Mastodon sidekiq containers' Security Context runAsNonRoot
-  ## @param sidekiq.containerSecurityContext.readOnlyRootFilesystem Set Mastodon sidekiq containers' Security Context runAsNonRoot
-  ## @param sidekiq.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
-  ## @param sidekiq.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ## @param sidekiq.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param sidekiq.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param sidekiq.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param sidekiq.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param sidekiq.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param sidekiq.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param sidekiq.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param sidekiq.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param sidekiq.command Override default container command (useful when using custom images)
   ##
@@ -851,30 +821,32 @@ streaming:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param streaming.podSecurityContext.enabled Enabled Mastodon streaming pods' Security Context
   ## @param streaming.podSecurityContext.fsGroup Set Mastodon streaming pod's Security Context fsGroup
-  ## @param streaming.podSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param streaming.containerSecurityContext.enabled Enabled Mastodon streaming containers' Security Context
-  ## @param streaming.containerSecurityContext.runAsUser Set Mastodon streaming containers' Security Context runAsUser
-  ## @param streaming.containerSecurityContext.runAsNonRoot Set Mastodon streaming containers' Security Context runAsNonRoot
-  ## @param streaming.containerSecurityContext.readOnlyRootFilesystem Set Mastodon streaming containers' Security Context runAsNonRoot
-  ## @param streaming.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
-  ## @param streaming.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ## @param streaming.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param streaming.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param streaming.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param streaming.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param streaming.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param streaming.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param streaming.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param streaming.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param streaming.command Override default container command (useful when using custom images)
   ##
@@ -1117,32 +1089,34 @@ initJob:
 
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param initJob.containerSecurityContext.enabled Enabled Mastodon init job containers' Security Context
-  ## @param initJob.containerSecurityContext.runAsUser Set Mastodon init job containers' Security Context runAsUser
-  ## @param initJob.containerSecurityContext.runAsNonRoot Set Mastodon init job containers' Security Context runAsNonRoot
-  ## @param initJob.containerSecurityContext.readOnlyRootFilesystem Set Mastodon init job containers' Security Context runAsNonRoot
-  ## @param initJob.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
-  ## @param initJob.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ## @param initJob.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param initJob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param initJob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param initJob.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param initJob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param initJob.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param initJob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param initJob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param initJob.podSecurityContext.enabled Enabled Mastodon init job pods' Security Context
   ## @param initJob.podSecurityContext.fsGroup Set Mastodon init job pod's Security Context fsGroup
-  ## @param initJob.podSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## @param initJob.extraEnvVars Array containing extra env vars to configure the Mastodon init job
   ## For example:
   ## extraEnvVars:

@@ -287,13 +287,25 @@ podSecurityContext:
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled Cassandra containers' Security Context
-## @param containerSecurityContext.runAsUser Set Cassandra container's Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Force the container to be run as non root
+## @param containerSecurityContext.runAsUser Set Cassandra containers' Security Context runAsUser
+## @param containerSecurityContext.allowPrivilegeEscalation Set Cassandra containers' Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop Set Cassandra containers' Security Context capabilities to be dropped
+## @param containerSecurityContext.readOnlyRootFilesystem Set Cassandra containers' Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.runAsNonRoot Set Cassandra containers' Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
+  readOnlyRootFilesystem: false
 ## Cassandra pods' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## Minimum memory for development is 4GB and 2 CPU cores
