@@ -120,7 +120,7 @@ secretKeyBase: ""
 ## @param vapidPrivateKey Mastodon vapid private key. Generate with rake mastodon:webpush:generate_vapid_key. Changing it will break push notifications.
 ##
 vapidPrivateKey: ""
-## @param vapidPublicKey Mastdon vapid public key. Generate with rake mastodon:webpush:generate_vapid_key. Changing it will break push notifications.
+## @param vapidPublicKey Mastodon vapid public key. Generate with rake mastodon:webpush:generate_vapid_key. Changing it will break push notifications.
 ##
 vapidPublicKey: ""
 
