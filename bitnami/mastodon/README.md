@@ -101,7 +101,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `otpSecret`                      | Mastodon one time password secret. Generate with rake secret. Changing it will break two-factor authentication.                | `""`                                 |
 | `secretKeyBase`                  | Mastodon secret key base. Generate with rake secret. Changing it will break all active browser sessions.                       | `""`                                 |
 | `vapidPrivateKey`                | Mastodon vapid private key. Generate with rake mastodon:webpush:generate_vapid_key. Changing it will break push notifications. | `""`                                 |
-| `vapidPublicKey`                 | Mastodon vapid public key. Generate with rake mastodon:webpush:generate_vapid_key. Changing it will break push notifications.   | `""`                                 |
+| `vapidPublicKey`                 | Mastodon vapid public key. Generate with rake mastodon:webpush:generate_vapid_key. Changing it will break push notifications.  | `""`                                 |
 | `extraConfig`                    | Extra configuration for Mastodon in the form of environment variables                                                          | `{}`                                 |
 | `extraSecretConfig`              | Extra secret configuration for Mastodon in the form of environment variables                                                   | `{}`                                 |
 | `existingConfigmap`              | The name of an existing ConfigMap with your default configuration for Mastodon                                                 | `""`                                 |
