@@ -192,7 +192,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.create`                                        | Deploy a pdb object for the ZooKeeper pod                                                                                                                                                         | `false`         |
 | `pdb.minAvailable`                                  | Minimum available ZooKeeper replicas                                                                                                                                                              | `""`            |
 | `pdb.maxUnavailable`                                | Maximum unavailable ZooKeeper replicas                                                                                                                                                            | `1`             |
-| `enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                       | `true`             |
+| `enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                             | `true`          |
+
 ### Traffic Exposure parameters
 
 | Name                                        | Description                                                                             | Value       |
