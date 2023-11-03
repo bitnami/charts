@@ -742,6 +742,25 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mongodb --set auth.r
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > Note: you need to substitute the placeholders [PASSWORD] and [REPLICASETKEY] with the values obtained in the installation notes.
 
+### To 15.0.0
+
+This major release adds common labels to the StatefulSet PersistentVolumeClaim template. Due to this change, the StatefulSet will be replaced (as it's not possible to change an existing StatefulSet `spec.volumeClaimTemplates`) and the pods will be recreated. To upgrade to this version from a previous version, you need to run the following steps:
+
+1. Add common labels to your Persistent Volume Claims
+
+    ```console
+    kubectl label persistentvolumeclaim datadir-my-release-0 common-label1=value common-label2=value
+    # Repeat for all Persistent Volume Claims, based on configured .replicaCount
+    ````
+
+2. Remove the StatefulSet keeping the dependent objects:
+
+    ```console
+    kubectl delete statefulset my-release --cascade=orphan
+    ```
+
+3. Upgrade your release to chart version 15.0.0.
+
 ### To 12.0.0
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
