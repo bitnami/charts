@@ -157,6 +157,11 @@ spec:
                   key: {{ include "mastodon.elasticsearch.passwordKey" . | quote }}
             {{- end }}
             {{- if ne .Values.smtp.auth_method "none" }}
+            - name: SMTP_SERVER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.smtp.secretName" . }}
+                  key: {{ include "mastodon.smtp.serverKey" . | quote }}
             - name: SMTP_LOGIN
               valueFrom:
                 secretKeyRef:
