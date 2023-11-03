@@ -109,66 +109,71 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Jasperreports deployment parameters
 
-| Name                                    | Description                                                                               | Value                      |
-| --------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------- |
-| `hostAliases`                           | Add deployment host aliases                                                               | `[]`                       |
-| `containerPorts.http`                   | HTTP port to expose at container level                                                    | `8080`                     |
-| `dnsConfig`                             | Pod DNS configuration.                                                                    | `{}`                       |
-| `podSecurityContext.enabled`            | Enable pod's Security Context                                                             | `true`                     |
-| `podSecurityContext.fsGroup`            | Set pod's Security Context fsGroup                                                        | `1001`                     |
-| `containerSecurityContext.enabled`      | Enable container's Security Context                                                       | `true`                     |
-| `containerSecurityContext.runAsUser`    | Set container's Security Context runAsUser                                                | `1001`                     |
-| `containerSecurityContext.runAsNonRoot` | Set container's Security Context runAsNonRoot                                             | `true`                     |
-| `resources.limits`                      | The resources limits for the Jasperreports container                                      | `{}`                       |
-| `resources.requests`                    | The requested resources for the Jasperreports container                                   | `{}`                       |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`                    |
-| `startupProbe.path`                     | Request path for startupProbe                                                             | `/jasperserver/login.html` |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `450`                      |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`                       |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `5`                        |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `6`                        |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`                        |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`                     |
-| `livenessProbe.path`                    | Request path for livenessProbe                                                            | `/jasperserver/login.html` |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `450`                      |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`                       |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `5`                        |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `6`                        |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`                        |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`                     |
-| `readinessProbe.path`                   | Request path for readinessProbe                                                           | `/jasperserver/login.html` |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `30`                       |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `10`                       |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `5`                        |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `6`                        |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`                        |
-| `customStartupProbe`                    | Override default startup probe                                                            | `{}`                       |
-| `customLivenessProbe`                   | Override default liveness probe                                                           | `{}`                       |
-| `customReadinessProbe`                  | Override default readiness probe                                                          | `{}`                       |
-| `podLabels`                             | Extra labels for Jasperreports pods                                                       | `{}`                       |
-| `podAnnotations`                        | Annotations for Jasperreports pods                                                        | `{}`                       |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                       |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                     |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                       |
-| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                    | `""`                       |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                       |
-| `affinity`                              | Affinity for pod assignment                                                               | `{}`                       |
-| `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`                       |
-| `tolerations`                           | Tolerations for pod assignment                                                            | `[]`                       |
-| `priorityClassName`                     | JasperReports pods' priorityClassName                                                     | `""`                       |
-| `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`                       |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`                       |
-| `lifecycleHooks`                        | LifecycleHooks to set additional configuration at startup.                                | `{}`                       |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes for Jasperreports pods                | `[]`                       |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Jasperreports container(s)   | `[]`                       |
-| `initContainers`                        | Add additional init containers to the Jasperreports pods                                  | `[]`                       |
-| `sidecars`                              | Add additional sidecar containers to the Jasperreports pods                               | `[]`                       |
-| `persistence.enabled`                   | Enable persistence using PVC                                                              | `true`                     |
-| `persistence.storageClass`              | PVC Storage Class for Jasperreports volume                                                | `""`                       |
-| `persistence.accessModes`               | Persistent Volume Access Mode                                                             | `["ReadWriteOnce"]`        |
-| `persistence.size`                      | PVC Storage Request for Jasperreports volume                                              | `8Gi`                      |
-| `persistence.existingClaim`             | An Existing PVC name for Jasperreports volume                                             | `""`                       |
-| `persistence.annotations`               | Persistent Volume Claim annotations                                                       | `{}`                       |
+| Name                                                | Description                                                                               | Value                      |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------- |
+| `hostAliases`                                       | Add deployment host aliases                                                               | `[]`                       |
+| `containerPorts.http`                               | HTTP port to expose at container level                                                    | `8080`                     |
+| `dnsConfig`                                         | Pod DNS configuration.                                                                    | `{}`                       |
+| `podSecurityContext.enabled`                        | Enable pod's Security Context                                                             | `true`                     |
+| `podSecurityContext.fsGroup`                        | Set pod's Security Context fsGroup                                                        | `1001`                     |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`                     |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`                     |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`                     |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`                    |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                   | `false`                    |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                 | `false`                    |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                        | `["ALL"]`                  |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                          | `RuntimeDefault`           |
+| `resources.limits`                                  | The resources limits for the Jasperreports container                                      | `{}`                       |
+| `resources.requests`                                | The requested resources for the Jasperreports container                                   | `{}`                       |
+| `startupProbe.enabled`                              | Enable startupProbe                                                                       | `false`                    |
+| `startupProbe.path`                                 | Request path for startupProbe                                                             | `/jasperserver/login.html` |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                    | `450`                      |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                           | `10`                       |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                          | `5`                        |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                        | `6`                        |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                        | `1`                        |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                      | `true`                     |
+| `livenessProbe.path`                                | Request path for livenessProbe                                                            | `/jasperserver/login.html` |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                   | `450`                      |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                          | `10`                       |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                         | `5`                        |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                       | `6`                        |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                       | `1`                        |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                     | `true`                     |
+| `readinessProbe.path`                               | Request path for readinessProbe                                                           | `/jasperserver/login.html` |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                  | `30`                       |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                         | `10`                       |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                        | `5`                        |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                      | `6`                        |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                      | `1`                        |
+| `customStartupProbe`                                | Override default startup probe                                                            | `{}`                       |
+| `customLivenessProbe`                               | Override default liveness probe                                                           | `{}`                       |
+| `customReadinessProbe`                              | Override default readiness probe                                                          | `{}`                       |
+| `podLabels`                                         | Extra labels for Jasperreports pods                                                       | `{}`                       |
+| `podAnnotations`                                    | Annotations for Jasperreports pods                                                        | `{}`                       |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                       |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                     |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                       |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set.                                    | `""`                       |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                       |
+| `affinity`                                          | Affinity for pod assignment                                                               | `{}`                       |
+| `nodeSelector`                                      | Node labels for pod assignment                                                            | `{}`                       |
+| `tolerations`                                       | Tolerations for pod assignment                                                            | `[]`                       |
+| `priorityClassName`                                 | JasperReports pods' priorityClassName                                                     | `""`                       |
+| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                            | `""`                       |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`                       |
+| `lifecycleHooks`                                    | LifecycleHooks to set additional configuration at startup.                                | `{}`                       |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for Jasperreports pods                | `[]`                       |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Jasperreports container(s)   | `[]`                       |
+| `initContainers`                                    | Add additional init containers to the Jasperreports pods                                  | `[]`                       |
+| `sidecars`                                          | Add additional sidecar containers to the Jasperreports pods                               | `[]`                       |
+| `persistence.enabled`                               | Enable persistence using PVC                                                              | `true`                     |
+| `persistence.storageClass`                          | PVC Storage Class for Jasperreports volume                                                | `""`                       |
+| `persistence.accessModes`                           | Persistent Volume Access Mode                                                             | `["ReadWriteOnce"]`        |
+| `persistence.size`                                  | PVC Storage Request for Jasperreports volume                                              | `8Gi`                      |
+| `persistence.existingClaim`                         | An Existing PVC name for Jasperreports volume                                             | `""`                       |
+| `persistence.annotations`                           | Persistent Volume Claim annotations                                                       | `{}`                       |
 
 ### Exposure parameters
 
