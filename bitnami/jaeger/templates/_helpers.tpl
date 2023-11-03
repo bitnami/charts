@@ -32,9 +32,11 @@ Create the name of the query deployment
 Create a container for checking cassandra availability
 */}}
 {{- define "jaeger.waitForDBInitContainer" -}}
+{{- $context := .context }}
+{{- $block := index .context.Values .component }}
 - name: jaeger-cassandra-ready-check
-  image: {{ include "jaeger.cqlshImage" . }}
-  imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+  image: {{ include "jaeger.cqlshImage" .context }}
+  imagePullPolicy: {{ .context.Values.image.pullPolicy | quote }}
   command:
     - /bin/bash
   args:
@@ -61,20 +63,23 @@ Create a container for checking cassandra availability
       fi
   env:
     - name: CQLSH_HOST
-      value: {{ include "jaeger.cassandra.host" . }}
+      value: {{ include "jaeger.cassandra.host" .context }}
     - name: BITNAMI_DEBUG
-      value: {{ ternary "true" "false" .Values.cqlshImage.debug | quote }}
+      value: {{ ternary "true" "false" .context.Values.cqlshImage.debug | quote }}
     - name: CQLSH_PORT
-      value: {{ include "jaeger.cassandra.port" . }}
+      value: {{ include "jaeger.cassandra.port" .context }}
     - name: CASSANDRA_USERNAME
-      value: {{ include "jaeger.cassandra.user" . }}
+      value: {{ include "jaeger.cassandra.user" .context }}
     - name: CASSANDRA_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: {{ include "jaeger.cassandra.secretName" . }}
-          key: {{ include "jaeger.cassandra.secretKey" . }}
+          name: {{ include "jaeger.cassandra.secretName" .context }}
+          key: {{ include "jaeger.cassandra.secretKey" .context }}
     - name: CASSANDRA_KEYSPACE
-      value: {{ .Values.cassandra.keyspace }}
+      value: {{ .context.Values.cassandra.keyspace }}
+  {{- if $block.containerSecurityContext.enabled }}
+  securityContext: {{- omit $block.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  {{- end }}
 {{- end -}}
 
 {{/*

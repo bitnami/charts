@@ -160,22 +160,26 @@ podLabels: {}
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-## @param containerSecurityContext.enabled Enable container security context
-## @param containerSecurityContext.capabilities.add [array] Add capabilities for the securityContext
-## @param containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
-## @param containerSecurityContext.readOnlyRootFilesystem Allows the pod to mount the RootFS as ReadOnly only
-## @param containerSecurityContext.runAsNonRoot If the pod should run as a non root container.
-## @param containerSecurityContext.runAsUser Define the uid with which the pod will run
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
-  capabilities:
-    add: []
-    drop:
-      - ALL
-  readOnlyRootFilesystem: true
-  runAsNonRoot: true
   runAsUser: 1001
+  runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
