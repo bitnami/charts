@@ -299,6 +299,16 @@ azure:
   ## @param azure.userAssignedIdentityID When using the Azure provider with Azure MSI, set Client ID of Azure user-assigned managed identity (optional, otherwise system-assigned managed identity is used)
   ##
   userAssignedIdentityID: ""
+## Civo configuration to be set via arguments/env. variables
+##
+civo:
+  ## @param civo.apiToken When using the Civo provider, `CIVO_TOKEN` to set (optional)
+  ##
+  apiToken: ""
+  ## @param civo.secretName Use an existing secret with key "apiToken" defined.
+  ## This ignores civo.apiToken
+  ##
+  secretName: ""
 ## Cloudflare configuration to be set via arguments/env. variables
 ##
 cloudflare:
