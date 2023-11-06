@@ -1173,6 +1173,7 @@ The changes introduced in this version are:
   - Controller pods will not configure externalAccess unless either:
     - `controller.controllerOnly=false` (default), meaning the pods are running as 'controller+broker' nodes; or
     - `externalAccess.controller.service.forceExpose=true`, for use cases where controller-only nodes want to be exposed externally.
+- TLS certificates value `tls.existingSecret` no longer supports an array of secrets (1 secret per node). It now accepts a single secret containing multiple certificates named `kafka-<role>-<pod-number>` for each Kafka pod, or alternatively, a single certificate shared by all Kafka nodes using wildcard CN and/or SubjectAltNames. **NOTE**: If using CertManager to automatically generate the certificate secrets, only the single certificate approach would be supported.
 
 #### Upgrading from Kraft mode
 
