@@ -113,8 +113,10 @@ Get the password secret.
 Get the password key to be retrieved from Redis&reg; secret.
 */}}
 {{- define "oauth2-proxy.redis.secretPasswordKey" -}}
-{{- if and .Values.redis.auth.existingSecret .Values.redis.auth.existingSecretPasswordKey -}}
+{{- if and .Values.redis.enabled .Values.redis.auth.existingSecret .Values.redis.auth.existingSecretPasswordKey -}}
 {{- printf "%s" .Values.redis.auth.existingSecretPasswordKey -}}
+{{- else if and (not .Values.redis.enabled) .Values.externalRedis.existingSecret .Values.externalRedis.existingSecretPasswordKey -}}
+{{- printf "%s" .Values.externalRedis.existingSecretPasswordKey -}}
 {{- else -}}
 {{- printf "redis-password" -}}
 {{- end -}}
