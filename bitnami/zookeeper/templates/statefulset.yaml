@@ -43,6 +43,7 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: zookeeper
     spec:
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
       serviceAccountName: {{ template "zookeeper.serviceAccountName" . }}
       {{- include "zookeeper.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.hostAliases }}
