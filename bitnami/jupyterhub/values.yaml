@@ -71,7 +71,7 @@ hub:
   image:
     registry: docker.io
     repository: bitnami/jupyterhub
-    tag: 4.0.2-debian-11-r55
+    tag: 4.0.2-debian-11-r58
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -331,14 +331,26 @@ hub:
     requests: {}
   ## hub containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param hub.containerSecurityContext.enabled Enabled Hub containers' Security Context
-  ## @param hub.containerSecurityContext.runAsUser Set Hub container's Security Context runAsUser
-  ## @param hub.containerSecurityContext.runAsNonRoot Set Hub container's Security Context runAsNonRoot
+  ## @param hub.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param hub.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param hub.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param hub.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param hub.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param hub.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param hub.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param hub.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    runAsUser: 1000
+    runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## hub pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param hub.podSecurityContext.enabled Enabled Hub pods' Security Context
@@ -636,7 +648,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/configurable-http-proxy
-    tag: 4.6.0-debian-11-r16
+    tag: 4.6.0-debian-11-r17
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -748,14 +760,26 @@ proxy:
     requests: {}
   ## Proxy containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param proxy.containerSecurityContext.enabled Enabled Proxy containers' Security Context
-  ## @param proxy.containerSecurityContext.runAsUser Set Proxy container's Security Context runAsUser
-  ## @param proxy.containerSecurityContext.runAsNonRoot Set Proxy container's Security Context runAsNonRoot
+  ## @param proxy.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param proxy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param proxy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param proxy.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param proxy.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param proxy.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param proxy.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param proxy.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Proxy pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param proxy.podSecurityContext.enabled Enabled Proxy pods' Security Context
@@ -1273,14 +1297,26 @@ imagePuller:
     requests: {}
   ## ImagePuller containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param imagePuller.containerSecurityContext.enabled Enabled ImagePuller containers' Security Context
-  ## @param imagePuller.containerSecurityContext.runAsUser Set ImagePuller container's Security Context runAsUser
-  ## @param imagePuller.containerSecurityContext.runAsNonRoot Set ImagePuller container's Security Context runAsNonRoot
+  ## @param imagePuller.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param imagePuller.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param imagePuller.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param imagePuller.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param imagePuller.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param imagePuller.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param imagePuller.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param imagePuller.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## ImagePuller pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param imagePuller.podSecurityContext.enabled Enabled ImagePuller pods' Security Context
@@ -1413,7 +1449,7 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 4.0.2-debian-11-r55
+    tag: 4.0.2-debian-11-r58
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1456,12 +1492,26 @@ singleuser:
     requests: {}
   ## singleuser containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param singleuser.containerSecurityContext.enabled Enabled Single User containers' Security Context
-  ## @param singleuser.containerSecurityContext.runAsUser Set Single User container's Security Context runAsUser
+  ## @param singleuser.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param singleuser.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param singleuser.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param singleuser.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param singleuser.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param singleuser.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param singleuser.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param singleuser.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## singleuser pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param singleuser.podSecurityContext.enabled Enabled Single User pods' Security Context

@@ -24,7 +24,7 @@ MariaDB is developed as open source software and as a relational database it pro
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use MariaDB in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use MariaDB in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -143,6 +143,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.containerSecurityContext.runAsNonRoot`             | Set primary container's Security Context runAsNonRoot                                                             | `true`              |
 | `primary.containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                               | `false`             |
 | `primary.containerSecurityContext.allowPrivilegeEscalation` | Set primary container's Security Context allowPrivilegeEscalation                                                 | `false`             |
+| `primary.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                | `["ALL"]`           |
+| `primary.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                  | `RuntimeDefault`    |
 | `primary.resources.limits`                                  | The resources limits for MariaDB primary containers                                                               | `{}`                |
 | `primary.resources.requests`                                | The requested resources for MariaDB primary containers                                                            | `{}`                |
 | `primary.startupProbe.enabled`                              | Enable startupProbe                                                                                               | `false`             |
@@ -237,6 +239,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.containerSecurityContext.runAsNonRoot`             | Set secondary container's Security Context runAsNonRoot                                                               | `true`              |
 | `secondary.containerSecurityContext.privileged`               | Set secondary container's Security Context privileged                                                                 | `false`             |
 | `secondary.containerSecurityContext.allowPrivilegeEscalation` | Set secondary container's Security Context allowPrivilegeEscalation                                                   | `false`             |
+| `secondary.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                    | `["ALL"]`           |
+| `secondary.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                      | `RuntimeDefault`    |
 | `secondary.resources.limits`                                  | The resources limits for MariaDB secondary containers                                                                 | `{}`                |
 | `secondary.resources.requests`                                | The requested resources for MariaDB secondary containers                                                              | `{}`                |
 | `secondary.startupProbe.enabled`                              | Enable startupProbe                                                                                                   | `false`             |
@@ -331,8 +335,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.extraArgs`                                         | Extra args to be passed to mysqld_exporter                                                                                                | `{}`                              |
 | `metrics.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the MariaDB metrics container(s)                                             | `{}`                              |
 | `metrics.containerSecurityContext.enabled`                  | Enable security context for MariaDB metrics container                                                                                     | `false`                           |
+| `metrics.containerSecurityContext.runAsUser`                | User ID for the MariaDB metrics container                                                                                                 | `1001`                            |
+| `metrics.containerSecurityContext.runAsNonRoot`             | Set metrics container's Security Context runAsNonRoot                                                                                     | `true`                            |
 | `metrics.containerSecurityContext.privileged`               | Set metrics container's Security Context privileged                                                                                       | `false`                           |
 | `metrics.containerSecurityContext.allowPrivilegeEscalation` | Set metrics container's Security Context allowPrivilegeEscalation                                                                         | `false`                           |
+| `metrics.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                        | `["ALL"]`                         |
+| `metrics.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                          | `RuntimeDefault`                  |
 | `metrics.resources.limits`                                  | The resources limits for MariaDB prometheus exporter containers                                                                           | `{}`                              |
 | `metrics.resources.requests`                                | The requested resources for MariaDB prometheus exporter containers                                                                        | `{}`                              |
 | `metrics.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                      | `true`                            |

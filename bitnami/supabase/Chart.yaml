@@ -53,4 +53,4 @@ maintainers:
 name: supabase
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/supabase
-version: 2.0.1
+version: 2.1.0

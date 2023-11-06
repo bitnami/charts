@@ -24,7 +24,7 @@ It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/t
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use OpenCart in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use OpenCart in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -81,92 +81,97 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### OpenCart parameters
 
-| Name                                    | Description                                                                                              | Value                      |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `image.registry`                        | OpenCart image registry                                                                                  | `REGISTRY_NAME`            |
-| `image.repository`                      | OpenCart image repository                                                                                | `REPOSITORY_NAME/opencart` |
-| `image.digest`                          | OpenCart image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `image.pullPolicy`                      | OpenCart image pull policy                                                                               | `IfNotPresent`             |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                         | `[]`                       |
-| `image.debug`                           | Specify if debug logs should be enabled                                                                  | `false`                    |
-| `hostAliases`                           | Deployment pod host aliases                                                                              | `[]`                       |
-| `replicaCount`                          | Number of replicas (requires ReadWriteMany PVC support)                                                  | `1`                        |
-| `opencartSkipInstall`                   | Skip OpenCart installation wizard. Useful for migrations and restoring from SQL dump                     | `false`                    |
-| `opencartHost`                          | OpenCart host to create application URLs                                                                 | `""`                       |
-| `opencartUsername`                      | User of the application                                                                                  | `user`                     |
-| `opencartPassword`                      | Application password                                                                                     | `""`                       |
-| `opencartEmail`                         | Admin email                                                                                              | `user@example.com`         |
-| `opencartEnableHttps`                   | Whether to use HTTPS by default, default is false.                                                       | `false`                    |
-| `allowEmptyPassword`                    | Allow DB blank passwords                                                                                 | `true`                     |
-| `command`                               | Override default container command (useful when using custom images)                                     | `[]`                       |
-| `args`                                  | Override default container args (useful when using custom images)                                        | `[]`                       |
-| `updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                           | `RollingUpdate`            |
-| `priorityClassName`                     | OpenCart pods' priorityClassName                                                                         | `""`                       |
-| `schedulerName`                         | Name of the k8s scheduler (other than default)                                                           | `""`                       |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                           | `[]`                       |
-| `extraEnvVars`                          | An array to add extra env vars                                                                           | `[]`                       |
-| `extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                               | `""`                       |
-| `extraEnvVarsSecret`                    | Secret with extra environment variables                                                                  | `""`                       |
-| `extraVolumes`                          | Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`                             | `[]`                       |
-| `extraVolumeMounts`                     | Extra volume mounts to add to the container. Normally used with `extraVolumes`.                          | `[]`                       |
-| `initContainers`                        | Extra init containers to add to the deployment                                                           | `[]`                       |
-| `sidecars`                              | Extra sidecar containers to add to the deployment                                                        | `[]`                       |
-| `tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                                 | `[]`                       |
-| `existingSecret`                        | Name of a secret with the application password                                                           | `""`                       |
-| `smtpHost`                              | SMTP host                                                                                                | `""`                       |
-| `smtpPort`                              | SMTP port                                                                                                | `""`                       |
-| `smtpUser`                              | SMTP user                                                                                                | `""`                       |
-| `smtpPassword`                          | SMTP password                                                                                            | `""`                       |
-| `smtpProtocol`                          | SMTP Protocol (options: ssl,tls, nil)                                                                    | `""`                       |
-| `containerPorts`                        | Container ports                                                                                          | `{}`                       |
-| `persistence.enabled`                   | Enable persistence using PVC                                                                             | `true`                     |
-| `persistence.storageClass`              | OpenCart Data Persistent Volume Storage Class                                                            | `""`                       |
-| `persistence.accessModes`               | PVC Access Mode for OpenCart volume                                                                      | `["ReadWriteOnce"]`        |
-| `persistence.size`                      | PVC Storage Request for OpenCart volume                                                                  | `8Gi`                      |
-| `persistence.existingClaim`             | An Existing PVC name                                                                                     | `""`                       |
-| `persistence.hostPath`                  | Host mount path for OpenCart volume                                                                      | `""`                       |
-| `persistence.annotations`               | Persistent Volume Claim annotations                                                                      | `{}`                       |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                      | `""`                       |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                 | `soft`                     |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `""`                       |
-| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                    | `""`                       |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                | `[]`                       |
-| `affinity`                              | Affinity for pod assignment                                                                              | `{}`                       |
-| `nodeSelector`                          | Node labels for pod assignment                                                                           | `{}`                       |
-| `resources.requests`                    | The requested resources for the container                                                                | `{}`                       |
-| `resources.limits`                      | The resources limits for the container                                                                   | `{}`                       |
-| `podSecurityContext.enabled`            | Enable OpenCart pods' Security Context                                                                   | `true`                     |
-| `podSecurityContext.fsGroup`            | OpenCart pods' group ID                                                                                  | `1001`                     |
-| `containerSecurityContext.enabled`      | Enable OpenCart containers' Security Context                                                             | `true`                     |
-| `containerSecurityContext.runAsUser`    | OpenCart containers' Security Context runAsUser                                                          | `1001`                     |
-| `containerSecurityContext.runAsNonRoot` | OpenCart containers' Security Context runAsNonRoot                                                       | `true`                     |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                                      | `false`                    |
-| `startupProbe.path`                     | Request path for startupProbe                                                                            | `/administration/`         |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                   | `120`                      |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                          | `10`                       |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                         | `5`                        |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                       | `6`                        |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                       | `1`                        |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                     | `true`                     |
-| `livenessProbe.path`                    | Request path for livenessProbe                                                                           | `/administration/`         |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                  | `120`                      |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                         | `10`                       |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                        | `5`                        |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                      | `6`                        |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                      | `1`                        |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                                    | `true`                     |
-| `readinessProbe.path`                   | Request path for readinessProbe                                                                          | `/administration/`         |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                 | `30`                       |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                        | `5`                        |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                       | `3`                        |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                     | `6`                        |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                     | `1`                        |
-| `customStartupProbe`                    | Override default startup probe                                                                           | `{}`                       |
-| `customLivenessProbe`                   | Override default liveness probe                                                                          | `{}`                       |
-| `customReadinessProbe`                  | Override default readiness probe                                                                         | `{}`                       |
-| `lifecycleHooks`                        | lifecycleHooks for the container to automate configuration before or after startup                       | `{}`                       |
-| `podAnnotations`                        | Pod annotations                                                                                          | `{}`                       |
-| `podLabels`                             | Add additional labels to the pod (evaluated as a template)                                               | `{}`                       |
+| Name                                                | Description                                                                                              | Value                      |
+| --------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `image.registry`                                    | OpenCart image registry                                                                                  | `REGISTRY_NAME`            |
+| `image.repository`                                  | OpenCart image repository                                                                                | `REPOSITORY_NAME/opencart` |
+| `image.digest`                                      | OpenCart image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `image.pullPolicy`                                  | OpenCart image pull policy                                                                               | `IfNotPresent`             |
+| `image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                         | `[]`                       |
+| `image.debug`                                       | Specify if debug logs should be enabled                                                                  | `false`                    |
+| `hostAliases`                                       | Deployment pod host aliases                                                                              | `[]`                       |
+| `replicaCount`                                      | Number of replicas (requires ReadWriteMany PVC support)                                                  | `1`                        |
+| `opencartSkipInstall`                               | Skip OpenCart installation wizard. Useful for migrations and restoring from SQL dump                     | `false`                    |
+| `opencartHost`                                      | OpenCart host to create application URLs                                                                 | `""`                       |
+| `opencartUsername`                                  | User of the application                                                                                  | `user`                     |
+| `opencartPassword`                                  | Application password                                                                                     | `""`                       |
+| `opencartEmail`                                     | Admin email                                                                                              | `user@example.com`         |
+| `opencartEnableHttps`                               | Whether to use HTTPS by default, default is false.                                                       | `false`                    |
+| `allowEmptyPassword`                                | Allow DB blank passwords                                                                                 | `true`                     |
+| `command`                                           | Override default container command (useful when using custom images)                                     | `[]`                       |
+| `args`                                              | Override default container args (useful when using custom images)                                        | `[]`                       |
+| `updateStrategy.type`                               | Update strategy - only really applicable for deployments with RWO PVs attached                           | `RollingUpdate`            |
+| `priorityClassName`                                 | OpenCart pods' priorityClassName                                                                         | `""`                       |
+| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                           | `""`                       |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                           | `[]`                       |
+| `extraEnvVars`                                      | An array to add extra env vars                                                                           | `[]`                       |
+| `extraEnvVarsCM`                                    | ConfigMap with extra environment variables                                                               | `""`                       |
+| `extraEnvVarsSecret`                                | Secret with extra environment variables                                                                  | `""`                       |
+| `extraVolumes`                                      | Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`                             | `[]`                       |
+| `extraVolumeMounts`                                 | Extra volume mounts to add to the container. Normally used with `extraVolumes`.                          | `[]`                       |
+| `initContainers`                                    | Extra init containers to add to the deployment                                                           | `[]`                       |
+| `sidecars`                                          | Extra sidecar containers to add to the deployment                                                        | `[]`                       |
+| `tolerations`                                       | Tolerations for pod assignment. Evaluated as a template.                                                 | `[]`                       |
+| `existingSecret`                                    | Name of a secret with the application password                                                           | `""`                       |
+| `smtpHost`                                          | SMTP host                                                                                                | `""`                       |
+| `smtpPort`                                          | SMTP port                                                                                                | `""`                       |
+| `smtpUser`                                          | SMTP user                                                                                                | `""`                       |
+| `smtpPassword`                                      | SMTP password                                                                                            | `""`                       |
+| `smtpProtocol`                                      | SMTP Protocol (options: ssl,tls, nil)                                                                    | `""`                       |
+| `containerPorts`                                    | Container ports                                                                                          | `{}`                       |
+| `persistence.enabled`                               | Enable persistence using PVC                                                                             | `true`                     |
+| `persistence.storageClass`                          | OpenCart Data Persistent Volume Storage Class                                                            | `""`                       |
+| `persistence.accessModes`                           | PVC Access Mode for OpenCart volume                                                                      | `["ReadWriteOnce"]`        |
+| `persistence.size`                                  | PVC Storage Request for OpenCart volume                                                                  | `8Gi`                      |
+| `persistence.existingClaim`                         | An Existing PVC name                                                                                     | `""`                       |
+| `persistence.hostPath`                              | Host mount path for OpenCart volume                                                                      | `""`                       |
+| `persistence.annotations`                           | Persistent Volume Claim annotations                                                                      | `{}`                       |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                      | `""`                       |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                 | `soft`                     |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `""`                       |
+| `nodeAffinityPreset.key`                            | Node label key to match Ignored if `affinity` is set.                                                    | `""`                       |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                                | `[]`                       |
+| `affinity`                                          | Affinity for pod assignment                                                                              | `{}`                       |
+| `nodeSelector`                                      | Node labels for pod assignment                                                                           | `{}`                       |
+| `resources.requests`                                | The requested resources for the container                                                                | `{}`                       |
+| `resources.limits`                                  | The resources limits for the container                                                                   | `{}`                       |
+| `podSecurityContext.enabled`                        | Enable OpenCart pods' Security Context                                                                   | `true`                     |
+| `podSecurityContext.fsGroup`                        | OpenCart pods' group ID                                                                                  | `1001`                     |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                     | `true`                     |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                               | `1001`                     |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                            | `true`                     |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                              | `false`                    |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                  | `false`                    |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                | `false`                    |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                       | `["ALL"]`                  |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                         | `RuntimeDefault`           |
+| `startupProbe.enabled`                              | Enable startupProbe                                                                                      | `false`                    |
+| `startupProbe.path`                                 | Request path for startupProbe                                                                            | `/administration/`         |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                   | `120`                      |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                          | `10`                       |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                         | `5`                        |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                       | `6`                        |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                       | `1`                        |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                                     | `true`                     |
+| `livenessProbe.path`                                | Request path for livenessProbe                                                                           | `/administration/`         |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                  | `120`                      |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                         | `10`                       |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                        | `5`                        |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                      | `6`                        |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                      | `1`                        |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                                    | `true`                     |
+| `readinessProbe.path`                               | Request path for readinessProbe                                                                          | `/administration/`         |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                 | `30`                       |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                        | `5`                        |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                       | `3`                        |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                     | `6`                        |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                     | `1`                        |
+| `customStartupProbe`                                | Override default startup probe                                                                           | `{}`                       |
+| `customLivenessProbe`                               | Override default liveness probe                                                                          | `{}`                       |
+| `customReadinessProbe`                              | Override default readiness probe                                                                         | `{}`                       |
+| `lifecycleHooks`                                    | lifecycleHooks for the container to automate configuration before or after startup                       | `{}`                       |
+| `podAnnotations`                                    | Pod annotations                                                                                          | `{}`                       |
+| `podLabels`                                         | Add additional labels to the pod (evaluated as a template)                                               | `{}`                       |
 
 ### Traffic Exposure Parameters
 

@@ -24,7 +24,7 @@ It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/t
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use MediaWiki in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use MediaWiki in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -111,70 +111,75 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Mediawiki deployment parameters
 
-| Name                                    | Description                                                                               | Value                                             |
-| --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| `replicaCount`                          | Number of Mediawiki replicas to deploy                                                    | `1`                                               |
-| `updateStrategy.type`                   | StrategyType can be set to RollingUpdate or OnDelete                                      | `RollingUpdate`                                   |
-| `podSecurityContext.enabled`            | Enable Mediawiki pods' Security Context                                                   | `true`                                            |
-| `podSecurityContext.fsGroup`            | Group ID for the volumes of the pod                                                       | `1001`                                            |
-| `containerSecurityContext.enabled`      | Enable Mediawiki containers' SecurityContext                                              | `true`                                            |
-| `containerSecurityContext.runAsUser`    | User ID to run Mediawiki containers                                                       | `1001`                                            |
-| `containerSecurityContext.runAsNonRoot` | Set Mediawiki container's Security Context runAsNonRoot                                   | `true`                                            |
-| `resources.limits`                      | The resources limits for the Mediawki container                                           | `{}`                                              |
-| `resources.requests`                    | The requested resources for the Mediawki container                                        | `{}`                                              |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`                                           |
-| `startupProbe.httpGet.path`             | Request path for startupProbe                                                             | `/api.php?action=query&meta=siteinfo&format=none` |
-| `startupProbe.httpGet.port`             | Port for startupProbe                                                                     | `http`                                            |
-| `startupProbe.httpGet.httpHeaders`      | Headers for startupProbe                                                                  | `[]`                                              |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `120`                                             |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`                                              |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `5`                                               |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `6`                                               |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`                                               |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`                                            |
-| `livenessProbe.httpGet.path`            | Request path for livenessProbe                                                            | `/api.php?action=query&meta=siteinfo&format=none` |
-| `livenessProbe.httpGet.port`            | Port for livenessProbe                                                                    | `http`                                            |
-| `livenessProbe.httpGet.httpHeaders`     | Headers for livenessProbe                                                                 | `[]`                                              |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `120`                                             |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`                                              |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `5`                                               |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `6`                                               |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`                                               |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`                                            |
-| `readinessProbe.httpGet.path`           | Request path for readinessProbe                                                           | `/api.php?action=query&meta=siteinfo&format=none` |
-| `readinessProbe.httpGet.port`           | Port for readinessProbe                                                                   | `http`                                            |
-| `readinessProbe.httpGet.httpHeaders`    | Headers for livenessProbe                                                                 | `[]`                                              |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `30`                                              |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `10`                                              |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `5`                                               |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `6`                                               |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`                                               |
-| `customStartupProbe`                    | Override default startup probe                                                            | `{}`                                              |
-| `customLivenessProbe`                   | Override default liveness probe                                                           | `{}`                                              |
-| `customReadinessProbe`                  | Override default readiness probe                                                          | `{}`                                              |
-| `podLabels`                             | Extra labels for Mediawki pods                                                            | `{}`                                              |
-| `podAnnotations`                        | Annotations for Mediawki pods                                                             | `{}`                                              |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                              |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                            |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                              |
-| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                    | `""`                                              |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                              |
-| `affinity`                              | Affinity for pod assignment. Evaluated as a template.                                     | `{}`                                              |
-| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                  | `{}`                                              |
-| `tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                  | `[]`                                              |
-| `priorityClassName`                     | Mediawiki pods' priorityClassName                                                         | `""`                                              |
-| `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`                                              |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`                                              |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes for Mediawki pods                     | `[]`                                              |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Mediawki container(s)        | `[]`                                              |
-| `initContainers`                        | Add additional init containers to the Mediawki pods                                       | `[]`                                              |
-| `sidecars`                              | Add additional sidecar containers to the Mediawki pods                                    | `[]`                                              |
-| `persistence.enabled`                   | Enable persistence using PVC                                                              | `true`                                            |
-| `persistence.storageClass`              | PVC Storage Class for MediaWiki volume                                                    | `""`                                              |
-| `persistence.existingClaim`             | An Existing PVC name for MediaWiki volume                                                 | `""`                                              |
-| `persistence.accessModes`               | Persistent Volume access modes                                                            | `[]`                                              |
-| `persistence.size`                      | PVC Storage Request for MediaWiki volume                                                  | `8Gi`                                             |
-| `persistence.annotations`               | Persistent Volume Claim annotations                                                       | `{}`                                              |
+| Name                                                | Description                                                                               | Value                                             |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| `replicaCount`                                      | Number of Mediawiki replicas to deploy                                                    | `1`                                               |
+| `updateStrategy.type`                               | StrategyType can be set to RollingUpdate or OnDelete                                      | `RollingUpdate`                                   |
+| `podSecurityContext.enabled`                        | Enable Mediawiki pods' Security Context                                                   | `true`                                            |
+| `podSecurityContext.fsGroup`                        | Group ID for the volumes of the pod                                                       | `1001`                                            |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`                                            |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`                                            |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`                                            |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`                                           |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                   | `false`                                           |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                 | `false`                                           |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                        | `["ALL"]`                                         |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                          | `RuntimeDefault`                                  |
+| `resources.limits`                                  | The resources limits for the Mediawki container                                           | `{}`                                              |
+| `resources.requests`                                | The requested resources for the Mediawki container                                        | `{}`                                              |
+| `startupProbe.enabled`                              | Enable startupProbe                                                                       | `false`                                           |
+| `startupProbe.httpGet.path`                         | Request path for startupProbe                                                             | `/api.php?action=query&meta=siteinfo&format=none` |
+| `startupProbe.httpGet.port`                         | Port for startupProbe                                                                     | `http`                                            |
+| `startupProbe.httpGet.httpHeaders`                  | Headers for startupProbe                                                                  | `[]`                                              |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                    | `120`                                             |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                           | `10`                                              |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                          | `5`                                               |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                        | `6`                                               |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                        | `1`                                               |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                      | `true`                                            |
+| `livenessProbe.httpGet.path`                        | Request path for livenessProbe                                                            | `/api.php?action=query&meta=siteinfo&format=none` |
+| `livenessProbe.httpGet.port`                        | Port for livenessProbe                                                                    | `http`                                            |
+| `livenessProbe.httpGet.httpHeaders`                 | Headers for livenessProbe                                                                 | `[]`                                              |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                   | `120`                                             |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                          | `10`                                              |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                         | `5`                                               |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                       | `6`                                               |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                       | `1`                                               |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                     | `true`                                            |
+| `readinessProbe.httpGet.path`                       | Request path for readinessProbe                                                           | `/api.php?action=query&meta=siteinfo&format=none` |
+| `readinessProbe.httpGet.port`                       | Port for readinessProbe                                                                   | `http`                                            |
+| `readinessProbe.httpGet.httpHeaders`                | Headers for livenessProbe                                                                 | `[]`                                              |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                  | `30`                                              |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                         | `10`                                              |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                        | `5`                                               |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                      | `6`                                               |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                      | `1`                                               |
+| `customStartupProbe`                                | Override default startup probe                                                            | `{}`                                              |
+| `customLivenessProbe`                               | Override default liveness probe                                                           | `{}`                                              |
+| `customReadinessProbe`                              | Override default readiness probe                                                          | `{}`                                              |
+| `podLabels`                                         | Extra labels for Mediawki pods                                                            | `{}`                                              |
+| `podAnnotations`                                    | Annotations for Mediawki pods                                                             | `{}`                                              |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                              |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                            |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                              |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set.                                    | `""`                                              |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                              |
+| `affinity`                                          | Affinity for pod assignment. Evaluated as a template.                                     | `{}`                                              |
+| `nodeSelector`                                      | Node labels for pod assignment. Evaluated as a template.                                  | `{}`                                              |
+| `tolerations`                                       | Tolerations for pod assignment. Evaluated as a template.                                  | `[]`                                              |
+| `priorityClassName`                                 | Mediawiki pods' priorityClassName                                                         | `""`                                              |
+| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                            | `""`                                              |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`                                              |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for Mediawki pods                     | `[]`                                              |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Mediawki container(s)        | `[]`                                              |
+| `initContainers`                                    | Add additional init containers to the Mediawki pods                                       | `[]`                                              |
+| `sidecars`                                          | Add additional sidecar containers to the Mediawki pods                                    | `[]`                                              |
+| `persistence.enabled`                               | Enable persistence using PVC                                                              | `true`                                            |
+| `persistence.storageClass`                          | PVC Storage Class for MediaWiki volume                                                    | `""`                                              |
+| `persistence.existingClaim`                         | An Existing PVC name for MediaWiki volume                                                 | `""`                                              |
+| `persistence.accessModes`                           | Persistent Volume access modes                                                            | `[]`                                              |
+| `persistence.size`                                  | PVC Storage Request for MediaWiki volume                                                  | `8Gi`                                             |
+| `persistence.annotations`                           | Persistent Volume Claim annotations                                                       | `{}`                                              |
 
 ### Traffic Exposure parameters
 

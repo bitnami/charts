@@ -24,7 +24,7 @@ It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/t
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Osclass in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Osclass in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -113,9 +113,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hostAliases`                                        | Osclass pod host aliases                                                                                        | `[]`                                     |
 | `podSecurityContext.enabled`                         | Enabled Osclass pods' Security Context                                                                          | `true`                                   |
 | `podSecurityContext.fsGroup`                         | Set Osclass pod's Security Context fsGroup                                                                      | `1001`                                   |
-| `containerSecurityContext.enabled`                   | Enabled Osclass containers' Security Context                                                                    | `true`                                   |
-| `containerSecurityContext.runAsUser`                 | Set Osclass container's Security Context runAsUser                                                              | `1001`                                   |
-| `containerSecurityContext.runAsNonRoot`              | Set Osclass container's Security Context runAsNonRoot                                                           | `true`                                   |
+| `containerSecurityContext.enabled`                   | Enabled containers' Security Context                                                                            | `true`                                   |
+| `containerSecurityContext.runAsUser`                 | Set containers' Security Context runAsUser                                                                      | `1001`                                   |
+| `containerSecurityContext.runAsNonRoot`              | Set container's Security Context runAsNonRoot                                                                   | `true`                                   |
+| `containerSecurityContext.privileged`                | Set container's Security Context privileged                                                                     | `false`                                  |
+| `containerSecurityContext.readOnlyRootFilesystem`    | Set container's Security Context readOnlyRootFilesystem                                                         | `false`                                  |
+| `containerSecurityContext.allowPrivilegeEscalation`  | Set container's Security Context allowPrivilegeEscalation                                                       | `false`                                  |
+| `containerSecurityContext.capabilities.drop`         | List of capabilities to be dropped                                                                              | `["ALL"]`                                |
+| `containerSecurityContext.seccompProfile.type`       | Set container's Security Context seccomp profile                                                                | `RuntimeDefault`                         |
 | `startupProbe.enabled`                               | Enable startupProbe                                                                                             | `false`                                  |
 | `startupProbe.path`                                  | Path for the HTTP probe                                                                                         | `/oc-admin`                              |
 | `startupProbe.initialDelaySeconds`                   | Initial delay seconds for startupProbe                                                                          | `600`                                    |
