@@ -485,6 +485,11 @@ pdb:
   create: false
   minAvailable: ""
   maxUnavailable: 1
+## @param enableServiceLinks Whether information about services should be injected into pod's environment variable
+## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+##
+enableServiceLinks: true
 
 ## @section Traffic Exposure parameters
 

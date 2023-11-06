@@ -36,6 +36,9 @@ spec:
           volumeMounts:
             - name: cassandra-schema
               mountPath: "/cassandra-schema"
+          {{- if .Values.migration.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.migration.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
       containers:
         - name: jaeger-cassandra-migrator
           image: {{ include "jaeger.cqlshImage" . }}
@@ -66,6 +69,9 @@ spec:
                 sed -i 's/cqlsh -e "show version"/cqlsh -e "show version" -u $CASSANDRA_USERNAME -p $CASSANDRA_PASSWORD /' /cassandra-schema/create.sh
                 /cassandra-schema/docker.sh
               fi
+          {{- if .Values.migration.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.migration.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           env:
             - name: CQLSH
               value: /opt/bitnami/cassandra/bin/cqlsh

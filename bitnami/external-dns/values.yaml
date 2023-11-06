@@ -299,6 +299,16 @@ azure:
   ## @param azure.userAssignedIdentityID When using the Azure provider with Azure MSI, set Client ID of Azure user-assigned managed identity (optional, otherwise system-assigned managed identity is used)
   ##
   userAssignedIdentityID: ""
+## Civo configuration to be set via arguments/env. variables
+##
+civo:
+  ## @param civo.apiToken When using the Civo provider, `CIVO_TOKEN` to set (optional)
+  ##
+  apiToken: ""
+  ## @param civo.secretName Use an existing secret with key "apiToken" defined.
+  ## This ignores civo.apiToken
+  ##
+  secretName: ""
 ## Cloudflare configuration to be set via arguments/env. variables
 ##
 cloudflare:
@@ -942,7 +952,14 @@ rbac:
   ## @param rbac.pspEnabled Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   pspEnabled: false
-## @param containerSecurityContext Security context for the container
+## @param containerSecurityContext.enabled Enabled Apache Server containers' Security Context
+## @param containerSecurityContext.runAsUser Set ExternalDNS containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set ExternalDNS container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set primary container's Security Context privileged
+## @param containerSecurityContext.allowPrivilegeEscalation Set primary container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.readOnlyRootFilesystem Set container readonlyRootFilesystem
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ## Example:
 ## containerSecurityContext:
@@ -951,15 +968,24 @@ rbac:
 ##   capabilities:
 ##     drop: ["ALL"]
 ##
-containerSecurityContext: {}
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsNonRoot: true
+  privileged: false
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
+
 ## @param podSecurityContext.enabled Enable pod security context
 ## @param podSecurityContext.fsGroup Group ID for the container
-## @param podSecurityContext.runAsUser User ID for the container
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-  runAsUser: 1001
 ## Container resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
