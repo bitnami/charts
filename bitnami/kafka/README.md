@@ -253,6 +253,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                      | `[]`                      |
 | `controller.terminationGracePeriodSeconds`                     | Seconds the pod needs to gracefully terminate                                                                                                                                                 | `""`                      |
 | `controller.podManagementPolicy`                               | StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel | `Parallel`                |
+| `controller.minReadySeconds`                                   | How many seconds a pod needs to be ready before killing the next, during update                                                                                                               | `0`                       |
 | `controller.priorityClassName`                                 | Name of the existing priority class to be used by kafka pods                                                                                                                                  | `""`                      |
 | `controller.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                                                                                                                | `""`                      |
 | `controller.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                         | `true`                    |
@@ -351,6 +352,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `broker.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                      | `[]`                      |
 | `broker.terminationGracePeriodSeconds`                     | Seconds the pod needs to gracefully terminate                                                                                                                                                 | `""`                      |
 | `broker.podManagementPolicy`                               | StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel | `Parallel`                |
+| `broker.minReadySeconds`                                   | How many seconds a pod needs to be ready before killing the next, during update                                                                                                               | `0`                       |
 | `broker.priorityClassName`                                 | Name of the existing priority class to be used by kafka pods                                                                                                                                  | `""`                      |
 | `broker.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                                                                                                                | `""`                      |
 | `broker.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                         | `true`                    |
@@ -1169,9 +1171,9 @@ The changes introduced in this version are:
   - TLS settings have been moved from `auth.tls.*` to `tls.*`.
   - Zookeeper TLS settings have been moved from `auth.zookeeper*` to `tls.zookeeper.*`
 - Refactor externalAccess to support the new architecture:
-  - `externalAccess.service.*` have been renamed to `externalAccess.controller.service.*` and `externalAccess.controller.service.*`.
-  - Controller pods will not configure externalAccess unless:
-    - `controller.controllerOnly=false` (default), meaning the pods are running as 'controller+broker' nodes.
+  - `externalAccess.service.*` have been renamed to `externalAccess.controller.service.*` and `externalAccess.broker.service.*`.
+  - Controller pods will not configure externalAccess unless either:
+    - `controller.controllerOnly=false` (default), meaning the pods are running as 'controller+broker' nodes; or
     - `externalAccess.controller.service.forceExpose=true`, for use cases where controller-only nodes want to be exposed externally.
 
 #### Upgrading from Kraft mode

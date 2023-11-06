@@ -154,6 +154,8 @@ spec:
             - name: CONSUL_DATACENTER
               value: {{ .Values.datacenterName | quote }}
             {{- if .Values.gossipKey }}
+            - name: CONSUL_GOSSIP_ENCRYPTION
+              value: "yes"
             - name: CONSUL_GOSSIP_ENCRYPTION_KEY
               valueFrom:
                 secretKeyRef:
