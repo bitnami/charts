@@ -825,7 +825,6 @@ controller:
 ##
 broker:
   ## @param broker.replicaCount Number of Kafka broker-only nodes
-  ## Ignore this section if running in Zookeeper mode.
   ##
   replicaCount: 0
   ## @param broker.minId Minimal node.id values for broker-only nodes. Do not change after first initialization.
