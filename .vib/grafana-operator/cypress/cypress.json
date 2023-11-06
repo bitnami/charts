@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://127.0.0.1:52279",
+  "baseUrl": "http://localhost/",
   "pageLoadTimeout": 120000,
   "defaultCommandTimeout": 30000,
   "env": {
