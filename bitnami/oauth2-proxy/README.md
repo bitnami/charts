@@ -221,12 +221,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### External Redis&reg; parameters
 
-| Name                           | Description                                                | Value  |
-| ------------------------------ | ---------------------------------------------------------- | ------ |
-| `externalRedis.host`           | External Redis&reg; server host                            | `""`   |
-| `externalRedis.password`       | External Redis&reg; user password                          | `""`   |
-| `externalRedis.port`           | External Redis&reg; server port                            | `6379` |
-| `externalRedis.existingSecret` | The name of an existing secret with Redis&reg; credentials | `""`   |
+| Name                                      | Description                                                | Value  |
+| ----------------------------------------- | ---------------------------------------------------------- | ------ |
+| `externalRedis.host`                      | External Redis&reg; server host                            | `""`   |
+| `externalRedis.password`                  | External Redis&reg; user password                          | `""`   |
+| `externalRedis.port`                      | External Redis&reg; server port                            | `6379` |
+| `externalRedis.existingSecret`            | The name of an existing secret with Redis&reg; credentials | `""`   |
+| `externalRedis.existingSecretPasswordKey` | Key inside the existing secret with Redis&reg; credentials | `""`   |
 
 ### Redis&reg; sub-chart parameters
 

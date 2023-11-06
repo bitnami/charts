@@ -265,6 +265,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Enable exposing Keycloak statistics                                                                                       | `false` |
 | `metrics.service.ports.http`               | Metrics service HTTP port                                                                                                 | `8080`  |
 | `metrics.service.annotations`              | Annotations for enabling prometheus to access the metrics endpoints                                                       | `{}`    |
+| `metrics.service.extraPorts`               | Add additional ports to the keycloak metrics service (i.e. admin port 9000)                                               | `[]`    |
 | `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                              | `false` |
 | `metrics.serviceMonitor.port`              | Metrics service HTTP port                                                                                                 | `http`  |
 | `metrics.serviceMonitor.endpoints`         | The endpoint configuration of the ServiceMonitor. Path is mandatory. Interval, timeout and labellings can be overwritten. | `[]`    |
