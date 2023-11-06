@@ -122,58 +122,63 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Ghost deployment parameters
 
-| Name                                    | Description                                                                               | Value           |
-| --------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
-| `replicaCount`                          | Number of Ghost replicas to deploy                                                        | `1`             |
-| `updateStrategy.type`                   | Ghost deployment strategy type                                                            | `RollingUpdate` |
-| `priorityClassName`                     | Ghost pod priority class name                                                             | `""`            |
-| `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`            |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`            |
-| `hostAliases`                           | Ghost pod host aliases                                                                    | `[]`            |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes for Ghost pods                        | `[]`            |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Ghost container(s)           | `[]`            |
-| `sidecars`                              | Add additional sidecar containers to the Ghost pod                                        | `[]`            |
-| `initContainers`                        | Add additional init containers to the Ghost pods                                          | `[]`            |
-| `lifecycleHooks`                        | Add lifecycle hooks to the Ghost deployment                                               | `{}`            |
-| `podLabels`                             | Extra labels for Ghost pods                                                               | `{}`            |
-| `podAnnotations`                        | Annotations for Ghost pods                                                                | `{}`            |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set                                     | `""`            |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                  | `[]`            |
-| `affinity`                              | Affinity for pod assignment                                                               | `{}`            |
-| `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`            |
-| `tolerations`                           | Tolerations for pod assignment                                                            | `[]`            |
-| `resources.limits`                      | The resources limits for the Ghost container                                              | `{}`            |
-| `resources.requests`                    | The requested resources for the Ghost container                                           | `{}`            |
-| `containerPorts.http`                   | Ghost HTTP container port                                                                 | `2368`          |
-| `containerPorts.https`                  | Ghost HTTPS container port                                                                | `2368`          |
-| `podSecurityContext.enabled`            | Enabled Ghost pods' Security Context                                                      | `true`          |
-| `podSecurityContext.fsGroup`            | Set Ghost pod's Security Context fsGroup                                                  | `1001`          |
-| `containerSecurityContext.enabled`      | Enabled Ghost containers' Security Context                                                | `true`          |
-| `containerSecurityContext.runAsUser`    | Set Ghost container's Security Context runAsUser                                          | `1001`          |
-| `containerSecurityContext.runAsNonRoot` | Set Ghost container's Security Context runAsNonRoot                                       | `true`          |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`         |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `120`           |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`            |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `5`             |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `6`             |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`             |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`          |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `120`           |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`            |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `5`             |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `6`             |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`             |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`          |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `30`            |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `5`             |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `3`             |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `6`             |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`             |
-| `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`            |
-| `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`            |
+| Name                                                | Description                                                                               | Value            |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------- |
+| `replicaCount`                                      | Number of Ghost replicas to deploy                                                        | `1`              |
+| `updateStrategy.type`                               | Ghost deployment strategy type                                                            | `RollingUpdate`  |
+| `priorityClassName`                                 | Ghost pod priority class name                                                             | `""`             |
+| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                            | `""`             |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`             |
+| `hostAliases`                                       | Ghost pod host aliases                                                                    | `[]`             |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for Ghost pods                        | `[]`             |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Ghost container(s)           | `[]`             |
+| `sidecars`                                          | Add additional sidecar containers to the Ghost pod                                        | `[]`             |
+| `initContainers`                                    | Add additional init containers to the Ghost pods                                          | `[]`             |
+| `lifecycleHooks`                                    | Add lifecycle hooks to the Ghost deployment                                               | `{}`             |
+| `podLabels`                                         | Extra labels for Ghost pods                                                               | `{}`             |
+| `podAnnotations`                                    | Annotations for Ghost pods                                                                | `{}`             |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`             |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`           |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`             |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set                                     | `""`             |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set                                  | `[]`             |
+| `affinity`                                          | Affinity for pod assignment                                                               | `{}`             |
+| `nodeSelector`                                      | Node labels for pod assignment                                                            | `{}`             |
+| `tolerations`                                       | Tolerations for pod assignment                                                            | `[]`             |
+| `resources.limits`                                  | The resources limits for the Ghost container                                              | `{}`             |
+| `resources.requests`                                | The requested resources for the Ghost container                                           | `{}`             |
+| `containerPorts.http`                               | Ghost HTTP container port                                                                 | `2368`           |
+| `containerPorts.https`                              | Ghost HTTPS container port                                                                | `2368`           |
+| `podSecurityContext.enabled`                        | Enabled Ghost pods' Security Context                                                      | `true`           |
+| `podSecurityContext.fsGroup`                        | Set Ghost pod's Security Context fsGroup                                                  | `1001`           |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`           |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`           |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`           |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`          |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                   | `false`          |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                 | `false`          |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                        | `["ALL"]`        |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                          | `RuntimeDefault` |
+| `startupProbe.enabled`                              | Enable startupProbe                                                                       | `false`          |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                    | `120`            |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                           | `10`             |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                          | `5`              |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                        | `6`              |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                        | `1`              |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                      | `true`           |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                   | `120`            |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                          | `10`             |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                         | `5`              |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                       | `6`              |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                       | `1`              |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                     | `true`           |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                  | `30`             |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                         | `5`              |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                        | `3`              |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                      | `6`              |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                      | `1`              |
+| `customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                       | `{}`             |
+| `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                      | `{}`             |
 
 ### Traffic Exposure Parameters
 

@@ -781,6 +781,9 @@ metrics:
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "{{ .Values.metrics.service.ports.http }}"
+    ## @param metrics.service.extraPorts [array] Add additional ports to the keycloak metrics service (i.e. admin port 9000)
+    ##
+    extraPorts: []
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:

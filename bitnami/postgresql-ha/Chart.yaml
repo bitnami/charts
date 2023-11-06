@@ -10,9 +10,9 @@ annotations:
     - name: pgpool
       image: docker.io/bitnami/pgpool:4.4.4-debian-11-r45
     - name: postgres-exporter
-      image: docker.io/bitnami/postgres-exporter:0.14.0-debian-11-r15
+      image: docker.io/bitnami/postgres-exporter:0.15.0-debian-11-r0
     - name: postgresql-repmgr
-      image: docker.io/bitnami/postgresql-repmgr:16.0.0-debian-11-r11
+      image: docker.io/bitnami/postgresql-repmgr:16.0.0-debian-11-r12
 apiVersion: v2
 appVersion: 16.0.0
 dependencies:
@@ -40,4 +40,4 @@ maintainers:
 name: postgresql-ha
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha
-version: 12.0.4
+version: 12.0.5
