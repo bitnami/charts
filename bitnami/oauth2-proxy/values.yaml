@@ -649,6 +649,9 @@ externalRedis:
   ## NOTE: When it's set, the `externalRedis.password` parameter is ignored
   ##
   existingSecret: ""
+  ## @param externalRedis.existingSecretPasswordKey Key inside the existing secret with Redis&reg; credentials
+  ##
+  existingSecretPasswordKey: ""
 
 ## @section Redis&reg; sub-chart parameters
 ##
