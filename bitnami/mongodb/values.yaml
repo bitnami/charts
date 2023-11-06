@@ -1041,7 +1041,7 @@ networkPolicy:
   ## Egress rules - deny outgoing connections
   ##
   egress:
-    ## @param networkPolicy.egress.customRules [array] Custom network policy for the MongoDB node.
+    ## @param networkPolicy.egress.customRules [array] Custom network policy for the MongoDB(&reg;) node.
     ##
     customRules: []
     ## e.g:
