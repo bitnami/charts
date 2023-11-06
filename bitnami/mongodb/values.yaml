@@ -1017,9 +1017,9 @@ networkPolicy:
   ## Ingress rules - Allow incoming connections
   ##
   ingress:
-    ## @param networkPolicy.ingress.namespaceSelector [object] Namespace selector label that is allowed to access the MongoDB node. This label will be used to identify the allowed namespace(s).
-    ## @param networkPolicy.ingress.podSelector [object] Pod selector label that is allowed to access the MongoDB node. This label will be used to identify the allowed pod(s).
-    ## @param networkPolicy.ingress.customRules [array] Custom network policy for the MongoDB node.
+    ## @param networkPolicy.ingress.namespaceSelector [object] Namespace selector label that is allowed to access the MongoDB(&reg;) node. This label will be used to identify the allowed namespace(s).
+    ## @param networkPolicy.ingress.podSelector [object] Pod selector label that is allowed to access the MongoDB(&reg;) node. This label will be used to identify the allowed pod(s).
+    ## @param networkPolicy.ingress.customRules [array] Custom network policy for the MongoDB(&reg;) node.
     namespaceSelector: {}
     ## e.g:
     ## namespaceSelector:
