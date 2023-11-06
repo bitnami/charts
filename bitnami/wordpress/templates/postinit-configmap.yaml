@@ -9,10 +9,7 @@ kind: ConfigMap
 metadata:
   name: {{ printf "%s-postinit" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -41,7 +38,7 @@ data:
     wp total-cache flush all
 
     # Revoke permissions to edit wp-config.php
-    chmod a-w bitnami/wordpress/wp-config.php
+    chmod a-w /bitnami/wordpress/wp-config.php
   {{- end }}
   {{- if .Values.customPostInitScripts }}
   {{- include "common.tplvalues.render" (dict "value" .Values.customPostInitScripts "context" $) | nindent 2 }}

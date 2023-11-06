@@ -9,7 +9,7 @@ file:
   /opt/bitnami/mariadb/conf/my.cnf:
     mode: "0644"
     filetype: file
-    contains: [
+    contents: [
       "[mysqld]",
       "basedir=/opt/bitnami/mariadb",
       "socket=/opt/bitnami/mariadb/tmp/mysql.sock"]
@@ -19,10 +19,10 @@ command:
     exec: mariadb -h mariadb-primary -u root -P {{ .Vars.primary.service.ports.mysql }} -p'{{ .Vars.auth.rootPassword }}' {{ .Vars.auth.database }} -e 'DROP TABLE IF EXISTS TEST; create table TEST(test_id int auto_increment, test_value int, primary key(test_id)); INSERT INTO TEST (TEST_VALUE) VALUES (1989);SELECT * FROM TEST'
     exit-status: 0
     stdout:
-    - 1989
+    - "1989"
   replication-test:
     exec: mariadb -h mariadb-primary -u {{ .Vars.auth.username }} -P {{ .Vars.primary.service.ports.mysql }} -p'{{ .Vars.auth.password }}' {{ .Vars.auth.database }} -e 'DROP TABLE IF EXISTS TEST_REP; create table TEST_REP(test_id int auto_increment, test_value varchar(4), primary key(test_id)); INSERT INTO TEST_REP (TEST_VALUE) VALUES (2022)' && sleep 2 && mariadb -h mariadb-secondary -u {{ .Vars.auth.username }} -P {{ .Vars.secondary.service.ports.mysql }} -p'{{ .Vars.auth.password }}' {{ .Vars.auth.database }} -e 'SELECT * FROM TEST_REP'
     exit-status: 0
     stdout:
-    - 2022
+    - "2022"
     timeout: 9000

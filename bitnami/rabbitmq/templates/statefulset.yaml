@@ -8,21 +8,11 @@ kind: StatefulSet
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.statefulsetLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.statefulsetLabels "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- if or .Values.commonAnnotations .Values.statefulsetAnnotations }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.statefulsetAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.statefulsetAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.statefulsetLabels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  {{- if or .Values.statefulsetAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.statefulsetAnnotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   serviceName: {{ printf "%s-%s" (include "common.names.fullname" .) (default "headless" .Values.servicenameOverride) }}
@@ -31,14 +21,12 @@ spec:
   {{- if .Values.updateStrategy }}
   updateStrategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
-        {{- if .Values.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
-        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
       annotations:
         {{- if .Values.commonAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
@@ -66,8 +54,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" .) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.hostAliases }}
@@ -95,6 +83,7 @@ spec:
       dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dnsConfig "context" .) | nindent 8 }}
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
@@ -450,14 +439,10 @@ spec:
       kind: PersistentVolumeClaim
       metadata:
         name: data
-        labels:
-          {{- include "common.labels.matchLabels" . | nindent 10 }}
-          {{- if .Values.persistence.labels }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.persistence.labels "context" $) | nindent 10 }}
-          {{- end }}
+        {{- $claimLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.persistence.labels .Values.commonLabels ) "context" . ) }}
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}
         {{- if .Values.persistence.annotations }}
-        annotations:
-          {{- include "common.tplvalues.render" ( dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
         {{- end }}
       spec:
         accessModes:

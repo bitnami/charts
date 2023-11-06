@@ -16,43 +16,6 @@
         }
       ]
     },
-    "verify": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/mysql"
-        },
-        "target_platform": {
-          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
-          "size": {
-            "name": "S4"
-          }
-        }
-      },
-      "actions": [
-        {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-mysql-primary-mysql"
-          }
-        },
-        {
-          "action_id": "goss",
-          "params": {
-            "resources": {
-              "path": "/.vib"
-            },
-            "tests_file": "mysql/goss/goss.yaml",
-            "vars_file": "mysql/runtime-parameters.yaml",
-            "remote": {
-              "pod": {
-                "workload": "sts-mysql-primary"
-              }
-            }
-          }
-        }
-      ]
-    },
     "publish": {
       "actions": [
         {

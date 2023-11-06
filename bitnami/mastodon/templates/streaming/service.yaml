@@ -8,20 +8,12 @@ kind: Service
 metadata:
   name: {{ template "mastodon.streaming.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: mastodon
     app.kubernetes.io/component: streaming
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.streaming.service.annotations .Values.commonAnnotations }}
-  annotations:
-    {{- if .Values.streaming.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.streaming.service.annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.streaming.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.streaming.service.type }}
@@ -56,5 +48,6 @@ spec:
     {{- if .Values.streaming.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.streaming.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.streaming.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: streaming

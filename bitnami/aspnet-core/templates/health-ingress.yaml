@@ -9,19 +9,14 @@ kind: Ingress
 metadata:
   name: {{ printf "%s-health" (include "aspnet-core.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   annotations:
     {{- if .Values.healthIngress.certManager }}
     kubernetes.io/tls-acme: "true"
     {{- end }}
-    {{- if .Values.healthIngress.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.healthIngress.annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- if or .Values.healthIngress.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.healthIngress.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
 spec:
   {{- if and .Values.healthIngress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}

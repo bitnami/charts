@@ -31,13 +31,6 @@
       },
       "actions": [
         {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-consul-ui-http",
-            "app_protocol": "HTTP"
-          }
-        },
-        {
           "action_id": "cypress",
           "params": {
             "resources": {
@@ -63,6 +56,19 @@
               "pod": {
                 "workload": "sts-consul"
               }
+            }
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/consul/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "consul"
             }
           }
         }

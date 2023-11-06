@@ -71,9 +71,9 @@ kustomizeController:
   enabled: true
   ## Bitnami Kustomize Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-kustomize-controller/tags/
-  ## @param kustomizeController.image.registry Kustomize Controller image registry
-  ## @param kustomizeController.image.repository Kustomize Controller image repository
-  ## @param kustomizeController.image.tag Kustomize Controller image tag (immutable tags are recommended)
+  ## @param kustomizeController.image.registry [default: REGISTRY_NAME] Kustomize Controller image registry
+  ## @param kustomizeController.image.repository [default: REPOSITORY_NAME/fluxcd-kustomize-controller] Kustomize Controller image repository
+  ## @skip kustomizeController.image.tag Kustomize Controller image tag (immutable tags are recommended)
   ## @param kustomizeController.image.digest Kustomize Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param kustomizeController.image.pullPolicy Kustomize Controller image pull policy
   ## @param kustomizeController.image.pullSecrets Kustomize Controller image pull secrets
@@ -82,7 +82,7 @@ kustomizeController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-kustomize-controller
-    tag: 0.35.1-debian-11-r115
+    tag: 1.1.1-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -174,30 +174,32 @@ kustomizeController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param kustomizeController.podSecurityContext.enabled Enabled Kustomize Controller pods' Security Context
   ## @param kustomizeController.podSecurityContext.fsGroup Set Kustomize Controller pod's Security Context fsGroup
-  ## @param kustomizeController.podSecurityContext.seccompProfile.type Set Kustomize Controller container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param kustomizeController.containerSecurityContext.enabled Enabled Kustomize Controller containers' Security Context
   ## @param kustomizeController.containerSecurityContext.runAsUser Set Kustomize Controller containers' Security Context runAsUser
   ## @param kustomizeController.containerSecurityContext.runAsNonRoot Set Kustomize Controller containers' Security Context runAsNonRoot
+  ## @param kustomizeController.containerSecurityContext.privileged Set Kustomize Controller containers' Security Context privileged
   ## @param kustomizeController.containerSecurityContext.readOnlyRootFilesystem Set Kustomize Controller containers' Security Context runAsNonRoot
   ## @param kustomizeController.containerSecurityContext.allowPrivilegeEscalation Set Kustomize Controller container's privilege escalation
   ## @param kustomizeController.containerSecurityContext.capabilities.drop Set Kustomize Controller container's Security Context runAsNonRoot
+  ## @param kustomizeController.containerSecurityContext.seccompProfile.type Set Kustomize Controller container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
 
   ## @param kustomizeController.command Override default container command (useful when using custom images)
   ##
@@ -504,9 +506,9 @@ helmController:
   enabled: true
   ## Bitnami Helm Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
-  ## @param helmController.image.registry Helm Controller image registry
-  ## @param helmController.image.repository Helm Controller image repository
-  ## @param helmController.image.tag Helm Controller image tag (immutable tags are recommended)
+  ## @param helmController.image.registry [default: REGISTRY_NAME] Helm Controller image registry
+  ## @param helmController.image.repository [default: REPOSITORY_NAME/fluxcd-helm-controller] Helm Controller image repository
+  ## @skip helmController.image.tag Helm Controller image tag (immutable tags are recommended)
   ## @param helmController.image.digest Helm Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param helmController.image.pullPolicy Helm Controller image pull policy
   ## @param helmController.image.pullSecrets Helm Controller image pull secrets
@@ -515,7 +517,7 @@ helmController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-helm-controller
-    tag: 0.35.0-debian-11-r20
+    tag: 0.36.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -607,30 +609,32 @@ helmController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param helmController.podSecurityContext.enabled Enabled Helm Controller pods' Security Context
   ## @param helmController.podSecurityContext.fsGroup Set Helm Controller pod's Security Context fsGroup
-  ## @param helmController.podSecurityContext.seccompProfile.type Set Helm Controller container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param helmController.containerSecurityContext.enabled Enabled Helm Controller containers' Security Context
   ## @param helmController.containerSecurityContext.runAsUser Set Helm Controller containers' Security Context runAsUser
   ## @param helmController.containerSecurityContext.runAsNonRoot Set Helm Controller containers' Security Context runAsNonRoot
+  ## @param helmController.containerSecurityContext.privileged Set Helm Controller containers' Security Context privileged
   ## @param helmController.containerSecurityContext.readOnlyRootFilesystem Set Helm Controller containers' Security Context runAsNonRoot
   ## @param helmController.containerSecurityContext.allowPrivilegeEscalation Set Helm Controller container's privilege escalation
   ## @param helmController.containerSecurityContext.capabilities.drop Set Helm Controller container's Security Context runAsNonRoot
+  ## @param helmController.containerSecurityContext.seccompProfile.type Set Helm Controller container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
 
   ## @param helmController.command Override default container command (useful when using custom images)
   ##
@@ -937,9 +941,9 @@ sourceController:
   enabled: true
   ## Bitnami Source Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
-  ## @param sourceController.image.registry Source Controller image registry
-  ## @param sourceController.image.repository Source Controller image repository
-  ## @param sourceController.image.tag Source Controller image tag (immutable tags are recommended)
+  ## @param sourceController.image.registry [default: REGISTRY_NAME] Source Controller image registry
+  ## @param sourceController.image.repository [default: REPOSITORY_NAME/fluxcd-source-controller] Source Controller image repository
+  ## @skip sourceController.image.tag Source Controller image tag (immutable tags are recommended)
   ## @param sourceController.image.digest Source Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param sourceController.image.pullPolicy Source Controller image pull policy
   ## @param sourceController.image.pullSecrets Source Controller image pull secrets
@@ -948,7 +952,7 @@ sourceController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-source-controller
-    tag: 0.36.1-debian-11-r114
+    tag: 1.1.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1042,30 +1046,32 @@ sourceController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param sourceController.podSecurityContext.enabled Enabled Source Controller pods' Security Context
   ## @param sourceController.podSecurityContext.fsGroup Set Source Controller pod's Security Context fsGroup
-  ## @param sourceController.podSecurityContext.seccompProfile.type Set Source Controller container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param sourceController.containerSecurityContext.enabled Enabled Source Controller containers' Security Context
   ## @param sourceController.containerSecurityContext.runAsUser Set Source Controller containers' Security Context runAsUser
   ## @param sourceController.containerSecurityContext.runAsNonRoot Set Source Controller containers' Security Context runAsNonRoot
+  ## @param sourceController.containerSecurityContext.privileged Set Source Controller containers' Security Context privileged
   ## @param sourceController.containerSecurityContext.readOnlyRootFilesystem Set Source Controller containers' Security Context runAsNonRoot
   ## @param sourceController.containerSecurityContext.allowPrivilegeEscalation Set Source Controller container's privilege escalation
   ## @param sourceController.containerSecurityContext.capabilities.drop Set Source Controller container's Security Context runAsNonRoot
+  ## @param sourceController.containerSecurityContext.seccompProfile.type Set Source Controller container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
+    privileged: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
 
   ## @param sourceController.command Override default container command (useful when using custom images)
   ##
@@ -1530,9 +1536,9 @@ notificationController:
   enabled: true
   ## Bitnami Notification Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-notification-controller/tags/
-  ## @param notificationController.image.registry Notification Controller image registry
-  ## @param notificationController.image.repository Notification Controller image repository
-  ## @param notificationController.image.tag Notification Controller image tag (immutable tags are recommended)
+  ## @param notificationController.image.registry [default: REGISTRY_NAME] Notification Controller image registry
+  ## @param notificationController.image.repository [default: REPOSITORY_NAME/fluxcd-notification-controller] Notification Controller image repository
+  ## @skip notificationController.image.tag Notification Controller image tag (immutable tags are recommended)
   ## @param notificationController.image.digest Notification Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param notificationController.image.pullPolicy Notification Controller image pull policy
   ## @param notificationController.image.pullSecrets Notification Controller image pull secrets
@@ -1541,7 +1547,7 @@ notificationController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-notification-controller
-    tag: 0.33.0-debian-11-r115
+    tag: 1.1.0-debian-11-r29
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1633,30 +1639,32 @@ notificationController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param notificationController.podSecurityContext.enabled Enabled Notification Controller pods' Security Context
   ## @param notificationController.podSecurityContext.fsGroup Set Notification Controller pod's Security Context fsGroup
-  ## @param notificationController.podSecurityContext.seccompProfile.type Set Notification Controller container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param notificationController.containerSecurityContext.enabled Enabled Notification Controller containers' Security Context
   ## @param notificationController.containerSecurityContext.runAsUser Set Notification Controller containers' Security Context runAsUser
   ## @param notificationController.containerSecurityContext.runAsNonRoot Set Notification Controller containers' Security Context runAsNonRoot
   ## @param notificationController.containerSecurityContext.readOnlyRootFilesystem Set Notification Controller containers' Security Context runAsNonRoot
+  ## @param notificationController.containerSecurityContext.privileged Set Notification Controller containers' Security Context privileged
   ## @param notificationController.containerSecurityContext.allowPrivilegeEscalation Set Notification Controller container's privilege escalation
   ## @param notificationController.containerSecurityContext.capabilities.drop Set Notification Controller container's Security Context runAsNonRoot
+  ## @param notificationController.containerSecurityContext.seccompProfile.type Set Notification Controller container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
 
   ## @param notificationController.command Override default container command (useful when using custom images)
   ##
@@ -1963,9 +1971,9 @@ imageAutomationController:
   enabled: true
   ## Bitnami Image Automation Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-image-automation-controller/tags/
-  ## @param imageAutomationController.image.registry Image Automation Controller image registry
-  ## @param imageAutomationController.image.repository Image Automation Controller image repository
-  ## @param imageAutomationController.image.tag Image Automation Controller image tag (immutable tags are recommended)
+  ## @param imageAutomationController.image.registry [default: REGISTRY_NAME] Image Automation Controller image registry
+  ## @param imageAutomationController.image.repository [default: REPOSITORY_NAME/fluxcd-image-automation-controller] Image Automation Controller image repository
+  ## @skip imageAutomationController.image.tag Image Automation Controller image tag (immutable tags are recommended)
   ## @param imageAutomationController.image.digest Image Automation Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param imageAutomationController.image.pullPolicy Image Automation Controller image pull policy
   ## @param imageAutomationController.image.pullSecrets Image Automation Controller image pull secrets
@@ -1974,7 +1982,7 @@ imageAutomationController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-image-automation-controller
-    tag: 0.31.0-debian-11-r59
+    tag: 0.36.1-debian-11-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2066,30 +2074,32 @@ imageAutomationController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param imageAutomationController.podSecurityContext.enabled Enabled Image Automation Controller pods' Security Context
   ## @param imageAutomationController.podSecurityContext.fsGroup Set Image Automation Controller pod's Security Context fsGroup
-  ## @param imageAutomationController.podSecurityContext.seccompProfile.type Set Image Automation Controller container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param imageAutomationController.containerSecurityContext.enabled Enabled Image Automation Controller containers' Security Context
   ## @param imageAutomationController.containerSecurityContext.runAsUser Set Image Automation Controller containers' Security Context runAsUser
   ## @param imageAutomationController.containerSecurityContext.runAsNonRoot Set Image Automation Controller containers' Security Context runAsNonRoot
   ## @param imageAutomationController.containerSecurityContext.readOnlyRootFilesystem Set Image Automation Controller containers' Security Context runAsNonRoot
+  ## @param imageAutomationController.containerSecurityContext.privileged Set Image Automation Controller containers' Security Context privileged
   ## @param imageAutomationController.containerSecurityContext.allowPrivilegeEscalation Set Image Automation Controller container's privilege escalation
   ## @param imageAutomationController.containerSecurityContext.capabilities.drop Set Image Automation Controller container's Security Context runAsNonRoot
+  ## @param imageAutomationController.containerSecurityContext.seccompProfile.type Set Image Automation Controller container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
+    privileged: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
 
   ## @param imageAutomationController.command Override default container command (useful when using custom images)
   ##
@@ -2396,9 +2406,9 @@ imageReflectorController:
   enabled: true
   ## Bitnami Image Reflector Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
-  ## @param imageReflectorController.image.registry Image Reflector Controller image registry
-  ## @param imageReflectorController.image.repository Image Reflector Controller image repository
-  ## @param imageReflectorController.image.tag Image Reflector Controller image tag (immutable tags are recommended)
+  ## @param imageReflectorController.image.registry [default: REGISTRY_NAME] Image Reflector Controller image registry
+  ## @param imageReflectorController.image.repository [default: REPOSITORY_NAME/fluxcd-image-reflector-controller] Image Reflector Controller image repository
+  ## @skip imageReflectorController.image.tag Image Reflector Controller image tag (immutable tags are recommended)
   ## @param imageReflectorController.image.digest Image Reflector Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param imageReflectorController.image.pullPolicy Image Reflector Controller image pull policy
   ## @param imageReflectorController.image.pullSecrets Image Reflector Controller image pull secrets
@@ -2407,7 +2417,7 @@ imageReflectorController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-image-reflector-controller
-    tag: 0.29.1-debian-11-r14
+    tag: 0.30.0-debian-11-r43
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2499,30 +2509,32 @@ imageReflectorController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param imageReflectorController.podSecurityContext.enabled Enabled Image Reflector Controller pods' Security Context
   ## @param imageReflectorController.podSecurityContext.fsGroup Set Image Reflector Controller pod's Security Context fsGroup
-  ## @param imageReflectorController.podSecurityContext.seccompProfile.type Set Image Reflector Controller container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param imageReflectorController.containerSecurityContext.enabled Enabled Image Reflector Controller containers' Security Context
   ## @param imageReflectorController.containerSecurityContext.runAsUser Set Image Reflector Controller containers' Security Context runAsUser
   ## @param imageReflectorController.containerSecurityContext.runAsNonRoot Set Image Reflector Controller containers' Security Context runAsNonRoot
+  ## @param imageReflectorController.containerSecurityContext.privileged Set Image Reflector Controller containers' Security Context privileged
   ## @param imageReflectorController.containerSecurityContext.readOnlyRootFilesystem Set Image Reflector Controller containers' Security Context runAsNonRoot
   ## @param imageReflectorController.containerSecurityContext.allowPrivilegeEscalation Set Image Reflector Controller container's privilege escalation
   ## @param imageReflectorController.containerSecurityContext.capabilities.drop Set Image Reflector Controller container's Security Context runAsNonRoot
+  ## @param imageReflectorController.containerSecurityContext.seccompProfile.type Set Image Reflector Controller container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
 
   ## @param imageReflectorController.command Override default container command (useful when using custom images)
   ##
@@ -2874,9 +2886,9 @@ volumePermissions:
   enabled: false
   ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param volumePermissions.image.registry OS Shell + Utility image registry
-  ## @param volumePermissions.image.repository OS Shell + Utility image repository
-  ## @param volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
   ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
@@ -2884,7 +2896,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r16
+    tag:  11-debian-11-r90
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

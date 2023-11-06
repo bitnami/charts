@@ -31,12 +31,6 @@
       },
       "actions": [
         {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-mongodb-mongodb"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
@@ -48,6 +42,21 @@
               "pod": {
                 "workload": "deploy-mongodb"
               }
+            }
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/mongodb/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "mongodb",
+              "username": "bitnamiRoot",
+              "password": "ComplicatedPassword123!4"
             }
           }
         }

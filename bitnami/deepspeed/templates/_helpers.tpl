@@ -177,15 +177,56 @@ Return the definition of wait for workers init container
 
       echo "Connection success"
       exit 0
-
+  {{- if .Values.client.containerSecurityContext.enabled }}
+  securityContext: {{- omit .Values.client.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  {{- end }}
   volumeMounts:
     - name: ssh-client-config
       mountPath: /etc/ssh/ssh_config.d/deepspeed_ssh_client.conf
       subPath: deepspeed_ssh_client.conf
+    - name: ssh-config
+      mountPath: /etc/ssh/ssh_config
+      subPath: ssh_config
     - name: ssh-client-private-key
       mountPath: /bitnami/ssh/client-private-key
     - name: ssh-local-folder
       mountPath: /home/deepspeed/.ssh
+    - name: tmp
+      mountPath: /tmp
+{{- end -}}
+
+{{/*
+Return the definition of the ssh client configuration init container
+*/}}
+{{- define "deepspeed.v0.ssh.clientInitContainer" -}}
+- name: ssh-client-configure
+  image: {{ include "deepspeed.v0.image" . }}
+  imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+  command:
+    - /bin/bash
+  args:
+    - -ec
+    - |
+      #!/bin/bash
+      # HACK: Depending on the OS, the ssh version may not have support for
+      # /etc/ssh/ssh_config.d. Therefore, we need to copy the ssh_config
+      # to a volume and perform modifications to include the configuration
+      # from the ConfigMap, as it will not be read
+      [[ -f "/opt/bitnami/scripts/deepspeed/entrypoint.sh" ]] && source "/opt/bitnami/scripts/deepspeed/entrypoint.sh"
+      cp /etc/ssh/ssh_config /bitnami/ssh/ssh-config
+      if [[ ! -d /etc/ssh/ssh_config.d ]]; then
+        # Older version of ssh, add the include directive
+        echo "Modifying ssh_config with include directive"
+        echo "Include /etc/ssh/ssh_config.d/*.conf" >> /bitnami/ssh/ssh-config/ssh_config
+      fi
+  {{- if .Values.client.containerSecurityContext.enabled }}
+  securityContext: {{- omit .Values.client.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  {{- end }}
+  volumeMounts:
+    - name: ssh-config
+      mountPath: /bitnami/ssh/ssh-config/
+    - name: tmp
+      mountPath: /tmp
 {{- end -}}
 
 {{/*
@@ -201,6 +242,7 @@ Return the definition of the ssh server configuration init container
     - -ec
     - |
       #!/bin/bash
+      [[ -f "/opt/bitnami/scripts/deepspeed/entrypoint.sh" ]] && source "/opt/bitnami/scripts/deepspeed/entrypoint.sh"
       echo "Obtaining public key and generating authorized_keys file"
       mkdir -p /home/deepspeed/.ssh
       ssh-keygen -y -f /bitnami/ssh/client-private-key/id_rsa > /home/deepspeed/.ssh/authorized_keys
@@ -211,14 +253,65 @@ Return the definition of the ssh server configuration init container
       chmod 700 /home/deepspeed/.ssh
       chmod 600 /home/deepspeed/.ssh/authorized_keys
       ssh-keygen -A -f /bitnami/ssh/server-private-key/
+
+      replace_in_file() {
+          local filename="${1:?filename is required}"
+          local match_regex="${2:?match regex is required}"
+          local substitute_regex="${3:?substitute regex is required}"
+          local posix_regex=${4:-true}
+
+          local result
+
+          # We should avoid using 'sed in-place' substitutions
+          # 1) They are not compatible with files mounted from ConfigMap(s)
+          # 2) We found incompatibility issues with Debian10 and "in-place" substitutions
+          local -r del=$'\001' # Use a non-printable character as a 'sed' delimiter to avoid issues
+          if [[ $posix_regex = true ]]; then
+              result="$(sed -E "s${del}${match_regex}${del}${substitute_regex}${del}g" "$filename")"
+          else
+              result="$(sed "s${del}${match_regex}${del}${substitute_regex}${del}g" "$filename")"
+          fi
+          echo "$result" > "$filename"
+      }
+
+      # HACK: Depending on the OS, the ssh version may not have support for
+      # /etc/ssh/sshd_config.d. Therefore, we need to copy the sshd_config
+      # to a volume and perform modifications to include the configuration
+      # from the ConfigMap. The sshd_config file does not allow the
+      # Include directive, so we need to append the configuration
+      cp /etc/ssh/sshd_config /bitnami/ssh/sshd-config
+      if [[ ! -d /etc/ssh/sshd_config.d ]]; then
+        # Older version of ssh, merge the contents
+        while read -r line; do
+          read -a entry <<< $line
+          key="${entry[0]}"
+          value="${entry[1]}"
+          if grep -q "${entry[0]}" /bitnami/ssh/sshd-config/sshd_config; then
+            echo "Replacing ${entry[*]} in sshd_config file"
+            replace_in_file /bitnami/ssh/sshd-config/sshd_config "^[#]*${entry[0]}.*" "${entry[*]}"
+          else
+            echo "Adding ${entry[*]} in sshd_config file"
+            echo "${entry[*]}" >> /bitnami/ssh/sshd-config/sshd_config
+          fi
+        done < /bitnami/ssh/server-configmap/*.conf
+      fi
+  {{- if .Values.worker.containerSecurityContext.enabled }}
+  securityContext: {{- omit .Values.worker.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  {{- end }}
   volumeMounts:
     - name: ssh-client-private-key
       mountPath: /bitnami/ssh/client-private-key
     # ssh-keygen -A forces /etc/ssh in the prefix path
     - name: ssh-worker-private-key
       mountPath: /bitnami/ssh/server-private-key/etc/ssh
+    - name: ssh-server-config
+      mountPath: /bitnami/ssh/server-configmap
+    - name: sshd-config
+      mountPath: /bitnami/ssh/sshd-config/
     - name: worker-home
       mountPath: /home/
+    - name: tmp
+      mountPath: /tmp
 {{- end -}}
 
 
@@ -226,9 +319,10 @@ Return the definition of the ssh server configuration init container
 Return the definition of the git clone init container
 */}}
 {{- define "deespeed.git.cloneInitContainer" -}}
+{{- $block := index .context.Values .component }}
 - name: git-clone-repository
-  image: {{ include "deepspeed.v0.git.image" . }}
-  imagePullPolicy: {{ .Values.gitImage.pullPolicy | quote }}
+  image: {{ include "deepspeed.v0.git.image" .context }}
+  imagePullPolicy: {{ .context.Values.gitImage.pullPolicy | quote }}
   command:
     - /bin/bash
   args:
@@ -237,12 +331,20 @@ Return the definition of the git clone init container
       #!/bin/bash
       rm -rf /app/*
       [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
-      git clone {{ .Values.source.git.repository }} {{ if .Values.source.git.revision }}--branch {{ .Values.source.git.revision }}{{ end }} /app
+      git clone {{ .context.Values.source.git.repository }} {{ if .context.Values.source.git.revision }}--branch {{ .context.Values.source.git.revision }}{{ end }} /app
+  {{- if $block.containerSecurityContext.enabled }}
+  securityContext: {{- omit $block.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  {{- end }}
   volumeMounts:
     - name: source
       mountPath: /app
-  {{- if .Values.source.git.extraVolumeMounts }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.source.git.extraVolumeMounts "context" $) | nindent 12 }}
+    - name: tmp
+      mountPath: /tmp
+    # It creates at startup ssh in case it performs ssh-based git clone
+    - name: tmp
+      mountPath: /etc/ssh
+  {{- if .context.Values.source.git.extraVolumeMounts }}
+    {{- include "common.tplvalues.render" (dict "value" .context.Values.source.git.extraVolumeMounts "context" .context) | nindent 12 }}
   {{- end }}
 {{- end -}}
 
@@ -271,6 +373,8 @@ Return the volume-permissions init container
   volumeMounts:
     - name: data
       mountPath: {{ $block.persistence.mountPath }}
+    - name: tmp
+      mountPath: /tmp
 {{- end -}}
 
 {{/*

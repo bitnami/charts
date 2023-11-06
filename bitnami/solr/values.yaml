@@ -64,9 +64,9 @@ diagnosticMode:
 
 ## Bitnami Solr image version
 ## ref: https://hub.docker.com/r/bitnami/solr/tags
-## @param image.registry Solr image registry
-## @param image.repository Solr image repository
-## @param image.tag Solr image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Solr image registry
+## @param image.repository [default: REPOSITORY_NAME/solr] Solr image repository
+## @skip image.tag Solr image tag (immutable tags are recommended)
 ## @param image.digest Solr image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -75,7 +75,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/solr
-  tag: 9.3.0-debian-11-r1
+  tag: 9.4.0-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -243,14 +243,26 @@ podSecurityContext:
   fsGroup: 1001
 ## Solr containers' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enable Solr containers' Security Context
-## @param containerSecurityContext.runAsUser Set Solr containers' Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set Solr containers' Security Context runAsNonRoot
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## @param hostAliases Solr pods host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -327,6 +339,11 @@ schedulerName: ""
 updateStrategy:
   type: RollingUpdate
   rollingUpdate: {}
+## @param enableServiceLinks Whether information about services should be injected into pod's environment variable
+## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+##
+enableServiceLinks: true
 
 ## Solr Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
@@ -590,9 +607,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
@@ -600,7 +617,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r13
+    tag: 11-debian-11-r90
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -800,14 +817,26 @@ metrics:
     requests: {}
   ## Solr Prometheus exporter containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param metrics.containerSecurityContext.enabled Enable Solr Prometheus exporter containers' Security Context
-  ## @param metrics.containerSecurityContext.runAsUser User ID for the containers.
-  ## @param metrics.containerSecurityContext.runAsNonRoot Enable Solr Prometheus exporter containers' Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param metrics.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Solr Prometheus exporter pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param metrics.podSecurityContext.enabled Enable Solr Prometheus exporter pods' Security Context

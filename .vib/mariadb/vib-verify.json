@@ -31,13 +31,6 @@
       },
       "actions": [
         {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-mariadb-primary-mysql",
-            "app_protocol": "GENERIC"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
@@ -49,6 +42,21 @@
               "pod": {
                 "workload": "sts-mariadb-primary"
               }
+            }
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/mariadb/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "mariadb-primary",
+              "username": "root",
+              "password": "R0ot)Password"
             }
           }
         }

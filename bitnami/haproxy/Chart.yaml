@@ -4,25 +4,28 @@
 annotations:
   category: Infrastructure
   licenses: Apache-2.0
+  images: |
+    - name: haproxy
+      image: docker.io/bitnami/haproxy:2.8.3-debian-11-r29
 apiVersion: v2
-appVersion: 2.8.1
+appVersion: 2.8.3
 dependencies:
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: HAProxy is a TCP proxy and a HTTP reverse proxy. It supports SSL termination and offloading, TCP and HTTP normalization, traffic regulation, caching and protection against DDoS attacks.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/haproxy/img/haproxy-stack-220x234.png
 keywords:
-  - haproxy
-  - proxy
-  - infrastructure
+- haproxy
+- proxy
+- infrastructure
 maintainers:
-  - name: VMware, Inc.
-    url: https://github.com/bitnami/charts
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
 name: haproxy
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/haproxy
-version: 0.8.7
+- https://github.com/bitnami/charts/tree/main/bitnami/haproxy
+version: 0.10.0

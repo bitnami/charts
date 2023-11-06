@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/odoo
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/odoo
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -22,12 +24,12 @@ Odoo Apps can be used as stand-alone applications, but they also integrate seaml
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Odoo in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Odoo in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -36,8 +38,10 @@ Looking to use Odoo in production? Try [VMware Application Catalog](https://bitn
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/odoo
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/odoo
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys Odoo on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -66,25 +70,24 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                                          | Value                        |
-| ------------------------ | ---------------------------------------------------------------------------------------------------- | ---------------------------- |
-| `kubeVersion`            | Override Kubernetes version                                                                          | `""`                         |
-| `nameOverride`           | String to partially override common.names.fullname                                                   | `""`                         |
-| `fullnameOverride`       | String to fully override common.names.fullname                                                       | `""`                         |
-| `commonLabels`           | Labels to add to all deployed objects                                                                | `{}`                         |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                                           | `{}`                         |
-| `clusterDomain`          | Default Kubernetes cluster domain                                                                    | `cluster.local`              |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                                    | `[]`                         |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)              | `false`                      |
-| `diagnosticMode.command` | Command to override all containers in the the statefulset                                            | `["sleep"]`                  |
-| `diagnosticMode.args`    | Args to override all containers in the the statefulset                                               | `["infinity"]`               |
-| `image.registry`         | Odoo image registry                                                                                  | `docker.io`                  |
-| `image.repository`       | Odoo image repository                                                                                | `bitnami/odoo`               |
-| `image.tag`              | Odoo image tag (immutable tags are recommended)                                                      | `16.0.20230715-debian-11-r9` |
-| `image.digest`           | Odoo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
-| `image.pullPolicy`       | Odoo image pull policy                                                                               | `IfNotPresent`               |
-| `image.pullSecrets`      | Odoo image pull secrets                                                                              | `[]`                         |
-| `image.debug`            | Enable image debug mode                                                                              | `false`                      |
+| Name                     | Description                                                                                          | Value                  |
+| ------------------------ | ---------------------------------------------------------------------------------------------------- | ---------------------- |
+| `kubeVersion`            | Override Kubernetes version                                                                          | `""`                   |
+| `nameOverride`           | String to partially override common.names.fullname                                                   | `""`                   |
+| `fullnameOverride`       | String to fully override common.names.fullname                                                       | `""`                   |
+| `commonLabels`           | Labels to add to all deployed objects                                                                | `{}`                   |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                           | `{}`                   |
+| `clusterDomain`          | Default Kubernetes cluster domain                                                                    | `cluster.local`        |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                    | `[]`                   |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)              | `false`                |
+| `diagnosticMode.command` | Command to override all containers in the the statefulset                                            | `["sleep"]`            |
+| `diagnosticMode.args`    | Args to override all containers in the the statefulset                                               | `["infinity"]`         |
+| `image.registry`         | Odoo image registry                                                                                  | `REGISTRY_NAME`        |
+| `image.repository`       | Odoo image repository                                                                                | `REPOSITORY_NAME/odoo` |
+| `image.digest`           | Odoo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `image.pullPolicy`       | Odoo image pull policy                                                                               | `IfNotPresent`         |
+| `image.pullSecrets`      | Odoo image pull secrets                                                                              | `[]`                   |
+| `image.debug`            | Enable image debug mode                                                                              | `false`                |
 
 ### Odoo Configuration parameters
 
@@ -93,6 +96,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `odooEmail`             | Odoo user email                                                      | `user@example.com` |
 | `odooPassword`          | Odoo user password                                                   | `""`               |
 | `odooSkipInstall`       | Skip Odoo installation wizard                                        | `false`            |
+| `odooDatabaseFilter`    | Filter odoo database by using a regex                                | `.*`               |
 | `loadDemoData`          | Whether to load demo data for all modules during initialization      | `false`            |
 | `customPostInitScripts` | Custom post-init.d user scripts                                      | `{}`               |
 | `smtpHost`              | SMTP server host                                                     | `""`               |
@@ -287,8 +291,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set odooPassword=password,postgresql.postgresPassword=secretpassword \
-    oci://registry-1.docker.io/bitnamicharts/odoo
+    oci://REGISTRY_NAME/REPOSITORY_NAME/odoo
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the Odoo administrator account password to `password` and the PostgreSQL `postgres` user password to `secretpassword`.
 
@@ -297,9 +303,10 @@ The above command sets the Odoo administrator account password to `password` and
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/odoo
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/odoo
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -362,6 +369,10 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 24.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 13.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1300) you can find more information about the changes introduced in that version.
 
 ### To 23.0.0
 

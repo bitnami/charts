@@ -10,22 +10,14 @@ kind: Service
 metadata:
   name: {{ include "common.names.fullname" . }}-query
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list $query.service.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query
     {{- include "thanos.servicemonitor.matchLabels" . | nindent 4 -}}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if $query.service.labels }}
-    {{- include "common.tplvalues.render" ( dict "value" $query.service.labels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if $query.service.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" $query.service.annotations "context" $) | nindent 4 }}
-    {{- end }}
+  {{- if or $query.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list $query.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ $query.service.type }}
   {{- if and $query.service.clusterIP (eq $query.service.type "ClusterIP") }}
@@ -57,7 +49,8 @@ spec:
     {{- if $query.service.labelSelectorsOverride }}
     {{- include "common.tplvalues.render" (dict "value" $query.service.labelSelectorsOverride "context" $) | nindent 4 }}
     {{- else }}
-    {{- include "common.labels.matchLabels" . | nindent 4 }}
+    {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $query.podLabels .Values.commonLabels ) "context" . ) }}
+    {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query
     {{- end }}
 {{- end }}

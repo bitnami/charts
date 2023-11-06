@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
-  https://ejbca:{{ .Vars.service.ports.https }}:
+  https://ejbca:{{ .Vars.service.ports.https }}/ejbca/doc:
     status: 200
     allow-insecure: true
 file:
@@ -15,7 +15,7 @@ file:
     exists: true
     filetype: file
     mode: "0644"
-    contains:
+    contents:
       - /http.*{{ .Vars.containerPorts.http }}/
       - /https.*{{ .Vars.containerPorts.https }}/
       - /connection-url.*{{ .Vars.mariadb.auth.database }}/

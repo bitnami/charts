@@ -8,20 +8,12 @@ kind: Service
 metadata:
   name: {{ template "supabase.studio.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: supabase
     app.kubernetes.io/component: studio
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.studio.service.annotations .Values.commonAnnotations }}
-  annotations:
-    {{- if .Values.studio.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.studio.service.annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.studio.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.studio.service.type }}
@@ -57,5 +49,6 @@ spec:
     {{- if .Values.studio.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.studio.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.studio.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: studio

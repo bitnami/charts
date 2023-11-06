@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/etcd
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/etcd
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -20,12 +22,12 @@ This chart bootstraps a [etcd](https://github.com/bitnami/containers/tree/main/b
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Etcd in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Etcd in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -33,8 +35,10 @@ Looking to use Etcd in production? Try [VMware Application Catalog](https://bitn
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/etcd
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/etcd
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy etcd on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -77,142 +81,148 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### etcd parameters
 
-| Name                                   | Description                                                                                                          | Value                 |
-| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`                       | etcd image registry                                                                                                  | `docker.io`           |
-| `image.repository`                     | etcd image name                                                                                                      | `bitnami/etcd`        |
-| `image.tag`                            | etcd image tag                                                                                                       | `3.5.9-debian-11-r76` |
-| `image.digest`                         | etcd image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                  |
-| `image.pullPolicy`                     | etcd image pull policy                                                                                               | `IfNotPresent`        |
-| `image.pullSecrets`                    | etcd image pull secrets                                                                                              | `[]`                  |
-| `image.debug`                          | Enable image debug mode                                                                                              | `false`               |
-| `auth.rbac.create`                     | Switch to enable RBAC authentication                                                                                 | `true`                |
-| `auth.rbac.allowNoneAuthentication`    | Allow to use etcd without configuring RBAC authentication                                                            | `true`                |
-| `auth.rbac.rootPassword`               | Root user password. The root user is always `root`                                                                   | `""`                  |
-| `auth.rbac.existingSecret`             | Name of the existing secret containing credentials for the root user                                                 | `""`                  |
-| `auth.rbac.existingSecretPasswordKey`  | Name of key containing password to be retrieved from the existing secret                                             | `""`                  |
-| `auth.token.enabled`                   | Enables token authentication                                                                                         | `true`                |
-| `auth.token.type`                      | Authentication token type. Allowed values: 'simple' or 'jwt'                                                         | `jwt`                 |
-| `auth.token.privateKey.filename`       | Name of the file containing the private key for signing the JWT token                                                | `jwt-token.pem`       |
-| `auth.token.privateKey.existingSecret` | Name of the existing secret containing the private key for signing the JWT token                                     | `""`                  |
-| `auth.token.signMethod`                | JWT token sign method                                                                                                | `RS256`               |
-| `auth.token.ttl`                       | JWT token TTL                                                                                                        | `10m`                 |
-| `auth.client.secureTransport`          | Switch to encrypt client-to-server communications using TLS certificates                                             | `false`               |
-| `auth.client.useAutoTLS`               | Switch to automatically create the TLS certificates                                                                  | `false`               |
-| `auth.client.existingSecret`           | Name of the existing secret containing the TLS certificates for client-to-server communications                      | `""`                  |
-| `auth.client.enableAuthentication`     | Switch to enable host authentication using TLS certificates. Requires existing secret                                | `false`               |
-| `auth.client.certFilename`             | Name of the file containing the client certificate                                                                   | `cert.pem`            |
-| `auth.client.certKeyFilename`          | Name of the file containing the client certificate private key                                                       | `key.pem`             |
-| `auth.client.caFilename`               | Name of the file containing the client CA certificate                                                                | `""`                  |
-| `auth.peer.secureTransport`            | Switch to encrypt server-to-server communications using TLS certificates                                             | `false`               |
-| `auth.peer.useAutoTLS`                 | Switch to automatically create the TLS certificates                                                                  | `false`               |
-| `auth.peer.existingSecret`             | Name of the existing secret containing the TLS certificates for server-to-server communications                      | `""`                  |
-| `auth.peer.enableAuthentication`       | Switch to enable host authentication using TLS certificates. Requires existing secret                                | `false`               |
-| `auth.peer.certFilename`               | Name of the file containing the peer certificate                                                                     | `cert.pem`            |
-| `auth.peer.certKeyFilename`            | Name of the file containing the peer certificate private key                                                         | `key.pem`             |
-| `auth.peer.caFilename`                 | Name of the file containing the peer CA certificate                                                                  | `""`                  |
-| `autoCompactionMode`                   | Auto compaction mode, by default periodic. Valid values: "periodic", "revision".                                     | `""`                  |
-| `autoCompactionRetention`              | Auto compaction retention for mvcc key value store in hour, by default 0, means disabled                             | `""`                  |
-| `initialClusterState`                  | Initial cluster state. Allowed values: 'new' or 'existing'                                                           | `""`                  |
-| `initialClusterToken`                  | Initial cluster token. Can be used to protect etcd from cross-cluster-interaction, which might corrupt the clusters. | `etcd-cluster-k8s`    |
-| `logLevel`                             | Sets the log level for the etcd process. Allowed values: 'debug', 'info', 'warn', 'error', 'panic', 'fatal'          | `info`                |
-| `maxProcs`                             | Limits the number of operating system threads that can execute user-level                                            | `""`                  |
-| `removeMemberOnContainerTermination`   | Use a PreStop hook to remove the etcd members from the etcd cluster on container termination                         | `true`                |
-| `configuration`                        | etcd configuration. Specify content for etcd.conf.yml                                                                | `""`                  |
-| `existingConfigmap`                    | Existing ConfigMap with etcd configuration                                                                           | `""`                  |
-| `extraEnvVars`                         | Extra environment variables to be set on etcd container                                                              | `[]`                  |
-| `extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                                                 | `""`                  |
-| `extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                                                    | `""`                  |
-| `command`                              | Default container command (useful when using custom images)                                                          | `[]`                  |
-| `args`                                 | Default container args (useful when using custom images)                                                             | `[]`                  |
+| Name                                   | Description                                                                                                          | Value                  |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`                       | etcd image registry                                                                                                  | `REGISTRY_NAME`        |
+| `image.repository`                     | etcd image name                                                                                                      | `REPOSITORY_NAME/etcd` |
+| `image.digest`                         | etcd image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                   |
+| `image.pullPolicy`                     | etcd image pull policy                                                                                               | `IfNotPresent`         |
+| `image.pullSecrets`                    | etcd image pull secrets                                                                                              | `[]`                   |
+| `image.debug`                          | Enable image debug mode                                                                                              | `false`                |
+| `auth.rbac.create`                     | Switch to enable RBAC authentication                                                                                 | `true`                 |
+| `auth.rbac.allowNoneAuthentication`    | Allow to use etcd without configuring RBAC authentication                                                            | `true`                 |
+| `auth.rbac.rootPassword`               | Root user password. The root user is always `root`                                                                   | `""`                   |
+| `auth.rbac.existingSecret`             | Name of the existing secret containing credentials for the root user                                                 | `""`                   |
+| `auth.rbac.existingSecretPasswordKey`  | Name of key containing password to be retrieved from the existing secret                                             | `""`                   |
+| `auth.token.enabled`                   | Enables token authentication                                                                                         | `true`                 |
+| `auth.token.type`                      | Authentication token type. Allowed values: 'simple' or 'jwt'                                                         | `jwt`                  |
+| `auth.token.privateKey.filename`       | Name of the file containing the private key for signing the JWT token                                                | `jwt-token.pem`        |
+| `auth.token.privateKey.existingSecret` | Name of the existing secret containing the private key for signing the JWT token                                     | `""`                   |
+| `auth.token.signMethod`                | JWT token sign method                                                                                                | `RS256`                |
+| `auth.token.ttl`                       | JWT token TTL                                                                                                        | `10m`                  |
+| `auth.client.secureTransport`          | Switch to encrypt client-to-server communications using TLS certificates                                             | `false`                |
+| `auth.client.useAutoTLS`               | Switch to automatically create the TLS certificates                                                                  | `false`                |
+| `auth.client.existingSecret`           | Name of the existing secret containing the TLS certificates for client-to-server communications                      | `""`                   |
+| `auth.client.enableAuthentication`     | Switch to enable host authentication using TLS certificates. Requires existing secret                                | `false`                |
+| `auth.client.certFilename`             | Name of the file containing the client certificate                                                                   | `cert.pem`             |
+| `auth.client.certKeyFilename`          | Name of the file containing the client certificate private key                                                       | `key.pem`              |
+| `auth.client.caFilename`               | Name of the file containing the client CA certificate                                                                | `""`                   |
+| `auth.peer.secureTransport`            | Switch to encrypt server-to-server communications using TLS certificates                                             | `false`                |
+| `auth.peer.useAutoTLS`                 | Switch to automatically create the TLS certificates                                                                  | `false`                |
+| `auth.peer.existingSecret`             | Name of the existing secret containing the TLS certificates for server-to-server communications                      | `""`                   |
+| `auth.peer.enableAuthentication`       | Switch to enable host authentication using TLS certificates. Requires existing secret                                | `false`                |
+| `auth.peer.certFilename`               | Name of the file containing the peer certificate                                                                     | `cert.pem`             |
+| `auth.peer.certKeyFilename`            | Name of the file containing the peer certificate private key                                                         | `key.pem`              |
+| `auth.peer.caFilename`                 | Name of the file containing the peer CA certificate                                                                  | `""`                   |
+| `autoCompactionMode`                   | Auto compaction mode, by default periodic. Valid values: "periodic", "revision".                                     | `""`                   |
+| `autoCompactionRetention`              | Auto compaction retention for mvcc key value store in hour, by default 0, means disabled                             | `""`                   |
+| `initialClusterState`                  | Initial cluster state. Allowed values: 'new' or 'existing'                                                           | `""`                   |
+| `initialClusterToken`                  | Initial cluster token. Can be used to protect etcd from cross-cluster-interaction, which might corrupt the clusters. | `etcd-cluster-k8s`     |
+| `logLevel`                             | Sets the log level for the etcd process. Allowed values: 'debug', 'info', 'warn', 'error', 'panic', 'fatal'          | `info`                 |
+| `maxProcs`                             | Limits the number of operating system threads that can execute user-level                                            | `""`                   |
+| `removeMemberOnContainerTermination`   | Use a PreStop hook to remove the etcd members from the etcd cluster on container termination                         | `true`                 |
+| `configuration`                        | etcd configuration. Specify content for etcd.conf.yml                                                                | `""`                   |
+| `existingConfigmap`                    | Existing ConfigMap with etcd configuration                                                                           | `""`                   |
+| `extraEnvVars`                         | Extra environment variables to be set on etcd container                                                              | `[]`                   |
+| `extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                                                 | `""`                   |
+| `extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                                                    | `""`                   |
+| `command`                              | Default container command (useful when using custom images)                                                          | `[]`                   |
+| `args`                                 | Default container args (useful when using custom images)                                                             | `[]`                   |
 
 ### etcd statefulset parameters
 
-| Name                                                | Description                                                                               | Value           |
-| --------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
-| `replicaCount`                                      | Number of etcd replicas to deploy                                                         | `1`             |
-| `updateStrategy.type`                               | Update strategy type, can be set to RollingUpdate or OnDelete.                            | `RollingUpdate` |
-| `podManagementPolicy`                               | Pod management policy for the etcd statefulset                                            | `Parallel`      |
-| `hostAliases`                                       | etcd pod host aliases                                                                     | `[]`            |
-| `lifecycleHooks`                                    | Override default etcd container hooks                                                     | `{}`            |
-| `containerPorts.client`                             | Client port to expose at container level                                                  | `2379`          |
-| `containerPorts.peer`                               | Peer port to expose at container level                                                    | `2380`          |
-| `podSecurityContext.enabled`                        | Enabled etcd pods' Security Context                                                       | `true`          |
-| `podSecurityContext.fsGroup`                        | Set etcd pod's Security Context fsGroup                                                   | `1001`          |
-| `containerSecurityContext.enabled`                  | Enabled etcd containers' Security Context                                                 | `true`          |
-| `containerSecurityContext.runAsUser`                | Set etcd container's Security Context runAsUser                                           | `1001`          |
-| `containerSecurityContext.runAsNonRoot`             | Set etcd container's Security Context runAsNonRoot                                        | `true`          |
-| `containerSecurityContext.allowPrivilegeEscalation` | Force the child process to be run as nonprivilege                                         | `false`         |
-| `resources.limits`                                  | The resources limits for the etcd container                                               | `{}`            |
-| `resources.requests`                                | The requested resources for the etcd container                                            | `{}`            |
-| `livenessProbe.enabled`                             | Enable livenessProbe                                                                      | `true`          |
-| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                   | `60`            |
-| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                          | `30`            |
-| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                         | `5`             |
-| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                       | `5`             |
-| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                       | `1`             |
-| `readinessProbe.enabled`                            | Enable readinessProbe                                                                     | `true`          |
-| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                  | `60`            |
-| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                         | `10`            |
-| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                        | `5`             |
-| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                      | `5`             |
-| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                      | `1`             |
-| `startupProbe.enabled`                              | Enable startupProbe                                                                       | `false`         |
-| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                    | `0`             |
-| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                           | `10`            |
-| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                          | `5`             |
-| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                        | `60`            |
-| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                        | `1`             |
-| `customLivenessProbe`                               | Override default liveness probe                                                           | `{}`            |
-| `customReadinessProbe`                              | Override default readiness probe                                                          | `{}`            |
-| `customStartupProbe`                                | Override default startup probe                                                            | `{}`            |
-| `extraVolumes`                                      | Optionally specify extra list of additional volumes for etcd pods                         | `[]`            |
-| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for etcd container(s)            | `[]`            |
-| `extraVolumeClaimTemplates`                         | Optionally specify extra list of additional volumeClaimTemplates for etcd container(s)    | `[]`            |
-| `initContainers`                                    | Add additional init containers to the etcd pods                                           | `[]`            |
-| `sidecars`                                          | Add additional sidecar containers to the etcd pods                                        | `[]`            |
-| `podAnnotations`                                    | Annotations for etcd pods                                                                 | `{}`            |
-| `podLabels`                                         | Extra labels for etcd pods                                                                | `{}`            |
-| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set.                                    | `""`            |
-| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                 | `[]`            |
-| `affinity`                                          | Affinity for pod assignment                                                               | `{}`            |
-| `nodeSelector`                                      | Node labels for pod assignment                                                            | `{}`            |
-| `tolerations`                                       | Tolerations for pod assignment                                                            | `[]`            |
-| `terminationGracePeriodSeconds`                     | Seconds the pod needs to gracefully terminate                                             | `""`            |
-| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                            | `""`            |
-| `priorityClassName`                                 | Name of the priority class to be used by etcd pods                                        | `""`            |
-| `runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                            | `""`            |
-| `shareProcessNamespace`                             | Enable shared process namespace in a pod.                                                 | `false`         |
-| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`            |
-| `persistentVolumeClaimRetentionPolicy.enabled`      | Controls if and how PVCs are deleted during the lifecycle of a StatefulSet                | `false`         |
-| `persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced            | `Retain`        |
-| `persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                    | `Retain`        |
+| Name                                                | Description                                                                               | Value            |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------- |
+| `replicaCount`                                      | Number of etcd replicas to deploy                                                         | `1`              |
+| `updateStrategy.type`                               | Update strategy type, can be set to RollingUpdate or OnDelete.                            | `RollingUpdate`  |
+| `podManagementPolicy`                               | Pod management policy for the etcd statefulset                                            | `Parallel`       |
+| `hostAliases`                                       | etcd pod host aliases                                                                     | `[]`             |
+| `lifecycleHooks`                                    | Override default etcd container hooks                                                     | `{}`             |
+| `containerPorts.client`                             | Client port to expose at container level                                                  | `2379`           |
+| `containerPorts.peer`                               | Peer port to expose at container level                                                    | `2380`           |
+| `containerPorts.metrics`                            | Metrics port to expose at container level when metrics.useSeparateEndpoint is true        | `9090`           |
+| `podSecurityContext.enabled`                        | Enabled etcd pods' Security Context                                                       | `true`           |
+| `podSecurityContext.fsGroup`                        | Set etcd pod's Security Context fsGroup                                                   | `1001`           |
+| `containerSecurityContext.enabled`                  | Enabled etcd containers' Security Context                                                 | `true`           |
+| `containerSecurityContext.runAsUser`                | Set etcd containers' Security Context runAsUser                                           | `1001`           |
+| `containerSecurityContext.runAsNonRoot`             | Set Controller container's Security Context runAsNonRoot                                  | `true`           |
+| `containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                       | `false`          |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set primary container's Security Context allowPrivilegeEscalation                         | `false`          |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                        | `["ALL"]`        |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                          | `RuntimeDefault` |
+| `resources.limits`                                  | The resources limits for the etcd container                                               | `{}`             |
+| `resources.requests`                                | The requested resources for the etcd container                                            | `{}`             |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                      | `true`           |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                   | `60`             |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                          | `30`             |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                         | `5`              |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                       | `5`              |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                       | `1`              |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                     | `true`           |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                  | `60`             |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                         | `10`             |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                        | `5`              |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                      | `5`              |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                      | `1`              |
+| `startupProbe.enabled`                              | Enable startupProbe                                                                       | `false`          |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                    | `0`              |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                           | `10`             |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                          | `5`              |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                        | `60`             |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                        | `1`              |
+| `customLivenessProbe`                               | Override default liveness probe                                                           | `{}`             |
+| `customReadinessProbe`                              | Override default readiness probe                                                          | `{}`             |
+| `customStartupProbe`                                | Override default startup probe                                                            | `{}`             |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for etcd pods                         | `[]`             |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for etcd container(s)            | `[]`             |
+| `extraVolumeClaimTemplates`                         | Optionally specify extra list of additional volumeClaimTemplates for etcd container(s)    | `[]`             |
+| `initContainers`                                    | Add additional init containers to the etcd pods                                           | `[]`             |
+| `sidecars`                                          | Add additional sidecar containers to the etcd pods                                        | `[]`             |
+| `podAnnotations`                                    | Annotations for etcd pods                                                                 | `{}`             |
+| `podLabels`                                         | Extra labels for etcd pods                                                                | `{}`             |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`             |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`           |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`             |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set.                                    | `""`             |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                 | `[]`             |
+| `affinity`                                          | Affinity for pod assignment                                                               | `{}`             |
+| `nodeSelector`                                      | Node labels for pod assignment                                                            | `{}`             |
+| `tolerations`                                       | Tolerations for pod assignment                                                            | `[]`             |
+| `terminationGracePeriodSeconds`                     | Seconds the pod needs to gracefully terminate                                             | `""`             |
+| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                            | `""`             |
+| `priorityClassName`                                 | Name of the priority class to be used by etcd pods                                        | `""`             |
+| `runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                            | `""`             |
+| `shareProcessNamespace`                             | Enable shared process namespace in a pod.                                                 | `false`          |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`             |
+| `persistentVolumeClaimRetentionPolicy.enabled`      | Controls if and how PVCs are deleted during the lifecycle of a StatefulSet                | `false`          |
+| `persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced            | `Retain`         |
+| `persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                    | `Retain`         |
 
 ### Traffic exposure parameters
 
-| Name                               | Description                                                                        | Value       |
-| ---------------------------------- | ---------------------------------------------------------------------------------- | ----------- |
-| `service.type`                     | Kubernetes Service type                                                            | `ClusterIP` |
-| `service.enabled`                  | create second service if equal true                                                | `true`      |
-| `service.clusterIP`                | Kubernetes service Cluster IP                                                      | `""`        |
-| `service.ports.client`             | etcd client port                                                                   | `2379`      |
-| `service.ports.peer`               | etcd peer port                                                                     | `2380`      |
-| `service.nodePorts.client`         | Specify the nodePort client value for the LoadBalancer and NodePort service types. | `""`        |
-| `service.nodePorts.peer`           | Specify the nodePort peer value for the LoadBalancer and NodePort service types.   | `""`        |
-| `service.clientPortNameOverride`   | etcd client port name override                                                     | `""`        |
-| `service.peerPortNameOverride`     | etcd peer port name override                                                       | `""`        |
-| `service.loadBalancerIP`           | loadBalancerIP for the etcd service (optional, cloud specific)                     | `""`        |
-| `service.loadBalancerSourceRanges` | Load Balancer source ranges                                                        | `[]`        |
-| `service.externalIPs`              | External IPs                                                                       | `[]`        |
-| `service.externalTrafficPolicy`    | %%MAIN_CONTAINER_NAME%% service external traffic policy                            | `Cluster`   |
-| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                     | `[]`        |
-| `service.annotations`              | Additional annotations for the etcd service                                        | `{}`        |
-| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"               | `None`      |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                        | `{}`        |
-| `service.headless.annotations`     | Annotations for the headless service.                                              | `{}`        |
+| Name                               | Description                                                                                                                                                    | Value       |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `service.type`                     | Kubernetes Service type                                                                                                                                        | `ClusterIP` |
+| `service.enabled`                  | create second service if equal true                                                                                                                            | `true`      |
+| `service.clusterIP`                | Kubernetes service Cluster IP                                                                                                                                  | `""`        |
+| `service.ports.client`             | etcd client port                                                                                                                                               | `2379`      |
+| `service.ports.peer`               | etcd peer port                                                                                                                                                 | `2380`      |
+| `service.ports.metrics`            | etcd metrics port when metrics.useSeparateEndpoint is true                                                                                                     | `9090`      |
+| `service.nodePorts.client`         | Specify the nodePort client value for the LoadBalancer and NodePort service types.                                                                             | `""`        |
+| `service.nodePorts.peer`           | Specify the nodePort peer value for the LoadBalancer and NodePort service types.                                                                               | `""`        |
+| `service.nodePorts.metrics`        | Specify the nodePort metrics value for the LoadBalancer and NodePort service types. The metrics port is only exposed when metrics.useSeparateEndpoint is true. | `""`        |
+| `service.clientPortNameOverride`   | etcd client port name override                                                                                                                                 | `""`        |
+| `service.peerPortNameOverride`     | etcd peer port name override                                                                                                                                   | `""`        |
+| `service.metricsPortNameOverride`  | etcd metrics port name override. The metrics port is only exposed when metrics.useSeparateEndpoint is true.                                                    | `""`        |
+| `service.loadBalancerIP`           | loadBalancerIP for the etcd service (optional, cloud specific)                                                                                                 | `""`        |
+| `service.loadBalancerSourceRanges` | Load Balancer source ranges                                                                                                                                    | `[]`        |
+| `service.externalIPs`              | External IPs                                                                                                                                                   | `[]`        |
+| `service.externalTrafficPolicy`    | %%MAIN_CONTAINER_NAME%% service external traffic policy                                                                                                        | `Cluster`   |
+| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                                                 | `[]`        |
+| `service.annotations`              | Additional annotations for the etcd service                                                                                                                    | `{}`        |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                           | `None`      |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                                                    | `{}`        |
+| `service.headless.annotations`     | Annotations for the headless service.                                                                                                                          | `{}`        |
 
 ### Persistence parameters
 
@@ -228,17 +238,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                   | Description                                                                                                                       | Value              |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`            |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`        |
-| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                      | `bitnami/os-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r16` |
-| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`               |
-| `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                                | `{}`               |
-| `volumePermissions.resources.requests` | Init container volume-permissions resource  requests                                                                              | `{}`               |
+| Name                                   | Description                                                                                                                       | Value                      |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                    |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                      | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
+| `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                                | `{}`                       |
+| `volumePermissions.resources.requests` | Init container volume-permissions resource  requests                                                                              | `{}`                       |
 
 ### Network Policy parameters
 
@@ -256,6 +265,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                      | Description                                                                                                                   | Value        |
 | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------ |
 | `metrics.enabled`                         | Expose etcd metrics                                                                                                           | `false`      |
+| `metrics.useSeparateEndpoint`             | Use a separate endpoint for exposing metrics                                                                                  | `false`      |
 | `metrics.podAnnotations`                  | Annotations for the Prometheus metrics on etcd pods                                                                           | `{}`         |
 | `metrics.podMonitor.enabled`              | Create PodMonitor Resource for scraping metrics using PrometheusOperator                                                      | `false`      |
 | `metrics.podMonitor.namespace`            | Namespace in which Prometheus is running                                                                                      | `monitoring` |
@@ -314,8 +324,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 helm install my-release \
-  --set auth.rbac.rootPassword=secretpassword oci://registry-1.docker.io/bitnamicharts/etcd
+  --set auth.rbac.rootPassword=secretpassword oci://REGISTRY_NAME/REPOSITORY_NAME/etcd
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the etcd `root` account password to `secretpassword`.
 
@@ -324,9 +336,10 @@ The above command sets the etcd `root` account password to `secretpassword`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/etcd
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/etcd
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -464,8 +477,10 @@ This version adds a new label `app.kubernetes.io/component=etcd` to the Stateful
 3. Upgrade your cluster:
 
     ```console
-    helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/etcd --set auth.rbac.rootPassword=$ETCD_ROOT_PASSWORD
+    helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/etcd --set auth.rbac.rootPassword=$ETCD_ROOT_PASSWORD
     ```
+
+    > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ### To 8.0.0
 
@@ -529,7 +544,7 @@ To upgrade from previous charts versions, create a snapshot of the keyspace and 
 You can use the command below to upgrade your chart by starting a new cluster using an existing snapshot, available in an existing PVC, to initialize the members:
 
 ```console
-helm install new-release oci://registry-1.docker.io/bitnamicharts/etcd \
+helm install new-release oci://REGISTRY_NAME/REPOSITORY_NAME/etcd \
   --set statefulset.replicaCount=3 \
   --set persistence.enabled=true \
   --set persistence.size=8Gi \
@@ -537,6 +552,8 @@ helm install new-release oci://registry-1.docker.io/bitnamicharts/etcd \
   --set startFromSnapshot.existingClaim=my-claim \
   --set startFromSnapshot.snapshotFilename=my-snapshot.db
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ### To 1.0.0
 

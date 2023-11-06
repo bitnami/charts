@@ -9,11 +9,10 @@ kind: Deployment
 metadata:
   name: {{ template "grafana-tempo.vulture.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.vulture.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: vulture
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -22,8 +21,9 @@ spec:
   {{- if .Values.vulture.updateStrategy }}
   strategy: {{- toYaml .Values.vulture.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.vulture.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: vulture
   template:
     metadata:
@@ -32,11 +32,8 @@ spec:
         {{- if .Values.vulture.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.vulture.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: vulture
-        {{- if .Values.vulture.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.vulture.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "grafana-tempo.serviceAccountName" . }}
       {{- include "grafana-tempo.imagePullSecrets" . | nindent 6 }}
@@ -47,8 +44,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.vulture.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.vulture.podAffinityPreset "component" "vulture" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.vulture.podAntiAffinityPreset "component" "vulture" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.vulture.podAffinityPreset "component" "vulture" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.vulture.podAntiAffinityPreset "component" "vulture" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.vulture.nodeAffinityPreset.type "key" .Values.vulture.nodeAffinityPreset.key "values" .Values.vulture.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.vulture.nodeSelector }}

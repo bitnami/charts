@@ -5,13 +5,15 @@
 
 Popular applications, provided by [Bitnami](https://bitnami.com), ready to launch on Kubernetes using [Kubernetes Helm](https://github.com/helm/helm).
 
-Looking to use our applications in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use our applications in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## TL;DR
 
 ```bash
-helm install my-release oci://registry-1.docker.io/bitnamicharts/<chart>
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/<chart>
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Vulnerabilities scanner
 
@@ -25,8 +27,8 @@ Since the container image is an immutable artifact that is already analyzed, as 
 
 ### Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 
 ### Setup a Kubernetes Cluster
 
@@ -54,8 +56,10 @@ Please refer to the [Quick Start guide](https://helm.sh/docs/intro/quickstart/) 
 
 Useful Helm Client Commands:
 
-- Install a chart: `helm install my-release oci://registry-1.docker.io/bitnamicharts/<chart>`
-- Upgrade your application: `helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/<chart>`
+- Install a chart: `helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/<chart>`
+- Upgrade your application: `helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/<chart>`
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## License
 

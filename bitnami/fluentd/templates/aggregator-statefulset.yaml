@@ -9,23 +9,18 @@ kind: StatefulSet
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: aggregator
     ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
     app: aggregator
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.aggregator.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.aggregator.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.aggregator.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.aggregator.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: aggregator
   serviceName: {{ include "common.names.fullname" . }}-headless
   podManagementPolicy: {{ .Values.aggregator.podManagementPolicy }}
@@ -35,12 +30,9 @@ spec:
   updateStrategy: {{- toYaml .Values.aggregator.updateStrategy | nindent 4 }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: aggregator
         app: aggregator
-        {{- if .Values.aggregator.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.podLabels "context" $) | nindent 8 }}
-        {{- end }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/aggregator-configmap.yaml") . | sha256sum }}
         {{- if .Values.aggregator.podAnnotations }}
@@ -59,8 +51,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.aggregator.podAffinityPreset "component" "aggregator" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.aggregator.podAntiAffinityPreset "component" "aggregator" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.aggregator.podAffinityPreset "component" "aggregator" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.aggregator.podAntiAffinityPreset "component" "aggregator" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.aggregator.nodeAffinityPreset.type "key" .Values.aggregator.nodeAffinityPreset.key "values" .Values.aggregator.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.aggregator.nodeSelector }}
@@ -238,12 +230,12 @@ spec:
         {{- if .Values.aggregator.initScriptsCM }}
         - name: custom-init-scripts-cm
           configMap:
-            name: {{ template ".Values.initScriptsCM" . }}
+            name: {{ template "fluentd.aggregator.initScriptsCM" . }}
         {{- end }}
         {{- if .Values.aggregator.initScriptsSecret }}
         - name: custom-init-scripts-secret
           secret:
-            secretName: {{ template ".Values.initScriptsSecret" . }}
+            secretName: {{ template "fluentd.aggregator.initScriptsSecret" . }}
             defaultMode: 0755
         {{- end }}
 

@@ -31,12 +31,6 @@
       },
       "actions": [
         {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-postgresql-rtest-tcp-postgresql"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
@@ -48,6 +42,21 @@
               "pod": {
                 "workload": "sts-postgresql-ptest"
               }
+            }
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/postgresql/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "postgresql-ptest",
+              "username": "postgres",
+              "password": "ComplicatedPassword123!4"
             }
           }
         }

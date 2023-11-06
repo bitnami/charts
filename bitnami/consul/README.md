@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/consul
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/consul
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -20,12 +22,12 @@ This chart bootstraps a [HashiCorp Consul](https://github.com/bitnami/containers
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use HashiCorp Consul in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use HashiCorp Consul in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -33,8 +35,10 @@ Looking to use HashiCorp Consul in production? Try [VMware Application Catalog](
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/consul
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/consul
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy HashiCorp Consul on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -81,94 +85,97 @@ helm delete --purge my-release
 
 ### HashiCorp Consul parameters
 
-| Name                            | Description                                                                                                      | Value                  |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`                | HashiCorp Consul image registry                                                                                  | `docker.io`            |
-| `image.repository`              | HashiCorp Consul image repository                                                                                | `bitnami/consul`       |
-| `image.tag`                     | HashiCorp Consul image tag (immutable tags are recommended)                                                      | `1.16.0-debian-11-r28` |
-| `image.digest`                  | HashiCorp Consul image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `image.pullPolicy`              | HashiCorp Consul image pull policy                                                                               | `IfNotPresent`         |
-| `image.pullSecrets`             | HashiCorp Consul image pull secrets                                                                              | `[]`                   |
-| `image.debug`                   | Enable image debug mode                                                                                          | `false`                |
-| `datacenterName`                | Datacenter name for Consul. If not supplied, will use the Consul                                                 | `dc1`                  |
-| `domain`                        | Consul domain name                                                                                               | `consul`               |
-| `raftMultiplier`                | Multiplier used to scale key Raft timing parameters                                                              | `1`                    |
-| `gossipKey`                     | Gossip key for all members. The key must be 16-bytes, can be generated with $(consul keygen)                     | `""`                   |
-| `tlsEncryptionSecretName`       | Name of existing secret with TLS encryption data                                                                 | `""`                   |
-| `hostAliases`                   | Deployment pod host aliases                                                                                      | `[]`                   |
-| `configuration`                 | HashiCorp Consul configuration to be injected as ConfigMap                                                       | `""`                   |
-| `existingConfigmap`             | ConfigMap with HashiCorp Consul configuration                                                                    | `""`                   |
-| `localConfig`                   | Extra configuration that will be added to the default one                                                        | `""`                   |
-| `podLabels`                     | Pod labels                                                                                                       | `{}`                   |
-| `priorityClassName`             | Priority class assigned to the Pods                                                                              | `""`                   |
-| `runtimeClassName`              | Name of the runtime class to be used by pod(s)                                                                   | `""`                   |
-| `schedulerName`                 | Alternative scheduler                                                                                            | `""`                   |
-| `terminationGracePeriodSeconds` | In seconds, time the given to the Consul pod needs to terminate gracefully                                       | `""`                   |
-| `topologySpreadConstraints`     | Topology Spread Constraints for pod assignment                                                                   | `[]`                   |
-| `command`                       | Command for running the container (set to default if not set). Use array form                                    | `[]`                   |
-| `args`                          | Args for running the container (set to default if not set). Use array form                                       | `[]`                   |
-| `extraEnvVars`                  | Extra environment variables to be set on HashiCorp Consul container                                              | `[]`                   |
-| `extraEnvVarsCM`                | Name of existing ConfigMap containing extra env vars                                                             | `""`                   |
-| `extraEnvVarsSecret`            | Name of existing Secret containing extra env vars                                                                | `""`                   |
-| `containerPorts.http`           | Port to open for HTTP in Consul                                                                                  | `8500`                 |
-| `containerPorts.dns`            | Port to open for DNS server in Consul                                                                            | `8600`                 |
-| `containerPorts.rpc`            | Port to open for RPC in Consul                                                                                   | `8400`                 |
-| `containerPorts.rpcServer`      | Port to open for RPC Server in Consul                                                                            | `8300`                 |
-| `containerPorts.serfLAN`        | Port to open for Serf LAN in Consul                                                                              | `8301`                 |
-| `lifecycleHooks`                | Add lifecycle hooks to the deployment                                                                            | `{}`                   |
+| Name                            | Description                                                                                                      | Value                    |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `image.registry`                | HashiCorp Consul image registry                                                                                  | `REGISTRY_NAME`          |
+| `image.repository`              | HashiCorp Consul image repository                                                                                | `REPOSITORY_NAME/consul` |
+| `image.digest`                  | HashiCorp Consul image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
+| `image.pullPolicy`              | HashiCorp Consul image pull policy                                                                               | `IfNotPresent`           |
+| `image.pullSecrets`             | HashiCorp Consul image pull secrets                                                                              | `[]`                     |
+| `image.debug`                   | Enable image debug mode                                                                                          | `false`                  |
+| `datacenterName`                | Datacenter name for Consul. If not supplied, will use the Consul                                                 | `dc1`                    |
+| `domain`                        | Consul domain name                                                                                               | `consul`                 |
+| `raftMultiplier`                | Multiplier used to scale key Raft timing parameters                                                              | `1`                      |
+| `gossipKey`                     | Gossip key for all members. The key must be base64-encoded, can be generated with $(consul keygen)               | `""`                     |
+| `tlsEncryptionSecretName`       | Name of existing secret with TLS encryption data                                                                 | `""`                     |
+| `hostAliases`                   | Deployment pod host aliases                                                                                      | `[]`                     |
+| `configuration`                 | HashiCorp Consul configuration to be injected as ConfigMap                                                       | `""`                     |
+| `existingConfigmap`             | ConfigMap with HashiCorp Consul configuration                                                                    | `""`                     |
+| `localConfig`                   | Extra configuration that will be added to the default one                                                        | `""`                     |
+| `podLabels`                     | Pod labels                                                                                                       | `{}`                     |
+| `priorityClassName`             | Priority class assigned to the Pods                                                                              | `""`                     |
+| `runtimeClassName`              | Name of the runtime class to be used by pod(s)                                                                   | `""`                     |
+| `schedulerName`                 | Alternative scheduler                                                                                            | `""`                     |
+| `terminationGracePeriodSeconds` | In seconds, time the given to the Consul pod needs to terminate gracefully                                       | `""`                     |
+| `topologySpreadConstraints`     | Topology Spread Constraints for pod assignment                                                                   | `[]`                     |
+| `command`                       | Command for running the container (set to default if not set). Use array form                                    | `[]`                     |
+| `args`                          | Args for running the container (set to default if not set). Use array form                                       | `[]`                     |
+| `extraEnvVars`                  | Extra environment variables to be set on HashiCorp Consul container                                              | `[]`                     |
+| `extraEnvVarsCM`                | Name of existing ConfigMap containing extra env vars                                                             | `""`                     |
+| `extraEnvVarsSecret`            | Name of existing Secret containing extra env vars                                                                | `""`                     |
+| `containerPorts.http`           | Port to open for HTTP in Consul                                                                                  | `8500`                   |
+| `containerPorts.dns`            | Port to open for DNS server in Consul                                                                            | `8600`                   |
+| `containerPorts.rpc`            | Port to open for RPC in Consul                                                                                   | `8400`                   |
+| `containerPorts.rpcServer`      | Port to open for RPC Server in Consul                                                                            | `8300`                   |
+| `containerPorts.serfLAN`        | Port to open for Serf LAN in Consul                                                                              | `8301`                   |
+| `lifecycleHooks`                | Add lifecycle hooks to the deployment                                                                            | `{}`                     |
 
 ### Statefulset parameters
 
-| Name                                                | Description                                                                               | Value           |
-| --------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
-| `replicaCount`                                      | Number of HashiCorp Consul replicas to deploy                                             | `3`             |
-| `updateStrategy.type`                               | Update strategy type for the HashiCorp Consul statefulset                                 | `RollingUpdate` |
-| `podManagementPolicy`                               | StatefulSet pod management policy                                                         | `Parallel`      |
-| `podAnnotations`                                    | Additional pod annotations                                                                | `{}`            |
-| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set.                                    | `""`            |
-| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                 | `[]`            |
-| `affinity`                                          | Affinity for pod assignment                                                               | `{}`            |
-| `nodeSelector`                                      | Node labels for pod assignment                                                            | `{}`            |
-| `tolerations`                                       | Tolerations for pod assignment                                                            | `[]`            |
-| `podSecurityContext.enabled`                        | Enable security context for HashiCorp Consul pods                                         | `true`          |
-| `podSecurityContext.fsGroup`                        | Group ID for the volumes of the pod                                                       | `1001`          |
-| `containerSecurityContext.enabled`                  | HashiCorp Consul Container securityContext                                                | `true`          |
-| `containerSecurityContext.runAsUser`                | User ID for the HashiCorp Consul container                                                | `1001`          |
-| `containerSecurityContext.runAsNonRoot`             | Force the container to be run as non root                                                 | `true`          |
-| `containerSecurityContext.allowPrivilegeEscalation` | Force the child process to be run as nonprivilege                                         | `false`         |
-| `resources.limits`                                  | The resources limits for HashiCorp Consul containers                                      | `{}`            |
-| `resources.requests`                                | The requested resources for HashiCorp Consul containers                                   | `{}`            |
-| `livenessProbe.enabled`                             | Enable livenessProbe                                                                      | `true`          |
-| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                   | `30`            |
-| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                          | `10`            |
-| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                         | `5`             |
-| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                       | `6`             |
-| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                       | `1`             |
-| `readinessProbe.enabled`                            | Enable readinessProbe                                                                     | `true`          |
-| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                  | `5`             |
-| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                         | `10`            |
-| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                        | `5`             |
-| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                      | `6`             |
-| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                      | `1`             |
-| `startupProbe.enabled`                              | Enable startupProbe                                                                       | `false`         |
-| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                    | `0`             |
-| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                           | `10`            |
-| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                          | `5`             |
-| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                        | `60`            |
-| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                        | `1`             |
-| `customLivenessProbe`                               | Override default liveness probe                                                           | `{}`            |
-| `customReadinessProbe`                              | Override default readiness probe                                                          | `{}`            |
-| `customStartupProbe`                                | Override default startup probe                                                            | `{}`            |
-| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Hashicorp Consul container   | `[]`            |
-| `extraVolumes`                                      | Optionally specify extra list of additional volumes for Hashicorp Consul container        | `[]`            |
-| `initContainers`                                    | Add additional init containers to the Hashicorp Consul pods                               | `[]`            |
-| `sidecars`                                          | Add additional sidecar containers to the Hashicorp Consul pods                            | `[]`            |
-| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                           | `false`         |
-| `pdb.minAvailable`                                  | Minimum number of pods that must still be available after the eviction                    | `1`             |
-| `pdb.maxUnavailable`                                | Max number of pods that can be unavailable after the eviction                             | `""`            |
+| Name                                                | Description                                                                               | Value            |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------- |
+| `replicaCount`                                      | Number of HashiCorp Consul replicas to deploy                                             | `3`              |
+| `updateStrategy.type`                               | Update strategy type for the HashiCorp Consul statefulset                                 | `RollingUpdate`  |
+| `podManagementPolicy`                               | StatefulSet pod management policy                                                         | `Parallel`       |
+| `podAnnotations`                                    | Additional pod annotations                                                                | `{}`             |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`             |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`           |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`             |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set.                                    | `""`             |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                 | `[]`             |
+| `affinity`                                          | Affinity for pod assignment                                                               | `{}`             |
+| `nodeSelector`                                      | Node labels for pod assignment                                                            | `{}`             |
+| `tolerations`                                       | Tolerations for pod assignment                                                            | `[]`             |
+| `podSecurityContext.enabled`                        | Enable security context for HashiCorp Consul pods                                         | `true`           |
+| `podSecurityContext.fsGroup`                        | Group ID for the volumes of the pod                                                       | `1001`           |
+| `containerSecurityContext.enabled`                  | Enabled Consul containers' Security Context                                               | `true`           |
+| `containerSecurityContext.runAsUser`                | Set Consul containers' Security Context runAsUser                                         | `1001`           |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set Consul containers' Security Context allowPrivilegeEscalation                          | `false`          |
+| `containerSecurityContext.capabilities.drop`        | Set Argo CD containers' repo server Security Context capabilities to be dropped           | `["ALL"]`        |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set Argo CD containers' repo server Security Context readOnlyRootFilesystem               | `false`          |
+| `containerSecurityContext.runAsNonRoot`             | Set Consul containers' Security Context runAsNonRoot                                      | `true`           |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`          |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                          | `RuntimeDefault` |
+| `resources.limits`                                  | The resources limits for HashiCorp Consul containers                                      | `{}`             |
+| `resources.requests`                                | The requested resources for HashiCorp Consul containers                                   | `{}`             |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                      | `true`           |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                   | `30`             |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                          | `10`             |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                         | `5`              |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                       | `6`              |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                       | `1`              |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                     | `true`           |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                  | `5`              |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                         | `10`             |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                        | `5`              |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                      | `6`              |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                      | `1`              |
+| `startupProbe.enabled`                              | Enable startupProbe                                                                       | `false`          |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                    | `0`              |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                           | `10`             |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                          | `5`              |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                        | `60`             |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                        | `1`              |
+| `customLivenessProbe`                               | Override default liveness probe                                                           | `{}`             |
+| `customReadinessProbe`                              | Override default readiness probe                                                          | `{}`             |
+| `customStartupProbe`                                | Override default startup probe                                                            | `{}`             |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Hashicorp Consul container   | `[]`             |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for Hashicorp Consul container        | `[]`             |
+| `initContainers`                                    | Add additional init containers to the Hashicorp Consul pods                               | `[]`             |
+| `sidecars`                                          | Add additional sidecar containers to the Hashicorp Consul pods                            | `[]`             |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                           | `false`          |
+| `pdb.minAvailable`                                  | Minimum number of pods that must still be available after the eviction                    | `1`              |
+| `pdb.maxUnavailable`                                | Max number of pods that can be unavailable after the eviction                             | `""`             |
 
 ### Exposure parameters
 
@@ -215,54 +222,54 @@ helm delete --purge my-release
 
 ### Volume Permissions parameters
 
-| Name                                   | Description                                                                                                        | Value              |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------ |
-| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume                                    | `false`            |
-| `volumePermissions.image.registry`     | OS Shell + Utility image registry                                                                                  | `docker.io`        |
-| `volumePermissions.image.repository`   | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r16` |
-| `volumePermissions.image.digest`       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `volumePermissions.image.pullPolicy`   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`  | OS Shell + Utility image pull secrets                                                                              | `[]`               |
-| `volumePermissions.resources.limits`   | The resources limits for the container                                                                             | `{}`               |
-| `volumePermissions.resources.requests` | The requested resources for the container                                                                          | `{}`               |
+| Name                                   | Description                                                                                                        | Value                      |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume                                    | `false`                    |
+| `volumePermissions.image.registry`     | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`   | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`  | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
+| `volumePermissions.resources.limits`   | The resources limits for the container                                                                             | `{}`                       |
+| `volumePermissions.resources.requests` | The requested resources for the container                                                                          | `{}`                       |
 
 ### Metrics parameters
 
-| Name                                            | Description                                                                                                                          | Value                     |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------- |
-| `metrics.enabled`                               | Start a side-car prometheus exporter                                                                                                 | `false`                   |
-| `metrics.image.registry`                        | HashiCorp Consul Prometheus Exporter image registry                                                                                  | `docker.io`               |
-| `metrics.image.repository`                      | HashiCorp Consul Prometheus Exporter image repository                                                                                | `bitnami/consul-exporter` |
-| `metrics.image.tag`                             | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                                      | `0.9.0-debian-11-r228`    |
-| `metrics.image.digest`                          | HashiCorp Consul Prometheus Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
-| `metrics.image.pullPolicy`                      | HashiCorp Consul Prometheus Exporter image pull policy                                                                               | `IfNotPresent`            |
-| `metrics.image.pullSecrets`                     | HashiCorp Consul Prometheus Exporter image pull secrets                                                                              | `[]`                      |
-| `metrics.containerSecurityContext.enabled`      | HashiCorp Consul Prometheus Exporter securityContext                                                                                 | `true`                    |
-| `metrics.containerSecurityContext.runAsUser`    | User ID for the HashiCorp Consul Prometheus Exporter                                                                                 | `1001`                    |
-| `metrics.containerSecurityContext.runAsNonRoot` | Force the container to be run as non root                                                                                            | `true`                    |
-| `metrics.service.type`                          | Kubernetes Service type                                                                                                              | `ClusterIP`               |
-| `metrics.service.loadBalancerIP`                | Service Load Balancer IP                                                                                                             | `""`                      |
-| `metrics.service.annotations`                   | Provide any additional annotations which may be required.                                                                            | `{}`                      |
-| `metrics.podAnnotations`                        | Metrics exporter pod Annotation and Labels                                                                                           | `{}`                      |
-| `metrics.resources.limits`                      | The resources limits for the container                                                                                               | `{}`                      |
-| `metrics.resources.requests`                    | The requested resources for the container                                                                                            | `{}`                      |
-| `metrics.serviceMonitor.enabled`                | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator, set to true to create a Service Monitor Entry          | `false`                   |
-| `metrics.serviceMonitor.namespace`              | The namespace in which the ServiceMonitor will be created                                                                            | `""`                      |
-| `metrics.serviceMonitor.interval`               | Interval at which metrics should be scraped                                                                                          | `30s`                     |
-| `metrics.serviceMonitor.scrapeTimeout`          | The timeout after which the scrape is ended                                                                                          | `""`                      |
-| `metrics.serviceMonitor.metricRelabelings`      | Metrics relabelings to add to the scrape endpoint                                                                                    | `[]`                      |
-| `metrics.serviceMonitor.relabelings`            | RelabelConfigs to apply to samples before scraping                                                                                   | `[]`                      |
-| `metrics.serviceMonitor.honorLabels`            | Specify honorLabels parameter to add the scrape endpoint                                                                             | `false`                   |
-| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                                    | `""`                      |
-| `metrics.serviceMonitor.selector`               | ServiceMonitor selector labels                                                                                                       | `{}`                      |
-| `metrics.serviceMonitor.labels`                 | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with                | `{}`                      |
+| Name                                            | Description                                                                                                                          | Value                             |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------- |
+| `metrics.enabled`                               | Start a side-car prometheus exporter                                                                                                 | `false`                           |
+| `metrics.image.registry`                        | HashiCorp Consul Prometheus Exporter image registry                                                                                  | `REGISTRY_NAME`                   |
+| `metrics.image.repository`                      | HashiCorp Consul Prometheus Exporter image repository                                                                                | `REPOSITORY_NAME/consul-exporter` |
+| `metrics.image.digest`                          | HashiCorp Consul Prometheus Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                              |
+| `metrics.image.pullPolicy`                      | HashiCorp Consul Prometheus Exporter image pull policy                                                                               | `IfNotPresent`                    |
+| `metrics.image.pullSecrets`                     | HashiCorp Consul Prometheus Exporter image pull secrets                                                                              | `[]`                              |
+| `metrics.containerSecurityContext.enabled`      | HashiCorp Consul Prometheus Exporter securityContext                                                                                 | `true`                            |
+| `metrics.containerSecurityContext.runAsUser`    | User ID for the HashiCorp Consul Prometheus Exporter                                                                                 | `1001`                            |
+| `metrics.containerSecurityContext.runAsNonRoot` | Force the container to be run as non root                                                                                            | `true`                            |
+| `metrics.service.type`                          | Kubernetes Service type                                                                                                              | `ClusterIP`                       |
+| `metrics.service.loadBalancerIP`                | Service Load Balancer IP                                                                                                             | `""`                              |
+| `metrics.service.annotations`                   | Provide any additional annotations which may be required.                                                                            | `{}`                              |
+| `metrics.podAnnotations`                        | Metrics exporter pod Annotation and Labels                                                                                           | `{}`                              |
+| `metrics.resources.limits`                      | The resources limits for the container                                                                                               | `{}`                              |
+| `metrics.resources.requests`                    | The requested resources for the container                                                                                            | `{}`                              |
+| `metrics.serviceMonitor.enabled`                | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator, set to true to create a Service Monitor Entry          | `false`                           |
+| `metrics.serviceMonitor.namespace`              | The namespace in which the ServiceMonitor will be created                                                                            | `""`                              |
+| `metrics.serviceMonitor.interval`               | Interval at which metrics should be scraped                                                                                          | `30s`                             |
+| `metrics.serviceMonitor.scrapeTimeout`          | The timeout after which the scrape is ended                                                                                          | `""`                              |
+| `metrics.serviceMonitor.metricRelabelings`      | Metrics relabelings to add to the scrape endpoint                                                                                    | `[]`                              |
+| `metrics.serviceMonitor.relabelings`            | RelabelConfigs to apply to samples before scraping                                                                                   | `[]`                              |
+| `metrics.serviceMonitor.honorLabels`            | Specify honorLabels parameter to add the scrape endpoint                                                                             | `false`                           |
+| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                                    | `""`                              |
+| `metrics.serviceMonitor.selector`               | ServiceMonitor selector labels                                                                                                       | `{}`                              |
+| `metrics.serviceMonitor.labels`                 | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with                | `{}`                              |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-helm install my-release --set domain=consul-domain,gossipKey=secretkey oci://registry-1.docker.io/bitnamicharts/consul
+helm install my-release --set domain=consul-domain,gossipKey=secretkey oci://REGISTRY_NAME/REPOSITORY_NAME/consul
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the HashiCorp Consul domain to `consul-domain` and sets the gossip key to `secretkey`.
 
@@ -271,9 +278,10 @@ The above command sets the HashiCorp Consul domain to `consul-domain` and sets t
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/consul
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/consul
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -294,7 +302,7 @@ In addition to this option, you can also set an external ConfigMap with all the 
 
 ### Ingress
 
-This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as nginx-ingress or traefik you can utilize the ingress controller to serve your ASP.NET Core application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
 To enable ingress integration, please set `ingress.enabled` to `true`.
 
@@ -482,8 +490,10 @@ The field `podManagementPolicy` can't be updated in a StatefulSet, so you need t
 
 ```console
 kubectl delete statefulset consul
-helm upgrade <DEPLOYMENT_NAME> oci://registry-1.docker.io/bitnamicharts/consul
+helm upgrade <DEPLOYMENT_NAME> oci://REGISTRY_NAME/REPOSITORY_NAME/consul
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ### To 6.0.0
 
@@ -494,14 +504,18 @@ This release updates the Bitnami Consul container to `1.6.1-debian-9-r6`, which 
 Consul container was moved to a non-root approach. There shouldn't be any issue when upgrading since the corresponding `securityContext` is enabled by default. Both the container image and the chart can be upgraded by running the command below:
 
 ```console
-helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/consul
+helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/consul
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 If you use a previous container image (previous to **1.4.0-r16**) disable the `securityContext` by running the command below:
 
 ```console
-helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/consul --set securityContext.enabled=false,image.tag=XXX
+helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/consul --set securityContext.enabled=false,image.tag=XXX
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ### To 2.0.0
 

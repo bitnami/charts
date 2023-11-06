@@ -8,29 +8,24 @@ kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: grafana
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.grafana.replicaCount }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.grafana.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: grafana
   {{- if .Values.grafana.updateStrategy }}
   strategy: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.updateStrategy "context" $) | nindent 4 }}
   {{- end }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: grafana
-        {{- if .Values.grafana.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.grafana.podLabels "context" $) | nindent 8 }}
-        {{- end }}
       annotations:
         {{- if (include "grafana.createAdminSecret" .) }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
@@ -62,8 +57,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAffinityPreset "component" "grafana" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAntiAffinityPreset "component" "grafana" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAffinityPreset "component" "grafana" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAntiAffinityPreset "component" "grafana" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.grafana.nodeAffinityPreset.type "key" .Values.grafana.nodeAffinityPreset.key "values" .Values.grafana.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.grafana.nodeSelector }}
@@ -222,6 +217,9 @@ spec:
             - name: dashboard
               containerPort: {{ .Values.grafana.containerPorts.grafana }}
               protocol: TCP
+            {{- if .Values.grafana.extraPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraPorts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if .Values.grafana.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.grafana.livenessProbe.enabled }}

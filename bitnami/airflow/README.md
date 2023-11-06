@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/airflow
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/airflow
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -20,20 +22,22 @@ This chart bootstraps an [Apache Airflow](https://github.com/bitnami/containers/
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Apache Airflow in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Apache Airflow in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 
 ## Installing the Chart
 
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/airflow
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/airflow
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy Airflow on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -76,271 +80,278 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow common parameters
 
-| Name                     | Description                                                                                                                                                               | Value              |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `auth.username`          | Username to access web UI                                                                                                                                                 | `user`             |
-| `auth.password`          | Password to access web UI                                                                                                                                                 | `""`               |
-| `auth.fernetKey`         | Fernet key to secure connections                                                                                                                                          | `""`               |
-| `auth.secretKey`         | Secret key to run your flask app                                                                                                                                          | `""`               |
-| `auth.existingSecret`    | Name of an existing secret to use for Airflow credentials                                                                                                                 | `""`               |
-| `executor`               | Airflow executor. Allowed values: `SequentialExecutor`, `LocalExecutor`, `CeleryExecutor`, `KubernetesExecutor`, `CeleryKubernetesExecutor` and `LocalKubernetesExecutor` | `CeleryExecutor`   |
-| `loadExamples`           | Switch to load some Airflow examples                                                                                                                                      | `false`            |
-| `configuration`          | Specify content for Airflow config file (auto-generated based on other env. vars otherwise)                                                                               | `""`               |
-| `existingConfigmap`      | Name of an existing ConfigMap with the Airflow config file                                                                                                                | `""`               |
-| `dags.existingConfigmap` | Name of an existing ConfigMap with all the DAGs files you want to load in Airflow                                                                                         | `""`               |
-| `dags.image.registry`    | Init container load-dags image registry                                                                                                                                   | `docker.io`        |
-| `dags.image.repository`  | Init container load-dags image repository                                                                                                                                 | `bitnami/os-shell` |
-| `dags.image.tag`         | Init container load-dags image tag (immutable tags are recommended)                                                                                                       | `11-debian-11-r16` |
-| `dags.image.digest`      | Init container load-dags image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                  | `""`               |
-| `dags.image.pullPolicy`  | Init container load-dags image pull policy                                                                                                                                | `IfNotPresent`     |
-| `dags.image.pullSecrets` | Init container load-dags image pull secrets                                                                                                                               | `[]`               |
-| `extraEnvVars`           | Add extra environment variables for all the Airflow pods                                                                                                                  | `[]`               |
-| `extraEnvVarsCM`         | ConfigMap with extra environment variables for all the Airflow pods                                                                                                       | `""`               |
-| `extraEnvVarsSecret`     | Secret with extra environment variables for all the Airflow pods                                                                                                          | `""`               |
-| `extraEnvVarsSecrets`    | List of secrets with extra environment variables for all the Airflow pods                                                                                                 | `[]`               |
-| `sidecars`               | Add additional sidecar containers to all the Airflow pods                                                                                                                 | `[]`               |
-| `initContainers`         | Add additional init containers to all the Airflow pods                                                                                                                    | `[]`               |
-| `extraVolumeMounts`      | Optionally specify extra list of additional volumeMounts for all the Airflow pods                                                                                         | `[]`               |
-| `extraVolumes`           | Optionally specify extra list of additional volumes for the all the Airflow pods                                                                                          | `[]`               |
+| Name                     | Description                                                                                                                                                               | Value                      |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `auth.username`          | Username to access web UI                                                                                                                                                 | `user`                     |
+| `auth.password`          | Password to access web UI                                                                                                                                                 | `""`                       |
+| `auth.fernetKey`         | Fernet key to secure connections                                                                                                                                          | `""`                       |
+| `auth.secretKey`         | Secret key to run your flask app                                                                                                                                          | `""`                       |
+| `auth.existingSecret`    | Name of an existing secret to use for Airflow credentials                                                                                                                 | `""`                       |
+| `executor`               | Airflow executor. Allowed values: `SequentialExecutor`, `LocalExecutor`, `CeleryExecutor`, `KubernetesExecutor`, `CeleryKubernetesExecutor` and `LocalKubernetesExecutor` | `CeleryExecutor`           |
+| `loadExamples`           | Switch to load some Airflow examples                                                                                                                                      | `false`                    |
+| `configuration`          | Specify content for Airflow config file (auto-generated based on other env. vars otherwise)                                                                               | `""`                       |
+| `existingConfigmap`      | Name of an existing ConfigMap with the Airflow config file                                                                                                                | `""`                       |
+| `dags.existingConfigmap` | Name of an existing ConfigMap with all the DAGs files you want to load in Airflow                                                                                         | `""`                       |
+| `dags.image.registry`    | Init container load-dags image registry                                                                                                                                   | `REGISTRY_NAME`            |
+| `dags.image.repository`  | Init container load-dags image repository                                                                                                                                 | `REPOSITORY_NAME/os-shell` |
+| `dags.image.digest`      | Init container load-dags image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                  | `""`                       |
+| `dags.image.pullPolicy`  | Init container load-dags image pull policy                                                                                                                                | `IfNotPresent`             |
+| `dags.image.pullSecrets` | Init container load-dags image pull secrets                                                                                                                               | `[]`                       |
+| `extraEnvVars`           | Add extra environment variables for all the Airflow pods                                                                                                                  | `[]`                       |
+| `extraEnvVarsCM`         | ConfigMap with extra environment variables for all the Airflow pods                                                                                                       | `""`                       |
+| `extraEnvVarsSecret`     | Secret with extra environment variables for all the Airflow pods                                                                                                          | `""`                       |
+| `extraEnvVarsSecrets`    | List of secrets with extra environment variables for all the Airflow pods                                                                                                 | `[]`                       |
+| `sidecars`               | Add additional sidecar containers to all the Airflow pods                                                                                                                 | `[]`                       |
+| `initContainers`         | Add additional init containers to all the Airflow pods                                                                                                                    | `[]`                       |
+| `extraVolumeMounts`      | Optionally specify extra list of additional volumeMounts for all the Airflow pods                                                                                         | `[]`                       |
+| `extraVolumes`           | Optionally specify extra list of additional volumes for the all the Airflow pods                                                                                          | `[]`                       |
 
 ### Airflow web parameters
 
-| Name                                        | Description                                                                                                              | Value                 |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
-| `web.image.registry`                        | Airflow image registry                                                                                                   | `docker.io`           |
-| `web.image.repository`                      | Airflow image repository                                                                                                 | `bitnami/airflow`     |
-| `web.image.tag`                             | Airflow image tag (immutable tags are recommended)                                                                       | `2.6.3-debian-11-r14` |
-| `web.image.digest`                          | Airflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                  |
-| `web.image.pullPolicy`                      | Airflow image pull policy                                                                                                | `IfNotPresent`        |
-| `web.image.pullSecrets`                     | Airflow image pull secrets                                                                                               | `[]`                  |
-| `web.image.debug`                           | Enable image debug mode                                                                                                  | `false`               |
-| `web.baseUrl`                               | URL used to access to Airflow web ui                                                                                     | `""`                  |
-| `web.existingConfigmap`                     | Name of an existing config map containing the Airflow web config file                                                    | `""`                  |
-| `web.command`                               | Override default container command (useful when using custom images)                                                     | `[]`                  |
-| `web.args`                                  | Override default container args (useful when using custom images)                                                        | `[]`                  |
-| `web.extraEnvVars`                          | Array with extra environment variables to add Airflow web pods                                                           | `[]`                  |
-| `web.extraEnvVarsCM`                        | ConfigMap containing extra environment variables for Airflow web pods                                                    | `""`                  |
-| `web.extraEnvVarsSecret`                    | Secret containing extra environment variables (in case of sensitive data) for Airflow web pods                           | `""`                  |
-| `web.extraEnvVarsSecrets`                   | List of secrets with extra environment variables for Airflow web pods                                                    | `[]`                  |
-| `web.containerPorts.http`                   | Airflow web HTTP container port                                                                                          | `8080`                |
-| `web.replicaCount`                          | Number of Airflow web replicas                                                                                           | `1`                   |
-| `web.livenessProbe.enabled`                 | Enable livenessProbe on Airflow web containers                                                                           | `true`                |
-| `web.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                  | `180`                 |
-| `web.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                         | `20`                  |
-| `web.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                        | `5`                   |
-| `web.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                      | `6`                   |
-| `web.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                      | `1`                   |
-| `web.readinessProbe.enabled`                | Enable readinessProbe on Airflow web containers                                                                          | `true`                |
-| `web.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                 | `30`                  |
-| `web.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                        | `10`                  |
-| `web.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                       | `5`                   |
-| `web.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                     | `6`                   |
-| `web.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                     | `1`                   |
-| `web.startupProbe.enabled`                  | Enable startupProbe on Airflow web containers                                                                            | `false`               |
-| `web.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                   | `60`                  |
-| `web.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                          | `10`                  |
-| `web.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                         | `1`                   |
-| `web.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                       | `15`                  |
-| `web.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                       | `1`                   |
-| `web.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                                      | `{}`                  |
-| `web.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                                     | `{}`                  |
-| `web.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                                       | `{}`                  |
-| `web.resources.limits`                      | The resources limits for the Airflow web containers                                                                      | `{}`                  |
-| `web.resources.requests`                    | The requested resources for the Airflow web containers                                                                   | `{}`                  |
-| `web.podSecurityContext.enabled`            | Enabled Airflow web pods' Security Context                                                                               | `true`                |
-| `web.podSecurityContext.fsGroup`            | Set Airflow web pod's Security Context fsGroup                                                                           | `1001`                |
-| `web.containerSecurityContext.enabled`      | Enabled Airflow web containers' Security Context                                                                         | `true`                |
-| `web.containerSecurityContext.runAsUser`    | Set Airflow web containers' Security Context runAsUser                                                                   | `1001`                |
-| `web.containerSecurityContext.runAsNonRoot` | Set Airflow web containers' Security Context runAsNonRoot                                                                | `true`                |
-| `web.lifecycleHooks`                        | for the Airflow web container(s) to automate configuration before or after startup                                       | `{}`                  |
-| `web.hostAliases`                           | Deployment pod host aliases                                                                                              | `[]`                  |
-| `web.podLabels`                             | Add extra labels to the Airflow web pods                                                                                 | `{}`                  |
-| `web.podAnnotations`                        | Add extra annotations to the Airflow web pods                                                                            | `{}`                  |
-| `web.affinity`                              | Affinity for Airflow web pods assignment (evaluated as a template)                                                       | `{}`                  |
-| `web.nodeAffinityPreset.key`                | Node label key to match. Ignored if `web.affinity` is set.                                                               | `""`                  |
-| `web.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`                            | `""`                  |
-| `web.nodeAffinityPreset.values`             | Node label values to match. Ignored if `web.affinity` is set.                                                            | `[]`                  |
-| `web.nodeSelector`                          | Node labels for Airflow web pods assignment                                                                              | `{}`                  |
-| `web.podAffinityPreset`                     | Pod affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`.                                 | `""`                  |
-| `web.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`.                            | `soft`                |
-| `web.tolerations`                           | Tolerations for Airflow web pods assignment                                                                              | `[]`                  |
-| `web.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                  |
-| `web.priorityClassName`                     | Priority Class Name                                                                                                      | `""`                  |
-| `web.schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                  |
-| `web.terminationGracePeriodSeconds`         | Seconds Airflow web pod needs to terminate gracefully                                                                    | `""`                  |
-| `web.updateStrategy.type`                   | Airflow web deployment strategy type                                                                                     | `RollingUpdate`       |
-| `web.updateStrategy.rollingUpdate`          | Airflow web deployment rolling update configuration parameters                                                           | `{}`                  |
-| `web.sidecars`                              | Add additional sidecar containers to the Airflow web pods                                                                | `[]`                  |
-| `web.initContainers`                        | Add additional init containers to the Airflow web pods                                                                   | `[]`                  |
-| `web.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Airflow web pods                                        | `[]`                  |
-| `web.extraVolumes`                          | Optionally specify extra list of additional volumes for the Airflow web pods                                             | `[]`                  |
-| `web.pdb.create`                            | Deploy a pdb object for the Airflow web pods                                                                             | `false`               |
-| `web.pdb.minAvailable`                      | Maximum number/percentage of unavailable Airflow web replicas                                                            | `1`                   |
-| `web.pdb.maxUnavailable`                    | Maximum number/percentage of unavailable Airflow web replicas                                                            | `""`                  |
+| Name                                                    | Description                                                                                                              | Value                     |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------- |
+| `web.image.registry`                                    | Airflow image registry                                                                                                   | `REGISTRY_NAME`           |
+| `web.image.repository`                                  | Airflow image repository                                                                                                 | `REPOSITORY_NAME/airflow` |
+| `web.image.digest`                                      | Airflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                      |
+| `web.image.pullPolicy`                                  | Airflow image pull policy                                                                                                | `IfNotPresent`            |
+| `web.image.pullSecrets`                                 | Airflow image pull secrets                                                                                               | `[]`                      |
+| `web.image.debug`                                       | Enable image debug mode                                                                                                  | `false`                   |
+| `web.baseUrl`                                           | URL used to access to Airflow web ui                                                                                     | `""`                      |
+| `web.existingConfigmap`                                 | Name of an existing config map containing the Airflow web config file                                                    | `""`                      |
+| `web.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`                      |
+| `web.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`                      |
+| `web.extraEnvVars`                                      | Array with extra environment variables to add Airflow web pods                                                           | `[]`                      |
+| `web.extraEnvVarsCM`                                    | ConfigMap containing extra environment variables for Airflow web pods                                                    | `""`                      |
+| `web.extraEnvVarsSecret`                                | Secret containing extra environment variables (in case of sensitive data) for Airflow web pods                           | `""`                      |
+| `web.extraEnvVarsSecrets`                               | List of secrets with extra environment variables for Airflow web pods                                                    | `[]`                      |
+| `web.containerPorts.http`                               | Airflow web HTTP container port                                                                                          | `8080`                    |
+| `web.replicaCount`                                      | Number of Airflow web replicas                                                                                           | `1`                       |
+| `web.livenessProbe.enabled`                             | Enable livenessProbe on Airflow web containers                                                                           | `true`                    |
+| `web.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `180`                     |
+| `web.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `20`                      |
+| `web.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `5`                       |
+| `web.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                      | `6`                       |
+| `web.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                      | `1`                       |
+| `web.readinessProbe.enabled`                            | Enable readinessProbe on Airflow web containers                                                                          | `true`                    |
+| `web.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                 | `30`                      |
+| `web.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                        | `10`                      |
+| `web.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                       | `5`                       |
+| `web.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                     | `6`                       |
+| `web.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                     | `1`                       |
+| `web.startupProbe.enabled`                              | Enable startupProbe on Airflow web containers                                                                            | `false`                   |
+| `web.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                   | `60`                      |
+| `web.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                          | `10`                      |
+| `web.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                         | `1`                       |
+| `web.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                       | `15`                      |
+| `web.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                       | `1`                       |
+| `web.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                      | `{}`                      |
+| `web.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`                      |
+| `web.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`                      |
+| `web.resources.limits`                                  | The resources limits for the Airflow web containers                                                                      | `{}`                      |
+| `web.resources.requests`                                | The requested resources for the Airflow web containers                                                                   | `{}`                      |
+| `web.podSecurityContext.enabled`                        | Enabled Airflow web pods' Security Context                                                                               | `true`                    |
+| `web.podSecurityContext.fsGroup`                        | Set Airflow web pod's Security Context fsGroup                                                                           | `1001`                    |
+| `web.containerSecurityContext.enabled`                  | Enabled Airflow web containers' Security Context                                                                         | `true`                    |
+| `web.containerSecurityContext.runAsUser`                | Set Airflow web containers' Security Context runAsUser                                                                   | `1001`                    |
+| `web.containerSecurityContext.runAsNonRoot`             | Set Airflow web containers' Security Context runAsNonRoot                                                                | `true`                    |
+| `web.containerSecurityContext.privileged`               | Set web container's Security Context privileged                                                                          | `false`                   |
+| `web.containerSecurityContext.allowPrivilegeEscalation` | Set web container's Security Context allowPrivilegeEscalation                                                            | `false`                   |
+| `web.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`                 |
+| `web.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault`          |
+| `web.lifecycleHooks`                                    | for the Airflow web container(s) to automate configuration before or after startup                                       | `{}`                      |
+| `web.hostAliases`                                       | Deployment pod host aliases                                                                                              | `[]`                      |
+| `web.podLabels`                                         | Add extra labels to the Airflow web pods                                                                                 | `{}`                      |
+| `web.podAnnotations`                                    | Add extra annotations to the Airflow web pods                                                                            | `{}`                      |
+| `web.affinity`                                          | Affinity for Airflow web pods assignment (evaluated as a template)                                                       | `{}`                      |
+| `web.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `web.affinity` is set.                                                               | `""`                      |
+| `web.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`                            | `""`                      |
+| `web.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `web.affinity` is set.                                                            | `[]`                      |
+| `web.nodeSelector`                                      | Node labels for Airflow web pods assignment                                                                              | `{}`                      |
+| `web.podAffinityPreset`                                 | Pod affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`.                                 | `""`                      |
+| `web.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`.                            | `soft`                    |
+| `web.tolerations`                                       | Tolerations for Airflow web pods assignment                                                                              | `[]`                      |
+| `web.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                      |
+| `web.priorityClassName`                                 | Priority Class Name                                                                                                      | `""`                      |
+| `web.schedulerName`                                     | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                      |
+| `web.terminationGracePeriodSeconds`                     | Seconds Airflow web pod needs to terminate gracefully                                                                    | `""`                      |
+| `web.updateStrategy.type`                               | Airflow web deployment strategy type                                                                                     | `RollingUpdate`           |
+| `web.updateStrategy.rollingUpdate`                      | Airflow web deployment rolling update configuration parameters                                                           | `{}`                      |
+| `web.sidecars`                                          | Add additional sidecar containers to the Airflow web pods                                                                | `[]`                      |
+| `web.initContainers`                                    | Add additional init containers to the Airflow web pods                                                                   | `[]`                      |
+| `web.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Airflow web pods                                        | `[]`                      |
+| `web.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Airflow web pods                                             | `[]`                      |
+| `web.pdb.create`                                        | Deploy a pdb object for the Airflow web pods                                                                             | `false`                   |
+| `web.pdb.minAvailable`                                  | Maximum number/percentage of unavailable Airflow web replicas                                                            | `1`                       |
+| `web.pdb.maxUnavailable`                                | Maximum number/percentage of unavailable Airflow web replicas                                                            | `""`                      |
 
 ### Airflow scheduler parameters
 
-| Name                                              | Description                                                                                                              | Value                       |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------- |
-| `scheduler.image.registry`                        | Airflow Scheduler image registry                                                                                         | `docker.io`                 |
-| `scheduler.image.repository`                      | Airflow Scheduler image repository                                                                                       | `bitnami/airflow-scheduler` |
-| `scheduler.image.tag`                             | Airflow Scheduler image tag (immutable tags are recommended)                                                             | `2.6.3-debian-11-r11`       |
-| `scheduler.image.digest`                          | Airflow Schefuler image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                        |
-| `scheduler.image.pullPolicy`                      | Airflow Scheduler image pull policy                                                                                      | `IfNotPresent`              |
-| `scheduler.image.pullSecrets`                     | Airflow Scheduler image pull secrets                                                                                     | `[]`                        |
-| `scheduler.image.debug`                           | Enable image debug mode                                                                                                  | `false`                     |
-| `scheduler.replicaCount`                          | Number of scheduler replicas                                                                                             | `1`                         |
-| `scheduler.command`                               | Override cmd                                                                                                             | `[]`                        |
-| `scheduler.args`                                  | Override args                                                                                                            | `[]`                        |
-| `scheduler.extraEnvVars`                          | Add extra environment variables                                                                                          | `[]`                        |
-| `scheduler.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                               | `""`                        |
-| `scheduler.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                                  | `""`                        |
-| `scheduler.extraEnvVarsSecrets`                   | List of secrets with extra environment variables for Airflow scheduler pods                                              | `[]`                        |
-| `scheduler.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                                      | `{}`                        |
-| `scheduler.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                                     | `{}`                        |
-| `scheduler.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                                       | `{}`                        |
-| `scheduler.resources.limits`                      | The resources limits for the Airflow scheduler containers                                                                | `{}`                        |
-| `scheduler.resources.requests`                    | The requested resources for the Airflow scheduler containers                                                             | `{}`                        |
-| `scheduler.podSecurityContext.enabled`            | Enabled Airflow scheduler pods' Security Context                                                                         | `true`                      |
-| `scheduler.podSecurityContext.fsGroup`            | Set Airflow scheduler pod's Security Context fsGroup                                                                     | `1001`                      |
-| `scheduler.containerSecurityContext.enabled`      | Enabled Airflow scheduler containers' Security Context                                                                   | `true`                      |
-| `scheduler.containerSecurityContext.runAsUser`    | Set Airflow scheduler containers' Security Context runAsUser                                                             | `1001`                      |
-| `scheduler.containerSecurityContext.runAsNonRoot` | Set Airflow scheduler containers' Security Context runAsNonRoot                                                          | `true`                      |
-| `scheduler.lifecycleHooks`                        | for the Airflow scheduler container(s) to automate configuration before or after startup                                 | `{}`                        |
-| `scheduler.hostAliases`                           | Deployment pod host aliases                                                                                              | `[]`                        |
-| `scheduler.podLabels`                             | Add extra labels to the Airflow scheduler pods                                                                           | `{}`                        |
-| `scheduler.podAnnotations`                        | Add extra annotations to the Airflow scheduler pods                                                                      | `{}`                        |
-| `scheduler.affinity`                              | Affinity for Airflow scheduler pods assignment (evaluated as a template)                                                 | `{}`                        |
-| `scheduler.nodeAffinityPreset.key`                | Node label key to match. Ignored if `scheduler.affinity` is set.                                                         | `""`                        |
-| `scheduler.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `scheduler.affinity` is set. Allowed values: `soft` or `hard`                      | `""`                        |
-| `scheduler.nodeAffinityPreset.values`             | Node label values to match. Ignored if `scheduler.affinity` is set.                                                      | `[]`                        |
-| `scheduler.nodeSelector`                          | Node labels for Airflow scheduler pods assignment                                                                        | `{}`                        |
-| `scheduler.podAffinityPreset`                     | Pod affinity preset. Ignored if `scheduler.affinity` is set. Allowed values: `soft` or `hard`.                           | `""`                        |
-| `scheduler.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `scheduler.affinity` is set. Allowed values: `soft` or `hard`.                      | `soft`                      |
-| `scheduler.tolerations`                           | Tolerations for Airflow scheduler pods assignment                                                                        | `[]`                        |
-| `scheduler.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                        |
-| `scheduler.priorityClassName`                     | Priority Class Name                                                                                                      | `""`                        |
-| `scheduler.schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                        |
-| `scheduler.terminationGracePeriodSeconds`         | Seconds Airflow scheduler pod needs to terminate gracefully                                                              | `""`                        |
-| `scheduler.updateStrategy.type`                   | Airflow scheduler deployment strategy type                                                                               | `RollingUpdate`             |
-| `scheduler.updateStrategy.rollingUpdate`          | Airflow scheduler deployment rolling update configuration parameters                                                     | `{}`                        |
-| `scheduler.sidecars`                              | Add additional sidecar containers to the Airflow scheduler pods                                                          | `[]`                        |
-| `scheduler.initContainers`                        | Add additional init containers to the Airflow scheduler pods                                                             | `[]`                        |
-| `scheduler.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Airflow scheduler pods                                  | `[]`                        |
-| `scheduler.extraVolumes`                          | Optionally specify extra list of additional volumes for the Airflow scheduler pods                                       | `[]`                        |
-| `scheduler.pdb.create`                            | Deploy a pdb object for the Airflow scheduler pods                                                                       | `false`                     |
-| `scheduler.pdb.minAvailable`                      | Maximum number/percentage of unavailable Airflow scheduler replicas                                                      | `1`                         |
-| `scheduler.pdb.maxUnavailable`                    | Maximum number/percentage of unavailable Airflow scheduler replicas                                                      | `""`                        |
+| Name                                                          | Description                                                                                                              | Value                               |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------- |
+| `scheduler.image.registry`                                    | Airflow Scheduler image registry                                                                                         | `REGISTRY_NAME`                     |
+| `scheduler.image.repository`                                  | Airflow Scheduler image repository                                                                                       | `REPOSITORY_NAME/airflow-scheduler` |
+| `scheduler.image.digest`                                      | Airflow Schefuler image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                                |
+| `scheduler.image.pullPolicy`                                  | Airflow Scheduler image pull policy                                                                                      | `IfNotPresent`                      |
+| `scheduler.image.pullSecrets`                                 | Airflow Scheduler image pull secrets                                                                                     | `[]`                                |
+| `scheduler.image.debug`                                       | Enable image debug mode                                                                                                  | `false`                             |
+| `scheduler.replicaCount`                                      | Number of scheduler replicas                                                                                             | `1`                                 |
+| `scheduler.command`                                           | Override cmd                                                                                                             | `[]`                                |
+| `scheduler.args`                                              | Override args                                                                                                            | `[]`                                |
+| `scheduler.extraEnvVars`                                      | Add extra environment variables                                                                                          | `[]`                                |
+| `scheduler.extraEnvVarsCM`                                    | ConfigMap with extra environment variables                                                                               | `""`                                |
+| `scheduler.extraEnvVarsSecret`                                | Secret with extra environment variables                                                                                  | `""`                                |
+| `scheduler.extraEnvVarsSecrets`                               | List of secrets with extra environment variables for Airflow scheduler pods                                              | `[]`                                |
+| `scheduler.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                      | `{}`                                |
+| `scheduler.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`                                |
+| `scheduler.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`                                |
+| `scheduler.resources.limits`                                  | The resources limits for the Airflow scheduler containers                                                                | `{}`                                |
+| `scheduler.resources.requests`                                | The requested resources for the Airflow scheduler containers                                                             | `{}`                                |
+| `scheduler.podSecurityContext.enabled`                        | Enabled Airflow scheduler pods' Security Context                                                                         | `true`                              |
+| `scheduler.podSecurityContext.fsGroup`                        | Set Airflow scheduler pod's Security Context fsGroup                                                                     | `1001`                              |
+| `scheduler.containerSecurityContext.enabled`                  | Enabled Airflow scheduler containers' Security Context                                                                   | `true`                              |
+| `scheduler.containerSecurityContext.runAsUser`                | Set Airflow scheduler containers' Security Context runAsUser                                                             | `1001`                              |
+| `scheduler.containerSecurityContext.runAsNonRoot`             | Set Airflow scheduler containers' Security Context runAsNonRoot                                                          | `true`                              |
+| `scheduler.containerSecurityContext.privileged`               | Set scheduler container's Security Context privileged                                                                    | `false`                             |
+| `scheduler.containerSecurityContext.allowPrivilegeEscalation` | Set scheduler container's Security Context allowPrivilegeEscalation                                                      | `false`                             |
+| `scheduler.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`                           |
+| `scheduler.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault`                    |
+| `scheduler.lifecycleHooks`                                    | for the Airflow scheduler container(s) to automate configuration before or after startup                                 | `{}`                                |
+| `scheduler.hostAliases`                                       | Deployment pod host aliases                                                                                              | `[]`                                |
+| `scheduler.podLabels`                                         | Add extra labels to the Airflow scheduler pods                                                                           | `{}`                                |
+| `scheduler.podAnnotations`                                    | Add extra annotations to the Airflow scheduler pods                                                                      | `{}`                                |
+| `scheduler.affinity`                                          | Affinity for Airflow scheduler pods assignment (evaluated as a template)                                                 | `{}`                                |
+| `scheduler.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `scheduler.affinity` is set.                                                         | `""`                                |
+| `scheduler.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `scheduler.affinity` is set. Allowed values: `soft` or `hard`                      | `""`                                |
+| `scheduler.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `scheduler.affinity` is set.                                                      | `[]`                                |
+| `scheduler.nodeSelector`                                      | Node labels for Airflow scheduler pods assignment                                                                        | `{}`                                |
+| `scheduler.podAffinityPreset`                                 | Pod affinity preset. Ignored if `scheduler.affinity` is set. Allowed values: `soft` or `hard`.                           | `""`                                |
+| `scheduler.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `scheduler.affinity` is set. Allowed values: `soft` or `hard`.                      | `soft`                              |
+| `scheduler.tolerations`                                       | Tolerations for Airflow scheduler pods assignment                                                                        | `[]`                                |
+| `scheduler.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                                |
+| `scheduler.priorityClassName`                                 | Priority Class Name                                                                                                      | `""`                                |
+| `scheduler.schedulerName`                                     | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                                |
+| `scheduler.terminationGracePeriodSeconds`                     | Seconds Airflow scheduler pod needs to terminate gracefully                                                              | `""`                                |
+| `scheduler.updateStrategy.type`                               | Airflow scheduler deployment strategy type                                                                               | `RollingUpdate`                     |
+| `scheduler.updateStrategy.rollingUpdate`                      | Airflow scheduler deployment rolling update configuration parameters                                                     | `{}`                                |
+| `scheduler.sidecars`                                          | Add additional sidecar containers to the Airflow scheduler pods                                                          | `[]`                                |
+| `scheduler.initContainers`                                    | Add additional init containers to the Airflow scheduler pods                                                             | `[]`                                |
+| `scheduler.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Airflow scheduler pods                                  | `[]`                                |
+| `scheduler.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Airflow scheduler pods                                       | `[]`                                |
+| `scheduler.pdb.create`                                        | Deploy a pdb object for the Airflow scheduler pods                                                                       | `false`                             |
+| `scheduler.pdb.minAvailable`                                  | Maximum number/percentage of unavailable Airflow scheduler replicas                                                      | `1`                                 |
+| `scheduler.pdb.maxUnavailable`                                | Maximum number/percentage of unavailable Airflow scheduler replicas                                                      | `""`                                |
 
 ### Airflow worker parameters
 
-| Name                                           | Description                                                                                                              | Value                    |
-| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
-| `worker.image.registry`                        | Airflow Worker image registry                                                                                            | `docker.io`              |
-| `worker.image.repository`                      | Airflow Worker image repository                                                                                          | `bitnami/airflow-worker` |
-| `worker.image.tag`                             | Airflow Worker image tag (immutable tags are recommended)                                                                | `2.6.3-debian-11-r11`    |
-| `worker.image.digest`                          | Airflow Worker image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                     |
-| `worker.image.pullPolicy`                      | Airflow Worker image pull policy                                                                                         | `IfNotPresent`           |
-| `worker.image.pullSecrets`                     | Airflow Worker image pull secrets                                                                                        | `[]`                     |
-| `worker.image.debug`                           | Enable image debug mode                                                                                                  | `false`                  |
-| `worker.command`                               | Override default container command (useful when using custom images)                                                     | `[]`                     |
-| `worker.args`                                  | Override default container args (useful when using custom images)                                                        | `[]`                     |
-| `worker.extraEnvVars`                          | Array with extra environment variables to add Airflow worker pods                                                        | `[]`                     |
-| `worker.extraEnvVarsCM`                        | ConfigMap containing extra environment variables for Airflow worker pods                                                 | `""`                     |
-| `worker.extraEnvVarsSecret`                    | Secret containing extra environment variables (in case of sensitive data) for Airflow worker pods                        | `""`                     |
-| `worker.extraEnvVarsSecrets`                   | List of secrets with extra environment variables for Airflow worker pods                                                 | `[]`                     |
-| `worker.containerPorts.http`                   | Airflow worker HTTP container port                                                                                       | `8793`                   |
-| `worker.replicaCount`                          | Number of Airflow worker replicas                                                                                        | `1`                      |
-| `worker.livenessProbe.enabled`                 | Enable livenessProbe on Airflow worker containers                                                                        | `true`                   |
-| `worker.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                  | `180`                    |
-| `worker.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                         | `20`                     |
-| `worker.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                        | `5`                      |
-| `worker.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                      | `6`                      |
-| `worker.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                      | `1`                      |
-| `worker.readinessProbe.enabled`                | Enable readinessProbe on Airflow worker containers                                                                       | `true`                   |
-| `worker.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                 | `30`                     |
-| `worker.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                        | `10`                     |
-| `worker.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                       | `5`                      |
-| `worker.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                     | `6`                      |
-| `worker.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                     | `1`                      |
-| `worker.startupProbe.enabled`                  | Enable startupProbe on Airflow worker containers                                                                         | `false`                  |
-| `worker.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                   | `60`                     |
-| `worker.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                          | `10`                     |
-| `worker.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                         | `1`                      |
-| `worker.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                       | `15`                     |
-| `worker.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                       | `1`                      |
-| `worker.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                                      | `{}`                     |
-| `worker.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                                     | `{}`                     |
-| `worker.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                                       | `{}`                     |
-| `worker.resources.limits`                      | The resources limits for the Airflow worker containers                                                                   | `{}`                     |
-| `worker.resources.requests`                    | The requested resources for the Airflow worker containers                                                                | `{}`                     |
-| `worker.podSecurityContext.enabled`            | Enabled Airflow worker pods' Security Context                                                                            | `true`                   |
-| `worker.podSecurityContext.fsGroup`            | Set Airflow worker pod's Security Context fsGroup                                                                        | `1001`                   |
-| `worker.containerSecurityContext.enabled`      | Enabled Airflow worker containers' Security Context                                                                      | `true`                   |
-| `worker.containerSecurityContext.runAsUser`    | Set Airflow worker containers' Security Context runAsUser                                                                | `1001`                   |
-| `worker.containerSecurityContext.runAsNonRoot` | Set Airflow worker containers' Security Context runAsNonRoot                                                             | `true`                   |
-| `worker.lifecycleHooks`                        | for the Airflow worker container(s) to automate configuration before or after startup                                    | `{}`                     |
-| `worker.hostAliases`                           | Deployment pod host aliases                                                                                              | `[]`                     |
-| `worker.podLabels`                             | Add extra labels to the Airflow worker pods                                                                              | `{}`                     |
-| `worker.podAnnotations`                        | Add extra annotations to the Airflow worker pods                                                                         | `{}`                     |
-| `worker.affinity`                              | Affinity for Airflow worker pods assignment (evaluated as a template)                                                    | `{}`                     |
-| `worker.nodeAffinityPreset.key`                | Node label key to match. Ignored if `worker.affinity` is set.                                                            | `""`                     |
-| `worker.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`                         | `""`                     |
-| `worker.nodeAffinityPreset.values`             | Node label values to match. Ignored if `worker.affinity` is set.                                                         | `[]`                     |
-| `worker.nodeSelector`                          | Node labels for Airflow worker pods assignment                                                                           | `{}`                     |
-| `worker.podAffinityPreset`                     | Pod affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`.                              | `""`                     |
-| `worker.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`.                         | `soft`                   |
-| `worker.tolerations`                           | Tolerations for Airflow worker pods assignment                                                                           | `[]`                     |
-| `worker.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                     |
-| `worker.priorityClassName`                     | Priority Class Name                                                                                                      | `""`                     |
-| `worker.schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                     |
-| `worker.terminationGracePeriodSeconds`         | Seconds Airflow worker pod needs to terminate gracefully                                                                 | `""`                     |
-| `worker.updateStrategy.type`                   | Airflow worker deployment strategy type                                                                                  | `RollingUpdate`          |
-| `worker.updateStrategy.rollingUpdate`          | Airflow worker deployment rolling update configuration parameters                                                        | `{}`                     |
-| `worker.sidecars`                              | Add additional sidecar containers to the Airflow worker pods                                                             | `[]`                     |
-| `worker.initContainers`                        | Add additional init containers to the Airflow worker pods                                                                | `[]`                     |
-| `worker.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Airflow worker pods                                     | `[]`                     |
-| `worker.extraVolumes`                          | Optionally specify extra list of additional volumes for the Airflow worker pods                                          | `[]`                     |
-| `worker.extraVolumeClaimTemplates`             | Optionally specify extra list of volumesClaimTemplates for the Airflow worker statefulset                                | `[]`                     |
-| `worker.podTemplate`                           | Template to replace the default one to be use when `executor=KubernetesExecutor` to create Airflow worker pods           | `{}`                     |
-| `worker.pdb.create`                            | Deploy a pdb object for the Airflow worker pods                                                                          | `false`                  |
-| `worker.pdb.minAvailable`                      | Maximum number/percentage of unavailable Airflow worker replicas                                                         | `1`                      |
-| `worker.pdb.maxUnavailable`                    | Maximum number/percentage of unavailable Airflow worker replicas                                                         | `""`                     |
-| `worker.autoscaling.enabled`                   | Whether enable horizontal pod autoscaler                                                                                 | `false`                  |
-| `worker.autoscaling.minReplicas`               | Configure a minimum amount of pods                                                                                       | `1`                      |
-| `worker.autoscaling.maxReplicas`               | Configure a maximum amount of pods                                                                                       | `3`                      |
-| `worker.autoscaling.targetCPU`                 | Define the CPU target to trigger the scaling actions (utilization percentage)                                            | `80`                     |
-| `worker.autoscaling.targetMemory`              | Define the memory target to trigger the scaling actions (utilization percentage)                                         | `80`                     |
+| Name                                                       | Description                                                                                                              | Value                            |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------- |
+| `worker.image.registry`                                    | Airflow Worker image registry                                                                                            | `REGISTRY_NAME`                  |
+| `worker.image.repository`                                  | Airflow Worker image repository                                                                                          | `REPOSITORY_NAME/airflow-worker` |
+| `worker.image.digest`                                      | Airflow Worker image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                             |
+| `worker.image.pullPolicy`                                  | Airflow Worker image pull policy                                                                                         | `IfNotPresent`                   |
+| `worker.image.pullSecrets`                                 | Airflow Worker image pull secrets                                                                                        | `[]`                             |
+| `worker.image.debug`                                       | Enable image debug mode                                                                                                  | `false`                          |
+| `worker.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`                             |
+| `worker.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`                             |
+| `worker.extraEnvVars`                                      | Array with extra environment variables to add Airflow worker pods                                                        | `[]`                             |
+| `worker.extraEnvVarsCM`                                    | ConfigMap containing extra environment variables for Airflow worker pods                                                 | `""`                             |
+| `worker.extraEnvVarsSecret`                                | Secret containing extra environment variables (in case of sensitive data) for Airflow worker pods                        | `""`                             |
+| `worker.extraEnvVarsSecrets`                               | List of secrets with extra environment variables for Airflow worker pods                                                 | `[]`                             |
+| `worker.containerPorts.http`                               | Airflow worker HTTP container port                                                                                       | `8793`                           |
+| `worker.replicaCount`                                      | Number of Airflow worker replicas                                                                                        | `1`                              |
+| `worker.livenessProbe.enabled`                             | Enable livenessProbe on Airflow worker containers                                                                        | `true`                           |
+| `worker.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `180`                            |
+| `worker.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `20`                             |
+| `worker.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `5`                              |
+| `worker.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                      | `6`                              |
+| `worker.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                      | `1`                              |
+| `worker.readinessProbe.enabled`                            | Enable readinessProbe on Airflow worker containers                                                                       | `true`                           |
+| `worker.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                 | `30`                             |
+| `worker.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                        | `10`                             |
+| `worker.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                       | `5`                              |
+| `worker.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                     | `6`                              |
+| `worker.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                     | `1`                              |
+| `worker.startupProbe.enabled`                              | Enable startupProbe on Airflow worker containers                                                                         | `false`                          |
+| `worker.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                   | `60`                             |
+| `worker.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                          | `10`                             |
+| `worker.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                         | `1`                              |
+| `worker.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                       | `15`                             |
+| `worker.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                       | `1`                              |
+| `worker.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                      | `{}`                             |
+| `worker.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`                             |
+| `worker.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`                             |
+| `worker.resources.limits`                                  | The resources limits for the Airflow worker containers                                                                   | `{}`                             |
+| `worker.resources.requests`                                | The requested resources for the Airflow worker containers                                                                | `{}`                             |
+| `worker.podSecurityContext.enabled`                        | Enabled Airflow worker pods' Security Context                                                                            | `true`                           |
+| `worker.podSecurityContext.fsGroup`                        | Set Airflow worker pod's Security Context fsGroup                                                                        | `1001`                           |
+| `worker.containerSecurityContext.enabled`                  | Enabled Airflow worker containers' Security Context                                                                      | `true`                           |
+| `worker.containerSecurityContext.runAsUser`                | Set Airflow worker containers' Security Context runAsUser                                                                | `1001`                           |
+| `worker.containerSecurityContext.runAsNonRoot`             | Set Airflow worker containers' Security Context runAsNonRoot                                                             | `true`                           |
+| `worker.containerSecurityContext.privileged`               | Set worker container's Security Context privileged                                                                       | `false`                          |
+| `worker.containerSecurityContext.allowPrivilegeEscalation` | Set worker container's Security Context allowPrivilegeEscalation                                                         | `false`                          |
+| `worker.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`                        |
+| `worker.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault`                 |
+| `worker.lifecycleHooks`                                    | for the Airflow worker container(s) to automate configuration before or after startup                                    | `{}`                             |
+| `worker.hostAliases`                                       | Deployment pod host aliases                                                                                              | `[]`                             |
+| `worker.podLabels`                                         | Add extra labels to the Airflow worker pods                                                                              | `{}`                             |
+| `worker.podAnnotations`                                    | Add extra annotations to the Airflow worker pods                                                                         | `{}`                             |
+| `worker.affinity`                                          | Affinity for Airflow worker pods assignment (evaluated as a template)                                                    | `{}`                             |
+| `worker.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `worker.affinity` is set.                                                            | `""`                             |
+| `worker.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`                         | `""`                             |
+| `worker.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `worker.affinity` is set.                                                         | `[]`                             |
+| `worker.nodeSelector`                                      | Node labels for Airflow worker pods assignment                                                                           | `{}`                             |
+| `worker.podAffinityPreset`                                 | Pod affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`.                              | `""`                             |
+| `worker.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`.                         | `soft`                           |
+| `worker.tolerations`                                       | Tolerations for Airflow worker pods assignment                                                                           | `[]`                             |
+| `worker.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                             |
+| `worker.priorityClassName`                                 | Priority Class Name                                                                                                      | `""`                             |
+| `worker.schedulerName`                                     | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                             |
+| `worker.terminationGracePeriodSeconds`                     | Seconds Airflow worker pod needs to terminate gracefully                                                                 | `""`                             |
+| `worker.updateStrategy.type`                               | Airflow worker deployment strategy type                                                                                  | `RollingUpdate`                  |
+| `worker.updateStrategy.rollingUpdate`                      | Airflow worker deployment rolling update configuration parameters                                                        | `{}`                             |
+| `worker.sidecars`                                          | Add additional sidecar containers to the Airflow worker pods                                                             | `[]`                             |
+| `worker.initContainers`                                    | Add additional init containers to the Airflow worker pods                                                                | `[]`                             |
+| `worker.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Airflow worker pods                                     | `[]`                             |
+| `worker.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Airflow worker pods                                          | `[]`                             |
+| `worker.extraVolumeClaimTemplates`                         | Optionally specify extra list of volumesClaimTemplates for the Airflow worker statefulset                                | `[]`                             |
+| `worker.podTemplate`                                       | Template to replace the default one to be use when `executor=KubernetesExecutor` to create Airflow worker pods           | `{}`                             |
+| `worker.pdb.create`                                        | Deploy a pdb object for the Airflow worker pods                                                                          | `false`                          |
+| `worker.pdb.minAvailable`                                  | Maximum number/percentage of unavailable Airflow worker replicas                                                         | `1`                              |
+| `worker.pdb.maxUnavailable`                                | Maximum number/percentage of unavailable Airflow worker replicas                                                         | `""`                             |
+| `worker.autoscaling.enabled`                               | Whether enable horizontal pod autoscaler                                                                                 | `false`                          |
+| `worker.autoscaling.minReplicas`                           | Configure a minimum amount of pods                                                                                       | `1`                              |
+| `worker.autoscaling.maxReplicas`                           | Configure a maximum amount of pods                                                                                       | `3`                              |
+| `worker.autoscaling.targetCPU`                             | Define the CPU target to trigger the scaling actions (utilization percentage)                                            | `80`                             |
+| `worker.autoscaling.targetMemory`                          | Define the memory target to trigger the scaling actions (utilization percentage)                                         | `80`                             |
 
 ### Airflow git sync parameters
 
-| Name                           | Description                                                                                         | Value                  |
-| ------------------------------ | --------------------------------------------------------------------------------------------------- | ---------------------- |
-| `git.image.registry`           | Git image registry                                                                                  | `docker.io`            |
-| `git.image.repository`         | Git image repository                                                                                | `bitnami/git`          |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)                                                      | `2.41.0-debian-11-r50` |
-| `git.image.digest`             | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `git.image.pullPolicy`         | Git image pull policy                                                                               | `IfNotPresent`         |
-| `git.image.pullSecrets`        | Git image pull secrets                                                                              | `[]`                   |
-| `git.dags.enabled`             | Enable in order to download DAG files from git repositories.                                        | `false`                |
-| `git.dags.repositories`        | Array of repositories from which to download DAG files                                              | `[]`                   |
-| `git.plugins.enabled`          | Enable in order to download Plugins files from git repositories.                                    | `false`                |
-| `git.plugins.repositories`     | Array of repositories from which to download DAG files                                              | `[]`                   |
-| `git.clone.command`            | Override cmd                                                                                        | `[]`                   |
-| `git.clone.args`               | Override args                                                                                       | `[]`                   |
-| `git.clone.extraVolumeMounts`  | Add extra volume mounts                                                                             | `[]`                   |
-| `git.clone.extraEnvVars`       | Add extra environment variables                                                                     | `[]`                   |
-| `git.clone.extraEnvVarsCM`     | ConfigMap with extra environment variables                                                          | `""`                   |
-| `git.clone.extraEnvVarsSecret` | Secret with extra environment variables                                                             | `""`                   |
-| `git.clone.resources`          | Clone init container resource requests and limits                                                   | `{}`                   |
-| `git.sync.interval`            | Interval in seconds to pull the git repository containing the plugins and/or DAG files              | `60`                   |
-| `git.sync.command`             | Override cmd                                                                                        | `[]`                   |
-| `git.sync.args`                | Override args                                                                                       | `[]`                   |
-| `git.sync.extraVolumeMounts`   | Add extra volume mounts                                                                             | `[]`                   |
-| `git.sync.extraEnvVars`        | Add extra environment variables                                                                     | `[]`                   |
-| `git.sync.extraEnvVarsCM`      | ConfigMap with extra environment variables                                                          | `""`                   |
-| `git.sync.extraEnvVarsSecret`  | Secret with extra environment variables                                                             | `""`                   |
-| `git.sync.resources`           | Sync sidecar container resource requests and limits                                                 | `{}`                   |
+| Name                           | Description                                                                                         | Value                 |
+| ------------------------------ | --------------------------------------------------------------------------------------------------- | --------------------- |
+| `git.image.registry`           | Git image registry                                                                                  | `REGISTRY_NAME`       |
+| `git.image.repository`         | Git image repository                                                                                | `REPOSITORY_NAME/git` |
+| `git.image.digest`             | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `git.image.pullPolicy`         | Git image pull policy                                                                               | `IfNotPresent`        |
+| `git.image.pullSecrets`        | Git image pull secrets                                                                              | `[]`                  |
+| `git.dags.enabled`             | Enable in order to download DAG files from git repositories.                                        | `false`               |
+| `git.dags.repositories`        | Array of repositories from which to download DAG files                                              | `[]`                  |
+| `git.plugins.enabled`          | Enable in order to download Plugins files from git repositories.                                    | `false`               |
+| `git.plugins.repositories`     | Array of repositories from which to download DAG files                                              | `[]`                  |
+| `git.clone.command`            | Override cmd                                                                                        | `[]`                  |
+| `git.clone.args`               | Override args                                                                                       | `[]`                  |
+| `git.clone.extraVolumeMounts`  | Add extra volume mounts                                                                             | `[]`                  |
+| `git.clone.extraEnvVars`       | Add extra environment variables                                                                     | `[]`                  |
+| `git.clone.extraEnvVarsCM`     | ConfigMap with extra environment variables                                                          | `""`                  |
+| `git.clone.extraEnvVarsSecret` | Secret with extra environment variables                                                             | `""`                  |
+| `git.clone.resources`          | Clone init container resource requests and limits                                                   | `{}`                  |
+| `git.sync.interval`            | Interval in seconds to pull the git repository containing the plugins and/or DAG files              | `60`                  |
+| `git.sync.command`             | Override cmd                                                                                        | `[]`                  |
+| `git.sync.args`                | Override args                                                                                       | `[]`                  |
+| `git.sync.extraVolumeMounts`   | Add extra volume mounts                                                                             | `[]`                  |
+| `git.sync.extraEnvVars`        | Add extra environment variables                                                                     | `[]`                  |
+| `git.sync.extraEnvVarsCM`      | ConfigMap with extra environment variables                                                          | `""`                  |
+| `git.sync.extraEnvVarsSecret`  | Secret with extra environment variables                                                             | `""`                  |
+| `git.sync.resources`           | Sync sidecar container resource requests and limits                                                 | `{}`                  |
 
 ### Airflow ldap parameters
 
@@ -405,53 +416,56 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow metrics parameters
 
-| Name                                            | Description                                                                                                      | Value                         |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| `metrics.enabled`                               | Whether or not to create a standalone Airflow exporter to expose Airflow metrics                                 | `false`                       |
-| `metrics.image.registry`                        | Airflow exporter image registry                                                                                  | `docker.io`                   |
-| `metrics.image.repository`                      | Airflow exporter image repository                                                                                | `bitnami/airflow-exporter`    |
-| `metrics.image.tag`                             | Airflow exporter image tag (immutable tags are recommended)                                                      | `0.20220314.0-debian-11-r365` |
-| `metrics.image.digest`                          | Airflow exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
-| `metrics.image.pullPolicy`                      | Airflow exporter image pull policy                                                                               | `IfNotPresent`                |
-| `metrics.image.pullSecrets`                     | Airflow exporter image pull secrets                                                                              | `[]`                          |
-| `metrics.extraEnvVars`                          | Array with extra environment variables to add Airflow exporter pods                                              | `[]`                          |
-| `metrics.extraEnvVarsCM`                        | ConfigMap containing extra environment variables for Airflow exporter pods                                       | `""`                          |
-| `metrics.extraEnvVarsSecret`                    | Secret containing extra environment variables (in case of sensitive data) for Airflow exporter pods              | `""`                          |
-| `metrics.containerPorts.http`                   | Airflow exporter metrics container port                                                                          | `9112`                        |
-| `metrics.resources.limits`                      | The resources limits for the container                                                                           | `{}`                          |
-| `metrics.resources.requests`                    | The requested resources for the container                                                                        | `{}`                          |
-| `metrics.podSecurityContext.enabled`            | Enable security context for the pods                                                                             | `true`                        |
-| `metrics.podSecurityContext.fsGroup`            | Set Airflow exporter pod's Security Context fsGroup                                                              | `1001`                        |
-| `metrics.containerSecurityContext.enabled`      | Enable Airflow exporter containers' Security Context                                                             | `true`                        |
-| `metrics.containerSecurityContext.runAsUser`    | Set Airflow exporter containers' Security Context runAsUser                                                      | `1001`                        |
-| `metrics.containerSecurityContext.runAsNonRoot` | Set Airflow exporter containers' Security Context runAsNonRoot                                                   | `true`                        |
-| `metrics.lifecycleHooks`                        | for the Airflow exporter container(s) to automate configuration before or after startup                          | `{}`                          |
-| `metrics.hostAliases`                           | Airflow exporter pods host aliases                                                                               | `[]`                          |
-| `metrics.podLabels`                             | Extra labels for Airflow exporter pods                                                                           | `{}`                          |
-| `metrics.podAnnotations`                        | Extra annotations for Airflow exporter pods                                                                      | `{}`                          |
-| `metrics.podAffinityPreset`                     | Pod affinity preset. Ignored if `metrics.affinity` is set. Allowed values: `soft` or `hard`                      | `""`                          |
-| `metrics.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `metrics.affinity` is set. Allowed values: `soft` or `hard`                 | `soft`                        |
-| `metrics.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `metrics.affinity` is set. Allowed values: `soft` or `hard`                | `""`                          |
-| `metrics.nodeAffinityPreset.key`                | Node label key to match Ignored if `metrics.affinity` is set.                                                    | `""`                          |
-| `metrics.nodeAffinityPreset.values`             | Node label values to match. Ignored if `metrics.affinity` is set.                                                | `[]`                          |
-| `metrics.affinity`                              | Affinity for pod assignment                                                                                      | `{}`                          |
-| `metrics.nodeSelector`                          | Node labels for pod assignment                                                                                   | `{}`                          |
-| `metrics.tolerations`                           | Tolerations for pod assignment                                                                                   | `[]`                          |
-| `metrics.schedulerName`                         | Name of the k8s scheduler (other than default) for Airflow exporter                                              | `""`                          |
-| `metrics.service.ports.http`                    | Airflow exporter metrics service port                                                                            | `9112`                        |
-| `metrics.service.clusterIP`                     | Static clusterIP or None for headless services                                                                   | `""`                          |
-| `metrics.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                 | `None`                        |
-| `metrics.service.annotations`                   | Annotations for the Airflow exporter service                                                                     | `{}`                          |
-| `metrics.serviceMonitor.enabled`                | if `true`, creates a Prometheus Operator ServiceMonitor (requires `metrics.enabled` to be `true`)                | `false`                       |
-| `metrics.serviceMonitor.namespace`              | Namespace in which Prometheus is running                                                                         | `""`                          |
-| `metrics.serviceMonitor.interval`               | Interval at which metrics should be scraped                                                                      | `""`                          |
-| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                                                          | `""`                          |
-| `metrics.serviceMonitor.labels`                 | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                            | `{}`                          |
-| `metrics.serviceMonitor.selector`               | Prometheus instance selector labels                                                                              | `{}`                          |
-| `metrics.serviceMonitor.relabelings`            | RelabelConfigs to apply to samples before scraping                                                               | `[]`                          |
-| `metrics.serviceMonitor.metricRelabelings`      | MetricRelabelConfigs to apply to samples before ingestion                                                        | `[]`                          |
-| `metrics.serviceMonitor.honorLabels`            | Specify honorLabels parameter to add the scrape endpoint                                                         | `false`                       |
-| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                | `""`                          |
+| Name                                                        | Description                                                                                                      | Value                              |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `metrics.enabled`                                           | Whether or not to create a standalone Airflow exporter to expose Airflow metrics                                 | `false`                            |
+| `metrics.image.registry`                                    | Airflow exporter image registry                                                                                  | `REGISTRY_NAME`                    |
+| `metrics.image.repository`                                  | Airflow exporter image repository                                                                                | `REPOSITORY_NAME/airflow-exporter` |
+| `metrics.image.digest`                                      | Airflow exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                               |
+| `metrics.image.pullPolicy`                                  | Airflow exporter image pull policy                                                                               | `IfNotPresent`                     |
+| `metrics.image.pullSecrets`                                 | Airflow exporter image pull secrets                                                                              | `[]`                               |
+| `metrics.extraEnvVars`                                      | Array with extra environment variables to add Airflow exporter pods                                              | `[]`                               |
+| `metrics.extraEnvVarsCM`                                    | ConfigMap containing extra environment variables for Airflow exporter pods                                       | `""`                               |
+| `metrics.extraEnvVarsSecret`                                | Secret containing extra environment variables (in case of sensitive data) for Airflow exporter pods              | `""`                               |
+| `metrics.containerPorts.http`                               | Airflow exporter metrics container port                                                                          | `9112`                             |
+| `metrics.resources.limits`                                  | The resources limits for the container                                                                           | `{}`                               |
+| `metrics.resources.requests`                                | The requested resources for the container                                                                        | `{}`                               |
+| `metrics.podSecurityContext.enabled`                        | Enable security context for the pods                                                                             | `true`                             |
+| `metrics.podSecurityContext.fsGroup`                        | Set Airflow exporter pod's Security Context fsGroup                                                              | `1001`                             |
+| `metrics.containerSecurityContext.enabled`                  | Enable Airflow exporter containers' Security Context                                                             | `true`                             |
+| `metrics.containerSecurityContext.runAsUser`                | Set Airflow exporter containers' Security Context runAsUser                                                      | `1001`                             |
+| `metrics.containerSecurityContext.runAsNonRoot`             | Set Airflow exporter containers' Security Context runAsNonRoot                                                   | `true`                             |
+| `metrics.containerSecurityContext.privileged`               | Set metrics container's Security Context privileged                                                              | `false`                            |
+| `metrics.containerSecurityContext.allowPrivilegeEscalation` | Set metrics container's Security Context allowPrivilegeEscalation                                                | `false`                            |
+| `metrics.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                               | `["ALL"]`                          |
+| `metrics.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                 | `RuntimeDefault`                   |
+| `metrics.lifecycleHooks`                                    | for the Airflow exporter container(s) to automate configuration before or after startup                          | `{}`                               |
+| `metrics.hostAliases`                                       | Airflow exporter pods host aliases                                                                               | `[]`                               |
+| `metrics.podLabels`                                         | Extra labels for Airflow exporter pods                                                                           | `{}`                               |
+| `metrics.podAnnotations`                                    | Extra annotations for Airflow exporter pods                                                                      | `{}`                               |
+| `metrics.podAffinityPreset`                                 | Pod affinity preset. Ignored if `metrics.affinity` is set. Allowed values: `soft` or `hard`                      | `""`                               |
+| `metrics.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `metrics.affinity` is set. Allowed values: `soft` or `hard`                 | `soft`                             |
+| `metrics.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `metrics.affinity` is set. Allowed values: `soft` or `hard`                | `""`                               |
+| `metrics.nodeAffinityPreset.key`                            | Node label key to match Ignored if `metrics.affinity` is set.                                                    | `""`                               |
+| `metrics.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `metrics.affinity` is set.                                                | `[]`                               |
+| `metrics.affinity`                                          | Affinity for pod assignment                                                                                      | `{}`                               |
+| `metrics.nodeSelector`                                      | Node labels for pod assignment                                                                                   | `{}`                               |
+| `metrics.tolerations`                                       | Tolerations for pod assignment                                                                                   | `[]`                               |
+| `metrics.schedulerName`                                     | Name of the k8s scheduler (other than default) for Airflow exporter                                              | `""`                               |
+| `metrics.service.ports.http`                                | Airflow exporter metrics service port                                                                            | `9112`                             |
+| `metrics.service.clusterIP`                                 | Static clusterIP or None for headless services                                                                   | `""`                               |
+| `metrics.service.sessionAffinity`                           | Control where client requests go, to the same pod or round-robin                                                 | `None`                             |
+| `metrics.service.annotations`                               | Annotations for the Airflow exporter service                                                                     | `{}`                               |
+| `metrics.serviceMonitor.enabled`                            | if `true`, creates a Prometheus Operator ServiceMonitor (requires `metrics.enabled` to be `true`)                | `false`                            |
+| `metrics.serviceMonitor.namespace`                          | Namespace in which Prometheus is running                                                                         | `""`                               |
+| `metrics.serviceMonitor.interval`                           | Interval at which metrics should be scraped                                                                      | `""`                               |
+| `metrics.serviceMonitor.scrapeTimeout`                      | Timeout after which the scrape is ended                                                                          | `""`                               |
+| `metrics.serviceMonitor.labels`                             | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                            | `{}`                               |
+| `metrics.serviceMonitor.selector`                           | Prometheus instance selector labels                                                                              | `{}`                               |
+| `metrics.serviceMonitor.relabelings`                        | RelabelConfigs to apply to samples before scraping                                                               | `[]`                               |
+| `metrics.serviceMonitor.metricRelabelings`                  | MetricRelabelConfigs to apply to samples before ingestion                                                        | `[]`                               |
+| `metrics.serviceMonitor.honorLabels`                        | Specify honorLabels parameter to add the scrape endpoint                                                         | `false`                            |
+| `metrics.serviceMonitor.jobLabel`                           | The name of the label on the target service to use as the job name in prometheus.                                | `""`                               |
 
 ### Airflow database parameters
 
@@ -491,8 +505,10 @@ helm install my-release \
                --set auth.password=my-passsword \
                --set auth.fernetKey=my-fernet-key \
                --set auth.secretKey=my-secret-key \
-               oci://registry-1.docker.io/bitnamicharts/airflow
+               oci://REGISTRY_NAME/REPOSITORY_NAME/airflow
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the credentials to access the Airflow web UI.
 
@@ -501,9 +517,10 @@ The above command sets the credentials to access the Airflow web UI.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/airflow
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/airflow
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -681,6 +698,16 @@ The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 16.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 13.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1300) you can find more information about the changes introduced in that version.
+
+### To 15.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 18.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1800) you can find more information about the changes introduced in that version.
+
+NOTE: Due to an error in our release process, Redis&reg;' chart versions higher or equal than 17.15.4 already use Redis&reg; 7.2 by default.
 
 ### To 14.0.0
 

@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/thanos
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/thanos
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -20,12 +22,12 @@ This chart bootstraps a [Thanos](https://github.com/bitnami/containers/tree/main
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Thanos in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Thanos in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -33,8 +35,10 @@ Looking to use Thanos in production? Try [VMware Application Catalog](https://bi
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/thanos
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/thanos
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy Thanos on the Kubernetes cluster with the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
 
@@ -105,36 +109,35 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 
 ### Thanos common parameters
 
-| Name                                          | Description                                                                                                         | Value                |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------- |
-| `image.registry`                              | Thanos image registry                                                                                               | `docker.io`          |
-| `image.repository`                            | Thanos image repository                                                                                             | `bitnami/thanos`     |
-| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.31.0-scratch-r12` |
-| `image.digest`                                | Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                 |
-| `image.pullPolicy`                            | Thanos image pull policy                                                                                            | `IfNotPresent`       |
-| `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                    | `[]`                 |
-| `objstoreConfig`                              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                                              | `""`                 |
-| `indexCacheConfig`                            | The [index cache configuration](https://thanos.io/tip/components/store.md/)                                         | `""`                 |
-| `bucketCacheConfig`                           | The [bucket cache configuration](https://thanos.io/tip/components/store.md/)                                        | `""`                 |
-| `existingObjstoreSecret`                      | Secret with Objstore Configuration                                                                                  | `""`                 |
-| `existingObjstoreSecretItems`                 | Optional item list for specifying a custom Secret key. If so, path should be objstore.yml                           | `[]`                 |
-| `httpConfig`                                  | The [https and basic auth configuration](https://thanos.io/tip/operating/https.md/)                                 | `""`                 |
-| `existingHttpConfigSecret`                    | Secret containing the HTTPS and Basic auth configuration                                                            | `""`                 |
-| `https.enabled`                               | Set to true to enable HTTPS. Requires a secret containing the certificate and key.                                  | `false`              |
-| `https.autoGenerated`                         | Create self-signed TLS certificates.                                                                                | `false`              |
-| `https.existingSecret`                        | Existing secret containing your own server key and certificate                                                      | `""`                 |
-| `https.certFilename`                          |                                                                                                                     | `tls.crt`            |
-| `https.keyFilename`                           |                                                                                                                     | `tls.key`            |
-| `https.caFilename`                            |                                                                                                                     | `ca.crt`             |
-| `https.key`                                   | TLS Key for Thanos HTTPS - ignored if existingSecret is provided                                                    | `""`                 |
-| `https.cert`                                  | TLS Certificate for Thanos HTTPS - ignored if existingSecret is provided                                            | `""`                 |
-| `https.ca`                                    | (Optional, used for client) CA Certificate for Thanos HTTPS - ignored if existingSecret is provided                 | `""`                 |
-| `https.clientAuthType`                        | Server policy for client authentication using certificates. Maps to ClientAuth Policies.                            | `""`                 |
-| `auth.basicAuthUsers`                         | Object containing <user>:<passwords> key-value pairs for each user that will have access via basic authentication   | `{}`                 |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `false`              |
-| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`                 |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true`               |
-| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`                 |
+| Name                                          | Description                                                                                                         | Value                    |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `image.registry`                              | Thanos image registry                                                                                               | `REGISTRY_NAME`          |
+| `image.repository`                            | Thanos image repository                                                                                             | `REPOSITORY_NAME/thanos` |
+| `image.digest`                                | Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                     |
+| `image.pullPolicy`                            | Thanos image pull policy                                                                                            | `IfNotPresent`           |
+| `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                    | `[]`                     |
+| `objstoreConfig`                              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                                              | `""`                     |
+| `indexCacheConfig`                            | The [index cache configuration](https://thanos.io/tip/components/store.md/)                                         | `""`                     |
+| `bucketCacheConfig`                           | The [bucket cache configuration](https://thanos.io/tip/components/store.md/)                                        | `""`                     |
+| `existingObjstoreSecret`                      | Secret with Objstore Configuration                                                                                  | `""`                     |
+| `existingObjstoreSecretItems`                 | Optional item list for specifying a custom Secret key. If so, path should be objstore.yml                           | `[]`                     |
+| `httpConfig`                                  | The [https and basic auth configuration](https://thanos.io/tip/operating/https.md/)                                 | `""`                     |
+| `existingHttpConfigSecret`                    | Secret containing the HTTPS and Basic auth configuration                                                            | `""`                     |
+| `https.enabled`                               | Set to true to enable HTTPS. Requires a secret containing the certificate and key.                                  | `false`                  |
+| `https.autoGenerated`                         | Create self-signed TLS certificates.                                                                                | `false`                  |
+| `https.existingSecret`                        | Existing secret containing your own server key and certificate                                                      | `""`                     |
+| `https.certFilename`                          |                                                                                                                     | `tls.crt`                |
+| `https.keyFilename`                           |                                                                                                                     | `tls.key`                |
+| `https.caFilename`                            |                                                                                                                     | `ca.crt`                 |
+| `https.key`                                   | TLS Key for Thanos HTTPS - ignored if existingSecret is provided                                                    | `""`                     |
+| `https.cert`                                  | TLS Certificate for Thanos HTTPS - ignored if existingSecret is provided                                            | `""`                     |
+| `https.ca`                                    | (Optional, used for client) CA Certificate for Thanos HTTPS - ignored if existingSecret is provided                 | `""`                     |
+| `https.clientAuthType`                        | Server policy for client authentication using certificates. Maps to ClientAuth Policies.                            | `""`                     |
+| `auth.basicAuthUsers`                         | Object containing <user>:<passwords> key-value pairs for each user that will have access via basic authentication   | `{}`                     |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `false`                  |
+| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`                     |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true`                   |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`                     |
 
 ### Thanos Query parameters
 
@@ -266,6 +269,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                          | `""`                     |
 | `query.ingress.enabled`                                   | Enable ingress controller resource                                                                                                      | `false`                  |
 | `query.ingress.hostname`                                  | Default host for the ingress resource                                                                                                   | `thanos.local`           |
+| `query.ingress.secretName`                                | Custom secretName for the ingress resource                                                                                              | `""`                     |
 | `query.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                           | `""`                     |
 | `query.ingress.annotations`                               | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.        | `{}`                     |
 | `query.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                                                | `[]`                     |
@@ -279,6 +283,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.ingress.pathType`                                  | Ingress path type                                                                                                                       | `ImplementationSpecific` |
 | `query.ingress.grpc.enabled`                              | Enable ingress controller resource (GRPC)                                                                                               | `false`                  |
 | `query.ingress.grpc.hostname`                             | Default host for the ingress resource (GRPC)                                                                                            | `thanos-grpc.local`      |
+| `query.ingress.grpc.secretName`                           | Custom secretName for the ingress resource (GRPC)                                                                                       | `""`                     |
 | `query.ingress.grpc.ingressClassName`                     | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                           | `""`                     |
 | `query.ingress.grpc.annotations`                          | Additional annotations for the Ingress resource (GRPC). To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
 | `query.ingress.grpc.extraHosts`                           | The list of additional hostnames to be covered with this ingress record.                                                                | `[]`                     |
@@ -1103,91 +1108,91 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 
 ### Metrics parameters
 
-| Name                                                                                    | Description                                                                                                                                                   | Value   |
-| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `metrics.enabled`                                                                       | Enable the export of Prometheus metrics                                                                                                                       | `false` |
-| `metrics.serviceMonitor.enabled`                                                        | Specify if a ServiceMonitor will be deployed for Prometheus Operator                                                                                          | `false` |
-| `metrics.serviceMonitor.namespace`                                                      | Namespace in which Prometheus is running                                                                                                                      | `""`    |
-| `metrics.serviceMonitor.labels`                                                         | Extra labels for the ServiceMonitor                                                                                                                           | `{}`    |
-| `metrics.serviceMonitor.jobLabel`                                                       | The name of the label on the target service to use as the job name in Prometheus                                                                              | `""`    |
-| `metrics.serviceMonitor.interval`                                                       | How frequently to scrape metrics                                                                                                                              | `""`    |
-| `metrics.serviceMonitor.scrapeTimeout`                                                  | Timeout after which the scrape is ended                                                                                                                       | `""`    |
-| `metrics.serviceMonitor.metricRelabelings`                                              | Specify additional relabeling of metrics                                                                                                                      | `[]`    |
-| `metrics.serviceMonitor.relabelings`                                                    | Specify general relabeling                                                                                                                                    | `[]`    |
-| `metrics.serviceMonitor.selector`                                                       | Prometheus instance selector labels                                                                                                                           | `{}`    |
-| `metrics.serviceMonitor.extraParameters`                                                | Any extra parameter to be added to the endpoint configured in the ServiceMonitor                                                                              | `{}`    |
-| `metrics.prometheusRule.enabled`                                                        | If `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true`)                                                        | `false` |
-| `metrics.prometheusRule.default.absent_rules`                                           | Enable absent_rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                        |         |
-| `metrics.prometheusRule.default.compaction`                                             | Enable compaction rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                    |         |
-| `metrics.prometheusRule.default.query`                                                  | Enable query when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                               |         |
-| `metrics.prometheusRule.default.receive`                                                | Enable receive rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                       |         |
-| `metrics.prometheusRule.default.replicate`                                              | Enable replicate rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                     |         |
-| `metrics.prometheusRule.default.ruler`                                                  | Enable ruler rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                         |         |
-| `metrics.prometheusRule.default.sidecar`                                                | Enable sidecar rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                       |         |
-| `metrics.prometheusRule.default.store_gateway`                                          | Enable store_gateway rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                 |         |
-| `metrics.prometheusRule.default.create`                                                 | would create all default prometheus alerts                                                                                                                    | `false` |
-| `metrics.prometheusRule.default.disabled.ThanosCompactIsDown`                           | Disable ThanosCompactIsDown rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.absent_rules is true                            |         |
-| `metrics.prometheusRule.default.disabled.ThanosQueryIsDown`                             | Disable ThanosQueryIsDown rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.absent_rules is true                              |         |
-| `metrics.prometheusRule.default.disabled.ThanosReceiveIsDown`                           | Disable ThanosReceiveIsDown rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.absent_rules is true                            |         |
-| `metrics.prometheusRule.default.disabled.ThanosRuleIsDown`                              | Disable ThanosRuleIsDown rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.absent_rules is true                               |         |
-| `metrics.prometheusRule.default.disabled.ThanosSidecarIsDown`                           | Disable ThanosSidecarIsDown rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.absent_rules is true                            |         |
-| `metrics.prometheusRule.default.disabled.ThanosStoreIsDown`                             | Disable ThanosStoreIsDown rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.absent_rules is true                              |         |
-| `metrics.prometheusRule.default.disabled.ThanosCompactMultipleRunning`                  | Disable ThanosCompactMultipleRunning rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.compaction is true                     |         |
-| `metrics.prometheusRule.default.disabled.ThanosCompactHalted`                           | Disable ThanosCompactMultipleRunning rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.compaction is true                     |         |
-| `metrics.prometheusRule.default.disabled.ThanosCompactHighCompactionFailures`           | Disable ThanosCompactMultipleRunning rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.compaction is true                     |         |
-| `metrics.prometheusRule.default.disabled.ThanosCompactBucketHighOperationFailures`      | Disable ThanosCompactMultipleRunning rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.compaction is true                     |         |
-| `metrics.prometheusRule.default.disabled.ThanosCompactHasNotRun`                        | Disable ThanosCompactMultipleRunning rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.compaction is true                     |         |
-| `metrics.prometheusRule.default.disabled.ThanosQueryHttpRequestQueryErrorRateHigh`      | Disable ThanosQueryHttpRequestQueryErrorRateHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true              |         |
-| `metrics.prometheusRule.default.disabled.ThanosQueryHttpRequestQueryRangeErrorRateHigh` | Disable ThanosQueryHttpRequestQueryRangeErrorRateHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true         |         |
-| `metrics.prometheusRule.default.disabled.ThanosQueryGrpcServerErrorRate`                | Disable ThanosQueryGrpcServerErrorRate rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true                        |         |
-| `metrics.prometheusRule.default.disabled.ThanosQueryGrpcClientErrorRate`                | Disable ThanosQueryGrpcClientErrorRate rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true                        |         |
-| `metrics.prometheusRule.default.disabled.ThanosQueryHighDNSFailures`                    | Disable ThanosQueryHighDNSFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true                            |         |
-| `metrics.prometheusRule.default.disabled.ThanosQueryInstantLatencyHigh`                 | Disable ThanosQueryInstantLatencyHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true                         |         |
-| `metrics.prometheusRule.default.disabled.ThanosQueryRangeLatencyHigh`                   | Disable ThanosQueryRangeLatencyHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true                           |         |
-| `metrics.prometheusRule.default.disabled.ThanosQueryOverload`                           | Disable ThanosQueryOverload rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true                                   |         |
-| `metrics.prometheusRule.default.disabled.ThanosReceiveHttpRequestErrorRateHigh`         | Disable ThanosReceiveHttpRequestErrorRateHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true               |         |
-| `metrics.prometheusRule.default.disabled.ThanosReceiveHttpRequestLatencyHigh`           | Disable ThanosReceiveHttpRequestLatencyHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                 |         |
-| `metrics.prometheusRule.default.disabled.ThanosReceiveHighReplicationFailures`          | Disable ThanosReceiveHighReplicationFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                |         |
-| `metrics.prometheusRule.default.disabled.ThanosReceiveHighForwardRequestFailures`       | Disable ThanosReceiveHighForwardRequestFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true             |         |
-| `metrics.prometheusRule.default.disabled.ThanosReceiveHighHashringFileRefreshFailures`  | Disable ThanosReceiveHighHashringFileRefreshFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true        |         |
-| `metrics.prometheusRule.default.disabled.ThanosReceiveConfigReloadFailure`              | Disable ThanosReceiveConfigReloadFailure rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                    |         |
-| `metrics.prometheusRule.default.disabled.ThanosReceiveNoUpload`                         | Disable ThanosReceiveNoUpload rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                               |         |
-| `metrics.prometheusRule.default.disabled.ThanosReceiveTrafficBelowThreshold`            | Disable ThanosReceiveTrafficBelowThreshold rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                  |         |
-| `metrics.prometheusRule.default.disabled.ThanosBucketReplicateErrorRate`                | Disable ThanosBucketReplicateErrorRate rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                      |         |
-| `metrics.prometheusRule.default.disabled.ThanosBucketReplicateRunLatency`               | Disable ThanosBucketReplicateRunLatency rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                     |         |
-| `metrics.prometheusRule.default.disabled.ThanosRuleQueueIsDroppingAlerts`               | Disable ThanosRuleQueueIsDroppingAlerts rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                       |         |
-| `metrics.prometheusRule.default.disabled.ThanosRuleSenderIsFailingAlerts`               | Disable ThanosRuleSenderIsFailingAlerts rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                       |         |
-| `metrics.prometheusRule.default.disabled.ThanosRuleHighRuleEvaluationFailures`          | Disable ThanosRuleHighRuleEvaluationFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                  |         |
-| `metrics.prometheusRule.default.disabled.ThanosRuleHighRuleEvaluationWarnings`          | Disable ThanosRuleHighRuleEvaluationWarnings rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                  |         |
-| `metrics.prometheusRule.default.disabled.ThanosRuleRuleEvaluationLatencyHigh`           | Disable ThanosRuleRuleEvaluationLatencyHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                   |         |
-| `metrics.prometheusRule.default.disabled.ThanosRuleGrpcErrorRate`                       | Disable ThanosRuleGrpcErrorRate rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                               |         |
-| `metrics.prometheusRule.default.disabled.ThanosRuleConfigReloadFailure`                 | Disable ThanosRuleConfigReloadFailure rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                         |         |
-| `metrics.prometheusRule.default.disabled.ThanosRuleQueryHighDNSFailures`                | Disable ThanosRuleQueryHighDNSFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                        |         |
-| `metrics.prometheusRule.default.disabled.ThanosRuleAlertmanagerHighDNSFailures`         | Disable ThanosRuleAlertmanagerHighDNSFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                 |         |
-| `metrics.prometheusRule.default.disabled.ThanosRuleNoEvaluationFor10Intervals`          | Disable ThanosRuleNoEvaluationFor10Intervals rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                  |         |
-| `metrics.prometheusRule.default.disabled.ThanosNoRuleEvaluations`                       | Disable ThanosNoRuleEvaluations rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                               |         |
-| `metrics.prometheusRule.default.disabled.ThanosSidecarBucketOperationsFailed`           | Disable ThanosSidecarBucketOperationsFailed rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.sidecar is true                 |         |
-| `metrics.prometheusRule.default.disabled.ThanosSidecarNoConnectionToStartedPrometheus`  | Disable ThanosSidecarNoConnectionToStartedPrometheus rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.sidecar is true        |         |
-| `metrics.prometheusRule.default.disabled.ThanosStoreGrpcErrorRate`                      | Disable ThanosSidecarNoConnectionToStartedPrometheus rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.store_gateway  is true |         |
-| `metrics.prometheusRule.default.disabled.ThanosStoreSeriesGateLatencyHigh`              | Disable ThanosStoreSeriesGateLatencyHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.store_gateway  is true             |         |
-| `metrics.prometheusRule.default.disabled.ThanosStoreBucketHighOperationFailures`        | Disable ThanosStoreBucketHighOperationFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.store_gateway  is true       |         |
-| `metrics.prometheusRule.default.disabled.ThanosStoreObjstoreOperationLatencyHigh`       | Disable ThanosStoreObjstoreOperationLatencyHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.store_gateway  is true      |         |
-| `metrics.prometheusRule.default.disabled`                                               | disable one specific prometheus alert rule                                                                                                                    | `{}`    |
-| `metrics.prometheusRule.namespace`                                                      | Namespace in which the PrometheusRule CRD is created                                                                                                          | `""`    |
-| `metrics.prometheusRule.additionalLabels`                                               | Additional labels for the prometheusRule                                                                                                                      | `{}`    |
-| `metrics.prometheusRule.groups`                                                         | Prometheus Rule Groups for Thanos components                                                                                                                  | `[]`    |
+| Name                                                                                    | Description                                                                                                                                                   | Value                |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| `metrics.enabled`                                                                       | Enable the export of Prometheus metrics                                                                                                                       | `false`              |
+| `metrics.serviceMonitor.enabled`                                                        | Specify if a ServiceMonitor will be deployed for Prometheus Operator                                                                                          | `false`              |
+| `metrics.serviceMonitor.namespace`                                                      | Namespace in which Prometheus is running                                                                                                                      | `""`                 |
+| `metrics.serviceMonitor.labels`                                                         | Extra labels for the ServiceMonitor                                                                                                                           | `{}`                 |
+| `metrics.serviceMonitor.jobLabel`                                                       | The name of the label on the target service to use as the job name in Prometheus                                                                              | `""`                 |
+| `metrics.serviceMonitor.interval`                                                       | How frequently to scrape metrics                                                                                                                              | `""`                 |
+| `metrics.serviceMonitor.scrapeTimeout`                                                  | Timeout after which the scrape is ended                                                                                                                       | `""`                 |
+| `metrics.serviceMonitor.metricRelabelings`                                              | Specify additional relabeling of metrics                                                                                                                      | `[]`                 |
+| `metrics.serviceMonitor.relabelings`                                                    | Specify general relabeling                                                                                                                                    | `[]`                 |
+| `metrics.serviceMonitor.selector`                                                       | Prometheus instance selector labels                                                                                                                           | `{}`                 |
+| `metrics.serviceMonitor.extraParameters`                                                | Any extra parameter to be added to the endpoint configured in the ServiceMonitor                                                                              | `{}`                 |
+| `metrics.prometheusRule.enabled`                                                        | If `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true`)                                                        | `false`              |
+| `metrics.prometheusRule.default.absent_rules`                                           | Enable absent_rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                        |                      |
+| `metrics.prometheusRule.default.compaction`                                             | Enable compaction rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                    |                      |
+| `metrics.prometheusRule.default.query`                                                  | Enable query when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                               |                      |
+| `metrics.prometheusRule.default.receive`                                                | Enable receive rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                       |                      |
+| `metrics.prometheusRule.default.replicate`                                              | Enable replicate rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                     |                      |
+| `metrics.prometheusRule.default.ruler`                                                  | Enable ruler rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                         |                      |
+| `metrics.prometheusRule.default.sidecar`                                                | Enable sidecar rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                       |                      |
+| `metrics.prometheusRule.default.sidecarJobRegex`                                        | Allows the customization of the thanos-sidecar job name to use in the sidecar prometheus alerts                                                               | `.*thanos-sidecar.*` |
+| `metrics.prometheusRule.default.store_gateway`                                          | Enable store_gateway rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)                                 |                      |
+| `metrics.prometheusRule.default.create`                                                 | would create all default prometheus alerts                                                                                                                    | `false`              |
+| `metrics.prometheusRule.default.disabled.ThanosCompactIsDown`                           | Disable ThanosCompactIsDown rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.absent_rules is true                            |                      |
+| `metrics.prometheusRule.default.disabled.ThanosQueryIsDown`                             | Disable ThanosQueryIsDown rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.absent_rules is true                              |                      |
+| `metrics.prometheusRule.default.disabled.ThanosReceiveIsDown`                           | Disable ThanosReceiveIsDown rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.absent_rules is true                            |                      |
+| `metrics.prometheusRule.default.disabled.ThanosRuleIsDown`                              | Disable ThanosRuleIsDown rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.absent_rules is true                               |                      |
+| `metrics.prometheusRule.default.disabled.ThanosSidecarIsDown`                           | Disable ThanosSidecarIsDown rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.absent_rules is true                            |                      |
+| `metrics.prometheusRule.default.disabled.ThanosStoreIsDown`                             | Disable ThanosStoreIsDown rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.absent_rules is true                              |                      |
+| `metrics.prometheusRule.default.disabled.ThanosCompactMultipleRunning`                  | Disable ThanosCompactMultipleRunning rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.compaction is true                     |                      |
+| `metrics.prometheusRule.default.disabled.ThanosCompactHalted`                           | Disable ThanosCompactMultipleRunning rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.compaction is true                     |                      |
+| `metrics.prometheusRule.default.disabled.ThanosCompactHighCompactionFailures`           | Disable ThanosCompactMultipleRunning rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.compaction is true                     |                      |
+| `metrics.prometheusRule.default.disabled.ThanosCompactBucketHighOperationFailures`      | Disable ThanosCompactMultipleRunning rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.compaction is true                     |                      |
+| `metrics.prometheusRule.default.disabled.ThanosCompactHasNotRun`                        | Disable ThanosCompactMultipleRunning rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.compaction is true                     |                      |
+| `metrics.prometheusRule.default.disabled.ThanosQueryHttpRequestQueryErrorRateHigh`      | Disable ThanosQueryHttpRequestQueryErrorRateHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true              |                      |
+| `metrics.prometheusRule.default.disabled.ThanosQueryHttpRequestQueryRangeErrorRateHigh` | Disable ThanosQueryHttpRequestQueryRangeErrorRateHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true         |                      |
+| `metrics.prometheusRule.default.disabled.ThanosQueryGrpcServerErrorRate`                | Disable ThanosQueryGrpcServerErrorRate rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true                        |                      |
+| `metrics.prometheusRule.default.disabled.ThanosQueryGrpcClientErrorRate`                | Disable ThanosQueryGrpcClientErrorRate rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true                        |                      |
+| `metrics.prometheusRule.default.disabled.ThanosQueryHighDNSFailures`                    | Disable ThanosQueryHighDNSFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true                            |                      |
+| `metrics.prometheusRule.default.disabled.ThanosQueryInstantLatencyHigh`                 | Disable ThanosQueryInstantLatencyHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true                         |                      |
+| `metrics.prometheusRule.default.disabled.ThanosQueryRangeLatencyHigh`                   | Disable ThanosQueryRangeLatencyHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true                           |                      |
+| `metrics.prometheusRule.default.disabled.ThanosQueryOverload`                           | Disable ThanosQueryOverload rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.query is true                                   |                      |
+| `metrics.prometheusRule.default.disabled.ThanosReceiveHttpRequestErrorRateHigh`         | Disable ThanosReceiveHttpRequestErrorRateHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true               |                      |
+| `metrics.prometheusRule.default.disabled.ThanosReceiveHttpRequestLatencyHigh`           | Disable ThanosReceiveHttpRequestLatencyHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                 |                      |
+| `metrics.prometheusRule.default.disabled.ThanosReceiveHighReplicationFailures`          | Disable ThanosReceiveHighReplicationFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                |                      |
+| `metrics.prometheusRule.default.disabled.ThanosReceiveHighForwardRequestFailures`       | Disable ThanosReceiveHighForwardRequestFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true             |                      |
+| `metrics.prometheusRule.default.disabled.ThanosReceiveHighHashringFileRefreshFailures`  | Disable ThanosReceiveHighHashringFileRefreshFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true        |                      |
+| `metrics.prometheusRule.default.disabled.ThanosReceiveConfigReloadFailure`              | Disable ThanosReceiveConfigReloadFailure rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                    |                      |
+| `metrics.prometheusRule.default.disabled.ThanosReceiveNoUpload`                         | Disable ThanosReceiveNoUpload rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                               |                      |
+| `metrics.prometheusRule.default.disabled.ThanosReceiveTrafficBelowThreshold`            | Disable ThanosReceiveTrafficBelowThreshold rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                  |                      |
+| `metrics.prometheusRule.default.disabled.ThanosBucketReplicateErrorRate`                | Disable ThanosBucketReplicateErrorRate rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                      |                      |
+| `metrics.prometheusRule.default.disabled.ThanosBucketReplicateRunLatency`               | Disable ThanosBucketReplicateRunLatency rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.receive is true                     |                      |
+| `metrics.prometheusRule.default.disabled.ThanosRuleQueueIsDroppingAlerts`               | Disable ThanosRuleQueueIsDroppingAlerts rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                       |                      |
+| `metrics.prometheusRule.default.disabled.ThanosRuleSenderIsFailingAlerts`               | Disable ThanosRuleSenderIsFailingAlerts rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                       |                      |
+| `metrics.prometheusRule.default.disabled.ThanosRuleHighRuleEvaluationFailures`          | Disable ThanosRuleHighRuleEvaluationFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                  |                      |
+| `metrics.prometheusRule.default.disabled.ThanosRuleHighRuleEvaluationWarnings`          | Disable ThanosRuleHighRuleEvaluationWarnings rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                  |                      |
+| `metrics.prometheusRule.default.disabled.ThanosRuleRuleEvaluationLatencyHigh`           | Disable ThanosRuleRuleEvaluationLatencyHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                   |                      |
+| `metrics.prometheusRule.default.disabled.ThanosRuleGrpcErrorRate`                       | Disable ThanosRuleGrpcErrorRate rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                               |                      |
+| `metrics.prometheusRule.default.disabled.ThanosRuleConfigReloadFailure`                 | Disable ThanosRuleConfigReloadFailure rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                         |                      |
+| `metrics.prometheusRule.default.disabled.ThanosRuleQueryHighDNSFailures`                | Disable ThanosRuleQueryHighDNSFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                        |                      |
+| `metrics.prometheusRule.default.disabled.ThanosRuleAlertmanagerHighDNSFailures`         | Disable ThanosRuleAlertmanagerHighDNSFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                 |                      |
+| `metrics.prometheusRule.default.disabled.ThanosRuleNoEvaluationFor10Intervals`          | Disable ThanosRuleNoEvaluationFor10Intervals rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                  |                      |
+| `metrics.prometheusRule.default.disabled.ThanosNoRuleEvaluations`                       | Disable ThanosNoRuleEvaluations rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.ruler is true                               |                      |
+| `metrics.prometheusRule.default.disabled.ThanosSidecarBucketOperationsFailed`           | Disable ThanosSidecarBucketOperationsFailed rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.sidecar is true                 |                      |
+| `metrics.prometheusRule.default.disabled.ThanosSidecarNoConnectionToStartedPrometheus`  | Disable ThanosSidecarNoConnectionToStartedPrometheus rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.sidecar is true        |                      |
+| `metrics.prometheusRule.default.disabled.ThanosStoreGrpcErrorRate`                      | Disable ThanosSidecarNoConnectionToStartedPrometheus rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.store_gateway  is true |                      |
+| `metrics.prometheusRule.default.disabled.ThanosStoreSeriesGateLatencyHigh`              | Disable ThanosStoreSeriesGateLatencyHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.store_gateway  is true             |                      |
+| `metrics.prometheusRule.default.disabled.ThanosStoreBucketHighOperationFailures`        | Disable ThanosStoreBucketHighOperationFailures rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.store_gateway  is true       |                      |
+| `metrics.prometheusRule.default.disabled.ThanosStoreObjstoreOperationLatencyHigh`       | Disable ThanosStoreObjstoreOperationLatencyHigh rule when metrics.prometheusRule.default.create or metrics.prometheusRule.default.store_gateway  is true      |                      |
+| `metrics.prometheusRule.default.disabled`                                               | disable one specific prometheus alert rule                                                                                                                    | `{}`                 |
+| `metrics.prometheusRule.namespace`                                                      | Namespace in which the PrometheusRule CRD is created                                                                                                          | `""`                 |
+| `metrics.prometheusRule.additionalLabels`                                               | Additional labels for the prometheusRule                                                                                                                      | `{}`                 |
+| `metrics.prometheusRule.groups`                                                         | Prometheus Rule Groups for Thanos components                                                                                                                  | `[]`                 |
 
 ### Volume Permissions parameters
 
-| Name                                  | Description                                                                                                                       | Value              |
-| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                   | `false`            |
-| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                  | `docker.io`        |
-| `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                       | `11-debian-11-r16` |
-| `volumePermissions.image.digest`      | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                  | `[]`               |
+| Name                                  | Description                                                                                                                       | Value                      |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                   | `false`                    |
+| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`      | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
 
 ### MinIO&reg; chart parameters
 
@@ -1210,17 +1215,20 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-helm install my-release --set query.replicaCount=2 oci://registry-1.docker.io/bitnamicharts/thanos
+helm install my-release --set query.replicaCount=2 oci://REGISTRY_NAME/REPOSITORY_NAME/thanos
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command install Thanos chart with 2 Thanos Query replicas.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/thanos
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/thanos
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -1417,8 +1425,10 @@ helm install kube-prometheus \
 helm install thanos \
     --values values.yaml \
     --namespace monitoring \
-    oci://registry-1.docker.io/bitnamicharts/thanos
+    oci://REGISTRY_NAME/REPOSITORY_NAME/thanos
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 That's all! Now you have Thanos fully integrated with Prometheus and Alertmanager.
 

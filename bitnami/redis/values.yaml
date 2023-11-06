@@ -80,9 +80,9 @@ diagnosticMode:
 
 ## Bitnami Redis&reg; image
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
-## @param image.registry Redis&reg; image registry
-## @param image.repository Redis&reg; image repository
-## @param image.tag Redis&reg; image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Redis&reg; image registry
+## @param image.repository [default: REPOSITORY_NAME/redis] Redis&reg; image repository
+## @skip image.tag Redis&reg; image tag (immutable tags are recommended)
 ## @param image.digest Redis&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Redis&reg; image pull policy
 ## @param image.pullSecrets Redis&reg; image pull secrets
@@ -91,7 +91,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis
-  tag: 7.0.12-debian-11-r19
+  tag: 7.2.3-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -179,6 +179,9 @@ master:
   ## @param master.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param master.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ##
+  enableServiceLinks: true
   ## @param master.preExecCmds Additional commands to run prior to starting Redis&reg; master
   ##
   preExecCmds: []
@@ -485,6 +488,16 @@ master:
     ## NOTE: requires master.persistence.enabled: true
     ##
     existingClaim: ""
+  ## persistentVolumeClaimRetentionPolicy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ## @param master.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of a StatefulSet
+  ## @param master.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ## @param master.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    enabled: false
+    whenScaled: Retain
+    whenDeleted: Retain
   ## Redis&reg; master service parameters
   ##
   service:
@@ -593,6 +606,9 @@ replica:
   ## @param replica.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param replica.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ##
+  enableServiceLinks: true
   ## @param replica.preExecCmds Additional commands to run prior to starting Redis&reg; replicas
   ##
   preExecCmds: []
@@ -915,6 +931,16 @@ replica:
     ## NOTE: requires replica.persistence.enabled: true
     ##
     existingClaim: ""
+  ## persistentVolumeClaimRetentionPolicy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ## @param replica.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of a StatefulSet
+  ## @param replica.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ## @param replica.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    enabled: false
+    whenScaled: Retain
+    whenDeleted: Retain
   ## Redis&reg; replicas service parameters
   ##
   service:
@@ -1019,9 +1045,9 @@ sentinel:
   enabled: false
   ## Bitnami Redis&reg; Sentinel image version
   ## ref: https://hub.docker.com/r/bitnami/redis-sentinel/tags/
-  ## @param sentinel.image.registry Redis&reg; Sentinel image registry
-  ## @param sentinel.image.repository Redis&reg; Sentinel image repository
-  ## @param sentinel.image.tag Redis&reg; Sentinel image tag (immutable tags are recommended)
+  ## @param sentinel.image.registry [default: REGISTRY_NAME] Redis&reg; Sentinel image registry
+  ## @param sentinel.image.repository [default: REPOSITORY_NAME/redis-sentinel] Redis&reg; Sentinel image repository
+  ## @skip sentinel.image.tag Redis&reg; Sentinel image tag (immutable tags are recommended)
   ## @param sentinel.image.digest Redis&reg; Sentinel image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param sentinel.image.pullPolicy Redis&reg; Sentinel image pull policy
   ## @param sentinel.image.pullSecrets Redis&reg; Sentinel image pull secrets
@@ -1030,7 +1056,7 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: 7.0.12-debian-11-r18
+    tag: 7.2.3-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1059,7 +1085,7 @@ sentinel:
   quorum: 2
   ## @param sentinel.getMasterTimeout Amount of time to allow before get_sentinel_master_info() times out.
   ##
-  getMasterTimeout: 200
+  getMasterTimeout: 99
   ## @param sentinel.automateClusterRecovery Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically failover to it.
   ## This also prevents any new replica from starting until the last remaining replica is elected as master to guarantee that it is the one to be elected by Sentinel, and not a newly started replica with no data.
   ## NOTE: This feature requires a "downAfterMilliseconds" value less or equal to 2000.
@@ -1087,6 +1113,9 @@ sentinel:
   ## @param sentinel.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param sentinel.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ##
+  enableServiceLinks: true
   ## @param sentinel.preExecCmds Additional commands to run prior to starting Redis&reg; Sentinel
   ##
   preExecCmds: []
@@ -1210,6 +1239,16 @@ sentinel:
     ## @param sentinel.persistence.sizeLimit Set this to enable a size limit for `emptyDir` volumes.
     ##
     sizeLimit: ""
+  ## persistentVolumeClaimRetentionPolicy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ## @param sentinel.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of a StatefulSet
+  ## @param sentinel.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ## @param sentinel.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    enabled: false
+    whenScaled: Retain
+    whenDeleted: Retain
   ## Redis&reg; Sentinel resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param sentinel.resources.limits The resources limits for the Redis&reg; Sentinel containers
@@ -1376,6 +1415,18 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
+
+  metrics:
+    ## @param networkPolicy.metrics.allowExternal Don't require client label for connections for metrics endpoint
+    ## When set to false, only pods with the correct client label will have network access to the metrics port
+    ##
+    allowExternal: true
+    ## @param networkPolicy.metrics.ingressNSMatchLabels Labels to match to allow traffic from other namespaces to metrics endpoint
+    ## @param networkPolicy.metrics.ingressNSPodMatchLabels Pod labels to match to allow traffic from other namespaces to metrics endpoint
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  
 ## PodSecurityPolicy configuration
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 ##
@@ -1474,9 +1525,9 @@ metrics:
   enabled: false
   ## Bitnami Redis&reg; Exporter image
   ## ref: https://hub.docker.com/r/bitnami/redis-exporter/tags/
-  ## @param metrics.image.registry Redis&reg; Exporter image registry
-  ## @param metrics.image.repository Redis&reg; Exporter image repository
-  ## @param metrics.image.tag Redis&reg; Exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.registry [default: REGISTRY_NAME] Redis&reg; Exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/redis-exporter] Redis&reg; Exporter image repository
+  ## @skip metrics.image.tag Redis&reg; Exporter image tag (immutable tags are recommended)
   ## @param metrics.image.digest Redis&reg; Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Redis&reg; Exporter image pull policy
   ## @param metrics.image.pullSecrets Redis&reg; Exporter image pull secrets
@@ -1484,7 +1535,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.52.0-debian-11-r5
+    tag: 1.55.0-debian-11-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1684,6 +1735,44 @@ metrics:
     ## @param metrics.serviceMonitor.targetLimit Limit of how many targets should be scraped
     ##
     targetLimit: false
+  ## Prometheus Pod Monitor
+  ## ref: https://github.com/coreos/prometheus-operator
+  ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#podmonitor
+  ##
+  podMonitor:
+    ## @param metrics.podMonitor.enabled Create PodMonitor resource(s) for scraping metrics using PrometheusOperator
+    ##
+    enabled: false
+    ## @param metrics.podMonitor.namespace The namespace in which the PodMonitor will be created
+    ##
+    namespace: ""
+    ## @param metrics.podMonitor.interval The interval at which metrics should be scraped
+    ##
+    interval: 30s
+    ## @param metrics.podMonitor.scrapeTimeout The timeout after which the scrape is ended
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.podMonitor.relabellings Metrics RelabelConfigs to apply to samples before scraping.
+    ##
+    relabellings: []
+    ## @param metrics.podMonitor.metricRelabelings Metrics RelabelConfigs to apply to samples before ingestion.
+    ##
+    metricRelabelings: []
+    ## @param metrics.podMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+    ##
+    honorLabels: false
+    ## @param metrics.podMonitor.additionalLabels Additional labels that can be used so PodMonitor resource(s) can be discovered by Prometheus
+    ##
+    additionalLabels: {}
+    ## @param metrics.podMonitor.podTargetLabels Labels from the Kubernetes pod to be transferred to the created metrics
+    ##
+    podTargetLabels: []
+    ## @param metrics.podMonitor.sampleLimit Limit of how many samples should be scraped from every Pod
+    ##
+    sampleLimit: false
+    ## @param metrics.podMonitor.targetLimit Limit of how many targets should be scraped
+    ##
+    targetLimit: false
 
   ## Custom PrometheusRule to be defined
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
@@ -1748,9 +1837,9 @@ volumePermissions:
   enabled: false
   ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param volumePermissions.image.registry OS Shell + Utility image registry
-  ## @param volumePermissions.image.repository OS Shell + Utility image repository
-  ## @param volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
   ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
@@ -1758,7 +1847,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r25
+    tag: 11-debian-11-r90
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1796,9 +1885,9 @@ sysctl:
   enabled: false
   ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param sysctl.image.registry OS Shell + Utility image registry
-  ## @param sysctl.image.repository OS Shell + Utility image repository
-  ## @param sysctl.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param sysctl.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param sysctl.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip sysctl.image.tag OS Shell + Utility image tag (immutable tags are recommended)
   ## @param sysctl.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param sysctl.image.pullPolicy OS Shell + Utility image pull policy
   ## @param sysctl.image.pullSecrets OS Shell + Utility image pull secrets
@@ -1806,7 +1895,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r25
+    tag: 11-debian-11-r90
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/solr
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/solr
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -20,12 +22,12 @@ This chart bootstraps a [Solr](https://github.com/bitnami/containers/tree/main/b
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Apache Solr in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Apache Solr in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -34,8 +36,10 @@ Looking to use Apache Solr in production? Try [VMware Application Catalog](https
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/solr
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/solr
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy Solr on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -80,9 +84,8 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                             | Description                                                                                          | Value                   |
 | -------------------------------- | ---------------------------------------------------------------------------------------------------- | ----------------------- |
-| `image.registry`                 | Solr image registry                                                                                  | `docker.io`             |
-| `image.repository`               | Solr image repository                                                                                | `bitnami/solr`          |
-| `image.tag`                      | Solr image tag (immutable tags are recommended)                                                      | `9.3.0-debian-11-r1`    |
+| `image.registry`                 | Solr image registry                                                                                  | `REGISTRY_NAME`         |
+| `image.repository`               | Solr image repository                                                                                | `REPOSITORY_NAME/solr`  |
 | `image.digest`                   | Solr image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `image.pullPolicy`               | image pull policy                                                                                    | `IfNotPresent`          |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                                     | `[]`                    |
@@ -109,63 +112,69 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Solr statefulset parameters
 
-| Name                                    | Description                                                                                                              | Value           |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------- |
-| `replicaCount`                          | Number of solr replicas                                                                                                  | `3`             |
-| `containerPorts.http`                   | Solr HTTP container port                                                                                                 | `8983`          |
-| `livenessProbe.enabled`                 | Enable livenessProbe on Solr containers                                                                                  | `true`          |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                  | `40`            |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                         | `10`            |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                        | `15`            |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                      | `6`             |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                      | `1`             |
-| `readinessProbe.enabled`                | Enable readinessProbe on Solr containers                                                                                 | `true`          |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                 | `60`            |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                        | `10`            |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                       | `15`            |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                     | `6`             |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                     | `1`             |
-| `startupProbe.enabled`                  | Enable startupProbe on Solr containers                                                                                   | `false`         |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                   | `40`            |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                          | `10`            |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                         | `15`            |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                       | `15`            |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                       | `1`             |
-| `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
-| `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
-| `customStartupProbe`                    | Custom startupProbe that overrides the default one                                                                       | `{}`            |
-| `lifecycleHooks`                        | lifecycleHooks for the Solr container to automate configuration before or after startup                                  | `{}`            |
-| `resources.limits`                      | The resources limits for the container                                                                                   | `{}`            |
-| `resources.requests`                    | The requested resources for the container                                                                                | `{}`            |
-| `podSecurityContext.enabled`            | Enable Solr pods' Security Context                                                                                       | `true`          |
-| `podSecurityContext.fsGroup`            | Set Solr pod's Security Context fsGroup                                                                                  | `1001`          |
-| `containerSecurityContext.enabled`      | Enable Solr containers' Security Context                                                                                 | `true`          |
-| `containerSecurityContext.runAsUser`    | Set Solr containers' Security Context runAsUser                                                                          | `1001`          |
-| `containerSecurityContext.runAsNonRoot` | Set Solr containers' Security Context runAsNonRoot                                                                       | `true`          |
-| `hostAliases`                           | Solr pods host aliases                                                                                                   | `[]`            |
-| `podLabels`                             | Extra labels for Solr pods                                                                                               | `{}`            |
-| `podAnnotations`                        | Annotations for Solr pods                                                                                                | `{}`            |
-| `podAffinityPreset`                     | Solr pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `""`            |
-| `podAntiAffinityPreset`                 | Solr pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                            | `soft`          |
-| `nodeAffinityPreset.type`               | Solr node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                           | `""`            |
-| `nodeAffinityPreset.key`                | Solr node label key to match Ignored if `affinity` is set.                                                               | `""`            |
-| `nodeAffinityPreset.values`             | Solr node label values to match. Ignored if `affinity` is set.                                                           | `[]`            |
-| `affinity`                              | Affinity settings for Solr pod assignment. Evaluated as a template                                                       | `{}`            |
-| `nodeSelector`                          | Node labels for Solr pods assignment. Evaluated as a template                                                            | `{}`            |
-| `tolerations`                           | Tolerations for Solr pods assignment. Evaluated as a template                                                            | `[]`            |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
-| `podManagementPolicy`                   | Management Policy for Solr StatefulSet                                                                                   | `Parallel`      |
-| `priorityClassName`                     | Solr pods' priority.                                                                                                     | `""`            |
-| `schedulerName`                         | Kubernetes pod scheduler registry                                                                                        | `""`            |
-| `updateStrategy.type`                   | Solr statefulset strategy type                                                                                           | `RollingUpdate` |
-| `updateStrategy.rollingUpdate`          | Solr statefulset rolling update configuration parameters                                                                 | `{}`            |
-| `pdb.create`                            | Enable a Pod Disruption Budget creation                                                                                  | `false`         |
-| `pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                           | `1`             |
-| `pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                                           | `""`            |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes for the Solr pod(s)                                                  | `[]`            |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Solr container(s)                                       | `[]`            |
-| `initContainers`                        | Add init containers to the Solr pod(s)                                                                                   | `[]`            |
-| `sidecars`                              | Add sidecars to the Solr pod(s)                                                                                          | `[]`            |
+| Name                                                | Description                                                                                                              | Value            |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------- |
+| `replicaCount`                                      | Number of solr replicas                                                                                                  | `3`              |
+| `containerPorts.http`                               | Solr HTTP container port                                                                                                 | `8983`           |
+| `livenessProbe.enabled`                             | Enable livenessProbe on Solr containers                                                                                  | `true`           |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `40`             |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `10`             |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `15`             |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                      | `6`              |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                      | `1`              |
+| `readinessProbe.enabled`                            | Enable readinessProbe on Solr containers                                                                                 | `true`           |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                 | `60`             |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                        | `10`             |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                       | `15`             |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                     | `6`              |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                     | `1`              |
+| `startupProbe.enabled`                              | Enable startupProbe on Solr containers                                                                                   | `false`          |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                   | `40`             |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                          | `10`             |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                         | `15`             |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                       | `15`             |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                       | `1`              |
+| `customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                      | `{}`             |
+| `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`             |
+| `customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`             |
+| `lifecycleHooks`                                    | lifecycleHooks for the Solr container to automate configuration before or after startup                                  | `{}`             |
+| `resources.limits`                                  | The resources limits for the container                                                                                   | `{}`             |
+| `resources.requests`                                | The requested resources for the container                                                                                | `{}`             |
+| `podSecurityContext.enabled`                        | Enable Solr pods' Security Context                                                                                       | `true`           |
+| `podSecurityContext.fsGroup`                        | Set Solr pod's Security Context fsGroup                                                                                  | `1001`           |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                  | `false`          |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                | `false`          |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`        |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
+| `hostAliases`                                       | Solr pods host aliases                                                                                                   | `[]`             |
+| `podLabels`                                         | Extra labels for Solr pods                                                                                               | `{}`             |
+| `podAnnotations`                                    | Annotations for Solr pods                                                                                                | `{}`             |
+| `podAffinityPreset`                                 | Solr pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `""`             |
+| `podAntiAffinityPreset`                             | Solr pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                            | `soft`           |
+| `nodeAffinityPreset.type`                           | Solr node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                           | `""`             |
+| `nodeAffinityPreset.key`                            | Solr node label key to match Ignored if `affinity` is set.                                                               | `""`             |
+| `nodeAffinityPreset.values`                         | Solr node label values to match. Ignored if `affinity` is set.                                                           | `[]`             |
+| `affinity`                                          | Affinity settings for Solr pod assignment. Evaluated as a template                                                       | `{}`             |
+| `nodeSelector`                                      | Node labels for Solr pods assignment. Evaluated as a template                                                            | `{}`             |
+| `tolerations`                                       | Tolerations for Solr pods assignment. Evaluated as a template                                                            | `[]`             |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`             |
+| `podManagementPolicy`                               | Management Policy for Solr StatefulSet                                                                                   | `Parallel`       |
+| `priorityClassName`                                 | Solr pods' priority.                                                                                                     | `""`             |
+| `schedulerName`                                     | Kubernetes pod scheduler registry                                                                                        | `""`             |
+| `updateStrategy.type`                               | Solr statefulset strategy type                                                                                           | `RollingUpdate`  |
+| `updateStrategy.rollingUpdate`                      | Solr statefulset rolling update configuration parameters                                                                 | `{}`             |
+| `enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                    | `true`           |
+| `pdb.create`                                        | Enable a Pod Disruption Budget creation                                                                                  | `false`          |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                           | `1`              |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                           | `""`             |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for the Solr pod(s)                                                  | `[]`             |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Solr container(s)                                       | `[]`             |
+| `initContainers`                                    | Add init containers to the Solr pod(s)                                                                                   | `[]`             |
+| `sidecars`                                          | Add sidecars to the Solr pod(s)                                                                                          | `[]`             |
 
 ### Traffic Exposure parameters
 
@@ -215,18 +224,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                                   | Description                                                                                                                       | Value              |
-| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`            |
-| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`        |
-| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r13` |
-| `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`               |
-| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`               |
-| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`               |
-| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                |
+| Name                                                   | Description                                                                                                                       | Value                      |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                    |
+| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                       |
+| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`                       |
+| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                       |
+| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                        |
 
 ### Other Parameters
 
@@ -252,85 +260,90 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                            | Description                                                                                                                    | Value                                                                 |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
-| `metrics.enabled`                               | Deploy a Solr Prometheus exporter deployment to expose metrics                                                                 | `false`                                                               |
-| `metrics.configFile`                            | Config file with metrics to export by the Solr prometheus metrics. To change it mount a different file using `extraConfigMaps` | `/opt/bitnami/solr/prometheus-exporter/conf/solr-exporter-config.xml` |
-| `metrics.threads`                               | Number of Solr exporter threads                                                                                                | `7`                                                                   |
-| `metrics.command`                               | Override Solr entrypoint string.                                                                                               | `[]`                                                                  |
-| `metrics.args`                                  | Arguments for the provided command if needed                                                                                   | `[]`                                                                  |
-| `metrics.extraEnvVars`                          | Additional environment variables to set                                                                                        | `[]`                                                                  |
-| `metrics.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                                     | `""`                                                                  |
-| `metrics.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                                        | `""`                                                                  |
-| `metrics.containerPorts.http`                   | Solr Prometheus exporter HTTP container port                                                                                   | `9231`                                                                |
-| `metrics.livenessProbe.enabled`                 | Enable livenessProbe on Solr Prometheus exporter containers                                                                    | `true`                                                                |
-| `metrics.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                        | `10`                                                                  |
-| `metrics.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                               | `5`                                                                   |
-| `metrics.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                              | `15`                                                                  |
-| `metrics.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                            | `15`                                                                  |
-| `metrics.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                            | `1`                                                                   |
-| `metrics.readinessProbe.enabled`                | Enable readinessProbe on Solr Prometheus exporter containers                                                                   | `true`                                                                |
-| `metrics.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                       | `10`                                                                  |
-| `metrics.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                              | `5`                                                                   |
-| `metrics.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                             | `15`                                                                  |
-| `metrics.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                           | `15`                                                                  |
-| `metrics.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                           | `15`                                                                  |
-| `metrics.startupProbe.enabled`                  | Enable startupProbe on Solr Prometheus exporter containers                                                                     | `false`                                                               |
-| `metrics.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                         | `30`                                                                  |
-| `metrics.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                                | `10`                                                                  |
-| `metrics.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                               | `1`                                                                   |
-| `metrics.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                             | `15`                                                                  |
-| `metrics.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                             | `1`                                                                   |
-| `metrics.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                                            | `{}`                                                                  |
-| `metrics.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                                           | `{}`                                                                  |
-| `metrics.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                                             | `{}`                                                                  |
-| `metrics.resources.limits`                      | The resources limits for the container                                                                                         | `{}`                                                                  |
-| `metrics.resources.requests`                    | The requested resources for the container                                                                                      | `{}`                                                                  |
-| `metrics.containerSecurityContext.enabled`      | Enable Solr Prometheus exporter containers' Security Context                                                                   | `true`                                                                |
-| `metrics.containerSecurityContext.runAsUser`    | User ID for the containers.                                                                                                    | `1001`                                                                |
-| `metrics.containerSecurityContext.runAsNonRoot` | Enable Solr Prometheus exporter containers' Security Context runAsNonRoot                                                      | `true`                                                                |
-| `metrics.podSecurityContext.enabled`            | Enable Solr Prometheus exporter pods' Security Context                                                                         | `true`                                                                |
-| `metrics.podSecurityContext.fsGroup`            | Group ID for the pods.                                                                                                         | `1001`                                                                |
-| `metrics.podLabels`                             | Additional labels for Solr Prometheus exporter pod(s)                                                                          | `{}`                                                                  |
-| `metrics.podAnnotations`                        | Additional annotations for Solr Prometheus exporter pod(s)                                                                     | `{}`                                                                  |
-| `metrics.podAffinityPreset`                     | Solr Prometheus exporter pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                   | `""`                                                                  |
-| `metrics.podAntiAffinityPreset`                 | Solr Prometheus exporter pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `soft`                                                                |
-| `metrics.nodeAffinityPreset.type`               | Solr Prometheus exporter node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`             | `""`                                                                  |
-| `metrics.nodeAffinityPreset.key`                | Solr Prometheus exporter node label key to match Ignored if `affinity` is set.                                                 | `""`                                                                  |
-| `metrics.nodeAffinityPreset.values`             | Solr Prometheus exporter node label values to match. Ignored if `affinity` is set.                                             | `[]`                                                                  |
-| `metrics.affinity`                              | Affinity settings for Solr Prometheus exporter pod assignment. Evaluated as a template                                         | `{}`                                                                  |
-| `metrics.nodeSelector`                          | Node labels for Solr Prometheus exporter pods assignment. Evaluated as a template                                              | `{}`                                                                  |
-| `metrics.tolerations`                           | Tolerations for Solr Prometheus exporter pods assignment. Evaluated as a template                                              | `[]`                                                                  |
-| `metrics.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template       | `[]`                                                                  |
-| `metrics.priorityClassName`                     | Solr Prometheus exporter pods' priority.                                                                                       | `""`                                                                  |
-| `metrics.schedulerName`                         | Kubernetes pod scheduler registry                                                                                              | `""`                                                                  |
-| `metrics.hostAliases`                           | Solr Prometheus exporter pod host aliases                                                                                      | `[]`                                                                  |
-| `metrics.updateStrategy.type`                   | Solr Prometheus exporter deployment strategy type                                                                              | `RollingUpdate`                                                       |
-| `metrics.updateStrategy.rollingUpdate`          | Solr Prometheus exporter deployment rolling update configuration parameters                                                    | `{}`                                                                  |
-| `metrics.extraVolumes`                          | Optionally specify extra list of additional volumes for the Solr Prometheus exporter pod(s)                                    | `[]`                                                                  |
-| `metrics.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Solr Prometheus exporter container(s)                         | `[]`                                                                  |
-| `metrics.initContainers`                        | Add init containers to the Solr Prometheus exporter pod(s)                                                                     | `[]`                                                                  |
-| `metrics.sidecars`                              | Add sidecars to the Solr Prometheus exporter pod(s)                                                                            | `[]`                                                                  |
-| `metrics.service.type`                          | Kubernetes Service type                                                                                                        | `ClusterIP`                                                           |
-| `metrics.service.ports.http`                    | Solr Prometheus exporter HTTP service port                                                                                     | `9231`                                                                |
-| `metrics.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                               | `None`                                                                |
-| `metrics.service.clusterIP`                     | Solr Prometheus exporter service Cluster IP                                                                                    | `""`                                                                  |
-| `metrics.service.annotations`                   | annotations for Solr Prometheus exporter service                                                                               | `{}`                                                                  |
-| `metrics.service.labels`                        | Additional labels for Solr Prometheus exporter service                                                                         | `{}`                                                                  |
-| `metrics.serviceMonitor.enabled`                | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator                                                  | `false`                                                               |
-| `metrics.serviceMonitor.namespace`              | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)                                                  | `""`                                                                  |
-| `metrics.serviceMonitor.interval`               | Interval at which metrics should be scraped.                                                                                   | `""`                                                                  |
-| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                                                                        | `""`                                                                  |
-| `metrics.serviceMonitor.additionalLabels`       | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                          | `{}`                                                                  |
-| `metrics.serviceMonitor.selector`               | Prometheus instance selector labels                                                                                            | `{}`                                                                  |
-| `metrics.serviceMonitor.relabelings`            | RelabelConfigs to apply to samples before scraping                                                                             | `[]`                                                                  |
-| `metrics.serviceMonitor.metricRelabelings`      | MetricRelabelConfigs to apply to samples before ingestion                                                                      | `[]`                                                                  |
-| `metrics.serviceMonitor.honorLabels`            | Specify honorLabels parameter to add the scrape endpoint                                                                       | `false`                                                               |
-| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                              | `""`                                                                  |
-| `metrics.prometheusRule.enabled`                | Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator                                          | `false`                                                               |
-| `metrics.prometheusRule.namespace`              | The namespace in which the prometheusRule will be created                                                                      | `""`                                                                  |
-| `metrics.prometheusRule.additionalLabels`       | Additional labels for the prometheusRule                                                                                       | `{}`                                                                  |
-| `metrics.prometheusRule.rules`                  | Custom Prometheus rules                                                                                                        | `[]`                                                                  |
+| Name                                                        | Description                                                                                                                    | Value                                                                 |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| `metrics.enabled`                                           | Deploy a Solr Prometheus exporter deployment to expose metrics                                                                 | `false`                                                               |
+| `metrics.configFile`                                        | Config file with metrics to export by the Solr prometheus metrics. To change it mount a different file using `extraConfigMaps` | `/opt/bitnami/solr/prometheus-exporter/conf/solr-exporter-config.xml` |
+| `metrics.threads`                                           | Number of Solr exporter threads                                                                                                | `7`                                                                   |
+| `metrics.command`                                           | Override Solr entrypoint string.                                                                                               | `[]`                                                                  |
+| `metrics.args`                                              | Arguments for the provided command if needed                                                                                   | `[]`                                                                  |
+| `metrics.extraEnvVars`                                      | Additional environment variables to set                                                                                        | `[]`                                                                  |
+| `metrics.extraEnvVarsCM`                                    | ConfigMap with extra environment variables                                                                                     | `""`                                                                  |
+| `metrics.extraEnvVarsSecret`                                | Secret with extra environment variables                                                                                        | `""`                                                                  |
+| `metrics.containerPorts.http`                               | Solr Prometheus exporter HTTP container port                                                                                   | `9231`                                                                |
+| `metrics.livenessProbe.enabled`                             | Enable livenessProbe on Solr Prometheus exporter containers                                                                    | `true`                                                                |
+| `metrics.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                        | `10`                                                                  |
+| `metrics.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                               | `5`                                                                   |
+| `metrics.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                              | `15`                                                                  |
+| `metrics.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                            | `15`                                                                  |
+| `metrics.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                            | `1`                                                                   |
+| `metrics.readinessProbe.enabled`                            | Enable readinessProbe on Solr Prometheus exporter containers                                                                   | `true`                                                                |
+| `metrics.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                       | `10`                                                                  |
+| `metrics.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                              | `5`                                                                   |
+| `metrics.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                             | `15`                                                                  |
+| `metrics.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                           | `15`                                                                  |
+| `metrics.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                           | `15`                                                                  |
+| `metrics.startupProbe.enabled`                              | Enable startupProbe on Solr Prometheus exporter containers                                                                     | `false`                                                               |
+| `metrics.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                         | `30`                                                                  |
+| `metrics.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                | `10`                                                                  |
+| `metrics.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                               | `1`                                                                   |
+| `metrics.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                             | `15`                                                                  |
+| `metrics.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                             | `1`                                                                   |
+| `metrics.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                            | `{}`                                                                  |
+| `metrics.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                           | `{}`                                                                  |
+| `metrics.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                             | `{}`                                                                  |
+| `metrics.resources.limits`                                  | The resources limits for the container                                                                                         | `{}`                                                                  |
+| `metrics.resources.requests`                                | The requested resources for the container                                                                                      | `{}`                                                                  |
+| `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                           | `true`                                                                |
+| `metrics.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                     | `1001`                                                                |
+| `metrics.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                  | `true`                                                                |
+| `metrics.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                    | `false`                                                               |
+| `metrics.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                        | `false`                                                               |
+| `metrics.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                      | `false`                                                               |
+| `metrics.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                             | `["ALL"]`                                                             |
+| `metrics.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                               | `RuntimeDefault`                                                      |
+| `metrics.podSecurityContext.enabled`                        | Enable Solr Prometheus exporter pods' Security Context                                                                         | `true`                                                                |
+| `metrics.podSecurityContext.fsGroup`                        | Group ID for the pods.                                                                                                         | `1001`                                                                |
+| `metrics.podLabels`                                         | Additional labels for Solr Prometheus exporter pod(s)                                                                          | `{}`                                                                  |
+| `metrics.podAnnotations`                                    | Additional annotations for Solr Prometheus exporter pod(s)                                                                     | `{}`                                                                  |
+| `metrics.podAffinityPreset`                                 | Solr Prometheus exporter pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                   | `""`                                                                  |
+| `metrics.podAntiAffinityPreset`                             | Solr Prometheus exporter pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `soft`                                                                |
+| `metrics.nodeAffinityPreset.type`                           | Solr Prometheus exporter node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`             | `""`                                                                  |
+| `metrics.nodeAffinityPreset.key`                            | Solr Prometheus exporter node label key to match Ignored if `affinity` is set.                                                 | `""`                                                                  |
+| `metrics.nodeAffinityPreset.values`                         | Solr Prometheus exporter node label values to match. Ignored if `affinity` is set.                                             | `[]`                                                                  |
+| `metrics.affinity`                                          | Affinity settings for Solr Prometheus exporter pod assignment. Evaluated as a template                                         | `{}`                                                                  |
+| `metrics.nodeSelector`                                      | Node labels for Solr Prometheus exporter pods assignment. Evaluated as a template                                              | `{}`                                                                  |
+| `metrics.tolerations`                                       | Tolerations for Solr Prometheus exporter pods assignment. Evaluated as a template                                              | `[]`                                                                  |
+| `metrics.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template       | `[]`                                                                  |
+| `metrics.priorityClassName`                                 | Solr Prometheus exporter pods' priority.                                                                                       | `""`                                                                  |
+| `metrics.schedulerName`                                     | Kubernetes pod scheduler registry                                                                                              | `""`                                                                  |
+| `metrics.hostAliases`                                       | Solr Prometheus exporter pod host aliases                                                                                      | `[]`                                                                  |
+| `metrics.updateStrategy.type`                               | Solr Prometheus exporter deployment strategy type                                                                              | `RollingUpdate`                                                       |
+| `metrics.updateStrategy.rollingUpdate`                      | Solr Prometheus exporter deployment rolling update configuration parameters                                                    | `{}`                                                                  |
+| `metrics.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Solr Prometheus exporter pod(s)                                    | `[]`                                                                  |
+| `metrics.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Solr Prometheus exporter container(s)                         | `[]`                                                                  |
+| `metrics.initContainers`                                    | Add init containers to the Solr Prometheus exporter pod(s)                                                                     | `[]`                                                                  |
+| `metrics.sidecars`                                          | Add sidecars to the Solr Prometheus exporter pod(s)                                                                            | `[]`                                                                  |
+| `metrics.service.type`                                      | Kubernetes Service type                                                                                                        | `ClusterIP`                                                           |
+| `metrics.service.ports.http`                                | Solr Prometheus exporter HTTP service port                                                                                     | `9231`                                                                |
+| `metrics.service.sessionAffinity`                           | Control where client requests go, to the same pod or round-robin                                                               | `None`                                                                |
+| `metrics.service.clusterIP`                                 | Solr Prometheus exporter service Cluster IP                                                                                    | `""`                                                                  |
+| `metrics.service.annotations`                               | annotations for Solr Prometheus exporter service                                                                               | `{}`                                                                  |
+| `metrics.service.labels`                                    | Additional labels for Solr Prometheus exporter service                                                                         | `{}`                                                                  |
+| `metrics.serviceMonitor.enabled`                            | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator                                                  | `false`                                                               |
+| `metrics.serviceMonitor.namespace`                          | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)                                                  | `""`                                                                  |
+| `metrics.serviceMonitor.interval`                           | Interval at which metrics should be scraped.                                                                                   | `""`                                                                  |
+| `metrics.serviceMonitor.scrapeTimeout`                      | Timeout after which the scrape is ended                                                                                        | `""`                                                                  |
+| `metrics.serviceMonitor.additionalLabels`                   | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                          | `{}`                                                                  |
+| `metrics.serviceMonitor.selector`                           | Prometheus instance selector labels                                                                                            | `{}`                                                                  |
+| `metrics.serviceMonitor.relabelings`                        | RelabelConfigs to apply to samples before scraping                                                                             | `[]`                                                                  |
+| `metrics.serviceMonitor.metricRelabelings`                  | MetricRelabelConfigs to apply to samples before ingestion                                                                      | `[]`                                                                  |
+| `metrics.serviceMonitor.honorLabels`                        | Specify honorLabels parameter to add the scrape endpoint                                                                       | `false`                                                               |
+| `metrics.serviceMonitor.jobLabel`                           | The name of the label on the target service to use as the job name in prometheus.                                              | `""`                                                                  |
+| `metrics.prometheusRule.enabled`                            | Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator                                          | `false`                                                               |
+| `metrics.prometheusRule.namespace`                          | The namespace in which the prometheusRule will be created                                                                      | `""`                                                                  |
+| `metrics.prometheusRule.additionalLabels`                   | Additional labels for the prometheusRule                                                                                       | `{}`                                                                  |
+| `metrics.prometheusRule.rules`                              | Custom Prometheus rules                                                                                                        | `[]`                                                                  |
 
 ### ZooKeeper parameters
 
@@ -350,17 +363,20 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 helm install my-release \
-  --set cloudEnabled=true oci://registry-1.docker.io/bitnamicharts/solr
+  --set cloudEnabled=true oci://REGISTRY_NAME/REPOSITORY_NAME/solr
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command enabled the Solr Cloud mode.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/solr
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/solr
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -423,6 +439,10 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 8.0.0
+
+This major updates the Zookeeper subchart to it newest major, 12.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-1200).
 
 ### To 7.0.0
 

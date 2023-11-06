@@ -11,10 +11,7 @@ kind: ConfigMap
 metadata:
   name: {{ printf "%s-scripts" $fullname }}
   namespace: {{ $releaseNamespace  | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -143,6 +140,13 @@ data:
       sed -i "s/$placeholder/$password/g" "$KAFKA_CONFIG_FILE"
     }
 
+    append_file_to_kafka_conf() {
+        local file="${1:?missing source file}"
+        local conf="${2:?missing kafka conf file}"
+
+        cat "$1" >> "$2"
+    }
+
     configure_external_access() {
       # Configure external hostname
       if [[ -f "/shared/external-host.txt" ]]; then
@@ -178,8 +182,10 @@ data:
     }
     {{- if (include "kafka.sslEnabled" .) }}
     configure_kafka_tls() {
-      # Remove previously existing keystores
+      # Remove previously existing keystores and certificates, if any
       rm -f /certs/kafka.keystore.jks /certs/kafka.truststore.jks
+      rm -f /certs/tls.crt /certs/tls.key /certs/ca.crt
+      find /certs -name "xx*" -exec rm {} \;
       if [[ "${KAFKA_TLS_TYPE}" = "PEM" ]]; then
         # Copy PEM certificate and key
         if [[ -f "/mounted-certs/kafka-${POD_ROLE}-${POD_ID}.crt" && "/mounted-certs/kafka-${POD_ROLE}-${POD_ID}.key" ]]; then
@@ -190,6 +196,10 @@ data:
           cp "/mounted-certs/kafka.crt" /certs/tls.crt
           # Copy the PEM key ensuring the key used PEM format with PKCS#8
           openssl pkcs8 -topk8 -nocrypt -in "/mounted-certs/kafka.key" > /certs/tls.key
+        elif [[ -f /mounted-certs/tls.crt && -f /mounted-certs/tls.key ]]; then
+          cp "/mounted-certs/tls.crt" /certs/tls.crt
+          # Copy the PEM key ensuring the key used PEM format with PKCS#8
+          openssl pkcs8 -topk8 -nocrypt -in "/mounted-certs/tls.key" > /certs/tls.key
         else
           error "PEM key and cert files not found"
         fi
@@ -198,19 +208,15 @@ data:
         # Copy CA certificate
         if [[ -f /mounted-certs/kafka-ca.crt ]]; then
           cp /mounted-certs/kafka-ca.crt /certs/ca.crt
+        elif [[ -f /mounted-certs/ca.crt ]]; then
+          cp /mounted-certs/ca.crt /certs/ca.crt
         else
           error "CA certificate file not found"
         fi
         {{- else }}
-        # Extract CA certificate from PEM cert
-        cat /certs/tls.crt | csplit - -s -z '/\-*END CERTIFICATE\-*/+1' '{*}' -f /certs/xx
-        FIND_CA_RESULT=$(find /certs -not -name 'xx00' -name 'xx*')
-        if [[ $(echo $FIND_CA_RESULT | wc -l)  < 1 ]]; then
-          error "auth.tls.pemChainIncluded was set, but PEM chain only contained 1 cert"
-        fi
-        echo $FIND_CA_RESULT | sort | xargs cat >> /certs/ca.crt
-        cat /certs/xx00 > /certs/tls.crt
-        find /certs -name "xx*" -exec rm {} \;
+        # CA certificates are also included in the same certificate
+        # All public certs will be included in the truststore
+        cp /certs/tls.crt /certs/ca.crt
         {{- end }}
 
         # Create JKS keystore from PEM cert and key
@@ -231,8 +237,8 @@ data:
       elif [[ "${KAFKA_TLS_TYPE}" = "JKS" ]]; then
         if [[ -f "/mounted-certs/kafka-${POD_ROLE}-${POD_ID}.keystore.jks" ]]; then
           cp "/mounted-certs/kafka-${POD_ROLE}-${POD_ID}.keystore.jks" /certs/kafka.keystore.jks
-        elif [[ -f /mounted-certs/kafka.keystore.jks ]]; then
-          cp /mounted-certs/kafka.keystore.jks /certs/kafka.keystore.jks
+        elif [[ -f {{ printf "/mounted-certs/%s" ( default "kafka.keystore.jks" .Values.tls.jksKeystoreKey) | quote }} ]]; then
+          cp {{ printf "/mounted-certs/%s" ( default "kafka.keystore.jks" .Values.tls.jksKeystoreKey) | quote }} /certs/kafka.keystore.jks
         else
           error "Keystore file not found"
         fi
@@ -282,10 +288,20 @@ data:
 
       # Replace placeholders with passwords
       {{- if regexFind "SASL" (upper .Values.listeners.interbroker.protocol) }}
+      {{- if (include "kafka.saslUserPasswordsEnabled" .) }}
       replace_placeholder "interbroker-password-placeholder" "$KAFKA_INTER_BROKER_PASSWORD"
+      {{- end }}
+      {{- if (include "kafka.saslClientSecretsEnabled" .) }}
+      replace_placeholder "interbroker-client-secret-placeholder" "$KAFKA_INTER_BROKER_CLIENT_SECRET"
+      {{- end }}
       {{- end -}}
       {{- if and .Values.kraft.enabled (regexFind "SASL" (upper .Values.listeners.controller.protocol)) }}
+      {{- if (include "kafka.saslUserPasswordsEnabled" .) }}
       replace_placeholder "controller-password-placeholder" "$KAFKA_CONTROLLER_PASSWORD"
+      {{- end }}
+      {{- if (include "kafka.saslClientSecretsEnabled" .) }}
+      replace_placeholder "controller-client-secret-placeholder" "$KAFKA_CONTROLLER_CLIENT_SECRET"
+      {{- end }}
       {{- end }}
       {{- if (include "kafka.client.saslEnabled" .)}}
       read -r -a passwords <<<"$(tr ',;' ' ' <<<"${KAFKA_CLIENT_PASSWORDS:-}")"
@@ -350,5 +366,8 @@ data:
     {{- if and .Values.tls.zookeeper.enabled .Values.tls.zookeeper.existingSecret }}
     configure_zookeeper_tls
     {{- end }}
+    if [ -f /secret-config/server-secret.properties ]; then
+      append_file_to_kafka_conf /secret-config/server-secret.properties $KAFKA_CONFIG_FILE
+    fi
     {{- include "common.tplvalues.render" ( dict "value" .Values.extraInit "context" $ ) | nindent 4 }}
 

@@ -9,8 +9,10 @@ WordPress is the world's most popular blogging and content management platform. 
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/wordpress
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/wordpress
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -20,12 +22,12 @@ It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/t
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use WordPress in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use WordPress in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -34,8 +36,10 @@ Looking to use WordPress in production? Try [VMware Application Catalog](https:/
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/wordpress
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/wordpress
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys WordPress on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -78,15 +82,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WordPress Image parameters
 
-| Name                | Description                                                                                               | Value                 |
-| ------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | WordPress image registry                                                                                  | `docker.io`           |
-| `image.repository`  | WordPress image repository                                                                                | `bitnami/wordpress`   |
-| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.2.2-debian-11-r82` |
-| `image.digest`      | WordPress image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | WordPress image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | WordPress image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Specify if debug values should be set                                                                     | `false`               |
+| Name                | Description                                                                                               | Value                       |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `image.registry`    | WordPress image registry                                                                                  | `REGISTRY_NAME`             |
+| `image.repository`  | WordPress image repository                                                                                | `REPOSITORY_NAME/wordpress` |
+| `image.digest`      | WordPress image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
+| `image.pullPolicy`  | WordPress image pull policy                                                                               | `IfNotPresent`              |
+| `image.pullSecrets` | WordPress image pull secrets                                                                              | `[]`                        |
+| `image.debug`       | Specify if debug values should be set                                                                     | `false`                     |
 
 ### WordPress Configuration parameters
 
@@ -169,13 +172,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraContainerPorts`                               | Optionally specify extra list of additional ports for WordPress container(s)                                             | `[]`             |
 | `podSecurityContext.enabled`                        | Enabled WordPress pods' Security Context                                                                                 | `true`           |
 | `podSecurityContext.fsGroup`                        | Set WordPress pod's Security Context fsGroup                                                                             | `1001`           |
-| `podSecurityContext.seccompProfile.type`            | Set WordPress container's Security Context seccomp profile                                                               | `RuntimeDefault` |
-| `containerSecurityContext.enabled`                  | Enabled WordPress containers' Security Context                                                                           | `true`           |
-| `containerSecurityContext.runAsUser`                | Set WordPress container's Security Context runAsUser                                                                     | `1001`           |
-| `containerSecurityContext.runAsNonRoot`             | Set WordPress container's Security Context runAsNonRoot                                                                  | `true`           |
-| `containerSecurityContext.allowPrivilegeEscalation` | Set WordPress container's privilege escalation                                                                           | `false`          |
-| `containerSecurityContext.readOnlyRootFilesystem`   | Set WordPress container's Security Context readOnlyRootFilesystem                                                        | `false`          |
-| `containerSecurityContext.capabilities.drop`        | Set WordPress container's Security Context runAsNonRoot                                                                  | `["ALL"]`        |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                  | `false`          |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                | `false`          |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`        |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `livenessProbe.enabled`                             | Enable livenessProbe on WordPress containers                                                                             | `true`           |
 | `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `120`            |
 | `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `10`             |
@@ -235,27 +239,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                                                   | Description                                                                                                        | Value              |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------ |
-| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                                                  | `true`             |
-| `persistence.storageClass`                             | Persistent Volume storage class                                                                                    | `""`               |
-| `persistence.accessModes`                              | Persistent Volume access modes                                                                                     | `[]`               |
-| `persistence.accessMode`                               | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)                                  | `ReadWriteOnce`    |
-| `persistence.size`                                     | Persistent Volume size                                                                                             | `10Gi`             |
-| `persistence.dataSource`                               | Custom PVC data source                                                                                             | `{}`               |
-| `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                                                 | `""`               |
-| `persistence.selector`                                 | Selector to match an existing Persistent Volume for WordPress data PVC                                             | `{}`               |
-| `persistence.annotations`                              | Persistent Volume Claim annotations                                                                                | `{}`               |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`            |
-| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `docker.io`        |
-| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r31` |
-| `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`               |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                        | `{}`               |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                     | `{}`               |
-| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                     | `0`                |
+| Name                                                   | Description                                                                                                        | Value                      |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                                                  | `true`                     |
+| `persistence.storageClass`                             | Persistent Volume storage class                                                                                    | `""`                       |
+| `persistence.accessModes`                              | Persistent Volume access modes                                                                                     | `[]`                       |
+| `persistence.accessMode`                               | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)                                  | `ReadWriteOnce`            |
+| `persistence.size`                                     | Persistent Volume size                                                                                             | `10Gi`                     |
+| `persistence.dataSource`                               | Custom PVC data source                                                                                             | `{}`                       |
+| `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                                                 | `""`                       |
+| `persistence.selector`                                 | Selector to match an existing Persistent Volume for WordPress data PVC                                             | `{}`                       |
+| `persistence.annotations`                              | Persistent Volume Claim annotations                                                                                | `{}`                       |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
+| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
+| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                        | `{}`                       |
+| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                     | `{}`                       |
+| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                     | `0`                        |
 
 ### Other Parameters
 
@@ -276,51 +279,50 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics Parameters
 
-| Name                                         | Description                                                                                                     | Value                     |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `metrics.enabled`                            | Start a sidecar prometheus exporter to expose metrics                                                           | `false`                   |
-| `metrics.image.registry`                     | Apache exporter image registry                                                                                  | `docker.io`               |
-| `metrics.image.repository`                   | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                          | Apache exporter image tag (immutable tags are recommended)                                                      | `1.0.1-debian-11-r8`      |
-| `metrics.image.digest`                       | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
-| `metrics.image.pullPolicy`                   | Apache exporter image pull policy                                                                               | `IfNotPresent`            |
-| `metrics.image.pullSecrets`                  | Apache exporter image pull secrets                                                                              | `[]`                      |
-| `metrics.containerPorts.metrics`             | Prometheus exporter container port                                                                              | `9117`                    |
-| `metrics.livenessProbe.enabled`              | Enable livenessProbe on Prometheus exporter containers                                                          | `true`                    |
-| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                         | `15`                      |
-| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                | `10`                      |
-| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                               | `5`                       |
-| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                             | `3`                       |
-| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                             | `1`                       |
-| `metrics.readinessProbe.enabled`             | Enable readinessProbe on Prometheus exporter containers                                                         | `true`                    |
-| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                        | `5`                       |
-| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                               | `10`                      |
-| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                              | `3`                       |
-| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                            | `3`                       |
-| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                            | `1`                       |
-| `metrics.startupProbe.enabled`               | Enable startupProbe on Prometheus exporter containers                                                           | `false`                   |
-| `metrics.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                          | `10`                      |
-| `metrics.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                 | `10`                      |
-| `metrics.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                | `1`                       |
-| `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                              | `15`                      |
-| `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                              | `1`                       |
-| `metrics.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                             | `{}`                      |
-| `metrics.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                            | `{}`                      |
-| `metrics.customStartupProbe`                 | Custom startupProbe that overrides the default one                                                              | `{}`                      |
-| `metrics.resources.limits`                   | The resources limits for the Prometheus exporter container                                                      | `{}`                      |
-| `metrics.resources.requests`                 | The requested resources for the Prometheus exporter container                                                   | `{}`                      |
-| `metrics.service.ports.metrics`              | Prometheus metrics service port                                                                                 | `9150`                    |
-| `metrics.service.annotations`                | Additional custom annotations for Metrics service                                                               | `{}`                      |
-| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator                                   | `false`                   |
-| `metrics.serviceMonitor.namespace`           | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)                                   | `""`                      |
-| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped.                                                                    | `""`                      |
-| `metrics.serviceMonitor.scrapeTimeout`       | Timeout after which the scrape is ended                                                                         | `""`                      |
-| `metrics.serviceMonitor.labels`              | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                           | `{}`                      |
-| `metrics.serviceMonitor.selector`            | Prometheus instance selector labels                                                                             | `{}`                      |
-| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping                                                              | `[]`                      |
-| `metrics.serviceMonitor.metricRelabelings`   | MetricRelabelConfigs to apply to samples before ingestion                                                       | `[]`                      |
-| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                        | `false`                   |
-| `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.                               | `""`                      |
+| Name                                         | Description                                                                                                     | Value                             |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `metrics.enabled`                            | Start a sidecar prometheus exporter to expose metrics                                                           | `false`                           |
+| `metrics.image.registry`                     | Apache exporter image registry                                                                                  | `REGISTRY_NAME`                   |
+| `metrics.image.repository`                   | Apache exporter image repository                                                                                | `REPOSITORY_NAME/apache-exporter` |
+| `metrics.image.digest`                       | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                              |
+| `metrics.image.pullPolicy`                   | Apache exporter image pull policy                                                                               | `IfNotPresent`                    |
+| `metrics.image.pullSecrets`                  | Apache exporter image pull secrets                                                                              | `[]`                              |
+| `metrics.containerPorts.metrics`             | Prometheus exporter container port                                                                              | `9117`                            |
+| `metrics.livenessProbe.enabled`              | Enable livenessProbe on Prometheus exporter containers                                                          | `true`                            |
+| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                         | `15`                              |
+| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                | `10`                              |
+| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                               | `5`                               |
+| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                             | `3`                               |
+| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                             | `1`                               |
+| `metrics.readinessProbe.enabled`             | Enable readinessProbe on Prometheus exporter containers                                                         | `true`                            |
+| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                        | `5`                               |
+| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                               | `10`                              |
+| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                              | `3`                               |
+| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                            | `3`                               |
+| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                            | `1`                               |
+| `metrics.startupProbe.enabled`               | Enable startupProbe on Prometheus exporter containers                                                           | `false`                           |
+| `metrics.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                          | `10`                              |
+| `metrics.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                 | `10`                              |
+| `metrics.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                | `1`                               |
+| `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                              | `15`                              |
+| `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                              | `1`                               |
+| `metrics.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                             | `{}`                              |
+| `metrics.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                            | `{}`                              |
+| `metrics.customStartupProbe`                 | Custom startupProbe that overrides the default one                                                              | `{}`                              |
+| `metrics.resources.limits`                   | The resources limits for the Prometheus exporter container                                                      | `{}`                              |
+| `metrics.resources.requests`                 | The requested resources for the Prometheus exporter container                                                   | `{}`                              |
+| `metrics.service.ports.metrics`              | Prometheus metrics service port                                                                                 | `9150`                            |
+| `metrics.service.annotations`                | Additional custom annotations for Metrics service                                                               | `{}`                              |
+| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator                                   | `false`                           |
+| `metrics.serviceMonitor.namespace`           | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)                                   | `""`                              |
+| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped.                                                                    | `""`                              |
+| `metrics.serviceMonitor.scrapeTimeout`       | Timeout after which the scrape is ended                                                                         | `""`                              |
+| `metrics.serviceMonitor.labels`              | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                           | `{}`                              |
+| `metrics.serviceMonitor.selector`            | Prometheus instance selector labels                                                                             | `{}`                              |
+| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping                                                              | `[]`                              |
+| `metrics.serviceMonitor.metricRelabelings`   | MetricRelabelConfigs to apply to samples before ingestion                                                       | `[]`                              |
+| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                        | `false`                           |
+| `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.                               | `""`                              |
 
 ### NetworkPolicy parameters
 
@@ -344,31 +346,32 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database Parameters
 
-| Name                                       | Description                                                                       | Value               |
-| ------------------------------------------ | --------------------------------------------------------------------------------- | ------------------- |
-| `mariadb.enabled`                          | Deploy a MariaDB server to satisfy the applications database requirements         | `true`              |
-| `mariadb.architecture`                     | MariaDB architecture. Allowed values: `standalone` or `replication`               | `standalone`        |
-| `mariadb.auth.rootPassword`                | MariaDB root password                                                             | `""`                |
-| `mariadb.auth.database`                    | MariaDB custom database                                                           | `bitnami_wordpress` |
-| `mariadb.auth.username`                    | MariaDB custom user name                                                          | `bn_wordpress`      |
-| `mariadb.auth.password`                    | MariaDB custom user password                                                      | `""`                |
-| `mariadb.primary.persistence.enabled`      | Enable persistence on MariaDB using PVC(s)                                        | `true`              |
-| `mariadb.primary.persistence.storageClass` | Persistent Volume storage class                                                   | `""`                |
-| `mariadb.primary.persistence.accessModes`  | Persistent Volume access modes                                                    | `[]`                |
-| `mariadb.primary.persistence.size`         | Persistent Volume size                                                            | `8Gi`               |
-| `externalDatabase.host`                    | External Database server host                                                     | `localhost`         |
-| `externalDatabase.port`                    | External Database server port                                                     | `3306`              |
-| `externalDatabase.user`                    | External Database username                                                        | `bn_wordpress`      |
-| `externalDatabase.password`                | External Database user password                                                   | `""`                |
-| `externalDatabase.database`                | External Database database name                                                   | `bitnami_wordpress` |
-| `externalDatabase.existingSecret`          | The name of an existing secret with database credentials. Evaluated as a template | `""`                |
-| `memcached.enabled`                        | Deploy a Memcached server for caching database queries                            | `false`             |
-| `memcached.auth.enabled`                   | Enable Memcached authentication                                                   | `false`             |
-| `memcached.auth.username`                  | Memcached admin user                                                              | `""`                |
-| `memcached.auth.password`                  | Memcached admin password                                                          | `""`                |
-| `memcached.service.port`                   | Memcached service port                                                            | `11211`             |
-| `externalCache.host`                       | External cache server host                                                        | `localhost`         |
-| `externalCache.port`                       | External cache server port                                                        | `11211`             |
+| Name                                       | Description                                                                                    | Value               |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------- | ------------------- |
+| `mariadb.enabled`                          | Deploy a MariaDB server to satisfy the applications database requirements                      | `true`              |
+| `mariadb.architecture`                     | MariaDB architecture. Allowed values: `standalone` or `replication`                            | `standalone`        |
+| `mariadb.auth.rootPassword`                | MariaDB root password                                                                          | `""`                |
+| `mariadb.auth.database`                    | MariaDB custom database                                                                        | `bitnami_wordpress` |
+| `mariadb.auth.username`                    | MariaDB custom user name                                                                       | `bn_wordpress`      |
+| `mariadb.auth.password`                    | MariaDB custom user password                                                                   | `""`                |
+| `mariadb.primary.persistence.enabled`      | Enable persistence on MariaDB using PVC(s)                                                     | `true`              |
+| `mariadb.primary.persistence.storageClass` | Persistent Volume storage class                                                                | `""`                |
+| `mariadb.primary.persistence.accessModes`  | Persistent Volume access modes                                                                 | `[]`                |
+| `mariadb.primary.persistence.size`         | Persistent Volume size                                                                         | `8Gi`               |
+| `externalDatabase.host`                    | External Database server host                                                                  | `localhost`         |
+| `externalDatabase.port`                    | External Database server port                                                                  | `3306`              |
+| `externalDatabase.user`                    | External Database username                                                                     | `bn_wordpress`      |
+| `externalDatabase.password`                | External Database user password                                                                | `""`                |
+| `externalDatabase.database`                | External Database database name                                                                | `bitnami_wordpress` |
+| `externalDatabase.existingSecret`          | The name of an existing secret with database credentials. Evaluated as a template              | `""`                |
+| `memcached.enabled`                        | Deploy a Memcached server for caching database queries                                         | `false`             |
+| `memcached.auth.enabled`                   | Enable Memcached authentication                                                                | `false`             |
+| `memcached.auth.username`                  | Memcached admin user                                                                           | `""`                |
+| `memcached.auth.password`                  | Memcached admin password                                                                       | `""`                |
+| `memcached.auth.existingPasswordSecret`    | Existing secret with Memcached credentials (must contain a value for `memcached-password` key) | `""`                |
+| `memcached.service.port`                   | Memcached service port                                                                         | `11211`             |
+| `externalCache.host`                       | External cache server host                                                                     | `localhost`         |
+| `externalCache.port`                       | External cache server port                                                                     | `11211`             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -377,8 +380,10 @@ helm install my-release \
   --set wordpressUsername=admin \
   --set wordpressPassword=password \
   --set mariadb.auth.rootPassword=secretpassword \
-    oci://registry-1.docker.io/bitnamicharts/wordpress
+    oci://REGISTRY_NAME/REPOSITORY_NAME/wordpress
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the WordPress administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
 
@@ -387,9 +392,10 @@ The above command sets the WordPress administrator account username and password
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/wordpress
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/wordpress
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -444,7 +450,7 @@ externalCache.port=11211
 
 ### Ingress
 
-This chart provides support for Ingress resources. If an Ingress controller, such as nginx-ingress or traefik, that Ingress controller can be used to serve WordPress.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/wordpress/configuration/configure-ingress/).
 
@@ -513,6 +519,10 @@ To enable the new features, it is not possible to do it by upgrading an existing
 
 ## Upgrading
 
+### To 18.0.0
+
+This major release bumps the MariaDB version to 11.1. No major issues are expected during the upgrade.
+
 ### To 17.0.0
 
 This major release bumps the MariaDB version to 11.0. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-10-11-to-mariadb-11-0/) for upgrading from MariaDB 10.11 to 11.0. No major issues are expected during the upgrade.
@@ -574,14 +584,18 @@ export MARIADB_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=wordpress,app
 Upgrade your release (maintaining the version) disabling MariaDB and scaling WordPress replicas to 0:
 
 ```console
-helm upgrade wordpress oci://registry-1.docker.io/bitnamicharts/wordpress --set wordpressPassword=$WORDPRESS_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 9.6.4
+helm upgrade wordpress oci://REGISTRY_NAME/REPOSITORY_NAME/wordpress --set wordpressPassword=$WORDPRESS_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 9.6.4
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 Finally, upgrade you release to `10.0.0` reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-helm upgrade wordpress oci://registry-1.docker.io/bitnamicharts/wordpress --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set wordpressPassword=$WORDPRESS_PASSWORD
+helm upgrade wordpress oci://REGISTRY_NAME/REPOSITORY_NAME/wordpress --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set wordpressPassword=$WORDPRESS_PASSWORD
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 You should see the lines below in MariaDB container logs:
 

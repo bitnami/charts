@@ -16,17 +16,11 @@ kind: Ingress
 metadata:
   name: {{ template "common.names.fullname" . }}-http-api
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" . ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.ingress.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.ingress.annotations "context" . ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" . ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if or .Values.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   {{- if and .Values.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
   ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
@@ -82,20 +76,11 @@ kind: Ingress
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" . ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.featureFlags.apiOnly.grpc.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.featureFlags.apiOnly.grpc.annotations "context" . ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.ingress.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.ingress.annotations "context" . ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" . ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if or .Values.featureFlags.apiOnly.grpc.annotations .Values.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.featureFlags.apiOnly.grpc.annotations .Values.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   {{- if and .Values.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
   ingressClassName: {{ .Values.ingress.ingressClassName | quote }}

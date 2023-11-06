@@ -9,11 +9,10 @@ kind: DaemonSet
 metadata:
   name: {{ printf "%s-speaker" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.speaker.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: speaker
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -21,16 +20,14 @@ spec:
   {{- if .Values.speaker.updateStrategy }}
   updateStrategy: {{- toYaml .Values.speaker.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.speaker.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: speaker
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: speaker
-        {{- if .Values.speaker.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.speaker.podLabels "context" $) | nindent 8 }}
-        {{- end }}
       {{- if .Values.speaker.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
@@ -44,8 +41,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.speaker.podAffinityPreset "component" "speaker" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.speaker.podAntiAffinityPreset "component" "speaker" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.speaker.podAffinityPreset "component" "speaker" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.speaker.podAntiAffinityPreset "component" "speaker" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.speaker.nodeAffinityPreset.type "key" .Values.speaker.nodeAffinityPreset.key "values" .Values.speaker.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       nodeSelector:
@@ -112,11 +109,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: METALLB_ML_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "metallb.speaker.secretName" . }}
-                  key: {{ include "metallb.speaker.secretKey" . }}
+            - name: METALLB_ML_SECRET_KEY_PATH
+              value: /etc/memberlist
             {{- if .Values.speaker.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
@@ -160,13 +154,25 @@ spec:
           {{- if .Values.speaker.resources }}
           resources: {{- toYaml .Values.speaker.resources | nindent 12 }}
           {{- end }}
-          {{- if .Values.speaker.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+          volumeMounts:
+            - name: memberlist-secret
+              mountPath: /etc/memberlist
+              readOnly: true
+            {{- if .Values.speaker.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.speaker.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.speaker.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if .Values.speaker.extraVolumes }}
-      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.extraVolumes "context" $) | nindent 8 }}
-      {{- end }}
+      volumes:
+        - name: memberlist-secret
+          secret:
+            secretName: {{ include "metallb.speaker.secretName" . }}
+            defaultMode: 0444
+            items:
+              - key: {{ include "metallb.speaker.secretKey" . }}
+                path: secretkey
+        {{- if .Values.speaker.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.speaker.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end }}

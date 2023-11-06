@@ -16,7 +16,7 @@ command:
     exec: fly -t {{ $target }} login -c http://concourse-web:{{ $port }} -u {{ $user }} -p '{{ $pwd }}' && fly -t {{ $target }} workers | grep 'running' | wc -l
     exit-status: 0
     stdout:
-      - {{ .Vars.worker.replicaCount }}
+      - "{{ .Vars.worker.replicaCount }}"
   check-ports-config:
     exec: $(echo $CONCOURSE_BIND_PORT | grep -q {{ .Vars.worker.containerPorts.garden }}) && $(echo $CONCOURSE_HEALTHCHECK_BIND_PORT | grep -q {{ .Vars.worker.containerPorts.health }}) && $(echo $CONCOURSE_BAGGAGECLAIM_BIND_PORT | grep -q {{ .Vars.worker.containerPorts.baggageclaim }}) && $(echo $CONCOURSE_BAGGAGECLAIM_DEBUG_BIND_PORT | grep -q {{ .Vars.worker.containerPorts.pprof }})
     exit-status: 0

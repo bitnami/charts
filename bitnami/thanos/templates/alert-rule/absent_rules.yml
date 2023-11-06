@@ -12,12 +12,9 @@ kind: PrometheusRule
 metadata:
   name: {{ template "common.names.fullname" . }}-component-absent
   namespace: {{ default .Release.Namespace .Values.metrics.prometheusRule.namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- if .Values.metrics.prometheusRule.additionalLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -108,7 +105,7 @@ spec:
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanossidecarisdown
         summary: Thanos component has disappeared.
       expr: |
-        absent(up{job=~".*thanos-sidecar.*"} == 1)
+        absent(up{job=~"{{ .Values.metrics.prometheusRule.default.sidecarJobRegex }}"} == 1)
       for: 5m
       labels:
         severity: critical

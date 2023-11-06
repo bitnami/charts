@@ -9,10 +9,7 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -24,16 +21,31 @@ spec:
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:
+    {{- if not (empty .Values.autoscaling.customPodMetrics) }}
+    {{- range .Values.autoscaling.customPodMetrics }}
+    - type: Pods
+      pods:
+        metric:
+          name: {{ .name }}
+        target:
+          type: AverageValue
+          averageValue: {{ .averageValue }}
+    {{ end -}}
+    {{- end }}
     {{- if .Values.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.autoscaling.targetCPU }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.autoscaling.targetCPU }}
     {{- end }}
     {{- if .Values.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.autoscaling.targetMemory  }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}

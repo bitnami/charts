@@ -8,6 +8,10 @@ cluster:
     enabled: true
     user: test_nats_cluster
     password: ClusterPassword123!4
+jetstream:
+  enabled: true
+persistence:
+  enabled: true
 podSecurityContext:
   enabled: true
   fsGroup: 1002
@@ -26,21 +30,3 @@ service:
   type: LoadBalancer
 resourceType: statefulset
 replicaCount: 2
-extraVolumes:
-  - name: nats-client
-    emptyDir: {}
-extraVolumeMounts:
-  - name: nats-client
-    mountPath: /opt/bitnami/nats/bin/nats
-    subPath: nats
-initContainers:
-  - name: nats-client
-    image: docker.io/bitnami/golang
-    imagePullPolicy: Always
-    command:
-    - sh
-    - -c
-    - CGO_ENABLED=0 go install github.com/nats-io/natscli/nats@latest
-    volumeMounts:
-    - name: nats-client
-      mountPath: /go/bin

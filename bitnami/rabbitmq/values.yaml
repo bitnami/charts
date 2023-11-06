@@ -23,9 +23,9 @@ global:
 ## @section RabbitMQ Image parameters
 ## Bitnami RabbitMQ image version
 ## ref: https://hub.docker.com/r/bitnami/rabbitmq/tags/
-## @param image.registry RabbitMQ image registry
-## @param image.repository RabbitMQ image repository
-## @param image.tag RabbitMQ image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] RabbitMQ image registry
+## @param image.repository [default: REPOSITORY_NAME/rabbitmq] RabbitMQ image repository
+## @skip image.tag RabbitMQ image tag (immutable tags are recommended)
 ## @param image.digest RabbitMQ image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy RabbitMQ image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -34,7 +34,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.12.2-debian-11-r8
+  tag: 3.12.8-debian-11-r0
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -90,6 +90,12 @@ commonLabels: {}
 ##
 serviceBindings:
   enabled: false
+
+## @param enableServiceLinks Whether information about services should be injected into pod's environment variable
+## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+##
+enableServiceLinks: true
 
 ## Enable diagnostic mode in the deployment
 ##
@@ -259,7 +265,7 @@ clustering:
   ## ref: https://www.rabbitmq.com/rabbitmqctl.8.html#force_boot
   ##
   forceBoot: false
-  ## @param clustering.partitionHandling Switch Partition Handling Strategy. Either `autoheal` or `pause-minority` or `pause-if-all-down` or `ignore`
+  ## @param clustering.partitionHandling Switch Partition Handling Strategy. Either `autoheal` or `pause_minority` or `pause_if_all_down` or `ignore`
   ## ref: https://www.rabbitmq.com/partitions.html#automatic-handling
   ##
   partitionHandling: autoheal
@@ -733,6 +739,9 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled RabbitMQ containers' Security Context
 ## @param containerSecurityContext.runAsUser Set RabbitMQ containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set RabbitMQ container's Security Context runAsNonRoot
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
+## @param containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## Example:
 ##   containerSecurityContext:
@@ -744,6 +753,11 @@ containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 
 ## RabbitMQ containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
@@ -1034,6 +1048,10 @@ service:
   ## - 10.10.10.0/24
   ##
   loadBalancerSourceRanges: []
+  ## @param service.allocateLoadBalancerNodePorts Whether to allocate node ports when service type is LoadBalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
+  ##
+  allocateLoadBalancerNodePorts: true 
   ## @param service.externalIPs Set the ExternalIPs
   ##
   externalIPs: []
@@ -1377,9 +1395,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
@@ -1387,7 +1405,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r16
+    tag: 11-debian-11-r90
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

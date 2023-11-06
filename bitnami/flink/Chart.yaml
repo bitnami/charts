@@ -4,25 +4,28 @@
 annotations:
   category: Infrastructure
   licenses: Apache-2.0
+  images: |
+    - name: flink
+      image: docker.io/bitnami/flink:1.18.0-debian-11-r0
 apiVersion: v2
-appVersion: 1.17.1
+appVersion: 1.18.0
 dependencies:
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: Apache Flink is a framework and distributed processing engine for stateful computations over unbounded and bounded data streams.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/flink/img/flink-stack-220x234.png
 keywords:
-  - flink
-  - stream-processing
-  - batch-processing
+- flink
+- stream-processing
+- batch-processing
 maintainers:
-  - name: VMware, Inc.
-    url: https://github.com/bitnami/charts
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
 name: flink
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/flink
-version: 0.3.6
+- https://github.com/bitnami/charts/tree/main/bitnami/flink
+version: 0.5.0

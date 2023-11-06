@@ -87,9 +87,9 @@ diagnosticMode:
 
 ## Bitnami PostgreSQL image version
 ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
-## @param image.registry PostgreSQL image registry
-## @param image.repository PostgreSQL image repository
-## @param image.tag PostgreSQL image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] PostgreSQL image registry
+## @param image.repository [default: REPOSITORY_NAME/postgresql] PostgreSQL image repository
+## @skip image.tag PostgreSQL image tag (immutable tags are recommended)
 ## @param image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy PostgreSQL image pull policy
 ## @param image.pullSecrets Specify image pull secrets
@@ -98,7 +98,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 15.3.0-debian-11-r77
+  tag: 16.0.0-debian-11-r14
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -458,25 +458,26 @@ primary:
     fsGroup: 1001
   ## Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param primary.containerSecurityContext.enabled Enable container security context
-  ## @param primary.containerSecurityContext.runAsUser User ID for the container
-  ## @param primary.containerSecurityContext.runAsGroup Group ID for the container
-  ## @param primary.containerSecurityContext.runAsNonRoot Set runAsNonRoot for the container
-  ## @param primary.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation for the container
-  ## @param primary.containerSecurityContext.seccompProfile.type Set seccompProfile.type for the container
-  ## @param primary.containerSecurityContext.capabilities.drop Set capabilities.drop for the container
+  ## @param primary.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param primary.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param primary.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param primary.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param primary.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param primary.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param primary.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param primary.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-    runAsGroup: 0
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
-    seccompProfile:
-      type: RuntimeDefault
     capabilities:
-      drop:
-        - ALL
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param primary.hostAliases PostgreSQL primary pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -698,6 +699,19 @@ primary:
     ## @param primary.persistence.dataSource Custom PVC data source
     ##
     dataSource: {}
+  ## PostgreSQL Primary Persistent Volume Claim Retention Policy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    ## @param primary.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Primary Statefulset
+    ##
+    enabled: false
+    ## @param primary.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+    ##
+    whenScaled: Retain
+    ## @param primary.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+    ##
+    whenDeleted: Retain
 
 ## @section PostgreSQL read only replica parameters (only used when `architecture` is set to `replication`)
 ##
@@ -808,25 +822,26 @@ readReplicas:
     fsGroup: 1001
   ## Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param readReplicas.containerSecurityContext.enabled Enable container security context
-  ## @param readReplicas.containerSecurityContext.runAsUser User ID for the container
-  ## @param readReplicas.containerSecurityContext.runAsGroup Group ID for the container
-  ## @param readReplicas.containerSecurityContext.runAsNonRoot Set runAsNonRoot for the container
-  ## @param readReplicas.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation for the container
-  ## @param readReplicas.containerSecurityContext.seccompProfile.type Set seccompProfile.type for the container
-  ## @param readReplicas.containerSecurityContext.capabilities.drop Set capabilities.drop for the container
+  ## @param readReplicas.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param readReplicas.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param readReplicas.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param readReplicas.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param readReplicas.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param readReplicas.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param readReplicas.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param readReplicas.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-    runAsGroup: 0
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
-    seccompProfile:
-      type: RuntimeDefault
     capabilities:
-      drop:
-        - ALL
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param readReplicas.hostAliases PostgreSQL read only pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1048,6 +1063,19 @@ readReplicas:
     ## @param readReplicas.persistence.dataSource Custom PVC data source
     ##
     dataSource: {}
+  ## PostgreSQL Read only Persistent Volume Claim Retention Policy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    ## @param readReplicas.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for read only Statefulset
+    ##
+    enabled: false
+    ## @param readReplicas.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+    ##
+    whenScaled: Retain
+    ## @param readReplicas.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+    ##
+    whenDeleted: Retain
 
 
 ## @section Backup parameters
@@ -1061,6 +1089,8 @@ backup:
   cronjob:
     ## @param backup.cronjob.schedule Set the cronjob parameter schedule
     schedule: "@daily"
+    ## @param backup.cronjob.timeZone Set the cronjob parameter timeZone
+    timeZone: ""
     ## @param backup.cronjob.concurrencyPolicy Set the cronjob parameter concurrencyPolicy
     concurrencyPolicy: Allow
     ## @param backup.cronjob.failedJobsHistoryLimit Set the cronjob parameter failedJobsHistoryLimit
@@ -1073,28 +1103,34 @@ backup:
     ttlSecondsAfterFinished: ""
     ## @param backup.cronjob.restartPolicy Set the cronjob parameter restartPolicy
     restartPolicy: OnFailure
+    ## @param backup.cronjob.podSecurityContext.enabled Enable PodSecurityContext for CronJob/Backup
+    ## @param backup.cronjob.podSecurityContext.fsGroup Group ID for the CronJob
+    podSecurityContext:
+      enabled: true
+      fsGroup: 1001
     ## backup container's Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param backup.cronjob.containerSecurityContext.runAsUser User ID for the backup container
-    ## @param backup.cronjob.containerSecurityContext.runAsGroup Group ID for the backup container
-    ## @param backup.cronjob.containerSecurityContext.runAsNonRoot Set backup container's Security Context runAsNonRoot
-    ## @param backup.cronjob.containerSecurityContext.readOnlyRootFilesystem Is the container itself readonly
-    ## @param backup.cronjob.containerSecurityContext.allowPrivilegeEscalation Is it possible to escalate backup pod(s) privileges
-    ## @param backup.cronjob.containerSecurityContext.seccompProfile.type Set backup container's Security Context seccompProfile type
-    ## @param backup.cronjob.containerSecurityContext.capabilities.drop Set backup container's Security Context capabilities to drop
+    ## @param backup.cronjob.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param backup.cronjob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param backup.cronjob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param backup.cronjob.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param backup.cronjob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param backup.cronjob.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param backup.cronjob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param backup.cronjob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     containerSecurityContext:
+      enabled: true
       runAsUser: 1001
-      runAsGroup: 0
       runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: false
       allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: true
-      seccompProfile:
-        type: RuntimeDefault
       capabilities:
-        drop:
-          - ALL
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## @param backup.cronjob.command Set backup container's command to run
-    command: 
+    command:
       - /bin/sh
       - -c
       - "pg_dumpall --clean --if-exists --load-via-partition-root --quote-all-identifiers --no-password --file=${PGDUMP_DIR}/pg_dumpall-$(date '+%Y-%m-%d-%H-%M').pgdump"
@@ -1103,6 +1139,10 @@ backup:
     labels: {}
     ## @param backup.cronjob.annotations Set the cronjob annotations
     annotations: {}
+    ## @param backup.cronjob.nodeSelector Node labels for PostgreSQL backup CronJob pod assignment
+    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ##
+    nodeSelector: {}
     storage:
       ## @param backup.cronjob.storage.existingClaim Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)
       ## If defined, PVC must be created manually before volume will be bound
@@ -1128,7 +1168,7 @@ backup:
       ## @param backup.cronjob.storage.annotations PVC annotations
       ##
       annotations: {}
-      ## @param backup.cronjob.storage.mountPath Path to mount the volume at 
+      ## @param backup.cronjob.storage.mountPath Path to mount the volume at
       ##
       mountPath: /backup/pgdump
       ## @param backup.cronjob.storage.subPath Subdirectory of the volume to mount at
@@ -1250,9 +1290,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
@@ -1260,7 +1300,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r22
+    tag: 11-debian-11-r90
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1351,9 +1391,9 @@ metrics:
   ## @param metrics.enabled Start a prometheus exporter
   ##
   enabled: false
-  ## @param metrics.image.registry PostgreSQL Prometheus Exporter image registry
-  ## @param metrics.image.repository PostgreSQL Prometheus Exporter image repository
-  ## @param metrics.image.tag PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.registry [default: REGISTRY_NAME] PostgreSQL Prometheus Exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/postgres-exporter] PostgreSQL Prometheus Exporter image repository
+  ## @skip metrics.image.tag PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)
   ## @param metrics.image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy PostgreSQL Prometheus Exporter image pull policy
   ## @param metrics.image.pullSecrets Specify image pull secrets
@@ -1361,7 +1401,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.13.2-debian-11-r4
+    tag: 0.15.0-debian-11-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1396,25 +1436,26 @@ metrics:
   extraEnvVars: []
   ## PostgreSQL Prometheus exporter containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param metrics.containerSecurityContext.enabled Enable PostgreSQL Prometheus exporter containers' Security Context
-  ## @param metrics.containerSecurityContext.runAsUser Set PostgreSQL Prometheus exporter containers' Security Context runAsUser
-  ## @param metrics.containerSecurityContext.runAsGroup Set PostgreSQL Prometheus exporter containers' Security Context runAsGroup
-  ## @param metrics.containerSecurityContext.runAsNonRoot Set PostgreSQL Prometheus exporter containers' Security Context runAsNonRoot
-  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set PostgreSQL Prometheus exporter containers' Security Context allowPrivilegeEscalation
-  ## @param metrics.containerSecurityContext.seccompProfile.type Set PostgreSQL Prometheus exporter containers' Security Context seccompProfile.type
-  ## @param metrics.containerSecurityContext.capabilities.drop Set PostgreSQL Prometheus exporter containers' Security Context capabilities.drop
+  ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param metrics.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-    runAsGroup: 0
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
-    seccompProfile:
-      type: RuntimeDefault
     capabilities:
-      drop:
-        - ALL
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure extra options for PostgreSQL Prometheus exporter containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param metrics.livenessProbe.enabled Enable livenessProbe on PostgreSQL Prometheus exporter containers

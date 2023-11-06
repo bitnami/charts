@@ -10,17 +10,15 @@ kind: StatefulSet
 metadata:
   name: {{ printf "%s-worker" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: worker
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
 spec:
   replicas: 1
   podManagementPolicy: {{ .Values.podManagementPolicy | quote }}
   serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: worker
   {{- if .Values.updateStrategy }}
   updateStrategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
@@ -30,11 +28,8 @@ spec:
       {{- if .Values.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: worker
-        {{- if .Values.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       {{- include "pytorch.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.hostAliases }}
@@ -44,8 +39,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "worker" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "worker" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "worker"  "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "worker"  "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
@@ -234,13 +229,10 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
-        annotations:
-          {{- if .Values.persistence.annotations }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
-          {{- end }}
-          {{- if .Values.commonAnnotations }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
-          {{- end }}
+        {{- if or .Values.commonAnnotations .Values.persistence.annotations }}
+        {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 10 }}
+        {{- end }}
         {{- if .Values.commonLabels }}
         labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
         {{- end }}

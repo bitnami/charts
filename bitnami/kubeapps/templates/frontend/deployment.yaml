@@ -8,11 +8,10 @@ kind: Deployment
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.frontend.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: frontend
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" . ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -21,8 +20,9 @@ spec:
   {{- if .Values.frontend.updateStrategy }}
   strategy: {{- toYaml .Values.frontend.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.frontend.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: frontend
   template:
     metadata:
@@ -31,11 +31,8 @@ spec:
         {{- if .Values.frontend.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.frontend.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: frontend
-        {{- if .Values.frontend.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.frontend.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       {{- if .Values.frontend.hostAliases }}
@@ -45,8 +42,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.frontend.podAffinityPreset "component" "frontend" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.frontend.podAntiAffinityPreset "component" "frontend" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.frontend.podAffinityPreset "component" "frontend" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.frontend.podAntiAffinityPreset "component" "frontend" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.frontend.nodeAffinityPreset.type "key" .Values.frontend.nodeAffinityPreset.key "values" .Values.frontend.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.frontend.schedulerName }}

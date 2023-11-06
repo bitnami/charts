@@ -8,21 +8,12 @@ kind: Service
 metadata:
   name:  {{ include "jaeger.query.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: jaeger
     app.kubernetes.io/component: query
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- if or .Values.query.service.annotations .Values.commonAnnotations }}
-  annotations:
-    {{- if .Values.query.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.query.service.annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.query.service.metrics.annotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.query.service.annotations .Values.query.service.metrics.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.service.annotations .Values.query.service.metrics.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.query.service.type }}
@@ -64,6 +55,7 @@ spec:
     {{- if .Values.query.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.query.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: jaeger
     app.kubernetes.io/component: query

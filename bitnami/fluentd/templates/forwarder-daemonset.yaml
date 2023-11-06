@@ -9,33 +9,25 @@ kind: DaemonSet
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: forwarder
     ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
     app: forwarder
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.forwarder.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.forwarder.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.forwarder.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.forwarder.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: forwarder
   updateStrategy: {{- toYaml .Values.forwarder.updateStrategy | nindent 4 }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: forwarder
         app: forwarder
-        {{- if .Values.forwarder.podLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" $.Values.forwarder.podLabels "context" $ ) | nindent 8 }}
-        {{- end }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/forwarder-configmap.yaml") . | sha256sum }}
         {{- if .Values.forwarder.podAnnotations }}
@@ -58,8 +50,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.forwarder.podAffinityPreset "component" "forwarder" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.forwarder.podAntiAffinityPreset "component" "forwarder" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.forwarder.podAffinityPreset "component" "forwarder" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.forwarder.podAntiAffinityPreset "component" "forwarder" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.forwarder.nodeAffinityPreset.type "key" .Values.forwarder.nodeAffinityPreset.key "values" .Values.forwarder.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.forwarder.nodeSelector }}
@@ -232,12 +224,12 @@ spec:
         {{- if .Values.forwarder.initScriptsCM }}
         - name: custom-init-scripts-cm
           configMap:
-            name: {{ template ".Values.initScriptsCM" . }}
+            name: {{ template "fluentd.forwarder.initScriptsCM" . }}
         {{- end }}
         {{- if .Values.forwarder.initScriptsSecret }}
         - name: custom-init-scripts-secret
           secret:
-            secretName: {{ template ".Values.initScriptsSecret" . }}
+            secretName: {{ template "fluentd.forwarder.initScriptsSecret" . }}
             defaultMode: 0755
         {{- end }}
         - name: fluentd-config

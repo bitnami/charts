@@ -7,7 +7,7 @@ file:
     filetype: file
     mode: "0644"
     owner: root
-    contains:
+    contents:
       - "level: {{ .Vars.logLevel }}"
       - "rootdirectory: {{ .Vars.persistence.imageChartStorage.filesystem.rootdirectory }}"
       - "addr: localhost:{{ .Vars.registry.server.containerPorts.debug }}"

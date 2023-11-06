@@ -56,16 +56,16 @@ diagnosticMode:
 
 ## Bitnami RabbitMQ Image
 ## ref: https://hub.docker.com/r/bitnami/rabbitmq/tags/
-## @param rabbitmqImage.registry RabbitMQ Image registry
-## @param rabbitmqImage.repository RabbitMQ Image repository
-## @param rabbitmqImage.tag RabbitMQ Image tag (immutable tags are recommended)
+## @param rabbitmqImage.registry [default: REGISTRY_NAME] RabbitMQ Image registry
+## @param rabbitmqImage.repository [default: REPOSITORY_NAME/rabbitmq] RabbitMQ Image repository
+## @skip rabbitmqImage.tag RabbitMQ Image tag (immutable tags are recommended)
 ## @param rabbitmqImage.digest RabbitMQ image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param rabbitmqImage.pullSecrets RabbitMQ Image pull secrets
 ##
 rabbitmqImage:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.11.20-debian-11-r8
+  tag: 3.11.23-debian-11-r23
   digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -78,16 +78,16 @@ rabbitmqImage:
 
 ## Bitnami RabbitMQ Default User Credential Updater Image
 ## ref: https://hub.docker.com/r/bitnami/rmq-default-credential-updater/tags/
-## @param credentialUpdaterImage.registry RabbitMQ Default User Credential Updater image registry
-## @param credentialUpdaterImage.repository RabbitMQ Default User Credential Updater image repository
-## @param credentialUpdaterImage.tag RabbitMQ Default User Credential Updater image tag (immutable tags are recommended)
+## @param credentialUpdaterImage.registry [default: REGISTRY_NAME] RabbitMQ Default User Credential Updater image registry
+## @param credentialUpdaterImage.repository [default: REPOSITORY_NAME/rmq-default-credential-updater] RabbitMQ Default User Credential Updater image repository
+## @skip credentialUpdaterImage.tag RabbitMQ Default User Credential Updater image tag (immutable tags are recommended)
 ## @param credentialUpdaterImage.digest RabbitMQ Default User Credential Updater image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param credentialUpdaterImage.pullSecrets RabbitMQ Default User Credential Updater image pull secrets
 ##
 credentialUpdaterImage:
   registry: docker.io
   repository: bitnami/rmq-default-credential-updater
-  tag: 1.0.2-scratch-r25
+  tag: 1.0.4-debian-11-r0
   digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -101,9 +101,9 @@ credentialUpdaterImage:
 clusterOperator:
   ## Bitnami RabbitMQ Cluster Operator image
   ## ref: https://hub.docker.com/r/bitnami/rabbitmq-cluster-operator/tags/
-  ## @param clusterOperator.image.registry RabbitMQ Cluster Operator image registry
-  ## @param clusterOperator.image.repository RabbitMQ Cluster Operator image repository
-  ## @param clusterOperator.image.tag RabbitMQ Cluster Operator image tag (immutable tags are recommended)
+  ## @param clusterOperator.image.registry [default: REGISTRY_NAME] RabbitMQ Cluster Operator image registry
+  ## @param clusterOperator.image.repository [default: REPOSITORY_NAME/rabbitmq-cluster-operator] RabbitMQ Cluster Operator image repository
+  ## @skip clusterOperator.image.tag RabbitMQ Cluster Operator image tag (immutable tags are recommended)
   ## @param clusterOperator.image.digest RabbitMQ Cluster Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param clusterOperator.image.pullPolicy RabbitMQ Cluster Operator image pull policy
   ## @param clusterOperator.image.pullSecrets RabbitMQ Cluster Operator image pull secrets
@@ -111,7 +111,7 @@ clusterOperator:
   image:
     registry: docker.io
     repository: bitnami/rabbitmq-cluster-operator
-    tag: 2.4.0-scratch-r1
+    tag: 2.5.0-debian-11-r37
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -216,16 +216,27 @@ clusterOperator:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param clusterOperator.containerSecurityContext.enabled Enabled RabbitMQ Cluster Operator containers' Security Context
-  ## @param clusterOperator.containerSecurityContext.runAsUser Set RabbitMQ Cluster Operator containers' Security Context runAsUser
-  ## @param clusterOperator.containerSecurityContext.runAsNonRoot Force running the container as non root
-  ## @param clusterOperator.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on cluster operator containers
+  ## @param clusterOperator.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param clusterOperator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param clusterOperator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param clusterOperator.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param clusterOperator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param clusterOperator.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param clusterOperator.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param clusterOperator.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    readOnlyRootFilesystem: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+
 
   ## @param clusterOperator.command Override default container command (useful when using custom images)
   ##
@@ -350,6 +361,17 @@ clusterOperator:
     ## @param clusterOperator.rbac.create Specifies whether RBAC resources should be created
     ##
     create: true
+    ## ClusterRole parameters
+    ##
+    clusterRole:
+      ## @param clusterOperator.rbac.clusterRole.customRules Define custom access rules for the ClusterRole
+      ## ref: https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
+      ## e.g:
+      ## customRules:
+      ##   - apiGroups: A list of API groups (e.g., [""], ["apps"]).
+      ##   - resources: A list of resource names (e.g., ["configmaps", "pods"]).
+      ##   - verbs: A list of allowed access verbs (e.g., ["create", "get", "list"]).
+      customRules: []
 
   ## ServiceAccount configuration
   ##
@@ -371,12 +393,12 @@ clusterOperator:
   ## @section RabbitMQ Cluster Operator Metrics parameters
   ##
   metrics:
-    ## @param clusterOperator.metrics.enabled Create a service for accessing the metrics endpoint
-    ##
-    enabled: false
     ## Metrics service parameters
     ##
     service:
+      ## @param clusterOperator.metrics.service.enabled Create a service for accessing the metrics endpoint
+      ##
+      enabled: false
       ## @param clusterOperator.metrics.service.type RabbitMQ Cluster Operator metrics service type
       ##
       type: ClusterIP
@@ -475,7 +497,50 @@ clusterOperator:
       ## @param clusterOperator.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
       ##
       labels: {}
-
+      ## @param clusterOperator.metrics.serviceMonitor.path Define the path used by ServiceMonitor to scrap metrics
+      ## Could be /metrics for aggregated metrics or /metrics/per-object for more details
+      ##
+      path: ""
+      ## @param clusterOperator.metrics.serviceMonitor.params Define the HTTP URL parameters used by ServiceMonitor
+      ##
+      params: {}
+    podMonitor:
+      ## @param clusterOperator.metrics.podMonitor.enabled Create PodMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param clusterOperator.metrics.podMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
+      ##
+      jobLabel: app.kubernetes.io/name
+      ## @param clusterOperator.metrics.podMonitor.namespace Namespace which Prometheus is running in
+      ##
+      namespace: ""
+      ## @param clusterOperator.metrics.podMonitor.honorLabels Honor metrics labels
+      ##
+      honorLabels: false
+      ## @param clusterOperator.metrics.podMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      selector: {}
+      ## @param clusterOperator.metrics.podMonitor.interval Specify the interval at which metrics should be scraped
+      ##
+      interval: 30s
+      ## @param clusterOperator.metrics.podMonitor.scrapeTimeout Specify the timeout after which the scrape is ended
+      ##
+      scrapeTimeout: 30s
+      ## @param clusterOperator.metrics.podMonitor.additionalLabels [object] Additional labels that can be used so PodMonitors will be discovered by Prometheus
+      ##
+      additionalLabels: {}
+      ## @param clusterOperator.metrics.podMonitor.path Define HTTP path to scrape for metrics.
+      ##
+      path: ""
+      ## @param clusterOperator.metrics.podMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param clusterOperator.metrics.podMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
+      ## @param clusterOperator.metrics.podMonitor.params Define the HTTP URL parameters used by PodMonitor
+      ##
+      params: {}
 ## @section RabbitMQ Messaging Topology Operator Parameters
 ##
 msgTopologyOperator:
@@ -484,9 +549,9 @@ msgTopologyOperator:
   enabled: true
   ## Bitnami RabbitMQ Messaging Topology Operator image
   ## ref: https://hub.docker.com/r/bitnami/rmq-messaging-topology-operator/tags/
-  ## @param msgTopologyOperator.image.registry RabbitMQ Messaging Topology Operator image registry
-  ## @param msgTopologyOperator.image.repository RabbitMQ Messaging Topology Operator image repository
-  ## @param msgTopologyOperator.image.tag RabbitMQ Messaging Topology Operator image tag (immutable tags are recommended)
+  ## @param msgTopologyOperator.image.registry [default: REGISTRY_NAME] RabbitMQ Messaging Topology Operator image registry
+  ## @param msgTopologyOperator.image.repository [default: REPOSITORY_NAME/rmq-messaging-topology-operator] RabbitMQ Messaging Topology Operator image repository
+  ## @skip msgTopologyOperator.image.tag RabbitMQ Messaging Topology Operator image tag (immutable tags are recommended)
   ## @param msgTopologyOperator.image.digest RabbitMQ Messaging Topology Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param msgTopologyOperator.image.pullPolicy RabbitMQ Messaging Topology Operator image pull policy
   ## @param msgTopologyOperator.image.pullSecrets RabbitMQ Messaging Topology Operator image pull secrets
@@ -494,7 +559,7 @@ msgTopologyOperator:
   image:
     registry: docker.io
     repository: bitnami/rmq-messaging-topology-operator
-    tag: 1.12.0-scratch-r4
+    tag: 1.12.0-debian-11-r58
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -613,16 +678,26 @@ msgTopologyOperator:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param msgTopologyOperator.containerSecurityContext.enabled Enabled RabbitMQ Messaging Topology Operator containers' Security Context
-  ## @param msgTopologyOperator.containerSecurityContext.runAsUser Set RabbitMQ Messaging Topology Operator containers' Security Context runAsUser
-  ## @param msgTopologyOperator.containerSecurityContext.runAsNonRoot Force running the container as non root
-  ## @param msgTopologyOperator.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Messaging Topology Operator
+  ## @param msgTopologyOperator.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param msgTopologyOperator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param msgTopologyOperator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param msgTopologyOperator.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param msgTopologyOperator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param msgTopologyOperator.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param msgTopologyOperator.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param msgTopologyOperator.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    readOnlyRootFilesystem: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param msgTopologyOperator.fullnameOverride String to fully override rmqco.msgTopologyOperator.fullname template
   ##
@@ -826,12 +901,12 @@ msgTopologyOperator:
   ## @section RabbitMQ Messaging Topology Operator parameters
   ##
   metrics:
-    ## @param msgTopologyOperator.metrics.enabled Create a service for accessing the metrics endpoint
-    ##
-    enabled: false
     ## Metrics service parameters
     ##
     service:
+      ## @param msgTopologyOperator.metrics.service.enabled Create a service for accessing the metrics endpoint
+      ##
+      enabled: false
       ## @param msgTopologyOperator.metrics.service.type RabbitMQ Cluster Operator metrics service type
       ##
       type: ClusterIP
@@ -930,7 +1005,37 @@ msgTopologyOperator:
       ## @param msgTopologyOperator.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
       ##
       labels: {}
-
+    podMonitor:
+      ## @param msgTopologyOperator.metrics.podMonitor.enabled Create PodMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param msgTopologyOperator.metrics.podMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
+      ##
+      jobLabel: app.kubernetes.io/name
+      ## @param msgTopologyOperator.metrics.podMonitor.namespace Namespace which Prometheus is running in
+      ##
+      namespace: ""
+      ## @param msgTopologyOperator.metrics.podMonitor.honorLabels Honor metrics labels
+      ##
+      honorLabels: false
+      ## @param msgTopologyOperator.metrics.podMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      selector: {}
+      ## @param msgTopologyOperator.metrics.podMonitor.interval Specify the interval at which metrics should be scraped
+      ##
+      interval: 30s
+      ## @param msgTopologyOperator.metrics.podMonitor.scrapeTimeout Specify the timeout after which the scrape is ended
+      ##
+      scrapeTimeout: 30s
+      ## @param msgTopologyOperator.metrics.podMonitor.additionalLabels [object] Additional labels that can be used so PodMonitors will be discovered by Prometheus
+      ##
+      additionalLabels: {}
+      ## @param msgTopologyOperator.metrics.podMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param msgTopologyOperator.metrics.podMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
 ## @section cert-manager parameters
 ##
 

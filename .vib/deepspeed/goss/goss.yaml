@@ -5,7 +5,7 @@
 file:
   /job/hostfile:
     exists: true
-    contains:
+    contents:
     {{- range $i, $e := until $nodes }}
       - /deepspeed-worker-{{ $i }}/
     {{ end }}
@@ -35,15 +35,6 @@ command:
     # or the one randomly defined by openshift (larger values). Othenrwise, the chart is still using the default value.
     exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
     exit-status: 0
-  check-no-capabilities:
-    exec: cat /proc/1/status
-    exit-status: 0
-    stdout:
-    - "CapInh:	0000000000000000"
-    - "CapPrm:	0000000000000000"
-    - "CapEff:	0000000000000000"
-    - "CapBnd:	0000000000000000"
-    - "CapAmb:	0000000000000000"
   {{ if .Vars.client.serviceAccount.automountServiceAccountToken }}
   check-sa:
     exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d

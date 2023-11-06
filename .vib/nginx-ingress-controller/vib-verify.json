@@ -31,13 +31,6 @@
       },
       "actions": [
         {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-nginx-ingress-controller-http",
-            "app_protocol": "HTTP"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
@@ -61,7 +54,7 @@
             "params": {
               "kubeconfig": "{{kubeconfig}}",
               "namespace": "{{namespace}}",
-              "service-name": "kuard-vib",
+              "service-name": "dokuwiki-vib",
               "service-port": "80"
             }
           }

@@ -9,26 +9,21 @@ kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.operator.replicaCount }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.operator.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   {{- if .Values.operator.updateStrategy }}
   strategy: {{ toYaml .Values.operator.updateStrategy | nindent 4 }}
   {{- end }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
-        {{- if .Values.operator.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.operator.podLabels "context" $) | nindent 8 }}
-        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
       {{- if .Values.operator.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.operator.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
@@ -54,10 +49,10 @@ spec:
       {{- else }}
       affinity:
         {{- if not (empty .Values.operator.podAffinityPreset) }}
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.operator.podAffinityPreset "component" "grafana-operator" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.operator.podAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
         {{- end }}
         {{- if not (empty .Values.operator.podAntiAffinityPreset) }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.operator.podAntiAffinityPreset "component" "grafana-operator" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.operator.podAntiAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
         {{- end }}
         {{- if not (empty .Values.operator.nodeAffinityPreset.type) }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.operator.nodeAffinityPreset.type "key" .Values.operator.nodeAffinityPreset.key "values" .Values.operator.nodeAffinityPreset.values) | nindent 10 }}
@@ -125,10 +120,10 @@ spec:
             - name: TEMPLATE_PATH
               value: /usr/local/bin/templates
             - name: WATCH_NAMESPACE
-              {{- if and .Values.namespaceScope (empty .Values.watchNamespaces) }}
-              value: namespace: {{ include "common.names.namespace" . | quote }}
-              {{ else }}
-              value: {{ .Values.watchNamespaces }}
+              {{- if .Values.namespaceScope }}
+              value: {{ default (include "common.names.namespace" .) .Values.watchNamespace | quote }}
+              {{- else }}
+              value: ""
               {{- end }}
             - name: POD_NAME
               valueFrom:

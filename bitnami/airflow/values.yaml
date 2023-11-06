@@ -111,9 +111,9 @@ dags:
   existingConfigmap: ""
   ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param dags.image.registry Init container load-dags image registry
-  ## @param dags.image.repository Init container load-dags image repository
-  ## @param dags.image.tag Init container load-dags image tag (immutable tags are recommended)
+  ## @param dags.image.registry [default: REGISTRY_NAME] Init container load-dags image registry
+  ## @param dags.image.repository [default: REPOSITORY_NAME/os-shell] Init container load-dags image repository
+  ## @skip dags.image.tag Init container load-dags image tag (immutable tags are recommended)
   ## @param dags.image.digest Init container load-dags image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param dags.image.pullPolicy Init container load-dags image pull policy
   ## @param dags.image.pullSecrets Init container load-dags image pull secrets
@@ -121,7 +121,7 @@ dags:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r16
+    tag: 11-debian-11-r90
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -178,9 +178,9 @@ extraVolumes: []
 web:
   ## Bitnami Airflow image version
   ## ref: https://hub.docker.com/r/bitnami/airflow/tags/
-  ## @param web.image.registry Airflow image registry
-  ## @param web.image.repository Airflow image repository
-  ## @param web.image.tag Airflow image tag (immutable tags are recommended)
+  ## @param web.image.registry [default: REGISTRY_NAME] Airflow image registry
+  ## @param web.image.repository [default: REPOSITORY_NAME/airflow] Airflow image repository
+  ## @skip web.image.tag Airflow image tag (immutable tags are recommended)
   ## @param web.image.digest Airflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param web.image.pullPolicy Airflow image pull policy
   ## @param web.image.pullSecrets Airflow image pull secrets
@@ -188,7 +188,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 2.6.3-debian-11-r14
+    tag: 2.7.2-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -311,11 +311,21 @@ web:
   ## @param web.containerSecurityContext.enabled Enabled Airflow web containers' Security Context
   ## @param web.containerSecurityContext.runAsUser Set Airflow web containers' Security Context runAsUser
   ## @param web.containerSecurityContext.runAsNonRoot Set Airflow web containers' Security Context runAsNonRoot
+  ## @param web.containerSecurityContext.privileged Set web container's Security Context privileged
+  ## @param web.containerSecurityContext.allowPrivilegeEscalation Set web container's Security Context allowPrivilegeEscalation
+  ## @param web.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param web.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param web.lifecycleHooks for the Airflow web container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -435,9 +445,9 @@ web:
 scheduler:
   ## Bitnami Airflow Scheduler image version
   ## ref: https://hub.docker.com/r/bitnami/airflow-scheduler/tags/
-  ## @param scheduler.image.registry Airflow Scheduler image registry
-  ## @param scheduler.image.repository Airflow Scheduler image repository
-  ## @param scheduler.image.tag Airflow Scheduler image tag (immutable tags are recommended)
+  ## @param scheduler.image.registry [default: REGISTRY_NAME] Airflow Scheduler image registry
+  ## @param scheduler.image.repository [default: REPOSITORY_NAME/airflow-scheduler] Airflow Scheduler image repository
+  ## @skip scheduler.image.tag Airflow Scheduler image tag (immutable tags are recommended)
   ## @param scheduler.image.digest Airflow Schefuler image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param scheduler.image.pullPolicy Airflow Scheduler image pull policy
   ## @param scheduler.image.pullSecrets Airflow Scheduler image pull secrets
@@ -446,7 +456,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 2.6.3-debian-11-r11
+    tag: 2.7.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -515,11 +525,21 @@ scheduler:
   ## @param scheduler.containerSecurityContext.enabled Enabled Airflow scheduler containers' Security Context
   ## @param scheduler.containerSecurityContext.runAsUser Set Airflow scheduler containers' Security Context runAsUser
   ## @param scheduler.containerSecurityContext.runAsNonRoot Set Airflow scheduler containers' Security Context runAsNonRoot
+  ## @param scheduler.containerSecurityContext.privileged Set scheduler container's Security Context privileged
+  ## @param scheduler.containerSecurityContext.allowPrivilegeEscalation Set scheduler container's Security Context allowPrivilegeEscalation
+  ## @param scheduler.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param scheduler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param scheduler.lifecycleHooks for the Airflow scheduler container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -639,9 +659,9 @@ scheduler:
 worker:
   ## Bitnami Airflow Worker image version
   ## ref: https://hub.docker.com/r/bitnami/airflow-worker/tags/
-  ## @param worker.image.registry Airflow Worker image registry
-  ## @param worker.image.repository Airflow Worker image repository
-  ## @param worker.image.tag Airflow Worker image tag (immutable tags are recommended)
+  ## @param worker.image.registry [default: REGISTRY_NAME] Airflow Worker image registry
+  ## @param worker.image.repository [default: REPOSITORY_NAME/airflow-worker] Airflow Worker image repository
+  ## @skip worker.image.tag Airflow Worker image tag (immutable tags are recommended)
   ## @param worker.image.digest Airflow Worker image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param worker.image.pullPolicy Airflow Worker image pull policy
   ## @param worker.image.pullSecrets Airflow Worker image pull secrets
@@ -650,7 +670,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 2.6.3-debian-11-r11
+    tag: 2.7.2-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -767,11 +787,21 @@ worker:
   ## @param worker.containerSecurityContext.enabled Enabled Airflow worker containers' Security Context
   ## @param worker.containerSecurityContext.runAsUser Set Airflow worker containers' Security Context runAsUser
   ## @param worker.containerSecurityContext.runAsNonRoot Set Airflow worker containers' Security Context runAsNonRoot
+  ## @param worker.containerSecurityContext.privileged Set worker container's Security Context privileged
+  ## @param worker.containerSecurityContext.allowPrivilegeEscalation Set worker container's Security Context allowPrivilegeEscalation
+  ## @param worker.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param worker.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param worker.lifecycleHooks for the Airflow worker container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -913,9 +943,9 @@ worker:
 git:
   ## Bitnami Git image version
   ## ref: https://hub.docker.com/r/bitnami/git/tags/
-  ## @param git.image.registry Git image registry
-  ## @param git.image.repository Git image repository
-  ## @param git.image.tag Git image tag (immutable tags are recommended)
+  ## @param git.image.registry [default: REGISTRY_NAME] Git image registry
+  ## @param git.image.repository [default: REPOSITORY_NAME/git] Git image repository
+  ## @skip git.image.tag Git image tag (immutable tags are recommended)
   ## @param git.image.digest Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param git.image.pullPolicy Git image pull policy
   ## @param git.image.pullSecrets Git image pull secrets
@@ -923,7 +953,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.41.0-debian-11-r50
+    tag: 2.42.0-debian-11-r45
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1276,9 +1306,9 @@ metrics:
   enabled: false
   ## Bitnami Airflow exporter image
   ## ref: https://hub.docker.com/r/bitnami/airflow-exporter/tags/
-  ## @param metrics.image.registry Airflow exporter image registry
-  ## @param metrics.image.repository Airflow exporter image repository
-  ## @param metrics.image.tag Airflow exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.registry [default: REGISTRY_NAME] Airflow exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/airflow-exporter] Airflow exporter image repository
+  ## @skip metrics.image.tag Airflow exporter image tag (immutable tags are recommended)
   ## @param metrics.image.digest Airflow exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Airflow exporter image pull policy
   ## @param metrics.image.pullSecrets Airflow exporter image pull secrets
@@ -1286,7 +1316,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20220314.0-debian-11-r365
+    tag: 0.20220314.0-debian-11-r438
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1331,6 +1361,10 @@ metrics:
   ## @param metrics.containerSecurityContext.enabled Enable Airflow exporter containers' Security Context
   ## @param metrics.containerSecurityContext.runAsUser Set Airflow exporter containers' Security Context runAsUser
   ## @param metrics.containerSecurityContext.runAsNonRoot Set Airflow exporter containers' Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set metrics container's Security Context privileged
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set metrics container's Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ## e.g:
   ##   containerSecurityContext:
   ##     enabled: true
@@ -1342,6 +1376,12 @@ metrics:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param metrics.lifecycleHooks for the Airflow exporter container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}

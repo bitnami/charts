@@ -16,7 +16,7 @@ file:
   /logs/cpu.0:
     exists: true
     filetype: file
-    contains:
+    contents:
       - "cpu.0:"
 command:
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}

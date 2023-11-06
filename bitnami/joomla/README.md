@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/joomla
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/joomla
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -22,12 +24,12 @@ It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/t
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Joomla! in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Joomla! in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -36,8 +38,10 @@ Looking to use Joomla! in production? Try [VMware Application Catalog](https://b
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/joomla
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/joomla
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys Joomla! on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -77,88 +81,92 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Joomla! parameters
 
-| Name                                    | Description                                                                                                          | Value                 |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`                        | Joomla! image registry                                                                                               | `docker.io`           |
-| `image.repository`                      | Joomla! Image name                                                                                                   | `bitnami/joomla`      |
-| `image.tag`                             | Joomla! Image tag                                                                                                    | `4.3.3-debian-11-r16` |
-| `image.digest`                          | Joomla! image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                  |
-| `image.pullPolicy`                      | Joomla! image pull policy                                                                                            | `IfNotPresent`        |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                     | `[]`                  |
-| `image.debug`                           | Specify if debug logs should be enabled                                                                              | `false`               |
-| `joomlaSkipInstall`                     | Skip Joomla! installation wizard. Useful for migrations and restoring from SQL dump                                  | `no`                  |
-| `joomlaUsername`                        | User of the application                                                                                              | `user`                |
-| `joomlaPassword`                        | Application password                                                                                                 | `""`                  |
-| `joomlaEmail`                           | Admin email                                                                                                          | `user@example.com`    |
-| `allowEmptyPassword`                    | Allow DB blank passwords                                                                                             | `no`                  |
-| `command`                               | Override default container command (useful when using custom images)                                                 | `[]`                  |
-| `args`                                  | Override default container args (useful when using custom images)                                                    | `[]`                  |
-| `replicaCount`                          | Number of replicas (requires ReadWriteMany PVC support)                                                              | `1`                   |
-| `hostAliases`                           | Deployment pod host aliases                                                                                          | `[]`                  |
-| `updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                                       | `RollingUpdate`       |
-| `extraEnvVars`                          | Extra environment variables                                                                                          | `[]`                  |
-| `extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                                  | `""`                  |
-| `extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                         | `""`                  |
-| `extraVolumes`                          | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`   | `[]`                  |
-| `extraVolumeMounts`                     | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes` | `[]`                  |
-| `initContainers`                        | Add additional init containers to the pod (evaluated as a template)                                                  | `[]`                  |
-| `sidecars`                              | Attach additional containers to the pod (evaluated as a template)                                                    | `[]`                  |
-| `existingSecret`                        | Name of a secret with the application password                                                                       | `""`                  |
-| `smtpHost`                              | SMTP host                                                                                                            | `""`                  |
-| `smtpPort`                              | SMTP port                                                                                                            | `""`                  |
-| `smtpUser`                              | SMTP user                                                                                                            | `""`                  |
-| `smtpPassword`                          | SMTP password                                                                                                        | `""`                  |
-| `smtpProtocol`                          | SMTP Protocol (options: ssl,tls, nil)                                                                                | `""`                  |
-| `containerPorts`                        | Container ports                                                                                                      | `{}`                  |
-| `persistence.enabled`                   | Enable persistence using PVC                                                                                         | `true`                |
-| `persistence.storageClass`              | PVC Storage Class for Joomla! volume                                                                                 | `""`                  |
-| `persistence.accessModes`               | PVC Access Mode for Joomla! volume                                                                                   | `["ReadWriteOnce"]`   |
-| `persistence.size`                      | PVC Storage Request for Joomla! volume                                                                               | `8Gi`                 |
-| `persistence.existingClaim`             | An Existing PVC name                                                                                                 | `""`                  |
-| `persistence.hostPath`                  | Host mount path for Joomla! volume                                                                                   | `""`                  |
-| `persistence.annotations`               | Persistent Volume Claim annotations                                                                                  | `{}`                  |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                  | `""`                  |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `soft`                |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                            | `""`                  |
-| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                                | `""`                  |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                            | `[]`                  |
-| `affinity`                              | Affinity for pod assignment                                                                                          | `{}`                  |
-| `nodeSelector`                          | Node labels for pod assignment                                                                                       | `{}`                  |
-| `tolerations`                           | Tolerations for pod assignment                                                                                       | `[]`                  |
-| `resources.limits`                      | The resources limits for the container                                                                               | `{}`                  |
-| `resources.requests`                    | The requested resources for the container                                                                            | `{}`                  |
-| `podSecurityContext.enabled`            | Enable Joomla! pods' Security Context                                                                                | `true`                |
-| `podSecurityContext.fsGroup`            | Joomla! pods' group ID                                                                                               | `1001`                |
-| `containerSecurityContext.enabled`      | Enable Joomla! containers' Security Context                                                                          | `true`                |
-| `containerSecurityContext.runAsUser`    | Joomla! containers' Security Context                                                                                 | `1001`                |
-| `containerSecurityContext.runAsNonRoot` | Set Joomla! container's Security Context runAsNonRoot                                                                | `true`                |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                                                  | `false`               |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                               | `600`                 |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                      | `10`                  |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                     | `5`                   |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                   | `6`                   |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                   | `1`                   |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                                 | `true`                |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                              | `600`                 |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                     | `10`                  |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                    | `5`                   |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                  | `6`                   |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                  | `1`                   |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                                                | `true`                |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                             | `30`                  |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                    | `5`                   |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                   | `3`                   |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                 | `6`                   |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                 | `1`                   |
-| `customStartupProbe`                    | Override default startup probe                                                                                       | `{}`                  |
-| `customLivenessProbe`                   | Override default liveness probe                                                                                      | `{}`                  |
-| `customReadinessProbe`                  | Override default readiness probe                                                                                     | `{}`                  |
-| `priorityClassName`                     | Define the priority class name to use for the joomla pods here.                                                      | `""`                  |
-| `schedulerName`                         | Name of the k8s scheduler (other than default)                                                                       | `""`                  |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                       | `[]`                  |
-| `lifecycleHooks`                        | LifecycleHook to set additional configuration at startup Evaluated as a template                                     | `{}`                  |
-| `podAnnotations`                        | Pod annotations                                                                                                      | `{}`                  |
-| `podLabels`                             | Add additional labels to the pod (evaluated as a template)                                                           | `{}`                  |
+| Name                                                | Description                                                                                                          | Value                    |
+| --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `image.registry`                                    | Joomla! image registry                                                                                               | `REGISTRY_NAME`          |
+| `image.repository`                                  | Joomla! Image name                                                                                                   | `REPOSITORY_NAME/joomla` |
+| `image.digest`                                      | Joomla! image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                     |
+| `image.pullPolicy`                                  | Joomla! image pull policy                                                                                            | `IfNotPresent`           |
+| `image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                     | `[]`                     |
+| `image.debug`                                       | Specify if debug logs should be enabled                                                                              | `false`                  |
+| `joomlaSkipInstall`                                 | Skip Joomla! installation wizard. Useful for migrations and restoring from SQL dump                                  | `no`                     |
+| `joomlaUsername`                                    | User of the application                                                                                              | `user`                   |
+| `joomlaPassword`                                    | Application password                                                                                                 | `""`                     |
+| `joomlaEmail`                                       | Admin email                                                                                                          | `user@example.com`       |
+| `allowEmptyPassword`                                | Allow DB blank passwords                                                                                             | `no`                     |
+| `command`                                           | Override default container command (useful when using custom images)                                                 | `[]`                     |
+| `args`                                              | Override default container args (useful when using custom images)                                                    | `[]`                     |
+| `replicaCount`                                      | Number of replicas (requires ReadWriteMany PVC support)                                                              | `1`                      |
+| `hostAliases`                                       | Deployment pod host aliases                                                                                          | `[]`                     |
+| `updateStrategy.type`                               | Update strategy - only really applicable for deployments with RWO PVs attached                                       | `RollingUpdate`          |
+| `extraEnvVars`                                      | Extra environment variables                                                                                          | `[]`                     |
+| `extraEnvVarsCM`                                    | ConfigMap containing extra env vars                                                                                  | `""`                     |
+| `extraEnvVarsSecret`                                | Secret containing extra env vars (in case of sensitive data)                                                         | `""`                     |
+| `extraVolumes`                                      | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`   | `[]`                     |
+| `extraVolumeMounts`                                 | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes` | `[]`                     |
+| `initContainers`                                    | Add additional init containers to the pod (evaluated as a template)                                                  | `[]`                     |
+| `sidecars`                                          | Attach additional containers to the pod (evaluated as a template)                                                    | `[]`                     |
+| `existingSecret`                                    | Name of a secret with the application password                                                                       | `""`                     |
+| `smtpHost`                                          | SMTP host                                                                                                            | `""`                     |
+| `smtpPort`                                          | SMTP port                                                                                                            | `""`                     |
+| `smtpUser`                                          | SMTP user                                                                                                            | `""`                     |
+| `smtpPassword`                                      | SMTP password                                                                                                        | `""`                     |
+| `smtpProtocol`                                      | SMTP Protocol (options: ssl,tls, nil)                                                                                | `""`                     |
+| `containerPorts`                                    | Container ports                                                                                                      | `{}`                     |
+| `persistence.enabled`                               | Enable persistence using PVC                                                                                         | `true`                   |
+| `persistence.storageClass`                          | PVC Storage Class for Joomla! volume                                                                                 | `""`                     |
+| `persistence.accessModes`                           | PVC Access Mode for Joomla! volume                                                                                   | `["ReadWriteOnce"]`      |
+| `persistence.size`                                  | PVC Storage Request for Joomla! volume                                                                               | `8Gi`                    |
+| `persistence.existingClaim`                         | An Existing PVC name                                                                                                 | `""`                     |
+| `persistence.hostPath`                              | Host mount path for Joomla! volume                                                                                   | `""`                     |
+| `persistence.annotations`                           | Persistent Volume Claim annotations                                                                                  | `{}`                     |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                  | `""`                     |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `soft`                   |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                            | `""`                     |
+| `nodeAffinityPreset.key`                            | Node label key to match Ignored if `affinity` is set.                                                                | `""`                     |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                                            | `[]`                     |
+| `affinity`                                          | Affinity for pod assignment                                                                                          | `{}`                     |
+| `nodeSelector`                                      | Node labels for pod assignment                                                                                       | `{}`                     |
+| `tolerations`                                       | Tolerations for pod assignment                                                                                       | `[]`                     |
+| `resources.limits`                                  | The resources limits for the container                                                                               | `{}`                     |
+| `resources.requests`                                | The requested resources for the container                                                                            | `{}`                     |
+| `podSecurityContext.enabled`                        | Enable Joomla! pods' Security Context                                                                                | `true`                   |
+| `podSecurityContext.fsGroup`                        | Joomla! pods' group ID                                                                                               | `1001`                   |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                 | `true`                   |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                           | `1001`                   |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                        | `true`                   |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                          | `false`                  |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                              | `false`                  |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                            | `false`                  |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                   | `["ALL"]`                |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                     | `RuntimeDefault`         |
+| `startupProbe.enabled`                              | Enable startupProbe                                                                                                  | `false`                  |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                               | `600`                    |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                      | `10`                     |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                     | `5`                      |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                   | `6`                      |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                   | `1`                      |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                                                 | `true`                   |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                              | `600`                    |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                     | `10`                     |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                    | `5`                      |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                  | `6`                      |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                  | `1`                      |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                                                | `true`                   |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                             | `30`                     |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                    | `5`                      |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                   | `3`                      |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                 | `6`                      |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                 | `1`                      |
+| `customStartupProbe`                                | Override default startup probe                                                                                       | `{}`                     |
+| `customLivenessProbe`                               | Override default liveness probe                                                                                      | `{}`                     |
+| `customReadinessProbe`                              | Override default readiness probe                                                                                     | `{}`                     |
+| `priorityClassName`                                 | Define the priority class name to use for the joomla pods here.                                                      | `""`                     |
+| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                       | `""`                     |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                       | `[]`                     |
+| `lifecycleHooks`                                    | LifecycleHook to set additional configuration at startup Evaluated as a template                                     | `{}`                     |
+| `podAnnotations`                                    | Pod annotations                                                                                                      | `{}`                     |
+| `podLabels`                                         | Add additional labels to the pod (evaluated as a template)                                                           | `{}`                     |
 
 ### Traffic Exposure Parameters
 
@@ -216,17 +224,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                        | Description                                                                                                     | Value                     |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `metrics.enabled`           | Start a side-car prometheus exporter                                                                            | `false`                   |
-| `metrics.image.registry`    | Apache exporter image registry                                                                                  | `docker.io`               |
-| `metrics.image.repository`  | Apache exporter image name                                                                                      | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `1.0.1-debian-11-r2`      |
-| `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
-| `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`            |
-| `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
-| `metrics.resources`         | Exporter resource requests/limit                                                                                | `{}`                      |
-| `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod                                                                 | `{}`                      |
+| Name                        | Description                                                                                                     | Value                             |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `metrics.enabled`           | Start a side-car prometheus exporter                                                                            | `false`                           |
+| `metrics.image.registry`    | Apache exporter image registry                                                                                  | `REGISTRY_NAME`                   |
+| `metrics.image.repository`  | Apache exporter image name                                                                                      | `REPOSITORY_NAME/apache-exporter` |
+| `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                              |
+| `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`                    |
+| `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                              |
+| `metrics.resources`         | Exporter resource requests/limit                                                                                | `{}`                              |
+| `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod                                                                 | `{}`                              |
 
 ### NetworkPolicy parameters
 
@@ -255,8 +262,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set joomlaUsername=admin,joomlaPassword=password,mariadb.mariadbRootPassword=secretpassword \
-    oci://registry-1.docker.io/bitnamicharts/joomla
+    oci://REGISTRY_NAME/REPOSITORY_NAME/joomla
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the Joomla! administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
 
@@ -265,9 +274,10 @@ The above command sets the Joomla! administrator account username and password t
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/joomla
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/joomla
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -345,6 +355,10 @@ You may want to review the [PV reclaim policy](https://kubernetes.io/docs/tasks/
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 16.0.0
+
+This major release bumps the MariaDB version to 11.1. No major issues are expected during the upgrade.
 
 ### To 15.0.0
 
@@ -430,14 +444,18 @@ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=joo
 Upgrade your release (maintaining the version) disabling MariaDB and scaling Joomla replicas to 0:
 
 ```console
-helm upgrade joomla oci://registry-1.docker.io/bitnamicharts/joomla --set joomlaPassword=$JOOMLA_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.1.9
+helm upgrade joomla oci://REGISTRY_NAME/REPOSITORY_NAME/joomla --set joomlaPassword=$JOOMLA_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.1.9
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 Finally, upgrade you release to 9.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-helm upgrade joomla oci://registry-1.docker.io/bitnamicharts/joomla --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set joomlaPassword=$JOOMLA_PASSWORD
+helm upgrade joomla oci://REGISTRY_NAME/REPOSITORY_NAME/joomla --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set joomlaPassword=$JOOMLA_PASSWORD
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 You should see the lines below in MariaDB container logs:
 

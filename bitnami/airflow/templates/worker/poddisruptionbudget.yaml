@@ -9,11 +9,10 @@ apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 metadata:
   name: {{ printf "%s-worker" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.web.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: worker
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.raender" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
-    {{- end }}
 spec:
   {{- if .Values.worker.pdb.minAvailable }}
   minAvailable: {{ .Values.worker.pdb.minAvailable }}
@@ -21,7 +20,8 @@ spec:
   {{- if .Values.worker.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.worker.pdb.maxUnavailable }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: worker
 {{- end }}

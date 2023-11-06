@@ -8,11 +8,8 @@ kind: Deployment
 metadata:
   name: {{ include "argocd.repo-server" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: repo-server
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -21,19 +18,17 @@ spec:
   {{- if .Values.repoServer.updateStrategy }}
   strategy: {{- toYaml .Values.repoServer.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.repoServer.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: repo-server
   template:
     metadata:
       {{- if .Values.repoServer.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: repo-server
-        {{- if .Values.repoServer.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ include "argocd.repo-server.serviceAccountName" . }}
       {{- include "argocd.imagePullSecrets" . | nindent 6 }}
@@ -44,8 +39,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.repoServer.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.repoServer.podAffinityPreset "component" "repo-server" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.repoServer.podAntiAffinityPreset "component" "repo-server" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.repoServer.podAffinityPreset "component" "repo-server" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.repoServer.podAntiAffinityPreset "component" "repo-server" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.repoServer.nodeAffinityPreset.type "key" .Values.repoServer.nodeAffinityPreset.key "values" .Values.repoServer.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.repoServer.nodeSelector }}
@@ -95,8 +90,11 @@ spec:
         - name: wait-for-redis
           image: {{ include "argocd.redis.image" . }}
           imagePullPolicy: {{ .Values.redis.image.pullPolicy | quote }}
-          {{- with .Values.redisWait.securityContext }}
-          securityContext: {{ . | toYaml }}
+          {{- if .Values.redisWait.securityContext }}
+          # Deprecated: use redisWait.containerSecurityContext
+          securityContext: {{- toYaml .Values.redisWait.securityContext | nindent 12 }}
+          {{- else if .Values.redisWait.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.redisWait.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           command:
             - /bin/bash

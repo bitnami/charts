@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+﻿# Copyright VMware, Inc.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -65,15 +65,15 @@ diagnosticMode:
 
 ## Bitnami etcd image version
 ## ref: https://hub.docker.com/r/bitnami/etcd/tags/
-## @param image.registry etcd image registry
-## @param image.repository etcd image name
-## @param image.tag etcd image tag
+## @param image.registry [default: REGISTRY_NAME] etcd image registry
+## @param image.repository [default: REPOSITORY_NAME/etcd] etcd image name
+## @skip image.tag etcd image tag
 ## @param image.digest etcd image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ##
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.9-debian-11-r76
+  tag: 3.5.10-debian-11-r0
   digest: ""
   ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
@@ -286,10 +286,12 @@ lifecycleHooks: {}
 ## etcd container ports to open
 ## @param containerPorts.client Client port to expose at container level
 ## @param containerPorts.peer Peer port to expose at container level
+## @param containerPorts.metrics Metrics port to expose at container level when metrics.useSeparateEndpoint is true
 ##
 containerPorts:
   client: 2379
   peer: 2380
+  metrics: 9090
 ## etcd pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled etcd pods' Security Context
@@ -301,15 +303,23 @@ podSecurityContext:
 ## etcd containers' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled etcd containers' Security Context
-## @param containerSecurityContext.runAsUser Set etcd container's Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set etcd container's Security Context runAsNonRoot
-## @param containerSecurityContext.allowPrivilegeEscalation Force the child process to be run as nonprivilege
+## @param containerSecurityContext.runAsUser Set etcd containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set primary container's Security Context privileged
+## @param containerSecurityContext.allowPrivilegeEscalation Set primary container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
   allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## etcd containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -518,23 +528,30 @@ service:
   clusterIP: ""
   ## @param service.ports.client etcd client port
   ## @param service.ports.peer etcd peer port
+  ## @param service.ports.metrics etcd metrics port when metrics.useSeparateEndpoint is true
   ##
   ports:
     client: 2379
     peer: 2380
+    metrics: 9090
   ## @param service.nodePorts.client Specify the nodePort client value for the LoadBalancer and NodePort service types.
   ## @param service.nodePorts.peer Specify the nodePort peer value for the LoadBalancer and NodePort service types.
+  ## @param service.nodePorts.metrics Specify the nodePort metrics value for the LoadBalancer and NodePort service types. The metrics port is only exposed when metrics.useSeparateEndpoint is true.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePorts:
     client: ""
     peer: ""
+    metrics: ""
   ## @param service.clientPortNameOverride etcd client port name override
   ##
   clientPortNameOverride: ""
   ## @param service.peerPortNameOverride etcd peer port name override
   ##
   peerPortNameOverride: ""
+  ## @param service.metricsPortNameOverride etcd metrics port name override. The metrics port is only exposed when metrics.useSeparateEndpoint is true.
+  ##
+  metricsPortNameOverride: ""
   ## @param service.loadBalancerIP loadBalancerIP for the etcd service (optional, cloud specific)
   ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
@@ -625,15 +642,15 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image name
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image name
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r16
+    tag: 11-debian-11-r90
     digest: ""
     ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
     ##
@@ -725,11 +742,14 @@ metrics:
   ## @param metrics.enabled Expose etcd metrics
   ##
   enabled: false
+  ## @param metrics.useSeparateEndpoint Use a separate endpoint for exposing metrics
+  #
+  useSeparateEndpoint: false
   ## @param metrics.podAnnotations [object] Annotations for the Prometheus metrics on etcd pods
   ##
   podAnnotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "{{ .Values.containerPorts.client }}"
+    prometheus.io/port: "{{ .Values.metrics.useSeparateEndpoint | ternary .Values.containerPorts.metrics .Values.containerPorts.client }}"
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
   ##

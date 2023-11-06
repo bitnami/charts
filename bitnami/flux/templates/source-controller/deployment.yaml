@@ -9,12 +9,11 @@ kind: Deployment
 metadata:
   name: {{ template "flux.source-controller.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.sourceController.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: flux
     app.kubernetes.io/component: source-controller
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -25,22 +24,17 @@ spec:
   {{- if .Values.sourceController.updateStrategy }}
   strategy: {{- toYaml .Values.sourceController.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.sourceController.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: source-controller
   template:
     metadata:
       {{- if .Values.sourceController.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.sourceController.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: source-controller
-        {{- if .Values.sourceController.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.sourceController.podLabels "context" $) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "flux.source-controller.serviceAccountName" . }}
       {{- include "flux.imagePullSecrets" . | nindent 6 }}
@@ -51,8 +45,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.sourceController.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.sourceController.podAffinityPreset "component" "source-controller" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.sourceController.podAntiAffinityPreset "component" "source-controller" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.sourceController.podAffinityPreset "component" "source-controller" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.sourceController.podAntiAffinityPreset "component" "source-controller" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.sourceController.nodeAffinityPreset.type "key" .Values.sourceController.nodeAffinityPreset.key "values" .Values.sourceController.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.sourceController.nodeSelector }}

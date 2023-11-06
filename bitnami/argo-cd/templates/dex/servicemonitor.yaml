@@ -8,15 +8,10 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ include "argocd.dex" . }}
-  {{- if .Values.dex.metrics.serviceMonitor.namespace }}
-  namespace: {{ .Values.dex.metrics.serviceMonitor.namespace | quote }}
-  {{- else }}
-  namespace: {{ .Release.Namespace | quote }}
-  {{- end }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
-    {{- end }}
+  namespace: {{ default .Release.Namespace .Values.dex.metrics.serviceMonitor.namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.dex.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     {{- if .Values.dex.metrics.serviceMonitor.selector }}
     {{- include "common.tplvalues.render" (dict "value" .Values.dex.metrics.serviceMonitor.selector "context" $) | nindent 4 }}
     {{- end }}
@@ -48,8 +43,7 @@ spec:
     matchNames:
       - {{ .Release.Namespace }}
   selector:
-    matchLabels:
-      {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: dex
 {{- end }}
 

@@ -7,9 +7,10 @@ file:
     filetype: symlink
     mode: "0777"
     owner: root
-    contains:
+    contents:
       - /logLevel.*{{ .Vars.config.logLevel }}/
 command:
+  {{- if .Vars.containerSecurityContext.enabled }}
   check-no-capabilities:
     exec: cat /proc/1/status
     exit-status: 0
@@ -19,6 +20,7 @@ command:
     - "CapEff:	0000000000000000"
     - "CapBnd:	0000000000000000"
     - "CapAmb:	0000000000000000"
+  {{- end }}
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.podSecurityContext.fsGroup }}
   check-user-info:

@@ -1,0 +1,261 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.cronjobs.enabled -}}
+apiVersion: {{ include "common.capabilities.cronjob.apiVersion" . }}
+kind: CronJob
+metadata:
+  name: {{ include "common.names.fullname" . }}-archive
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  schedule: {{ .Values.cronjobs.archive.schedule | quote }}
+  suspend: {{ .Values.cronjobs.archive.suspend }}
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels: {{- include "common.labels.standard" . | nindent 12 }}
+            app.kubernetes.io/component: archive
+            {{- if .Values.cronjobs.archive.podLabels }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.cronjobs.archive.podLabels "context" $ ) | nindent 12 }}
+            {{- end }}
+          {{- if .Values.cronjobs.archive.podAnnotations }}
+          annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.cronjobs.archive.podAnnotations "context" $ ) | nindent 12 }}
+          {{- end }}
+        spec:
+          {{- include "matomo.imagePullSecrets" . | nindent 10 }}
+          restartPolicy: OnFailure
+          initContainers:
+            {{ include "matomo.initContainers" . | nindent 12 }}
+          containers:
+            - name: {{ include "common.names.fullname" . }}-archive
+              image: {{ template "matomo.image" . }}
+              imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+              {{- if .Values.cronjobs.archive.containerSecurityContext.enabled }}
+              securityContext: {{- omit .Values.cronjobs.archive.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              {{- end }}
+              {{- if .Values.cronjobs.archive.command }}
+              command: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.archive.command "context" $) | nindent 16 }}
+              {{- else }}
+              command:
+                - /bin/bash
+                - -c
+              {{- end }}
+              {{- if .Values.cronjobs.archive.args }}
+              args: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.archive.args "context" $) | nindent 16 }}
+              {{- else }}
+              args:
+                - . /opt/bitnami/scripts/matomo-env.sh &&
+                  . /opt/bitnami/scripts/libbitnami.sh &&
+                  . /opt/bitnami/scripts/liblog.sh &&
+                  /opt/bitnami/scripts/php/setup.sh &&
+                  /opt/bitnami/scripts/mysql-client/setup.sh &&
+                  /opt/bitnami/scripts/matomo/setup.sh &&
+                  /post-init.sh &&
+                  /opt/bitnami/php/bin/php /opt/bitnami/matomo/console core:archive
+              {{- end }}
+              env:
+                - name: BITNAMI_DEBUG
+                  value: {{ ternary "true" "false" .Values.image.debug | quote }}
+                - name: MATOMO_DATABASE_HOST
+                  value: {{ include "matomo.databaseHost" . | quote }}
+                - name: MATOMO_DATABASE_PORT_NUMBER
+                  value: {{ include "matomo.databasePort" . | quote }}
+                - name: MATOMO_DATABASE_NAME
+                  value: {{ include "matomo.databaseName" . | quote }}
+                - name: MATOMO_DATABASE_USER
+                  value: {{ include "matomo.databaseUser" . | quote }}
+                - name: MATOMO_DATABASE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "matomo.databaseSecretName" . }}
+                      key: {{ include "matomo.databasePasswordKey" . | quote }}
+              volumeMounts:
+                - name: matomo-data
+                  mountPath: /bitnami/matomo
+                {{- if .Values.customPostInitScripts }}
+                - mountPath: /docker-entrypoint-init.d
+                  name: custom-postinit
+                {{- end }}
+                {{- if .Values.extraVolumeMounts }}
+                {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+                {{- end }}
+              resources:
+                {{- toYaml .Values.resources | nindent 16 }}
+          volumes:
+            {{- if .Values.certificates.customCAs }}
+            - name: etc-ssl-certs
+              emptyDir:
+                medium: "Memory"
+            - name: etc-ssl-private
+              emptyDir:
+                medium: "Memory"
+            - name: custom-ca-certificates
+              projected:
+                defaultMode: 0400
+                sources:
+                  {{- range $index, $customCA := .Values.certificates.customCAs }}
+                  - secret:
+                      name: {{ $customCA.secret }}
+                  {{- end }}
+            {{- end }}
+            {{- if .Values.certificates.customCertificate.certificateSecret }}
+            - name: custom-certificate
+              secret:
+                secretName: {{ .Values.certificates.customCertificate.certificateSecret }}
+            {{- if .Values.certificates.customCertificate.chainSecret }}
+            - name: custom-certificate-chain
+              secret:
+                secretName: {{ .Values.certificates.customCertificate.chainSecret.name }}
+            {{- end }}
+            {{- end }}
+            - name: matomo-data
+              {{- if .Values.persistence.enabled }}
+              persistentVolumeClaim:
+                claimName: {{ .Values.persistence.existingClaim | default (printf "%s-matomo" (include "common.names.fullname" .)) }}
+              {{- else }}
+              emptyDir: {}
+              {{- end }}
+            {{- if .Values.customPostInitScripts }}
+            - name: custom-postinit
+              configMap:
+                name: {{ printf "%s-postinit" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+                defaultMode: 0755
+            {{- end }}
+            {{- if .Values.extraVolumes }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 12 }}
+            {{- end }}
+---
+apiVersion: {{ include "common.capabilities.cronjob.apiVersion" . }}
+kind: CronJob
+metadata:
+  name: {{ include "common.names.fullname" . }}-scheduled-tasks
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  schedule: {{ .Values.cronjobs.taskScheduler.schedule | quote }}
+  suspend: {{ .Values.cronjobs.archive.suspend }}
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels: {{- include "common.labels.standard" . | nindent 12 }}
+            app.kubernetes.io/component: task-scheduler
+            {{- if .Values.cronjobs.taskScheduler.podLabels }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.cronjobs.taskScheduler.podLabels "context" $ ) | nindent 12 }}
+            {{- end }}
+          {{- if .Values.cronjobs.taskScheduler.podAnnotations }}
+          annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.cronjobs.taskScheduler.podAnnotations "context" $ ) | nindent 12 }}
+          {{- end }}
+        spec:
+          {{- include "matomo.imagePullSecrets" . | nindent 10 }}
+          restartPolicy: OnFailure
+          initContainers:
+            {{ include "matomo.initContainers" . | nindent 12 }}
+          containers:
+            - name: {{ include "common.names.fullname" . }}-scheduled-tasks
+              image: {{ template "matomo.image" . }}
+              imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+              {{- if .Values.cronjobs.taskScheduler.containerSecurityContext.enabled }}
+              securityContext: {{- omit .Values.cronjobs.taskScheduler.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              {{- end }}
+              {{- if .Values.cronjobs.taskScheduler.command }}
+              command: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.taskScheduler.command "context" $) | nindent 16 }}
+              {{- else }}
+              command:
+                - /bin/bash
+                - -c
+              {{- end }}
+              {{- if .Values.cronjobs.taskScheduler.args }}
+              args: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.taskScheduler.args "context" $) | nindent 16 }}
+              {{- else }}
+              args:
+                - . /opt/bitnami/scripts/matomo-env.sh &&
+                  . /opt/bitnami/scripts/libbitnami.sh &&
+                  . /opt/bitnami/scripts/liblog.sh &&
+                  /opt/bitnami/scripts/php/setup.sh &&
+                  /opt/bitnami/scripts/mysql-client/setup.sh &&
+                  /opt/bitnami/scripts/matomo/setup.sh &&
+                  /post-init.sh &&
+                  /opt/bitnami/php/bin/php /opt/bitnami/matomo/console core:run-scheduled-tasks
+              {{- end }}
+              env:
+                - name: BITNAMI_DEBUG
+                  value: {{ ternary "true" "false" .Values.image.debug | quote }}
+                - name: MATOMO_DATABASE_HOST
+                  value: {{ include "matomo.databaseHost" . | quote }}
+                - name: MATOMO_DATABASE_PORT_NUMBER
+                  value: {{ include "matomo.databasePort" . | quote }}
+                - name: MATOMO_DATABASE_NAME
+                  value: {{ include "matomo.databaseName" . | quote }}
+                - name: MATOMO_DATABASE_USER
+                  value: {{ include "matomo.databaseUser" . | quote }}
+                - name: MATOMO_DATABASE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "matomo.databaseSecretName" . }}
+                      key: {{ include "matomo.databasePasswordKey" . | quote }}
+              volumeMounts:
+                - name: matomo-data
+                  mountPath: /bitnami/matomo
+          volumes:
+            {{- if .Values.certificates.customCAs }}
+            - name: etc-ssl-certs
+              emptyDir:
+                medium: "Memory"
+            - name: etc-ssl-private
+              emptyDir:
+                medium: "Memory"
+            - name: custom-ca-certificates
+              projected:
+                defaultMode: 0400
+                sources:
+                  {{- range $index, $customCA := .Values.certificates.customCAs }}
+                  - secret:
+                      name: {{ $customCA.secret }}
+                  {{- end }}
+            {{- end }}
+            {{- if .Values.certificates.customCertificate.certificateSecret }}
+            - name: custom-certificate
+              secret:
+                secretName: {{ .Values.certificates.customCertificate.certificateSecret }}
+            {{- if .Values.certificates.customCertificate.chainSecret }}
+            - name: custom-certificate-chain
+              secret:
+                secretName: {{ .Values.certificates.customCertificate.chainSecret.name }}
+            {{- end }}
+            {{- end }}
+            - name: matomo-data
+              {{- if .Values.persistence.enabled }}
+              persistentVolumeClaim:
+                claimName: {{ .Values.persistence.existingClaim | default (printf "%s-matomo" (include "common.names.fullname" .)) }}
+              {{- else }}
+              emptyDir: {}
+              {{- end }}
+            {{- if .Values.customPostInitScripts }}
+            - name: custom-postinit
+              configMap:
+                name: {{ printf "%s-postinit" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+                defaultMode: 0755
+            {{- end }}
+            {{- if .Values.extraVolumes }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 12 }}
+            {{- end }}
+{{- end }}

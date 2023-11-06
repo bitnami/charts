@@ -57,9 +57,9 @@ useDaemonset: false
 
 ## Bitnami external-dns image version
 ## ref: https://hub.docker.com/r/bitnami/external-dns/tags/
-## @param image.registry ExternalDNS image registry
-## @param image.repository ExternalDNS image repository
-## @param image.tag ExternalDNS Image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] ExternalDNS image registry
+## @param image.repository [default: REPOSITORY_NAME/external-dns] ExternalDNS image repository
+## @skip image.tag ExternalDNS Image tag (immutable tags are recommended)
 ## @param image.digest ExternalDNS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy ExternalDNS image pull policy
 ## @param image.pullSecrets ExternalDNS image pull secrets
@@ -67,7 +67,7 @@ useDaemonset: false
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.13.5-debian-11-r55
+  tag: 0.13.6-debian-11-r30
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -145,6 +145,12 @@ publishHostIP: false
 ## @param serviceTypeFilter The service types to take care about (default: all, options: ClusterIP, NodePort, LoadBalancer, ExternalName)
 ##
 serviceTypeFilter: []
+## Chart Validation
+##
+validation:
+  ## @param validation.enabled Enable chart validation
+  ##
+  enabled: true
 ## Akamai configuration to be set via arguments/env. variables
 ##
 akamai:
@@ -251,6 +257,14 @@ aws:
   ## @param aws.evaluateTargetHealth When using the AWS provider, sets the evaluate target health flag (options: true, false)
   ##
   evaluateTargetHealth: ""
+  ## @param aws.dynamodbTable When using the AWS provider, sets the DynamoDB table name to use for dynamodb registry
+  ## ref: https://github.com/kubernetes-sigs/external-dns/blob/0483ffde22e60436f16be154b9fe1a388a1400d0/docs/registry/dynamodb.md
+  ##
+  dynamodbTable: ""
+  ## @param aws.dynamodbRegion When using the AWS provider, sets the DynamoDB table region to use for dynamodb registry
+  ## ref: https://github.com/kubernetes-sigs/external-dns/blob/0483ffde22e60436f16be154b9fe1a388a1400d0/docs/registry/dynamodb.md
+  ##
+  dynamodbRegion: ""
 ## Azure configuration to be set via arguments/env. variables
 ##
 azure:
@@ -276,12 +290,25 @@ azure:
   ## @param azure.aadClientSecret When using the Azure provider, set the Azure AAD Client Secret
   ##
   aadClientSecret: ""
+  ## @param azure.useWorkloadIdentityExtension When using the Azure provider, set if you use Workload Identity extension.
+  ##
+  useWorkloadIdentityExtension: false
   ## @param azure.useManagedIdentityExtension When using the Azure provider, set if you use Azure MSI
   ##
   useManagedIdentityExtension: false
   ## @param azure.userAssignedIdentityID When using the Azure provider with Azure MSI, set Client ID of Azure user-assigned managed identity (optional, otherwise system-assigned managed identity is used)
   ##
   userAssignedIdentityID: ""
+## Civo configuration to be set via arguments/env. variables
+##
+civo:
+  ## @param civo.apiToken When using the Civo provider, `CIVO_TOKEN` to set (optional)
+  ##
+  apiToken: ""
+  ## @param civo.secretName Use an existing secret with key "apiToken" defined.
+  ## This ignores civo.apiToken
+  ##
+  secretName: ""
 ## Cloudflare configuration to be set via arguments/env. variables
 ##
 cloudflare:
@@ -589,7 +616,7 @@ rfc2136:
   ## @param rfc2136.tsigSecret When using the rfc2136 provider, specify the tsig secret to enable security. (do not specify if `rfc2136.secretName` is provided.) (optional)
   ##
   tsigSecret: ""
-  ## @param rfc2136.secretName When using the rfc2136 provider, specify the existing secret which contains your tsig secret. Disables the usage of `rfc2136.tsigSecret` (optional)
+  ## @param rfc2136.secretName When using the rfc2136 provider, specify the existing secret which contains your tsig secret in the key "rfc2136_tsig_secret". Disables the usage of `rfc2136.tsigSecret` (optional)
   ##
   secretName: ""
   ## @param rfc2136.tsigSecretAlg When using the rfc2136 provider, specify the tsig secret to enable security (optional)
@@ -706,7 +733,7 @@ logFormat: text
 ## @param policy Modify how DNS records are synchronized between sources and providers (options: sync, upsert-only )
 ##
 policy: upsert-only
-## @param registry Registry method to use (options: txt, aws-sd, noop)
+## @param registry Registry method to use (options: txt, aws-sd, dynamodb, noop)
 ## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/proposal/registry.md
 ##
 registry: "txt"
@@ -925,7 +952,14 @@ rbac:
   ## @param rbac.pspEnabled Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   pspEnabled: false
-## @param containerSecurityContext Security context for the container
+## @param containerSecurityContext.enabled Enabled Apache Server containers' Security Context
+## @param containerSecurityContext.runAsUser Set ExternalDNS containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set ExternalDNS container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set primary container's Security Context privileged
+## @param containerSecurityContext.allowPrivilegeEscalation Set primary container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.readOnlyRootFilesystem Set container readonlyRootFilesystem
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ## Example:
 ## containerSecurityContext:
@@ -934,15 +968,24 @@ rbac:
 ##   capabilities:
 ##     drop: ["ALL"]
 ##
-containerSecurityContext: {}
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsNonRoot: true
+  privileged: false
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
+
 ## @param podSecurityContext.enabled Enable pod security context
 ## @param podSecurityContext.fsGroup Group ID for the container
-## @param podSecurityContext.runAsUser User ID for the container
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-  runAsUser: 1001
 ## Container resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1099,3 +1142,4 @@ metrics:
     ## @param  metrics.googlePodMonitor.endpoint The endpoint for Google Managed Prometheus scraping the metrics
     ##
     endpoint: /metrics
+

@@ -31,12 +31,6 @@
       },
       "actions": [
         {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-redis-master-tcp-redis"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
@@ -48,6 +42,20 @@
               "pod": {
                 "workload": "sts-redis-master"
               }
+            }
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/redis/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "redis-master",
+              "password": "ComplicatedPassword123!4"
             }
           }
         }

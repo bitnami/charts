@@ -62,9 +62,9 @@ diagnosticMode:
 
 ## Bitnami Redis&reg; image version
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
-## @param image.registry Redis&reg; cluster image registry
-## @param image.repository Redis&reg; cluster image repository
-## @param image.tag Redis&reg; cluster image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Redis&reg; cluster image registry
+## @param image.repository [default: REPOSITORY_NAME/redis-cluster] Redis&reg; cluster image repository
+## @skip image.tag Redis&reg; cluster image tag (immutable tags are recommended)
 ## @param image.digest Redis&reg; cluster image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Redis&reg; cluster image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -73,10 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis-cluster
-  ## Bitnami Redis&reg; image tag
-  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/redis#supported-tags-and-respective-dockerfile-links
-  ##
-  tag: 7.0.12-debian-11-r15
+  tag: 7.2.3-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -146,13 +143,11 @@ rbac:
 ## Redis&reg; pod Security Context
 ## @param podSecurityContext.enabled Enable Redis&reg; pod Security Context
 ## @param podSecurityContext.fsGroup Group ID for the pods
-## @param podSecurityContext.runAsUser User ID for the pods
 ## @param podSecurityContext.sysctls Set namespaced sysctls for the pods
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-  runAsUser: 1001
   ## Uncomment the setting below to increase the net.core.somaxconn value
   ## e.g:
   ## sysctls:
@@ -171,14 +166,26 @@ minAvailable: ""
 ##
 maxUnavailable: ""
 ## Containers Security Context
-## @param containerSecurityContext.enabled Enable Containers' Security Context
-## @param containerSecurityContext.runAsUser User ID for the containers.
-## @param containerSecurityContext.runAsNonRoot Run container as non root
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## @param usePassword Use password authentication
 ##
 usePassword: true
@@ -352,9 +359,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work)
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
@@ -362,7 +369,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r19
+    tag: 11-debian-11-r90
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -654,6 +661,10 @@ updateJob:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param updateJob.helmHook Job Helm hook
+  ## https://helm.sh/docs/topics/charts_hooks/#the-available-hooks
+  ##
+  helmHook: post-upgrade
   ## @param updateJob.annotations Job annotations
   ##
   annotations: {}
@@ -781,7 +792,17 @@ cluster:
     ## @param cluster.externalAccess.enabled Enable access to the Redis
     ##
     enabled: false
+    ## @param cluster.externalAccess.hostMode Set cluster preferred endpoint type as hostname
+    ## ref: https://github.com/redis/redis/pull/9530
+    ##
+    hostMode: false
     service:
+      ## @param cluster.externalAccess.service.disableLoadBalancerIP Disable use of `Service.spec.loadBalancerIP`
+      ##
+      disableLoadBalancerIP: false
+      ## @param cluster.externalAccess.service.loadBalancerIPAnnotaion Name of annotation to specify fixed IP for service in. Disables `Service.spec.loadBalancerIP` if not empty
+      ##
+      loadBalancerIPAnnotaion: ""
       ## @param cluster.externalAccess.service.type Type for the services used to expose every Pod
       ## At this moment only LoadBalancer is supported
       ##
@@ -828,9 +849,9 @@ metrics:
   ## @param metrics.enabled Start a side-car prometheus exporter
   ##
   enabled: false
-  ## @param metrics.image.registry Redis&reg; exporter image registry
-  ## @param metrics.image.repository Redis&reg; exporter image name
-  ## @param metrics.image.tag Redis&reg; exporter image tag
+  ## @param metrics.image.registry [default: REGISTRY_NAME] Redis&reg; exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/redis-exporter] Redis&reg; exporter image name
+  ## @skip metrics.image.tag Redis&reg; exporter image tag
   ## @param metrics.image.digest Redis&reg; exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Redis&reg; exporter image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
@@ -838,7 +859,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.52.0-debian-11-r0
+    tag: 1.55.0-debian-11-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -998,16 +1019,16 @@ sysctlImage:
   ## @param sysctlImage.command sysctlImage command to execute
   ##
   command: []
-  ## @param sysctlImage.registry sysctlImage Init container registry
-  ## @param sysctlImage.repository sysctlImage Init container repository
-  ## @param sysctlImage.tag sysctlImage Init container tag
+  ## @param sysctlImage.registry [default: REGISTRY_NAME] sysctlImage Init container registry
+  ## @param sysctlImage.repository [default: REPOSITORY_NAME/os-shell] sysctlImage Init container repository
+  ## @skip sysctlImage.tag sysctlImage Init container tag
   ## @param sysctlImage.digest sysctlImage Init container digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param sysctlImage.pullPolicy sysctlImage Init container pull policy
   ## @param sysctlImage.pullSecrets Specify docker-registry secret names as an array
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 11-debian-11-r19
+  tag: 11-debian-11-r90
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

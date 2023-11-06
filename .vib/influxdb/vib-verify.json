@@ -31,13 +31,6 @@
       },
       "actions": [
         {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-influxdb-http",
-            "app_protocol": "HTTP"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
@@ -65,6 +58,22 @@
               "password": "RootP4ssw0rd",
               "bucket": "primary",
               "org": "primary"
+            }
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/influxdb/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "influxdb",
+              "token": "4dm1nT0k3n",
+              "org": "testOrganization",
+              "bucket": "testBucket"
             }
           }
         }

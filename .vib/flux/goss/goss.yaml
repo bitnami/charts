@@ -9,6 +9,7 @@ command:
     # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
     exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
     exit-status: 0
+  {{- if .Vars.sourceController.containerSecurityContext.enabled }}
   check-no-capabilities:
     exec: cat /proc/1/status
     exit-status: 0
@@ -18,6 +19,7 @@ command:
     - "CapEff:	0000000000000000"
     - "CapBnd:	0000000000000000"
     - "CapAmb:	0000000000000000"
+  {{- end }}
   {{ if .Vars.sourceController.serviceAccount.automountServiceAccountToken }}
   check-sa:
     exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
@@ -39,6 +41,7 @@ file:
     mode: "2775"
     owner: root
   # Verify the two cloned git repositories
+  {{ if not ( has "air-gapped" .Vars.target_platform_properties ) }}
   {{ .Vars.sourceController.persistence.mountPath }}/gitrepository/{{ .Env.RUNTIME_NAMESPACE }}/{{ $chartGitRepo }}:
     exists: true
     filetype: directory
@@ -47,6 +50,7 @@ file:
     exists: true
     filetype: directory
     mode: "2700"
+  {{ end }}
 http:
   # Source Controller
   http://127.0.0.1:{{ .Vars.sourceController.containerPorts.http }}:
@@ -79,6 +83,7 @@ http:
     body:
       - /ImageUpdateAutomation.*{{ $imageUpdateAutomationName }}/
   # Ensure that the deployment done by the helm controller worked
+  {{ if not ( has "air-gapped" .Vars.target_platform_properties ) }}
   http://{{ $chartReleaseName }}/doku.php:
     status: 200
     body:
@@ -89,3 +94,4 @@ http:
     status: 200
     body:
       - /greetings from podinfo/
+  {{ end }}

@@ -31,10 +31,7 @@ kind: Ingress
 metadata:
   name: {{ include "harbor.ingress" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   annotations:
   {{- if .Values.internalTLS.enabled }}
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
@@ -45,11 +42,9 @@ metadata:
     ncp/http-redirect: "true"
     {{- end }}
   {{- end }}
-  {{- if .Values.ingress.core.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.ingress.core.annotations "context" .) | nindent 4 }}
-  {{- end }}
-  {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" .) | nindent 4 }}
+  {{- if or .Values.ingress.core.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingress.core.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   {{- if eq .Values.ingress.core.controller "ncp" }}

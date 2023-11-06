@@ -31,13 +31,6 @@
       },
       "actions": [
         {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-minio-minio-console",
-            "app_protocol": "HTTP"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
@@ -61,6 +54,21 @@
             "endpoint": "lb-minio-minio-console",
             "app_protocol": "HTTP",
             "env": {
+              "username": "test_admin",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/minio/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "minio",
               "username": "test_admin",
               "password": "ComplicatedPassword123!4"
             }

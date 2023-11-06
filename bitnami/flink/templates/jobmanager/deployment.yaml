@@ -8,37 +8,33 @@ kind: Deployment
 metadata:
   name:  {{ include "flink.jobmanager.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: flink
     app.kubernetes.io/component: jobmanager
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.jobmanager.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: flink
+      app.kubernetes.io/component: jobmanager
   replicas: {{ .Values.jobmanager.replicaCount }}
   {{- if .Values.jobmanager.updateStrategy }}
   strategy: {{- toYaml .Values.jobmanager.updateStrategy | nindent 4 }}
   {{- end }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/part-of: flink
         app.kubernetes.io/component: jobmanager
-        {{- if .Values.jobmanager.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.podLabels "context" $) | nindent 8 }}
-        {{- end }}
-      {{- if .Values.jobmanager.podAnnotations }}
-      annotations:
-        {{- if .Values.jobmanager.podAnnotations }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.podAnnotations "context" $) | nindent 8 }}
-        {{- end }}
+      {{- if or .Values.jobmanager.podAnnotations .Values.commonAnnotations }}
+      {{- $podAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.jobmanager.podAnnotations .Values.commonAnnotations ) "context" . ) }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" $podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
+      {{- include "flink.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.jobmanager.schedulerName }}
       schedulerName: {{ .Values.jobmanager.schedulerName }}
       {{- end }}
@@ -47,8 +43,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.jobmanager.podAffinityPreset "component" "jobmanager" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.jobmanager.podAntiAffinityPreset "component" "jobmanager" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.jobmanager.podAffinityPreset "component" "jobmanager" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.jobmanager.podAntiAffinityPreset "component" "jobmanager" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.jobmanager.nodeAffinityPreset.type "key" .Values.jobmanager.nodeAffinityPreset.key "values" .Values.jobmanager.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.jobmanager.podSecurityContext.enabled }}
@@ -154,7 +150,7 @@ spec:
           resources: {{- toYaml .Values.jobmanager.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.jobmanager.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.jobmanager.extraVolumeMounts "context" $) | nindent 12 }}
+          volumeMounts: {{- include "common.tplvalues.render" ( dict "value" .Values.jobmanager.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
         {{- if .Values.jobmanager.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.jobmanager.sidecars "context" $) | nindent 8 }}

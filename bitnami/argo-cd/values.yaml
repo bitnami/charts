@@ -47,9 +47,9 @@ extraDeploy: []
 
 ## Bitnami Argo CD image
 ## ref: https://hub.docker.com/r/bitnami/argo-cd/tags/
-## @param image.registry Argo CD image registry
-## @param image.repository Argo CD image repository
-## @param image.tag Argo CD image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Argo CD image registry
+## @param image.repository [default: REPOSITORY_NAME/argo-cd] Argo CD image repository
+## @skip image.tag Argo CD image tag (immutable tags are recommended)
 ## @param image.digest Argo CD image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Argo CD image pull policy
 ## @param image.pullSecrets Argo CD image pull secrets
@@ -58,7 +58,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/argo-cd
-  tag: 2.7.10-debian-11-r0
+  tag: 2.9.0-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -162,16 +162,21 @@ controller:
   ## @param controller.containerSecurityContext.capabilities.drop Set Argo CD containers' Security Context capabilities to be dropped
   ## @param controller.containerSecurityContext.readOnlyRootFilesystem Set Argo CD containers' Security Context readOnlyRootFilesystem
   ## @param controller.containerSecurityContext.runAsNonRoot Set Argo CD container's Security Context runAsNonRoot
+  ## @param controller.containerSecurityContext.privileged Set controller container's Security Context privileged
+  ## @param controller.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - all
-    readOnlyRootFilesystem: false
     runAsNonRoot: true
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    privileged: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+
 
   ## ServiceAccount configuration for the Argo CD application controller
   ##
@@ -809,16 +814,20 @@ applicationSet:
   ## @param applicationSet.containerSecurityContext.capabilities.drop Set Argo CD applicationSet controller containers' Security Context capabilities to be dropped
   ## @param applicationSet.containerSecurityContext.readOnlyRootFilesystem Set Argo CD applicationSet controller containers' Security Context readOnlyRootFilesystem
   ## @param applicationSet.containerSecurityContext.runAsNonRoot Set Argo CD applicationSet controller container's Security Context runAsNonRoot
+  ## @param applicationSet.containerSecurityContext.privileged Set applicationSet container's Security Context privileged
+  ## @param applicationSet.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - all
-    readOnlyRootFilesystem: false
     runAsNonRoot: true
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    privileged: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param applicationSet.livenessProbe.enabled Enable livenessProbe on Argo CD applicationSet controller nodes
   ## @param applicationSet.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param applicationSet.livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -1201,16 +1210,20 @@ notifications:
   ## @param notifications.containerSecurityContext.capabilities.drop Set Argo CD notifications controller containers' Security Context capabilities to be dropped
   ## @param notifications.containerSecurityContext.readOnlyRootFilesystem Set Argo CD notifications controller containers' Security Context readOnlyRootFilesystem
   ## @param notifications.containerSecurityContext.runAsNonRoot Set Argo CD notifications controller container's Security Context runAsNonRoot
+  ## @param notifications.containerSecurityContext.privileged Set notifications container's Security Context privileged
+  ## @param notifications.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - all
-    readOnlyRootFilesystem: false
     runAsNonRoot: true
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    privileged: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Argo CD notifications controller resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param notifications.resources.limits The resources limits for the Argo CD notifications controller containers
@@ -1451,16 +1464,20 @@ notifications:
       ## @param notifications.bots.slack.containerSecurityContext.capabilities.drop Set Argo CD Slack bot containers' Security Context capabilities to be dropped
       ## @param notifications.bots.slack.containerSecurityContext.readOnlyRootFilesystem Set Argo CD Slack bot containers' Security Context readOnlyRootFilesystem
       ## @param notifications.bots.slack.containerSecurityContext.runAsNonRoot Set Argo CD Slack bot container's Security Context runAsNonRoot
+      ## @param notifications.bots.slack.containerSecurityContext.privileged Set notifications container's Security Context privileged
+      ## @param notifications.bots.slack.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
       ##
       containerSecurityContext:
         enabled: true
         runAsUser: 1001
-        allowPrivilegeEscalation: false
-        capabilities:
-          drop:
-          - all
-        readOnlyRootFilesystem: false
         runAsNonRoot: true
+        readOnlyRootFilesystem: false
+        allowPrivilegeEscalation: false
+        privileged: false
+        capabilities:
+          drop: ["ALL"]
+        seccompProfile:
+          type: "RuntimeDefault"
       ## Argo CD Slack bot resource requests and limits
       ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
       ## @param notifications.bots.slack.resources.limits The resources limits for the Argo CD Slack bot containers
@@ -1594,16 +1611,20 @@ server:
   ## @param server.containerSecurityContext.capabilities.drop Set Argo CD containers' server Security Context capabilities to be dropped
   ## @param server.containerSecurityContext.readOnlyRootFilesystem Set Argo CD containers' server Security Context readOnlyRootFilesystem
   ## @param server.containerSecurityContext.runAsNonRoot Set Argo CD server containers' Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.privileged Set server container's Security Context privileged
+  ## @param server.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - all
-    readOnlyRootFilesystem: false
     runAsNonRoot: true
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    privileged: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## Argo CD server deployment autoscaling
   ## @param server.autoscaling.enabled Enable Argo CD server deployment autoscaling
@@ -2341,16 +2362,20 @@ repoServer:
   ## @param repoServer.containerSecurityContext.capabilities.drop Set Argo CD containers' repo server Security Context capabilities to be dropped
   ## @param repoServer.containerSecurityContext.readOnlyRootFilesystem Set Argo CD containers' repo server Security Context readOnlyRootFilesystem
   ## @param repoServer.containerSecurityContext.runAsNonRoot Set Argo CD repo server containers' Security Context runAsNonRoot
+  ## @param repoServer.containerSecurityContext.privileged Set repoServer container's Security Context privileged
+  ## @param repoServer.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - all
-    readOnlyRootFilesystem: false
     runAsNonRoot: true
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    privileged: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## Repo server service parameters
   ##
@@ -2690,9 +2715,9 @@ repoServer:
 dex:
   ## Bitnami Dex image
   ## ref: https://hub.docker.com/r/bitnami/argo-cd/tags/
-  ## @param dex.image.registry Dex image registry
-  ## @param dex.image.repository Dex image repository
-  ## @param dex.image.tag Dex image tag (immutable tags are recommended)
+  ## @param dex.image.registry [default: REGISTRY_NAME] Dex image registry
+  ## @param dex.image.repository [default: REPOSITORY_NAME/dex] Dex image repository
+  ## @skip dex.image.tag Dex image tag (immutable tags are recommended)
   ## @param dex.image.digest Dex image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param dex.image.pullPolicy Dex image pull policy
   ## @param dex.image.pullSecrets Dex image pull secrets
@@ -2701,7 +2726,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.37.0-debian-11-r30
+    tag: 2.37.0-debian-11-r97
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2803,13 +2828,21 @@ dex:
   ## @param dex.containerSecurityContext.allowPrivilegeEscalation Set Dex containers' Security Context allowPrivilegeEscalation
   ## @param dex.containerSecurityContext.readOnlyRootFilesystem Set Dex containers' server Security Context readOnlyRootFilesystem
   ## @param dex.containerSecurityContext.runAsNonRoot Set Dex containers' Security Context runAsNonRoot
+  ## @param dex.containerSecurityContext.capabilities.drop Set Argo CD containers' repo server Security Context capabilities to be dropped
+  ## @param dex.containerSecurityContext.privileged Set dex container's Security Context privileged
+  ## @param dex.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-    allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: false
     runAsNonRoot: true
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    privileged: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## Dex service parameters
   ##
@@ -3192,6 +3225,16 @@ config:
     #   ...
     #   -----END PGP PUBLIC KEY BLOCK-----
 
+  ## @param config.rbac Role-based authentication configuration
+  ##
+  rbac: {}
+    # policy.default: role:readonly
+    # policy.csv: |
+    #   # Grant all members of the group 'my-org:team-alpha; the ability to sync apps in 'my-project'
+    #   p, my-org:team-alpha, applications, sync, my-project/*, allow
+    #   # Grant all members of 'my-org:team-beta' admins
+    #   g, my-org:team-beta, role:admin
+
   ## Argo CD general secret configuration
   ##
   secret:
@@ -3304,9 +3347,9 @@ volumePermissions:
   enabled: false
   ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param volumePermissions.image.registry OS Shell + Utility image registry
-  ## @param volumePermissions.image.repository OS Shell + Utility image repository
-  ## @param volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
   ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
@@ -3314,7 +3357,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r22
+    tag: 11-debian-11-r90
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3357,9 +3400,9 @@ rbac:
 redis:
   ## Bitnami Redis image
   ## ref: https://hub.docker.com/r/bitnami/redis/tags/
-  ## @param redis.image.registry Redis image registry
-  ## @param redis.image.repository Redis image repository
-  ## @param redis.image.tag Redis image tag (immutable tags are recommended)
+  ## @param redis.image.registry [default: REGISTRY_NAME] Redis image registry
+  ## @param redis.image.repository [default: REPOSITORY_NAME/redis] Redis image repository
+  ## @skip redis.image.tag Redis image tag (immutable tags are recommended)
   ## @param redis.image.digest Redis image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param redis.image.pullPolicy Redis image pull policy
   ## @param redis.image.pullSecrets Redis image pull secrets
@@ -3367,7 +3410,7 @@ redis:
   image:
     registry: docker.io
     repository: bitnami/redis
-    tag: 7.0.12-debian-11-r17
+    tag: 7.2.3-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3451,6 +3494,23 @@ redisWait:
   ## @param redisWait.extraArgs Additional arguments for the redis-cli call, such as TLS
   ##
   extraArgs: ''
-  ## @param redisWait.securityContext Security context for init container
+  ## @param redisWait.containerSecurityContext.enabled Enabled Argo CD repo server containers' Security Context
+  ## @param redisWait.containerSecurityContext.runAsUser Set Argo CD repo server containers' Security Context runAsUser
+  ## @param redisWait.containerSecurityContext.allowPrivilegeEscalation Set Argo CD repo server containers' Security Context allowPrivilegeEscalation
+  ## @param redisWait.containerSecurityContext.capabilities.drop Set Argo CD containers' repo server Security Context capabilities to be dropped
+  ## @param redisWait.containerSecurityContext.readOnlyRootFilesystem Set Argo CD containers' repo server Security Context readOnlyRootFilesystem
+  ## @param redisWait.containerSecurityContext.runAsNonRoot Set Argo CD repo server containers' Security Context runAsNonRoot
+  ## @param redisWait.containerSecurityContext.privileged Set redisWait container's Security Context privileged
+  ## @param redisWait.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
-  securityContext: {}
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    privileged: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"

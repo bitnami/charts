@@ -11,8 +11,10 @@ Disclaimer: All software products, projects and company names are trademark(TM) 
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/minio
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/minio
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -20,12 +22,12 @@ This chart bootstraps a [MinIO&reg;](https://github.com/bitnami/containers/tree/
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Bitnami Object Storage based on MinIOreg; in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Bitnami Object Storage based on MinIOreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -33,8 +35,10 @@ Looking to use Bitnami Object Storage based on MinIOreg; in production? Try [VMw
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/minio
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/minio
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy MinIO&reg; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -74,37 +78,35 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### MinIO&reg; parameters
 
-| Name                       | Description                                                                                                                                                                                               | Value                    |
-| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `image.registry`           | MinIO&reg; image registry                                                                                                                                                                                 | `docker.io`              |
-| `image.repository`         | MinIO&reg; image repository                                                                                                                                                                               | `bitnami/minio`          |
-| `image.tag`                | MinIO&reg; image tag (immutable tags are recommended)                                                                                                                                                     | `2023.7.18-debian-11-r0` |
-| `image.digest`             | MinIO&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                | `""`                     |
-| `image.pullPolicy`         | Image pull policy                                                                                                                                                                                         | `IfNotPresent`           |
-| `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                                          | `[]`                     |
-| `image.debug`              | Specify if debug logs should be enabled                                                                                                                                                                   | `false`                  |
-| `clientImage.registry`     | MinIO&reg; Client image registry                                                                                                                                                                          | `docker.io`              |
-| `clientImage.repository`   | MinIO&reg; Client image repository                                                                                                                                                                        | `bitnami/minio-client`   |
-| `clientImage.tag`          | MinIO&reg; Client image tag (immutable tags are recommended)                                                                                                                                              | `2023.7.18-debian-11-r0` |
-| `clientImage.digest`       | MinIO&reg; Client image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                         | `""`                     |
-| `mode`                     | MinIO&reg; server mode (`standalone` or `distributed`)                                                                                                                                                    | `standalone`             |
-| `auth.rootUser`            | MinIO&reg; root username                                                                                                                                                                                  | `admin`                  |
-| `auth.rootPassword`        | Password for MinIO&reg; root user                                                                                                                                                                         | `""`                     |
-| `auth.existingSecret`      | Use existing secret for credentials details (`auth.rootUser` and `auth.rootPassword` will be ignored and picked up from this secret). The secret has to contain the keys `root-user` and `root-password`) | `""`                     |
-| `auth.forcePassword`       | Force users to specify required passwords                                                                                                                                                                 | `false`                  |
-| `auth.useCredentialsFiles` | Mount credentials as a files instead of using an environment variable                                                                                                                                     | `false`                  |
-| `auth.forceNewKeys`        | Force root credentials (user and password) to be reconfigured every time they change in the secrets                                                                                                       | `false`                  |
-| `defaultBuckets`           | Comma, semi-colon or space separated list of buckets to create at initialization (only in standalone mode)                                                                                                | `""`                     |
-| `disableWebUI`             | Disable MinIO&reg; Web UI                                                                                                                                                                                 | `false`                  |
-| `tls.enabled`              | Enable tls in front of the container                                                                                                                                                                      | `false`                  |
-| `tls.autoGenerated`        | Generate automatically self-signed TLS certificates                                                                                                                                                       | `false`                  |
-| `tls.existingSecret`       | Name of an existing secret holding the certificate information                                                                                                                                            | `""`                     |
-| `tls.mountPath`            | The mount path where the secret will be located                                                                                                                                                           | `""`                     |
-| `extraEnvVars`             | Extra environment variables to be set on MinIO&reg; container                                                                                                                                             | `[]`                     |
-| `extraEnvVarsCM`           | ConfigMap with extra environment variables                                                                                                                                                                | `""`                     |
-| `extraEnvVarsSecret`       | Secret with extra environment variables                                                                                                                                                                   | `""`                     |
-| `command`                  | Default container command (useful when using custom images). Use array form                                                                                                                               | `[]`                     |
-| `args`                     | Default container args (useful when using custom images). Use array form                                                                                                                                  | `[]`                     |
+| Name                       | Description                                                                                                                                                                                               | Value                          |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `image.registry`           | MinIO&reg; image registry                                                                                                                                                                                 | `REGISTRY_NAME`                |
+| `image.repository`         | MinIO&reg; image repository                                                                                                                                                                               | `REPOSITORY_NAME/minio`        |
+| `image.digest`             | MinIO&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                | `""`                           |
+| `image.pullPolicy`         | Image pull policy                                                                                                                                                                                         | `IfNotPresent`                 |
+| `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                                          | `[]`                           |
+| `image.debug`              | Specify if debug logs should be enabled                                                                                                                                                                   | `false`                        |
+| `clientImage.registry`     | MinIO&reg; Client image registry                                                                                                                                                                          | `REGISTRY_NAME`                |
+| `clientImage.repository`   | MinIO&reg; Client image repository                                                                                                                                                                        | `REPOSITORY_NAME/minio-client` |
+| `clientImage.digest`       | MinIO&reg; Client image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                         | `""`                           |
+| `mode`                     | MinIO&reg; server mode (`standalone` or `distributed`)                                                                                                                                                    | `standalone`                   |
+| `auth.rootUser`            | MinIO&reg; root username                                                                                                                                                                                  | `admin`                        |
+| `auth.rootPassword`        | Password for MinIO&reg; root user                                                                                                                                                                         | `""`                           |
+| `auth.existingSecret`      | Use existing secret for credentials details (`auth.rootUser` and `auth.rootPassword` will be ignored and picked up from this secret). The secret has to contain the keys `root-user` and `root-password`) | `""`                           |
+| `auth.forcePassword`       | Force users to specify required passwords                                                                                                                                                                 | `false`                        |
+| `auth.useCredentialsFiles` | Mount credentials as a files instead of using an environment variable                                                                                                                                     | `false`                        |
+| `auth.forceNewKeys`        | Force root credentials (user and password) to be reconfigured every time they change in the secrets                                                                                                       | `false`                        |
+| `defaultBuckets`           | Comma, semi-colon or space separated list of buckets to create at initialization (only in standalone mode)                                                                                                | `""`                           |
+| `disableWebUI`             | Disable MinIO&reg; Web UI                                                                                                                                                                                 | `false`                        |
+| `tls.enabled`              | Enable tls in front of the container                                                                                                                                                                      | `false`                        |
+| `tls.autoGenerated`        | Generate automatically self-signed TLS certificates                                                                                                                                                       | `false`                        |
+| `tls.existingSecret`       | Name of an existing secret holding the certificate information                                                                                                                                            | `""`                           |
+| `tls.mountPath`            | The mount path where the secret will be located                                                                                                                                                           | `""`                           |
+| `extraEnvVars`             | Extra environment variables to be set on MinIO&reg; container                                                                                                                                             | `[]`                           |
+| `extraEnvVarsCM`           | ConfigMap with extra environment variables                                                                                                                                                                | `""`                           |
+| `extraEnvVarsSecret`       | Secret with extra environment variables                                                                                                                                                                   | `""`                           |
+| `command`                  | Default container command (useful when using custom images). Use array form                                                                                                                               | `[]`                           |
+| `args`                     | Default container args (useful when using custom images). Use array form                                                                                                                                  | `[]`                           |
 
 ### MinIO&reg; deployment/statefulset parameters
 
@@ -120,6 +122,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `statefulset.drivesPerNode`                          | Number of drives attached to every node (only for MinIO&reg; distributed mode)                                                                                                                | `1`             |
 | `provisioning.enabled`                               | Enable MinIO&reg; provisioning Job                                                                                                                                                            | `false`         |
 | `provisioning.schedulerName`                         | Name of the k8s scheduler (other than default) for MinIO&reg; provisioning                                                                                                                    | `""`            |
+| `provisioning.podLabels`                             | Extra labels for provisioning pods                                                                                                                                                            | `{}`            |
 | `provisioning.podAnnotations`                        | Provisioning Pod annotations.                                                                                                                                                                 | `{}`            |
 | `provisioning.command`                               | Default provisioning container command (useful when using custom images). Use array form                                                                                                      | `[]`            |
 | `provisioning.args`                                  | Default provisioning container args (useful when using custom images). Use array form                                                                                                         | `[]`            |
@@ -139,6 +142,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `provisioning.containerSecurityContext.enabled`      | Enable container Security Context                                                                                                                                                             | `true`          |
 | `provisioning.containerSecurityContext.runAsUser`    | User ID for the container                                                                                                                                                                     | `1001`          |
 | `provisioning.containerSecurityContext.runAsNonRoot` | Avoid running as root User                                                                                                                                                                    | `true`          |
+| `provisioning.cleanupAfterFinished.enabled`          | Enables Cleanup for Finished Jobs                                                                                                                                                             | `false`         |
+| `provisioning.cleanupAfterFinished.seconds`          | Sets the value of ttlSecondsAfterFinished                                                                                                                                                     | `600`           |
 | `hostAliases`                                        | MinIO&reg; pod host aliases                                                                                                                                                                   | `[]`            |
 | `containerPorts.api`                                 | MinIO&reg; container port to open for MinIO&reg; API                                                                                                                                          | `9000`          |
 | `containerPorts.console`                             | MinIO&reg; container port to open for MinIO&reg; Console                                                                                                                                      | `9001`          |
@@ -240,30 +245,29 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence parameters
 
-| Name                        | Description                                                          | Value               |
-| --------------------------- | -------------------------------------------------------------------- | ------------------- |
-| `persistence.enabled`       | Enable MinIO&reg; data persistence using PVC. If false, use emptyDir | `true`              |
-| `persistence.storageClass`  | PVC Storage Class for MinIO&reg; data volume                         | `""`                |
-| `persistence.mountPath`     | Data volume mount path                                               | `/data`             |
-| `persistence.accessModes`   | PVC Access Modes for MinIO&reg; data volume                          | `["ReadWriteOnce"]` |
-| `persistence.size`          | PVC Storage Request for MinIO&reg; data volume                       | `8Gi`               |
-| `persistence.annotations`   | Annotations for the PVC                                              | `{}`                |
-| `persistence.existingClaim` | Name of an existing PVC to use (only in `standalone` mode)           | `""`                |
+| Name                        | Description                                                          | Value                 |
+| --------------------------- | -------------------------------------------------------------------- | --------------------- |
+| `persistence.enabled`       | Enable MinIO&reg; data persistence using PVC. If false, use emptyDir | `true`                |
+| `persistence.storageClass`  | PVC Storage Class for MinIO&reg; data volume                         | `""`                  |
+| `persistence.mountPath`     | Data volume mount path                                               | `/bitnami/minio/data` |
+| `persistence.accessModes`   | PVC Access Modes for MinIO&reg; data volume                          | `["ReadWriteOnce"]`   |
+| `persistence.size`          | PVC Storage Request for MinIO&reg; data volume                       | `8Gi`                 |
+| `persistence.annotations`   | Annotations for the PVC                                              | `{}`                  |
+| `persistence.existingClaim` | Name of an existing PVC to use (only in `standalone` mode)           | `""`                  |
 
 ### Volume Permissions parameters
 
-| Name                                                   | Description                                                                                                                       | Value              |
-| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`            |
-| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`        |
-| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r11` |
-| `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                  | `[]`               |
-| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`               |
-| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`               |
-| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                |
+| Name                                                   | Description                                                                                                                       | Value                      |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                    |
+| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
+| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`                       |
+| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                       |
+| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                        |
 
 ### RBAC parameters
 
@@ -311,17 +315,20 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 helm install my-release \
   --set auth.rootUser=minio-admin \
   --set auth.rootPassword=minio-secret-password \
-    oci://registry-1.docker.io/bitnamicharts/minio
+    oci://REGISTRY_NAME/REPOSITORY_NAME/minio
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the MinIO&reg; Server root user and password to `minio-admin` and `minio-secret-password`, respectively.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/minio
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/minio
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details

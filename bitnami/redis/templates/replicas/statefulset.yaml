@@ -9,11 +9,8 @@ kind: StatefulSet
 metadata:
   name: {{ printf "%s-replicas" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: replica
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -21,8 +18,9 @@ spec:
   {{- if not .Values.replica.autoscaling.enabled }}
   replicas: {{ .Values.replica.replicaCount }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.replica.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: replica
   serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
   {{- if .Values.replica.updateStrategy }}
@@ -36,24 +34,18 @@ spec:
   {{- end }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: replica
-        {{- if .Values.replica.podLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.replica.podLabels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
         {{- if and .Values.metrics.enabled .Values.metrics.podLabels }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
       annotations:
         {{- if (include "redis.createConfigmap" .) }}
-        checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/configmap: {{ pick ( include (print $.Template.BasePath "/configmap.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
         {{- end }}
-        checksum/health: {{ include (print $.Template.BasePath "/health-configmap.yaml") . | sha256sum }}
-        checksum/scripts: {{ include (print $.Template.BasePath "/scripts-configmap.yaml") . | sha256sum }}
-        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        checksum/health: {{ pick ( include (print $.Template.BasePath "/health-configmap.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
+        checksum/scripts: {{ pick ( include (print $.Template.BasePath "/scripts-configmap.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
+        checksum/secret: {{ pick ( include (print $.Template.BasePath "/secret.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
         {{- if .Values.replica.podAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.replica.podAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
@@ -77,8 +69,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.replica.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.replica.podAffinityPreset "component" "replica" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.replica.podAntiAffinityPreset "component" "replica" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.replica.podAffinityPreset "component" "replica" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.replica.podAntiAffinityPreset "component" "replica" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.replica.nodeAffinityPreset.type "key" .Values.replica.nodeAffinityPreset.key "values" .Values.replica.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.replica.nodeSelector }}
@@ -102,6 +94,7 @@ spec:
       {{- if .Values.replica.dnsConfig }}
       dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.replica.dnsConfig "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.replica.enableServiceLinks }}
       terminationGracePeriodSeconds: {{ .Values.replica.terminationGracePeriodSeconds }}
       containers:
         - name: redis
@@ -497,16 +490,19 @@ spec:
           persistentVolumeClaim:
             claimName: {{ printf "%s" (tpl .Values.replica.persistence.existingClaim .) }}
   {{- else }}
+  {{- if .Values.replica.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.replica.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.replica.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
         name: redis-data
-        labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
+        {{- $claimLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.persistence.labels .Values.commonLabels ) "context" . ) }}
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}
           app.kubernetes.io/component: replica
-          {{- if .Values.replica.persistence.labels }}
-        {{- toYaml .Values.replica.persistence.labels | nindent 10 }}
-          {{- end }}
         {{- if .Values.replica.persistence.annotations }}
         annotations: {{- toYaml .Values.replica.persistence.annotations | nindent 10 }}
         {{- end }}

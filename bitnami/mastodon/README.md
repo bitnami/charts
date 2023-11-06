@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/mastodon
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mastodon
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -20,16 +22,16 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps an [Mastodon](https://www.mastodon.com/) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm charts in clusters.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/apps/mastodon/get-started/).
 
-Looking to use Mastodon in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Mastodon in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -37,8 +39,10 @@ Looking to use Mastodon in production? Try [VMware Application Catalog](https://
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/mastodon
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mastodon
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys Mastodon on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -66,68 +70,70 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                                                                                         | Value                |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
-| `kubeVersion`            | Override Kubernetes version                                                                                                                         | `""`                 |
-| `nameOverride`           | String to partially override common.names.name                                                                                                      | `""`                 |
-| `fullnameOverride`       | String to fully override common.names.fullname                                                                                                      | `""`                 |
-| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                     | `""`                 |
-| `commonLabels`           | Labels to add to all deployed objects                                                                                                               | `{}`                 |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                 |
-| `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`      |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                 |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`              |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`          |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`       |
-| `image.registry`         | Mastodon image registry                                                                                                                             | `docker.io`          |
-| `image.repository`       | Mastodon image repository                                                                                                                           | `bitnami/mastodon`   |
-| `image.tag`              | Mastodon image tag (immutable tags are recommended)                                                                                                 | `4.1.6-debian-11-r0` |
-| `image.digest`           | Mastodon image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                 |
-| `image.pullPolicy`       | Mastodon image pull policy                                                                                                                          | `IfNotPresent`       |
-| `image.pullSecrets`      | Mastodon image pull secrets                                                                                                                         | `[]`                 |
-| `image.debug`            | Enable Mastodon image debug mode                                                                                                                    | `false`              |
+| Name                     | Description                                                                                                                                         | Value                      |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `kubeVersion`            | Override Kubernetes version                                                                                                                         | `""`                       |
+| `nameOverride`           | String to partially override common.names.name                                                                                                      | `""`                       |
+| `fullnameOverride`       | String to fully override common.names.fullname                                                                                                      | `""`                       |
+| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                     | `""`                       |
+| `commonLabels`           | Labels to add to all deployed objects                                                                                                               | `{}`                       |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                       |
+| `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`            |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                       |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`                    |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`                |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`             |
+| `image.registry`         | Mastodon image registry                                                                                                                             | `REGISTRY_NAME`            |
+| `image.repository`       | Mastodon image repository                                                                                                                           | `REPOSITORY_NAME/mastodon` |
+| `image.digest`           | Mastodon image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                       |
+| `image.pullPolicy`       | Mastodon image pull policy                                                                                                                          | `IfNotPresent`             |
+| `image.pullSecrets`      | Mastodon image pull secrets                                                                                                                         | `[]`                       |
+| `image.debug`            | Enable Mastodon image debug mode                                                                                                                    | `false`                    |
 
 ### Mastodon common parameters
 
-| Name                             | Description                                                                                                                  | Value                                |
-| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
-| `environment`                    | Mastodon Rails and Node environment. Should be one of 'production',                                                          | `production`                         |
-| `adminUser`                      | Mastodon admin username                                                                                                      | `user`                               |
-| `adminEmail`                     | Mastodon admin email                                                                                                         | `user@changeme.com`                  |
-| `adminPassword`                  | Mastodon admin password                                                                                                      | `""`                                 |
-| `defaultConfig`                  | Default configuration for Mastodon in the form of environment variables                                                      | `""`                                 |
-| `defaultSecretConfig`            | Default secret configuration for Mastodon in the form of environment variables                                               | `""`                                 |
-| `extraConfig`                    | Extra configuration for Mastodon in the form of environment variables                                                        | `{}`                                 |
-| `extraSecretConfig`              | Extra secret configuration for Mastodon in the form of environment variables                                                 | `{}`                                 |
-| `existingConfigmap`              | The name of an existing ConfigMap with your default configuration for Mastodon                                               | `""`                                 |
-| `existingSecret`                 | The name of an existing Secret with your default configuration for Mastodon                                                  | `""`                                 |
-| `extraConfigExistingConfigmap`   | The name of an existing ConfigMap with your extra configuration for Mastodon                                                 | `""`                                 |
-| `extraConfigExistingSecret`      | The name of an existing Secret with your extra configuration for Mastodon                                                    | `""`                                 |
-| `enableSearches`                 | Enable the search engine (uses Elasticsearch under the hood)                                                                 | `true`                               |
-| `enableS3`                       | Enable the S3 storage engine                                                                                                 | `true`                               |
-| `forceHttpsS3Protocol`           | Force Mastodon's S3_PROTOCOL to be https (Useful when TLS is terminated using cert-manager/Ingress)                          | `false`                              |
-| `useSecureWebSocket`             | Set Mastodon's STREAMING_API_BASE_URL to use secure websocket (wss:// instead of ws://)                                      | `false`                              |
-| `local_https`                    | Set this instance to advertise itself to the fediverse using HTTPS rather than HTTP URLs. This should almost always be true. | `true`                               |
-| `localDomain`                    | The domain name used by accounts on this instance. Unless you're using                                                       | `""`                                 |
-| `webDomain`                      | Optional alternate domain used when you want to host Mastodon at a                                                           | `""`                                 |
-| `defaultLocale`                  | Set the default locale for this instance                                                                                     | `en`                                 |
-| `s3AliasHost`                    | S3 alias host for Mastodon (will use 'http://webDomain/bucket' if not set)                                                   | `""`                                 |
-| `smtp.server`                    | SMTP server                                                                                                                  | `""`                                 |
-| `smtp.port`                      | SMTP port                                                                                                                    | `587`                                |
-| `smtp.from_address`              | From address for sent emails                                                                                                 | `""`                                 |
-| `smtp.domain`                    | SMTP domain                                                                                                                  | `""`                                 |
-| `smtp.reply_to`                  | Reply-To value for sent emails                                                                                               | `""`                                 |
-| `smtp.delivery_method`           | SMTP delivery method                                                                                                         | `smtp`                               |
-| `smtp.ca_file`                   | SMTP CA file location                                                                                                        | `/etc/ssl/certs/ca-certificates.crt` |
-| `smtp.openssl_verify_mode`       | OpenSSL verify mode                                                                                                          | `none`                               |
-| `smtp.enable_starttls_auto`      | Automatically enable StartTLS                                                                                                | `true`                               |
-| `smtp.tls`                       | SMTP TLS                                                                                                                     | `false`                              |
-| `smtp.auth_method`               | SMTP auth method (set to "none" to disable SMTP auth)                                                                        | `plain`                              |
-| `smtp.login`                     | SMTP auth username                                                                                                           | `""`                                 |
-| `smtp.password`                  | SMTP auth password                                                                                                           | `""`                                 |
-| `smtp.existingSecret`            | Name of an existing secret resource containing the SMTP                                                                      | `""`                                 |
-| `smtp.existingSecretLoginKey`    | Name of the key for the SMTP login credential                                                                                | `""`                                 |
-| `smtp.existingSecretPasswordKey` | Name of the key for the SMTP password credential                                                                             | `""`                                 |
+| Name                             | Description                                                                                                                    | Value                                |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------ |
+| `environment`                    | Mastodon Rails and Node environment. Should be one of 'production',                                                            | `production`                         |
+| `adminUser`                      | Mastodon admin username                                                                                                        | `""`                                 |
+| `adminEmail`                     | Mastodon admin email                                                                                                           | `""`                                 |
+| `adminPassword`                  | Mastodon admin password                                                                                                        | `""`                                 |
+| `otpSecret`                      | Mastodon one time password secret. Generate with rake secret. Changing it will break two-factor authentication.                | `""`                                 |
+| `secretKeyBase`                  | Mastodon secret key base. Generate with rake secret. Changing it will break all active browser sessions.                       | `""`                                 |
+| `vapidPrivateKey`                | Mastodon vapid private key. Generate with rake mastodon:webpush:generate_vapid_key. Changing it will break push notifications. | `""`                                 |
+| `vapidPublicKey`                 | Mastodon vapid public key. Generate with rake mastodon:webpush:generate_vapid_key. Changing it will break push notifications.  | `""`                                 |
+| `extraConfig`                    | Extra configuration for Mastodon in the form of environment variables                                                          | `{}`                                 |
+| `extraSecretConfig`              | Extra secret configuration for Mastodon in the form of environment variables                                                   | `{}`                                 |
+| `existingConfigmap`              | The name of an existing ConfigMap with your default configuration for Mastodon                                                 | `""`                                 |
+| `existingSecret`                 | The name of an existing Secret with your default configuration for Mastodon                                                    | `""`                                 |
+| `extraConfigExistingConfigmap`   | The name of an existing ConfigMap with your extra configuration for Mastodon                                                   | `""`                                 |
+| `extraConfigExistingSecret`      | The name of an existing Secret with your extra configuration for Mastodon                                                      | `""`                                 |
+| `enableSearches`                 | Enable the search engine (uses Elasticsearch under the hood)                                                                   | `true`                               |
+| `enableS3`                       | Enable the S3 storage engine                                                                                                   | `true`                               |
+| `forceHttpsS3Protocol`           | Force Mastodon's S3_PROTOCOL to be https (Useful when TLS is terminated using cert-manager/Ingress)                            | `false`                              |
+| `useSecureWebSocket`             | Set Mastodon's STREAMING_API_BASE_URL to use secure websocket (wss:// instead of ws://)                                        | `false`                              |
+| `local_https`                    | Set this instance to advertise itself to the fediverse using HTTPS rather than HTTP URLs. This should almost always be true.   | `true`                               |
+| `localDomain`                    | The domain name used by accounts on this instance. Unless you're using                                                         | `""`                                 |
+| `webDomain`                      | Optional alternate domain used when you want to host Mastodon at a                                                             | `""`                                 |
+| `defaultLocale`                  | Set the default locale for this instance                                                                                       | `en`                                 |
+| `s3AliasHost`                    | S3 alias host for Mastodon (will use 'http://webDomain/bucket' if not set)                                                     | `""`                                 |
+| `smtp.server`                    | SMTP server                                                                                                                    | `""`                                 |
+| `smtp.port`                      | SMTP port                                                                                                                      | `587`                                |
+| `smtp.from_address`              | From address for sent emails                                                                                                   | `""`                                 |
+| `smtp.domain`                    | SMTP domain                                                                                                                    | `""`                                 |
+| `smtp.reply_to`                  | Reply-To value for sent emails                                                                                                 | `""`                                 |
+| `smtp.delivery_method`           | SMTP delivery method                                                                                                           | `smtp`                               |
+| `smtp.ca_file`                   | SMTP CA file location                                                                                                          | `/etc/ssl/certs/ca-certificates.crt` |
+| `smtp.openssl_verify_mode`       | OpenSSL verify mode                                                                                                            | `none`                               |
+| `smtp.enable_starttls_auto`      | Automatically enable StartTLS                                                                                                  | `true`                               |
+| `smtp.tls`                       | SMTP TLS                                                                                                                       | `false`                              |
+| `smtp.auth_method`               | SMTP auth method (set to "none" to disable SMTP auth)                                                                          | `plain`                              |
+| `smtp.login`                     | SMTP auth username                                                                                                             | `""`                                 |
+| `smtp.password`                  | SMTP auth password                                                                                                             | `""`                                 |
+| `smtp.existingSecret`            | Name of an existing secret resource containing the SMTP                                                                        | `""`                                 |
+| `smtp.existingSecretLoginKey`    | Name of the key for the SMTP login credential                                                                                  | `""`                                 |
+| `smtp.existingSecretPasswordKey` | Name of the key for the SMTP password credential                                                                               | `""`                                 |
+| `smtp.existingSecretServerKey`   | Name of the key for the SMTP hostname                                                                                          | `""`                                 |
 
 ### Mastodon Web Parameters
 
@@ -160,13 +166,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.resources.requests`                                | The requested resources for the Mastodon web containers                                                                  | `{}`             |
 | `web.podSecurityContext.enabled`                        | Enabled Mastodon web pods' Security Context                                                                              | `true`           |
 | `web.podSecurityContext.fsGroup`                        | Set Mastodon web pod's Security Context fsGroup                                                                          | `1001`           |
-| `web.podSecurityContext.seccompProfile.type`            | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
-| `web.containerSecurityContext.enabled`                  | Enabled Mastodon web containers' Security Context                                                                        | `true`           |
-| `web.containerSecurityContext.runAsUser`                | Set Mastodon web containers' Security Context runAsUser                                                                  | `1001`           |
-| `web.containerSecurityContext.runAsNonRoot`             | Set Mastodon web containers' Security Context runAsNonRoot                                                               | `true`           |
-| `web.containerSecurityContext.readOnlyRootFilesystem`   | Set Mastodon web containers' Security Context runAsNonRoot                                                               | `false`          |
-| `web.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                     | `false`          |
-| `web.containerSecurityContext.capabilities.drop`        | Set container's Security Context runAsNonRoot                                                                            | `["ALL"]`        |
+| `web.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `web.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
+| `web.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
+| `web.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
+| `web.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                  | `false`          |
+| `web.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                | `false`          |
+| `web.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`        |
+| `web.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `web.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `web.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
 | `web.hostAliases`                                       | Mastodon web pods host aliases                                                                                           | `[]`             |
@@ -240,13 +247,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidekiq.resources.requests`                                | The requested resources for the Mastodon sidekiq containers                                                              | `{}`             |
 | `sidekiq.podSecurityContext.enabled`                        | Enabled Mastodon sidekiq pods' Security Context                                                                          | `true`           |
 | `sidekiq.podSecurityContext.fsGroup`                        | Set Mastodon sidekiq pod's Security Context fsGroup                                                                      | `1001`           |
-| `sidekiq.podSecurityContext.seccompProfile.type`            | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
-| `sidekiq.containerSecurityContext.enabled`                  | Enabled Mastodon sidekiq containers' Security Context                                                                    | `true`           |
-| `sidekiq.containerSecurityContext.runAsUser`                | Set Mastodon sidekiq containers' Security Context runAsUser                                                              | `1001`           |
-| `sidekiq.containerSecurityContext.runAsNonRoot`             | Set Mastodon sidekiq containers' Security Context runAsNonRoot                                                           | `true`           |
-| `sidekiq.containerSecurityContext.readOnlyRootFilesystem`   | Set Mastodon sidekiq containers' Security Context runAsNonRoot                                                           | `false`          |
-| `sidekiq.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                     | `false`          |
-| `sidekiq.containerSecurityContext.capabilities.drop`        | Set container's Security Context runAsNonRoot                                                                            | `["ALL"]`        |
+| `sidekiq.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `sidekiq.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
+| `sidekiq.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
+| `sidekiq.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
+| `sidekiq.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                  | `false`          |
+| `sidekiq.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                | `false`          |
+| `sidekiq.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`        |
+| `sidekiq.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `sidekiq.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `sidekiq.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
 | `sidekiq.hostAliases`                                       | Mastodon sidekiq pods host aliases                                                                                       | `[]`             |
@@ -305,13 +313,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `streaming.resources.requests`                                | The requested resources for the Mastodon streaming containers                                                            | `{}`             |
 | `streaming.podSecurityContext.enabled`                        | Enabled Mastodon streaming pods' Security Context                                                                        | `true`           |
 | `streaming.podSecurityContext.fsGroup`                        | Set Mastodon streaming pod's Security Context fsGroup                                                                    | `1001`           |
-| `streaming.podSecurityContext.seccompProfile.type`            | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
-| `streaming.containerSecurityContext.enabled`                  | Enabled Mastodon streaming containers' Security Context                                                                  | `true`           |
-| `streaming.containerSecurityContext.runAsUser`                | Set Mastodon streaming containers' Security Context runAsUser                                                            | `1001`           |
-| `streaming.containerSecurityContext.runAsNonRoot`             | Set Mastodon streaming containers' Security Context runAsNonRoot                                                         | `true`           |
-| `streaming.containerSecurityContext.readOnlyRootFilesystem`   | Set Mastodon streaming containers' Security Context runAsNonRoot                                                         | `false`          |
-| `streaming.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                     | `false`          |
-| `streaming.containerSecurityContext.capabilities.drop`        | Set container's Security Context runAsNonRoot                                                                            | `["ALL"]`        |
+| `streaming.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `streaming.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
+| `streaming.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
+| `streaming.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
+| `streaming.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                  | `false`          |
+| `streaming.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                | `false`          |
+| `streaming.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`        |
+| `streaming.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `streaming.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `streaming.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
 | `streaming.hostAliases`                                       | Mastodon streaming pods host aliases                                                                                     | `[]`             |
@@ -386,15 +395,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.createAdmin`                                       | Create admin user as part of the job                                                                                           | `true`           |
 | `initJob.backoffLimit`                                      | set backoff limit of the job                                                                                                   | `10`             |
 | `initJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Mastodon init job                                                  | `[]`             |
-| `initJob.containerSecurityContext.enabled`                  | Enabled Mastodon init job containers' Security Context                                                                         | `true`           |
-| `initJob.containerSecurityContext.runAsUser`                | Set Mastodon init job containers' Security Context runAsUser                                                                   | `1001`           |
-| `initJob.containerSecurityContext.runAsNonRoot`             | Set Mastodon init job containers' Security Context runAsNonRoot                                                                | `true`           |
-| `initJob.containerSecurityContext.readOnlyRootFilesystem`   | Set Mastodon init job containers' Security Context runAsNonRoot                                                                | `false`          |
-| `initJob.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                           | `false`          |
-| `initJob.containerSecurityContext.capabilities.drop`        | Set container's Security Context runAsNonRoot                                                                                  | `["ALL"]`        |
+| `initJob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                           | `true`           |
+| `initJob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                     | `1001`           |
+| `initJob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                  | `true`           |
+| `initJob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                    | `false`          |
+| `initJob.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                        | `false`          |
+| `initJob.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                      | `false`          |
+| `initJob.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                             | `["ALL"]`        |
+| `initJob.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                               | `RuntimeDefault` |
 | `initJob.podSecurityContext.enabled`                        | Enabled Mastodon init job pods' Security Context                                                                               | `true`           |
 | `initJob.podSecurityContext.fsGroup`                        | Set Mastodon init job pod's Security Context fsGroup                                                                           | `1001`           |
-| `initJob.podSecurityContext.seccompProfile.type`            | Set container's Security Context seccomp profile                                                                               | `RuntimeDefault` |
 | `initJob.extraEnvVars`                                      | Array containing extra env vars to configure the Mastodon init job                                                             | `[]`             |
 | `initJob.extraEnvVarsCM`                                    | ConfigMap containing extra env vars to configure the Mastodon init job                                                         | `""`             |
 | `initJob.extraEnvVarsSecret`                                | Secret containing extra env vars to configure the Mastodon init job (in case of sensitive data)                                | `""`             |
@@ -423,17 +433,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init Container Parameters
 
-| Name                                                   | Description                                                                                     | Value              |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ------------------ |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`            |
-| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `docker.io`        |
-| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r25` |
-| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`               |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`               |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`               |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                |
+| Name                                                   | Description                                                                                     | Value                      |
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                    |
+| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`                       |
+| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                       |
+| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                       |
+| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                        |
 
 ### Other Parameters
 
@@ -564,8 +573,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 helm install my-release \
   --set adminUsername=admin \
   --set adminPassword=password \
-    oci://registry-1.docker.io/bitnamicharts/mastodon
+    oci://REGISTRY_NAME/REPOSITORY_NAME/mastodon
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the mastodon administrator account username and password to `admin` and `password` respectively.
 
@@ -574,9 +585,10 @@ The above command sets the mastodon administrator account username and password 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/mastodon
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/mastodon
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -674,7 +686,17 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
-## Notable changes
+## Upgrading
+
+### To 3.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 13.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1300) you can find more information about the changes introduced in that version.
+
+### 2.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 18.0.0. This subchart's major doesn't include any changes affecting its use as a subchart for Mastodon, so no major issues are expected during the upgrade.
+
+NOTE: Due to an error in our release process, Redis&reg;' chart versions higher or equal than 17.15.4 already use Redis&reg; 7.2 by default.
 
 ### 1.0.0
 
