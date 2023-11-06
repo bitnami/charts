@@ -219,7 +219,7 @@ security:
   ## Ref: https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch#security
   ##
   elasticPassword: ""
-  ## @param security.existingSecret Name of the existing secret containing the Elasticsearch password and
+  ## @param security.existingSecret Name of the existing secret containing the Elasticsearch password
   ##
   existingSecret: ""
   ## FIPS mode
