@@ -249,7 +249,7 @@ spec:
             {{- end }}
             {{- if .Values.web.existingConfigmap }}
             - name: custom-webserver-configuration-file
-              mountPath: /opt/bitnami/airflow/webserver_config.py
+              mountPath: /opt/bitnami/airflow/default_webserver_config.py
               subPath: webserver_config.py
             {{- end }}
             {{- if .Values.ldap.tls.enabled }}
