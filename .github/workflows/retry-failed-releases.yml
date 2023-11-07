@@ -35,7 +35,7 @@ jobs:
           fi
 
           for run_id in "${retriable_runs_ids[@]:0:${MAX_RETRY_SLOTS}}"; do
-            echo "Retrying workflow $(jq --argjson id $run_id '.workflow_runs[] | select(.id==$id) | .html_url' "${TEMP_FILE}")"
+            echo "Retrying workflow $(jq --argjson id $run_id '.workflow_runs[] | select(.id==$id) | .html_url' ${TEMP_FILE})"
             rerun_url=$(jq -r --argjson id $run_id '.workflow_runs[] | select(.id==$id) | .rerun_url' "${TEMP_FILE}")
             curl -H "Authorization: Bearer ${TOKEN}" -X POST -Lks ${rerun_url}
           done
