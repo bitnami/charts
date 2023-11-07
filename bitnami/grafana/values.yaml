@@ -57,7 +57,7 @@ commonAnnotations: {}
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 10.2.0-debian-11-r0
+  tag: 10.2.0-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -377,22 +377,32 @@ grafana:
   topologySpreadConstraints: []
   ## @param grafana.podSecurityContext.enabled Enable securityContext on for Grafana deployment
   ## @param grafana.podSecurityContext.fsGroup Group to configure permissions for volumes
-  ## @param grafana.podSecurityContext.runAsUser User for the security context
-  ## @param grafana.podSecurityContext.runAsNonRoot Run containers as non-root users
   ##
   podSecurityContext:
     enabled: true
-    runAsUser: 1001
     fsGroup: 1001
-    runAsNonRoot: true
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param grafana.containerSecurityContext.enabled Enabled Grafana containers' Security Context
-  ## @param grafana.containerSecurityContext.runAsUser Set Grafana containers' Security Context runAsUser
+  ## @param grafana.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param grafana.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param grafana.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param grafana.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param grafana.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param grafana.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param grafana.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param grafana.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Grafana containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious

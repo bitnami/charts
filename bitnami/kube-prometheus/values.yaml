@@ -67,7 +67,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.68.0-debian-11-r27
+    tag: 0.69.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -175,29 +175,33 @@ operator:
   ## Prometheus Operator pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param operator.podSecurityContext.enabled Enable pod security context
-  ## @param operator.podSecurityContext.runAsUser User ID for the container
   ## @param operator.podSecurityContext.fsGroup Group ID for the container filesystem
   ##
   podSecurityContext:
     enabled: true
-    runAsUser: 1001
     fsGroup: 1001
   ## Prometheus Operator containers' Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param operator.containerSecurityContext.enabled Enable container security context
-  ## @param operator.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
-  ## @param operator.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
-  ## @param operator.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
-  ## @param operator.containerSecurityContext.readOnlyRootFilesystem Mount / (root) as a readonly filesystem
+  ## @param operator.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param operator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param operator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param operator.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param operator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param operator.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param operator.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param operator.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    capabilities:
-      drop:
-      - ALL
+    runAsUser: 1001
     runAsNonRoot: true
-    allowPrivilegeEscalation: false
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Prometheus Operator Service
   ##
   service:
@@ -452,20 +456,26 @@ operator:
     image: {}
     ## Prometheus config reload container's securityContext
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param operator.prometheusConfigReloader.containerSecurityContext.enabled Enable container security context
-    ## @param operator.prometheusConfigReloader.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem
-    ## @param operator.prometheusConfigReloader.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
-    ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
-    ## @param operator.prometheusConfigReloader.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
+      runAsUser: 1001
+      runAsNonRoot: true
+      privileged: false
       readOnlyRootFilesystem: false
       allowPrivilegeEscalation: false
-      runAsNonRoot: true
       capabilities:
-        drop:
-          - ALL
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## Configure extra options for liveness probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
     ## @param operator.prometheusConfigReloader.livenessProbe.enabled Turn on and off liveness probe
@@ -524,7 +534,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.47.1-debian-11-r2
+    tag: 2.47.2-debian-11-r0
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -556,29 +566,33 @@ prometheus:
   ## Prometheus pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param prometheus.podSecurityContext.enabled Enable security context
-  ## @param prometheus.podSecurityContext.runAsUser User ID for the container
   ## @param prometheus.podSecurityContext.fsGroup Group ID for the container filesystem
   ##
   podSecurityContext:
     enabled: true
-    runAsUser: 1001
     fsGroup: 1001
   ## Prometheus containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param prometheus.containerSecurityContext.enabled Enable container security context
-  ## @param prometheus.containerSecurityContext.readOnlyRootFilesystem Mount / (root) as a readonly filesystem
-  ## @param prometheus.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
-  ## @param prometheus.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
-  ## @param prometheus.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
+  ## @param prometheus.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param prometheus.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param prometheus.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param prometheus.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param prometheus.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param prometheus.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param prometheus.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param prometheus.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
-    runAsNonRoot: true
     capabilities:
-      drop:
-        - ALL
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure pod disruption budgets for Prometheus
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget
   ## @param prometheus.pdb.create Create a pod disruption budget for Prometheus
@@ -1202,7 +1216,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.32.4-debian-11-r3
+      tag: 0.32.5-debian-11-r0
       digest: ""
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1218,20 +1232,26 @@ prometheus:
       pullSecrets: []
     ## Thanos Sidecar container's securityContext
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param prometheus.thanos.containerSecurityContext.enabled Enable container security context
-    ## @param prometheus.thanos.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem
-    ## @param prometheus.thanos.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
-    ## @param prometheus.thanos.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
-    ## @param prometheus.thanos.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
+    ## @param prometheus.thanos.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param prometheus.thanos.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param prometheus.thanos.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param prometheus.thanos.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param prometheus.thanos.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param prometheus.thanos.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param prometheus.thanos.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param prometheus.thanos.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
+      runAsUser: 1001
+      runAsNonRoot: true
+      privileged: false
       readOnlyRootFilesystem: false
       allowPrivilegeEscalation: false
-      runAsNonRoot: true
       capabilities:
-        drop:
-          - ALL
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## @param prometheus.thanos.prometheusUrl Override default prometheus url `http://localhost:9090`
     ##
     prometheusUrl: ""
@@ -1631,29 +1651,33 @@ alertmanager:
   ## Prometheus Alertmanager pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param alertmanager.podSecurityContext.enabled Enable security context
-  ## @param alertmanager.podSecurityContext.runAsUser User ID for the container
   ## @param alertmanager.podSecurityContext.fsGroup Group ID for the container filesystem
   ##
   podSecurityContext:
     enabled: true
-    runAsUser: 1001
     fsGroup: 1001
   ## Prometheus Alertmanager container's securityContext
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param alertmanager.containerSecurityContext.enabled Enable container security context
-  ## @param alertmanager.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem
-  ## @param alertmanager.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
-  ## @param alertmanager.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
-  ## @param alertmanager.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
+  ## @param alertmanager.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param alertmanager.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param alertmanager.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param alertmanager.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param alertmanager.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param alertmanager.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param alertmanager.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param alertmanager.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
-    runAsNonRoot: true
     capabilities:
-      drop:
-        - ALL
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure pod disruption budgets for Alertmanager
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget
   ## @param alertmanager.pdb.create Create a pod disruption budget for Alertmanager
@@ -2370,14 +2394,26 @@ blackboxExporter:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param blackboxExporter.containerSecurityContext.enabled Enabled Blackbox Exporter containers' Security Context
-  ## @param blackboxExporter.containerSecurityContext.runAsUser Set Blackbox Exporter containers' Security Context runAsUser
-  ## @param blackboxExporter.containerSecurityContext.runAsNonRoot Set Blackbox Exporter containers' Security Context runAsNonRoot
+  ## @param blackboxExporter.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param blackboxExporter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param blackboxExporter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param blackboxExporter.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param blackboxExporter.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param blackboxExporter.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param blackboxExporter.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param blackboxExporter.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param blackboxExporter.lifecycleHooks for the blackboxExporter container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
