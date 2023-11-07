@@ -1009,6 +1009,57 @@ externalAccess:
       ##
       sessionAffinityConfig: {}
 
+## @section Network policy parameters
+##
+
+## Enable Network policies using Kubernetes Network Policies
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Enable MongoDB(&reg;) network policies
+  ##
+  enabled: false
+
+  ## Ingress rules - Allow incoming connections
+  ##
+  ingress:
+    ## @param networkPolicy.ingress.namespaceSelector [object] Namespace selector label that is allowed to access the MongoDB(&reg;) node. This label will be used to identify the allowed namespace(s).
+    ## @param networkPolicy.ingress.podSelector [object] Pod selector label that is allowed to access the MongoDB(&reg;) node. This label will be used to identify the allowed pod(s).
+    ## @param networkPolicy.ingress.customRules [array] Custom network policy for the MongoDB(&reg;) node.
+    namespaceSelector: {}
+    ## e.g:
+    ## namespaceSelector:
+    ##   label1: value1
+    podSelector: {}
+    ## e.g:
+    ## podSelector:
+    ##   label2: value2
+    customRules: []
+    ## e.g:
+    ## customRules:
+    ##   - from:
+    ##     - namespaceSelector:
+    ##         matchLabels:
+    ##            label1: value1
+    ##       podSelector:
+    ##         matchLabels:
+    ##            label2: value2
+  ## Egress rules - deny outgoing connections
+  ##
+  egress:
+    ## @param networkPolicy.egress.customRules [array] Custom network policy for the MongoDB(&reg;) node.
+    ##
+    customRules: []
+    ## e.g:
+    ## customRules:
+    ##   - to:
+    ##     - namespaceSelector:
+    ##         matchLabels:
+    ##            label1: value1
+    ##       podSelector:
+    ##         matchLabels:
+    ##            label2: value2
+
 ## @section Persistence parameters
 ##
 
