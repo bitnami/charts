@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: grafana
-      image: docker.io/bitnami/grafana:10.2.0-debian-11-r1
+      image: docker.io/bitnami/grafana:10.2.0-debian-11-r2
     - name: os-shell
       image: docker.io/bitnami/os-shell:11-debian-11-r90
 apiVersion: v2

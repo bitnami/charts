@@ -339,14 +339,26 @@ podSecurityContext:
   fsGroup: 1001
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enable Matomo containers' Security Context
-## @param containerSecurityContext.runAsUser Matomo containers' Security Context
-## @param containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## Configure extra options for startup probe
 ## Matomo core exposes / to unauthenticated requests, making it a good
 ## default startup and readiness path. However, that may not always be the
@@ -938,14 +950,26 @@ cronjobs:
     args: []
     ## @param
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param cronjobs.taskScheduler.containerSecurityContext.enabled archive Container securityContext
-    ## @param cronjobs.taskScheduler.containerSecurityContext.runAsUser User ID for the archive container
-    ## @param cronjobs.taskScheduler.containerSecurityContext.runAsNonRoot Whether to run the archive container as a non-root user
+    ## @param cronjobs.taskScheduler.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param cronjobs.taskScheduler.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param cronjobs.taskScheduler.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param cronjobs.taskScheduler.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param cronjobs.taskScheduler.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param cronjobs.taskScheduler.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param cronjobs.taskScheduler.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param cronjobs.taskScheduler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
-      enabled: false
+      enabled: true
       runAsUser: 1001
       runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## @param cronjobs.taskScheduler.podAnnotations Additional pod annotations
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
@@ -972,14 +996,26 @@ cronjobs:
     args: []
     ## @param
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param cronjobs.archive.containerSecurityContext.enabled archive Container securityContext
-    ## @param cronjobs.archive.containerSecurityContext.runAsUser User ID for the archive container
-    ## @param cronjobs.archive.containerSecurityContext.runAsNonRoot Whether to run the archive container as a non-root user
+    ## @param cronjobs.archive.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param cronjobs.archive.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param cronjobs.archive.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param cronjobs.archive.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param cronjobs.archive.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param cronjobs.archive.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param cronjobs.archive.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param cronjobs.archive.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
-      enabled: false
+      enabled: true
       runAsUser: 1001
       runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## @param cronjobs.archive.podAnnotations Additional pod annotations
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
