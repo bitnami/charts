@@ -103,9 +103,9 @@ domain: consul
 ## @param raftMultiplier Multiplier used to scale key Raft timing parameters
 ##
 raftMultiplier: "1"
-## @param gossipKey Gossip key for all members. The key must be 16-bytes, can be generated with $(consul keygen)
+## @param gossipKey Gossip key for all members. The key must be base64-encoded, can be generated with $(consul keygen)
 ## Example:
-## gossipKey: 887Syd/BOvbtvRAKviazMg==
+## gossipKey: "DVoLa/k99hfBEdIfCLkzSpWg4obElLYVIFDsutKCL/w="
 ##
 gossipKey: ""
 ## @param tlsEncryptionSecretName Name of existing secret with TLS encryption data
