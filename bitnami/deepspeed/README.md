@@ -148,14 +148,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.resources.requests`                                | The requested resources for the client containers                                                | `{}`             |
 | `client.podSecurityContext.enabled`                        | Enabled Client pods' Security Context                                                            | `true`           |
 | `client.podSecurityContext.fsGroup`                        | Set Client pod's Security Context fsGroup                                                        | `1001`           |
-| `client.podSecurityContext.seccompProfile.type`            | Set Client container's Security Context seccomp profile                                          | `RuntimeDefault` |
 | `client.containerSecurityContext.enabled`                  | Enabled Client containers' Security Context                                                      | `true`           |
 | `client.containerSecurityContext.runAsUser`                | Set Client containers' Security Context runAsUser                                                | `1001`           |
 | `client.containerSecurityContext.runAsGroup`               | Set Client containers' Security Context runAsGroup                                               | `1001`           |
 | `client.containerSecurityContext.runAsNonRoot`             | Set Client containers' Security Context runAsNonRoot                                             | `true`           |
 | `client.containerSecurityContext.readOnlyRootFilesystem`   | Set Client containers' Security Context runAsNonRoot                                             | `true`           |
+| `client.containerSecurityContext.privileged`               | Set Client containers' Security Context privileged                                               | `false`          |
 | `client.containerSecurityContext.allowPrivilegeEscalation` | Set Client container's privilege escalation                                                      | `false`          |
 | `client.containerSecurityContext.capabilities.drop`        | Set Client container's Security Context runAsNonRoot                                             | `["ALL"]`        |
+| `client.containerSecurityContext.seccompProfile.type`      | Set Client container's Security Context seccomp profile                                          | `RuntimeDefault` |
 | `client.lifecycleHooks`                                    | for the client container(s) to automate configuration before or after startup                    | `{}`             |
 | `client.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                   | `""`             |
 | `client.hostAliases`                                       | client pods host aliases                                                                         | `[]`             |
@@ -242,7 +243,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.resources.requests`                                | The requested resources for the client containers                                                  | `{}`             |
 | `worker.podSecurityContext.enabled`                        | Enabled Worker pods' Security Context                                                              | `true`           |
 | `worker.podSecurityContext.fsGroup`                        | Set Worker pod's Security Context fsGroup                                                          | `1001`           |
-| `worker.podSecurityContext.seccompProfile.type`            | Set Worker container's Security Context seccomp profile                                            | `RuntimeDefault` |
 | `worker.containerSecurityContext.enabled`                  | Enabled Worker containers' Security Context                                                        | `true`           |
 | `worker.containerSecurityContext.runAsUser`                | Set Worker containers' Security Context runAsUser                                                  | `1001`           |
 | `worker.containerSecurityContext.runAsGroup`               | Set Worker containers' Security Context runAsGroup                                                 | `1001`           |
@@ -250,6 +250,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.containerSecurityContext.readOnlyRootFilesystem`   | Set Worker containers' Security Context runAsNonRoot                                               | `true`           |
 | `worker.containerSecurityContext.allowPrivilegeEscalation` | Set Worker container's privilege escalation                                                        | `false`          |
 | `worker.containerSecurityContext.capabilities.drop`        | Set Worker container's Security Context runAsNonRoot                                               | `["ALL"]`        |
+| `worker.containerSecurityContext.seccompProfile.type`      | Set Worker container's Security Context seccomp profile                                            | `RuntimeDefault` |
+| `worker.containerSecurityContext.privileged`               | Set Worker container's Security Context privileged                                                 | `false`          |
 | `worker.lifecycleHooks`                                    | for the client container(s) to automate configuration before or after startup                      | `{}`             |
 | `worker.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                     | `""`             |
 | `worker.hostAliases`                                       | client pods host aliases                                                                           | `[]`             |

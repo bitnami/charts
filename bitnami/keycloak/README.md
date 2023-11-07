@@ -129,64 +129,69 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Keycloak statefulset parameters
 
-| Name                                    | Description                                                                                                              | Value           |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------- |
-| `replicaCount`                          | Number of Keycloak replicas to deploy                                                                                    | `1`             |
-| `containerPorts.http`                   | Keycloak HTTP container port                                                                                             | `8080`          |
-| `containerPorts.https`                  | Keycloak HTTPS container port                                                                                            | `8443`          |
-| `containerPorts.infinispan`             | Keycloak infinispan container port                                                                                       | `7800`          |
-| `extraContainerPorts`                   | Optionally specify extra list of additional port-mappings for Keycloak container                                         | `[]`            |
-| `podSecurityContext.enabled`            | Enabled Keycloak pods' Security Context                                                                                  | `true`          |
-| `podSecurityContext.fsGroup`            | Set Keycloak pod's Security Context fsGroup                                                                              | `1001`          |
-| `containerSecurityContext.enabled`      | Enabled Keycloak containers' Security Context                                                                            | `true`          |
-| `containerSecurityContext.runAsUser`    | Set Keycloak container's Security Context runAsUser                                                                      | `1001`          |
-| `containerSecurityContext.runAsNonRoot` | Set Keycloak container's Security Context runAsNonRoot                                                                   | `true`          |
-| `resources.limits`                      | The resources limits for the Keycloak containers                                                                         | `{}`            |
-| `resources.requests`                    | The requested resources for the Keycloak containers                                                                      | `{}`            |
-| `livenessProbe.enabled`                 | Enable livenessProbe on Keycloak containers                                                                              | `true`          |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                  | `300`           |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                         | `1`             |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                        | `5`             |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                      | `3`             |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                      | `1`             |
-| `readinessProbe.enabled`                | Enable readinessProbe on Keycloak containers                                                                             | `true`          |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                 | `30`            |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                        | `10`            |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                       | `1`             |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                     | `3`             |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                     | `1`             |
-| `startupProbe.enabled`                  | Enable startupProbe on Keycloak containers                                                                               | `false`         |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                   | `30`            |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                          | `5`             |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                         | `1`             |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                       | `60`            |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                       | `1`             |
-| `customLivenessProbe`                   | Custom Liveness probes for Keycloak                                                                                      | `{}`            |
-| `customReadinessProbe`                  | Custom Rediness probes Keycloak                                                                                          | `{}`            |
-| `customStartupProbe`                    | Custom Startup probes for Keycloak                                                                                       | `{}`            |
-| `lifecycleHooks`                        | LifecycleHooks to set additional configuration at startup                                                                | `{}`            |
-| `hostAliases`                           | Deployment pod host aliases                                                                                              | `[]`            |
-| `podLabels`                             | Extra labels for Keycloak pods                                                                                           | `{}`            |
-| `podAnnotations`                        | Annotations for Keycloak pods                                                                                            | `{}`            |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`            |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`          |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`            |
-| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                                                   | `""`            |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                                | `[]`            |
-| `affinity`                              | Affinity for pod assignment                                                                                              | `{}`            |
-| `nodeSelector`                          | Node labels for pod assignment                                                                                           | `{}`            |
-| `tolerations`                           | Tolerations for pod assignment                                                                                           | `[]`            |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
-| `podManagementPolicy`                   | Pod management policy for the Keycloak statefulset                                                                       | `Parallel`      |
-| `priorityClassName`                     | Keycloak pods' Priority Class Name                                                                                       | `""`            |
-| `schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`            |
-| `terminationGracePeriodSeconds`         | Seconds Keycloak pod needs to terminate gracefully                                                                       | `""`            |
-| `updateStrategy.type`                   | Keycloak statefulset strategy type                                                                                       | `RollingUpdate` |
-| `updateStrategy.rollingUpdate`          | Keycloak statefulset rolling update configuration parameters                                                             | `{}`            |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes for Keycloak pods                                                    | `[]`            |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Keycloak container(s)                                       | `[]`            |
-| `initContainers`                        | Add additional init containers to the Keycloak pods                                                                      | `[]`            |
-| `sidecars`                              | Add additional sidecar containers to the Keycloak pods                                                                   | `[]`            |
+| Name                                                | Description                                                                                                              | Value            |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------- |
+| `replicaCount`                                      | Number of Keycloak replicas to deploy                                                                                    | `1`              |
+| `containerPorts.http`                               | Keycloak HTTP container port                                                                                             | `8080`           |
+| `containerPorts.https`                              | Keycloak HTTPS container port                                                                                            | `8443`           |
+| `containerPorts.infinispan`                         | Keycloak infinispan container port                                                                                       | `7800`           |
+| `extraContainerPorts`                               | Optionally specify extra list of additional port-mappings for Keycloak container                                         | `[]`             |
+| `podSecurityContext.enabled`                        | Enabled Keycloak pods' Security Context                                                                                  | `true`           |
+| `podSecurityContext.fsGroup`                        | Set Keycloak pod's Security Context fsGroup                                                                              | `1001`           |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                  | `false`          |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                | `false`          |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`        |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
+| `resources.limits`                                  | The resources limits for the Keycloak containers                                                                         | `{}`             |
+| `resources.requests`                                | The requested resources for the Keycloak containers                                                                      | `{}`             |
+| `livenessProbe.enabled`                             | Enable livenessProbe on Keycloak containers                                                                              | `true`           |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `300`            |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `1`              |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `5`              |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                      | `3`              |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                      | `1`              |
+| `readinessProbe.enabled`                            | Enable readinessProbe on Keycloak containers                                                                             | `true`           |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                 | `30`             |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                        | `10`             |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                       | `1`              |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                     | `3`              |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                     | `1`              |
+| `startupProbe.enabled`                              | Enable startupProbe on Keycloak containers                                                                               | `false`          |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                   | `30`             |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                          | `5`              |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                         | `1`              |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                       | `60`             |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                       | `1`              |
+| `customLivenessProbe`                               | Custom Liveness probes for Keycloak                                                                                      | `{}`             |
+| `customReadinessProbe`                              | Custom Rediness probes Keycloak                                                                                          | `{}`             |
+| `customStartupProbe`                                | Custom Startup probes for Keycloak                                                                                       | `{}`             |
+| `lifecycleHooks`                                    | LifecycleHooks to set additional configuration at startup                                                                | `{}`             |
+| `hostAliases`                                       | Deployment pod host aliases                                                                                              | `[]`             |
+| `podLabels`                                         | Extra labels for Keycloak pods                                                                                           | `{}`             |
+| `podAnnotations`                                    | Annotations for Keycloak pods                                                                                            | `{}`             |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`             |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`           |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`             |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set.                                                                   | `""`             |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                                                | `[]`             |
+| `affinity`                                          | Affinity for pod assignment                                                                                              | `{}`             |
+| `nodeSelector`                                      | Node labels for pod assignment                                                                                           | `{}`             |
+| `tolerations`                                       | Tolerations for pod assignment                                                                                           | `[]`             |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`             |
+| `podManagementPolicy`                               | Pod management policy for the Keycloak statefulset                                                                       | `Parallel`       |
+| `priorityClassName`                                 | Keycloak pods' Priority Class Name                                                                                       | `""`             |
+| `schedulerName`                                     | Use an alternate scheduler, e.g. "stork".                                                                                | `""`             |
+| `terminationGracePeriodSeconds`                     | Seconds Keycloak pod needs to terminate gracefully                                                                       | `""`             |
+| `updateStrategy.type`                               | Keycloak statefulset strategy type                                                                                       | `RollingUpdate`  |
+| `updateStrategy.rollingUpdate`                      | Keycloak statefulset rolling update configuration parameters                                                             | `{}`             |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for Keycloak pods                                                    | `[]`             |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Keycloak container(s)                                       | `[]`             |
+| `initContainers`                                    | Add additional init containers to the Keycloak pods                                                                      | `[]`             |
+| `sidecars`                                          | Add additional sidecar containers to the Keycloak pods                                                                   | `[]`             |
 
 ### Exposure parameters
 
@@ -260,6 +265,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Enable exposing Keycloak statistics                                                                                       | `false` |
 | `metrics.service.ports.http`               | Metrics service HTTP port                                                                                                 | `8080`  |
 | `metrics.service.annotations`              | Annotations for enabling prometheus to access the metrics endpoints                                                       | `{}`    |
+| `metrics.service.extraPorts`               | Add additional ports to the keycloak metrics service (i.e. admin port 9000)                                               | `[]`    |
 | `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                              | `false` |
 | `metrics.serviceMonitor.port`              | Metrics service HTTP port                                                                                                 | `http`  |
 | `metrics.serviceMonitor.endpoints`         | The endpoint configuration of the ServiceMonitor. Path is mandatory. Interval, timeout and labellings can be overwritten. | `[]`    |
@@ -280,41 +286,46 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### keycloak-config-cli parameters
 
-| Name                                                      | Description                                                                                                                   | Value                                 |
-| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli job                                                                                     | `false`                               |
-| `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                                                  | `REGISTRY_NAME`                       |
-| `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                                                | `REPOSITORY_NAME/keycloak-config-cli` |
-| `keycloakConfigCli.image.digest`                          | keycloak-config-cli container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                  |
-| `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                                               | `IfNotPresent`                        |
-| `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                                              | `[]`                                  |
-| `keycloakConfigCli.annotations`                           | Annotations for keycloak-config-cli job                                                                                       | `{}`                                  |
-| `keycloakConfigCli.command`                               | Command for running the container (set to default if not set). Use array form                                                 | `[]`                                  |
-| `keycloakConfigCli.args`                                  | Args for running the container (set to default if not set). Use array form                                                    | `[]`                                  |
-| `keycloakConfigCli.hostAliases`                           | Job pod host aliases                                                                                                          | `[]`                                  |
-| `keycloakConfigCli.resources.limits`                      | The resources limits for the keycloak-config-cli container                                                                    | `{}`                                  |
-| `keycloakConfigCli.resources.requests`                    | The requested resources for the keycloak-config-cli container                                                                 | `{}`                                  |
-| `keycloakConfigCli.containerSecurityContext.enabled`      | Enabled keycloak-config-cli containers' Security Context                                                                      | `true`                                |
-| `keycloakConfigCli.containerSecurityContext.runAsUser`    | Set keycloak-config-cli container's Security Context runAsUser                                                                | `1001`                                |
-| `keycloakConfigCli.containerSecurityContext.runAsNonRoot` | Set keycloak-config-cli container's Security Context runAsNonRoot                                                             | `true`                                |
-| `keycloakConfigCli.podSecurityContext.enabled`            | Enabled keycloak-config-cli pods' Security Context                                                                            | `true`                                |
-| `keycloakConfigCli.podSecurityContext.fsGroup`            | Set keycloak-config-cli pod's Security Context fsGroup                                                                        | `1001`                                |
-| `keycloakConfigCli.backoffLimit`                          | Number of retries before considering a Job as failed                                                                          | `1`                                   |
-| `keycloakConfigCli.podLabels`                             | Pod extra labels                                                                                                              | `{}`                                  |
-| `keycloakConfigCli.podAnnotations`                        | Annotations for job pod                                                                                                       | `{}`                                  |
-| `keycloakConfigCli.extraEnvVars`                          | Additional environment variables to set                                                                                       | `[]`                                  |
-| `keycloakConfigCli.nodeSelector`                          | Node labels for pod assignment                                                                                                | `{}`                                  |
-| `keycloakConfigCli.podTolerations`                        | Tolerations for job pod assignment                                                                                            | `[]`                                  |
-| `keycloakConfigCli.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                                    | `""`                                  |
-| `keycloakConfigCli.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                                       | `""`                                  |
-| `keycloakConfigCli.extraVolumes`                          | Extra volumes to add to the job                                                                                               | `[]`                                  |
-| `keycloakConfigCli.extraVolumeMounts`                     | Extra volume mounts to add to the container                                                                                   | `[]`                                  |
-| `keycloakConfigCli.initContainers`                        | Add additional init containers to the Keycloak config cli pod                                                                 | `[]`                                  |
-| `keycloakConfigCli.sidecars`                              | Add additional sidecar containers to the Keycloak config cli pod                                                              | `[]`                                  |
-| `keycloakConfigCli.configuration`                         | keycloak-config-cli realms configuration                                                                                      | `{}`                                  |
-| `keycloakConfigCli.existingConfigmap`                     | ConfigMap with keycloak-config-cli configuration                                                                              | `""`                                  |
-| `keycloakConfigCli.cleanupAfterFinished.enabled`          | Enables Cleanup for Finished Jobs                                                                                             | `false`                               |
-| `keycloakConfigCli.cleanupAfterFinished.seconds`          | Sets the value of ttlSecondsAfterFinished                                                                                     | `600`                                 |
+| Name                                                                  | Description                                                                                                                   | Value                                 |
+| --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| `keycloakConfigCli.enabled`                                           | Whether to enable keycloak-config-cli job                                                                                     | `false`                               |
+| `keycloakConfigCli.image.registry`                                    | keycloak-config-cli container image registry                                                                                  | `REGISTRY_NAME`                       |
+| `keycloakConfigCli.image.repository`                                  | keycloak-config-cli container image repository                                                                                | `REPOSITORY_NAME/keycloak-config-cli` |
+| `keycloakConfigCli.image.digest`                                      | keycloak-config-cli container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                  |
+| `keycloakConfigCli.image.pullPolicy`                                  | keycloak-config-cli container image pull policy                                                                               | `IfNotPresent`                        |
+| `keycloakConfigCli.image.pullSecrets`                                 | keycloak-config-cli container image pull secrets                                                                              | `[]`                                  |
+| `keycloakConfigCli.annotations`                                       | Annotations for keycloak-config-cli job                                                                                       | `{}`                                  |
+| `keycloakConfigCli.command`                                           | Command for running the container (set to default if not set). Use array form                                                 | `[]`                                  |
+| `keycloakConfigCli.args`                                              | Args for running the container (set to default if not set). Use array form                                                    | `[]`                                  |
+| `keycloakConfigCli.hostAliases`                                       | Job pod host aliases                                                                                                          | `[]`                                  |
+| `keycloakConfigCli.resources.limits`                                  | The resources limits for the keycloak-config-cli container                                                                    | `{}`                                  |
+| `keycloakConfigCli.resources.requests`                                | The requested resources for the keycloak-config-cli container                                                                 | `{}`                                  |
+| `keycloakConfigCli.containerSecurityContext.enabled`                  | Enabled keycloak-config-cli Security Context                                                                                  | `true`                                |
+| `keycloakConfigCli.containerSecurityContext.runAsUser`                | Set keycloak-config-cli Security Context runAsUser                                                                            | `1001`                                |
+| `keycloakConfigCli.containerSecurityContext.runAsNonRoot`             | Set keycloak-config-cli Security Context runAsNonRoot                                                                         | `true`                                |
+| `keycloakConfigCli.containerSecurityContext.privileged`               | Set keycloak-config-cli Security Context privileged                                                                           | `false`                               |
+| `keycloakConfigCli.containerSecurityContext.readOnlyRootFilesystem`   | Set keycloak-config-cli Security Context readOnlyRootFilesystem                                                               | `false`                               |
+| `keycloakConfigCli.containerSecurityContext.allowPrivilegeEscalation` | Set keycloak-config-cli Security Context allowPrivilegeEscalation                                                             | `false`                               |
+| `keycloakConfigCli.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                            | `["ALL"]`                             |
+| `keycloakConfigCli.containerSecurityContext.seccompProfile.type`      | Set keycloak-config-cli Security Context seccomp profile                                                                      | `RuntimeDefault`                      |
+| `keycloakConfigCli.podSecurityContext.enabled`                        | Enabled keycloak-config-cli pods' Security Context                                                                            | `true`                                |
+| `keycloakConfigCli.podSecurityContext.fsGroup`                        | Set keycloak-config-cli pod's Security Context fsGroup                                                                        | `1001`                                |
+| `keycloakConfigCli.backoffLimit`                                      | Number of retries before considering a Job as failed                                                                          | `1`                                   |
+| `keycloakConfigCli.podLabels`                                         | Pod extra labels                                                                                                              | `{}`                                  |
+| `keycloakConfigCli.podAnnotations`                                    | Annotations for job pod                                                                                                       | `{}`                                  |
+| `keycloakConfigCli.extraEnvVars`                                      | Additional environment variables to set                                                                                       | `[]`                                  |
+| `keycloakConfigCli.nodeSelector`                                      | Node labels for pod assignment                                                                                                | `{}`                                  |
+| `keycloakConfigCli.podTolerations`                                    | Tolerations for job pod assignment                                                                                            | `[]`                                  |
+| `keycloakConfigCli.extraEnvVarsCM`                                    | ConfigMap with extra environment variables                                                                                    | `""`                                  |
+| `keycloakConfigCli.extraEnvVarsSecret`                                | Secret with extra environment variables                                                                                       | `""`                                  |
+| `keycloakConfigCli.extraVolumes`                                      | Extra volumes to add to the job                                                                                               | `[]`                                  |
+| `keycloakConfigCli.extraVolumeMounts`                                 | Extra volume mounts to add to the container                                                                                   | `[]`                                  |
+| `keycloakConfigCli.initContainers`                                    | Add additional init containers to the Keycloak config cli pod                                                                 | `[]`                                  |
+| `keycloakConfigCli.sidecars`                                          | Add additional sidecar containers to the Keycloak config cli pod                                                              | `[]`                                  |
+| `keycloakConfigCli.configuration`                                     | keycloak-config-cli realms configuration                                                                                      | `{}`                                  |
+| `keycloakConfigCli.existingConfigmap`                                 | ConfigMap with keycloak-config-cli configuration                                                                              | `""`                                  |
+| `keycloakConfigCli.cleanupAfterFinished.enabled`                      | Enables Cleanup for Finished Jobs                                                                                             | `false`                               |
+| `keycloakConfigCli.cleanupAfterFinished.seconds`                      | Sets the value of ttlSecondsAfterFinished                                                                                     | `600`                                 |
 
 ### Database parameters
 

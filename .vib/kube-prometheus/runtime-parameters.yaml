@@ -5,10 +5,10 @@ operator:
     automountServiceAccountToken: true
   podSecurityContext:
     enabled: true
-    runAsUser: 1002
     fsGroup: 1002
   containerSecurityContext:
     enabled: true
+    runAsUser: 1002
     capabilities:
       drop:
       - ALL
