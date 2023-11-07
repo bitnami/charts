@@ -80,9 +80,6 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-## @param replicaCount Number of Gitea Pods to run (requires ReadWriteMany PVC support)
-##
-replicaCount: 1
 ## @param adminUsername User of the application
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/gitea#configuration
 ##
