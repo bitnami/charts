@@ -751,7 +751,7 @@ This major release adds common labels to the StatefulSet PersistentVolumeClaim t
     ```console
     kubectl label persistentvolumeclaim datadir-my-release-0 common-label1=value common-label2=value
     # Repeat for all Persistent Volume Claims, based on configured .replicaCount
-    ````
+    ```
 
 2. Remove the StatefulSet keeping the dependent objects:
 
