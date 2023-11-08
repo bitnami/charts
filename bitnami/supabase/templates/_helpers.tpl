@@ -22,8 +22,8 @@ Return the proper Supabase Studio Public URL
 Return the proper Supabase API Public URL
 */}}
 {{- define "supabase.api.publicURL" -}}
-{{- if .Values.publicURL -}}
-{{- print .Values.publicURL -}}
+{{- if .Values.global.publicURL -}}
+{{- print .Values.global.publicURL -}}
 {{- else if .Values.kong.ingress.enabled -}}
 {{- printf "http://%s" .Values.kong.ingress.hostname -}}
 {{- else if (and (eq .Values.kong.service.type "LoadBalancer") .Values.kong.service.loadBalancerIP) -}}
