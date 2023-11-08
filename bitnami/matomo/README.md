@@ -81,100 +81,105 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Matomo parameters
 
-| Name                                    | Description                                                                                                           | Value                    |
-| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `image.registry`                        | Matomo image registry                                                                                                 | `REGISTRY_NAME`          |
-| `image.repository`                      | Matomo Image name                                                                                                     | `REPOSITORY_NAME/matomo` |
-| `image.digest`                          | Matomo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                     |
-| `image.pullPolicy`                      | Matomo image pull policy                                                                                              | `IfNotPresent`           |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                     |
-| `image.debug`                           | Specify if debug logs should be enabled                                                                               | `false`                  |
-| `replicaCount`                          | Number of Matomo Pods to run (requires ReadWriteMany PVC support)                                                     | `1`                      |
-| `matomoUsername`                        | User of the application                                                                                               | `user`                   |
-| `matomoPassword`                        | Application password                                                                                                  | `""`                     |
-| `matomoEmail`                           | Admin email                                                                                                           | `user@example.com`       |
-| `matomoWebsiteName`                     | Matomo application name                                                                                               | `example`                |
-| `matomoWebsiteHost`                     | Matomo application host                                                                                               | `https://example.org`    |
-| `matomoSkipInstall`                     | Skip Matomo installation wizard. Useful for migrations and restoring from SQL dump                                    | `false`                  |
-| `customPostInitScripts`                 | Custom post-init.d user scripts                                                                                       | `{}`                     |
-| `allowEmptyPassword`                    | Allow DB blank passwords                                                                                              | `true`                   |
-| `command`                               | Override default container command (useful when using custom images)                                                  | `[]`                     |
-| `args`                                  | Override default container args (useful when using custom images)                                                     | `[]`                     |
-| `updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                                        | `RollingUpdate`          |
-| `priorityClassName`                     | Matomo pods' priorityClassName                                                                                        | `""`                     |
-| `schedulerName`                         | Name of the k8s scheduler (other than default)                                                                        | `""`                     |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                        | `[]`                     |
-| `hostAliases`                           | Add deployment host aliases                                                                                           | `[]`                     |
-| `extraEnvVars`                          | Extra environment variables                                                                                           | `[]`                     |
-| `extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                                   | `""`                     |
-| `extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                          | `""`                     |
-| `extraVolumes`                          | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `[]`                     |
-| `extraVolumeMounts`                     | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                     |
-| `initContainers`                        | Add additional init containers to the pod (evaluated as a template)                                                   | `[]`                     |
-| `sidecars`                              | Attach additional containers to the pod (evaluated as a template)                                                     | `[]`                     |
-| `serviceAccountName`                    | Attach serviceAccountName to the pod and sidecars                                                                     | `""`                     |
-| `tolerations`                           | Tolerations for pod assignment                                                                                        | `[]`                     |
-| `existingSecret`                        | Name of a secret with the application password                                                                        | `""`                     |
-| `smtpAuth`                              | SMTP authentication mechanism (options: Plain, Login, Crammd5)                                                        | `""`                     |
-| `smtpHost`                              | SMTP host                                                                                                             | `""`                     |
-| `smtpPort`                              | SMTP port                                                                                                             | `""`                     |
-| `smtpUser`                              | SMTP user                                                                                                             | `""`                     |
-| `smtpPassword`                          | SMTP password                                                                                                         | `""`                     |
-| `smtpProtocol`                          | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `""`                     |
-| `noreplyName`                           | Noreply name                                                                                                          | `""`                     |
-| `noreplyAddress`                        | Noreply address                                                                                                       | `""`                     |
-| `smtpExistingSecret`                    | The name of an existing secret with SMTP credentials                                                                  | `""`                     |
-| `containerPorts`                        | Container ports                                                                                                       | `{}`                     |
-| `persistence.enabled`                   | Enable persistence using PVC                                                                                          | `true`                   |
-| `persistence.storageClass`              | PVC Storage Class for Matomo volume                                                                                   | `""`                     |
-| `persistence.accessModes`               | PVC Access Mode for Matomo volume                                                                                     | `["ReadWriteOnce"]`      |
-| `persistence.size`                      | PVC Storage Request for Matomo volume                                                                                 | `8Gi`                    |
-| `persistence.dataSource`                | Custom PVC data source                                                                                                | `{}`                     |
-| `persistence.existingClaim`             | A manually managed Persistent Volume Claim                                                                            | `""`                     |
-| `persistence.hostPath`                  | If defined, the matomo-data volume will mount to the specified hostPath.                                              | `""`                     |
-| `persistence.annotations`               | Persistent Volume Claim annotations                                                                                   | `{}`                     |
-| `persistence.selector`                  | Selector to match an existing Persistent Volume for Matomo data PVC                                                   | `{}`                     |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                     |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                   |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                     |
-| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                     |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                     |
-| `affinity`                              | Affinity for pod assignment                                                                                           | `{}`                     |
-| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                                              | `{}`                     |
-| `resources.limits`                      | The resources limits for Matomo containers                                                                            | `{}`                     |
-| `resources.requests`                    | The requested resources for Matomo containers                                                                         | `{}`                     |
-| `podSecurityContext.enabled`            | Enable Matomo pods' Security Context                                                                                  | `true`                   |
-| `podSecurityContext.fsGroup`            | Matomo pods' group ID                                                                                                 | `1001`                   |
-| `containerSecurityContext.enabled`      | Enable Matomo containers' Security Context                                                                            | `true`                   |
-| `containerSecurityContext.runAsUser`    | Matomo containers' Security Context                                                                                   | `1001`                   |
-| `containerSecurityContext.runAsNonRoot` | Set Controller container's Security Context runAsNonRoot                                                              | `true`                   |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                                                   | `false`                  |
-| `startupProbe.path`                     | Request path for startupProbe                                                                                         | `/matomo.php`            |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                | `600`                    |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                       | `10`                     |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                      | `5`                      |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                    | `5`                      |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                    | `1`                      |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                                  | `true`                   |
-| `livenessProbe.path`                    | Request path for livenessProbe                                                                                        | `/matomo.php`            |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                               | `600`                    |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                      | `10`                     |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                     | `5`                      |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                   | `5`                      |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                   | `1`                      |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                                                 | `true`                   |
-| `readinessProbe.path`                   | Request path for readinessProbe                                                                                       | `/matomo.php`            |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                              | `30`                     |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                     | `5`                      |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                    | `1`                      |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                  | `5`                      |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                  | `1`                      |
-| `customStartupProbe`                    | Override default startup probe                                                                                        | `{}`                     |
-| `customLivenessProbe`                   | Override default liveness probe                                                                                       | `{}`                     |
-| `customReadinessProbe`                  | Override default readiness probe                                                                                      | `{}`                     |
-| `lifecycleHooks`                        | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | `{}`                     |
-| `podAnnotations`                        | Pod annotations                                                                                                       | `{}`                     |
-| `podLabels`                             | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                     |
+| Name                                                | Description                                                                                                           | Value                    |
+| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `image.registry`                                    | Matomo image registry                                                                                                 | `REGISTRY_NAME`          |
+| `image.repository`                                  | Matomo Image name                                                                                                     | `REPOSITORY_NAME/matomo` |
+| `image.digest`                                      | Matomo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                     |
+| `image.pullPolicy`                                  | Matomo image pull policy                                                                                              | `IfNotPresent`           |
+| `image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                      | `[]`                     |
+| `image.debug`                                       | Specify if debug logs should be enabled                                                                               | `false`                  |
+| `replicaCount`                                      | Number of Matomo Pods to run (requires ReadWriteMany PVC support)                                                     | `1`                      |
+| `matomoUsername`                                    | User of the application                                                                                               | `user`                   |
+| `matomoPassword`                                    | Application password                                                                                                  | `""`                     |
+| `matomoEmail`                                       | Admin email                                                                                                           | `user@example.com`       |
+| `matomoWebsiteName`                                 | Matomo application name                                                                                               | `example`                |
+| `matomoWebsiteHost`                                 | Matomo application host                                                                                               | `https://example.org`    |
+| `matomoSkipInstall`                                 | Skip Matomo installation wizard. Useful for migrations and restoring from SQL dump                                    | `false`                  |
+| `customPostInitScripts`                             | Custom post-init.d user scripts                                                                                       | `{}`                     |
+| `allowEmptyPassword`                                | Allow DB blank passwords                                                                                              | `true`                   |
+| `command`                                           | Override default container command (useful when using custom images)                                                  | `[]`                     |
+| `args`                                              | Override default container args (useful when using custom images)                                                     | `[]`                     |
+| `updateStrategy.type`                               | Update strategy - only really applicable for deployments with RWO PVs attached                                        | `RollingUpdate`          |
+| `priorityClassName`                                 | Matomo pods' priorityClassName                                                                                        | `""`                     |
+| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                        | `""`                     |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                        | `[]`                     |
+| `hostAliases`                                       | Add deployment host aliases                                                                                           | `[]`                     |
+| `extraEnvVars`                                      | Extra environment variables                                                                                           | `[]`                     |
+| `extraEnvVarsCM`                                    | ConfigMap containing extra env vars                                                                                   | `""`                     |
+| `extraEnvVarsSecret`                                | Secret containing extra env vars (in case of sensitive data)                                                          | `""`                     |
+| `extraVolumes`                                      | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `[]`                     |
+| `extraVolumeMounts`                                 | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                     |
+| `initContainers`                                    | Add additional init containers to the pod (evaluated as a template)                                                   | `[]`                     |
+| `sidecars`                                          | Attach additional containers to the pod (evaluated as a template)                                                     | `[]`                     |
+| `serviceAccountName`                                | Attach serviceAccountName to the pod and sidecars                                                                     | `""`                     |
+| `tolerations`                                       | Tolerations for pod assignment                                                                                        | `[]`                     |
+| `existingSecret`                                    | Name of a secret with the application password                                                                        | `""`                     |
+| `smtpAuth`                                          | SMTP authentication mechanism (options: Plain, Login, Crammd5)                                                        | `""`                     |
+| `smtpHost`                                          | SMTP host                                                                                                             | `""`                     |
+| `smtpPort`                                          | SMTP port                                                                                                             | `""`                     |
+| `smtpUser`                                          | SMTP user                                                                                                             | `""`                     |
+| `smtpPassword`                                      | SMTP password                                                                                                         | `""`                     |
+| `smtpProtocol`                                      | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `""`                     |
+| `noreplyName`                                       | Noreply name                                                                                                          | `""`                     |
+| `noreplyAddress`                                    | Noreply address                                                                                                       | `""`                     |
+| `smtpExistingSecret`                                | The name of an existing secret with SMTP credentials                                                                  | `""`                     |
+| `containerPorts`                                    | Container ports                                                                                                       | `{}`                     |
+| `persistence.enabled`                               | Enable persistence using PVC                                                                                          | `true`                   |
+| `persistence.storageClass`                          | PVC Storage Class for Matomo volume                                                                                   | `""`                     |
+| `persistence.accessModes`                           | PVC Access Mode for Matomo volume                                                                                     | `["ReadWriteOnce"]`      |
+| `persistence.size`                                  | PVC Storage Request for Matomo volume                                                                                 | `8Gi`                    |
+| `persistence.dataSource`                            | Custom PVC data source                                                                                                | `{}`                     |
+| `persistence.existingClaim`                         | A manually managed Persistent Volume Claim                                                                            | `""`                     |
+| `persistence.hostPath`                              | If defined, the matomo-data volume will mount to the specified hostPath.                                              | `""`                     |
+| `persistence.annotations`                           | Persistent Volume Claim annotations                                                                                   | `{}`                     |
+| `persistence.selector`                              | Selector to match an existing Persistent Volume for Matomo data PVC                                                   | `{}`                     |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                     |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                   |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                     |
+| `nodeAffinityPreset.key`                            | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                     |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                     |
+| `affinity`                                          | Affinity for pod assignment                                                                                           | `{}`                     |
+| `nodeSelector`                                      | Node labels for pod assignment. Evaluated as a template.                                                              | `{}`                     |
+| `resources.limits`                                  | The resources limits for Matomo containers                                                                            | `{}`                     |
+| `resources.requests`                                | The requested resources for Matomo containers                                                                         | `{}`                     |
+| `podSecurityContext.enabled`                        | Enable Matomo pods' Security Context                                                                                  | `true`                   |
+| `podSecurityContext.fsGroup`                        | Matomo pods' group ID                                                                                                 | `1001`                   |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                  | `true`                   |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                            | `1001`                   |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                         | `true`                   |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                           | `false`                  |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                               | `false`                  |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                             | `false`                  |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                    | `["ALL"]`                |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                      | `RuntimeDefault`         |
+| `startupProbe.enabled`                              | Enable startupProbe                                                                                                   | `false`                  |
+| `startupProbe.path`                                 | Request path for startupProbe                                                                                         | `/matomo.php`            |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                | `600`                    |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                       | `10`                     |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                      | `5`                      |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                    | `5`                      |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                    | `1`                      |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                                                  | `true`                   |
+| `livenessProbe.path`                                | Request path for livenessProbe                                                                                        | `/matomo.php`            |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                               | `600`                    |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                      | `10`                     |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                     | `5`                      |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                   | `5`                      |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                   | `1`                      |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                                                 | `true`                   |
+| `readinessProbe.path`                               | Request path for readinessProbe                                                                                       | `/matomo.php`            |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                              | `30`                     |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                     | `5`                      |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                    | `1`                      |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                  | `5`                      |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                  | `1`                      |
+| `customStartupProbe`                                | Override default startup probe                                                                                        | `{}`                     |
+| `customLivenessProbe`                               | Override default liveness probe                                                                                       | `{}`                     |
+| `customReadinessProbe`                              | Override default readiness probe                                                                                      | `{}`                     |
+| `lifecycleHooks`                                    | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | `{}`                     |
+| `podAnnotations`                                    | Pod annotations                                                                                                       | `{}`                     |
+| `podLabels`                                         | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                     |
 
 ### Traffic Exposure Parameters
 
@@ -300,28 +305,38 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### CronJob parameters
 
-| Name                                                           | Description                                                          | Value         |
-| -------------------------------------------------------------- | -------------------------------------------------------------------- | ------------- |
-| `cronjobs.enabled`                                             | Enables cronjobs for archive and scheduler tasks                     | `true`        |
-| `cronjobs.taskScheduler.schedule`                              | Kubernetes CronJob schedule                                          | `*/5 * * * *` |
-| `cronjobs.taskScheduler.suspend`                               | Whether to create suspended CronJob                                  | `false`       |
-| `cronjobs.taskScheduler.command`                               | Override default container command (useful when using custom images) | `[]`          |
-| `cronjobs.taskScheduler.args`                                  | Override default container args (useful when using custom images)    | `[]`          |
-| `cronjobs.taskScheduler.containerSecurityContext.enabled`      | archive Container securityContext                                    | `false`       |
-| `cronjobs.taskScheduler.containerSecurityContext.runAsUser`    | User ID for the archive container                                    | `1001`        |
-| `cronjobs.taskScheduler.containerSecurityContext.runAsNonRoot` | Whether to run the archive container as a non-root user              | `true`        |
-| `cronjobs.taskScheduler.podAnnotations`                        | Additional pod annotations                                           | `{}`          |
-| `cronjobs.taskScheduler.podLabels`                             | Additional pod labels                                                | `{}`          |
-| `cronjobs.archive.enabled`                                     | Whether to enable scheduled mail-to-task CronJob                     | `false`       |
-| `cronjobs.archive.schedule`                                    | Kubernetes CronJob schedule                                          | `*/5 * * * *` |
-| `cronjobs.archive.suspend`                                     | Whether to create suspended CronJob                                  | `false`       |
-| `cronjobs.archive.command`                                     | Override default container command (useful when using custom images) | `[]`          |
-| `cronjobs.archive.args`                                        | Override default container args (useful when using custom images)    | `[]`          |
-| `cronjobs.archive.containerSecurityContext.enabled`            | archive Container securityContext                                    | `false`       |
-| `cronjobs.archive.containerSecurityContext.runAsUser`          | User ID for the archive container                                    | `1001`        |
-| `cronjobs.archive.containerSecurityContext.runAsNonRoot`       | Whether to run the archive container as a non-root user              | `true`        |
-| `cronjobs.archive.podAnnotations`                              | Additional pod annotations                                           | `{}`          |
-| `cronjobs.archive.podLabels`                                   | Additional pod labels                                                | `{}`          |
+| Name                                                                       | Description                                                          | Value            |
+| -------------------------------------------------------------------------- | -------------------------------------------------------------------- | ---------------- |
+| `cronjobs.enabled`                                                         | Enables cronjobs for archive and scheduler tasks                     | `true`           |
+| `cronjobs.taskScheduler.schedule`                                          | Kubernetes CronJob schedule                                          | `*/5 * * * *`    |
+| `cronjobs.taskScheduler.suspend`                                           | Whether to create suspended CronJob                                  | `false`          |
+| `cronjobs.taskScheduler.command`                                           | Override default container command (useful when using custom images) | `[]`             |
+| `cronjobs.taskScheduler.args`                                              | Override default container args (useful when using custom images)    | `[]`             |
+| `cronjobs.taskScheduler.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                 | `true`           |
+| `cronjobs.taskScheduler.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                           | `1001`           |
+| `cronjobs.taskScheduler.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                        | `true`           |
+| `cronjobs.taskScheduler.containerSecurityContext.privileged`               | Set container's Security Context privileged                          | `false`          |
+| `cronjobs.taskScheduler.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem              | `false`          |
+| `cronjobs.taskScheduler.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation            | `false`          |
+| `cronjobs.taskScheduler.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                   | `["ALL"]`        |
+| `cronjobs.taskScheduler.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                     | `RuntimeDefault` |
+| `cronjobs.taskScheduler.podAnnotations`                                    | Additional pod annotations                                           | `{}`             |
+| `cronjobs.taskScheduler.podLabels`                                         | Additional pod labels                                                | `{}`             |
+| `cronjobs.archive.enabled`                                                 | Whether to enable scheduled mail-to-task CronJob                     | `false`          |
+| `cronjobs.archive.schedule`                                                | Kubernetes CronJob schedule                                          | `*/5 * * * *`    |
+| `cronjobs.archive.suspend`                                                 | Whether to create suspended CronJob                                  | `false`          |
+| `cronjobs.archive.command`                                                 | Override default container command (useful when using custom images) | `[]`             |
+| `cronjobs.archive.args`                                                    | Override default container args (useful when using custom images)    | `[]`             |
+| `cronjobs.archive.containerSecurityContext.enabled`                        | Enabled containers' Security Context                                 | `true`           |
+| `cronjobs.archive.containerSecurityContext.runAsUser`                      | Set containers' Security Context runAsUser                           | `1001`           |
+| `cronjobs.archive.containerSecurityContext.runAsNonRoot`                   | Set container's Security Context runAsNonRoot                        | `true`           |
+| `cronjobs.archive.containerSecurityContext.privileged`                     | Set container's Security Context privileged                          | `false`          |
+| `cronjobs.archive.containerSecurityContext.readOnlyRootFilesystem`         | Set container's Security Context readOnlyRootFilesystem              | `false`          |
+| `cronjobs.archive.containerSecurityContext.allowPrivilegeEscalation`       | Set container's Security Context allowPrivilegeEscalation            | `false`          |
+| `cronjobs.archive.containerSecurityContext.capabilities.drop`              | List of capabilities to be dropped                                   | `["ALL"]`        |
+| `cronjobs.archive.containerSecurityContext.seccompProfile.type`            | Set container's Security Context seccomp profile                     | `RuntimeDefault` |
+| `cronjobs.archive.podAnnotations`                                          | Additional pod annotations                                           | `{}`             |
+| `cronjobs.archive.podLabels`                                               | Additional pod labels                                                | `{}`             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
