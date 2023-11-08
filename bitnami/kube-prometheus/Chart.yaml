@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: alertmanager
-      image: docker.io/bitnami/alertmanager:0.26.0-debian-11-r43
+      image: docker.io/bitnami/alertmanager:0.26.0-debian-11-r44
     - name: blackbox-exporter
       image: docker.io/bitnami/blackbox-exporter:0.24.0-debian-11-r139
     - name: prometheus-operator
@@ -46,4 +46,4 @@ maintainers:
 name: kube-prometheus
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
-version: 8.22.1
+version: 8.22.2
