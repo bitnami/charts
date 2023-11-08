@@ -158,7 +158,7 @@ spec:
             {{- if .Values.query.grpc.client.serverName }}
             - --grpc-client-server-name={{ .Values.query.grpc.client.serverName }}
             {{- end }}
-            {{- if and .Values.queryFrontend.enabled .Values.queryFrontend.ingress.enabled .Values.queryFrontend.ingress.hostname }}
+            {{- if and .Values.queryFrontend.enabled .Values.queryFrontend.ingress.enabled .Values.queryFrontend.ingress.hostname .Values.queryFrontend.ingress.overrideAlertQueryURL }}
             - --alert.query-url=http://{{ tpl .Values.queryFrontend.ingress.hostname . }}
             {{- end }}             
             {{- if .Values.query.extraFlags }}
