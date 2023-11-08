@@ -950,6 +950,7 @@ realtime:
     DB_HOST: {{ include "supabase.database.host" . | quote }}
     DB_PORT: {{ include "supabase.database.port" . | quote }}
     DB_NAME: {{ include "supabase.database.name" . | quote }}
+    DB_USER: {{ include "supabase.database.user" . | quote }}
     DB_SSL: {{ .Values.dbSSL | quote }}
     PORT: {{ .Values.realtime.containerPorts.http | quote }}
     FLY_ALLOC_ID: "realtime"
@@ -960,6 +961,9 @@ realtime:
     SECURE_CHANNELS: "true"
     SLOT_NAME: "supabase_realtime_rls"
     TEMPORARY_SLOT: "true"
+    DNS_NODES: "cluster.local:53"
+    ENABLE_TAILSCALE: "false"
+    DB_AFTER_CONNECT_QUERY: 'SET search_path TO realtime'
 
   ## @param realtime.extraConfig Extra configuration for Supabase realtime
   ##
