@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: grafana-tempo-query
-      image: docker.io/bitnami/grafana-tempo-query:2.3.0-debian-11-r0
+      image: docker.io/bitnami/grafana-tempo-query:2.3.0-debian-11-r2
     - name: grafana-tempo-vulture
       image: docker.io/bitnami/grafana-tempo-vulture:2.3.0-debian-11-r0
     - name: grafana-tempo
