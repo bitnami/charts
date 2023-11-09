@@ -137,7 +137,7 @@ rbac:
   ##
   rules:
     - apiGroups: ["*"]
-      resources: ["events", "pods", "jobs"]
+      resources: ["*"]
       verbs: ["get", "watch", "list"]
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
