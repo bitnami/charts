@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.7.3-debian-11-r0
+  tag: 2.7.4-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -277,26 +277,26 @@ influxdb:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param influxdb.containerSecurityContext.enabled Enabled InfluxDB&trade; containers' Security Context
-  ## @param influxdb.containerSecurityContext.runAsUser Set InfluxDB&trade; containers' Security Context runAsUser
-  ## @param influxdb.containerSecurityContext.runAsGroup Set InfluxDB&trade; containers' Security Context runAsGroup
-  ## @param influxdb.containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
-  ## @param influxdb.containerSecurityContext.allowPrivilegeEscalation Set Controller container's Security Context allowPrivilegeEscalation
-  ## @param influxdb.containerSecurityContext.seccompProfile.type Set Controller container's Security Context seccompProfile
-  ## @param influxdb.containerSecurityContext.capabilities.drop Set Controller container's Security Context capabilities to drop
-  #
+  ## @param influxdb.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param influxdb.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param influxdb.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param influxdb.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param influxdb.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param influxdb.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param influxdb.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param influxdb.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-    runAsGroup: 0
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
-    seccompProfile:
-      type: RuntimeDefault
     capabilities:
-      drop:
-        - ALL
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## InfluxDB&trade; pods' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -891,34 +891,34 @@ backup:
     podAnnotations: {}
     ## K8s Security Context for Backup Cronjob pods
     ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-    ## @param backup.cronjob.securityContext.enabled Enable security context for InfluxDB&trade; backup pods
-    ## @param backup.cronjob.securityContext.fsGroup Group ID for the InfluxDB&trade; filesystem
-    ## @param backup.cronjob.securityContext.runAsUser User ID for the InfluxDB&trade; filesystem
-    ## @param backup.cronjob.securityContext.runAsGroup Group ID for the InfluxDB&trade; runAsGroup
-    ## @param backup.cronjob.securityContext.runAsNonRoot Setting for the InfluxDB&trade; runAsNonRoot
-    ## @param backup.cronjob.securityContext.seccompProfile.type Setting for the InfluxDB&trade; seccompProfile.type
+    ## @param backup.cronjob.podSecurityContext.enabled Enable security context for InfluxDB&trade; backup pods
+    ## @param backup.cronjob.podSecurityContext.fsGroup Group ID for the InfluxDB&trade; filesystem
     ##
-    securityContext:
+    podSecurityContext:
       enabled: true
       fsGroup: 1001
-      runAsUser: 1001
-      runAsGroup: 0
-      runAsNonRoot: true
-      seccompProfile:
-        type: RuntimeDefault
 
     ## K8s Security Context for Backup Cronjob containers
     ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-    ## @param backup.cronjob.containerSecurityContext.enabled Enable security context for InfluxDB&trade; backup containers
-    ## @param backup.cronjob.containerSecurityContext.readOnlyRootFilesystem readOnlyRootFilesystem for InfluxDB&trade;
-    ## @param backup.cronjob.containerSecurityContext.allowPrivilegeEscalation allowPrivilegeEscalation for InfluxDB&trade;
-    ## @param backup.cronjob.containerSecurityContext.capabilities.drop Capabilities to drop for InfluxDB&trade;
+    ## @param backup.cronjob.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param backup.cronjob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param backup.cronjob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param backup.cronjob.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param backup.cronjob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param backup.cronjob.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param backup.cronjob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param backup.cronjob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     containerSecurityContext:
       enabled: true
+      runAsUser: 1001
+      runAsNonRoot: true
+      privileged: false
       readOnlyRootFilesystem: true
       allowPrivilegeEscalation: false
       capabilities:
-        drop: [ "ALL" ]
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
   ## @param backup.podAffinityPreset Backup &trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -986,7 +986,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.450.0-debian-11-r0
+        tag: 0.453.0-debian-11-r0
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1025,7 +1025,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.53.0-debian-11-r10
+        tag: 2.53.1-debian-11-r0
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1064,7 +1064,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/aws-cli
-        tag: 2.13.20-debian-11-r15
+        tag: 2.13.30-debian-11-r0
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

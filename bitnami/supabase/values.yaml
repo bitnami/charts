@@ -134,7 +134,7 @@ jwt:
       ##
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.28.2-debian-11-r16
+      tag: 1.28.3-debian-11-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -156,33 +156,34 @@ jwt:
     extraVolumes: []
 
     ## Configure Container Security Context
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param jwt.autoGenerate.containerSecurityContext.enabled Enabled jwt init job containers' Security Context
     ## @param jwt.autoGenerate.containerSecurityContext.runAsUser Set jwt init job containers' Security Context runAsUser
-    ## @param jwt.autoGenerate.containerSecurityContext.runAsNonRoot Set jwt init job containers' Security Context runAsNonRoot
-    ## @param jwt.autoGenerate.containerSecurityContext.readOnlyRootFilesystem Set jwt init job containers' Security Context runAsNonRoot
-    ## @param jwt.autoGenerate.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
-    ## @param jwt.autoGenerate.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+    ## @param jwt.autoGenerate.containerSecurityContext.runAsNonRoot Set jwt init job container's Security Context runAsNonRoot
+    ## @param jwt.autoGenerate.containerSecurityContext.privileged Set jwt init job container's Security Context privileged
+    ## @param jwt.autoGenerate.containerSecurityContext.readOnlyRootFilesystem Set jwt init job container's Security Context readOnlyRootFilesystem
+    ## @param jwt.autoGenerate.containerSecurityContext.allowPrivilegeEscalation Set jwt init job container's Security Context allowPrivilegeEscalation
+    ## @param jwt.autoGenerate.containerSecurityContext.capabilities.drop List of jwt init job capabilities to be dropped
+    ## @param jwt.autoGenerate.containerSecurityContext.seccompProfile.type Set jwt init job container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
       runAsUser: 1001
       runAsNonRoot: true
+      privileged: false
       readOnlyRootFilesystem: false
       allowPrivilegeEscalation: false
       capabilities:
         drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## Configure Pods Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
     ## @param jwt.autoGenerate.podSecurityContext.enabled Enabled jwt init job pods' Security Context
     ## @param jwt.autoGenerate.podSecurityContext.fsGroup Set jwt init job pod's Security Context fsGroup
-    ## @param jwt.autoGenerate.podSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     podSecurityContext:
       enabled: true
       fsGroup: 1001
-      seccompProfile:
-        type: "RuntimeDefault"
     ## @param jwt.autoGenerate.extraEnvVars Array containing extra env vars to configure the jwt init job
     ## For example:
     ## extraEnvVars:
@@ -387,16 +388,26 @@ auth:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param auth.containerSecurityContext.enabled Enabled Supabase auth containers' Security Context
-  ## @param auth.containerSecurityContext.runAsUser Set Supabase auth containers' Security Context runAsUser
-  ## @param auth.containerSecurityContext.runAsNonRoot Set Supabase auth containers' Security Context runAsNonRoot
-  ## @param auth.containerSecurityContext.readOnlyRootFilesystem Set Supabase auth containers' Security Context runAsNonRoot
+  ## @param auth.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param auth.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param auth.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param auth.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param auth.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param auth.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param auth.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param auth.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param auth.command Override default container command (useful when using custom images)
   ##
@@ -620,7 +631,7 @@ meta:
   image:
     registry: docker.io
     repository: bitnami/supabase-postgres-meta
-    tag: 0.72.0-debian-11-r0
+    tag: 0.74.1-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -711,16 +722,26 @@ meta:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param meta.containerSecurityContext.enabled Enabled Supabase Postgres Meta containers' Security Context
-  ## @param meta.containerSecurityContext.runAsUser Set Supabase Postgres Meta containers' Security Context runAsUser
-  ## @param meta.containerSecurityContext.runAsNonRoot Set Supabase Postgres Meta containers' Security Context runAsNonRoot
-  ## @param meta.containerSecurityContext.readOnlyRootFilesystem Set Supabase Postgres Meta containers' Security Context runAsNonRoot
+  ## @param meta.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param meta.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param meta.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param meta.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param meta.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param meta.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param meta.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param meta.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param meta.command Override default container command (useful when using custom images)
   ##
@@ -963,7 +984,7 @@ realtime:
   image:
     registry: docker.io
     repository: bitnami/supabase-realtime
-    tag: 2.24.2-debian-11-r0
+    tag: 2.25.26-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1054,16 +1075,26 @@ realtime:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param realtime.containerSecurityContext.enabled Enabled Supabase realtime containers' Security Context
-  ## @param realtime.containerSecurityContext.runAsUser Set Supabase realtime containers' Security Context runAsUser
-  ## @param realtime.containerSecurityContext.runAsNonRoot Set Supabase realtime containers' Security Context runAsNonRoot
-  ## @param realtime.containerSecurityContext.readOnlyRootFilesystem Set Supabase realtime containers' Security Context runAsNonRoot
+  ## @param realtime.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param realtime.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param realtime.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param realtime.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param realtime.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param realtime.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param realtime.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param realtime.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param realtime.command Override default container command (useful when using custom images)
   ##
@@ -1285,7 +1316,7 @@ rest:
   image:
     registry: docker.io
     repository: bitnami/postgrest
-    tag: 11.2.1-debian-11-r1
+    tag: 11.2.2-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1376,16 +1407,26 @@ rest:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param rest.containerSecurityContext.enabled Enabled Supabase rest containers' Security Context
-  ## @param rest.containerSecurityContext.runAsUser Set Supabase rest containers' Security Context runAsUser
-  ## @param rest.containerSecurityContext.runAsNonRoot Set Supabase rest containers' Security Context runAsNonRoot
-  ## @param rest.containerSecurityContext.readOnlyRootFilesystem Set Supabase rest containers' Security Context runAsNonRoot
+  ## @param rest.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param rest.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param rest.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param rest.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param rest.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param rest.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param rest.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param rest.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param rest.command Override default container command (useful when using custom images)
   ##
@@ -1612,7 +1653,7 @@ storage:
   image:
     registry: docker.io
     repository: bitnami/supabase-storage
-    tag: 0.43.3-debian-11-r0
+    tag: 0.43.10-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1703,16 +1744,26 @@ storage:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param storage.containerSecurityContext.enabled Enabled Supabase storage containers' Security Context
-  ## @param storage.containerSecurityContext.runAsUser Set Supabase storage containers' Security Context runAsUser
-  ## @param storage.containerSecurityContext.runAsNonRoot Set Supabase storage containers' Security Context runAsNonRoot
-  ## @param storage.containerSecurityContext.readOnlyRootFilesystem Set Supabase storage containers' Security Context runAsNonRoot
+  ## @param storage.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param storage.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param storage.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param storage.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param storage.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param storage.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param storage.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param storage.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param storage.command Override default container command (useful when using custom images)
   ##
@@ -1986,7 +2037,7 @@ studio:
   image:
     registry: docker.io
     repository: bitnami/supabase-studio
-    tag: 0.23.9-debian-11-r0
+    tag: 0.23.9-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2077,16 +2128,26 @@ studio:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param studio.containerSecurityContext.enabled Enabled Supabase studio containers' Security Context
-  ## @param studio.containerSecurityContext.runAsUser Set Supabase studio containers' Security Context runAsUser
-  ## @param studio.containerSecurityContext.runAsNonRoot Set Supabase studio containers' Security Context runAsNonRoot
-  ## @param studio.containerSecurityContext.readOnlyRootFilesystem Set Supabase studio containers' Security Context runAsNonRoot
+  ## @param studio.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param studio.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param studio.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param studio.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param studio.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param studio.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param studio.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param studio.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param studio.command Override default container command (useful when using custom images)
   ##
@@ -2430,7 +2491,7 @@ volumePermissions:
 psqlImage:
   registry: docker.io
   repository: bitnami/supabase-postgres
-  tag: 15.1.0-debian-11-r175
+  tag: 15.1.0-debian-11-r179
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2506,6 +2567,9 @@ kong:
           mountPath: /bitnami/kong/declarative-template/
         - name: rendered-declarative-conf
           mountPath: /bitnami/kong/declarative-conf/
+      {{- if .Values.containerSecurityContext.enabled }}
+      securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 6 }}
+      {{- end }}
       env:
         - name: SUPABASE_ANON_KEY
           valueFrom:
@@ -2594,7 +2658,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/supabase-postgres
-    tag: 15.1.0-debian-11-r175
+    tag: 15.1.0-debian-11-r179
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

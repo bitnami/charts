@@ -10,11 +10,11 @@ annotations:
     - name: redis-exporter
       image: docker.io/bitnami/redis-exporter:1.55.0-debian-11-r0
     - name: redis-sentinel
-      image: docker.io/bitnami/redis-sentinel:7.2.2-debian-11-r0
+      image: docker.io/bitnami/redis-sentinel:7.2.3-debian-11-r0
     - name: redis
-      image: docker.io/bitnami/redis:7.2.2-debian-11-r0
+      image: docker.io/bitnami/redis:7.2.3-debian-11-r0
 apiVersion: v2
-appVersion: 7.2.2
+appVersion: 7.2.3
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -34,4 +34,4 @@ maintainers:
 name: redis
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/redis
-version: 18.2.0
+version: 18.2.2
