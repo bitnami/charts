@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kube-state-metrics
-      image: docker.io/bitnami/kube-state-metrics:2.10.0-debian-11-r35
+      image: docker.io/bitnami/kube-state-metrics:2.10.1-debian-11-r0
 apiVersion: v2
-appVersion: 2.10.0
+appVersion: 2.10.1
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -28,4 +28,4 @@ maintainers:
 name: kube-state-metrics
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics
-version: 3.8.2
+version: 3.8.3
