@@ -80,6 +80,13 @@
         "path": "architecture"
       },
       "properties": {
+        "kind": {
+          "type": "string",
+          "title": "Workload Kind",
+          "form": true,
+          "description": "Allowed values: `DaemonSet` or `StatefulSet`",
+          "enum": ["DaemonSet", "StatefulSet"]
+        },
         "replicaCount": {
           "type": "integer",
           "form": true,
