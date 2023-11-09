@@ -160,7 +160,7 @@ spec:
             {{- end }}
             {{- if and .Values.queryFrontend.enabled .Values.queryFrontend.ingress.enabled .Values.queryFrontend.ingress.hostname .Values.queryFrontend.ingress.overrideAlertQueryURL }}
             - --alert.query-url=http://{{ tpl .Values.queryFrontend.ingress.hostname . }}
-            {{- end }}             
+            {{- end }}
             {{- if .Values.query.extraFlags }}
             {{- include "common.tplvalues.render" (dict "value" .Values.query.extraFlags "context" $) | nindent 12 }}
             {{- end }}
