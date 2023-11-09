@@ -90,6 +90,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `commonAnnotations`       | Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template | `{}`            |
 | `topologyKey`             | Override common lib default topology key. If empty - "kubernetes.io/hostname" is used                     | `""`            |
 | `serviceBindings.enabled` | Create secret for service binding (Experimental)                                                          | `false`         |
+| `enableServiceLinks`      | Whether information about services should be injected into pod's environment variable                     | `true`          |
 | `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
 | `diagnosticMode.command`  | Command to override all containers in the deployment                                                      | `["sleep"]`     |
 | `diagnosticMode.args`     | Args to override all containers in the deployment                                                         | `["infinity"]`  |

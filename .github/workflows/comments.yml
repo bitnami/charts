@@ -21,13 +21,13 @@ jobs:
       pull-requests: read
     steps:
       - name: Repo checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       - name: Load .env file
-        uses: xom9ikk/dotenv@v2
+        uses: xom9ikk/dotenv@de1ff27d319507880e6621e4d47424c677d95f68
         with:
           path: .github/workflows/
       - name: Move into From Build Maintenance
-        uses: peter-evans/create-or-update-project-card@v2
+        uses: peter-evans/create-or-update-project-card@dfa240db6fe287ceb681e45d6728c1af70452c58
         # The comment was created by bitnami-bot in a pull_request created by bitnami-bot
         if: ${{ github.actor == 'bitnami-bot' && github.event.issue.user.login == 'bitnami-bot' && github.event.issue.pull_request != null }}
         with:
@@ -36,7 +36,7 @@ jobs:
           # Required to trigger moving-cards.yml workflow (clean labels and assign people to work on it)
           token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
       - name: Move into Pending
-        uses: peter-evans/create-or-update-project-card@v2
+        uses: peter-evans/create-or-update-project-card@dfa240db6fe287ceb681e45d6728c1af70452c58
         if: |
           (github.actor != 'bitnami-bot' || github.event.issue.user.login != 'bitnami-bot' || github.event.issue.pull_request == null) &&
           contains(fromJson(env.BITNAMI_TEAM), github.actor) &&
@@ -45,7 +45,7 @@ jobs:
           project-name: Support
           column-name: Pending
       - name: Move into In Progress
-        uses: peter-evans/create-or-update-project-card@v2
+        uses: peter-evans/create-or-update-project-card@dfa240db6fe287ceb681e45d6728c1af70452c58
         if: |
           (github.actor != 'bitnami-bot' || github.event.issue.user.login != 'bitnami-bot' || github.event.issue.pull_request == null) &&
           (!contains(fromJson(env.BITNAMI_TEAM), github.actor)) &&
@@ -54,7 +54,7 @@ jobs:
           project-name: Support
           column-name: In progress
       - name: Move into Triage
-        uses: peter-evans/create-or-update-project-card@v2
+        uses: peter-evans/create-or-update-project-card@dfa240db6fe287ceb681e45d6728c1af70452c58
         if: |
           (github.actor != 'bitnami-bot' || github.event.issue.user.login != 'bitnami-bot' || github.event.issue.pull_request == null) &&
           (!contains(fromJson(env.BITNAMI_TEAM), github.actor)) &&

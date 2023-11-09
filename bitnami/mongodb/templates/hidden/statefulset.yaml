@@ -81,6 +81,7 @@ spec:
       {{ if .Values.hidden.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.hidden.terminationGracePeriodSeconds }}
       {{- end }}
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
       {{- if or .Values.hidden.initContainers (and .Values.volumePermissions.enabled .Values.hidden.persistence.enabled) (and .Values.externalAccess.hidden.enabled .Values.externalAccess.autoDiscovery.enabled) .Values.tls.enabled }}
       initContainers:
         {{- if .Values.hidden.initContainers }}
