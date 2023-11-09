@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.2-debian-11-r10
+      image: docker.io/bitnami/apache-exporter:1.0.3-debian-11-r0
     - name: elasticsearch
       image: docker.io/bitnami/elasticsearch:7.17.14-debian-11-r1
     - name: magento
@@ -48,4 +48,4 @@ maintainers:
 name: magento
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/magento
-version: 24.1.0
+version: 24.1.1
