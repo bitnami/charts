@@ -79,7 +79,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/clickhouse
-  tag: 23.9.2-debian-11-r0
+  tag: 23.10.2-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -198,29 +198,33 @@ resources:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled ClickHouse pods' Security Context
 ## @param podSecurityContext.fsGroup Set ClickHouse pod's Security Context fsGroup
-## @param podSecurityContext.seccompProfile.type Set ClickHouse container's Security Context seccomp profile
 ## If you are using Kubernetes 1.18, the following code needs to be commented out.
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-  seccompProfile:
-    type: "RuntimeDefault"
 ## Configure Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enabled ClickHouse containers' Security Context
-## @param containerSecurityContext.runAsUser Set ClickHouse containers' Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set ClickHouse containers' Security Context runAsNonRoot
-## @param containerSecurityContext.allowPrivilegeEscalation Set ClickHouse container's privilege escalation
-## @param containerSecurityContext.capabilities.drop Set ClickHouse container's Security Context runAsNonRoot
+## @param containerSecurityContext.enabled Enable containers' Security Context
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
+## @param containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's
+## @param containerSecurityContext.privileged Set contraller container's Security Context privileged
+## @param containerSecurityContext.allowPrivilegeEscalation Set contraller container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be droppedn
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
   allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
   capabilities:
     drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 
 ## Authentication
 ## @param auth.username ClickHouse Admin username

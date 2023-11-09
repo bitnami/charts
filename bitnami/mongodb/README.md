@@ -90,6 +90,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `commonAnnotations`       | Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template | `{}`            |
 | `topologyKey`             | Override common lib default topology key. If empty - "kubernetes.io/hostname" is used                     | `""`            |
 | `serviceBindings.enabled` | Create secret for service binding (Experimental)                                                          | `false`         |
+| `enableServiceLinks`      | Whether information about services should be injected into pod's environment variable                     | `true`          |
 | `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
 | `diagnosticMode.command`  | Command to override all containers in the deployment                                                      | `["sleep"]`     |
 | `diagnosticMode.args`     | Args to override all containers in the deployment                                                         | `["infinity"]`  |
@@ -192,13 +193,14 @@ Refer to the [chart documentation for more information on each of these architec
 | `podSecurityContext.enabled`                        | Enable MongoDB(&reg;) pod(s)' Security Context                                                                  | `true`           |
 | `podSecurityContext.fsGroup`                        | Group ID for the volumes of the MongoDB(&reg;) pod(s)                                                           | `1001`           |
 | `podSecurityContext.sysctls`                        | sysctl settings of the MongoDB(&reg;) pod(s)'                                                                   | `[]`             |
-| `containerSecurityContext.enabled`                  | Enable MongoDB(&reg;) container(s)' Security Context                                                            | `true`           |
-| `containerSecurityContext.runAsUser`                | User ID for the MongoDB(&reg;) container                                                                        | `1001`           |
-| `containerSecurityContext.runAsGroup`               | Group ID for the MongoDB(&reg;) container                                                                       | `0`              |
-| `containerSecurityContext.runAsNonRoot`             | Set MongoDB(&reg;) container's Security Context runAsNonRoot                                                    | `true`           |
-| `containerSecurityContext.allowPrivilegeEscalation` | Is it possible to escalate MongoDB(&reg;) pod(s) privileges                                                     | `false`          |
-| `containerSecurityContext.seccompProfile.type`      | Set MongoDB(&reg;) container's Security Context seccompProfile type                                             | `RuntimeDefault` |
-| `containerSecurityContext.capabilities.drop`        | Set MongoDB(&reg;) container's Security Context capabilities to drop                                            | `["ALL"]`        |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                            | `true`           |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                      | `1001`           |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                   | `true`           |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                     | `false`          |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                         | `false`          |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                       | `false`          |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                              | `["ALL"]`        |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                | `RuntimeDefault` |
 | `resources.limits`                                  | The resources limits for MongoDB(&reg;) containers                                                              | `{}`             |
 | `resources.requests`                                | The requested resources for MongoDB(&reg;) containers                                                           | `{}`             |
 | `containerPorts.mongodb`                            | MongoDB(&reg;) container port                                                                                   | `27017`          |
@@ -294,6 +296,16 @@ Refer to the [chart documentation for more information on each of these architec
 | `externalAccess.hidden.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                                | `None`                    |
 | `externalAccess.hidden.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                                     | `{}`                      |
 
+### Network policy parameters
+
+| Name                                      | Description                                                                                                                               | Value   |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                   | Enable MongoDB(&reg;) network policies                                                                                                    | `false` |
+| `networkPolicy.ingress.namespaceSelector` | Namespace selector label that is allowed to access the MongoDB(&reg;) node. This label will be used to identify the allowed namespace(s). | `{}`    |
+| `networkPolicy.ingress.podSelector`       | Pod selector label that is allowed to access the MongoDB(&reg;) node. This label will be used to identify the allowed pod(s).             | `{}`    |
+| `networkPolicy.ingress.customRules`       | Custom network policy for the MongoDB(&reg;) node.                                                                                        | `[]`    |
+| `networkPolicy.egress.customRules`        | Custom network policy for the MongoDB(&reg;) node.                                                                                        | `[]`    |
+
 ### Persistence parameters
 
 | Name                                          | Description                                                                                                                           | Value               |
@@ -324,13 +336,14 @@ Refer to the [chart documentation for more information on each of these architec
 | `backup.cronjob.startingDeadlineSeconds`                           | Set the cronjob parameter startingDeadlineSeconds                                                                                     | `""`                |
 | `backup.cronjob.ttlSecondsAfterFinished`                           | Set the cronjob parameter ttlSecondsAfterFinished                                                                                     | `""`                |
 | `backup.cronjob.restartPolicy`                                     | Set the cronjob parameter restartPolicy                                                                                               | `OnFailure`         |
-| `backup.cronjob.containerSecurityContext.runAsUser`                | User ID for the backup container                                                                                                      | `1001`              |
-| `backup.cronjob.containerSecurityContext.runAsGroup`               | Group ID for the backup container                                                                                                     | `0`                 |
-| `backup.cronjob.containerSecurityContext.runAsNonRoot`             | Set backup container's Security Context runAsNonRoot                                                                                  | `true`              |
-| `backup.cronjob.containerSecurityContext.readOnlyRootFilesystem`   | Is the container itself readonly                                                                                                      | `true`              |
-| `backup.cronjob.containerSecurityContext.allowPrivilegeEscalation` | Is it possible to escalate backup pod(s) privileges                                                                                   | `false`             |
-| `backup.cronjob.containerSecurityContext.seccompProfile.type`      | Set backup container's Security Context seccompProfile type                                                                           | `RuntimeDefault`    |
-| `backup.cronjob.containerSecurityContext.capabilities.drop`        | Set backup container's Security Context capabilities to drop                                                                          | `["ALL"]`           |
+| `backup.cronjob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                  | `true`              |
+| `backup.cronjob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                            | `1001`              |
+| `backup.cronjob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                         | `true`              |
+| `backup.cronjob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                           | `false`             |
+| `backup.cronjob.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                               | `false`             |
+| `backup.cronjob.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                             | `false`             |
+| `backup.cronjob.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                    | `["ALL"]`           |
+| `backup.cronjob.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                      | `RuntimeDefault`    |
 | `backup.cronjob.command`                                           | Set backup container's command to run                                                                                                 | `[]`                |
 | `backup.cronjob.labels`                                            | Set the cronjob labels                                                                                                                | `{}`                |
 | `backup.cronjob.annotations`                                       | Set the cronjob annotations                                                                                                           | `{}`                |
@@ -410,13 +423,14 @@ Refer to the [chart documentation for more information on each of these architec
 | `arbiter.podSecurityContext.enabled`                        | Enable Arbiter pod(s)' Security Context                                                           | `true`           |
 | `arbiter.podSecurityContext.fsGroup`                        | Group ID for the volumes of the Arbiter pod(s)                                                    | `1001`           |
 | `arbiter.podSecurityContext.sysctls`                        | sysctl settings of the Arbiter pod(s)'                                                            | `[]`             |
-| `arbiter.containerSecurityContext.enabled`                  | Enable Arbiter container(s)' Security Context                                                     | `true`           |
-| `arbiter.containerSecurityContext.runAsUser`                | User ID for the Arbiter container                                                                 | `1001`           |
-| `arbiter.containerSecurityContext.runAsGroup`               | Group ID for the Arbiter container                                                                | `0`              |
-| `arbiter.containerSecurityContext.runAsNonRoot`             | Set Arbiter containers' Security Context runAsNonRoot                                             | `true`           |
-| `arbiter.containerSecurityContext.allowPrivilegeEscalation` | Is it possible to escalate Arbiter pod(s) privileges                                              | `false`          |
-| `arbiter.containerSecurityContext.seccompProfile.type`      | Set Arbiter container's Security Context seccompProfile type                                      | `RuntimeDefault` |
-| `arbiter.containerSecurityContext.capabilities.drop`        | Set Arbiter container's Security Context capabilities to drop                                     | `["ALL"]`        |
+| `arbiter.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                              | `true`           |
+| `arbiter.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                        | `1001`           |
+| `arbiter.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                     | `true`           |
+| `arbiter.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                       | `false`          |
+| `arbiter.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                           | `false`          |
+| `arbiter.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                         | `false`          |
+| `arbiter.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                | `["ALL"]`        |
+| `arbiter.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                  | `RuntimeDefault` |
 | `arbiter.resources.limits`                                  | The resources limits for Arbiter containers                                                       | `{}`             |
 | `arbiter.resources.requests`                                | The requested resources for Arbiter containers                                                    | `{}`             |
 | `arbiter.containerPorts.mongodb`                            | MongoDB(&reg;) arbiter container port                                                             | `27017`          |
@@ -492,13 +506,14 @@ Refer to the [chart documentation for more information on each of these architec
 | `hidden.podSecurityContext.enabled`                        | Enable Hidden pod(s)' Security Context                                                               | `true`              |
 | `hidden.podSecurityContext.fsGroup`                        | Group ID for the volumes of the Hidden pod(s)                                                        | `1001`              |
 | `hidden.podSecurityContext.sysctls`                        | sysctl settings of the Hidden pod(s)'                                                                | `[]`                |
-| `hidden.containerSecurityContext.enabled`                  | Enable Hidden container(s)' Security Context                                                         | `true`              |
-| `hidden.containerSecurityContext.runAsUser`                | User ID for the Hidden container                                                                     | `1001`              |
-| `hidden.containerSecurityContext.runAsGroup`               | Group ID for the Hidden container                                                                    | `0`                 |
-| `hidden.containerSecurityContext.runAsNonRoot`             | Set Hidden containers' Security Context runAsNonRoot                                                 | `true`              |
-| `hidden.containerSecurityContext.allowPrivilegeEscalation` | Set Hidden containers' Security Context allowPrivilegeEscalation                                     | `false`             |
-| `hidden.containerSecurityContext.seccompProfile.type`      | Set Hidden container's Security Context seccompProfile type                                          | `RuntimeDefault`    |
-| `hidden.containerSecurityContext.capabilities.drop`        | Set Hidden container's Security Context capabilities to drop                                         | `["ALL"]`           |
+| `hidden.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                 | `true`              |
+| `hidden.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                           | `1001`              |
+| `hidden.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                        | `true`              |
+| `hidden.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                          | `false`             |
+| `hidden.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                              | `false`             |
+| `hidden.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                            | `false`             |
+| `hidden.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                   | `["ALL"]`           |
+| `hidden.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                     | `RuntimeDefault`    |
 | `hidden.resources.limits`                                  | The resources limits for hidden node containers                                                      | `{}`                |
 | `hidden.resources.requests`                                | The requested resources for hidden node containers                                                   | `{}`                |
 | `hidden.containerPorts.mongodb`                            | MongoDB(&reg;) hidden container port                                                                 | `27017`             |
