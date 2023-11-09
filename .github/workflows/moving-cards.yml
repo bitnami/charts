@@ -52,54 +52,54 @@ jobs:
       - get-issue
     steps:
       - name: Repo checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         with:
           fetch-depth: 1
       - name: Load .env file
-        uses: xom9ikk/dotenv@v2
+        uses: xom9ikk/dotenv@de1ff27d319507880e6621e4d47424c677d95f68
         with:
           path: .github/workflows/
       # Now handling the needed labeling
       - name: Triage labeling
         # Only if moved into triage
         if: ${{ github.event.project_card.column_id == env.TRIAGE_COLUMN_ID }}
-        uses: fmulero/labeler@1.1.0
+        uses: fmulero/labeler@f49bf680252fc8ac12cbebb6e0ed8ea19d0712da
         with:
           add-labels: triage
           remove-labels: on-hold, in-progress, solved
       - name: From Bitnami labeling
         if: ${{ github.event.project_card.column_id == env.BITNAMI_COLUMN_ID }}
-        uses: fmulero/labeler@1.1.0
+        uses: fmulero/labeler@f49bf680252fc8ac12cbebb6e0ed8ea19d0712da
         with:
           add-labels: ${{ (needs.get-issue.outputs.author == 'bitnami-bot' && needs.get-issue.outputs.type == 'pull_request') && 'automated, auto-merge' || 'bitnami' }}
           remove-labels: on-hold, in-progress, triage, solved
       - name: Verify labeling
         # Only if moved into bitnami column and the PR is ready for review
-        # Consecutive calls were fixed in fmulero/labeler@1.1.0, see https://github.com/fmulero/labeler/pull/2
+        # Consecutive calls were fixed in fmulero/labeler@f49bf680252fc8ac12cbebb6e0ed8ea19d0712da, see https://github.com/fmulero/labeler/pull/2
         if: |
           github.event.project_card.column_id == env.BITNAMI_COLUMN_ID &&
           needs.get-issue.outputs.type == 'pull_request' && needs.get-issue.outputs.draft == 'false'
-        uses: fmulero/labeler@1.1.0
+        uses: fmulero/labeler@f49bf680252fc8ac12cbebb6e0ed8ea19d0712da
         with:
           repo-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
           add-labels: verify
       - name: Build Maintenance labeling
         if: ${{ github.event.project_card.column_id == env.BUILD_MAINTENANCE_COLUMN_ID }}
-        uses: fmulero/labeler@1.1.0
+        uses: fmulero/labeler@f49bf680252fc8ac12cbebb6e0ed8ea19d0712da
         with:
           add-labels: review-required
           remove-labels: auto-merge
       - name: On hold labeling
         # Only if moved into on hold
         if: ${{ github.event.project_card.column_id == env.ON_HOLD_COLUMN_ID  }}
-        uses: fmulero/labeler@1.1.0
+        uses: fmulero/labeler@f49bf680252fc8ac12cbebb6e0ed8ea19d0712da
         with:
           add-labels: on-hold
           remove-labels: triage, in-progress, solved
       - name: In progress labeling
         # Only if moved into In progress
         if: ${{ github.event.project_card.column_id == env.IN_PROGRESS_COLUMN_ID  }}
-        uses: fmulero/labeler@1.1.0
+        uses: fmulero/labeler@f49bf680252fc8ac12cbebb6e0ed8ea19d0712da
         with:
           add-labels: in-progress
           remove-labels: on-hold, triage, solved
@@ -108,7 +108,7 @@ jobs:
         if: |
           github.event.project_card.column_id == env.SOLVED_COLUMN_ID &&
           (needs.get-issue.outputs.author != 'bitnami-bot')
-        uses: fmulero/labeler@1.1.0
+        uses: fmulero/labeler@f49bf680252fc8ac12cbebb6e0ed8ea19d0712da
         with:
           add-labels: solved
           # Triage is not on the list to know how many issues/PRs are solved
@@ -123,11 +123,11 @@ jobs:
     # The job shouldn't run for solved cards
     steps:
       - name: Repo checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         with:
           fetch-depth: 1
       - name: Load .env file
-        uses: xom9ikk/dotenv@v2
+        uses: xom9ikk/dotenv@de1ff27d319507880e6621e4d47424c677d95f68
         with:
           path: .github/workflows/
       - name: Assign to a person to work on it
@@ -136,7 +136,7 @@ jobs:
         if: |
           github.event.project_card.column_id != env.SOLVED_COLUMN_ID && github.event.project_card.column_id != env.BUILD_MAINTENANCE_COLUMN_ID &&
           (needs.get-issue.outputs.assignees == '[]' || github.event.action == 'created')
-        uses: pozil/auto-assign-issue@v1.11.0
+        uses: pozil/auto-assign-issue@edee9537367a8fbc625d27f9e10aa8bad47b8723
         with:
           numOfAssignee: 1
           teams: ${{ github.event.project_card.column_id == env.BITNAMI_COLUMN_ID && env.SUPPORT_TEAM_NAME || env.TRIAGE_TEAM_NAME }}
@@ -148,7 +148,7 @@ jobs:
           github.event.action == 'moved' && needs.get-issue.outputs.assignees != '[]' &&
           github.event.project_card.column_id == env.IN_PROGRESS_COLUMN_ID &&
           github.event.changes.column_id.from == env.TRIAGE_COLUMN_ID
-        uses: pozil/auto-assign-issue@v1.11.0
+        uses: pozil/auto-assign-issue@edee9537367a8fbc625d27f9e10aa8bad47b8723
         with:
           numOfAssignee: 1
           removePreviousAssignees: true

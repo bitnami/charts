@@ -260,7 +260,7 @@ initJob:
   image:
     registry: docker.io
     repository: bitnami/pymilvus
-    tag: 2.3.1-debian-11-r12
+    tag: 2.3.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4287,7 +4287,7 @@ attu:
   image:
     registry: docker.io
     repository: bitnami/attu
-    tag: 2.3.1-debian-11-r22
+    tag: 2.3.2-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
