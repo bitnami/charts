@@ -742,6 +742,9 @@ Init container definition for Kafka initialization
   {{- if $roleSettings.containerSecurityContext.enabled }}
   securityContext: {{- omit $roleSettings.containerSecurityContext "enabled" | toYaml | nindent 4 }}
   {{- end }}
+  {{- if $roleSettings.initContainerResources }}
+  resources: {{- toYaml $roleSettings.initContainerResources | nindent 4 }}  
+  {{- end }} 
   command:
     - /bin/bash
   args:
