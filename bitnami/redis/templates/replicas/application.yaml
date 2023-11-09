@@ -480,7 +480,7 @@ spec:
         {{- if .Values.metrics.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
-  {{- if not .Values.replica.persistence.enabled }}
+  {{- if or (not .Values.replica.persistence.enabled) (not (eq .Values.replica.kind "StatefulSet")) }}
         - name: redis-data
           {{- if or .Values.replica.persistence.medium .Values.replica.persistence.sizeLimit }}
           emptyDir:
@@ -497,10 +497,6 @@ spec:
         - name: redis-data
           persistentVolumeClaim:
             claimName: {{ printf "%s" (tpl .Values.replica.persistence.existingClaim .) }}
-  {{- else if not (eq .Values.replica.kind "StatefulSet") }}
-        - name: redis-data
-          persistentVolumeClaim:
-            claimName: {{ printf "redis-data-%s-replica" (include "common.names.fullname" .) }}
   {{- else }}
   {{- if .Values.replica.persistentVolumeClaimRetentionPolicy.enabled }}
   persistentVolumeClaimRetentionPolicy:
