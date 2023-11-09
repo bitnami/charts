@@ -561,6 +561,14 @@ controller:
   ## @param controller.lifecycleHooks lifecycleHooks for the Kafka container to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## Kafka init container resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param controller.initContainerResources.limits The resources limits for the init container
+  ## @param controller.initContainerResources.requests The requested resources for the init container
+  ##
+  initContainerResources:
+    limits: {}
+    requests: {}
   ## Kafka resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param controller.resources.limits The resources limits for the container
@@ -942,6 +950,14 @@ broker:
   ## @param broker.lifecycleHooks lifecycleHooks for the Kafka container to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## Kafka init container resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param broker.initContainerResources.limits The resources limits for the container
+  ## @param broker.initContainerResources.requests The requested resources for the container
+  ##
+  initContainerResources:
+    limits: {}
+    requests: {}
   ## Kafka resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param broker.resources.limits The resources limits for the container

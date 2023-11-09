@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.2-debian-11-r10
+      image: docker.io/bitnami/apache-exporter:1.0.3-debian-11-r0
     - name: opencart
       image: docker.io/bitnami/opencart:4.0.2-3-debian-11-r21
     - name: os-shell
@@ -38,4 +38,4 @@ maintainers:
 name: opencart
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/opencart
-version: 16.1.0
+version: 16.1.1
