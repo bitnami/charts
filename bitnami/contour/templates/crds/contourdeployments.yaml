@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.4
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: contourdeployments.projectcontour.io
 spec:
   preserveUnknownFields: false
@@ -179,6 +179,13 @@ spec:
                           type: object
                         type: array
                     type: object
+                  podAnnotations:
+                    additionalProperties:
+                      type: string
+                    description: PodAnnotations defines annotations to add to the
+                      Contour pods. the annotations for Prometheus will be appended
+                      or overwritten with predefined value.
+                    type: object
                   replicas:
                     description: "Deprecated: Use `DeploymentSettings.Replicas` instead.
                       \n Replicas is the desired number of Contour replicas. If if
@@ -233,7 +240,8 @@ spec:
                         description: 'Requests describes the minimum amount of compute
                           resources required. If Requests is omitted for a container,
                           it defaults to Limits if that is explicitly specified, otherwise
-                          to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                          to an implementation-defined value. Requests cannot exceed
+                          Limits. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                         type: object
                     type: object
                 type: object
@@ -244,6 +252,14 @@ spec:
                   or Deployment), node placement constraints for the pods, and various
                   options for the Envoy service.
                 properties:
+                  baseID:
+                    description: The base ID to use when allocating shared memory
+                      regions. if Envoy needs to be run multiple times on the same
+                      machine, each running Envoy will need a unique base ID so that
+                      the shared memory regions do not conflict. defaults to 0.
+                    format: int32
+                    minimum: 0
+                    type: integer
                   daemonSet:
                     description: DaemonSet describes the settings for running envoy
                       as a `DaemonSet`. if `WorkloadType` is `Deployment`,it's must
@@ -825,7 +841,7 @@ spec:
                                 value between the SizeLimit specified here and the
                                 sum of memory limits of all containers in a pod. The
                                 default is nil which means that the limit is undefined.
-                                More info: http://kubernetes.io/docs/user-guide/volumes#emptydir'
+                                More info: https://kubernetes.io/docs/concepts/storage/volumes#emptydir'
                               pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                               x-kubernetes-int-or-string: true
                           type: object
@@ -1052,7 +1068,8 @@ spec:
                                             If Requests is omitted for a container,
                                             it defaults to Limits if that is explicitly
                                             specified, otherwise to an implementation-defined
-                                            value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                                            value. Requests cannot exceed Limits.
+                                            More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                                           type: object
                                       type: object
                                     selector:
@@ -2057,6 +2074,16 @@ spec:
                           addresses (NodePorts, ExternalIPs, and LoadBalancer IPs).
                           \n If unset, defaults to \"Local\"."
                         type: string
+                      ipFamilyPolicy:
+                        description: IPFamilyPolicy represents the dual-stack-ness
+                          requested or required by this Service. If there is no value
+                          provided, then this field will be set to SingleStack. Services
+                          can be "SingleStack" (a single IP family), "PreferDualStack"
+                          (two IP families on dual-stack configured clusters or a
+                          single IP family on single-stack clusters), or "RequireDualStack"
+                          (two IP families on dual-stack configured clusters, otherwise
+                          fail).
+                        type: string
                       serviceAnnotations:
                         additionalProperties:
                           type: string
@@ -2148,11 +2175,21 @@ spec:
                           type: object
                         type: array
                     type: object
+                  overloadMaxHeapSize:
+                    description: 'OverloadMaxHeapSize defines the maximum heap memory
+                      of the envoy controlled by the overload manager. When the value
+                      is greater than 0, the overload manager is enabled, and when
+                      envoy reaches 95% of the maximum heap size, it performs a shrink
+                      heap operation, When it reaches 98% of the maximum heap size,
+                      Envoy Will stop accepting requests. More info: https://projectcontour.io/docs/main/config/overload-manager/'
+                    format: int64
+                    type: integer
                   podAnnotations:
                     additionalProperties:
                       type: string
                     description: PodAnnotations defines annotations to add to the
-                      Envoy pods.
+                      Envoy pods. the annotations for Prometheus will be appended
+                      or overwritten with predefined value.
                     type: object
                   replicas:
                     description: "Deprecated: Use `DeploymentSettings.Replicas` instead.
@@ -2209,7 +2246,8 @@ spec:
                         description: 'Requests describes the minimum amount of compute
                           resources required. If Requests is omitted for a container,
                           it defaults to Limits if that is explicitly specified, otherwise
-                          to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                          to an implementation-defined value. Requests cannot exceed
+                          Limits. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                         type: object
                     type: object
                   workloadType:
@@ -2286,6 +2324,23 @@ spec:
                               for more information. \n Values: `auto` (default), `v4`,
                               `v6`, `all`. \n Other values will produce an error."
                             type: string
+                          maxRequestsPerConnection:
+                            description: Defines the maximum requests for upstream
+                              connections. If not specified, there is no limit. see
+                              https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-msg-config-core-v3-httpprotocoloptions
+                              for more information.
+                            format: int32
+                            minimum: 1
+                            type: integer
+                          per-connection-buffer-limit-bytes:
+                            description: Defines the soft limit on size of the cluster’s
+                              new connection read and write buffers in bytes. If unspecified,
+                              an implementation defined default is applied (1MiB).
+                              see https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/cluster/v3/cluster.proto#envoy-v3-api-field-config-cluster-v3-cluster-per-connection-buffer-limit-bytes
+                              for more information.
+                            format: int32
+                            minimum: 1
+                            type: integer
                         type: object
                       defaultHTTPVersions:
                         description: "DefaultHTTPVersions defines the default set
@@ -2374,6 +2429,47 @@ spec:
                               duplicate slashes from request URL paths. \n Contour's
                               default is false."
                             type: boolean
+                          httpMaxConcurrentStreams:
+                            description: Defines the value for SETTINGS_MAX_CONCURRENT_STREAMS
+                              Envoy will advertise in the SETTINGS frame in HTTP/2
+                              connections and the limit for concurrent streams allowed
+                              for a peer on a single HTTP/2 connection. It is recommended
+                              to not set this lower than 100 but this field can be
+                              used to bound resource usage by HTTP/2 connections and
+                              mitigate attacks like CVE-2023-44487. The default value
+                              when this is not set is unlimited.
+                            format: int32
+                            minimum: 1
+                            type: integer
+                          maxRequestsPerConnection:
+                            description: Defines the maximum requests for downstream
+                              connections. If not specified, there is no limit. see
+                              https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/protocol.proto#envoy-v3-api-msg-config-core-v3-httpprotocoloptions
+                              for more information.
+                            format: int32
+                            minimum: 1
+                            type: integer
+                          maxRequestsPerIOCycle:
+                            description: Defines the limit on number of HTTP requests
+                              that Envoy will process from a single connection in
+                              a single I/O cycle. Requests over this limit are processed
+                              in subsequent I/O cycles. Can be used as a mitigation
+                              for CVE-2023-44487 when abusive traffic is detected.
+                              Configures the http.max_requests_per_io_cycle Envoy
+                              runtime setting. The default value when this is not
+                              set is no limit.
+                            format: int32
+                            minimum: 1
+                            type: integer
+                          per-connection-buffer-limit-bytes:
+                            description: Defines the soft limit on size of the listener’s
+                              new connection read and write buffers in bytes. If unspecified,
+                              an implementation defined default is applied (1MiB).
+                              see https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/listener/v3/listener.proto#envoy-v3-api-field-config-listener-v3-listener-per-connection-buffer-limit-bytes
+                              for more information.
+                            format: int32
+                            minimum: 1
+                            type: integer
                           serverHeaderTransformation:
                             description: "Defines the action to be applied to the
                               Server header on the response path. When configured
@@ -2386,6 +2482,33 @@ spec:
                               `pass_through` \n Other values will produce an error.
                               Contour's default is overwrite."
                             type: string
+                          socketOptions:
+                            description: SocketOptions defines configurable socket
+                              options for the listeners. Single set of options are
+                              applied to all listeners.
+                            properties:
+                              tos:
+                                description: Defines the value for IPv4 TOS field
+                                  (including 6 bit DSCP field) for IP packets originating
+                                  from Envoy listeners. Single value is applied to
+                                  all listeners. If listeners are bound to IPv6-only
+                                  addresses, setting this option will cause an error.
+                                format: int32
+                                maximum: 255
+                                minimum: 0
+                                type: integer
+                              trafficClass:
+                                description: Defines the value for IPv6 Traffic Class
+                                  field (including 6 bit DSCP field) for IP packets
+                                  originating from the Envoy listeners. Single value
+                                  is applied to all listeners. If listeners are bound
+                                  to IPv4-only addresses, setting this option will
+                                  cause an error.
+                                format: int32
+                                maximum: 255
+                                minimum: 0
+                                type: integer
+                            type: object
                           tls:
                             description: TLS holds various configurable Envoy TLS
                               listener values.
@@ -2419,6 +2542,12 @@ spec:
                                 items:
                                   type: string
                                 type: array
+                              maximumProtocolVersion:
+                                description: "MaximumProtocolVersion is the maximum
+                                  TLS version this vhost should negotiate. \n Values:
+                                  `1.2`, `1.3`(default). \n Other values will produce
+                                  an error."
+                                type: string
                               minimumProtocolVersion:
                                 description: "MinimumProtocolVersion is the minimum
                                   TLS version this vhost should negotiate. \n Values:
@@ -2452,9 +2581,11 @@ spec:
                             type: array
                           accessLogLevel:
                             description: "AccessLogLevel sets the verbosity level
-                              of the access log. \n Values: `info` (default, meaning
-                              all requests are logged), `error` and `disabled`. \n
-                              Other values will produce an error."
+                              of the access log. \n Values: `info` (default, all requests
+                              are logged), `error` (all non-success requests, i.e.
+                              300+ response code, are logged), `critical` (all 5xx
+                              requests are logged) and `disabled`. \n Other values
+                              will produce an error."
                             type: string
                         type: object
                       metrics:
@@ -2585,6 +2716,14 @@ spec:
                             type: string
                         type: object
                     type: object
+                  featureFlags:
+                    description: 'FeatureFlags defines toggle to enable new contour
+                      features. Available toggles are: useEndpointSlices - configures
+                      contour to fetch endpoint data from k8s endpoint slices. defaults
+                      to false and reading endpoint data from the k8s endpoints.'
+                    items:
+                      type: string
+                    type: array
                   gateway:
                     description: Gateway contains parameters for the gateway-api Gateway
                       that Contour is configured to serve traffic.
@@ -2813,6 +2952,189 @@ spec:
                     description: RateLimitService optionally holds properties of the
                       Rate Limit Service to be used for global rate limiting.
                     properties:
+                      defaultGlobalRateLimitPolicy:
+                        description: DefaultGlobalRateLimitPolicy allows setting a
+                          default global rate limit policy for every HTTPProxy. HTTPProxy
+                          can overwrite this configuration.
+                        properties:
+                          descriptors:
+                            description: Descriptors defines the list of descriptors
+                              that will be generated and sent to the rate limit service.
+                              Each descriptor contains 1+ key-value pair entries.
+                            items:
+                              description: RateLimitDescriptor defines a list of key-value
+                                pair generators.
+                              properties:
+                                entries:
+                                  description: Entries is the list of key-value pair
+                                    generators.
+                                  items:
+                                    description: RateLimitDescriptorEntry is a key-value
+                                      pair generator. Exactly one field on this struct
+                                      must be non-nil.
+                                    properties:
+                                      genericKey:
+                                        description: GenericKey defines a descriptor
+                                          entry with a static key and value.
+                                        properties:
+                                          key:
+                                            description: Key defines the key of the
+                                              descriptor entry. If not set, the key
+                                              is set to "generic_key".
+                                            type: string
+                                          value:
+                                            description: Value defines the value of
+                                              the descriptor entry.
+                                            minLength: 1
+                                            type: string
+                                        type: object
+                                      remoteAddress:
+                                        description: RemoteAddress defines a descriptor
+                                          entry with a key of "remote_address" and
+                                          a value equal to the client's IP address
+                                          (from x-forwarded-for).
+                                        type: object
+                                      requestHeader:
+                                        description: RequestHeader defines a descriptor
+                                          entry that's populated only if a given header
+                                          is present on the request. The descriptor
+                                          key is static, and the descriptor value
+                                          is equal to the value of the header.
+                                        properties:
+                                          descriptorKey:
+                                            description: DescriptorKey defines the
+                                              key to use on the descriptor entry.
+                                            minLength: 1
+                                            type: string
+                                          headerName:
+                                            description: HeaderName defines the name
+                                              of the header to look for on the request.
+                                            minLength: 1
+                                            type: string
+                                        type: object
+                                      requestHeaderValueMatch:
+                                        description: RequestHeaderValueMatch defines
+                                          a descriptor entry that's populated if the
+                                          request's headers match a set of 1+ match
+                                          criteria. The descriptor key is "header_match",
+                                          and the descriptor value is static.
+                                        properties:
+                                          expectMatch:
+                                            default: true
+                                            description: ExpectMatch defines whether
+                                              the request must positively match the
+                                              match criteria in order to generate
+                                              a descriptor entry (i.e. true), or not
+                                              match the match criteria in order to
+                                              generate a descriptor entry (i.e. false).
+                                              The default is true.
+                                            type: boolean
+                                          headers:
+                                            description: Headers is a list of 1+ match
+                                              criteria to apply against the request
+                                              to determine whether to populate the
+                                              descriptor entry or not.
+                                            items:
+                                              description: HeaderMatchCondition specifies
+                                                how to conditionally match against
+                                                HTTP headers. The Name field is required,
+                                                only one of Present, NotPresent, Contains,
+                                                NotContains, Exact, NotExact and Regex
+                                                can be set. For negative matching
+                                                rules only (e.g. NotContains or NotExact)
+                                                you can set TreatMissingAsEmpty. IgnoreCase
+                                                has no effect for Regex.
+                                              properties:
+                                                contains:
+                                                  description: Contains specifies
+                                                    a substring that must be present
+                                                    in the header value.
+                                                  type: string
+                                                exact:
+                                                  description: Exact specifies a string
+                                                    that the header value must be
+                                                    equal to.
+                                                  type: string
+                                                ignoreCase:
+                                                  description: IgnoreCase specifies
+                                                    that string matching should be
+                                                    case insensitive. Note that this
+                                                    has no effect on the Regex parameter.
+                                                  type: boolean
+                                                name:
+                                                  description: Name is the name of
+                                                    the header to match against. Name
+                                                    is required. Header names are
+                                                    case insensitive.
+                                                  type: string
+                                                notcontains:
+                                                  description: NotContains specifies
+                                                    a substring that must not be present
+                                                    in the header value.
+                                                  type: string
+                                                notexact:
+                                                  description: NoExact specifies a
+                                                    string that the header value must
+                                                    not be equal to. The condition
+                                                    is true if the header has any
+                                                    other value.
+                                                  type: string
+                                                notpresent:
+                                                  description: NotPresent specifies
+                                                    that condition is true when the
+                                                    named header is not present. Note
+                                                    that setting NotPresent to false
+                                                    does not make the condition true
+                                                    if the named header is present.
+                                                  type: boolean
+                                                present:
+                                                  description: Present specifies that
+                                                    condition is true when the named
+                                                    header is present, regardless
+                                                    of its value. Note that setting
+                                                    Present to false does not make
+                                                    the condition true if the named
+                                                    header is absent.
+                                                  type: boolean
+                                                regex:
+                                                  description: Regex specifies a regular
+                                                    expression pattern that must match
+                                                    the header value.
+                                                  type: string
+                                                treatMissingAsEmpty:
+                                                  description: TreatMissingAsEmpty
+                                                    specifies if the header match
+                                                    rule specified header does not
+                                                    exist, this header value will
+                                                    be treated as empty. Defaults
+                                                    to false. Unlike the underlying
+                                                    Envoy implementation this is **only**
+                                                    supported for negative matches
+                                                    (e.g. NotContains, NotExact).
+                                                  type: boolean
+                                              required:
+                                              - name
+                                              type: object
+                                            minItems: 1
+                                            type: array
+                                          value:
+                                            description: Value defines the value of
+                                              the descriptor entry.
+                                            minLength: 1
+                                            type: string
+                                        type: object
+                                    type: object
+                                  minItems: 1
+                                  type: array
+                              type: object
+                            minItems: 1
+                            type: array
+                          disabled:
+                            description: Disabled configures the HTTPProxy to not
+                              use the default global rate limit policy defined by
+                              the Contour configuration.
+                            type: boolean
+                        type: object
                       domain:
                         description: Domain is passed to the Rate Limit Service.
                         type: string
