@@ -133,7 +133,7 @@ rbac:
   ## @param rbac.create Create the RBAC roles for API accessibility
   ##
   create: true
-  ## @param rbac.rules List of rules for the cluster role
+  ## @param rbac.rules [array] List of rules for the cluster role
   ##
   rules:
     - apiGroups: ["*"]
