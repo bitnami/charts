@@ -194,6 +194,8 @@ jobs:
             Please check the related [action_run#${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for more information.
         with:
           retries: 3
+          # Necessary to trigger support workflows
+          github-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
           script: |
             const {BODY} = process.env
             github.rest.issues.createComment({
