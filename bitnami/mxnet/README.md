@@ -8,6 +8,10 @@ Apache MXNet (Incubating) is a flexible and efficient library for deep learning 
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+## This Helm chart is deprecated
+
+The upstream project has been discontinued and no new features.
+
 ## TL;DR
 
 ```console
