@@ -12,15 +12,15 @@ it('allows to create a new project', () => {
   cy.login();
   // Go to the templates page
   cy.get('[class*="templates-tab"]').click();
-  cy.contains('[data-testid="template-card"]', 'Marketing Portal').within(() => {
+  cy.contains('[data-testid="template-card"]', 'Product Catalog CRUD').within(() => {
     cy.get('[class*="fork-button"]').click();
   })
-  // Create an application from the Marketing Portal template
+  // Create an application from the Product Catalog CRUD template
   cy.contains('Fork template').click();
   cy.contains('Deploy');
   // Check if the application exists in the applications page
   cy.visit('/applications');
-  cy.contains('Customer Communications portal');
+  cy.contains('Product Catalog');
 });
 
 it('allows to change workspace settings', () => {
