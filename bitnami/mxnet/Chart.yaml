@@ -21,7 +21,7 @@ dependencies:
   version: 2.x.x
 # The MXNet chart is deprecated and no longer maintained.
 deprecated: true
-description: DEPRECATED Collection of open source web applications that help software companies build better software.
+description: DEPRECATED Apache MXNet (Incubating) is a flexible and efficient library for deep learning designed to work as a neural network. Bitnami image ships OpenBLAS as math library.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/mxnet/img/mxnet-stack-220x234.png
 keywords:
