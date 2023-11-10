@@ -95,63 +95,68 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### phpMyAdmin deployment parameters
 
-| Name                                    | Description                                                                               | Value           |
-| --------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
-| `hostAliases`                           | Deployment pod host aliases                                                               | `[]`            |
-| `containerPorts.http`                   | HTTP port to expose at container level                                                    | `8080`          |
-| `containerPorts.https`                  | HTTPS port to expose at container level                                                   | `8443`          |
-| `updateStrategy.type`                   | Strategy to use to update Pods                                                            | `RollingUpdate` |
-| `podSecurityContext.enabled`            | Enable phpMyAdmin pods' Security Context                                                  | `true`          |
-| `podSecurityContext.fsGroup`            | User ID for the container                                                                 | `1001`          |
-| `containerSecurityContext.enabled`      | Enable phpMyAdmin containers' Security Context                                            | `true`          |
-| `containerSecurityContext.runAsUser`    | Group ID for the volumes of the pod                                                       | `1001`          |
-| `containerSecurityContext.runAsNonRoot` | Set phpmyadmin container's Security Context runAsNonRoot                                  | `true`          |
-| `resources.limits`                      | The resources limits for the PhpMyAdmin container                                         | `{}`            |
-| `resources.requests`                    | The requested resources for the PhpMyAdmin container                                      | `{}`            |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`         |
-| `startupProbe.httpGet.path`             | Request path for startupProbe                                                             | `/`             |
-| `startupProbe.httpGet.port`             | Port for startupProbe                                                                     | `http`          |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `30`            |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`            |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `30`            |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `6`             |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`             |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`          |
-| `livenessProbe.httpGet.path`            | Request path for livenessProbe                                                            | `/`             |
-| `livenessProbe.httpGet.port`            | Port for livenessProbe                                                                    | `http`          |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `30`            |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`            |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `30`            |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `6`             |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`             |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`          |
-| `readinessProbe.httpGet.path`           | Request path for readinessProbe                                                           | `/`             |
-| `readinessProbe.httpGet.port`           | Port for readinessProbe                                                                   | `http`          |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `30`            |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `10`            |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `30`            |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `6`             |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`             |
-| `customStartupProbe`                    | Override default startup probe                                                            | `{}`            |
-| `customLivenessProbe`                   | Override default liveness probe                                                           | `{}`            |
-| `customReadinessProbe`                  | Override default readiness probe                                                          | `{}`            |
-| `podLabels`                             | Extra labels for PhpMyAdmin pods                                                          | `{}`            |
-| `podAnnotations`                        | Annotations for PhpMyAdmin pods                                                           | `{}`            |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                    | `""`            |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                 | `[]`            |
-| `affinity`                              | Affinity for pod assignment. Evaluated as a template.                                     | `{}`            |
-| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                  | `{}`            |
-| `tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                  | `[]`            |
-| `priorityClassName`                     | phpmyadmin pods' priorityClassName                                                        | `""`            |
-| `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`            |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`            |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes for PhpMyAdmin pods                   | `[]`            |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for PhpMyAdmin container(s)      | `[]`            |
-| `initContainers`                        | Add init containers to the PhpMyAdmin pods                                                | `[]`            |
-| `sidecars`                              | Add sidecar containers to the PhpMyAdmin pods                                             | `[]`            |
+| Name                                                | Description                                                                               | Value            |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------- |
+| `hostAliases`                                       | Deployment pod host aliases                                                               | `[]`             |
+| `containerPorts.http`                               | HTTP port to expose at container level                                                    | `8080`           |
+| `containerPorts.https`                              | HTTPS port to expose at container level                                                   | `8443`           |
+| `updateStrategy.type`                               | Strategy to use to update Pods                                                            | `RollingUpdate`  |
+| `podSecurityContext.enabled`                        | Enable phpMyAdmin pods' Security Context                                                  | `true`           |
+| `podSecurityContext.fsGroup`                        | User ID for the container                                                                 | `1001`           |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`           |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`           |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`           |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`          |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                   | `false`          |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                 | `false`          |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                        | `["ALL"]`        |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                          | `RuntimeDefault` |
+| `resources.limits`                                  | The resources limits for the PhpMyAdmin container                                         | `{}`             |
+| `resources.requests`                                | The requested resources for the PhpMyAdmin container                                      | `{}`             |
+| `startupProbe.enabled`                              | Enable startupProbe                                                                       | `false`          |
+| `startupProbe.httpGet.path`                         | Request path for startupProbe                                                             | `/`              |
+| `startupProbe.httpGet.port`                         | Port for startupProbe                                                                     | `http`           |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                    | `30`             |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                           | `10`             |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                          | `30`             |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                        | `6`              |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                        | `1`              |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                      | `true`           |
+| `livenessProbe.httpGet.path`                        | Request path for livenessProbe                                                            | `/`              |
+| `livenessProbe.httpGet.port`                        | Port for livenessProbe                                                                    | `http`           |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                   | `30`             |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                          | `10`             |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                         | `30`             |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                       | `6`              |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                       | `1`              |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                     | `true`           |
+| `readinessProbe.httpGet.path`                       | Request path for readinessProbe                                                           | `/`              |
+| `readinessProbe.httpGet.port`                       | Port for readinessProbe                                                                   | `http`           |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                  | `30`             |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                         | `10`             |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                        | `30`             |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                      | `6`              |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                      | `1`              |
+| `customStartupProbe`                                | Override default startup probe                                                            | `{}`             |
+| `customLivenessProbe`                               | Override default liveness probe                                                           | `{}`             |
+| `customReadinessProbe`                              | Override default readiness probe                                                          | `{}`             |
+| `podLabels`                                         | Extra labels for PhpMyAdmin pods                                                          | `{}`             |
+| `podAnnotations`                                    | Annotations for PhpMyAdmin pods                                                           | `{}`             |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`             |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`           |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`             |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set.                                    | `""`             |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                 | `[]`             |
+| `affinity`                                          | Affinity for pod assignment. Evaluated as a template.                                     | `{}`             |
+| `nodeSelector`                                      | Node labels for pod assignment. Evaluated as a template.                                  | `{}`             |
+| `tolerations`                                       | Tolerations for pod assignment. Evaluated as a template.                                  | `[]`             |
+| `priorityClassName`                                 | phpmyadmin pods' priorityClassName                                                        | `""`             |
+| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                            | `""`             |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`             |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for PhpMyAdmin pods                   | `[]`             |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for PhpMyAdmin container(s)      | `[]`             |
+| `initContainers`                                    | Add init containers to the PhpMyAdmin pods                                                | `[]`             |
+| `sidecars`                                          | Add sidecar containers to the PhpMyAdmin pods                                             | `[]`             |
 
 ### Traffic Exposure parameters
 

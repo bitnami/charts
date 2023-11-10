@@ -53,8 +53,7 @@
             },
             "endpoint": "lb-kubeapps-http",
             "env": {
-              "repoName": "bitnami",
-              "repoURL": "oci://registry-1.docker.io/bitnamicharts"
+              "registryName": "bitnamicharts"
             },
             "app_protocol": "HTTP"
           }
