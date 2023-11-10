@@ -80,7 +80,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.6.0-debian-11-r0
+  tag: 3.6.0-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -561,6 +561,14 @@ controller:
   ## @param controller.lifecycleHooks lifecycleHooks for the Kafka container to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## Kafka init container resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param controller.initContainerResources.limits The resources limits for the init container
+  ## @param controller.initContainerResources.requests The requested resources for the init container
+  ##
+  initContainerResources:
+    limits: {}
+    requests: {}
   ## Kafka resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param controller.resources.limits The resources limits for the container
@@ -673,6 +681,9 @@ controller:
   ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
   ##
   podManagementPolicy: Parallel
+  ## @param controller.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
+  ##
+  minReadySeconds: 0
   ## @param controller.priorityClassName Name of the existing priority class to be used by kafka pods
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
@@ -825,7 +836,6 @@ controller:
 ##
 broker:
   ## @param broker.replicaCount Number of Kafka broker-only nodes
-  ## Ignore this section if running in Zookeeper mode.
   ##
   replicaCount: 0
   ## @param broker.minId Minimal node.id values for broker-only nodes. Do not change after first initialization.
@@ -940,6 +950,14 @@ broker:
   ## @param broker.lifecycleHooks lifecycleHooks for the Kafka container to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## Kafka init container resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param broker.initContainerResources.limits The resources limits for the container
+  ## @param broker.initContainerResources.requests The requested resources for the container
+  ##
+  initContainerResources:
+    limits: {}
+    requests: {}
   ## Kafka resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param broker.resources.limits The resources limits for the container
@@ -1052,6 +1070,9 @@ broker:
   ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
   ##
   podManagementPolicy: Parallel
+  ## @param broker.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
+  ##
+  minReadySeconds: 0
   ## @param broker.priorityClassName Name of the existing priority class to be used by kafka pods
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
@@ -1307,7 +1328,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.28.2-debian-11-r16
+      tag: 1.28.3-debian-11-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1893,7 +1914,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.19.0-debian-11-r95
+      tag: 0.20.0-debian-11-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

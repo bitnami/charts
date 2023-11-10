@@ -128,6 +128,8 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "ns1") .Values.ns1.apiKey (not .Values.ns1.secretName) -}}
     {{- true -}}
+{{- else if and (eq .Values.provider "civo") .Values.civo.apiToken (not .Values.civo.secretName) -}}
+    {{- true -}}
 {{- else -}}
 {{- end -}}
 {{- end -}}
@@ -180,6 +182,8 @@ Return the name of the Secret used to store the passwords
 {{- .Values.rfc2136.secretName }}
 {{- else if and (eq .Values.provider "ns1") .Values.ns1.secretName }}
 {{- .Values.ns1.secretName }}
+{{- else if and (eq .Values.provider "civo") .Values.civo.secretName }}
+{{- .Values.civo.secretName }}
 {{- else -}}
 {{- template "external-dns.fullname" . }}
 {{- end -}}

@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis-cluster
-  tag: 7.2.2-debian-11-r0
+  tag: 7.2.3-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -143,13 +143,11 @@ rbac:
 ## Redis&reg; pod Security Context
 ## @param podSecurityContext.enabled Enable Redis&reg; pod Security Context
 ## @param podSecurityContext.fsGroup Group ID for the pods
-## @param podSecurityContext.runAsUser User ID for the pods
 ## @param podSecurityContext.sysctls Set namespaced sysctls for the pods
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-  runAsUser: 1001
   ## Uncomment the setting below to increase the net.core.somaxconn value
   ## e.g:
   ## sysctls:
@@ -168,14 +166,26 @@ minAvailable: ""
 ##
 maxUnavailable: ""
 ## Containers Security Context
-## @param containerSecurityContext.enabled Enable Containers' Security Context
-## @param containerSecurityContext.runAsUser User ID for the containers.
-## @param containerSecurityContext.runAsNonRoot Run container as non root
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## @param usePassword Use password authentication
 ##
 usePassword: true
@@ -359,7 +369,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -849,7 +859,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.55.0-debian-11-r0
+    tag: 1.55.0-debian-11-r2
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1018,7 +1028,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 11-debian-11-r90
+  tag: 11-debian-11-r91
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
