@@ -143,7 +143,12 @@ spec:
             {{- else }}
             - --artifacts-destination={{ .Values.tracking.persistence.mountPath }}/mlartifacts
             {{- end }}
+            {{- if and (not (include "mlflow.v0.s3.serveArtifacts" .)) (include "mlflow.v0.s3.enabled" .) }}
+            - --default-artifact-root=s3://{{ include "mlflow.v0.s3.bucket" . }}
+            - --no-serve-artifacts
+            {{ else }}
             - --serve-artifacts
+            {{- end }}
             - --host=0.0.0.0
             - --port={{ .Values.tracking.containerPorts.http }}
             {{- if .Values.tracking.metrics.enabled }}
