@@ -267,6 +267,26 @@ dataPlane:
           prefix: /apisix
           timeout: 30
         {{- end }}
+      etcd:
+        host:
+          {{- if .Values.etcd.enabled  }}
+            {{- $replicas := $.Values.etcd.replicaCount | int }}
+            {{- range $i, $_e := until $replicas }}
+          - {{ printf "%s://%s-%d.%s:%v" (ternary "https" "http" $.Values.etcd.auth.client.secureTransport) (include "apisix.etcd.fullname" $ ) $i (include "apisix.etcd.headlessServiceName" $) ( include "apisix.etcd.port" $ ) }}
+            {{- end }}
+          {{- else }}
+          {{- range $node := .Values.externalEtcd.servers }}
+          - {{ ternary "https" "http" $.Values.externalEtcd.secureTransport }}://{{ printf "%s:%v" $node (include "apisix.etcd.port" $) }}
+          {{- end }}
+          {{- end }}
+        prefix: /apisix
+        timeout: 30
+        use_grpc: false
+        startup_retry: 60
+        {{- if (include "apisix.etcd.authEnabled" .) }}
+        user: "{{ print "{{APISIX_ETCD_USER}}" }}"
+        password: "{{ print "{{APISIX_ETCD_PASSWORD}}" }}"
+        {{- end }}
       {{- if .Values.dataPlane.tls.enabled }}
       certs:
         {{- if .Values.dataPlane.tls.enabled }}

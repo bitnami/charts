@@ -250,6 +250,10 @@ Return the definition of the ssh server configuration init container
       echo "C_INCLUDE_PATH=$C_INCLUDE_PATH" >> /home/deepspeed/.ssh/environment
       echo "CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH" >> /home/deepspeed/.ssh/environment
       echo "PATH=$PATH" >> /home/deepspeed/.ssh/environment
+      echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> /home/deepspeed/.ssh/environment
+      echo "CFLAGS=$CFLAGS" >> /home/deepspeed/.ssh/environment
+      echo "CPPFLAGS=$CPPFLAGS" >> /home/deepspeed/.ssh/environment
+      echo "LDFLAGS=$LDFLAGS" >> /home/deepspeed/.ssh/environment
       chmod 700 /home/deepspeed/.ssh
       chmod 600 /home/deepspeed/.ssh/authorized_keys
       ssh-keygen -A -f /bitnami/ssh/server-private-key/

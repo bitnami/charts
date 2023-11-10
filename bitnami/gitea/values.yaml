@@ -62,7 +62,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/gitea
-  tag: 1.20.5-debian-11-r6
+  tag: 1.20.5-debian-11-r8
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -80,9 +80,6 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-## @param replicaCount Number of Gitea Pods to run (requires ReadWriteMany PVC support)
-##
-replicaCount: 1
 ## @param adminUsername User of the application
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/gitea#configuration
 ##

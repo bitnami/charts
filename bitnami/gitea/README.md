@@ -31,7 +31,6 @@ Looking to use Gitea in production? Try [VMware Tanzu Application Catalog](https
 - Kubernetes 1.23+
 - Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
-- ReadWriteMany volumes for deployment scaling
 
 ## Installing the Chart
 
@@ -89,7 +88,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`                                  | Gitea image pull policy                                                                                               | `IfNotPresent`          |
 | `image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                      | `[]`                    |
 | `image.debug`                                       | Specify if debug logs should be enabled                                                                               | `false`                 |
-| `replicaCount`                                      | Number of Gitea Pods to run (requires ReadWriteMany PVC support)                                                      | `1`                     |
 | `adminUsername`                                     | User of the application                                                                                               | `bn_user`               |
 | `adminPassword`                                     | Application password                                                                                                  | `""`                    |
 | `adminEmail`                                        | Admin email                                                                                                           | `user@example.com`      |

@@ -22,6 +22,9 @@ spec:
       port: {{ coalesce .Values.metrics.service.ports.http .Values.metrics.service.port }}
       protocol: TCP
       targetPort: http
+    {{- if .Values.metrics.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}      
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: keycloak

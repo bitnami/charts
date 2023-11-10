@@ -34,7 +34,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.12.7-debian-11-r0
+  tag: 3.12.8-debian-11-r1
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -1048,6 +1048,10 @@ service:
   ## - 10.10.10.0/24
   ##
   loadBalancerSourceRanges: []
+  ## @param service.allocateLoadBalancerNodePorts Whether to allocate node ports when service type is LoadBalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
+  ##
+  allocateLoadBalancerNodePorts: true 
   ## @param service.externalIPs Set the ExternalIPs
   ##
   externalIPs: []
@@ -1401,7 +1405,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

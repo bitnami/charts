@@ -16,7 +16,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.tracking.service.labels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if or .Values.tracking.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" (dict "values" .Values.tracking.service.annotations .Values.commonAnnotations "context" .) | fromYaml }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" ( list .Values.tracking.service.annotations .Values.commonAnnotations ) "context" .) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
