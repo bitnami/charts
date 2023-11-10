@@ -1,12 +1,12 @@
+This Helm chart is deprecated
+
+The upstream project has been discontinued and no new features.
+
 CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
 ** Please be patient while the chart is being deployed **
-
-This Helm chart is deprecated
-
-The upstream project has been discontinued and no new features.
 
 {{- if or .Values.configMap (.Files.Glob "files/*") .Values.cloneFilesFromGit.enabled }}
 {{- if .Values.entrypoint.file }}
