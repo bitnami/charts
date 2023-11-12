@@ -16,8 +16,18 @@ metadata:
   {{- end }}
 spec:
   endpoints:
+    {{- /* Backward Compatibility for .Values.metrics.serviceMonitor.path */}}
+    {{- $paths := list }}
+    {{- if (.Values.metrics.serviceMonitor.paths | empty | not) }}
+    {{- $paths = .Values.metrics.serviceMonitor.paths }}
+    {{- end }}
+    {{- if (.Values.metrics.serviceMonitor.path | empty | not) }}
+    {{- $paths = prepend $paths .Values.metrics.serviceMonitor.path }}
+    {{- end }}
+    {{- range $idx, $path := ($paths | uniq) }}
+    {{- with $ }}
     - port: minio-api
-      path: {{ .Values.metrics.serviceMonitor.path }}
+      path: {{ $path }}
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}
