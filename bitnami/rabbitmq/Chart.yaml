@@ -10,7 +10,7 @@ annotations:
     - name: rabbitmq
       image: docker.io/bitnami/rabbitmq:3.12.8-debian-11-r1
 apiVersion: v2
-appVersion: 3.12.8
+appVersion: 3.12.9
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
