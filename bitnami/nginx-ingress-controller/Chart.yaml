@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: nginx-ingress-controller
-      image: docker.io/bitnami/nginx-ingress-controller:1.9.3-debian-11-r0
+      image: docker.io/bitnami/nginx-ingress-controller:1.9.4-debian-11-r1
     - name: nginx
-      image: docker.io/bitnami/nginx:1.25.2-debian-11-r47
+      image: docker.io/bitnami/nginx:1.25.3-debian-11-r1
 apiVersion: v2
-appVersion: 1.9.3
+appVersion: 1.9.4
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -34,4 +34,4 @@ maintainers:
 name: nginx-ingress-controller
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller
-version: 9.9.2
+version: 9.9.3
