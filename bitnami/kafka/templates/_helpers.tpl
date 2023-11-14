@@ -1135,11 +1135,11 @@ kafka: rbac.create
 {{- define "kafka.validateValues.externalAccessAutoDiscoveryIPsOrNames" -}}
 {{- $loadBalancerNameListLength := len .Values.externalAccess.controller.service.loadBalancerNames -}}
 {{- $loadBalancerIPListLength := len .Values.externalAccess.controller.service.loadBalancerIPs -}}
-{{- if and .Values.externalAccess.enabled (or .Values.externalAccess.controller.forceExpose (not .Values.controller.controllerOnly)) (eq .Values.externalAccess.controller.service.type "LoadBalancer") (not .Values.externalAccess.autoDiscovery.enabled) (eq $loadBalancerNameListLength 0) (eq $loadBalancerIPListLength 0) }}
+{{- if and .Values.externalAccess.enabled (gt (int .Values.controller.replicaCount) 0) (or .Values.externalAccess.controller.forceExpose (not .Values.controller.controllerOnly)) (eq .Values.externalAccess.controller.service.type "LoadBalancer") (not .Values.externalAccess.autoDiscovery.enabled) (eq $loadBalancerNameListLength 0) (eq $loadBalancerIPListLength 0) }}
 kafka: externalAccess.controller.service.loadBalancerNames or externalAccess.controller.service.loadBalancerIPs
     By specifying "externalAccess.enabled=true", "externalAccess.autoDiscovery.enabled=false" and
     "externalAccess.controller.service.type=LoadBalancer" at least one of externalAccess.controller.service.loadBalancerNames
-    or externalAccess.controller.service.loadBalancerIPs  must be set and the length of those arrays must be equal
+    or externalAccess.controller.service.loadBalancerIPs must be set and the length of those arrays must be equal
     to the number of replicas.
 {{- end -}}
 {{- $loadBalancerNameListLength := len .Values.externalAccess.broker.service.loadBalancerNames -}}
@@ -1149,7 +1149,7 @@ kafka: externalAccess.controller.service.loadBalancerNames or externalAccess.con
 kafka: externalAccess.broker.service.loadBalancerNames or externalAccess.broker.service.loadBalancerIPs
     By specifying "externalAccess.enabled=true", "externalAccess.autoDiscovery.enabled=false" and
     "externalAccess.broker.service.type=LoadBalancer" at least one of externalAccess.broker.service.loadBalancerNames
-    or externalAccess.broker.service.loadBalancerIPs  must be set and the length of those arrays must be equal
+    or externalAccess.broker.service.loadBalancerIPs must be set and the length of those arrays must be equal
     to the number of replicas.
 {{- end -}}
 {{- end -}}
