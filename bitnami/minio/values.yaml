@@ -350,8 +350,12 @@ provisioning:
   ##   - name: test-bucket
   ##     region: us-east-1
   ##     # Only when mode is 'distributed'
+  ##     # Allowed values: "Versioned" | "Suspended" | "Unchanged"
+  ##     # Defaults to "Suspended" if not specified.
+  ##     # For compatibility, accepts boolean values as well, where true maps
+  ##     # to "Versioned" and false to "Suspended".
   ##     # ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
-  ##     versioning: false
+  ##     versioning: Suspended
   ##     # Versioning is automatically enabled if withLock is true
   ##     # ref: https://docs.min.io/docs/minio-bucket-versioning-guide.html
   ##     withLock: true
