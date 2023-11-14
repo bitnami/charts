@@ -248,7 +248,7 @@ ingress:
 image:
   registry: docker.io
   repository: bitnami/oauth2-proxy
-  tag: 7.5.1-debian-11-r10
+  tag: 7.5.1-debian-11-r11
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -470,12 +470,26 @@ podSecurityContext:
   fsGroup: 1001
 ## Configure Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param containerSecurityContext.enabled Enabled OAuth2 Proxy containers' Security Context
-## @param containerSecurityContext.runAsUser Set OAuth2 Proxy containers' Security Context runAsUser
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
+  runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 
 ## @param command Override default container command (useful when using custom images)
 ##
@@ -649,6 +663,9 @@ externalRedis:
   ## NOTE: When it's set, the `externalRedis.password` parameter is ignored
   ##
   existingSecret: ""
+  ## @param externalRedis.existingSecretPasswordKey Key inside the existing secret with Redis&reg; credentials
+  ##
+  existingSecretPasswordKey: ""
 
 ## @section Redis&reg; sub-chart parameters
 ##

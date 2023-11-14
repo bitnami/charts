@@ -171,14 +171,27 @@ podSecurityContext:
   enabled: true
   fsGroup: 1001
 ## SecurityContext configuration for the container
-## @param containerSecurityContext.enabled Enable securityContext on for DokuWiki deployment
-## @param containerSecurityContext.runAsUser User for the securityContext
-## @param containerSecurityContext.runAsNonRoot Force the container as be run as non root
+## @param containerSecurityContext.enabled Enabled Dokuwiki containers' Security Context
+## @param containerSecurityContext.runAsUser Set Dokuwiki containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set primary container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set primary container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set primary container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
+  readOnlyRootFilesystem: false
+
 ## Configure resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.requests [object] The requested resources for the container
@@ -575,7 +588,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.2-debian-11-r10
+    tag: 1.0.3-debian-11-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

@@ -60,7 +60,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/pinniped
-  tag: 0.27.0-debian-11-r0
+  tag: 0.27.0-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -223,16 +223,26 @@ concierge:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param concierge.containerSecurityContext.enabled Enabled Concierge containers' Security Context
-  ## @param concierge.containerSecurityContext.runAsUser Set Concierge containers' Security Context runAsUser
-  ## @param concierge.containerSecurityContext.runAsNonRoot Set Concierge containers' Security Context runAsNonRoot
-  ## @param concierge.containerSecurityContext.readOnlyRootFilesystem Enable readOnlyRootFilesystem
+  ## @param concierge.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param concierge.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param concierge.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param concierge.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param concierge.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param concierge.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param concierge.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param concierge.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param concierge.existingConfigmap The name of an existing ConfigMap with your custom configuration for Concierge
   ##
@@ -560,16 +570,26 @@ supervisor:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param supervisor.containerSecurityContext.enabled Enabled Supervisor containers' Security Context
-  ## @param supervisor.containerSecurityContext.runAsUser Set Supervisor containers' Security Context runAsUser
-  ## @param supervisor.containerSecurityContext.runAsNonRoot Set Supervisor containers' Security Context runAsNonRoot
-  ## @param supervisor.containerSecurityContext.readOnlyRootFilesystem Enable readOnlyRootFilesystem
+  ## @param supervisor.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param supervisor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param supervisor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param supervisor.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param supervisor.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param supervisor.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param supervisor.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param supervisor.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param supervisor.existingConfigmap The name of an existing ConfigMap with your custom configuration for Supervisor
   ##

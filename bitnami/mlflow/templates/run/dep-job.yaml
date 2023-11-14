@@ -88,7 +88,7 @@ spec:
         {{- if .Values.run.enableDefaultInitContainers }}
         {{- if eq .Values.run.source.type "git" }}
         # Clone git repository
-        {{- include "mlflow.v0.git.cloneInitContainer" (dict "component" "run" "context" $) | nindent 8 }}
+        {{- include "mlflow.v0.git.cloneInitContainer" $ | nindent 8 }}
         {{- end }}
         {{- if and .Values.volumePermissions.enabled .Values.run.persistence.enabled }}
         # Adjust volume permissions

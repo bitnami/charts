@@ -237,6 +237,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                                        | Description                                                                                             | Value                    |
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `replica.kind`                                              | Use either DaemonSet or StatefulSet (default)                                                           | `StatefulSet`            |
 | `replica.replicaCount`                                      | Number of Redis&reg; replicas to deploy                                                                 | `3`                      |
 | `replica.configuration`                                     | Configuration for Redis&reg; replicas nodes                                                             | `""`                     |
 | `replica.disableCommands`                                   | Array with Redis&reg; commands to disable on replicas nodes                                             | `["FLUSHDB","FLUSHALL"]` |

@@ -89,6 +89,12 @@ topologyKey: ""
 serviceBindings:
   enabled: false
 
+## @param enableServiceLinks Whether information about services should be injected into pod's environment variable
+## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+##
+enableServiceLinks: true
+
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -120,7 +126,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb
-  tag: 7.0.2-debian-11-r7
+  tag: 7.0.3-debian-11-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -247,7 +253,7 @@ tls:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.2-debian-11-r47
+    tag: 1.25.3-debian-11-r1
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -539,25 +545,26 @@ podSecurityContext:
   sysctls: []
 ## MongoDB(&reg;) containers' Security Context (main and metrics container).
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enable MongoDB(&reg;) container(s)' Security Context
-## @param containerSecurityContext.runAsUser User ID for the MongoDB(&reg;) container
-## @param containerSecurityContext.runAsGroup Group ID for the MongoDB(&reg;) container
-## @param containerSecurityContext.runAsNonRoot Set MongoDB(&reg;) container's Security Context runAsNonRoot
-## @param containerSecurityContext.allowPrivilegeEscalation Is it possible to escalate MongoDB(&reg;) pod(s) privileges
-## @param containerSecurityContext.seccompProfile.type Set MongoDB(&reg;) container's Security Context seccompProfile type
-## @param containerSecurityContext.capabilities.drop Set MongoDB(&reg;) container's Security Context capabilities to drop
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
-  runAsGroup: 0
   runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: false
   allowPrivilegeEscalation: false
-  seccompProfile:
-    type: RuntimeDefault
   capabilities:
-    drop:
-      - ALL
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## MongoDB(&reg;) containers' resource requests and limits.
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -812,7 +819,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.28.3-debian-11-r0
+      tag: 1.28.3-debian-11-r1
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1002,6 +1009,57 @@ externalAccess:
       ##
       sessionAffinityConfig: {}
 
+## @section Network policy parameters
+##
+
+## Enable Network policies using Kubernetes Network Policies
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Enable MongoDB(&reg;) network policies
+  ##
+  enabled: false
+
+  ## Ingress rules - Allow incoming connections
+  ##
+  ingress:
+    ## @param networkPolicy.ingress.namespaceSelector [object] Namespace selector label that is allowed to access the MongoDB(&reg;) node. This label will be used to identify the allowed namespace(s).
+    ## @param networkPolicy.ingress.podSelector [object] Pod selector label that is allowed to access the MongoDB(&reg;) node. This label will be used to identify the allowed pod(s).
+    ## @param networkPolicy.ingress.customRules [array] Custom network policy for the MongoDB(&reg;) node.
+    namespaceSelector: {}
+    ## e.g:
+    ## namespaceSelector:
+    ##   label1: value1
+    podSelector: {}
+    ## e.g:
+    ## podSelector:
+    ##   label2: value2
+    customRules: []
+    ## e.g:
+    ## customRules:
+    ##   - from:
+    ##     - namespaceSelector:
+    ##         matchLabels:
+    ##            label1: value1
+    ##       podSelector:
+    ##         matchLabels:
+    ##            label2: value2
+  ## Egress rules - deny outgoing connections
+  ##
+  egress:
+    ## @param networkPolicy.egress.customRules [array] Custom network policy for the MongoDB(&reg;) node.
+    ##
+    customRules: []
+    ## e.g:
+    ## customRules:
+    ##   - to:
+    ##     - namespaceSelector:
+    ##         matchLabels:
+    ##            label1: value1
+    ##       podSelector:
+    ##         matchLabels:
+    ##            label2: value2
+
 ## @section Persistence parameters
 ##
 
@@ -1103,25 +1161,26 @@ backup:
     restartPolicy: OnFailure
     ## backup container's Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param backup.cronjob.containerSecurityContext.runAsUser User ID for the backup container
-    ## @param backup.cronjob.containerSecurityContext.runAsGroup Group ID for the backup container
-    ## @param backup.cronjob.containerSecurityContext.runAsNonRoot Set backup container's Security Context runAsNonRoot
-    ## @param backup.cronjob.containerSecurityContext.readOnlyRootFilesystem Is the container itself readonly
-    ## @param backup.cronjob.containerSecurityContext.allowPrivilegeEscalation Is it possible to escalate backup pod(s) privileges
-    ## @param backup.cronjob.containerSecurityContext.seccompProfile.type Set backup container's Security Context seccompProfile type
-    ## @param backup.cronjob.containerSecurityContext.capabilities.drop Set backup container's Security Context capabilities to drop
+    ## @param backup.cronjob.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param backup.cronjob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param backup.cronjob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param backup.cronjob.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param backup.cronjob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param backup.cronjob.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param backup.cronjob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param backup.cronjob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
+      enabled: true
       runAsUser: 1001
-      runAsGroup: 0
       runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: false
       allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: true
-      seccompProfile:
-        type: RuntimeDefault
       capabilities:
-        drop:
-          - ALL
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## @param backup.cronjob.command Set backup container's command to run
     ##
     command: []
@@ -1292,7 +1351,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1494,25 +1553,26 @@ arbiter:
     sysctls: []
   ## MongoDB(&reg;) Arbiter containers' Security Context (only main container).
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param arbiter.containerSecurityContext.enabled Enable Arbiter container(s)' Security Context
-  ## @param arbiter.containerSecurityContext.runAsUser User ID for the Arbiter container
-  ## @param arbiter.containerSecurityContext.runAsGroup Group ID for the Arbiter container
-  ## @param arbiter.containerSecurityContext.runAsNonRoot Set Arbiter containers' Security Context runAsNonRoot
-  ## @param arbiter.containerSecurityContext.allowPrivilegeEscalation Is it possible to escalate Arbiter pod(s) privileges
-  ## @param arbiter.containerSecurityContext.seccompProfile.type Set Arbiter container's Security Context seccompProfile type
-  ## @param arbiter.containerSecurityContext.capabilities.drop Set Arbiter container's Security Context capabilities to drop
+  ## @param arbiter.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param arbiter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param arbiter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param arbiter.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param arbiter.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param arbiter.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param arbiter.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param arbiter.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-    runAsGroup: 0
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
-    seccompProfile:
-      type: RuntimeDefault
     capabilities:
-      drop:
-        - ALL
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## MongoDB(&reg;) Arbiter containers' resource requests and limits.
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1828,25 +1888,26 @@ hidden:
     sysctls: []
   ## MongoDB(&reg;) Hidden containers' Security Context (only main container).
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param hidden.containerSecurityContext.enabled Enable Hidden container(s)' Security Context
-  ## @param hidden.containerSecurityContext.runAsUser User ID for the Hidden container
-  ## @param hidden.containerSecurityContext.runAsGroup Group ID for the Hidden container
-  ## @param hidden.containerSecurityContext.runAsNonRoot Set Hidden containers' Security Context runAsNonRoot
-  ## @param hidden.containerSecurityContext.allowPrivilegeEscalation Set Hidden containers' Security Context allowPrivilegeEscalation
-  ## @param hidden.containerSecurityContext.seccompProfile.type Set Hidden container's Security Context seccompProfile type
-  ## @param hidden.containerSecurityContext.capabilities.drop Set Hidden container's Security Context capabilities to drop
+  ## @param hidden.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param hidden.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param hidden.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param hidden.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param hidden.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param hidden.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param hidden.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param hidden.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-    runAsGroup: 0
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
-    seccompProfile:
-      type: RuntimeDefault
     capabilities:
-      drop:
-        - ALL
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## MongoDB(&reg;) Hidden containers' resource requests and limits.
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
