@@ -195,6 +195,10 @@ spec:
             - name: notifiers
               mountPath: /opt/bitnami/grafana/conf/provisioning/notifiers
             {{- end }}
+            {{- if .Values.alerting.configMapName }}
+            - name: alerting
+              mountPath: /opt/bitnami/grafana/conf/provisioning/alerting
+            {{- end }}
             {{- if .Values.ldap.enabled }}
             - name: ldap
               mountPath: /opt/bitnami/grafana/conf/ldap.toml
@@ -319,6 +323,11 @@ spec:
         - name: notifiers
           configMap:
             name: {{ .Values.notifiers.configMapName }}
+        {{- end }}
+        {{- if .Values.alerting.configMapName }}
+        - name: alerting
+          configMap:
+            name: {{ .Values.alerting.configMapName }}
         {{- end }}
         {{- if .Values.config.useGrafanaIniFile }}
         - name: grafana-ini
