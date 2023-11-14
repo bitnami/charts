@@ -79,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonAnnotations`      | Annotations to add to all deployed objects                                                | `{}`            |
 | `clusterDomain`          | Kubernetes cluster domain name                                                            | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                         | `[]`            |
-| `enableServiceLinks`     | Whether information about services should be injected into all pods' environment variable | `true`          |
+| `enableServiceLinks`     | Whether information about services should be injected into all pods' environment variable | `false`         |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)   | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployments/statefulsets                        | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployments/statefulsets                           | `["infinity"]`  |
