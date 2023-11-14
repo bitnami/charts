@@ -586,7 +586,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/kong-ingress-controller
-    tag: 2.12.0-debian-11-r10
+    tag: 3.0.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -810,7 +810,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 14.9.0-debian-11-r60
+    tag: 14.10.0-debian-11-r4
     digest: ""
   auth:
     username: kong
