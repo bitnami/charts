@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/metrics-server
-  tag: 0.6.4-debian-11-r70
+  tag: 0.6.4-debian-11-r72
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -415,16 +415,26 @@ customLivenessProbe: {}
 customReadinessProbe: {}
 ## Container security context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enable Container security context
-## @param containerSecurityContext.readOnlyRootFilesystem ReadOnlyRootFilesystem for the container
-## @param containerSecurityContext.runAsNonRoot Run containers as non-root users
+## @param containerSecurityContext.enabled Enabled containers' Security Context
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
-  readOnlyRootFilesystem: false
-  runAsNonRoot: true
   runAsUser: 1001
+  runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## Pod security context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Pod security context

@@ -31,7 +31,7 @@ spec:
       annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.controller.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
-      {{- include "common.images.pullSecrets" (dict "images" (list .Values.speaker.image .Values.controller.image) "global" .Values.global) | nindent 6 }}
+      {{- include "common.images.renderPullSecrets" (dict "images" (list .Values.speaker.image .Values.controller.image) "context" $) | nindent 6 }}
       {{- if .Values.controller.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.controller.hostAliases "context" $) | nindent 8 }}
       {{- end }}

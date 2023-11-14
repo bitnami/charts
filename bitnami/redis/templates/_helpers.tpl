@@ -44,7 +44,7 @@ Return sysctl image
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "redis.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.sentinel.image .Values.metrics.image .Values.volumePermissions.image .Values.sysctl.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.sentinel.image .Values.metrics.image .Values.volumePermissions.image .Values.sysctl.image) "context" $) -}}
 {{- end -}}
 
 {{/*
