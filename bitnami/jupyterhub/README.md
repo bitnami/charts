@@ -472,6 +472,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `singleuser.persistence.storageClass` | Persistent Volumes storage class                           | `""`                |
 | `singleuser.persistence.accessModes`  | Persistent Volumes access modes                            | `["ReadWriteOnce"]` |
 | `singleuser.persistence.size`         | Persistent Volumes size                                    | `10Gi`              |
+| `singleuser.profileList`              | Define JupyterHub profiles                                 | `[]`                |
 
 ### Traffic exposure parameters
 
