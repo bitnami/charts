@@ -23,7 +23,7 @@ spec:
   {{- if .Values.tracking.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.tracking.pdb.maxUnavailable }}
   {{- end  }}
-  {{- $podLabels := include "common.tplvalues.merge" (dict "values" .Values.tracking.podLabels .Values.commonLabels "context" .) | fromYaml }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.tracking.podLabels .Values.commonLabels) "context" .) | fromYaml }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: mlflow
