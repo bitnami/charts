@@ -499,6 +499,7 @@ cloneStaticSiteFromGit:
 serverBlock: |-
    server {
      listen 0.0.0.0:8080;
+     proxy_ssl_verify off;
      location / {
        proxy_pass https://10.15.10.30/;
      }
