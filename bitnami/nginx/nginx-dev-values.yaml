@@ -502,7 +502,7 @@ serverBlock: |-
      }
      location /generic-test {
        proxy_pass https://10.10.116.3/;
-     
+     }
    }
 
 
