@@ -406,7 +406,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cassandra.dbUser.password`    | Password for `dbUser.user`. Randomly generated if empty | `""`             |
 | `cassandra.service.ports.cql`  | Cassandra cql port                                      | `9042`           |
 
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/jaeger/values.yaml)
 
 ## Configuration and installation details
 

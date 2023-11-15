@@ -348,7 +348,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/fluen
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/fluentd/values.yaml)
 
 ## Configuration and installation details
 
@@ -464,7 +464,7 @@ The default behaviour is to run as `root` because:
 
 Since we would like the chart to work out-of-the-box for as many users as possible, the `forwarder` thus runs as root by default. You can read more about the motivation for this at [#1905](https://github.com/bitnami/charts/issues/1905) and [#2323](https://github.com/bitnami/charts/pull/2323), however you should be aware of this, and the risks of running root containers in general.
 
-If you enable the forwarder's [bundled PodSecurityPolicy](templates/forwarder-psp.yaml) with `forwarder.rbac.pspEnabled=true` it will allow the pod to run as `root` by default, while ensuring as many other privileges as possible are dropped.
+If you enable the forwarder's [bundled PodSecurityPolicy](https://github.com/bitnami/charts/tree/main/bitnami/fluentd/templates/forwarder-psp.yaml) with `forwarder.rbac.pspEnabled=true` it will allow the pod to run as `root` by default, while ensuring as many other privileges as possible are dropped.
 
 #### Running as non-root
 
@@ -473,7 +473,7 @@ You can run as the `fluentd` user/group (non-root) with the below overrides if:
 - you have control of the `hostPath` filesystem permissions on your nodes sufficient to allow the fluentd user to read from them
 - don't need to write to the `hostPath`s
 
-Note that if you have enabled the [bundled PodSecurityPolicy](templates/forwarder-psp.yaml), it will adapt to the Chart values overrides.
+Note that if you have enabled the [bundled PodSecurityPolicy](https://github.com/bitnami/charts/tree/main/bitnami/fluentd/templates/forwarder-psp.yaml), it will adapt to the Chart values overrides.
 
 ```yaml
 forwarder:
@@ -488,7 +488,7 @@ forwarder:
 
 #### Pod Security Policy & Custom `hostPath`s
 
-Mounting additional `hostPath`s is sometimes required to deal with `/var/lib` being symlinked on some Kubernetes environments. If you need to do so, the [bundled PodSecurityPolicy](templates/forwarder-psp.yaml) will likely not meet your needs, as it whitelists only the standard `hostPath`s.
+Mounting additional `hostPath`s is sometimes required to deal with `/var/lib` being symlinked on some Kubernetes environments. If you need to do so, the [bundled PodSecurityPolicy](https://github.com/bitnami/charts/tree/main/bitnami/fluentd/templates/forwarder-psp.yaml) will likely not meet your needs, as it whitelists only the standard `hostPath`s.
 
 ### Setting Pod's affinity
 

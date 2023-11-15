@@ -4,7 +4,7 @@
 
 EJBCA is an enterprise class PKI Certificate Authority software, built using Java (JEE) technology.
 
-[Overview of EJBCA](http://www.ejbca.org)
+[Overview of EJBCA](https://www.ejbca.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
@@ -266,7 +266,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/ejbca
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/ejbca/values.yaml)
 
 ## Configuration and installation details
 
@@ -286,7 +286,7 @@ By default, this chart only deploys a single pod running EJBCA. To increase the 
 
 For example, for a release using `secretPassword` and `dbPassword` to scale up to a total of `2` replicas, the aforementioned parameters should hold these values `replicaCount=2`, `ejbcaAdminPassword=secretPassword`, `mariadb.auth.password=dbPassword`.
 
-> **Tip**: You can modify the file [values.yaml](values.yaml)
+> **Tip**: You can modify the file [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/ejbca/values.yaml)
 
 ### Configure Sidecars and Init Containers
 

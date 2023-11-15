@@ -4,7 +4,7 @@
 
 Wildfly is a lightweight, open source application server, formerly known as JBoss, that implements the latest enterprise Java standards.
 
-[Overview of WildFly](http://www.wildfly.org/)
+[Overview of WildFly](https://www.wildfly.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
@@ -253,7 +253,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/wildf
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/wildfly/values.yaml)
 
 ## Configuration and installation details
 

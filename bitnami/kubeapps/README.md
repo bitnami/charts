@@ -654,7 +654,7 @@ helm install kubeapps --namespace kubeapps -f custom-values.yaml oci://REGISTRY_
 
 ### Configuring Initial Repositories
 
-By default, Kubeapps will track the [Bitnami Application Catalog](https://github.com/bitnami/charts). To change these defaults, override with your desired parameters the `apprepository.initialRepos` object present in the [values.yaml](values.yaml) file.
+By default, Kubeapps will track the [Bitnami Application Catalog](https://github.com/bitnami/charts). To change these defaults, override with your desired parameters the `apprepository.initialRepos` object present in the [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/kubeapps/values.yaml) file.
 
 ### Enabling Operators
 

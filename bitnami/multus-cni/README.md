@@ -178,7 +178,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/multu
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/multus-cni/values.yaml)
 
 ## Configuration and installation details
 
@@ -192,7 +192,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 Once installed, the helm chart will modify configuration files in the host nodes of the Kubernetes cluster. Ensure that the cluster allows root and privileged deployments.
 
-Once the multus-cni configuration is installed, check the [upstream Kubernetes documentation](upstream documentation) on how to modify the network settings of the cluster.
+Once the multus-cni configuration is installed, check the [upstream Kubernetes documentation](https://kubernetes.io/docs/concepts/cluster-administration/networking/) on how to modify the network settings of the cluster.
 
 > **Important**: Double check that the host CNI binary and configuration directories are properly configured, or the deployment will fail. This is done using the `hostCNINetDir` and `hostCNIBinDir` values.
 
