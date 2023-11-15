@@ -113,13 +113,13 @@ contour:
     pullSecrets: []
     debug: false
   ## @param contour.contourConfigName Contour Deployment with ContourConfiguration CRD.
-  # 
+  #
   contourConfigName: "contour"
   ## @param contour.configPath Contour Deployment with configmap.
   ##
   configPath: true
-  ## @param contour.replicaCount Number of Contour Pod replicas 
-  # 
+  ## @param contour.replicaCount Number of Contour Pod replicas
+  #
   replicaCount: 1
   ## @param contour.priorityClassName Priority class assigned to the pods
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
@@ -868,6 +868,7 @@ envoy:
     targetPorts:
       http: http
       https: https
+      metrics: metrics
     ## @param envoy.service.type Type of Envoy service to create
     ##
     type: LoadBalancer
@@ -915,6 +916,9 @@ envoy:
       ## @param envoy.service.ports.https Sets service https port
       ##
       https: 443
+      ## @param envoy.service.ports.metrics Sets service metrics port
+      ##
+      metrics: 8002
     ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ## @param envoy.service.nodePorts.http HTTP Port. If `envoy.service.type` is NodePort and this is non-empty
@@ -938,9 +942,14 @@ envoy:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
-  ## @param envoy.useHostPort Enable/disable `hostPort` for TCP/80 and TCP/443
+  ## @param envoy.useHostPort.http Enable/disable `hostPort` for TCP/80
+  ## @param envoy.useHostPort.https Enable/disable `hostPort` TCP/443
+  ## @param envoy.useHostPort.metrics Enable/disable `hostPort` for TCP/8002
   ##
-  useHostPort: true
+  useHostPort:
+    http: true
+    https: true
+    metrics: true
   ## @param envoy.useHostIP Enable/disable `hostIP`
   ##
   useHostIP: false
