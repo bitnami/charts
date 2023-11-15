@@ -500,11 +500,8 @@ serverBlock: |-
    server {
      listen 0.0.0.0:8080;
      proxy_ssl_verify off;
-     location /generic-api {
-       proxy_pass https://10.15.10.3;
-     }
-     location /bravo-api {
-       proxy_pass https://10.10.31.117;
+     location / {
+       proxy_pass https://10.10.31.116:7703;
      }
    }
 
