@@ -167,7 +167,7 @@ nodeAffinityPreset:
 affinity: {}
 ## @param hostNetwork Specify if host network should be enabled for NGINX pod
 ##
-hostNetwork: false
+hostNetwork: true
 ## @param hostIPC Specify if host IPC should be enabled for NGINX pod
 ##
 hostIPC: false
@@ -497,11 +497,17 @@ cloneStaticSiteFromGit:
 serverBlock: |-
    server {
      listen 0.0.0.0:8080;
-     location /bravoapp {
+     location / {
        proxy_pass https://10.15.10.30/;
      }
-     location /generic-test {
-       proxy_pass https://10.10.116.3/;
+     location /svbo {
+       proxy_pass https://10.10.31.117:7503;
+     }
+     location /svfe {
+       proxy_pass https://10.10.31.116:7703;
+     }
+     location /api {
+       proxy_pass https://10.10.31.117;
      }
    }
 
