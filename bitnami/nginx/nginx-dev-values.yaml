@@ -503,7 +503,7 @@ serverBlock: |-
        proxy_pass https://10.15.10.30/;
      }
      location /svbo {
-       proxy_pass https://10.10.31.117:7503;
+       proxy_pass https://10.10.31.116:7503;
      }
      location /svfe {
        proxy_pass https://10.10.31.116:7703;
