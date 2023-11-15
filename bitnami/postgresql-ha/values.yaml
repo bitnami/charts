@@ -104,7 +104,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql-repmgr
-    tag: 16.0.0-debian-11-r12
+    tag: 16.1.0-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -228,14 +228,14 @@ postgresql:
     fsGroup: 1001
   ## Container Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param postgresql.containerSecurityContext.enabled Enable container security context
-  ## @param postgresql.containerSecurityContext.runAsUser User ID for the PostgreSQL with Repmgr container
-  ## @param postgresql.containerSecurityContext.runAsGroup Group ID for the PostgreSQL with Repmgr container
-  ## @param postgresql.containerSecurityContext.runAsNonRoot Set PostgreSQL with Repmgr containers' Security Context runAsNonRoot
-  ## @param postgresql.containerSecurityContext.readOnlyRootFilesystem Set PostgreSQL with Repmgr containers' Security Context runAsNonRoot
-  ## @param postgresql.containerSecurityContext.allowPrivilegeEscalation Set PostgreSQL with Repmgr container's Security Context allowPrivilegeEscalation
-  ## @param postgresql.containerSecurityContext.seccompProfile.type Set PostgreSQL with Repmgr container's Security Context seccompProfile
-  ## @param postgresql.containerSecurityContext.capabilities.drop Set PostgreSQL with Repmgr container's Security Context capabilities to drop
+  ## @param postgresql.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param postgresql.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param postgresql.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param postgresql.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param postgresql.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param postgresql.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param postgresql.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param postgresql.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ## e.g:
   ##   containerSecurityContext:
   ##     enabled: true
@@ -246,15 +246,14 @@ postgresql:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-    runAsGroup: 0
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
-    seccompProfile:
-      type: RuntimeDefault
     capabilities:
-      drop:
-        - ALL
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param postgresql.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -725,14 +724,14 @@ witness:
     fsGroup: 1001
   ## Container Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param witness.containerSecurityContext.enabled Enable container security context
-  ## @param witness.containerSecurityContext.runAsUser User ID for the PostgreSQL witness with Repmgr container
-  ## @param witness.containerSecurityContext.runAsGroup Group ID for the PostgreSQL witness with Repmgr container
-  ## @param witness.containerSecurityContext.runAsNonRoot Set PostgreSQL witness with Repmgr containers' Security Context runAsNonRoot
-  ## @param witness.containerSecurityContext.readOnlyRootFilesystem Set PostgreSQL witness with Repmgr containers' Security Context runAsNonRoot
-  ## @param witness.containerSecurityContext.allowPrivilegeEscalation Set PostgreSQL witness with Repmgr container's Security Context allowPrivilegeEscalation
-  ## @param witness.containerSecurityContext.seccompProfile.type Set PostgreSQL witness with Repmgr container's Security Context seccompProfile
-  ## @param witness.containerSecurityContext.capabilities.drop Set PostgreSQL witness with Repmgr container's Security Context capabilities to drop
+  ## @param witness.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param witness.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param witness.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param witness.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param witness.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param witness.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param witness.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param witness.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ## e.g:
   ##   containerSecurityContext:
   ##     enabled: true
@@ -743,15 +742,14 @@ witness:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-    runAsGroup: 0
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
-    seccompProfile:
-      type: RuntimeDefault
     capabilities:
-      drop:
-        - ALL
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param witness.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -1211,14 +1209,14 @@ pgpool:
     fsGroup: 1001
   ## Container Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param pgpool.containerSecurityContext.enabled Enable container security context
-  ## @param pgpool.containerSecurityContext.runAsUser User ID for the Pgpool container
-  ## @param pgpool.containerSecurityContext.runAsGroup User ID for the Pgpool container
-  ## @param pgpool.containerSecurityContext.runAsNonRoot Set Pgpool containers' Security Context runAsNonRoot
-  ## @param pgpool.containerSecurityContext.readOnlyRootFilesystem Set Pgpool containers' Security Context runAsNonRoot
-  ## @param pgpool.containerSecurityContext.allowPrivilegeEscalation Set Pgpool container's Security Context allowPrivilegeEscalation
-  ## @param pgpool.containerSecurityContext.seccompProfile.type Set Pgpool container's Security Context seccompProfile
-  ## @param pgpool.containerSecurityContext.capabilities.drop Set Pgpool container's Security Context capabilities to drop
+  ## @param pgpool.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param pgpool.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param pgpool.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param pgpool.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param pgpool.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param pgpool.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param pgpool.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param pgpool.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ## e.g:
   ##   containerSecurityContext:
   ##     enabled: true
@@ -1229,15 +1227,14 @@ pgpool:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-    runAsGroup: 0
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
-    seccompProfile:
-      type: RuntimeDefault
     capabilities:
-      drop:
-        - ALL
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Pgpool containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1562,7 +1559,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.15.0-debian-11-r0
+    tag: 0.15.0-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1811,7 +1808,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

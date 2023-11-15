@@ -1,0 +1,46 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.networkPolicy.enabled }}
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+kind: NetworkPolicy
+metadata:
+  name: {{ template "mongodb.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: mongodb
+  {{- if or .Values.annotations .Values.commonAnnotation }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: mongodb
+  ingress:
+    {{- if and .Values.networkPolicy.enabled (or .Values.networkPolicy.ingress.namespaceSelector .Values.networkPolicy.ingress.podSelector) }}
+    - from:
+        {{- if .Values.networkPolicy.ingress.namespaceSelector }}
+        - namespaceSelector:
+            matchLabels: {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.ingress.namespaceSelector "context" $ ) | nindent 14 }}
+        {{- end}}
+        {{- if .Values.networkPolicy.ingress.podSelector }}
+        - podSelector:
+            matchLabels: {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.ingress.podSelector "context" $ ) | nindent 14 }}
+        {{- end}}
+      ports:
+        - protocol: TCP
+          port: {{ .Values.containerPorts.mongodb }}
+    {{- end}}
+    {{- if .Values.networkPolicy.ingress.customRules }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.ingress.customRules "context" $ ) | nindent 4 }}
+    {{- end}}
+  {{- if .Values.networkPolicy.egress.customRules }}
+  egress:
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.egress.customRules "context" $ ) | nindent 4 }}
+  {{- end}}
+{{- end}}

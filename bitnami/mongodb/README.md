@@ -90,6 +90,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `commonAnnotations`       | Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template | `{}`            |
 | `topologyKey`             | Override common lib default topology key. If empty - "kubernetes.io/hostname" is used                     | `""`            |
 | `serviceBindings.enabled` | Create secret for service binding (Experimental)                                                          | `false`         |
+| `enableServiceLinks`      | Whether information about services should be injected into pod's environment variable                     | `true`          |
 | `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
 | `diagnosticMode.command`  | Command to override all containers in the deployment                                                      | `["sleep"]`     |
 | `diagnosticMode.args`     | Args to override all containers in the deployment                                                         | `["infinity"]`  |
@@ -294,6 +295,16 @@ Refer to the [chart documentation for more information on each of these architec
 | `externalAccess.hidden.service.annotations`                   | Service annotations for external access                                                                                                         | `{}`                      |
 | `externalAccess.hidden.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                                | `None`                    |
 | `externalAccess.hidden.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                                     | `{}`                      |
+
+### Network policy parameters
+
+| Name                                      | Description                                                                                                                               | Value   |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                   | Enable MongoDB(&reg;) network policies                                                                                                    | `false` |
+| `networkPolicy.ingress.namespaceSelector` | Namespace selector label that is allowed to access the MongoDB(&reg;) node. This label will be used to identify the allowed namespace(s). | `{}`    |
+| `networkPolicy.ingress.podSelector`       | Pod selector label that is allowed to access the MongoDB(&reg;) node. This label will be used to identify the allowed pod(s).             | `{}`    |
+| `networkPolicy.ingress.customRules`       | Custom network policy for the MongoDB(&reg;) node.                                                                                        | `[]`    |
+| `networkPolicy.egress.customRules`        | Custom network policy for the MongoDB(&reg;) node.                                                                                        | `[]`    |
 
 ### Persistence parameters
 

@@ -237,6 +237,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                                        | Description                                                                                             | Value                    |
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `replica.kind`                                              | Use either DaemonSet or StatefulSet (default)                                                           | `StatefulSet`            |
 | `replica.replicaCount`                                      | Number of Redis&reg; replicas to deploy                                                                 | `3`                      |
 | `replica.configuration`                                     | Configuration for Redis&reg; replicas nodes                                                             | `""`                     |
 | `replica.disableCommands`                                   | Array with Redis&reg; commands to disable on replicas nodes                                             | `["FLUSHDB","FLUSHALL"]` |
@@ -363,7 +364,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.annotations`                                       | Additional custom annotations for Redis&reg; Sentinel resource                                                                              | `{}`                             |
 | `sentinel.masterSet`                                         | Master set name                                                                                                                             | `mymaster`                       |
 | `sentinel.quorum`                                            | Sentinel Quorum                                                                                                                             | `2`                              |
-| `sentinel.getMasterTimeout`                                  | Amount of time to allow before get_sentinel_master_info() times out.                                                                        | `99`                             |
+| `sentinel.getMasterTimeout`                                  | Amount of time to allow before get_sentinel_master_info() times out.                                                                        | `90`                             |
 | `sentinel.automateClusterRecovery`                           | Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically failover to it. | `false`                          |
 | `sentinel.redisShutdownWaitFailover`                         | Whether the Redis&reg; master container waits for the failover at shutdown (in addition to the Redis&reg; Sentinel container).              | `true`                           |
 | `sentinel.downAfterMilliseconds`                             | Timeout for detecting a Redis&reg; node is down                                                                                             | `60000`                          |

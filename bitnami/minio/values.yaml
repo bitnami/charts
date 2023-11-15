@@ -58,7 +58,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2023.11.1-debian-11-r0
+  tag: 2023.11.11-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -86,7 +86,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2023.10.30-debian-11-r0
+  tag: 2023.11.6-debian-11-r1
   digest: ""
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
@@ -393,14 +393,27 @@ provisioning:
     fsGroup: 1001
   ## MinIO&reg; container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param provisioning.containerSecurityContext.enabled Enable container Security Context
-  ## @param provisioning.containerSecurityContext.runAsUser User ID for the container
-  ## @param provisioning.containerSecurityContext.runAsNonRoot Avoid running as root User
+  ## @param provisioning.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param provisioning.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param provisioning.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param provisioning.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param provisioning.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param provisioning.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param provisioning.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param provisioning.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+
   ## Automatic Cleanup for Finished Jobs
   ## @param provisioning.cleanupAfterFinished.enabled Enables Cleanup for Finished Jobs
   ## @param provisioning.cleanupAfterFinished.seconds Sets the value of ttlSecondsAfterFinished
@@ -429,14 +442,26 @@ podSecurityContext:
   fsGroup: 1001
 ## MinIO&reg; container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enable container Security Context
-## @param containerSecurityContext.runAsUser User ID for the container
-## @param containerSecurityContext.runAsNonRoot Avoid running as root User
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## @param podLabels Extra labels for MinIO&reg; pods
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
@@ -945,7 +970,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1037,9 +1062,14 @@ metrics:
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
     ##
     jobLabel: ""
-    ## @param metrics.serviceMonitor.path HTTP path to scrape for metrics
+    ## DEPRECATED metrics.serviceMonitor.path - please use `metrics.serviceMonitor.paths` instead
     ##
-    path: /minio/v2/metrics/cluster
+    ## path: /minio/v2/metrics/cluster
+    ## @param metrics.serviceMonitor.paths HTTP paths to scrape for metrics
+    ##
+    paths:
+      - /minio/v2/metrics/cluster
+      - /minio/v2/metrics/node
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
     ##
     interval: 30s

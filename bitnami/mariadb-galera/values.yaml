@@ -80,7 +80,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 11.1.2-debian-11-r2
+  tag: 11.1.3-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -220,21 +220,31 @@ rbac:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ## @param podSecurityContext.enabled Enable security context
 ## @param podSecurityContext.fsGroup Group ID for the container filesystem
-## @param podSecurityContext.runAsUser User ID for the container
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-  runAsUser: 1001
 ## Configure Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param containerSecurityContext.enabled Enabled galera's container Security Context
-## @param containerSecurityContext.runAsUser Set galera's container Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set galera's container Security Context runAsNonRoot
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## Database credentials for root (admin) user
 ##
 rootUser:
@@ -799,7 +809,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.15.0-debian-11-r70
+    tag: 0.15.0-debian-11-r71
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -838,9 +848,25 @@ metrics:
     requests: {}
   ## MySQL Prometheus exporter's Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param metrics.containerSecurityContext.enabled Enabled exporter's container Security Context
+  ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param metrics.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   containerSecurityContext:
-    enabled: false
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## MySQL Prometheus exporter service parameters
   ## @param metrics.service.type Prometheus exporter service type
   ## @param metrics.service.port Prometheus exporter service port

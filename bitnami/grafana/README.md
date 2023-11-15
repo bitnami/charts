@@ -216,6 +216,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `datasources.secretName`           | The name of an externally-managed secret containing custom datasource files.                                                                         | `""`                              |
 | `datasources.secretDefinition`     | The contents of a secret defining a custom datasource file. Only used if datasources.secretName is empty or not defined.                             | `{}`                              |
 | `notifiers.configMapName`          | Name of a ConfigMap containing Grafana notifiers configuration                                                                                       | `""`                              |
+| `alerting.configMapName`           | Name of a ConfigMap containing Grafana alerting configuration                                                                                        | `""`                              |
 
 ### Grafana Deployment parameters
 
