@@ -231,6 +231,9 @@ hub:
       cmd: jupyterhub-singleuser
       {{- end }}
       defaultUrl:
+      {{- if .Values.singleuser.profileList }}
+      profileList: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.profileList "context" $) | nindent 4 }}
+      {{- end }}
     cull:
       enabled: true
       users: false
@@ -1614,6 +1617,16 @@ singleuser:
     ## @param singleuser.persistence.size Persistent Volumes size
     ##
     size: 10Gi
+
+  ## @param singleuser.profileList  Define JupyterHub profiles
+  profileList: []
+    ## - display_name: "Profile 1"
+    ##   description: "Longer description for profile 1."
+    ##   default: true
+    ## - display_name: "Profile 2"
+    ##   description: "Longer description for profile 2."
+    ##   kubespawner_override:
+    ##     image: jupyter/datascience-notebook:latest
 
   ## @section Traffic exposure parameters
 

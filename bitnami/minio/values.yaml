@@ -1062,9 +1062,14 @@ metrics:
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
     ##
     jobLabel: ""
-    ## @param metrics.serviceMonitor.path HTTP path to scrape for metrics
+    ## DEPRECATED metrics.serviceMonitor.path - please use `metrics.serviceMonitor.paths` instead
     ##
-    path: /minio/v2/metrics/cluster
+    ## path: /minio/v2/metrics/cluster
+    ## @param metrics.serviceMonitor.paths HTTP paths to scrape for metrics
+    ##
+    paths:
+      - /minio/v2/metrics/cluster
+      - /minio/v2/metrics/node
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
     ##
     interval: 30s

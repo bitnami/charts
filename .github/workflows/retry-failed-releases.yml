@@ -18,9 +18,8 @@ jobs:
         env:
           MAX_RETRY_SLOTS: 15
           MAX_RUNS_ATTEMPS: 3
-          WORKFLOW_ID: "35553382"
           TEMP_FILE: "${{runner.temp}}/failed_runs.json"
-          WORKFLOW_RUNS_URL: "${{ github.api_url }}/repos/${{ github.repository }}/actions/workflows/${{ env.WORKFLOW_ID }}/runs"
+          WORKFLOW_RUNS_URL: "${{ github.api_url }}/repos/${{ github.repository }}/actions/workflows/35553382/runs"
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Obtain "CI Pipeline" failed runs executed by the bitnami-bot and filter those from release PRs with $MAX_RUNS_ATTEMPS or more attempts
