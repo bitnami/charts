@@ -133,3 +133,4 @@ Get the httpd.conf config map name.
     {{- printf "%s-httpd-conf" (include "common.names.fullname" . ) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
+

@@ -16,6 +16,8 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/apache
 
 Looking to use Apache in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
+This is a new link to [bitnami.com](bitnami.com)
+
 ## Introduction
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
