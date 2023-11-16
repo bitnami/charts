@@ -10,6 +10,8 @@
 helm install my-release oci://registry-1.docker.io/bitnamicharts/%%CHART_NAME%%
 ```
 
+Looking to use %%CHART_NAME%% in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Introduction
 
 %%INTRODUCTION%% (check existing examples)
