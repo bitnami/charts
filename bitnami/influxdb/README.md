@@ -11,12 +11,20 @@ InfluxDB(TM) is a trademark owned by InfluxData, which is not affiliated with, a
 ## TL;DR
 
 ```console
+helm install my-release oci://registry-1.docker.io/bitnamicharts/influxdb
+```
+
+Looking to use InfluxDB## TL;DR
+
+```console
 helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/influxdb
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 Looking to use InfluxDB&trade; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
+##trade; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
