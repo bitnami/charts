@@ -1,6 +1,6 @@
 <!--- app-name: Elasticsearch -->
 
-# Elasticsearch packaged by Bitnami
+# Bitnami Elasticsearch Stack
 
 Elasticsearch is a distributed search and analytics engine. It is used for web search, log monitoring, and real-time analytics. Ideal for Big Data applications.
 
