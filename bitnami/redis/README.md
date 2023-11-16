@@ -172,7 +172,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.containerSecurityContext.allowPrivilegeEscalation` | Is it possible to escalate Redis&reg; pod(s) privileges                                               | `false`                  |
 | `master.containerSecurityContext.seccompProfile.type`      | Set Redis&reg; master containers' Security Context seccompProfile                                     | `RuntimeDefault`         |
 | `master.containerSecurityContext.capabilities.drop`        | Set Redis&reg; master containers' Security Context capabilities to drop                               | `["ALL"]`                |
-| `master.kind`                                              | Use either Deployment or StatefulSet (default)                                                        | `StatefulSet`            |
+| `master.kind`                                              | Use either Deployment, StatefulSet (default) or DaemonSet                                             | `StatefulSet`            |
 | `master.schedulerName`                                     | Alternate scheduler for Redis&reg; master pods                                                        | `""`                     |
 | `master.updateStrategy.type`                               | Redis&reg; master statefulset strategy type                                                           | `RollingUpdate`          |
 | `master.minReadySeconds`                                   | How many seconds a pod needs to be ready before killing the next, during update                       | `0`                      |
