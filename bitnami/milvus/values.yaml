@@ -232,6 +232,20 @@ milvus:
         superUsers:
           - {{ .Values.milvus.auth.username }}
         {{- end }}
+  ## @param milvus.logConfig [string] Milvus components default logging configuration
+  ##
+  logConfig: |
+     # if true, only log to stdout
+     --logtostdout=true
+     --logtostderr=false
+     --alsologtostderr=false
+     # `INFO``, ``WARNING``, ``ERROR``, and ``FATAL`` are 0, 1, 2, and 3
+     --minloglevel=0
+     --log_dir=/var/lib/milvus/logs/
+     # MB 
+     --max_log_size=200
+     --stop_logging_if_full_disk=true
+
   ## @param milvus.extraConfig Extra configuration parameters
   ##
   extraConfig: {}
@@ -239,6 +253,10 @@ milvus:
   ## @param milvus.existingConfigMap name of a ConfigMap with existing configuration for the default configuration
   ##
   existingConfigMap: ""
+
+  ## @param milvus.existingLogConfigMap name of a ConfigMap with existing configuration for the logging configuration
+  ##
+  existingLogConfigMap: ""
 
   ## @param milvus.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the Dashboard
   ##

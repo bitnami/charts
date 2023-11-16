@@ -184,6 +184,9 @@ spec:
           emptyDir: {}
         - name: tmp
           emptyDir: {}
+        - name: log-config
+          configMap:
+            name: {{ template "milvus.logConfigmapName" . }}
         - name: config-common
           configMap:
             name: {{ template "milvus.configmapName" . }}

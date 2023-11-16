@@ -411,6 +411,13 @@ Get the secret password key
 {{- end -}}
 
 {{/*
+Return the proper Milvus log configmap fullname
+*/}}
+{{- define "milvus.logConfigmapName" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "log" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Get the common configuration configmap.
 */}}
 {{- define "milvus.configmapName" -}}
@@ -960,6 +967,8 @@ Init container definition for waiting for the database to be ready
     - -ec
     - |
       #!/bin/bash
+      # Copy logging configuration
+      cp /bitnami/milvus/conf/log/glog.conf /bitnami/milvus/rendered-conf/glog.conf
       # Build final milvus.yaml with the sections of the different files
       find /bitnami/milvus/conf -type f -name *.yaml -print0 | sort -z | xargs -0 yq eval-all '. as $item ireduce ({}; . * $item )' /opt/bitnami/milvus/configs/milvus.yaml > /bitnami/milvus/rendered-conf/pre-render-config_00.yaml
       {{- if (include "milvus.kafka.deployed" .context) }}
@@ -1005,6 +1014,8 @@ Init container definition for waiting for the database to be ready
         name: {{ include "common.tplvalues.render" (dict "value" $block.extraEnvVarsSecret "context" $) }}
     {{- end }}
   volumeMounts:
+    - name: log-config
+      mountPath: /bitnami/milvus/conf/log
     - name: config-common
       mountPath: /bitnami/milvus/conf/00_default
     {{- if or .context.Values.milvus.extraConfig .context.Values.milvus.extraConfigExistingConfigMap }}
