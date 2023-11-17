@@ -432,7 +432,6 @@ Gets the host to be used for this application.
 If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
 */}}
 {{- define "airflow.baseUrl" -}}
-
 {{- $host := default (include "airflow.serviceIP" .) .Values.web.baseUrl -}}
 {{- $port := printf ":%v" .Values.service.ports.http -}}
 {{- $schema := "http://" -}}
