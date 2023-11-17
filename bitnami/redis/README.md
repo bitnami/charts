@@ -862,7 +862,7 @@ The Redis&reg; sentinel exporter was removed in this version because the upstrea
   - `sentinel.metrics.*` parameters are deprecated in favor of `metrics.sentinel.*` ones.
 - New parameters to add custom command, environment variables, sidecars, init containers, etc. were added.
 - Chart labels were adapted to follow the [Helm charts standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
-- values.yaml metadata was adapted to follow the format supported by [Readme Generator for Helm](https://github.com/bitnami-labs/readme-generator-for-helm).
+- values.yaml metadata was adapted to follow the format supported by [Readme Generator for Helm](https://github.com/bitnami/readme-generator-for-helm).
 
 Consequences:
 

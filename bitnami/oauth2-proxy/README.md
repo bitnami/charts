@@ -250,7 +250,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.sentinel.service.port`          | Redis&reg; (with Sentinel) service port                    | `6379`       |
 | `redis.sentinel.service.sentinelPort`  | Redis&reg; (with Sentinel) sentinel service port           | `26379`      |
 
-See <https://github.com/bitnami-labs/readmenator> to create the table
+See <https://github.com/bitnami/readme-generator-for-helm> to create the table
 
 The above parameters map to the env variables defined in [bitnami/oauth2-proxy](https://github.com/bitnami/containers/tree/main/bitnami/oauth2-proxy). For more information please refer to the [bitnami/oauth2-proxy](https://github.com/bitnami/containers/tree/main/bitnami/oauth2-proxy) image documentation.
 
