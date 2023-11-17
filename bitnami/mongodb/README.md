@@ -321,7 +321,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `persistence.volumeClaimTemplates.selector`        | A label query over volumes to consider for binding (e.g. when using local volumes)                                                    | `{}`                |
 | `persistence.volumeClaimTemplates.requests`        | Custom PVC requests attributes                                                                                                        | `{}`                |
 | `persistence.volumeClaimTemplates.dataSource`      | Add dataSource to the VolumeClaimTemplate                                                                                             | `{}`                |
-| `persistentVolumeClaimRetentionPolicy.enabled`     | Enable Persistent volume retention policy for rabbitmq Statefulset                                                                    | `false`             |
+| `persistentVolumeClaimRetentionPolicy.enabled`     | Enable Persistent volume retention policy for MongoDB(&reg;) Statefulset                                                              | `false`             |
 | `persistentVolumeClaimRetentionPolicy.whenScaled`  | Volume retention behavior when the replica count of the StatefulSet is reduced                                                        | `Retain`            |
 | `persistentVolumeClaimRetentionPolicy.whenDeleted` | Volume retention behavior that applies when the StatefulSet is deleted                                                                | `Retain`            |
 
