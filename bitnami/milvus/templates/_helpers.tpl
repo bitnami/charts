@@ -414,7 +414,7 @@ Get the secret password key
 Return the proper Milvus log configmap fullname
 */}}
 {{- define "milvus.logConfigmapName" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "log" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-log" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
