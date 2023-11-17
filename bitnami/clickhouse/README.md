@@ -353,7 +353,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zookeeper.image.repository`     | Zookeeper image repository    | `REPOSITORY_NAME/zookeeper` |
 | `zookeeper.image.pullPolicy`     | Zookeeper image pull policy   | `IfNotPresent`              |
 
-See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table.
+See <https://github.com/bitnami/readme-generator-for-helm> to create the table.
 
 The above parameters map to the env variables defined in [bitnami/clickhouse](https://github.com/bitnami/containers/tree/main/bitnami/clickhouse). For more information please refer to the [bitnami/clickhouse](https://github.com/bitnami/containers/tree/main/bitnami/clickhouse) image documentation.
 

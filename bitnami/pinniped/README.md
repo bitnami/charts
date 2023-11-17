@@ -318,7 +318,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.ingress.secrets`                         | Custom TLS certificates as secrets                                                                                               | `[]`                        |
 | `supervisor.ingress.extraRules`                      | Additional rules to be covered with this ingress record                                                                          | `[]`                        |
 
-See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table
+See <https://github.com/bitnami/readme-generator-for-helm> to create the table
 
 The above parameters map to the env variables defined in [bitnami/pinniped](https://github.com/bitnami/containers/tree/main/bitnami/pinniped). For more information please refer to the [bitnami/pinniped](https://github.com/bitnami/containers/tree/main/bitnami/pinniped) image documentation.
 

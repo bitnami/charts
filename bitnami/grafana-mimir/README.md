@@ -1270,7 +1270,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedmetadata.nameOverride`            | override the subchart name                                                                                | `""`                        |
 | `memcachedmetadata.service.ports.memcached` | Memcached service port                                                                                    | `11211`                     |
 
-See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table
+See <https://github.com/bitnami/readme-generator-for-helm> to create the table
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

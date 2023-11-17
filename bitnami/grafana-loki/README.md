@@ -1172,7 +1172,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedindexwrites.nameOverride`            | override the subchart name                                                                                | `""`                        |
 | `memcachedindexwrites.service.ports.memcached` | Memcached service port                                                                                    | `11211`                     |
 
-See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table.
+See <https://github.com/bitnami/readme-generator-for-helm> to create the table.
 
 The above parameters map to the env variables defined in [bitnami/grafana-loki](https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki). For more information please refer to the [bitnami/grafana-loki](https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki) image documentation.
 
