@@ -4,7 +4,7 @@
 
 HAProxy is a TCP proxy and a HTTP reverse proxy. It supports SSL termination and offloading, TCP and HTTP normalization, traffic regulation, caching and protection against DDoS attacks.
 
-[Overview of HAProxy](https://www.haproxy.org/)
+[Overview of HAProxy](http://www.haproxy.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
