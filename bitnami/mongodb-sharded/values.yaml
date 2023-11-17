@@ -1590,7 +1590,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.39.0-debian-11-r123
+    tag: 0.39.0-debian-11-r124
     digest: ""
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
