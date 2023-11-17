@@ -1,6 +1,6 @@
 <!--- app-name: Whereabouts -->
 
-# Whereabouts packaged by Bitnami
+# Bitnami package for Whereabouts
 
 Whereabouts is a CNI plugin for Kubernetes clusters. It dynamically assigns IP addresses cluster-wide. Features both IPv4 and IPv6 addressing.
 

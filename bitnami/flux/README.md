@@ -1,6 +1,6 @@
 <!--- app-name: Flux -->
 
-# Flux packaged by Bitnami
+# Bitnami package for Flux
 
 Flux is a tool for keeping Kubernetes clusters in sync with sources of configuration
 

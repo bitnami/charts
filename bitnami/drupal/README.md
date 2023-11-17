@@ -1,6 +1,6 @@
 <!--- app-name: Drupal -->
 
-# Drupal packaged by Bitnami
+# Bitnami package for Drupal
 
 Drupal is one of the most versatile open source content management systems in the world. It is pre-configured with the Ctools and Views modules, Drush and Let's Encrypt auto-configuration support.
 

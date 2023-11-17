@@ -1,6 +1,6 @@
 <!--- app-name: RabbitMQ -->
 
-# RabbitMQ packaged by Bitnami
+# Bitnami package for RabbitMQ
 
 RabbitMQ is an open source general-purpose message broker that is designed for consistent, highly-available messaging scenarios (both synchronous and asynchronous).
 

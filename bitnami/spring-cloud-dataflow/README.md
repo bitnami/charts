@@ -1,6 +1,6 @@
 <!--- app-name: Spring Cloud Data Flow -->
 
-# Spring Cloud Data Flow packaged by Bitnami
+# Bitnami package for Spring Cloud Data Flow
 
 Spring Cloud Data Flow is a microservices-based toolkit for building streaming and batch data processing pipelines in Cloud Foundry and Kubernetes.
 

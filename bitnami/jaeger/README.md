@@ -1,6 +1,6 @@
 <!--- app-name: Jaeger -->
 
-# Jaeger packaged by Bitnami
+# Bitnami package for Jaeger
 
 Jaeger is a distributed tracing system. It is used for monitoring and troubleshooting microservices-based distributed systems.
 

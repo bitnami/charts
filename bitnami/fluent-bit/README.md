@@ -1,6 +1,6 @@
 <!--- app-name: Fluent Bit -->
 
-# Fluent Bit packaged by Bitnami
+# Bitnami package for Fluent Bit
 
 Fluent Bit is a Fast and Lightweight Log Processor and Forwarder. It has been made with a strong focus on performance to allow the collection of events from different sources without complexity.
 

@@ -1,6 +1,6 @@
 <!--- app-name: Memcached -->
 
-# Memcached packaged by Bitnami
+# Bitnami package for Memcached
 
 Memcached is an high-performance, distributed memory object caching system, generic in nature, but intended for use in speeding up dynamic web applications by alleviating database load.
 

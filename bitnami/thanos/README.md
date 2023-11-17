@@ -1,6 +1,6 @@
 <!--- app-name: Thanos -->
 
-# Thanos packaged by Bitnami
+# Bitnami package for Thanos
 
 Thanos is a highly available metrics system that can be added on top of existing Prometheus deployments, providing a global query view across all Prometheus installations.
 

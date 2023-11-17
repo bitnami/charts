@@ -1,6 +1,6 @@
 <!--- app-name: Magento -->
 
-# Magento packaged by Bitnami
+# Bitnami package for Magento
 
 Magento is a powerful open source e-commerce platform. With easy customizations and rich features, it allows retailers to grow their online businesses in a cost-effective way.
 

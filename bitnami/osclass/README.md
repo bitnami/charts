@@ -1,6 +1,6 @@
 <!--- app-name: Osclass -->
 
-# Osclass packaged by Bitnami
+# Bitnami package for Osclass
 
 Osclass allows you to easily create a classifieds site without any technical knowledge. It provides support for presenting general ads or specialized ads, is customizable, extensible and multilingual.
 

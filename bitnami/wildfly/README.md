@@ -1,6 +1,6 @@
 <!--- app-name: WildFly -->
 
-# WildFly packaged by Bitnami
+# Bitnami package for WildFly
 
 Wildfly is a lightweight, open source application server, formerly known as JBoss, that implements the latest enterprise Java standards.
 
