@@ -2903,7 +2903,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 13.13.0-debian-11-r0
+    tag: 13.13.0-debian-11-r4
     digest: ""
   auth:
     enablePostgresUser: true
