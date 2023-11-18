@@ -1,0 +1,21 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if not .Values.milvus.existingLogConfigMap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "milvus.logConfigmapName" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: milvus
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  glog.conf: |
+    {{- include "common.tplvalues.render" (dict "value" .Values.milvus.logConfig "context" $) | nindent 4 }}
+{{- end }}
+
