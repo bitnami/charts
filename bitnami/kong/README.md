@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kong
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kong
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Kong in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -23,8 +23,6 @@ This chart bootstraps a [kong](https://github.com/bitnami/containers/tree/main/b
 Extra functionalities beyond the Kong core are extended through plugins. Kong is built on top of reliable technologies like NGINX and provides an easy-to-use RESTful API to operate and configure the system.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Kong in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -364,7 +362,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/kong
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/kong/values.yaml)
 
 ## Configuration and installation details
 
