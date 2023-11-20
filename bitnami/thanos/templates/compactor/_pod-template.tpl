@@ -220,6 +220,7 @@ spec:
         secretName: {{ include "thanos.httpCertsSecretName" . }}
     {{- end }}
     {{- end }}
+    {{- if or .Values.compactor.persistence.enabled .Values.compactor.persistence.defaultEmptyDir }}
     - name: data
       {{- if .Values.compactor.persistence.enabled }}
       persistentVolumeClaim:
@@ -227,6 +228,7 @@ spec:
       {{- else }}
       emptyDir: {}
       {{- end }}
+    {{- end }}
     {{- if .Values.compactor.extraVolumes }}
     {{- include "common.tplvalues.render" (dict "value" .Values.compactor.extraVolumes "context" $) | nindent 4 }}
     {{- end }}
