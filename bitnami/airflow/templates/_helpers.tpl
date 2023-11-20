@@ -444,7 +444,9 @@ If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value
 {{- if and .Values.ingress.enabled .Values.ingress.hostname -}}
   {{- $host = .Values.ingress.hostname -}}
 {{- end -}}
+{{- if $host -}}
 {{- printf "%s%s%s" $schema $host $port -}}
+{{- end }}
 {{- end -}}
 
 {{/*
