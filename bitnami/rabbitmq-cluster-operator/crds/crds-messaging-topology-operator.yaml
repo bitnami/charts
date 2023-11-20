@@ -3,8 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.0
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: bindings.rabbitmq.com
 spec:
   group: rabbitmq.com
@@ -135,8 +134,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.0
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: exchanges.rabbitmq.com
 spec:
   group: rabbitmq.com
@@ -265,8 +263,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.0
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: federations.rabbitmq.com
 spec:
   group: rabbitmq.com
@@ -417,8 +414,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.0
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: permissions.rabbitmq.com
 spec:
   group: rabbitmq.com
@@ -558,8 +554,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.0
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: policies.rabbitmq.com
 spec:
   group: rabbitmq.com
@@ -595,10 +590,14 @@ spec:
             properties:
               applyTo:
                 default: all
-                description: 'What this policy applies to: ''queues'', ''exchanges'',
-                  or ''all''. Default to ''all''.'
+                description: 'What this policy applies to: ''queues'', ''classic_queues'',
+                  ''quorum_queues'', ''streams'', ''exchanges'', or ''all''. Default
+                  to ''all''.'
                 enum:
                 - queues
+                - classic_queues
+                - quorum_queues
+                - streams
                 - exchanges
                 - all
                 type: string
@@ -700,8 +699,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.0
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: queues.rabbitmq.com
 spec:
   group: rabbitmq.com
@@ -833,8 +831,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.0
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: schemareplications.rabbitmq.com
 spec:
   group: rabbitmq.com
@@ -976,8 +973,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.0
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: shovels.rabbitmq.com
 spec:
   group: rabbitmq.com
@@ -1183,8 +1179,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.0
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: superstreams.rabbitmq.com
 spec:
   group: rabbitmq.com
@@ -1318,8 +1313,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.0
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: topicpermissions.rabbitmq.com
 spec:
   group: rabbitmq.com
@@ -1458,8 +1452,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.0
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: users.rabbitmq.com
 spec:
   group: rabbitmq.com
@@ -1614,8 +1607,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.0
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: vhosts.rabbitmq.com
 spec:
   group: rabbitmq.com
@@ -1653,9 +1645,9 @@ spec:
                 description: Default queue type for this vhost; can be set to quorum,
                   classic or stream. Supported in RabbitMQ 3.11.12 or above.
                 enum:
-                  - quorum
-                  - classic
-                  - stream
+                - quorum
+                - classic
+                - stream
                 type: string
               name:
                 description: Name of the vhost; see https://www.rabbitmq.com/vhosts.html.
