@@ -88,7 +88,7 @@ spec:
                   name: custom-postinit
                 {{- end }}
                 {{- if .Values.extraVolumeMounts }}
-                {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+                {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 16 }}
                 {{- end }}
               resources:
                 {{- toYaml .Values.resources | nindent 16 }}
@@ -150,7 +150,7 @@ metadata:
   {{- end }}
 spec:
   schedule: {{ .Values.cronjobs.taskScheduler.schedule | quote }}
-  suspend: {{ .Values.cronjobs.archive.suspend }}
+  suspend: {{ .Values.cronjobs.taskScheduler.suspend }}
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:

@@ -71,7 +71,7 @@ hub:
   image:
     registry: docker.io
     repository: bitnami/jupyterhub
-    tag: 4.0.2-debian-11-r58
+    tag: 4.0.2-debian-11-r63
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -231,6 +231,9 @@ hub:
       cmd: jupyterhub-singleuser
       {{- end }}
       defaultUrl:
+      {{- if .Values.singleuser.profileList }}
+      profileList: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.profileList "context" $) | nindent 4 }}
+      {{- end }}
     cull:
       enabled: true
       users: false
@@ -1449,7 +1452,7 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 4.0.2-debian-11-r58
+    tag: 4.0.2-debian-11-r65
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1615,6 +1618,16 @@ singleuser:
     ##
     size: 10Gi
 
+  ## @param singleuser.profileList  Define JupyterHub profiles
+  profileList: []
+    ## - display_name: "Profile 1"
+    ##   description: "Longer description for profile 1."
+    ##   default: true
+    ## - display_name: "Profile 2"
+    ##   description: "Longer description for profile 2."
+    ##   kubespawner_override:
+    ##     image: jupyter/datascience-notebook:latest
+
   ## @section Traffic exposure parameters
 
   networkPolicy:
@@ -1647,7 +1660,7 @@ singleuser:
 auxiliaryImage:
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 11-debian-11-r90
+  tag: 11-debian-11-r91
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

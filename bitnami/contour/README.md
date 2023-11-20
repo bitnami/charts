@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/contour
+helm install my-release oci://registry-1.docker.io/bitnamicharts/contour
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Contour in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -23,8 +23,6 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 This chart bootstraps a [Contour](https://projectcontour.io) Ingress Controller Deployment and a [Envoy Proxy](https://www.envoyproxy.io) Daemonset on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Contour in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -322,12 +320,15 @@ helm uninstall my-release
 | `envoy.service.annotations`                                               | Annotations for Envoy service                                                                                         | `{}`                    |
 | `envoy.service.ports.http`                                                | Sets service http port                                                                                                | `80`                    |
 | `envoy.service.ports.https`                                               | Sets service https port                                                                                               | `443`                   |
+| `envoy.service.ports.metrics`                                             | Sets service metrics port                                                                                             | `8002`                  |
 | `envoy.service.nodePorts.http`                                            | HTTP Port. If `envoy.service.type` is NodePort and this is non-empty                                                  | `""`                    |
 | `envoy.service.nodePorts.https`                                           | HTTPS Port. If `envoy.service.type` is NodePort and this is non-empty                                                 | `""`                    |
 | `envoy.service.extraPorts`                                                | Extra ports to expose (normally used with the `sidecar` value)                                                        | `[]`                    |
 | `envoy.service.sessionAffinity`                                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                  | `None`                  |
 | `envoy.service.sessionAffinityConfig`                                     | Additional settings for the sessionAffinity                                                                           | `{}`                    |
-| `envoy.useHostPort`                                                       | Enable/disable `hostPort` for TCP/80 and TCP/443                                                                      | `true`                  |
+| `envoy.useHostPort.http`                                                  | Enable/disable `hostPort` for TCP/80                                                                                  | `true`                  |
+| `envoy.useHostPort.https`                                                 | Enable/disable `hostPort` TCP/443                                                                                     | `true`                  |
+| `envoy.useHostPort.metrics`                                               | Enable/disable `hostPort` for TCP/8002                                                                                | `true`                  |
 | `envoy.useHostIP`                                                         | Enable/disable `hostIP`                                                                                               | `false`                 |
 | `envoy.hostPorts.http`                                                    | Sets `hostPort` http port                                                                                             | `80`                    |
 | `envoy.hostPorts.https`                                                   | Sets `hostPort` https port                                                                                            | `443`                   |

@@ -278,6 +278,12 @@ datasources:
 notifiers:
   configMapName: ""
 
+## Create alerting rules, contact points, notification policies, templates, and mute timings from a configMap
+## @param alerting.configMapName Name of a ConfigMap containing Grafana alerting configuration
+##
+alerting:
+  configMapName: ""
+
 ## @section Grafana Deployment parameters
 
 grafana:

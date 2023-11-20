@@ -4,25 +4,23 @@
 
 MongoDB(R) is a relational open source NoSQL database. Easy to use, it stores data in JSON-like documents. Automated scalability and high-performance. Ideal for developing cloud native applications.
 
-[Overview of MongoDB&reg;](http://www.mongodb.org)
+[Overview of MongoDB&reg;](https://www.mongodb.org)
 
 Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB(R) is run and maintained by MongoDB, which is a completely separate project from Bitnami.
 
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mongodb
+helm install my-release oci://registry-1.docker.io/bitnamicharts/mongodb
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use MongoDBreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [MongoDB(&reg;)](https://github.com/bitnami/containers/tree/main/bitnami/mongodb) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use MongoDBreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -308,21 +306,24 @@ Refer to the [chart documentation for more information on each of these architec
 
 ### Persistence parameters
 
-| Name                                          | Description                                                                                                                           | Value               |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `persistence.enabled`                         | Enable MongoDB(&reg;) data persistence using PVC                                                                                      | `true`              |
-| `persistence.medium`                          | Provide a medium for `emptyDir` volumes.                                                                                              | `""`                |
-| `persistence.existingClaim`                   | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)                                                     | `""`                |
-| `persistence.resourcePolicy`                  | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`                |
-| `persistence.storageClass`                    | PVC Storage Class for MongoDB(&reg;) data volume                                                                                      | `""`                |
-| `persistence.accessModes`                     | PV Access Mode                                                                                                                        | `["ReadWriteOnce"]` |
-| `persistence.size`                            | PVC Storage Request for MongoDB(&reg;) data volume                                                                                    | `8Gi`               |
-| `persistence.annotations`                     | PVC annotations                                                                                                                       | `{}`                |
-| `persistence.mountPath`                       | Path to mount the volume at                                                                                                           | `/bitnami/mongodb`  |
-| `persistence.subPath`                         | Subdirectory of the volume to mount at                                                                                                | `""`                |
-| `persistence.volumeClaimTemplates.selector`   | A label query over volumes to consider for binding (e.g. when using local volumes)                                                    | `{}`                |
-| `persistence.volumeClaimTemplates.requests`   | Custom PVC requests attributes                                                                                                        | `{}`                |
-| `persistence.volumeClaimTemplates.dataSource` | Add dataSource to the VolumeClaimTemplate                                                                                             | `{}`                |
+| Name                                               | Description                                                                                                                           | Value               |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `persistence.enabled`                              | Enable MongoDB(&reg;) data persistence using PVC                                                                                      | `true`              |
+| `persistence.medium`                               | Provide a medium for `emptyDir` volumes.                                                                                              | `""`                |
+| `persistence.existingClaim`                        | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)                                                     | `""`                |
+| `persistence.resourcePolicy`                       | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`                |
+| `persistence.storageClass`                         | PVC Storage Class for MongoDB(&reg;) data volume                                                                                      | `""`                |
+| `persistence.accessModes`                          | PV Access Mode                                                                                                                        | `["ReadWriteOnce"]` |
+| `persistence.size`                                 | PVC Storage Request for MongoDB(&reg;) data volume                                                                                    | `8Gi`               |
+| `persistence.annotations`                          | PVC annotations                                                                                                                       | `{}`                |
+| `persistence.mountPath`                            | Path to mount the volume at                                                                                                           | `/bitnami/mongodb`  |
+| `persistence.subPath`                              | Subdirectory of the volume to mount at                                                                                                | `""`                |
+| `persistence.volumeClaimTemplates.selector`        | A label query over volumes to consider for binding (e.g. when using local volumes)                                                    | `{}`                |
+| `persistence.volumeClaimTemplates.requests`        | Custom PVC requests attributes                                                                                                        | `{}`                |
+| `persistence.volumeClaimTemplates.dataSource`      | Add dataSource to the VolumeClaimTemplate                                                                                             | `{}`                |
+| `persistentVolumeClaimRetentionPolicy.enabled`     | Enable Persistent volume retention policy for MongoDB(&reg;) Statefulset                                                              | `false`             |
+| `persistentVolumeClaimRetentionPolicy.whenScaled`  | Volume retention behavior when the replica count of the StatefulSet is reduced                                                        | `Retain`            |
+| `persistentVolumeClaimRetentionPolicy.whenDeleted` | Volume retention behavior that applies when the StatefulSet is deleted                                                                | `Retain`            |
 
 ### Backup parameters
 
@@ -653,7 +654,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/mongo
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/mongodb/values.yaml)
 
 ## Configuration and installation details
 
@@ -874,7 +875,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-<http://www.apache.org/licenses/LICENSE-2.0>
+<https://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

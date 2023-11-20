@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/pinniped
+helm install my-release oci://registry-1.docker.io/bitnamicharts/pinniped
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Pinniped in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -25,8 +25,6 @@ This chart bootstraps a [Pinniped](https://pinniped.dev/) Deployment in a [Kuber
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/pinniped/get-started/).
-
-Looking to use Pinniped in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -320,7 +318,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.ingress.secrets`                         | Custom TLS certificates as secrets                                                                                               | `[]`                        |
 | `supervisor.ingress.extraRules`                      | Additional rules to be covered with this ingress record                                                                          | `[]`                        |
 
-See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table
+See <https://github.com/bitnami/readme-generator-for-helm> to create the table
 
 The above parameters map to the env variables defined in [bitnami/pinniped](https://github.com/bitnami/containers/tree/main/bitnami/pinniped). For more information please refer to the [bitnami/pinniped](https://github.com/bitnami/containers/tree/main/bitnami/pinniped) image documentation.
 
@@ -343,7 +341,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/pinni
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/pinniped/values.yaml)
 
 ## Configuration and installation details
 

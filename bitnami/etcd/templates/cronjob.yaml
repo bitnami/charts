@@ -4,6 +4,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if .Values.disasterRecovery.enabled -}}
+{{- $mergedLabels := mergeOverwrite (dict) .Values.commonLabels .Values.disasterRecovery.cronjob.podLabels -}}
 apiVersion: {{ include "common.capabilities.cronjob.apiVersion" . }}
 kind: CronJob
 metadata:
@@ -21,7 +22,7 @@ spec:
     spec:
       template:
         metadata:
-          labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 12 }}
+          labels: {{- include "common.labels.standard" ( dict "customLabels" $mergedLabels "context" $ ) | nindent 12 }}
             app.kubernetes.io/component: snapshotter
           {{- if .Values.disasterRecovery.cronjob.podAnnotations }}
           annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.disasterRecovery.cronjob.podAnnotations "context" $) | nindent 12 }}

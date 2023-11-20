@@ -33,6 +33,13 @@ jobs:
           # Create an empty file, useful when the PR changes ignored files
           touch "${TEMP_OUTPUT}"
           exit_code=0
+          for f in ${md_files}; do
+            # Looking for links that do not start with https, # or img
+            if grep --quiet --perl-regexp '\]\((?!(https|#|img))[^\)]*' $f; then
+              echo "::error:: Please ensure all links in $f starts with https, # or img"
+              exit 1
+            fi
+          done
           markdownlint -o "${TEMP_OUTPUT}" ${md_files[@]} || exit_code=$?
           while read -r line; do
             # line format:

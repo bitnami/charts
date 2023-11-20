@@ -1221,6 +1221,10 @@ queryFrontend:
     ## @param queryFrontend.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos.local
+    ## @param queryFrontend.ingress.overrideAlertQueryURL Automatically use query-frontend's ingress hostname as --alert.queryURL for both Query and Ruler.
+    ## This is used in order for the expression url on alerts/rules to be correctly rendered on UI as Frontend's hostname, instead of http://localhost:10902
+    ##
+    overrideAlertQueryURL: true
     ## @param queryFrontend.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
     ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/

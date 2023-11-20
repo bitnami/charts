@@ -120,8 +120,8 @@ spec:
             - name: TEMPLATE_PATH
               value: /usr/local/bin/templates
             - name: WATCH_NAMESPACE
-              {{- if .Values.namespaceScope }}
-              value: {{ default (include "common.names.namespace" .) .Values.watchNamespace | quote }}
+              {{- if .Values.operator.watchNamespace }}
+              value: {{ default (include "common.names.namespace" .) .Values.operator.watchNamespace | quote }}
               {{- else }}
               value: ""
               {{- end }}
