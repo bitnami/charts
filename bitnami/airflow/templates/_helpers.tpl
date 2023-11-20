@@ -432,23 +432,21 @@ Gets the host to be used for this application.
 If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
 */}}
 {{- define "airflow.baseUrl" -}}
-{{- $host := "" -}}
-{{- $port := "" -}}
-{{- $servicePortString := printf "%v" .Values.service.ports.http -}}
-{{- if and (not (eq $servicePortString "80")) (not (eq $servicePortString "443")) -}}
-  {{- $port = printf ":%s" $servicePortString -}}
+{{- $host := default (include "airflow.serviceIP" .) .Values.web.baseUrl -}}
+{{- $port := printf ":%v" .Values.service.ports.http -}}
+{{- $schema := "http://" -}}
+{{- if regexMatch "^https?://" .Values.web.baseUrl -}}
+  {{- $schema = "" -}}
 {{- end -}}
-{{- if .Values.ingress.enabled }}
-  {{- $host = .Values.ingress.hostname | default "" -}}
-{{- else -}}
-  {{- $host = .Values.web.baseUrl | default "" -}}
-{{- end }}
-{{- $host = default (include "airflow.serviceIP" .) $host -}}
+{{- if or (regexMatch ":\\d+$" .Values.web.baseUrl) (eq $port ":80") (eq $port ":443") -}}
+  {{- $port = "" -}}
+{{- end -}}
+{{- if and .Values.ingress.enabled .Values.ingress.hostname -}}
+  {{- $host = .Values.ingress.hostname -}}
+{{- end -}}
 {{- if $host -}}
-  {{- printf "http://%s%s" $host $port -}}
-{{- else -}}
-  {{- default "" .Values.web.baseUrl -}}
-{{- end -}}
+{{- printf "%s%s%s" $schema $host $port -}}
+{{- end }}
 {{- end -}}
 
 {{/*
