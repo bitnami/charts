@@ -13,8 +13,6 @@ Looking to use our applications in production? Try [VMware Tanzu Application Cat
 helm install my-release oci://registry-1.docker.io/bitnamicharts/<chart>
 ```
 
-Looking to use WordPress in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## Vulnerabilities scanner
 
 Each Helm chart contains one or more containers. Those containers use images provided by Bitnami through its test & release pipeline and whose source code can be found at [bitnami/containers](https://github.com/bitnami/containers).
