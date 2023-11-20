@@ -163,7 +163,7 @@ spec:
           ports:
             - containerPort: {{ .Values.envoy.containerPorts.http }}
               # Use of .Values.envoy.useHostPort as boolean is DEPRECATED. Support will be removed in upcoming versions.
-              {{- if or (and (kindIs "boolean" .Values.envoy.useHostPort) .Values.envoy.useHostPort) .Values.envoy.useHostPort.http }}
+              {{- if or (and (kindIs "boolean" .Values.envoy.useHostPort) .Values.envoy.useHostPort) (and (kindIs "map" .Values.envoy.useHostPort) .Values.envoy.useHostPort.http) }}
               hostPort: {{ .Values.envoy.hostPorts.http }}
               {{- end }}
               {{- if .Values.envoy.useHostIP }}
@@ -173,7 +173,7 @@ spec:
               protocol: TCP
             - containerPort: {{ .Values.envoy.containerPorts.https }}
               # Use of .Values.envoy.useHostPort as boolean is DEPRECATED. Support will be removed in upcoming versions.
-              {{- if or (and (kindIs "boolean" .Values.envoy.useHostPort) .Values.envoy.useHostPort) .Values.envoy.useHostPort.https }}
+              {{- if or (and (kindIs "boolean" .Values.envoy.useHostPort) .Values.envoy.useHostPort) (and (kindIs "map" .Values.envoy.useHostPort) .Values.envoy.useHostPort.https) }}
               hostPort: {{ .Values.envoy.hostPorts.https }}
               {{- end }}
               {{- if .Values.envoy.useHostIP }}
@@ -183,7 +183,7 @@ spec:
               protocol: TCP
             - containerPort: {{ .Values.envoy.containerPorts.metrics }}
               # Use of .Values.envoy.useHostPort as boolean is DEPRECATED. Support will be removed in upcoming versions.
-              {{- if or (and (kindIs "boolean" .Values.envoy.useHostPort) .Values.envoy.useHostPort) .Values.envoy.useHostPort.metrics }}
+              {{- if or (and (kindIs "boolean" .Values.envoy.useHostPort) .Values.envoy.useHostPort) (and (kindIs "map" .Values.envoy.useHostPort) .Values.envoy.useHostPort.metrics) }}
               hostPort: {{ .Values.envoy.hostPorts.metrics }}
               {{- end }}
               {{- if .Values.envoy.useHostIP }}

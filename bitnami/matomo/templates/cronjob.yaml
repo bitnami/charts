@@ -150,7 +150,7 @@ metadata:
   {{- end }}
 spec:
   schedule: {{ .Values.cronjobs.taskScheduler.schedule | quote }}
-  suspend: {{ .Values.cronjobs.archive.suspend }}
+  suspend: {{ .Values.cronjobs.taskScheduler.suspend }}
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
