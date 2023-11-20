@@ -117,6 +117,6 @@ spec:
           volumes:
           - name: media-management
             configMap:
-              name: tootctl-media-management-configmap
+              name: {{ template "mastodon.tootctlMediaManagement.fullname" . }}
               defaultMode: 0555
 {{- end }}
