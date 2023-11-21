@@ -503,7 +503,7 @@ serverBlock: |-
      location /generic-api {
        proxy_pass https://10.15.10.3;
      }
-     location /bravo-api {
+     location / {
        proxy_pass https://10.10.31.117;
      }
    }
