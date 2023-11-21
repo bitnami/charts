@@ -172,7 +172,8 @@ spec:
           {{- end }}
           ports:
             - containerPort: {{ .Values.envoy.containerPorts.http }}
-              {{- if .Values.envoy.useHostPort }}
+              # Use of .Values.envoy.useHostPort as boolean is DEPRECATED. Support will be removed in upcoming versions.
+              {{- if or (and (kindIs "boolean" .Values.envoy.useHostPort) .Values.envoy.useHostPort) (and (kindIs "map" .Values.envoy.useHostPort) .Values.envoy.useHostPort.http) }}
               hostPort: {{ .Values.envoy.hostPorts.http }}
               {{- end }}
               {{- if .Values.envoy.useHostIP }}
@@ -181,7 +182,8 @@ spec:
               name: http
               protocol: TCP
             - containerPort: {{ .Values.envoy.containerPorts.https }}
-              {{- if .Values.envoy.useHostPort }}
+              # Use of .Values.envoy.useHostPort as boolean is DEPRECATED. Support will be removed in upcoming versions.
+              {{- if or (and (kindIs "boolean" .Values.envoy.useHostPort) .Values.envoy.useHostPort) (and (kindIs "map" .Values.envoy.useHostPort) .Values.envoy.useHostPort.https) }}
               hostPort: {{ .Values.envoy.hostPorts.https }}
               {{- end }}
               {{- if .Values.envoy.useHostIP }}
@@ -190,7 +192,8 @@ spec:
               name: https
               protocol: TCP
             - containerPort: {{ .Values.envoy.containerPorts.metrics }}
-              {{- if .Values.envoy.useHostPort }}
+              # Use of .Values.envoy.useHostPort as boolean is DEPRECATED. Support will be removed in upcoming versions.
+              {{- if or (and (kindIs "boolean" .Values.envoy.useHostPort) .Values.envoy.useHostPort) (and (kindIs "map" .Values.envoy.useHostPort) .Values.envoy.useHostPort.metrics) }}
               hostPort: {{ .Values.envoy.hostPorts.metrics }}
               {{- end }}
               {{- if .Values.envoy.useHostIP }}
