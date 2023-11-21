@@ -10,7 +10,7 @@ annotations:
     - name: parse-dashboard
       image: docker.io/bitnami/parse-dashboard:5.3.0-debian-11-r1
     - name: parse
-      image: docker.io/bitnami/parse:6.3.1-debian-11-r0
+      image: docker.io/bitnami/parse:6.4.0-debian-11-r1
 apiVersion: v2
 appVersion: 6.4.0
 dependencies:
@@ -38,4 +38,4 @@ maintainers:
 name: parse
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/parse
-version: 21.1.3
+version: 21.1.4
