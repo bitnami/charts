@@ -813,7 +813,7 @@ Init container definition for waiting for the database to be ready
           fi
       }
 
-      host={{ include "milvus.s3.host" . | quote }}
+      host={{ printf "%v:%v" (include "milvus.s3.host" .) (include "milvus.s3.port" .) }}
 
       echo "Checking connection to $host"
       if retry_while "check_s3 $host"; then
