@@ -1,6 +1,6 @@
 <!--- app-name: phpBB -->
 
-# phpBB packaged by Bitnami
+# Bitnami package for phpBB
 
 phpBB is a popular bulletin board that features robust messaging capabilities such as flat message structure, subforums, topic split/merge/lock, user groups, full-text search, and attachments.
 

@@ -1,6 +1,6 @@
 <!--- app-name: Appsmith -->
 
-# Appsmith packaged by Bitnami
+# Bitnami package for Appsmith
 
 Appsmith is an open source platform for building and maintaining internal tools, such as custom dashboards, admin panels or CRUD apps.
 

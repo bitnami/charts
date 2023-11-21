@@ -1,6 +1,6 @@
 <!--- app-name: HashiCorp Consul -->
 
-# HashiCorp Consul packaged by Bitnami
+# Bitnami package for HashiCorp Consul
 
 HashiCorp Consul is a tool for discovering and configuring services in your infrastructure.
 

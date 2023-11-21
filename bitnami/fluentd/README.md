@@ -1,6 +1,6 @@
 <!--- app-name: Fluentd -->
 
-# Fluentd packaged by Bitnami
+# Bitnami package for Fluentd
 
 Fluentd collects events from various data sources and writes them to files, RDBMS, NoSQL, IaaS, SaaS, Hadoop and so on.
 

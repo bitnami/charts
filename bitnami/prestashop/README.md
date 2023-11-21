@@ -1,6 +1,6 @@
 <!--- app-name: PrestaShop -->
 
-# PrestaShop packaged by Bitnami
+# Bitnami package for PrestaShop
 
 PrestaShop is a powerful open source eCommerce platform used by over 250,000 online storefronts worldwide. It is easily customizable, responsive, and includes powerful tools to drive online sales.
 

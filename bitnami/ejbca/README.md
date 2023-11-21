@@ -1,6 +1,6 @@
 <!--- app-name: EJBCA -->
 
-# EJBCA packaged by Bitnami
+# Bitnami package for EJBCA
 
 EJBCA is an enterprise class PKI Certificate Authority software, built using Java (JEE) technology.
 

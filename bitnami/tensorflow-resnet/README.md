@@ -1,6 +1,6 @@
 <!--- app-name: TensorFlow ResNet -->
 
-# TensorFlow ResNet packaged by Bitnami
+# Bitnami package for TensorFlow ResNet
 
 TensorFlow ResNet is a client utility for use with TensorFlow Serving and ResNet models.
 

@@ -1,6 +1,6 @@
 <!--- app-name: DeepSpeed -->
 
-# DeepSpeed packaged by Bitnami
+# Bitnami package for DeepSpeed
 
 DeepSpeed is deep learning software suite for empowering ChatGPT-like model training. Features dense or sparse model inference, high throughput and high compression.
 

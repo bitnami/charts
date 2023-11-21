@@ -1,6 +1,6 @@
 <!--- app-name: Apache APISIX -->
 
-# Apache APISIX packaged by Bitnami
+# Bitnami package for Apache APISIX
 
 Apache APISIX is high-performance, real-time API Gateway. Features load balancing, dynamic upstream, canary release, circuit breaking, authentication, observability, amongst others.
 

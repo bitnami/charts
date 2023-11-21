@@ -1,6 +1,6 @@
 <!--- app-name: Apache ZooKeeper -->
 
-# Apache ZooKeeper packaged by Bitnami
+# Bitnami package for Apache ZooKeeper
 
 Apache ZooKeeper provides a reliable, centralized register of configuration data and services for distributed applications.
 

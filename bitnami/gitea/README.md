@@ -1,6 +1,6 @@
 <!--- app-name: Gitea -->
 
-# Gitea packaged by Bitnami
+# Bitnami package for Gitea
 
 Gitea is a lightweight code hosting solution. Written in Go, features low resource consumption, easy upgrades and multiple databases.
 

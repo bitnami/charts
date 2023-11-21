@@ -1,6 +1,6 @@
 <!--- app-name: Kubernetes Event Exporter -->
 
-# Kubernetes Event Exporter packaged by Bitnami
+# Bitnami package for Kubernetes Event Exporter
 
 Kubernetes Event Exporter makes it easy to export Kubernetes events to other tools, thereby enabling better event observability, custom alerts and aggregation.
 
