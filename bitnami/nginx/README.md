@@ -4,7 +4,7 @@
 
 NGINX Open Source is a web server that can be also used as a reverse proxy, load balancer, and HTTP cache. Recommended for high-demanding sites due to its ability to provide faster content.
 
-[Overview of NGINX Open Source](https://nginx.org)
+[Overview of NGINX Open Source](http://nginx.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
