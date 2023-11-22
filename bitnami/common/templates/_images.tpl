@@ -111,7 +111,7 @@ Return the proper image version (ingores image revision/prerelease info & fallba
     {{- $version := semver $imageTag -}}
     {{- printf "%d.%d.%d" $version.Major $version.Minor $version.Patch -}}
 {{- else -}}
-    {{- print .chart.AppVersion -}}
+    {{- print .Chart.AppVersion -}}
 {{- end -}}
 {{- end -}}
 
