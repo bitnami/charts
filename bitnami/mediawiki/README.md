@@ -1,10 +1,10 @@
 <!--- app-name: MediaWiki -->
 
-# MediaWiki packaged by Bitnami
+# Bitnami package for MediaWiki
 
 MediaWiki is the free and open source wiki software that powers Wikipedia. Used by thousands of organizations, it is extremely powerful, scalable software and a feature-rich wiki implementation.
 
-[Overview of MediaWiki](https://www.mediawiki.org/wiki/MediaWiki)
+[Overview of MediaWiki](http://www.mediawiki.org/wiki/MediaWiki)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 

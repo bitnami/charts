@@ -8,7 +8,7 @@ annotations:
     - name: apisix-dashboard
       image: docker.io/bitnami/apisix-dashboard:3.0.1-debian-11-r139
     - name: apisix-ingress-controller
-      image: docker.io/bitnami/apisix-ingress-controller:1.7.0-debian-11-r16
+      image: docker.io/bitnami/apisix-ingress-controller:1.7.1-debian-11-r0
     - name: apisix
       image: docker.io/bitnami/apisix:3.7.0-debian-11-r0
     - name: os-shell
@@ -45,4 +45,4 @@ sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/apisix
 - https://github.com/bitnami/charts/tree/main/bitnami/apisix-dashboard
 - https://github.com/bitnami/charts/tree/main/bitnami/apisix-ingress-controller
-version: 2.2.6
+version: 2.2.7

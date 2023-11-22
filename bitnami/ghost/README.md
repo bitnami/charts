@@ -1,6 +1,6 @@
 <!--- app-name: Ghost -->
 
-# Ghost packaged by Bitnami
+# Bitnami package for Ghost
 
 Ghost is an open source publishing platform designed to create blogs, magazines, and news sites. It includes a simple markdown editor with preview, theming, and SEO built-in to simplify editing.
 

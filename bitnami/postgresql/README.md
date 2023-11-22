@@ -1,6 +1,6 @@
 <!--- app-name: PostgreSQL -->
 
-# PostgreSQL packaged by Bitnami
+# Bitnami package for PostgreSQL
 
 PostgreSQL (Postgres) is an open source object-relational database known for reliability and data integrity. ACID-compliant, it supports foreign keys, joins, views, triggers and stored procedures.
 

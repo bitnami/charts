@@ -1,6 +1,6 @@
 <!--- app-name: Mastodon -->
 
-# Mastodon packaged by Bitnami
+# Bitnami package for Mastodon
 
 Mastodon is self-hosted social network server based on ActivityPub. Written in Ruby, features real-time updates, multimedia attachments and no vendor lock-in.
 
@@ -452,9 +452,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account          | `true`        |
 | `externalDatabase.host`                       | Database host                                                           | `""`          |
 | `externalDatabase.port`                       | Database port number                                                    | `5432`        |
-| `externalDatabase.user`                       | Non-root username for JupyterHub                                        | `postgres`    |
-| `externalDatabase.password`                   | Password for the non-root username for JupyterHub                       | `""`          |
-| `externalDatabase.database`                   | JupyterHub database name                                                | `mastodon`    |
+| `externalDatabase.user`                       | Non-root username for Mastodon                                          | `postgres`    |
+| `externalDatabase.password`                   | Password for the non-root username for Mastodon                         | `""`          |
+| `externalDatabase.database`                   | Mastodon database name                                                  | `mastodon`    |
 | `externalDatabase.existingSecret`             | Name of an existing secret resource containing the database credentials | `""`          |
 | `externalDatabase.existingSecretPasswordKey`  | Name of an existing secret key containing the database credentials      | `db-password` |
 

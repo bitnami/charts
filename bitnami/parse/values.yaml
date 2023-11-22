@@ -79,7 +79,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/parse
-    tag: 6.3.1-debian-11-r1
+    tag: 6.4.0-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -424,7 +424,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/parse-dashboard
-    tag: 5.2.0-debian-11-r23
+    tag: 5.3.0-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

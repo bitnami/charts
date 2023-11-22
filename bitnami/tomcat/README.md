@@ -1,6 +1,6 @@
 <!--- app-name: Apache Tomcat -->
 
-# Apache Tomcat packaged by Bitnami
+# Bitnami package for Apache Tomcat
 
 Apache Tomcat is an open-source web server designed to host and run Java-based web applications. It is a lightweight server with a good performance for applications running in production environments.
 

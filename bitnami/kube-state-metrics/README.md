@@ -1,6 +1,6 @@
 <!--- app-name: Kube State Metrics -->
 
-# Kube State Metrics packaged by Bitnami
+# Bitnami package for Kube State Metrics
 
 kube-state-metrics is a simple service that listens to the Kubernetes API server and generates metrics about the state of the objects.
 

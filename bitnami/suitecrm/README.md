@@ -1,6 +1,6 @@
 <!--- app-name: SuiteCRM -->
 
-# SuiteCRM packaged by Bitnami
+# Bitnami package for SuiteCRM
 
 SuiteCRM is a completely open source, enterprise-grade Customer Relationship Management (CRM) application. SuiteCRM is a fork of the popular SugarCRM application.
 

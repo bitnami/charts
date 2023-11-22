@@ -1,6 +1,6 @@
 <!--- app-name: Apache Spark -->
 
-# Apache Spark packaged by Bitnami
+# Bitnami package for Apache Spark
 
 Apache Spark is a high-performance engine for large-scale computing tasks, such as data processing, machine learning and real-time data streaming. It includes APIs for Java, Python, Scala and R.
 

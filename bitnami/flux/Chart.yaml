@@ -10,7 +10,7 @@ annotations:
     - name: fluxcd-helm-controller
       image: docker.io/bitnami/fluxcd-helm-controller:0.36.2-debian-11-r1
     - name: fluxcd-image-automation-controller
-      image: docker.io/bitnami/fluxcd-image-automation-controller:0.36.1-debian-11-r6
+      image: docker.io/bitnami/fluxcd-image-automation-controller:0.36.1-debian-11-r7
     - name: fluxcd-image-reflector-controller
       image: docker.io/bitnami/fluxcd-image-reflector-controller:0.30.0-debian-11-r44
     - name: fluxcd-kustomize-controller
@@ -27,7 +27,7 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: Flux is a tool for keeping Kubernetes clusters in sync with sources of configuration
+description: Source Controller is a component of Flux. Flux is a tool for keeping Kubernetes clusters in sync with sources of configuration.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/fluxcd-kustomize-controller/img/fluxcd-kustomize-controller-stack-220x234.png
 keywords:
@@ -43,4 +43,4 @@ maintainers:
 name: flux
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/flux
-version: 1.1.2
+version: 1.1.3
