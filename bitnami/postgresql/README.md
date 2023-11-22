@@ -466,6 +466,7 @@ kubectl delete pvc -l release=my-release
 | `metrics.image.digest`                                      | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                |
 | `metrics.image.pullPolicy`                                  | PostgreSQL Prometheus Exporter image pull policy                                                           | `IfNotPresent`                      |
 | `metrics.image.pullSecrets`                                 | Specify image pull secrets                                                                                 | `[]`                                |
+| `metrics.collectors`                                        | Control enabled collectors                                                                                 | `{}`                                |
 | `metrics.customMetrics`                                     | Define additional custom metrics                                                                           | `{}`                                |
 | `metrics.extraEnvVars`                                      | Extra environment variables to add to PostgreSQL Prometheus exporter                                       | `[]`                                |
 | `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                       | `true`                              |

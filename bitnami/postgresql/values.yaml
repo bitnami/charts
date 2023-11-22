@@ -1412,8 +1412,14 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param metrics.collectors Control enabled collectors
+  ## ref: https://github.com/prometheus-community/postgres_exporter#flags
+  ## Example:
+  ## collectors:
+  ##   wal: false
+  collectors: {}
   ## @param metrics.customMetrics Define additional custom metrics
-  ## ref: https://github.com/wrouesnel/postgres_exporter#adding-new-metrics-via-a-config-file
+  ## ref: https://github.com/prometheus-community/postgres_exporter#adding-new-metrics-via-a-config-file-deprecated
   ## customMetrics:
   ##   pg_database:
   ##     query: "SELECT d.datname AS name, CASE WHEN pg_catalog.has_database_privilege(d.datname, 'CONNECT') THEN pg_catalog.pg_database_size(d.datname) ELSE 0 END AS size_bytes FROM pg_catalog.pg_database d where datname not in ('template0', 'template1', 'postgres')"
@@ -1427,7 +1433,7 @@ metrics:
   ##
   customMetrics: {}
   ## @param metrics.extraEnvVars Extra environment variables to add to PostgreSQL Prometheus exporter
-  ## see: https://github.com/wrouesnel/postgres_exporter#environment-variables
+  ## see: https://github.com/prometheus-community/postgres_exporter#environment-variables
   ## For example:
   ##  extraEnvVars:
   ##  - name: PG_EXPORTER_DISABLE_DEFAULT_METRICS
