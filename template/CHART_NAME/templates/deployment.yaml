@@ -11,13 +11,8 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: %%COMPONENT_NAME%%
   {{- if or .Values.%%MAIN_OBJECT_BLOCK%%.deploymentAnnotations .Values.commonAnnotations }}
-  annotations:
-    {{- if .Values.%%MAIN_OBJECT_BLOCK%%.deploymentAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.deploymentAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" .Values.%%MAIN_OBJECT_BLOCK%%.deploymentAnnotations .Values.commonAnnotations "context" .) | fromYaml }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   {{- if not .Values.%%MAIN_OBJECT_BLOCK%%.autoscaling.enabled }}
