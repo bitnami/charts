@@ -16,6 +16,6 @@ it.only('allows to create a git repository', () => {
       force: true,
     });
   });
-  cy.get('button.green').click();
+  cy.get('button.primary').click();
   cy.contains('touch README.md');
 });
