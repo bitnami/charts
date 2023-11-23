@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: rabbitmq-cluster-operator
-      image: docker.io/bitnami/rabbitmq-cluster-operator:2.5.0-debian-11-r39
+      image: docker.io/bitnami/rabbitmq-cluster-operator:2.6.0-debian-11-r0
     - name: rabbitmq
       image: docker.io/bitnami/rabbitmq:3.11.26-debian-11-r0
     - name: rmq-default-credential-updater
@@ -14,7 +14,7 @@ annotations:
     - name: rmq-messaging-topology-operator
       image: docker.io/bitnami/rmq-messaging-topology-operator:1.12.1-debian-11-r2
 apiVersion: v2
-appVersion: 2.5.0
+appVersion: 2.6.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -37,4 +37,4 @@ maintainers:
 name: rabbitmq-cluster-operator
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq-cluster-operator
-version: 3.10.5
+version: 3.10.6
