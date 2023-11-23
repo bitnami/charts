@@ -35,7 +35,7 @@ it('should be possible to create a new Jenkins pipeline', () => {
     cy.visit(
       `/job/${item.freestyleProject.name}-${random}/${nextBuildNumber}/`
     );
-    cy.contains(`Build #${nextBuildNumber}`);
+    cy.contains(`#${nextBuildNumber}`);
     cy.contains('Started by user');
   });
 });

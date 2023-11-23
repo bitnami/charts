@@ -1,6 +1,6 @@
 <!--- app-name: RabbitMQ Cluster Operator -->
 
-# RabbitMQ Cluster Operator packaged by Bitnami
+# Bitnami package for RabbitMQ Cluster Operator
 
 The RabbitMQ Cluster Kubernetes Operator automates provisioning, management, and operations of RabbitMQ clusters running on Kubernetes.
 

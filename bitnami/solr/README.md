@@ -1,10 +1,10 @@
 <!--- app-name: Apache Solr -->
 
-# Apache Solr packaged by Bitnami
+# Bitnami package for Apache Solr
 
 Apache Solr is an extremely powerful, open source enterprise search platform built on Apache Lucene. It is highly reliable and flexible, scalable, and designed to add value very quickly after launch.
 
-[Overview of Apache Solr](https://lucene.apache.org/solr/)
+[Overview of Apache Solr](http://lucene.apache.org/solr/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 

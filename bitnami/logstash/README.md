@@ -1,10 +1,10 @@
 <!--- app-name: Logstash -->
 
-# Logstash packaged by Bitnami
+# Bitnami package for Logstash
 
 Logstash is an open source data processing engine. It ingests data from multiple sources, processes it, and sends the output to final destination in real-time. It is a core component of the ELK stack.
 
-[Overview of Logstash](https://logstash.net)
+[Overview of Logstash](http://logstash.net)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 

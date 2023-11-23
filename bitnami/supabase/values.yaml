@@ -107,7 +107,7 @@ jwt:
     image:
       registry: docker.io
       repository: bitnami/jwt-cli
-      tag: 6.0.0-debian-11-r21
+      tag: 6.0.0-debian-11-r22
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -134,7 +134,7 @@ jwt:
       ##
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.28.3-debian-11-r1
+      tag: 1.28.4-debian-11-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -631,7 +631,7 @@ meta:
   image:
     registry: docker.io
     repository: bitnami/supabase-postgres-meta
-    tag: 0.74.2-debian-11-r0
+    tag: 0.74.3-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -984,7 +984,7 @@ realtime:
   image:
     registry: docker.io
     repository: bitnami/supabase-realtime
-    tag: 2.25.27-debian-11-r1
+    tag: 2.25.38-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1653,7 +1653,7 @@ storage:
   image:
     registry: docker.io
     repository: bitnami/supabase-storage
-    tag: 0.43.11-debian-11-r0
+    tag: 0.43.11-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2491,7 +2491,7 @@ volumePermissions:
 psqlImage:
   registry: docker.io
   repository: bitnami/supabase-postgres
-  tag: 15.1.0-debian-11-r179
+  tag: 15.1.0-debian-11-r181
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2658,7 +2658,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/supabase-postgres
-    tag: 15.1.0-debian-11-r179
+    tag: 15.1.0-debian-11-r181
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

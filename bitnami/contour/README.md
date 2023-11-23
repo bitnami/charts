@@ -1,6 +1,6 @@
 <!--- app-name: Contour -->
 
-# Contour packaged by Bitnami
+# Bitnami package for Contour
 
 Contour is an open source Kubernetes ingress controller that works by deploying the Envoy proxy as a reverse proxy and load balancer.
 

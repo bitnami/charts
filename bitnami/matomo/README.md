@@ -1,6 +1,6 @@
 <!--- app-name: Matomo -->
 
-# Matomo packaged by Bitnami
+# Bitnami package for Matomo
 
 Matomo, formerly known as Piwik, is a real time web analytics program. It provides detailed reports on website visitors.
 

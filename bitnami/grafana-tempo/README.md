@@ -1,6 +1,6 @@
 <!--- app-name: Grafana Tempo -->
 
-# Grafana Tempo packaged by Bitnami
+# Bitnami package for Grafana Tempo
 
 Grafana Tempo is a distributed tracing system that has out-of-the-box integration with Grafana. It is highly scalable and works with many popular tracing protocols.
 

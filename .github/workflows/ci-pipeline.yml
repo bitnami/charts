@@ -81,7 +81,7 @@ jobs:
       - id: show-error
         name: Show error
         if: ${{ steps.get-chart.outputs.result != 'ok' }}
-        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
           script: |
             let message='${{ steps.get-chart.outputs.error }}';
@@ -157,7 +157,7 @@ jobs:
       # Approved by the 'github-actions' user; a PR can't be approved by its author
       - name: PR approval
         if: ${{ needs.vib-verify.result == 'success' }}
-        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
           result-encoding: string
           retries: 3
@@ -171,7 +171,7 @@ jobs:
       - name: Merge
         id: merge
         if: ${{ needs.vib-verify.result == 'success' }}
-        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
           result-encoding: string
           retries: 3
@@ -187,7 +187,7 @@ jobs:
       # post a comment on the PR and assign a maintainer agent to review it
       - name: Manual review required
         if: ${{ always() && (needs.vib-verify.result != 'success' || steps.merge.outcome != 'success' ) }}
-        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         env:
           BODY: |
             There has been an error during the automated release process. Manual revision is now required.
