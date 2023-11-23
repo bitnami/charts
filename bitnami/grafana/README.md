@@ -1,6 +1,6 @@
 <!--- app-name: Grafana -->
 
-# Grafana packaged by Bitnami
+# Bitnami package for Grafana
 
 Grafana is an open source metric analytics and visualization suite for visualizing time series data that supports various types of data sources.
 

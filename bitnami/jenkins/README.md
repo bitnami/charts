@@ -1,10 +1,10 @@
 <!--- app-name: Jenkins -->
 
-# Jenkins packaged by Bitnami
+# Bitnami package for Jenkins
 
 Jenkins is an open source Continuous Integration and Continuous Delivery (CI/CD) server designed to automate the building, testing, and deploying of any software project.
 
-[Overview of Jenkins](https://jenkins-ci.org/)
+[Overview of Jenkins](http://jenkins-ci.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 

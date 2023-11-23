@@ -1,6 +1,6 @@
 <!--- app-name: Kibana -->
 
-# Kibana packaged by Bitnami
+# Bitnami package for Kibana
 
 Kibana is an open source, browser based analytics and search dashboard for Elasticsearch. Kibana strives to be easy to get started with, while also being flexible and powerful.
 

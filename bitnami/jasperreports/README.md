@@ -1,10 +1,10 @@
 <!--- app-name: JasperReports -->
 
-# JasperReports packaged by Bitnami
+# Bitnami package for JasperReports
 
 JasperReports Server is a stand-alone and embeddable reporting server. It is a central information hub, with reporting and analytics that can be embedded into web and mobile applications.
 
-[Overview of JasperReports](https://community.jaspersoft.com/project/jasperreports-server)
+[Overview of JasperReports](http://community.jaspersoft.com/project/jasperreports-server)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 

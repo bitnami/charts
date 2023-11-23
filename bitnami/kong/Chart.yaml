@@ -10,7 +10,7 @@ annotations:
     - name: kong
       image: docker.io/bitnami/kong:3.4.2-debian-11-r0
     - name: postgresql
-      image: docker.io/bitnami/postgresql:14.10.0-debian-11-r4
+      image: docker.io/bitnami/postgresql:14.10.0-debian-11-r9
 apiVersion: v2
 appVersion: 3.4.2
 dependencies:
@@ -45,4 +45,4 @@ maintainers:
 name: kong
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kong
-version: 10.1.2
+version: 10.1.3

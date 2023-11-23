@@ -1,6 +1,6 @@
 <!--- app-name: HAProxy -->
 
-# HAProxy packaged by Bitnami
+# Bitnami package for HAProxy
 
 HAProxy is a TCP proxy and a HTTP reverse proxy. It supports SSL termination and offloading, TCP and HTTP normalization, traffic regulation, caching and protection against DDoS attacks.
 

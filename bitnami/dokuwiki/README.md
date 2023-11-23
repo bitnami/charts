@@ -1,6 +1,6 @@
 <!--- app-name: DokuWiki -->
 
-# DokuWiki packaged by Bitnami
+# Bitnami package for DokuWiki
 
 DokuWiki is a standards-compliant wiki optimized for creating documentation. Designed to be simple to use for small organizations, it stores all data in plain text files so no database is required.
 

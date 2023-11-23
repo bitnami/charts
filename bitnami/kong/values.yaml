@@ -810,7 +810,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 14.10.0-debian-11-r4
+    tag: 14.10.0-debian-11-r9
     digest: ""
   auth:
     username: kong

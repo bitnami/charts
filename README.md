@@ -9,11 +9,9 @@ Looking to use our applications in production? Try [VMware Tanzu Application Cat
 
 ## TL;DR
 
-```bash
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/<chart>
+```console
+helm install my-release oci://registry-1.docker.io/bitnamicharts/<chart>
 ```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Vulnerabilities scanner
 
@@ -21,7 +19,7 @@ Each Helm chart contains one or more containers. Those containers use images pro
 
 As part of the container releases, the images are scanned for vulnerabilities, [here](https://github.com/bitnami/containers#vulnerability-scan-in-bitnami-container-images) you can find more info about this topic.
 
-Since the container image is an immutable artifact that is already analyzed, as part of the Helm chart release process we are not looking for vulnerabilities in the containers but running different verification to ensure the Helm charts work as expected, see the testing strategy defined at [_TESTING.md_](https://github.com/bitnami/charts/blob/main/TESTING.md).
+Since the container image is an immutable artifact that is already analyzed, as part of the Helm chart release process we are not looking for vulnerabilities in the containers but running different verifications to ensure the Helm charts work as expected, see the testing strategy defined at [_TESTING.md_](https://github.com/bitnami/charts/blob/main/TESTING.md).
 
 ## Before you begin
 
@@ -32,7 +30,7 @@ Since the container image is an immutable artifact that is already analyzed, as 
 
 ### Setup a Kubernetes Cluster
 
-The quickest way to setup a Kubernetes cluster to install Bitnami Charts is following the "Bitnami Get Started" guides for the different services:
+The quickest way to set up a Kubernetes cluster to install Bitnami Charts is by following the "Bitnami Get Started" guides for the different services:
 
 - [Get Started with Bitnami Charts using VMware Tanzu Kubernetes Grid](https://docs.bitnami.com/kubernetes/get-started-tkg/)
 - [Get Started with Bitnami Charts using VMware Tanzu Mission Control](https://docs.bitnami.com/tutorials/tanzu-mission-control-get-started/)
@@ -52,14 +50,12 @@ To install Helm, refer to the [Helm install guide](https://github.com/helm/helm#
 
 Once you have installed the Helm client, you can deploy a Bitnami Helm Chart into a Kubernetes cluster.
 
-Please refer to the [Quick Start guide](https://helm.sh/docs/intro/quickstart/) if you wish to get running in just a few commands, otherwise the [Using Helm Guide](https://helm.sh/docs/intro/using_helm/) provides detailed instructions on how to use the Helm client to manage packages on your Kubernetes cluster.
+Please refer to the [Quick Start guide](https://helm.sh/docs/intro/quickstart/) if you wish to get running in just a few commands, otherwise, the [Using Helm Guide](https://helm.sh/docs/intro/using_helm/) provides detailed instructions on how to use the Helm client to manage packages on your Kubernetes cluster.
 
 Useful Helm Client Commands:
 
-- Install a chart: `helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/<chart>`
-- Upgrade your application: `helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/<chart>`
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+- Install a chart: `helm install my-release oci://registry-1.docker.io/bitnamicharts/<chart>`
+- Upgrade your application: `helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/<chart>`
 
 ## License
 

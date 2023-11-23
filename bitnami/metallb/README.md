@@ -1,6 +1,6 @@
 <!--- app-name: MetalLB -->
 
-# MetalLB packaged by Bitnami
+# Bitnami package for MetalLB
 
 MetalLB is a load-balancer implementation for bare metal Kubernetes clusters, using standard routing protocols.
 

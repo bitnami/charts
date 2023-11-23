@@ -1,6 +1,6 @@
 <!--- app-name: Supabase -->
 
-# Supabase packaged by Bitnami
+# Bitnami package for Supabase
 
 Supabase is an open source Firebase alternative. Provides all the necessary backend features to build your application in a scalable way. Uses PostgreSQL as datastore.
 

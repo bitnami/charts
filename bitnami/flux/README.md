@@ -1,10 +1,10 @@
 <!--- app-name: Flux -->
 
-# Flux packaged by Bitnami
+# Bitnami package for Flux
 
-Flux is a tool for keeping Kubernetes clusters in sync with sources of configuration
+Source Controller is a component of Flux. Flux is a tool for keeping Kubernetes clusters in sync with sources of configuration.
 
-[Overview of Flux](https://github.com/fluxcd/flux2)
+[Overview of Flux](https://github.com/fluxcd/source-controller)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 

@@ -1,10 +1,10 @@
 <!--- app-name: MySQL -->
 
-# MySQL packaged by Bitnami
+# Bitnami package for MySQL
 
 MySQL is a fast, reliable, scalable, and easy to use open source relational database system. Designed to handle mission-critical, heavy-load production applications.
 
-[Overview of MySQL](https://www.mysql.com)
+[Overview of MySQL](http://www.mysql.com)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
