@@ -1006,7 +1006,15 @@
                             "type": "object",
                             "properties": {
                                 "postgresql": {
-                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "type": "string",
+                                            "enum": [""]
+                                        },
+                                        {
+                                            "type": "integer"
+                                        }
+                                    ],
                                     "description": "Node port for PostgreSQL",
                                     "default": ""
                                 }
