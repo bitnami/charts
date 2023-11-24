@@ -1,6 +1,6 @@
 <!--- app-name: Node Exporter -->
 
-# Node Exporter packaged by Bitnami
+# Bitnami package for Node Exporter
 
 Prometheus exporter for hardware and OS metrics exposed by UNIX kernels, with pluggable metric collectors.
 

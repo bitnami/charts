@@ -1,6 +1,6 @@
 <!--- app-name: SonarQube&trade; -->
 
-# SonarQube(TM) packaged by Bitnami
+# Bitnami package for SonarQube(TM)
 
 SonarQube(TM) is an open source quality management platform that analyzes and measures code's technical quality. It enables developers to detect code issues, vulnerabilities, and bugs in early stages.
 

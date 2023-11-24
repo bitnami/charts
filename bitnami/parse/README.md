@@ -1,6 +1,6 @@
 <!--- app-name: Parse Server -->
 
-# Parse Server packaged by Bitnami
+# Bitnami package for Parse Server
 
 Parse is a platform that enables users to add a scalable and powerful backend to launch a full-featured app for iOS, Android, JavaScript, Windows, Unity, and more.
 
