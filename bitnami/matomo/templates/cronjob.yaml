@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.cronjobs.enabled -}}
+{{- if ( include "matomo.cronjobs.enabled" ( dict "context" $ "cronjob" "archive" ) ) -}}
 apiVersion: {{ include "common.capabilities.cronjob.apiVersion" . }}
 kind: CronJob
 metadata:
@@ -135,6 +135,8 @@ spec:
             {{- if .Values.extraVolumes }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 12 }}
             {{- end }}
+{{- end }}
+{{- if ( include "matomo.cronjobs.enabled" ( dict "context" $ "cronjob" "taskScheduler" ) ) -}}
 ---
 apiVersion: {{ include "common.capabilities.cronjob.apiVersion" . }}
 kind: CronJob

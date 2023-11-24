@@ -932,10 +932,13 @@ networkPolicy:
 ##
 
 cronjobs:
-  ## @param cronjobs.enabled Enables cronjobs for archive and scheduler tasks
+  ## DEPRECATED @param cronjobs.enabled Please use cronjobs.taskScheduler.enabled and/or cronjobs.archive.enabled
   ##
-  enabled: true
+  # enabled: true
   taskScheduler:
+    ## @param cronjobs.taskScheduler.enabled Whether to enable scheduled mail-to-task CronJob
+    ##
+    enabled: true
     ## @param cronjobs.taskScheduler.schedule Kubernetes CronJob schedule
     ##
     schedule: "*/5 * * * *"
@@ -981,7 +984,7 @@ cronjobs:
   archive:
     ## @param cronjobs.archive.enabled Whether to enable scheduled mail-to-task CronJob
     ##
-    enabled: false
+    enabled: true
     ## @param cronjobs.archive.schedule Kubernetes CronJob schedule
     ##
     schedule: "*/5 * * * *"
