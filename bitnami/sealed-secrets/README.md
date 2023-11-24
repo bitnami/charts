@@ -92,7 +92,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secretName`                                        | The name of an existing TLS secret containing the key used to encrypt secrets                                            | `""`                             |
 | `updateStatus`                                      | Specifies whether the Sealed Secrets controller should update the status subresource                                     | `true`                           |
 | `skipRecreate`                                      | Specifies whether the Sealed Secrets controller should skip recreating removed secrets                                   | `false`                          |
-| `keyrenewperiod`                                    | Specifies key renewal period. Default 30 days                                                                            | `""`                             |
+| `keyRenewPeriod`                                    | Specifies key renewal period. Default 30 days. e.g keyRenewPeriod: "720h30m"                                             | `""`                             |
 | `rateLimit`                                         | Number of allowed sustained request per second for verify endpoint                                                       | `""`                             |
 | `rateLimitBurst`                                    | Number of requests allowed to exceed the rate limit per second for verify endpoint                                       | `""`                             |
 | `additionalNamespaces`                              | List of namespaces used to manage the Sealed Secrets                                                                     | `[]`                             |
@@ -209,9 +209,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                           | `true`  |
 | `networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created                                                      | `false` |
 | `networkPolicy.allowExternal`                 | Don't require client label for connections                                                               | `true`  |
-| `pdb.create`                                  | Specifies whether a PodDisruptionBudget should be created                                                | `false` |
-| `pdb.minAvailable`                            | The minimum number of pods (non number to omit)                                                          | `1`     |
-| `pdb.maxUnavailable`                          | The maximum number of unavailable pods (non number to omit)                                              | `""`    |
+| `pdb.create`                                  | Enable a Pod Disruption Budget creation                                                                  | `false` |
+| `pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                           | `""`    |
+| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                           | `""`    |
 
 ### Metrics parameters
 
