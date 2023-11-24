@@ -215,3 +215,18 @@ Return the matomo pods needed initContainers
       readOnly: true
 {{- end }}
 {{- end }}
+{{/*
+Return if cronjob X is enabled. Takes into account the deprecated value 'cronjobs.enabled'.
+Use: include "matomo.cronjobs.enabled" (dict "context" $ "cronjob" "archive" )
+*/}}
+{{- define "matomo.cronjobs.enabled" -}}
+{{- if ( hasKey .context.Values.cronjobs "enabled" ) -}}
+  {{- if .context.Values.cronjobs.enabled -}}
+    {{- true -}}
+  {{- end -}}
+{{- else -}}
+  {{- if ( get .context.Values.cronjobs .cronjob ).enabled  -}}
+    {{- true -}}
+  {{- end -}}
+{{- end -}}
+{{- end }}
