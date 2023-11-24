@@ -109,11 +109,9 @@ updateStatus: true
 ## for secret re-creation.
 ##
 skipRecreate: false
-## @param keyrenewperiod Specifies key renewal period. Default 30 days
-## e.g
-## keyrenewperiod: "720h30m"
+## @param keyRenewPeriod Specifies key renewal period. Default 30 days. e.g keyRenewPeriod: "720h30m"
 ##
-keyrenewperiod: ""
+keyRenewPeriod: ""
 ## @param rateLimit Number of allowed sustained request per second for verify endpoint
 ##
 rateLimit: ""
@@ -583,17 +581,15 @@ networkPolicy:
   ##
   allowExternal: true
 
-## PodDisruptionBudget Parameters
+## Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+## @param pdb.create Enable a Pod Disruption Budget creation
+## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
 ##
 pdb:
-  ## @param pdb.create Specifies whether a PodDisruptionBudget should be created
-  ##
   create: false
-  ## @param pdb.minAvailable The minimum number of pods (non number to omit)
-  ##
-  minAvailable: 1
-  ## @param pdb.maxUnavailable The maximum number of unavailable pods (non number to omit)
-  ##
+  minAvailable: ""
   maxUnavailable: ""
 
 ## @section Metrics parameters
