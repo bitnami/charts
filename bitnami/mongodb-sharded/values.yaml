@@ -79,7 +79,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 7.0.2-debian-11-r7
+  tag: 7.0.3-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -248,7 +248,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -558,14 +558,24 @@ configsvr:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param configsvr.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param configsvr.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-  ## @param configsvr.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
-  ## @param configsvr.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
+  ## @param configsvr.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param configsvr.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param configsvr.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param configsvr.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param configsvr.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param configsvr.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param configsvr.command Override default container command (useful when using custom images)
   ##
   command:
@@ -882,14 +892,24 @@ mongos:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param mongos.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param mongos.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-  ## @param mongos.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
-  ## @param mongos.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
+  ## @param mongos.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param mongos.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param mongos.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param mongos.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param mongos.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param mongos.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param mongos.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -1158,14 +1178,24 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param shardsvr.dataNode.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param shardsvr.dataNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-    ## @param shardsvr.dataNode.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
-    ## @param shardsvr.dataNode.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
+    ## @param shardsvr.dataNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param shardsvr.dataNode.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param shardsvr.dataNode.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param shardsvr.dataNode.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param shardsvr.dataNode.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param shardsvr.dataNode.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
       runAsUser: 1001
       runAsNonRoot: true
+      privileged: false
       readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## @param shardsvr.dataNode.command Override default container command (useful when using custom images)
     ##
     command:
@@ -1453,14 +1483,24 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param shardsvr.arbiter.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param shardsvr.arbiter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-    ## @param shardsvr.arbiter.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
-    ## @param shardsvr.arbiter.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
+    ## @param shardsvr.arbiter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param shardsvr.arbiter.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param shardsvr.arbiter.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param shardsvr.arbiter.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param shardsvr.arbiter.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param shardsvr.arbiter.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
       runAsUser: 1001
       runAsNonRoot: true
+      privileged: false
       readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## @param shardsvr.arbiter.command Override default container command (useful when using custom images)
     ##
     command: []
@@ -1550,7 +1590,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.39.0-debian-11-r123
+    tag: 0.39.0-debian-11-r124
     digest: ""
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
@@ -1576,14 +1616,24 @@ metrics:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param metrics.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-  ## @param metrics.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
-  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Metrics exporter liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ## @param metrics.livenessProbe.enabled Enable livenessProbe

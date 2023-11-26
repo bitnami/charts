@@ -79,7 +79,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/parse
-    tag: 6.3.1-debian-11-r0
+    tag: 6.4.0-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -119,16 +119,26 @@ server:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param server.containerSecurityContext.enabled Enabled Parse Dashboard containers' Security Context
-  ## @param server.containerSecurityContext.runAsUser Set Parse Dashboard containers' Security Context runAsUser
-  ## @param server.containerSecurityContext.runAsNonRoot Set Parse Dashboard containers' Security Context runAsNonRoot
-  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set Parse Dashboard containers' Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param server.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param server.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param server.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param server.command Override default container command (useful when using custom images)
   ##
@@ -414,7 +424,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/parse-dashboard
-    tag: 5.2.0-debian-11-r21
+    tag: 5.3.0-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -453,16 +463,26 @@ dashboard:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param dashboard.containerSecurityContext.enabled Enabled Parse Dashboard containers' Security Context
-  ## @param dashboard.containerSecurityContext.runAsUser Set Parse Dashboard containers' Security Context runAsUser
-  ## @param dashboard.containerSecurityContext.runAsNonRoot Set Parse Dashboard containers' Security Context runAsNonRoot
-  ## @param dashboard.containerSecurityContext.readOnlyRootFilesystem Set Parse Dashboard containers' Security Context runAsNonRoot
+  ## @param dashboard.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param dashboard.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param dashboard.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param dashboard.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param dashboard.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param dashboard.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param dashboard.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param dashboard.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param dashboard.command Override default container command (useful when using custom images)
   ##
@@ -904,7 +924,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

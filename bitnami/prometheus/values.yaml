@@ -84,7 +84,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.26.0-debian-11-r43
+    tag: 0.26.0-debian-11-r44
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -192,16 +192,26 @@ alertmanager:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param alertmanager.containerSecurityContext.enabled Enabled Alertmanager containers' Security Context
-  ## @param alertmanager.containerSecurityContext.runAsUser Set Alertmanager containers' Security Context runAsUser
-  ## @param alertmanager.containerSecurityContext.runAsNonRoot Set Alertmanager containers' Security Context runAsNonRoot
-  ## @param alertmanager.containerSecurityContext.readOnlyRootFilesystem Set Alertmanager containers' Security Context runAsNonRoot
+  ## @param alertmanager.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param alertmanager.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param alertmanager.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param alertmanager.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param alertmanager.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param alertmanager.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param alertmanager.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param alertmanager.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param alertmanager.existingConfigmap The name of an existing ConfigMap with your custom configuration for Alertmanager
   ##
@@ -584,7 +594,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.47.2-debian-11-r0
+    tag: 2.48.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -732,16 +742,26 @@ server:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param server.containerSecurityContext.enabled Enabled Prometheus containers' Security Context
-  ## @param server.containerSecurityContext.runAsUser Set Prometheus containers' Security Context runAsUser
-  ## @param server.containerSecurityContext.runAsNonRoot Set Prometheus containers' Security Context runAsNonRoot
-  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set Prometheus containers' Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param server.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param server.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param server.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param server.existingConfigmap The name of an existing ConfigMap with your custom configuration for Prometheus
   ##
@@ -952,7 +972,7 @@ server:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.32.4-debian-11-r3
+      tag: 0.32.5-debian-11-r1
       digest: ""
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -968,20 +988,26 @@ server:
       pullSecrets: []
     ## Thanos Sidecar container's securityContext
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param server.thanos.containerSecurityContext.enabled Enable container security context
-    ## @param server.thanos.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem
-    ## @param server.thanos.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
-    ## @param server.thanos.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
-    ## @param server.thanos.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
+    ## @param server.thanos.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param server.thanos.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param server.thanos.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param server.thanos.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param server.thanos.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param server.thanos.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param server.thanos.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param server.thanos.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
+      runAsUser: 1001
+      runAsNonRoot: true
+      privileged: false
       readOnlyRootFilesystem: false
       allowPrivilegeEscalation: false
-      runAsNonRoot: true
       capabilities:
-        drop:
-          - ALL
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## @param server.thanos.prometheusUrl Override default prometheus url `http://localhost:9090`
     ##
     prometheusUrl: ""
@@ -1494,7 +1520,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

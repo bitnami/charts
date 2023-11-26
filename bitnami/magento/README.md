@@ -1,6 +1,6 @@
 <!--- app-name: Magento -->
 
-# Magento packaged by Bitnami
+# Bitnami package for Magento
 
 Magento is a powerful open source e-commerce platform. With easy customizations and rich features, it allows retailers to grow their online businesses in a cost-effective way.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/magento
+helm install my-release oci://registry-1.docker.io/bitnamicharts/magento
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Magento in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -23,8 +23,6 @@ This chart bootstraps a [Magento](https://github.com/bitnami/containers/tree/mai
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/main/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment as a database for the Magento application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Magento in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -84,87 +82,92 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Magento parameters
 
-| Name                                    | Description                                                                                                          | Value                     |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `image.registry`                        | Magento image registry                                                                                               | `REGISTRY_NAME`           |
-| `image.repository`                      | Magento image repository                                                                                             | `REPOSITORY_NAME/magento` |
-| `image.digest`                          | Magento image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                      |
-| `image.pullPolicy`                      | Magento image pull policy                                                                                            | `IfNotPresent`            |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                     | `[]`                      |
-| `image.debug`                           | Specify if debug logs should be enabled                                                                              | `false`                   |
-| `hostAliases`                           | Add deployment host aliases                                                                                          | `[]`                      |
-| `replicaCount`                          | Number of Magento Pods to run                                                                                        | `1`                       |
-| `magentoSkipInstall`                    | Skip Magento installation wizard. Useful for migrations and restoring from SQL dump                                  | `false`                   |
-| `magentoHost`                           | Magento host to create application URLs                                                                              | `""`                      |
-| `magentoUsername`                       | User of the application                                                                                              | `user`                    |
-| `magentoPassword`                       | Application password                                                                                                 | `""`                      |
-| `magentoEmail`                          | Admin email                                                                                                          | `user@example.com`        |
-| `magentoFirstName`                      | Magento Admin First Name                                                                                             | `""`                      |
-| `magentoLastName`                       | Magento Admin Last Name                                                                                              | `""`                      |
-| `magentoAdminUri`                       | Magento prefix to access Magento Admin                                                                               | `""`                      |
-| `magentoMode`                           | Magento mode                                                                                                         | `""`                      |
-| `magentoExtraInstallArgs`               | Magento extra install args                                                                                           | `""`                      |
-| `magentoDeployStaticContent`            | Deploy static content during the first deployment, to optimize page load time                                        | `false`                   |
-| `magentoUseHttps`                       | Use SSL to access the Magento Store. Valid values: `true`, `false`                                                   | `false`                   |
-| `magentoUseSecureAdmin`                 | Use SSL to access the Magento Admin. Valid values: `true`, `false`                                                   | `false`                   |
-| `magentoSkipReindex`                    | Skip Magento Indexer reindex step during the initialization. Valid values: `true`, `false`                           | `false`                   |
-| `allowEmptyPassword`                    | Allow DB blank passwords                                                                                             | `false`                   |
-| `command`                               | Override default container command (useful when using custom images)                                                 | `[]`                      |
-| `args`                                  | Override default container args (useful when using custom images)                                                    | `[]`                      |
-| `updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                                       | `RollingUpdate`           |
-| `extraEnvVars`                          | Extra environment variables                                                                                          | `[]`                      |
-| `extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                                  | `""`                      |
-| `extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                         | `""`                      |
-| `extraVolumes`                          | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`   | `[]`                      |
-| `extraVolumeMounts`                     | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes` | `[]`                      |
-| `extraContainerPorts`                   | Array of additional container ports for the Magento container                                                        | `[]`                      |
-| `initContainers`                        | Add additional init containers to the pod (evaluated as a template)                                                  | `[]`                      |
-| `sidecars`                              | Attach additional containers to the pod (evaluated as a template)                                                    | `[]`                      |
-| `tolerations`                           | Tolerations for pod assignment                                                                                       | `[]`                      |
-| `priorityClassName`                     | %%MAIN_CONTAINER_NAME%% pods' priorityClassName                                                                      | `""`                      |
-| `schedulerName`                         | Name of the k8s scheduler (other than default)                                                                       | `""`                      |
-| `terminationGracePeriodSeconds`         | In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully                          | `""`                      |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                       | `[]`                      |
-| `existingSecret`                        | Name of a secret with the application password                                                                       | `""`                      |
-| `containerPorts`                        | Container ports                                                                                                      | `{}`                      |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                  | `""`                      |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `soft`                    |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                            | `""`                      |
-| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                                | `""`                      |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                            | `[]`                      |
-| `affinity`                              | Affinity for pod assignment                                                                                          | `{}`                      |
-| `nodeSelector`                          | Node labels for pod assignment                                                                                       | `{}`                      |
-| `resources.limits`                      | The resources limits for the Magento container                                                                       | `{}`                      |
-| `resources.requests`                    | The requested resourcesc for the Magento container                                                                   | `{}`                      |
-| `podSecurityContext.enabled`            | Enable Magento pods' Security Context                                                                                | `true`                    |
-| `podSecurityContext.fsGroup`            | Magento pods' group ID                                                                                               | `1001`                    |
-| `containerSecurityContext.enabled`      | Enable Magento containers' Security Context                                                                          | `true`                    |
-| `containerSecurityContext.runAsUser`    | Magento containers' Security Context                                                                                 | `1001`                    |
-| `containerSecurityContext.runAsNonRoot` | Set %%MAIN_CONTAINER_NAME%% container's Security Context runAsNonRoot                                                | `true`                    |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                                 | `true`                    |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                              | `300`                     |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                     | `10`                      |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                    | `5`                       |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                  | `6`                       |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                  | `1`                       |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                                                | `true`                    |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                             | `30`                      |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                    | `5`                       |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                   | `3`                       |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                 | `6`                       |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                 | `1`                       |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                                                  | `false`                   |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                               | `0`                       |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                      | `10`                      |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                     | `3`                       |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                   | `60`                      |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                   | `1`                       |
-| `customLivenessProbe`                   | Override default liveness probe                                                                                      | `{}`                      |
-| `customReadinessProbe`                  | Override default readiness probe                                                                                     | `{}`                      |
-| `customStartupProbe`                    | Override default startup probe                                                                                       | `{}`                      |
-| `lifecycleHooks`                        | LifecycleHook to set additional configuration at startup Evaluated as a template                                     | `{}`                      |
-| `podAnnotations`                        | Pod annotations                                                                                                      | `{}`                      |
-| `podLabels`                             | Add additional labels to the pod (evaluated as a template)                                                           | `{}`                      |
+| Name                                                | Description                                                                                                          | Value                     |
+| --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `image.registry`                                    | Magento image registry                                                                                               | `REGISTRY_NAME`           |
+| `image.repository`                                  | Magento image repository                                                                                             | `REPOSITORY_NAME/magento` |
+| `image.digest`                                      | Magento image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                      |
+| `image.pullPolicy`                                  | Magento image pull policy                                                                                            | `IfNotPresent`            |
+| `image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                     | `[]`                      |
+| `image.debug`                                       | Specify if debug logs should be enabled                                                                              | `false`                   |
+| `hostAliases`                                       | Add deployment host aliases                                                                                          | `[]`                      |
+| `replicaCount`                                      | Number of Magento Pods to run                                                                                        | `1`                       |
+| `magentoSkipInstall`                                | Skip Magento installation wizard. Useful for migrations and restoring from SQL dump                                  | `false`                   |
+| `magentoHost`                                       | Magento host to create application URLs                                                                              | `""`                      |
+| `magentoUsername`                                   | User of the application                                                                                              | `user`                    |
+| `magentoPassword`                                   | Application password                                                                                                 | `""`                      |
+| `magentoEmail`                                      | Admin email                                                                                                          | `user@example.com`        |
+| `magentoFirstName`                                  | Magento Admin First Name                                                                                             | `""`                      |
+| `magentoLastName`                                   | Magento Admin Last Name                                                                                              | `""`                      |
+| `magentoAdminUri`                                   | Magento prefix to access Magento Admin                                                                               | `""`                      |
+| `magentoMode`                                       | Magento mode                                                                                                         | `""`                      |
+| `magentoExtraInstallArgs`                           | Magento extra install args                                                                                           | `""`                      |
+| `magentoDeployStaticContent`                        | Deploy static content during the first deployment, to optimize page load time                                        | `false`                   |
+| `magentoUseHttps`                                   | Use SSL to access the Magento Store. Valid values: `true`, `false`                                                   | `false`                   |
+| `magentoUseSecureAdmin`                             | Use SSL to access the Magento Admin. Valid values: `true`, `false`                                                   | `false`                   |
+| `magentoSkipReindex`                                | Skip Magento Indexer reindex step during the initialization. Valid values: `true`, `false`                           | `false`                   |
+| `allowEmptyPassword`                                | Allow DB blank passwords                                                                                             | `false`                   |
+| `command`                                           | Override default container command (useful when using custom images)                                                 | `[]`                      |
+| `args`                                              | Override default container args (useful when using custom images)                                                    | `[]`                      |
+| `updateStrategy.type`                               | Update strategy - only really applicable for deployments with RWO PVs attached                                       | `RollingUpdate`           |
+| `extraEnvVars`                                      | Extra environment variables                                                                                          | `[]`                      |
+| `extraEnvVarsCM`                                    | ConfigMap containing extra env vars                                                                                  | `""`                      |
+| `extraEnvVarsSecret`                                | Secret containing extra env vars (in case of sensitive data)                                                         | `""`                      |
+| `extraVolumes`                                      | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`   | `[]`                      |
+| `extraVolumeMounts`                                 | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes` | `[]`                      |
+| `extraContainerPorts`                               | Array of additional container ports for the Magento container                                                        | `[]`                      |
+| `initContainers`                                    | Add additional init containers to the pod (evaluated as a template)                                                  | `[]`                      |
+| `sidecars`                                          | Attach additional containers to the pod (evaluated as a template)                                                    | `[]`                      |
+| `tolerations`                                       | Tolerations for pod assignment                                                                                       | `[]`                      |
+| `priorityClassName`                                 | %%MAIN_CONTAINER_NAME%% pods' priorityClassName                                                                      | `""`                      |
+| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                       | `""`                      |
+| `terminationGracePeriodSeconds`                     | In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully                          | `""`                      |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                       | `[]`                      |
+| `existingSecret`                                    | Name of a secret with the application password                                                                       | `""`                      |
+| `containerPorts`                                    | Container ports                                                                                                      | `{}`                      |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                  | `""`                      |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `soft`                    |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                            | `""`                      |
+| `nodeAffinityPreset.key`                            | Node label key to match Ignored if `affinity` is set.                                                                | `""`                      |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                                            | `[]`                      |
+| `affinity`                                          | Affinity for pod assignment                                                                                          | `{}`                      |
+| `nodeSelector`                                      | Node labels for pod assignment                                                                                       | `{}`                      |
+| `resources.limits`                                  | The resources limits for the Magento container                                                                       | `{}`                      |
+| `resources.requests`                                | The requested resourcesc for the Magento container                                                                   | `{}`                      |
+| `podSecurityContext.enabled`                        | Enable Magento pods' Security Context                                                                                | `true`                    |
+| `podSecurityContext.fsGroup`                        | Magento pods' group ID                                                                                               | `1001`                    |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                 | `true`                    |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                           | `1001`                    |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                        | `true`                    |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                          | `false`                   |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                              | `false`                   |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                            | `false`                   |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                   | `["ALL"]`                 |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                     | `RuntimeDefault`          |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                                                 | `true`                    |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                              | `300`                     |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                     | `10`                      |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                    | `5`                       |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                  | `6`                       |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                  | `1`                       |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                                                | `true`                    |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                             | `30`                      |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                    | `5`                       |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                   | `3`                       |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                 | `6`                       |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                 | `1`                       |
+| `startupProbe.enabled`                              | Enable startupProbe                                                                                                  | `false`                   |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                               | `0`                       |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                      | `10`                      |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                     | `3`                       |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                   | `60`                      |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                   | `1`                       |
+| `customLivenessProbe`                               | Override default liveness probe                                                                                      | `{}`                      |
+| `customReadinessProbe`                              | Override default readiness probe                                                                                     | `{}`                      |
+| `customStartupProbe`                                | Override default startup probe                                                                                       | `{}`                      |
+| `lifecycleHooks`                                    | LifecycleHook to set additional configuration at startup Evaluated as a template                                     | `{}`                      |
+| `podAnnotations`                                    | Pod annotations                                                                                                      | `{}`                      |
+| `podLabels`                                         | Add additional labels to the pod (evaluated as a template)                                                           | `{}`                      |
 
 ### NetworkPolicy parameters
 
@@ -373,7 +376,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/magen
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/magento/values.yaml)
 
 ## Configuration and installation details
 

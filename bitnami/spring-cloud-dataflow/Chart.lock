@@ -1,15 +1,15 @@
 dependencies:
 - name: rabbitmq
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 12.2.4
+  version: 12.5.2
 - name: mariadb
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 14.0.2
+  version: 14.1.4
 - name: kafka
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 26.0.0
+  version: 26.4.2
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.13.2
-digest: sha256:a4695549f58aaedf642965de1e10c34226338c03309cdbbc7a4f21c9ce0b5fe6
-generated: "2023-10-17T10:28:47.112346491+02:00"
+  version: 2.13.3
+digest: sha256:b2ec4eda3e2346f2711713a45834547ba9e6f312af82e9fa52739f5c2447f5ff
+generated: "2023-11-21T23:11:58.789736175Z"

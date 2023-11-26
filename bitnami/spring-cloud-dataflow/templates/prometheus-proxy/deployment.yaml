@@ -56,6 +56,9 @@ spec:
       {{- if .Values.metrics.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
+      {{- if .Values.metrics.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.metrics.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
       {{- if .Values.metrics.priorityClassName }}
       priorityClassName: {{ .Values.metrics.priorityClassName | quote }}
       {{- end }}

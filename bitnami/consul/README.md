@@ -1,6 +1,6 @@
 <!--- app-name: HashiCorp Consul -->
 
-# HashiCorp Consul packaged by Bitnami
+# Bitnami package for HashiCorp Consul
 
 HashiCorp Consul is a tool for discovering and configuring services in your infrastructure.
 
@@ -11,18 +11,16 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/consul
+helm install my-release oci://registry-1.docker.io/bitnamicharts/consul
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use HashiCorp Consul in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [HashiCorp Consul](https://github.com/bitnami/containers/tree/main/bitnami/consul) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use HashiCorp Consul in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -96,7 +94,7 @@ helm delete --purge my-release
 | `datacenterName`                | Datacenter name for Consul. If not supplied, will use the Consul                                                 | `dc1`                    |
 | `domain`                        | Consul domain name                                                                                               | `consul`                 |
 | `raftMultiplier`                | Multiplier used to scale key Raft timing parameters                                                              | `1`                      |
-| `gossipKey`                     | Gossip key for all members. The key must be 16-bytes, can be generated with $(consul keygen)                     | `""`                     |
+| `gossipKey`                     | Gossip key for all members. The key must be base64-encoded, can be generated with $(consul keygen)               | `""`                     |
 | `tlsEncryptionSecretName`       | Name of existing secret with TLS encryption data                                                                 | `""`                     |
 | `hostAliases`                   | Deployment pod host aliases                                                                                      | `[]`                     |
 | `configuration`                 | HashiCorp Consul configuration to be injected as ConfigMap                                                       | `""`                     |
@@ -282,7 +280,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/consu
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/consul/values.yaml)
 
 ## Configuration and installation details
 

@@ -5,7 +5,7 @@ SPDX-License-Identifier: APACHE-2.0
 
 {{- if and (eq .Values.architecture "replication") (not .Values.sentinel.enabled) }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
-kind: StatefulSet
+kind: {{ .Values.replica.kind }}
 metadata:
   name: {{ printf "%s-replicas" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
@@ -15,14 +15,16 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if not .Values.replica.autoscaling.enabled }}
+  {{- if and (not (eq .Values.replica.kind "DaemonSet")) (not .Values.replica.autoscaling.enabled) }}
   replicas: {{ .Values.replica.replicaCount }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.replica.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: replica
+  {{- if (eq .Values.replica.kind "StatefulSet") }}
   serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
+  {{- end }}
   {{- if .Values.replica.updateStrategy }}
   updateStrategy: {{- toYaml .Values.replica.updateStrategy | nindent 4 }}
   {{- end }}
@@ -131,13 +133,19 @@ spec:
             - name: REDIS_REPLICATION_MODE
               value: replica
             - name: REDIS_MASTER_HOST
-            {{- if and (eq (int64 .Values.master.count) 1) (ne .Values.master.kind "Deployment") }}
+            {{- if .Values.replica.externalMaster.enabled }}
+              value: {{ .Values.replica.externalMaster.host | quote }}
+            {{- else if and (eq (int64 .Values.master.count) 1) (eq .Values.master.kind "StatefulSet") }}
               value: {{ template "common.names.fullname" . }}-master-0.{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- else }}
               value: {{ template "common.names.fullname" . }}-master.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
             - name: REDIS_MASTER_PORT_NUMBER
+            {{- if .Values.replica.externalMaster.enabled }}
+              value: {{ .Values.replica.externalMaster.port | quote }}
+            {{- else }}
               value: {{ .Values.master.containerPorts.redis | quote }}
+            {{- end }}
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
             {{- if .Values.auth.enabled }}
@@ -472,7 +480,7 @@ spec:
         {{- if .Values.metrics.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
-  {{- if not .Values.replica.persistence.enabled }}
+  {{- if or (not .Values.replica.persistence.enabled) (not (eq .Values.replica.kind "StatefulSet")) }}
         - name: redis-data
           {{- if or .Values.replica.persistence.medium .Values.replica.persistence.sizeLimit }}
           emptyDir:

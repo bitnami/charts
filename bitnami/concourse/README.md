@@ -1,6 +1,6 @@
 <!--- app-name: Concourse -->
 
-# Concourse packaged by Bitnami
+# Bitnami package for Concourse
 
 Concourse is an automation system written in Go. It is most commonly used for CI/CD, and is built to scale to any kind of automation pipeline, from simple to complex.
 
@@ -9,10 +9,10 @@ Concourse is an automation system written in Go. It is most commonly used for CI
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/concourse
+helm install my-release oci://registry-1.docker.io/bitnamicharts/concourse
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Concourse in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -21,8 +21,6 @@ This chart bootstraps a [Concourse](https://concourse-ci.org/) deployment on a [
 It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/main/bitnami/postgresql)
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Concourse in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -391,7 +389,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`                |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`                |
 
-See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table.
+See <https://github.com/bitnami/readme-generator-for-helm> to create the table.
 
 The above parameters map to the env variables defined in [bitnami/concourse](https://github.com/bitnami/containers/tree/main/bitnami/concourse). For more information please refer to the [bitnami/concourse](https://github.com/bitnami/containers/tree/main/bitnami/concourse) image documentation.
 
@@ -416,7 +414,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/conco
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/concourse/values.yaml)
 
 ## Configuration and installation details
 

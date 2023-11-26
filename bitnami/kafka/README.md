@@ -1,6 +1,6 @@
 <!--- app-name: Apache Kafka -->
 
-# Apache Kafka packaged by Bitnami
+# Bitnami package for Apache Kafka
 
 Apache Kafka is a distributed streaming platform designed to build real-time pipelines and can be used as a message broker or as a replacement for a log aggregation solution for big data applications.
 
@@ -11,18 +11,16 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kafka
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kafka
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Apache Kafka in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [Kafka](https://github.com/bitnami/containers/tree/main/bitnami/kafka) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Apache Kafka in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -226,6 +224,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                          | `{}`                      |
 | `controller.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                            | `{}`                      |
 | `controller.lifecycleHooks`                                    | lifecycleHooks for the Kafka container to automate configuration before or after startup                                                                                                      | `{}`                      |
+| `controller.initContainerResources.limits`                     | The resources limits for the init container                                                                                                                                                   | `{}`                      |
+| `controller.initContainerResources.requests`                   | The requested resources for the init container                                                                                                                                                | `{}`                      |
 | `controller.resources.limits`                                  | The resources limits for the container                                                                                                                                                        | `{}`                      |
 | `controller.resources.requests`                                | The requested resources for the container                                                                                                                                                     | `{}`                      |
 | `controller.podSecurityContext.enabled`                        | Enable security context for the pods                                                                                                                                                          | `true`                    |
@@ -253,6 +253,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                      | `[]`                      |
 | `controller.terminationGracePeriodSeconds`                     | Seconds the pod needs to gracefully terminate                                                                                                                                                 | `""`                      |
 | `controller.podManagementPolicy`                               | StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel | `Parallel`                |
+| `controller.minReadySeconds`                                   | How many seconds a pod needs to be ready before killing the next, during update                                                                                                               | `0`                       |
 | `controller.priorityClassName`                                 | Name of the existing priority class to be used by kafka pods                                                                                                                                  | `""`                      |
 | `controller.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                                                                                                                | `""`                      |
 | `controller.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                         | `true`                    |
@@ -324,6 +325,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `broker.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                          | `{}`                      |
 | `broker.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                            | `{}`                      |
 | `broker.lifecycleHooks`                                    | lifecycleHooks for the Kafka container to automate configuration before or after startup                                                                                                      | `{}`                      |
+| `broker.initContainerResources.limits`                     | The resources limits for the container                                                                                                                                                        | `{}`                      |
+| `broker.initContainerResources.requests`                   | The requested resources for the container                                                                                                                                                     | `{}`                      |
 | `broker.resources.limits`                                  | The resources limits for the container                                                                                                                                                        | `{}`                      |
 | `broker.resources.requests`                                | The requested resources for the container                                                                                                                                                     | `{}`                      |
 | `broker.podSecurityContext.enabled`                        | Enable security context for the pods                                                                                                                                                          | `true`                    |
@@ -351,6 +354,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `broker.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                      | `[]`                      |
 | `broker.terminationGracePeriodSeconds`                     | Seconds the pod needs to gracefully terminate                                                                                                                                                 | `""`                      |
 | `broker.podManagementPolicy`                               | StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel | `Parallel`                |
+| `broker.minReadySeconds`                                   | How many seconds a pod needs to be ready before killing the next, during update                                                                                                               | `0`                       |
 | `broker.priorityClassName`                                 | Name of the existing priority class to be used by kafka pods                                                                                                                                  | `""`                      |
 | `broker.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                                                                                                                | `""`                      |
 | `broker.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                         | `true`                    |
@@ -670,7 +674,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/kafka
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/kafka/values.yaml)
 
 ## Configuration and installation details
 
@@ -1173,6 +1177,7 @@ The changes introduced in this version are:
   - Controller pods will not configure externalAccess unless either:
     - `controller.controllerOnly=false` (default), meaning the pods are running as 'controller+broker' nodes; or
     - `externalAccess.controller.service.forceExpose=true`, for use cases where controller-only nodes want to be exposed externally.
+- TLS certificates value `tls.existingSecret` no longer supports an array of secrets (1 secret per node). It now accepts a single secret containing multiple certificates named `kafka-<role>-<pod-number>` for each Kafka pod, or alternatively, a single certificate shared by all Kafka nodes using wildcard CN and/or SubjectAltNames. **NOTE**: If using CertManager to automatically generate the certificate secrets, only the single certificate approach would be supported.
 
 #### Upgrading from Kraft mode
 

@@ -27,7 +27,7 @@ jobs:
           sudo tar xf /tmp/srp-cli.tgz -C /usr/local/bin/
           srp config --srp-endpoint ${BAC_SRP_ENDPOINT}
           srp config auth --client-id=${BAC_SRP_CLIENT_ID} --client-secret=${BAC_SRP_CLIENT_SECRET}
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         name: Checkout Repository
         with:
           # No full history required
@@ -43,7 +43,7 @@ jobs:
             --version "1.0" --all-ephemeral true --build-type release
           echo "uid=${SRP_UID}" >> $GITHUB_OUTPUT
       - name: Archive SRP report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32
         with:
           name: source-provenance
           path: source-provenance.json

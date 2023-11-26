@@ -79,7 +79,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mlflow
-  tag: 2.8.0-debian-11-r0
+  tag: 2.8.1-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -110,7 +110,7 @@ image:
 gitImage:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.42.0-debian-11-r45
+  tag: 2.43.0-debian-11-r0
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -200,32 +200,34 @@ tracking:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param tracking.podSecurityContext.enabled Enabled mlflow pods' Security Context
   ## @param tracking.podSecurityContext.fsGroup Set mlflow pod's Security Context fsGroup
-  ## @param tracking.podSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param tracking.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param tracking.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param tracking.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param tracking.containerSecurityContext.privileged Set containers' Security Context privileged
   ## @param tracking.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
   ## @param tracking.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
   ## @param tracking.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
   ## @param tracking.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ## @param tracking.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## Basic authentication
   ## @param tracking.auth.enabled Enable basic authentication
@@ -902,32 +904,34 @@ run:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param run.podSecurityContext.enabled Enabled Run pods' Security Context
   ## @param run.podSecurityContext.fsGroup Set Run pod's Security Context fsGroup
-  ## @param run.podSecurityContext.seccompProfile.type Set Run container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param run.containerSecurityContext.enabled Enabled Run containers' Security Context
   ## @param run.containerSecurityContext.runAsUser Set Run containers' Security Context runAsUser
   ## @param run.containerSecurityContext.runAsGroup Set Run containers' Security Context runAsGroup
   ## @param run.containerSecurityContext.runAsNonRoot Set Run containers' Security Context runAsNonRoot
+  ## @param run.containerSecurityContext.privileged Set Run containers' Security Context privileged
   ## @param run.containerSecurityContext.readOnlyRootFilesystem Set Run containers' Security Context runAsNonRoot
   ## @param run.containerSecurityContext.allowPrivilegeEscalation Set Run container's privilege escalation
   ## @param run.containerSecurityContext.capabilities.drop Set Run container's Security Context runAsNonRoot
+  ## @param run.containerSecurityContext.seccompProfile.type Set Run container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param run.lifecycleHooks for the run container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -1158,7 +1162,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1197,7 +1201,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
@@ -1214,21 +1218,26 @@ waitContainer:
 
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param waitContainer.containerSecurityContext.enabled Enabled APISIX containers' Security Context
-  ## @param waitContainer.containerSecurityContext.runAsUser Set APISIX containers' Security Context runAsUser
-  ## @param waitContainer.containerSecurityContext.runAsNonRoot Set APISIX containers' Security Context runAsNonRoot
-  ## @param waitContainer.containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context runAsNonRoot
-  ## @param waitContainer.containerSecurityContext.allowPrivilegeEscalation Set APISIX container's privilege escalation
-  ## @param waitContainer.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
+  ## @param waitContainer.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param waitContainer.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param waitContainer.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
+  ## @param waitContainer.containerSecurityContext.privileged Set containers' Security Context privileged
+  ## @param waitContainer.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
+  ## @param waitContainer.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
+  ## @param waitContainer.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ## @param waitContainer.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
 ## @section PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml

@@ -524,6 +524,17 @@ Return the SMTP Secret Name
 {{- end -}}
 
 {{/*
+Retrieve SMTP server key
+*/}}
+{{- define "mastodon.smtp.serverKey" -}}
+{{- if .Values.smtp.existingSecretServerKey -}}
+    {{- print .Values.smtp.existingSecretServerKey -}}
+{{- else -}}
+    {{- print "server" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Retrieve SMTP login key
 */}}
 {{- define "mastodon.smtp.loginKey" -}}

@@ -6,15 +6,15 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r90
+      image: docker.io/bitnami/os-shell:11-debian-11-r91
     - name: vault-csi-provider
-      image: docker.io/bitnami/vault-csi-provider:1.4.0-debian-11-r140
+      image: docker.io/bitnami/vault-csi-provider:1.4.1-debian-11-r1
     - name: vault-k8s
-      image: docker.io/bitnami/vault-k8s:1.3.0-debian-11-r23
+      image: docker.io/bitnami/vault-k8s:1.3.1-debian-11-r1
     - name: vault
-      image: docker.io/bitnami/vault:1.15.1-debian-11-r0
+      image: docker.io/bitnami/vault:1.15.2-debian-11-r1
 apiVersion: v2
-appVersion: 1.15.1
+appVersion: 1.15.2
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -35,4 +35,4 @@ maintainers:
 name: vault
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/vault
-version: 0.3.9
+version: 0.4.4

@@ -1,6 +1,6 @@
 <!--- app-name: PostgreSQL HA -->
 
-# PostgreSQL HA packaged by Bitnami
+# Bitnami package for PostgreSQL HA
 
 This PostgreSQL cluster solution includes the PostgreSQL replication manager, an open-source tool for managing replication and failover on PostgreSQL clusters.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/postgresql-ha
+helm install my-release oci://registry-1.docker.io/bitnamicharts/postgresql-ha
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use PostgreSQL HA in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -26,8 +26,6 @@ This Helm chart has been developed based on [bitnami/postgresql](https://github.
 - Replacing `bitnami/postgresql` with `bitnami/postgresql-repmgr` which includes and configures [repmgr](https://repmgr.org/). Repmgr ensures standby nodes assume the primary role when the primary node is unhealthy.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use PostgreSQL HA in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -126,14 +124,14 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `postgresql.terminationGracePeriodSeconds`                     | Seconds PostgreSQL pod needs to terminate gracefully                                                                                                                                                          | `""`                                |
 | `postgresql.podSecurityContext.enabled`                        | Enable security context for PostgreSQL with Repmgr                                                                                                                                                            | `true`                              |
 | `postgresql.podSecurityContext.fsGroup`                        | Group ID for the PostgreSQL with Repmgr filesystem                                                                                                                                                            | `1001`                              |
-| `postgresql.containerSecurityContext.enabled`                  | Enable container security context                                                                                                                                                                             | `true`                              |
-| `postgresql.containerSecurityContext.runAsUser`                | User ID for the PostgreSQL with Repmgr container                                                                                                                                                              | `1001`                              |
-| `postgresql.containerSecurityContext.runAsGroup`               | Group ID for the PostgreSQL with Repmgr container                                                                                                                                                             | `0`                                 |
-| `postgresql.containerSecurityContext.runAsNonRoot`             | Set PostgreSQL with Repmgr containers' Security Context runAsNonRoot                                                                                                                                          | `true`                              |
-| `postgresql.containerSecurityContext.readOnlyRootFilesystem`   | Set PostgreSQL with Repmgr containers' Security Context runAsNonRoot                                                                                                                                          | `false`                             |
-| `postgresql.containerSecurityContext.allowPrivilegeEscalation` | Set PostgreSQL with Repmgr container's Security Context allowPrivilegeEscalation                                                                                                                              | `false`                             |
-| `postgresql.containerSecurityContext.seccompProfile.type`      | Set PostgreSQL with Repmgr container's Security Context seccompProfile                                                                                                                                        | `RuntimeDefault`                    |
-| `postgresql.containerSecurityContext.capabilities.drop`        | Set PostgreSQL with Repmgr container's Security Context capabilities to drop                                                                                                                                  | `["ALL"]`                           |
+| `postgresql.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                          | `true`                              |
+| `postgresql.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                    | `1001`                              |
+| `postgresql.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                 | `true`                              |
+| `postgresql.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                   | `false`                             |
+| `postgresql.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                       | `false`                             |
+| `postgresql.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                     | `false`                             |
+| `postgresql.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                            | `["ALL"]`                           |
+| `postgresql.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                              | `RuntimeDefault`                    |
 | `postgresql.command`                                           | Override default container command (useful when using custom images)                                                                                                                                          | `[]`                                |
 | `postgresql.args`                                              | Override default container args (useful when using custom images)                                                                                                                                             | `[]`                                |
 | `postgresql.lifecycleHooks`                                    | LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template                                                                                            | `{}`                                |
@@ -252,14 +250,14 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `witness.terminationGracePeriodSeconds`                        | Seconds PostgreSQL witness pod needs to terminate gracefully                                                                                                                                                  | `""`                                |
 | `witness.podSecurityContext.enabled`                           | Enable security context for PostgreSQL witness with Repmgr                                                                                                                                                    | `true`                              |
 | `witness.podSecurityContext.fsGroup`                           | Group ID for the PostgreSQL witness with Repmgr filesystem                                                                                                                                                    | `1001`                              |
-| `witness.containerSecurityContext.enabled`                     | Enable container security context                                                                                                                                                                             | `true`                              |
-| `witness.containerSecurityContext.runAsUser`                   | User ID for the PostgreSQL witness with Repmgr container                                                                                                                                                      | `1001`                              |
-| `witness.containerSecurityContext.runAsGroup`                  | Group ID for the PostgreSQL witness with Repmgr container                                                                                                                                                     | `0`                                 |
-| `witness.containerSecurityContext.runAsNonRoot`                | Set PostgreSQL witness with Repmgr containers' Security Context runAsNonRoot                                                                                                                                  | `true`                              |
-| `witness.containerSecurityContext.readOnlyRootFilesystem`      | Set PostgreSQL witness with Repmgr containers' Security Context runAsNonRoot                                                                                                                                  | `false`                             |
-| `witness.containerSecurityContext.allowPrivilegeEscalation`    | Set PostgreSQL witness with Repmgr container's Security Context allowPrivilegeEscalation                                                                                                                      | `false`                             |
-| `witness.containerSecurityContext.seccompProfile.type`         | Set PostgreSQL witness with Repmgr container's Security Context seccompProfile                                                                                                                                | `RuntimeDefault`                    |
-| `witness.containerSecurityContext.capabilities.drop`           | Set PostgreSQL witness with Repmgr container's Security Context capabilities to drop                                                                                                                          | `["ALL"]`                           |
+| `witness.containerSecurityContext.enabled`                     | Enabled containers' Security Context                                                                                                                                                                          | `true`                              |
+| `witness.containerSecurityContext.runAsUser`                   | Set containers' Security Context runAsUser                                                                                                                                                                    | `1001`                              |
+| `witness.containerSecurityContext.runAsNonRoot`                | Set container's Security Context runAsNonRoot                                                                                                                                                                 | `true`                              |
+| `witness.containerSecurityContext.privileged`                  | Set container's Security Context privileged                                                                                                                                                                   | `false`                             |
+| `witness.containerSecurityContext.readOnlyRootFilesystem`      | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                       | `false`                             |
+| `witness.containerSecurityContext.allowPrivilegeEscalation`    | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                     | `false`                             |
+| `witness.containerSecurityContext.capabilities.drop`           | List of capabilities to be dropped                                                                                                                                                                            | `["ALL"]`                           |
+| `witness.containerSecurityContext.seccompProfile.type`         | Set container's Security Context seccomp profile                                                                                                                                                              | `RuntimeDefault`                    |
 | `witness.command`                                              | Override default container command (useful when using custom images)                                                                                                                                          | `[]`                                |
 | `witness.args`                                                 | Override default container args (useful when using custom images)                                                                                                                                             | `[]`                                |
 | `witness.lifecycleHooks`                                       | LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template                                                                                            | `{}`                                |
@@ -378,14 +376,14 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `pgpool.tolerations`                                       | Tolerations for Pgpool pods assignment                                                                                                          | `[]`                     |
 | `pgpool.podSecurityContext.enabled`                        | Enable security context for Pgpool                                                                                                              | `true`                   |
 | `pgpool.podSecurityContext.fsGroup`                        | Group ID for the Pgpool filesystem                                                                                                              | `1001`                   |
-| `pgpool.containerSecurityContext.enabled`                  | Enable container security context                                                                                                               | `true`                   |
-| `pgpool.containerSecurityContext.runAsUser`                | User ID for the Pgpool container                                                                                                                | `1001`                   |
-| `pgpool.containerSecurityContext.runAsGroup`               | User ID for the Pgpool container                                                                                                                | `0`                      |
-| `pgpool.containerSecurityContext.runAsNonRoot`             | Set Pgpool containers' Security Context runAsNonRoot                                                                                            | `true`                   |
-| `pgpool.containerSecurityContext.readOnlyRootFilesystem`   | Set Pgpool containers' Security Context runAsNonRoot                                                                                            | `false`                  |
-| `pgpool.containerSecurityContext.allowPrivilegeEscalation` | Set Pgpool container's Security Context allowPrivilegeEscalation                                                                                | `false`                  |
-| `pgpool.containerSecurityContext.seccompProfile.type`      | Set Pgpool container's Security Context seccompProfile                                                                                          | `RuntimeDefault`         |
-| `pgpool.containerSecurityContext.capabilities.drop`        | Set Pgpool container's Security Context capabilities to drop                                                                                    | `["ALL"]`                |
+| `pgpool.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                            | `true`                   |
+| `pgpool.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                      | `1001`                   |
+| `pgpool.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                   | `true`                   |
+| `pgpool.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                     | `false`                  |
+| `pgpool.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                         | `false`                  |
+| `pgpool.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                       | `false`                  |
+| `pgpool.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                              | `["ALL"]`                |
+| `pgpool.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                | `RuntimeDefault`         |
 | `pgpool.resources.limits`                                  | The resources limits for the container                                                                                                          | `{}`                     |
 | `pgpool.resources.requests`                                | The requested resources for the container                                                                                                       | `{}`                     |
 | `pgpool.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                            | `true`                   |
@@ -553,17 +551,20 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 ### Persistence parameters
 
-| Name                        | Description                                                                             | Value                 |
-| --------------------------- | --------------------------------------------------------------------------------------- | --------------------- |
-| `persistence.enabled`       | Enable data persistence                                                                 | `true`                |
-| `persistence.existingClaim` | A manually managed Persistent Volume and Claim                                          | `""`                  |
-| `persistence.storageClass`  | Persistent Volume Storage Class                                                         | `""`                  |
-| `persistence.mountPath`     | The path the volume will be mounted at, useful when using different PostgreSQL images.  | `/bitnami/postgresql` |
-| `persistence.accessModes`   | List of access modes of data volume                                                     | `["ReadWriteOnce"]`   |
-| `persistence.size`          | Persistent Volume Claim size                                                            | `8Gi`                 |
-| `persistence.annotations`   | Persistent Volume Claim annotations                                                     | `{}`                  |
-| `persistence.labels`        | Persistent Volume Claim labels                                                          | `{}`                  |
-| `persistence.selector`      | Selector to match an existing Persistent Volume (this value is evaluated as a template) | `{}`                  |
+| Name                                               | Description                                                                             | Value                 |
+| -------------------------------------------------- | --------------------------------------------------------------------------------------- | --------------------- |
+| `persistence.enabled`                              | Enable data persistence                                                                 | `true`                |
+| `persistence.existingClaim`                        | A manually managed Persistent Volume and Claim                                          | `""`                  |
+| `persistence.storageClass`                         | Persistent Volume Storage Class                                                         | `""`                  |
+| `persistence.mountPath`                            | The path the volume will be mounted at, useful when using different PostgreSQL images.  | `/bitnami/postgresql` |
+| `persistence.accessModes`                          | List of access modes of data volume                                                     | `["ReadWriteOnce"]`   |
+| `persistence.size`                                 | Persistent Volume Claim size                                                            | `8Gi`                 |
+| `persistence.annotations`                          | Persistent Volume Claim annotations                                                     | `{}`                  |
+| `persistence.labels`                               | Persistent Volume Claim labels                                                          | `{}`                  |
+| `persistence.selector`                             | Selector to match an existing Persistent Volume (this value is evaluated as a template) | `{}`                  |
+| `persistentVolumeClaimRetentionPolicy.enabled`     | Enable Persistent volume retention policy for postgresql Statefulset                    | `false`               |
+| `persistentVolumeClaimRetentionPolicy.whenScaled`  | Volume retention behavior when the replica count of the StatefulSet is reduced          | `Retain`              |
+| `persistentVolumeClaimRetentionPolicy.whenDeleted` | Volume retention behavior that applies when the StatefulSet is deleted                  | `Retain`              |
 
 ### Traffic Exposure parameters
 
@@ -652,10 +653,6 @@ By default, the chart is configured to use Kubernetes Security Context to automa
 As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
-
-### Securing traffic using TLS
-
-Learn how to [configure TLS authentication](/<%= platform_path %>/infrastructure/postgresql-ha/administration/enable-tls-ingress/)
 
 ### LDAP
 

@@ -16,7 +16,7 @@ metadata:
   {{- end }}
 data:
   {{- if .Values.primary.configuration }}
-  postgresql.conf: |-
+  postgresql.conf: |
     {{- include "common.tplvalues.render" ( dict "value" .Values.primary.configuration "context" $ ) | nindent 4 }}
   {{- end }}
   {{- if .Values.primary.pgHbaConfiguration }}

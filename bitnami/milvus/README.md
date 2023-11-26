@@ -1,6 +1,6 @@
 <!--- app-name: Milvus -->
 
-# Milvus packaged by Bitnami
+# Bitnami package for Milvus
 
 Milvus is a cloud-native, open-source vector database solution for AI applications and similarity search. Features high scalability, hibrid search and unified lambda structure.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/milvus
+helm install my-release oci://registry-1.docker.io/bitnamicharts/milvus
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Milvus in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -25,8 +25,6 @@ This chart bootstraps a [Milvus](https://github.com/grafana/loki) Deployment in 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/milvus/get-started/).
-
-Looking to use Milvus in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -70,18 +68,19 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                             | Value           |
-| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
-| `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
-| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
-| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
-| `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployments/statefulsets                      | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the deployments/statefulsets                         | `["infinity"]`  |
+| Name                     | Description                                                                               | Value           |
+| ------------------------ | ----------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Override Kubernetes version                                                               | `""`            |
+| `nameOverride`           | String to partially override common.names.fullname                                        | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname                                            | `""`            |
+| `commonLabels`           | Labels to add to all deployed objects                                                     | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                | `{}`            |
+| `clusterDomain`          | Kubernetes cluster domain name                                                            | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                         | `[]`            |
+| `enableServiceLinks`     | Whether information about services should be injected into all pods' environment variable | `false`         |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)   | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployments/statefulsets                        | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployments/statefulsets                           | `["infinity"]`  |
 
 ### Common Milvus Parameters
 
@@ -1410,15 +1409,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### External etcd settings
 
-| Name                                     | Description                                                 | Value                |
-| ---------------------------------------- | ----------------------------------------------------------- | -------------------- |
-| `externalEtcd.servers`                   | List of hostnames of the external etcd                      | `[]`                 |
-| `externalEtcd.port`                      | Port of the external etcd instance                          | `2379`               |
-| `externalEtcd.user`                      | User of the external etcd instance                          | `root`               |
-| `externalEtcd.password`                  | Password of the external etcd instance                      | `""`                 |
-| `externalEtcd.existingSecret`            | Name of a secret containing the external etcd password      | `""`                 |
-| `externalEtcd.existingSecretPasswordKey` | Key inside the secret containing the external etcd password | `etcd-root-password` |
-| `externalEtcd.secureTransport`           | Use TLS for client-to-server communications                 | `false`              |
+| Name                                     | Description                                                                                          | Value                |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------- | -------------------- |
+| `externalEtcd.servers`                   | List of hostnames of the external etcd                                                               | `[]`                 |
+| `externalEtcd.port`                      | Port of the external etcd instance                                                                   | `2379`               |
+| `externalEtcd.user`                      | User of the external etcd instance                                                                   | `root`               |
+| `externalEtcd.password`                  | Password of the external etcd instance                                                               | `""`                 |
+| `externalEtcd.existingSecret`            | Name of a secret containing the external etcd password                                               | `""`                 |
+| `externalEtcd.existingSecretPasswordKey` | Key inside the secret containing the external etcd password                                          | `etcd-root-password` |
+| `externalEtcd.tls.enabled`               | Enable TLS for etcd client connections.                                                              | `false`              |
+| `externalEtcd.tls.existingSecret`        | Name of the existing secret containing the TLS certificates for external etcd client communications. | `""`                 |
+| `externalEtcd.tls.cert`                  | The secret key from the existingSecret if 'cert' key different from the default (tls.crt)            | `tls.crt`            |
+| `externalEtcd.tls.key`                   | The secret key from the existingSecret if 'key' key different from the default (tls.key)             | `tls.key`            |
+| `externalEtcd.tls.caCert`                | The secret key from the existingSecret if 'caCert' key different from the default (ca.crt)           | `ca.crt`             |
+| `externalEtcd.tls.keyPassword`           | Password to access the password-protected PEM key if necessary.                                      | `""`                 |
 
 ### External S3 parameters
 
@@ -1489,7 +1493,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kafka.sasl.enabledMechanisms`    | Kafka enabled SASL mechanisms                                                                 | `PLAIN`                              |
 | `kafka.sasl.client.users`         | Kafka client users                                                                            | `["user"]`                           |
 
-See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table.
+See <https://github.com/bitnami/readme-generator-for-helm> to create the table.
 
 The above parameters map to the env variables defined in [bitnami/milvus](https://github.com/bitnami/containers/tree/main/bitnami/milvus). For more information please refer to the [bitnami/milvus](https://github.com/bitnami/containers/tree/main/bitnami/milvus) image documentation.
 
@@ -1512,7 +1516,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/milvu
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/milvus/values.yaml)
 
 ## Configuration and installation details
 

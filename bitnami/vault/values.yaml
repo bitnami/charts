@@ -83,7 +83,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/vault
-    tag: 1.15.1-debian-11-r0
+    tag: 1.15.2-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -180,30 +180,32 @@ server:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param server.podSecurityContext.enabled Enabled Vault Server pods' Security Context
   ## @param server.podSecurityContext.fsGroup Set Vault Server pod's Security Context fsGroup
-  ## @param server.podSecurityContext.seccompProfile.type Set Vault Server container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param server.containerSecurityContext.enabled Enabled Vault Server containers' Security Context
-  ## @param server.containerSecurityContext.runAsUser Set Vault Server containers' Security Context runAsUser
-  ## @param server.containerSecurityContext.runAsNonRoot Set Vault Server containers' Security Context runAsNonRoot
-  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set Vault Server containers' Security Context runAsNonRoot
-  ## @param server.containerSecurityContext.allowPrivilegeEscalation Set Vault Server container's privilege escalation
-  ## @param server.containerSecurityContext.capabilities.drop Set Vault Server container's Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param server.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param server.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param server.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param server.command Override default container command (useful when using custom images)
   ##
@@ -732,7 +734,7 @@ csiProvider:
   image:
     registry: docker.io
     repository: bitnami/vault-csi-provider
-    tag: 1.4.0-debian-11-r140
+    tag: 1.4.1-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -876,13 +878,10 @@ csiProvider:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param csiProvider.podSecurityContext.enabled Enabled CSI Provider pods' Security Context
   ## @param csiProvider.podSecurityContext.fsGroup Set CSI Provider pod's Security Context fsGroup
-  ## @param csiProvider.podSecurityContext.seccompProfile.type Set CSI Provider pod's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
 
   provider:
     ## @param csiProvider.provider.containerPorts.health CSI Provider health container port
@@ -952,21 +951,26 @@ csiProvider:
       requests: {}
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param csiProvider.provider.containerSecurityContext.enabled Enabled CSI Provider container' Security Context
-    ## @param csiProvider.provider.containerSecurityContext.runAsUser Set CSI Provider container' Security Context runAsUser
-    ## @param csiProvider.provider.containerSecurityContext.runAsNonRoot Set CSI Provider container' Security Context runAsNonRoot
-    ## @param csiProvider.provider.containerSecurityContext.readOnlyRootFilesystem Set CSI Provider container' Security Context runAsNonRoot
-    ## @param csiProvider.provider.containerSecurityContext.allowPrivilegeEscalation Set CSI Provider container's privilege escalation
-    ## @param csiProvider.provider.containerSecurityContext.capabilities.drop Set CSI Provider container's Security Context runAsNonRoot
+    ## @param csiProvider.provider.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param csiProvider.provider.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param csiProvider.provider.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param csiProvider.provider.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param csiProvider.provider.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param csiProvider.provider.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param csiProvider.provider.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param csiProvider.provider.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
       runAsUser: 1001
       runAsNonRoot: true
+      privileged: false
       readOnlyRootFilesystem: true
       allowPrivilegeEscalation: false
       capabilities:
         drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
 
     ## @param csiProvider.provider.command Override default container command (useful when using custom images)
     ##
@@ -1056,21 +1060,26 @@ csiProvider:
     customStartupProbe: {}
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param csiProvider.agent.containerSecurityContext.enabled Enabled CSI Agent container' Security Context
-    ## @param csiProvider.agent.containerSecurityContext.runAsUser Set CSI Agent container' Security Context runAsUser
-    ## @param csiProvider.agent.containerSecurityContext.runAsNonRoot Set CSI Agent container' Security Context runAsNonRoot
-    ## @param csiProvider.agent.containerSecurityContext.readOnlyRootFilesystem Set CSI Agent container' Security Context runAsNonRoot
-    ## @param csiProvider.agent.containerSecurityContext.allowPrivilegeEscalation Set CSI Agent container's privilege escalation
-    ## @param csiProvider.agent.containerSecurityContext.capabilities.drop Set CSI Agent container's Security Context runAsNonRoot
+    ## @param csiProvider.agent.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param csiProvider.agent.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param csiProvider.agent.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param csiProvider.agent.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param csiProvider.agent.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param csiProvider.agent.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param csiProvider.agent.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param csiProvider.agent.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
       runAsUser: 1001
       runAsNonRoot: true
+      privileged: false
       readOnlyRootFilesystem: true
       allowPrivilegeEscalation: false
       capabilities:
         drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## CSI Provider Agent resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ## @param csiProvider.agent.resources.limits The resources limits for the CSI Provider Agent container
@@ -1167,7 +1176,7 @@ injector:
   image:
     registry: docker.io
     repository: bitnami/vault-k8s
-    tag: 1.3.0-debian-11-r23
+    tag: 1.3.1-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1257,30 +1266,32 @@ injector:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param injector.podSecurityContext.enabled Enabled Vault Kubernetes Injector pods' Security Context
   ## @param injector.podSecurityContext.fsGroup Set Vault Kubernetes Injector pod's Security Context fsGroup
-  ## @param injector.podSecurityContext.seccompProfile.type Set Vault Kubernetes Injector container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param injector.containerSecurityContext.enabled Enabled Vault Kubernetes Injector containers' Security Context
-  ## @param injector.containerSecurityContext.runAsUser Set Vault Kubernetes Injector containers' Security Context runAsUser
-  ## @param injector.containerSecurityContext.runAsNonRoot Set Vault Kubernetes Injector containers' Security Context runAsNonRoot
-  ## @param injector.containerSecurityContext.readOnlyRootFilesystem Set Vault Kubernetes Injector containers' Security Context runAsNonRoot
-  ## @param injector.containerSecurityContext.allowPrivilegeEscalation Set Vault Kubernetes Injector container's privilege escalation
-  ## @param injector.containerSecurityContext.capabilities.drop Set Vault Kubernetes Injector container's Security Context runAsNonRoot
+  ## @param injector.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param injector.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param injector.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param injector.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param injector.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param injector.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param injector.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param injector.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param injector.command Override default container command (useful when using custom images)
   ##
@@ -1544,7 +1555,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

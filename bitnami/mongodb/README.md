@@ -11,18 +11,16 @@ Disclaimer: The respective trademarks mentioned in the offering are owned by the
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mongodb
+helm install my-release oci://registry-1.docker.io/bitnamicharts/mongodb
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use MongoDBreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [MongoDB(&reg;)](https://github.com/bitnami/containers/tree/main/bitnami/mongodb) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use MongoDBreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -90,6 +88,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `commonAnnotations`       | Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template | `{}`            |
 | `topologyKey`             | Override common lib default topology key. If empty - "kubernetes.io/hostname" is used                     | `""`            |
 | `serviceBindings.enabled` | Create secret for service binding (Experimental)                                                          | `false`         |
+| `enableServiceLinks`      | Whether information about services should be injected into pod's environment variable                     | `true`          |
 | `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
 | `diagnosticMode.command`  | Command to override all containers in the deployment                                                      | `["sleep"]`     |
 | `diagnosticMode.args`     | Args to override all containers in the deployment                                                         | `["infinity"]`  |
@@ -295,23 +294,36 @@ Refer to the [chart documentation for more information on each of these architec
 | `externalAccess.hidden.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                                | `None`                    |
 | `externalAccess.hidden.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                                     | `{}`                      |
 
+### Network policy parameters
+
+| Name                                      | Description                                                                                                                               | Value   |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                   | Enable MongoDB(&reg;) network policies                                                                                                    | `false` |
+| `networkPolicy.ingress.namespaceSelector` | Namespace selector label that is allowed to access the MongoDB(&reg;) node. This label will be used to identify the allowed namespace(s). | `{}`    |
+| `networkPolicy.ingress.podSelector`       | Pod selector label that is allowed to access the MongoDB(&reg;) node. This label will be used to identify the allowed pod(s).             | `{}`    |
+| `networkPolicy.ingress.customRules`       | Custom network policy for the MongoDB(&reg;) node.                                                                                        | `[]`    |
+| `networkPolicy.egress.customRules`        | Custom network policy for the MongoDB(&reg;) node.                                                                                        | `[]`    |
+
 ### Persistence parameters
 
-| Name                                          | Description                                                                                                                           | Value               |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `persistence.enabled`                         | Enable MongoDB(&reg;) data persistence using PVC                                                                                      | `true`              |
-| `persistence.medium`                          | Provide a medium for `emptyDir` volumes.                                                                                              | `""`                |
-| `persistence.existingClaim`                   | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)                                                     | `""`                |
-| `persistence.resourcePolicy`                  | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`                |
-| `persistence.storageClass`                    | PVC Storage Class for MongoDB(&reg;) data volume                                                                                      | `""`                |
-| `persistence.accessModes`                     | PV Access Mode                                                                                                                        | `["ReadWriteOnce"]` |
-| `persistence.size`                            | PVC Storage Request for MongoDB(&reg;) data volume                                                                                    | `8Gi`               |
-| `persistence.annotations`                     | PVC annotations                                                                                                                       | `{}`                |
-| `persistence.mountPath`                       | Path to mount the volume at                                                                                                           | `/bitnami/mongodb`  |
-| `persistence.subPath`                         | Subdirectory of the volume to mount at                                                                                                | `""`                |
-| `persistence.volumeClaimTemplates.selector`   | A label query over volumes to consider for binding (e.g. when using local volumes)                                                    | `{}`                |
-| `persistence.volumeClaimTemplates.requests`   | Custom PVC requests attributes                                                                                                        | `{}`                |
-| `persistence.volumeClaimTemplates.dataSource` | Add dataSource to the VolumeClaimTemplate                                                                                             | `{}`                |
+| Name                                               | Description                                                                                                                           | Value               |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `persistence.enabled`                              | Enable MongoDB(&reg;) data persistence using PVC                                                                                      | `true`              |
+| `persistence.medium`                               | Provide a medium for `emptyDir` volumes.                                                                                              | `""`                |
+| `persistence.existingClaim`                        | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)                                                     | `""`                |
+| `persistence.resourcePolicy`                       | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`                |
+| `persistence.storageClass`                         | PVC Storage Class for MongoDB(&reg;) data volume                                                                                      | `""`                |
+| `persistence.accessModes`                          | PV Access Mode                                                                                                                        | `["ReadWriteOnce"]` |
+| `persistence.size`                                 | PVC Storage Request for MongoDB(&reg;) data volume                                                                                    | `8Gi`               |
+| `persistence.annotations`                          | PVC annotations                                                                                                                       | `{}`                |
+| `persistence.mountPath`                            | Path to mount the volume at                                                                                                           | `/bitnami/mongodb`  |
+| `persistence.subPath`                              | Subdirectory of the volume to mount at                                                                                                | `""`                |
+| `persistence.volumeClaimTemplates.selector`        | A label query over volumes to consider for binding (e.g. when using local volumes)                                                    | `{}`                |
+| `persistence.volumeClaimTemplates.requests`        | Custom PVC requests attributes                                                                                                        | `{}`                |
+| `persistence.volumeClaimTemplates.dataSource`      | Add dataSource to the VolumeClaimTemplate                                                                                             | `{}`                |
+| `persistentVolumeClaimRetentionPolicy.enabled`     | Enable Persistent volume retention policy for MongoDB(&reg;) Statefulset                                                              | `false`             |
+| `persistentVolumeClaimRetentionPolicy.whenScaled`  | Volume retention behavior when the replica count of the StatefulSet is reduced                                                        | `Retain`            |
+| `persistentVolumeClaimRetentionPolicy.whenDeleted` | Volume retention behavior that applies when the StatefulSet is deleted                                                                | `Retain`            |
 
 ### Backup parameters
 
@@ -642,7 +654,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/mongo
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/mongodb/values.yaml)
 
 ## Configuration and installation details
 
@@ -863,7 +875,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-<http://www.apache.org/licenses/LICENSE-2.0>
+<https://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

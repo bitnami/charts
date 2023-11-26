@@ -37,7 +37,7 @@ jobs:
             echo "name=${assets}" >> $GITHUB_OUTPUT
           fi
       - name: Show messages
-        uses: actions/github-script@v6
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
           script: |
             if ("${{ steps.get-asset.outputs.result }}" != "ok" ) {
@@ -47,6 +47,6 @@ jobs:
             }
       - name: Labeling
         if: ${{ steps.get-asset.outputs.result == 'ok' }}
-        uses: fmulero/labeler@1.1.0
+        uses: fmulero/labeler@d3ef0aadb212cd1656bd6d5ce1e772787bf1682b
         with:
           add-labels: "${{ steps.get-asset.outputs.name }}"

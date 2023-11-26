@@ -62,6 +62,7 @@ spec:
             {{- end }}
           {{- end }}
         spec:
+          enableServiceLinks: {{ .Values.enableServiceLinks }}
           {{- if .Values.tls.enabled }}
           initContainers:
             - name: generate-tls-certs

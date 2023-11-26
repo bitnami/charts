@@ -81,7 +81,7 @@ jobs:
       - id: show-error
         name: Show error
         if: ${{ steps.get-chart.outputs.result != 'ok' }}
-        uses: actions/github-script@v6
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
           script: |
             let message='${{ steps.get-chart.outputs.error }}';
@@ -106,7 +106,7 @@ jobs:
       )
     name: VIB Verify
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         name: Checkout Repository
         with:
           ref: ${{ github.event.pull_request.head.ref }}
@@ -157,13 +157,21 @@ jobs:
       # Approved by the 'github-actions' user; a PR can't be approved by its author
       - name: PR approval
         if: ${{ needs.vib-verify.result == 'success' }}
-        uses: hmarr/auto-approve-action@v3.0.0
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
-          pull-request-number: ${{ github.event.number }}
+          result-encoding: string
+          retries: 3
+          script: |
+            github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              event: 'APPROVE',
+            });
       - name: Merge
         id: merge
         if: ${{ needs.vib-verify.result == 'success' }}
-        uses: actions/github-script@v6
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
           result-encoding: string
           retries: 3
@@ -179,11 +187,20 @@ jobs:
       # post a comment on the PR and assign a maintainer agent to review it
       - name: Manual review required
         if: ${{ always() && (needs.vib-verify.result != 'success' || steps.merge.outcome != 'success' ) }}
-        uses: peter-evans/create-or-update-comment@v3.0.0
-        with:
-          issue-number: ${{ github.event.number }}
-          # Necessary to trigger support workflows
-          token: ${{ secrets.BITNAMI_BOT_TOKEN }}
-          body: |
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        env:
+          BODY: |
             There has been an error during the automated release process. Manual revision is now required.
             Please check the related [action_run#${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for more information.
+        with:
+          retries: 3
+          # Necessary to trigger support workflows
+          github-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+          script: |
+            const {BODY} = process.env
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `${BODY}`
+            })

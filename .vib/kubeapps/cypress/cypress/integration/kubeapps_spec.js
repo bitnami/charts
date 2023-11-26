@@ -18,8 +18,7 @@ it('allows managing a helm chart release', () => {
 
     cy.get('#search').type(releases.newRelease.application);
     cy.contains('div.card', releases.newRelease.application).click();
-    cy.contains(Cypress.env('repoName'));
-    cy.contains(Cypress.env('repoURL'));
+    cy.contains(Cypress.env('registryName'));
     cy.contains('Deploy').click();
 
     cy.get('#releaseName').type(releaseName);

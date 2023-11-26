@@ -4,17 +4,17 @@
 
 Redis(R) is an open source, advanced key-value store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets and sorted sets.
 
-[Overview of Redis&reg;](http://redis.io)
+[Overview of Redis&reg;](https://redis.io)
 
 Disclaimer: Redis is a registered trademark of Redis Ltd. Any rights therein are reserved to Redis Ltd. Any use by Bitnami is for referential purposes only and does not indicate any sponsorship, endorsement, or affiliation between Redis Ltd.
 
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redis
+helm install my-release oci://registry-1.docker.io/bitnamicharts/redis
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Redisreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -36,8 +36,6 @@ The main features of each chart are the following:
 | Supports multiple databases                            | Supports only one database. Better if you have a big dataset           |
 | Single write point (single master)                     | Multiple write points (multiple masters)                               |
 | ![Redis&reg; Topology](img/redis-topology.png) | ![Redis&reg; Cluster Topology](img/redis-cluster-topology.png) |
-
-Looking to use Redisreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -172,7 +170,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.containerSecurityContext.allowPrivilegeEscalation` | Is it possible to escalate Redis&reg; pod(s) privileges                                               | `false`                  |
 | `master.containerSecurityContext.seccompProfile.type`      | Set Redis&reg; master containers' Security Context seccompProfile                                     | `RuntimeDefault`         |
 | `master.containerSecurityContext.capabilities.drop`        | Set Redis&reg; master containers' Security Context capabilities to drop                               | `["ALL"]`                |
-| `master.kind`                                              | Use either Deployment or StatefulSet (default)                                                        | `StatefulSet`            |
+| `master.kind`                                              | Use either Deployment, StatefulSet (default) or DaemonSet                                             | `StatefulSet`            |
 | `master.schedulerName`                                     | Alternate scheduler for Redis&reg; master pods                                                        | `""`                     |
 | `master.updateStrategy.type`                               | Redis&reg; master statefulset strategy type                                                           | `RollingUpdate`          |
 | `master.minReadySeconds`                                   | How many seconds a pod needs to be ready before killing the next, during update                       | `0`                      |
@@ -237,6 +235,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                                        | Description                                                                                             | Value                    |
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `replica.kind`                                              | Use either DaemonSet or StatefulSet (default)                                                           | `StatefulSet`            |
 | `replica.replicaCount`                                      | Number of Redis&reg; replicas to deploy                                                                 | `3`                      |
 | `replica.configuration`                                     | Configuration for Redis&reg; replicas nodes                                                             | `""`                     |
 | `replica.disableCommands`                                   | Array with Redis&reg; commands to disable on replicas nodes                                             | `["FLUSHDB","FLUSHALL"]` |
@@ -363,7 +362,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.annotations`                                       | Additional custom annotations for Redis&reg; Sentinel resource                                                                              | `{}`                             |
 | `sentinel.masterSet`                                         | Master set name                                                                                                                             | `mymaster`                       |
 | `sentinel.quorum`                                            | Sentinel Quorum                                                                                                                             | `2`                              |
-| `sentinel.getMasterTimeout`                                  | Amount of time to allow before get_sentinel_master_info() times out.                                                                        | `99`                             |
+| `sentinel.getMasterTimeout`                                  | Amount of time to allow before get_sentinel_master_info() times out.                                                                        | `90`                             |
 | `sentinel.automateClusterRecovery`                           | Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically failover to it. | `false`                          |
 | `sentinel.redisShutdownWaitFailover`                         | Whether the Redis&reg; master container waits for the failover at shutdown (in addition to the Redis&reg; Sentinel container).              | `true`                           |
 | `sentinel.downAfterMilliseconds`                             | Timeout for detecting a Redis&reg; node is down                                                                                             | `60000`                          |
@@ -615,7 +614,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/redis
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/redis/values.yaml)
 
 ## Configuration and installation details
 
@@ -863,7 +862,7 @@ The Redis&reg; sentinel exporter was removed in this version because the upstrea
   - `sentinel.metrics.*` parameters are deprecated in favor of `metrics.sentinel.*` ones.
 - New parameters to add custom command, environment variables, sidecars, init containers, etc. were added.
 - Chart labels were adapted to follow the [Helm charts standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
-- values.yaml metadata was adapted to follow the format supported by [Readme Generator for Helm](https://github.com/bitnami-labs/readme-generator-for-helm).
+- values.yaml metadata was adapted to follow the format supported by [Readme Generator for Helm](https://github.com/bitnami/readme-generator-for-helm).
 
 Consequences:
 

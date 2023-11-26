@@ -1,6 +1,6 @@
 <!--- app-name: MLflow -->
 
-# MLflow packaged by Bitnami
+# Bitnami package for MLflow
 
 MLflow is an open-source platform designed to manage the end-to-end machine learning lifecycle. It allows you to track experiments, package code into reproducible runs, and share and deploy models.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mlflow
+helm install my-release oci://registry-1.docker.io/bitnamicharts/mlflow
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use MLflow in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -23,8 +23,6 @@ This chart bootstraps a [MLflow](https://github.com/bitnami/containers/tree/main
 Python is built for full integration into Python that enables you to use it with its libraries and main packages.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use MLflow in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -131,14 +129,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tracking.resources.requests`                                | The requested resources for the mlflow containers                                                                                                                      | `{}`             |
 | `tracking.podSecurityContext.enabled`                        | Enabled mlflow pods' Security Context                                                                                                                                  | `true`           |
 | `tracking.podSecurityContext.fsGroup`                        | Set mlflow pod's Security Context fsGroup                                                                                                                              | `1001`           |
-| `tracking.podSecurityContext.seccompProfile.type`            | Set container's Security Context seccomp profile                                                                                                                       | `RuntimeDefault` |
 | `tracking.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                   | `true`           |
 | `tracking.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                             | `1001`           |
 | `tracking.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                            | `1001`           |
+| `tracking.containerSecurityContext.privileged`               | Set containers' Security Context privileged                                                                                                                            | `false`          |
 | `tracking.containerSecurityContext.runAsNonRoot`             | Set containers' Security Context runAsNonRoot                                                                                                                          | `true`           |
 | `tracking.containerSecurityContext.readOnlyRootFilesystem`   | Set containers' Security Context runAsNonRoot                                                                                                                          | `true`           |
 | `tracking.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                                                                   | `false`          |
 | `tracking.containerSecurityContext.capabilities.drop`        | Set container's Security Context runAsNonRoot                                                                                                                          | `["ALL"]`        |
+| `tracking.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                       | `RuntimeDefault` |
 | `tracking.auth.enabled`                                      | Enable basic authentication                                                                                                                                            | `true`           |
 | `tracking.auth.username`                                     | Admin username                                                                                                                                                         | `user`           |
 | `tracking.auth.password`                                     | Admin password                                                                                                                                                         | `""`             |
@@ -318,14 +317,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `run.resources.requests`                                | The requested resources for the run containers                                                  | `{}`             |
 | `run.podSecurityContext.enabled`                        | Enabled Run pods' Security Context                                                              | `true`           |
 | `run.podSecurityContext.fsGroup`                        | Set Run pod's Security Context fsGroup                                                          | `1001`           |
-| `run.podSecurityContext.seccompProfile.type`            | Set Run container's Security Context seccomp profile                                            | `RuntimeDefault` |
 | `run.containerSecurityContext.enabled`                  | Enabled Run containers' Security Context                                                        | `true`           |
 | `run.containerSecurityContext.runAsUser`                | Set Run containers' Security Context runAsUser                                                  | `1001`           |
 | `run.containerSecurityContext.runAsGroup`               | Set Run containers' Security Context runAsGroup                                                 | `1001`           |
 | `run.containerSecurityContext.runAsNonRoot`             | Set Run containers' Security Context runAsNonRoot                                               | `true`           |
+| `run.containerSecurityContext.privileged`               | Set Run containers' Security Context privileged                                                 | `false`          |
 | `run.containerSecurityContext.readOnlyRootFilesystem`   | Set Run containers' Security Context runAsNonRoot                                               | `true`           |
 | `run.containerSecurityContext.allowPrivilegeEscalation` | Set Run container's privilege escalation                                                        | `false`          |
 | `run.containerSecurityContext.capabilities.drop`        | Set Run container's Security Context runAsNonRoot                                               | `["ALL"]`        |
+| `run.containerSecurityContext.seccompProfile.type`      | Set Run container's Security Context seccomp profile                                            | `RuntimeDefault` |
 | `run.lifecycleHooks`                                    | for the run container(s) to automate configuration before or after startup                      | `{}`             |
 | `run.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                  | `""`             |
 | `run.hostAliases`                                       | run pods host aliases                                                                           | `[]`             |
@@ -396,12 +396,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `waitContainer.image.digest`                                      | Init container wait-container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `waitContainer.image.pullPolicy`                                  | Init container wait-container image pull policy                                                                               | `IfNotPresent`             |
 | `waitContainer.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                              | `[]`                       |
-| `waitContainer.containerSecurityContext.enabled`                  | Enabled APISIX containers' Security Context                                                                                   | `true`                     |
-| `waitContainer.containerSecurityContext.runAsUser`                | Set APISIX containers' Security Context runAsUser                                                                             | `1001`                     |
-| `waitContainer.containerSecurityContext.runAsNonRoot`             | Set APISIX containers' Security Context runAsNonRoot                                                                          | `true`                     |
-| `waitContainer.containerSecurityContext.readOnlyRootFilesystem`   | Set APISIX containers' Security Context runAsNonRoot                                                                          | `true`                     |
-| `waitContainer.containerSecurityContext.allowPrivilegeEscalation` | Set APISIX container's privilege escalation                                                                                   | `false`                    |
-| `waitContainer.containerSecurityContext.capabilities.drop`        | Set APISIX container's Security Context runAsNonRoot                                                                          | `["ALL"]`                  |
+| `waitContainer.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                          | `true`                     |
+| `waitContainer.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                    | `1001`                     |
+| `waitContainer.containerSecurityContext.runAsNonRoot`             | Set containers' Security Context runAsNonRoot                                                                                 | `true`                     |
+| `waitContainer.containerSecurityContext.privileged`               | Set containers' Security Context privileged                                                                                   | `false`                    |
+| `waitContainer.containerSecurityContext.readOnlyRootFilesystem`   | Set containers' Security Context runAsNonRoot                                                                                 | `true`                     |
+| `waitContainer.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                          | `false`                    |
+| `waitContainer.containerSecurityContext.capabilities.drop`        | Set container's Security Context runAsNonRoot                                                                                 | `["ALL"]`                  |
+| `waitContainer.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                              | `RuntimeDefault`           |
 
 ### PostgreSQL chart configuration
 

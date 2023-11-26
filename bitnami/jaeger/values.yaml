@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/jaeger
-  tag: 1.50.0-debian-11-r1
+  tag: 1.51.0-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -522,6 +522,15 @@ collector:
     ## @param collector.containerPorts.admin Admin port: health check at / and metrics at /metrics
     ##
     admin: 14269
+    ## Otlp ports to expose
+    ##
+    otlp:
+      ## @param collector.containerPorts.otlp.grpc Accepts traces in OpenTelemetry OTLP format over gRPC
+      ##
+      grpc: 4317
+      ## @param collector.containerPorts.otlp.http Accepts traces in OpenTelemetry OTLP format over HTTP
+      ##
+      http: 4318
   ## Jaeger collector.service parameters
   ##
   service:
@@ -543,6 +552,15 @@ collector:
       ## @param collector.service.ports.admin Admin port: health check at / and metrics at /metrics
       ##
       admin: 14269
+      ## Otlp ports to expose
+      ##
+      otlp:
+        ## @param collector.service.ports.otlp.grpc Accepts traces in OpenTelemetry OTLP format over gRPC
+        ##
+        grpc: 4317
+        ## @param collector.service.ports.otlp.http Accepts traces in OpenTelemetry OTLP format over HTTP
+        ##
+        http: 4318
     ## Node ports to expose
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     nodePorts:
@@ -558,6 +576,15 @@ collector:
       ## @param collector.service.nodePorts.admin Admin port: health check at / and metrics at /metrics
       ##
       admin: ""
+      ## Otlp ports to expose
+      ##
+      otlp:
+        ## @param collector.service.nodePorts.otlp.grpc Accepts traces in OpenTelemetry OTLP format over gRPC
+        ##
+        grpc: ""
+        ## @param collector.service.nodePorts.otlp.http Accepts traces in OpenTelemetry OTLP format over HTTP
+        ##
+        http: ""
     ## @param collector.service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
     ##
     extraPorts: []
@@ -1160,7 +1187,7 @@ migration:
 cqlshImage:
   registry: docker.io
   repository: bitnami/cassandra
-  tag: 4.0.11-debian-11-r76
+  tag: 4.0.11-debian-11-r84
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

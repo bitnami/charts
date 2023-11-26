@@ -26,6 +26,9 @@ spec:
       app.kubernetes.io/part-of: kafka
   serviceName: {{ printf "%s-broker-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.broker.updateStrategy "context" $ ) | nindent 4 }}
+  {{- if and .Values.broker.minReadySeconds (semverCompare ">= 1.23-0" (include "common.capabilities.kubeVersion" .)) }}
+  minReadySeconds: {{ .Values.broker.minReadySeconds }}
+  {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}

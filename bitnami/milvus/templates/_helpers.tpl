@@ -733,14 +733,22 @@ Init container definition for waiting for the database to be ready
         "{{ ternary "https" "http" $.Values.etcd.auth.client.secureTransport }}://{{ printf "%s:%v" (include "milvus.etcd.fullname" $ ) (include "milvus.etcd.port" $ ) }}"
       {{- else }}
       {{- range $node :=.Values.externalEtcd.servers }}
-        "{{ ternary "https" "http" $.Values.externalEtcd.secureTransport }}://{{ printf "%s:%v" $node (include "milvus.etcd.port" $) }}"
+        "{{ ternary "https" "http" $.Values.externalEtcd.tls.enabled }}://{{ printf "%s:%v" $node (include "milvus.etcd.port" $) }}"
       {{- end }}
       {{- end }}
       )
 
       check_etcd() {
           local -r etcd_host="${1:-?missing etcd}"
-          if curl --max-time 5 "${etcd_host}/version" | grep etcdcluster; then
+          local params_cert=""
+
+          if echo $etcd_host | grep https; then
+             params_cert="--cacert /bitnami/milvus/conf/cert/etcd/client/{{ .Values.externalEtcd.tls.caCert }} --cert /bitnami/milvus/conf/cert/etcd/client/{{ .Values.externalEtcd.tls.cert }} --key /bitnami/milvus/conf/cert/etcd/client/{{ .Values.externalEtcd.tls.key }}"
+          fi
+          if [ ! -z {{ .Values.externalEtcd.tls.keyPassword }} ]; then
+            params_cert=$params_cert" --pass {{  .Values.externalEtcd.tls.keyPassword }}"
+          fi
+          if curl --max-time 5 "${etcd_host}/version" $params_cert | grep etcdcluster; then
              return 0
           else
              return 1
@@ -759,6 +767,12 @@ Init container definition for waiting for the database to be ready
 
       echo "Connection success"
       exit 0
+  {{- if and .Values.externalEtcd.tls.enabled (not (empty .Values.externalEtcd.tls.existingSecret)) }}
+  volumeMounts:
+    - name: etcd-client-certs
+      mountPath: /bitnami/milvus/conf/cert/etcd/client
+      readOnly: true
+  {{- end }}
 {{- end -}}
 
 {{/*
@@ -799,7 +813,7 @@ Init container definition for waiting for the database to be ready
           fi
       }
 
-      host={{ include "milvus.s3.host" . | quote }}
+      host={{ printf "%v:%v" (include "milvus.s3.host" .) (include "milvus.s3.port" .) }}
 
       echo "Checking connection to $host"
       if retry_while "check_s3 $host"; then

@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.2-debian-11-r8
+      image: docker.io/bitnami/apache-exporter:1.0.3-debian-11-r1
     - name: mediawiki
-      image: docker.io/bitnami/mediawiki:1.40.1-debian-11-r3
+      image: docker.io/bitnami/mediawiki:1.40.1-debian-11-r4
 apiVersion: v2
 appVersion: 1.40.1
 dependencies:
@@ -39,4 +39,4 @@ maintainers:
 name: mediawiki
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mediawiki
-version: 17.1.0
+version: 17.2.3

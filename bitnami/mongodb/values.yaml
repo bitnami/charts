@@ -89,6 +89,12 @@ topologyKey: ""
 serviceBindings:
   enabled: false
 
+## @param enableServiceLinks Whether information about services should be injected into pod's environment variable
+## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+##
+enableServiceLinks: true
+
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -120,7 +126,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb
-  tag: 7.0.2-debian-11-r7
+  tag: 7.0.3-debian-11-r6
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -247,7 +253,7 @@ tls:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.2-debian-11-r47
+    tag: 1.25.3-debian-11-r1
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -813,7 +819,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.28.3-debian-11-r0
+      tag: 1.28.4-debian-11-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1003,6 +1009,57 @@ externalAccess:
       ##
       sessionAffinityConfig: {}
 
+## @section Network policy parameters
+##
+
+## Enable Network policies using Kubernetes Network Policies
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Enable MongoDB(&reg;) network policies
+  ##
+  enabled: false
+
+  ## Ingress rules - Allow incoming connections
+  ##
+  ingress:
+    ## @param networkPolicy.ingress.namespaceSelector [object] Namespace selector label that is allowed to access the MongoDB(&reg;) node. This label will be used to identify the allowed namespace(s).
+    ## @param networkPolicy.ingress.podSelector [object] Pod selector label that is allowed to access the MongoDB(&reg;) node. This label will be used to identify the allowed pod(s).
+    ## @param networkPolicy.ingress.customRules [array] Custom network policy for the MongoDB(&reg;) node.
+    namespaceSelector: {}
+    ## e.g:
+    ## namespaceSelector:
+    ##   label1: value1
+    podSelector: {}
+    ## e.g:
+    ## podSelector:
+    ##   label2: value2
+    customRules: []
+    ## e.g:
+    ## customRules:
+    ##   - from:
+    ##     - namespaceSelector:
+    ##         matchLabels:
+    ##            label1: value1
+    ##       podSelector:
+    ##         matchLabels:
+    ##            label2: value2
+  ## Egress rules - deny outgoing connections
+  ##
+  egress:
+    ## @param networkPolicy.egress.customRules [array] Custom network policy for the MongoDB(&reg;) node.
+    ##
+    customRules: []
+    ## e.g:
+    ## customRules:
+    ##   - to:
+    ##     - namespaceSelector:
+    ##         matchLabels:
+    ##            label1: value1
+    ##       podSelector:
+    ##         matchLabels:
+    ##            label2: value2
+
 ## @section Persistence parameters
 ##
 
@@ -1067,6 +1124,21 @@ persistence:
     ## @param persistence.volumeClaimTemplates.dataSource Add dataSource to the VolumeClaimTemplate
     ##
     dataSource: {}
+
+## Persistent Volume Claim Retention Policy
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+##
+persistentVolumeClaimRetentionPolicy:
+  ## @param persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for MongoDB(&reg;) Statefulset
+  ##
+  enabled: false
+  ## @param persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ##
+  whenScaled: Retain
+  ## @param persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  whenDeleted: Retain
+    
 
 ## @section Backup parameters
 ## This section implements a trivial logical dump cronjob of the database.
@@ -1294,7 +1366,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2077,7 +2149,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.39.0-debian-11-r123
+    tag: 0.40.0-debian-11-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

@@ -28,15 +28,15 @@ jobs:
       (!contains(github.event.pull_request.labels.*.name, 'bitnami')) && (!contains(github.event.pull_request.labels.*.name, 'triage'))
     steps:
       - name: Repo checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       - name: Load .env file
-        uses: xom9ikk/dotenv@v2
+        uses: xom9ikk/dotenv@de1ff27d319507880e6621e4d47424c677d95f68
         with:
           path: .github/workflows/
       - name: Move into In Progress
         # Move the card only if the actor is not a Bitnami member
         if: ${{ !contains(fromJson(env.BITNAMI_TEAM), github.actor) }}
-        uses: peter-evans/create-or-update-project-card@v2
+        uses: peter-evans/create-or-update-project-card@dfa240db6fe287ceb681e45d6728c1af70452c58
         with:
           project-name: Support
           column-name: In progress

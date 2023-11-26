@@ -57,7 +57,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.32.5-debian-11-r0
+  tag: 0.32.5-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -227,18 +227,26 @@ query:
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Query containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param query.containerSecurityContext.enabled Enable container security context for the Thanos Query containers
-  ## @param query.containerSecurityContext.runAsUser User ID for the service user running the Thanos Query containers
-  ## @param query.containerSecurityContext.runAsNonRoot Force the Thanos Query containers to run as a non root user
-  ## @param query.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off for Thanos Query containers
-  ## @param query.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Thanos Query containers
+  ## @param query.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param query.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param query.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param query.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param query.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param query.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param query.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param query.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    allowPrivilegeEscalation: false
+    privileged: false
     readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Thanos Query containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param query.resources.limits The resources limits for the Thanos Query container
@@ -902,18 +910,26 @@ queryFrontend:
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Query Frontend containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param queryFrontend.containerSecurityContext.enabled Enable container security context for the Thanos Query Frontend containers
-  ## @param queryFrontend.containerSecurityContext.runAsUser User ID for the service user running the Thanos Query Frontend containers
-  ## @param queryFrontend.containerSecurityContext.runAsNonRoot Force the Thanos Query Frontend containers to run as a non root user
-  ## @param queryFrontend.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off for Thanos Query Frontend containers
-  ## @param queryFrontend.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Thanos Query Frontend containers
+  ## @param queryFrontend.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param queryFrontend.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param queryFrontend.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param queryFrontend.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param queryFrontend.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param queryFrontend.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param queryFrontend.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param queryFrontend.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    allowPrivilegeEscalation: false
+    privileged: false
     readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Thanos Query Frontend containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param queryFrontend.resources.limits The resources limits for the Thanos Query Frontend container
@@ -1205,6 +1221,10 @@ queryFrontend:
     ## @param queryFrontend.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos.local
+    ## @param queryFrontend.ingress.overrideAlertQueryURL Automatically use query-frontend's ingress hostname as --alert.queryURL for both Query and Ruler.
+    ## This is used in order for the expression url on alerts/rules to be correctly rendered on UI as Frontend's hostname, instead of http://localhost:10902
+    ##
+    overrideAlertQueryURL: true
     ## @param queryFrontend.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
     ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
@@ -1345,18 +1365,26 @@ bucketweb:
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Bucket Web containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param bucketweb.containerSecurityContext.enabled Enable container security context for the Thanos Bucket Web containers
-  ## @param bucketweb.containerSecurityContext.runAsUser User ID for the service user running the Thanos Bucket Web containers
-  ## @param bucketweb.containerSecurityContext.runAsNonRoot Force the Thanos Bucket Web containers to run as a non root user
-  ## @param bucketweb.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off for Thanos Bucket Web containers
-  ## @param bucketweb.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Thanos Bucket Web containers
+  ## @param bucketweb.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param bucketweb.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param bucketweb.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param bucketweb.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param bucketweb.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param bucketweb.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param bucketweb.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param bucketweb.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    allowPrivilegeEscalation: false
+    privileged: false
     readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Thanos Bucket Web containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param bucketweb.resources.limits The resources limits for the Thanos Bucket Web container
@@ -1792,18 +1820,26 @@ compactor:
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Compactor containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param compactor.containerSecurityContext.enabled Enable container security context for the Thanos Compactor containers
-  ## @param compactor.containerSecurityContext.runAsUser User ID for the service user running the Thanos Compactor containers
-  ## @param compactor.containerSecurityContext.runAsNonRoot Force the Thanos Compactor containers to run as a non root user
-  ## @param compactor.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off for Thanos Compactor containers
-  ## @param compactor.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Thanos Compactor containers
+  ## @param compactor.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param compactor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param compactor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param compactor.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param compactor.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param compactor.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param compactor.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param compactor.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    allowPrivilegeEscalation: false
+    privileged: false
     readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Thanos Compactor containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param compactor.resources.limits The resources limits for the Thanos Compactor container
@@ -2137,6 +2173,9 @@ compactor:
     ## @param compactor.persistence.enabled Enable data persistence using PVC(s) on Thanos Compactor pods
     ##
     enabled: true
+    ## @param compactor.persistence.defaultEmptyDir Defaults to emptyDir if persistence is disabled.
+    ##
+    defaultEmptyDir: true
     ## @param compactor.persistence.storageClass Specify the `storageClass` used to provision the volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -2254,18 +2293,26 @@ storegateway:
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Store Gateway containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param storegateway.containerSecurityContext.enabled Enable container security context for the Thanos Store Gateway containers
-  ## @param storegateway.containerSecurityContext.runAsUser User ID for the service user running the Thanos Store Gateway containers
-  ## @param storegateway.containerSecurityContext.runAsNonRoot Force the Thanos Store Gateway containers to run as a non root user
-  ## @param storegateway.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off for Thanos Store Gateway containers
-  ## @param storegateway.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Thanos Store Gateway containers
+  ## @param storegateway.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param storegateway.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param storegateway.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param storegateway.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param storegateway.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param storegateway.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param storegateway.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param storegateway.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    allowPrivilegeEscalation: false
+    privileged: false
     readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Thanos Store Gateway containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param storegateway.resources.limits The resources limits for the Thanos Store Gateway container
@@ -2897,18 +2944,26 @@ ruler:
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Ruler containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param ruler.containerSecurityContext.enabled Enable container security context for the Thanos Ruler containers
-  ## @param ruler.containerSecurityContext.runAsUser User ID for the service user running the Thanos Ruler containers
-  ## @param ruler.containerSecurityContext.runAsNonRoot Force the Thanos Ruler containers to run as a non root user
-  ## @param ruler.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off for Thanos Ruler containers
-  ## @param ruler.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Thanos Ruler containers
+  ## @param ruler.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param ruler.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param ruler.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param ruler.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param ruler.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param ruler.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param ruler.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param ruler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    allowPrivilegeEscalation: false
+    privileged: false
     readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Thanos Ruler containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param ruler.resources.limits The resources limits for the Thanos Ruler container
@@ -3401,18 +3456,26 @@ receive:
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Receive containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param receive.containerSecurityContext.enabled Enable container security context for the Thanos Receive containers
-  ## @param receive.containerSecurityContext.runAsUser User ID for the service user running the Thanos Receive containers
-  ## @param receive.containerSecurityContext.runAsNonRoot Force the Thanos Receive containers to run as a non root user
-  ## @param receive.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off for Thanos Receive containers
-  ## @param receive.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Thanos Receive containers
+  ## @param receive.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param receive.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param receive.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param receive.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param receive.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param receive.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param receive.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param receive.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    allowPrivilegeEscalation: false
+    privileged: false
     readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Thanos Receive containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param receive.resources.limits The resources limits for the Thanos Receive container
@@ -3871,18 +3934,26 @@ receiveDistributor:
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Receive Distributor containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param receiveDistributor.containerSecurityContext.enabled Enable container security context for the Thanos Receive Distributor containers
-  ## @param receiveDistributor.containerSecurityContext.runAsUser User ID for the service user running the Thanos Receive Distributor containers
-  ## @param receiveDistributor.containerSecurityContext.runAsNonRoot Force the Thanos Receive Distributor containers to run as a non root user
-  ## @param receiveDistributor.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off for Thanos Receive Distributor containers
-  ## @param receiveDistributor.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Thanos Receive Distributor containers
+  ## @param receiveDistributor.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param receiveDistributor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param receiveDistributor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param receiveDistributor.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param receiveDistributor.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param receiveDistributor.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param receiveDistributor.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param receiveDistributor.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    allowPrivilegeEscalation: false
+    privileged: false
     readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Thanos Receive Distributor containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param receiveDistributor.resources.limits The resources limits for the Thanos Receive container
@@ -4259,7 +4330,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

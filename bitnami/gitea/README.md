@@ -1,6 +1,6 @@
 <!--- app-name: Gitea -->
 
-# Gitea packaged by Bitnami
+# Bitnami package for Gitea
 
 Gitea is a lightweight code hosting solution. Written in Go, features low resource consumption, easy upgrades and multiple databases.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/gitea
+helm install my-release oci://registry-1.docker.io/bitnamicharts/gitea
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Gitea in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -24,14 +24,11 @@ It also packages the [Bitnami PostgreSQL chart](https://github.com/bitnami/chart
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Gitea in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
 - Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
-- ReadWriteMany volumes for deployment scaling
 
 ## Installing the Chart
 
@@ -89,7 +86,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`                                  | Gitea image pull policy                                                                                               | `IfNotPresent`          |
 | `image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                      | `[]`                    |
 | `image.debug`                                       | Specify if debug logs should be enabled                                                                               | `false`                 |
-| `replicaCount`                                      | Number of Gitea Pods to run (requires ReadWriteMany PVC support)                                                      | `1`                     |
 | `adminUsername`                                     | User of the application                                                                                               | `bn_user`               |
 | `adminPassword`                                     | Application password                                                                                                  | `""`                    |
 | `adminEmail`                                        | Admin email                                                                                                           | `user@example.com`      |
@@ -269,7 +265,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/gitea
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/gitea/values.yaml)
 
 ## Configuration and installation details
 

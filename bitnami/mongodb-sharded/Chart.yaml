@@ -6,13 +6,13 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: mongodb-exporter
-      image: docker.io/bitnami/mongodb-exporter:0.39.0-debian-11-r123
+      image: docker.io/bitnami/mongodb-exporter:0.39.0-debian-11-r124
     - name: mongodb-sharded
-      image: docker.io/bitnami/mongodb-sharded:7.0.2-debian-11-r7
+      image: docker.io/bitnami/mongodb-sharded:7.0.3-debian-11-r2
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r90
+      image: docker.io/bitnami/os-shell:11-debian-11-r91
 apiVersion: v2
-appVersion: 7.0.2
+appVersion: 7.0.3
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -35,4 +35,4 @@ maintainers:
 name: mongodb-sharded
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mongodb-sharded
-version: 7.0.5
+version: 7.1.4

@@ -96,7 +96,7 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.26.1-debian-11-r0
+    tag: 1.27.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -113,13 +113,13 @@ contour:
     pullSecrets: []
     debug: false
   ## @param contour.contourConfigName Contour Deployment with ContourConfiguration CRD.
-  # 
+  #
   contourConfigName: "contour"
   ## @param contour.configPath Contour Deployment with configmap.
   ##
   configPath: true
-  ## @param contour.replicaCount Number of Contour Pod replicas 
-  # 
+  ## @param contour.replicaCount Number of Contour Pod replicas
+  #
   replicaCount: 1
   ## @param contour.priorityClassName Priority class assigned to the pods
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
@@ -279,14 +279,26 @@ contour:
     fsGroup: 1001
   ## Envoy container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param contour.containerSecurityContext.enabled Envoy Container securityContext
-  ## @param contour.containerSecurityContext.runAsUser User ID for the Contour container (to change this, http and https containerPorts must be set to >1024)
-  ## @param contour.containerSecurityContext.runAsNonRoot Run as non root
+  ## @param contour.containerSecurityContext.enabled Enabled contour containers' Security Context
+  ## @param contour.containerSecurityContext.runAsUser Set contour containers' Security Context runAsUser
+  ## @param contour.containerSecurityContext.runAsNonRoot Set contour containers' Security Context runAsNonRoot
+  ## @param contour.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+  ## @param contour.containerSecurityContext.privileged Set contour container's Security Context privileged
+  ## @param contour.containerSecurityContext.allowPrivilegeEscalation Set contour container's Security Context allowPrivilegeEscalation
+  ## @param contour.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param contour.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: false
   ## @param contour.livenessProbe.enabled Enable/disable the Liveness probe
   ## @param contour.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated
   ## @param contour.livenessProbe.periodSeconds How often to perform the probe
@@ -508,7 +520,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.26.6-debian-11-r0
+    tag: 1.27.2-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -597,25 +609,50 @@ envoy:
       requests: {}
     ## Shutdown Manager container security context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param envoy.shutdownManager.containerSecurityContext.enabled Shutdown Manager Container securityContext
-    ## @param envoy.shutdownManager.containerSecurityContext.runAsUser User ID for the Shutdown Manager container (to change this, http and https containerPorts must be set to >1024)
-    ## @param envoy.shutdownManager.containerSecurityContext.runAsNonRoot Run as non root
+    ## @param envoy.shutdownManager.containerSecurityContext.enabled Enabled envoy shutdownManager containers' Security Context
+    ## @param envoy.shutdownManager.containerSecurityContext.runAsUser Set envoy shutdownManager containers' Security Context runAsUser
+    ## @param envoy.shutdownManager.containerSecurityContext.runAsNonRoot Set envoy shutdownManager containers' Security Context runAsNonRoot
+    ## @param envoy.shutdownManager.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+    ## @param envoy.shutdownManager.containerSecurityContext.privileged Set envoy.shutdownManager container's Security Context privileged
+    ## @param envoy.shutdownManager.containerSecurityContext.allowPrivilegeEscalation Set envoy shutdownManager container's Security Context allowPrivilegeEscalation
+    ## @param envoy.shutdownManager.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param envoy.shutdownManager.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
       runAsUser: 1001
       runAsNonRoot: true
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+      readOnlyRootFilesystem: true
+
   ## Envoy Initconfig initcontainer security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param envoy.initConfig.containerSecurityContext.enabled Envoy initconfig Container securityContext
-  ## @param envoy.initConfig.containerSecurityContext.runAsUser User ID for the Envoy initconfig container (to change this, http and https containerPorts must be set to >1024)
-  ## @param envoy.initConfig.containerSecurityContext.runAsNonRoot Run as non root
+  ## @param envoy.initConfig.containerSecurityContext.enabled Enabled envoy initConfig containers' Security Context
+  ## @param envoy.initConfig.containerSecurityContext.runAsUser Set envoy initConfig containers' Security Context runAsUser
+  ## @param envoy.initConfig.containerSecurityContext.runAsNonRoot Set envoy initConfig containers' Security Context runAsNonRoot
+  ## @param envoy.initConfig.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+  ## @param envoy.initConfig.containerSecurityContext.privileged Set contraller container's Security Context privileged
+  ## @param envoy.initConfig.containerSecurityContext.allowPrivilegeEscalation Set contraller container's Security Context allowPrivilegeEscalation
+  ## @param envoy.initConfig.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param envoy.initConfig.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   initConfig:
     containerSecurityContext:
       enabled: true
       runAsUser: 1001
       runAsNonRoot: true
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+      readOnlyRootFilesystem: false
   ## @param envoy.kind Install as deployment or daemonset
   ##
   kind: daemonset
@@ -715,14 +752,26 @@ envoy:
     enabled: false
   ## Envoy container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param envoy.containerSecurityContext.enabled Envoy Container securityContext
-  ## @param envoy.containerSecurityContext.runAsUser User ID for the Envoy container (to change this, http and https containerPorts must be set to >1024)
-  ## @param envoy.containerSecurityContext.runAsNonRoot Run as non root
+  ## @param envoy.containerSecurityContext.enabled Enabled envoy containers' Security Context
+  ## @param envoy.containerSecurityContext.runAsUser Set envoy containers' Security Context runAsUser
+  ## @param envoy.containerSecurityContext.runAsNonRoot Set envoy containers' Security Context runAsNonRoot
+  ## @param envoy.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+  ## @param envoy.containerSecurityContext.privileged Set envoy container's Security Context privileged
+  ## @param envoy.containerSecurityContext.allowPrivilegeEscalation Set envoy container's Security Context allowPrivilegeEscalation
+  ## @param envoy.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param envoy.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: false
   ## @param envoy.hostNetwork Envoy Pod host network access
   ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#host-namespaces
   ##
@@ -819,6 +868,7 @@ envoy:
     targetPorts:
       http: http
       https: https
+      metrics: metrics
     ## @param envoy.service.type Type of Envoy service to create
     ##
     type: LoadBalancer
@@ -866,6 +916,9 @@ envoy:
       ## @param envoy.service.ports.https Sets service https port
       ##
       https: 443
+      ## @param envoy.service.ports.metrics Sets service metrics port
+      ##
+      metrics: 8002
     ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ## @param envoy.service.nodePorts.http HTTP Port. If `envoy.service.type` is NodePort and this is non-empty
@@ -889,9 +942,14 @@ envoy:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
-  ## @param envoy.useHostPort Enable/disable `hostPort` for TCP/80 and TCP/443
+  ## @param envoy.useHostPort.http Enable/disable `hostPort` for TCP/80
+  ## @param envoy.useHostPort.https Enable/disable `hostPort` TCP/443
+  ## @param envoy.useHostPort.metrics Enable/disable `hostPort` for TCP/8002
   ##
-  useHostPort: true
+  useHostPort:
+    http: true
+    https: true
+    metrics: true
   ## @param envoy.useHostIP Enable/disable `hostIP`
   ##
   useHostIP: false
@@ -980,7 +1038,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.2-debian-11-r47
+    tag: 1.25.3-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1071,14 +1129,26 @@ defaultBackend:
     fsGroup: 1001
   ## Default backend containers' Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param defaultBackend.containerSecurityContext.enabled Default backend container securityContext
-  ## @param defaultBackend.containerSecurityContext.runAsUser User ID for the Envoy container (to change this, http and https containerPorts must be set to >1024)
-  ## @param defaultBackend.containerSecurityContext.runAsNonRoot Run as non root
+  ## @param defaultBackend.containerSecurityContext.enabled Enabled defaultBackend containers' Security Context
+  ## @param defaultBackend.containerSecurityContext.runAsUser Set defaultBackend containers' Security Context runAsUser
+  ## @param defaultBackend.containerSecurityContext.runAsNonRoot Set defaultBackend containers' Security Context runAsNonRoot
+  ## @param defaultBackend.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
+  ## @param defaultBackend.containerSecurityContext.privileged Set defaultBackend container's Security Context privileged
+  ## @param defaultBackend.containerSecurityContext.allowPrivilegeEscalation Set defaultBackend container's Security Context allowPrivilegeEscalation
+  ## @param defaultBackend.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param defaultBackend.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: false
   ## Default backend containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources
   ## We usually recommend not to specify default resources and to leave this as a conscious

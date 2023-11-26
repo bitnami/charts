@@ -1,6 +1,6 @@
 <!--- app-name: Kubernetes Event Exporter -->
 
-# Kubernetes Event Exporter packaged by Bitnami
+# Bitnami package for Kubernetes Event Exporter
 
 Kubernetes Event Exporter makes it easy to export Kubernetes events to other tools, thereby enabling better event observability, custom alerts and aggregation.
 
@@ -11,18 +11,16 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kubernetes-event-exporter
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kubernetes-event-exporter
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Kubernetes Event Exporter in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [Kubernetes Event Exporter](https://github.com/resmoio/kubernetes-event-exporter) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Kubernetes Event Exporter in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -95,6 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `config.receivers`                                  | Array containing event receivers                                                                                          | `[]`                                        |
 | `config.route.routes`                               | Array containing event route configuration                                                                                | `[]`                                        |
 | `rbac.create`                                       | Create the RBAC roles for API accessibility                                                                               | `true`                                      |
+| `rbac.rules`                                        | List of rules for the cluster role                                                                                        | `[]`                                        |
 | `serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                      | `true`                                      |
 | `serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.       | `""`                                        |
 | `serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                            | `true`                                      |

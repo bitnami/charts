@@ -59,6 +59,11 @@
             "default": [],
             "items": {}
         },
+        "enableServiceLinks": {
+            "type": "boolean",
+            "description": "Whether information about services should be injected into all pods' environment variable",
+            "default": true
+        },
         "diagnosticMode": {
             "type": "object",
             "properties": {
@@ -7186,10 +7191,40 @@
                     "description": "Port of the external etcd instance",
                     "default": 2379
                 },
-                "secureTransport": {
-                    "type": "boolean",
-                    "description": "Use TLS for client-to-server communications",
-                    "default": false
+                "tls": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable TLS for etcd client connections",
+                            "default": false
+                        },
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Name of the existing secret containing the TLS certificates for external etcd client communications",
+                            "default": ""
+                        },
+                        "cert": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'cert' key different from the default",
+                            "default": "tls.crt"
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'key' key different from the default",
+                            "default": "tls.key"
+                        },
+                        "caCert": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'caCert' key different from the default",
+                            "default": "ca.crt"
+                        },
+                        "keyPassword": {
+                            "type": "string",
+                            "description": "Password to access the password-protected PEM key if necessary",
+                            "default": ""
+                        }
+                    }
                 }
             }
         },
