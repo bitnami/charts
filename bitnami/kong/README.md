@@ -1,6 +1,6 @@
 <!--- app-name: Kong -->
 
-# Kong packaged by Bitnami
+# Bitnami package for Kong
 
 Kong is an open source Microservice API gateway and platform designed for managing microservices requests of high-availability, fault-tolerance, and distributed systems.
 

@@ -10,7 +10,7 @@ annotations:
     - name: consul
       image: docker.io/bitnami/consul:1.17.0-debian-11-r1
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r90
+      image: docker.io/bitnami/os-shell:11-debian-11-r91
 apiVersion: v2
 appVersion: 1.17.0
 dependencies:
@@ -32,4 +32,4 @@ maintainers:
 name: consul
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/consul
-version: 10.14.3
+version: 10.14.4

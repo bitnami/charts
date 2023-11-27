@@ -354,24 +354,6 @@ persistence:
       size: 1Gi
       annotations: {}
       selector: {}
-      ## @param persistence.persistentVolumeClaim.jobservice.scanData.existingClaim Name of an existing PVC to use
-      ## @param persistence.persistentVolumeClaim.jobservice.scanData.storageClass PVC Storage Class for Harbor Jobservice scan data volume
-      ## Note: The default StorageClass will be used if not defined. Set it to `-` to disable dynamic provisioning
-      ## @param persistence.persistentVolumeClaim.jobservice.scanData.subPath The sub path used in the volume
-      ## @param persistence.persistentVolumeClaim.jobservice.scanData.accessModes The access mode of the volume
-      ## @param persistence.persistentVolumeClaim.jobservice.scanData.size The size of the volume
-      ## @param persistence.persistentVolumeClaim.jobservice.scanData.annotations Annotations for the PVC
-      ## @param persistence.persistentVolumeClaim.jobservice.scanData.selector Selector to match an existing Persistent Volume
-      ##
-      scanData:
-        existingClaim: ""
-        storageClass: ""
-        subPath: ""
-        accessModes:
-          - ReadWriteOnce
-        size: 1Gi
-        annotations: {}
-        selector: {}
     ## @param persistence.persistentVolumeClaim.trivy.storageClass PVC Storage Class for Trivy data volume
     ## Note: The default StorageClass will be used if not defined. Set it to `-` to disable dynamic provisioning
     ## @param persistence.persistentVolumeClaim.trivy.accessModes The access mode of the volume
@@ -936,7 +918,7 @@ portal:
   image:
     registry: docker.io
     repository: bitnami/harbor-portal
-    tag: 2.9.1-debian-11-r0
+    tag: 2.9.1-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2903,7 +2885,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 13.13.0-debian-11-r4
+    tag: 13.13.0-debian-11-r8
     digest: ""
   auth:
     enablePostgresUser: true

@@ -1,6 +1,6 @@
 <!--- app-name: Kubernetes Event Exporter -->
 
-# Kubernetes Event Exporter packaged by Bitnami
+# Bitnami package for Kubernetes Event Exporter
 
 Kubernetes Event Exporter makes it easy to export Kubernetes events to other tools, thereby enabling better event observability, custom alerts and aggregation.
 
@@ -93,6 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `config.receivers`                                  | Array containing event receivers                                                                                          | `[]`                                        |
 | `config.route.routes`                               | Array containing event route configuration                                                                                | `[]`                                        |
 | `rbac.create`                                       | Create the RBAC roles for API accessibility                                                                               | `true`                                      |
+| `rbac.rules`                                        | List of rules for the cluster role                                                                                        | `[]`                                        |
 | `serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                      | `true`                                      |
 | `serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.       | `""`                                        |
 | `serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                            | `true`                                      |

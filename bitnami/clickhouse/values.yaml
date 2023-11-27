@@ -79,7 +79,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/clickhouse
-  tag: 23.10.3-debian-11-r0
+  tag: 23.10.5-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1123,7 +1123,7 @@ zookeeper:
   image:
     registry: docker.io
     repository: bitnami/zookeeper
-    tag: 3.8.3-debian-11-r1
+    tag: 3.8.3-debian-11-r2
     pullPolicy: IfNotPresent
   replicaCount: 3
   service:

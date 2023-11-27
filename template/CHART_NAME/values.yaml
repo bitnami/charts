@@ -206,6 +206,18 @@ diagnosticMode:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param %%MAIN_OBJECT_BLOCK%%.daemonsetAnnotations Annotations for %%MAIN_CONTAINER_NAME%% daemonset
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  daemonsetAnnotations: {}
+  ## @param %%MAIN_OBJECT_BLOCK%%.deploymentAnnotations Annotations for %%MAIN_CONTAINER_NAME%% deployment
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  deploymentAnnotations: {}
+  ## @param %%MAIN_OBJECT_BLOCK%%.statefulsetAnnotations Annotations for %%MAIN_CONTAINER_NAME%% statefulset
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
   ## @param %%MAIN_OBJECT_BLOCK%%.podLabels Extra labels for %%MAIN_CONTAINER_NAME%% pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##

@@ -1,6 +1,6 @@
 <!--- app-name: PyTorch -->
 
-# PyTorch packaged by Bitnami
+# Bitnami package for PyTorch
 
 PyTorch is a deep learning platform that accelerates the transition from research prototyping to production deployment. Bitnami image includes Torchvision for specific computer vision support.
 

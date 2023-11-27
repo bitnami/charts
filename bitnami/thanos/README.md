@@ -1,6 +1,6 @@
 <!--- app-name: Thanos -->
 
-# Thanos packaged by Bitnami
+# Bitnami package for Thanos
 
 Thanos is a highly available metrics system that can be added on top of existing Prometheus deployments, providing a global query view across all Prometheus installations.
 
@@ -631,6 +631,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `compactor.ingress.path`                                      | Ingress path                                                                                                                     | `/`                      |
 | `compactor.ingress.pathType`                                  | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `compactor.persistence.enabled`                               | Enable data persistence using PVC(s) on Thanos Compactor pods                                                                    | `true`                   |
+| `compactor.persistence.defaultEmptyDir`                       | Defaults to emptyDir if persistence is disabled.                                                                                 | `true`                   |
 | `compactor.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                                          | `""`                     |
 | `compactor.persistence.accessModes`                           | PVC Access Modes for data volume                                                                                                 | `["ReadWriteOnce"]`      |
 | `compactor.persistence.size`                                  | PVC Storage Request for data volume                                                                                              | `8Gi`                    |

@@ -1,6 +1,6 @@
 <!--- app-name: ExternalDNS -->
 
-# ExternalDNS packaged by Bitnami
+# Bitnami package for ExternalDNS
 
 ExternalDNS is a Kubernetes addon that configures public DNS servers with information about exposed Kubernetes services to make them discoverable.
 
