@@ -299,7 +299,7 @@ master:
     capabilities:
       drop:
         - ALL
-  ## @param master.kind Use either Deployment or StatefulSet (default)
+  ## @param master.kind Use either Deployment, StatefulSet (default) or DaemonSet
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
   ##
   kind: StatefulSet

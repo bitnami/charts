@@ -3710,7 +3710,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3832,7 +3832,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.22-debian-11-r0
+    tag: 1.6.22-debian-11-r1
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -3873,7 +3873,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.22-debian-11-r0
+    tag: 1.6.22-debian-11-r1
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -3915,7 +3915,7 @@ memcachedindexqueries:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.22-debian-11-r0
+    tag: 1.6.22-debian-11-r1
     digest: ""
   ## @param memcachedindexqueries.architecture Memcached architecture
   ##
@@ -3956,7 +3956,7 @@ memcachedindexwrites:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.22-debian-11-r0
+    tag: 1.6.22-debian-11-r1
     digest: ""
   ## @param memcachedindexwrites.architecture Memcached architecture
   ##
