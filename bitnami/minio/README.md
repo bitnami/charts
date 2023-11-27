@@ -11,18 +11,16 @@ Disclaimer: All software products, projects and company names are trademark(TM) 
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/minio
+helm install my-release oci://registry-1.docker.io/bitnamicharts/minio
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Bitnami Object Storage based on MinIOreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [MinIO&reg;](https://github.com/bitnami/containers/tree/main/bitnami/minio) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Bitnami Object Storage based on MinIOreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -154,6 +152,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.console`                                         | MinIO&reg; container port to open for MinIO&reg; Console                                                                                                                                      | `9001`           |
 | `podSecurityContext.enabled`                                     | Enable pod Security Context                                                                                                                                                                   | `true`           |
 | `podSecurityContext.fsGroup`                                     | Group ID for the container                                                                                                                                                                    | `1001`           |
+| `podSecurityContext.fsGroupChangePolicy`                         | When K8s should preform chown on attached volumes                                                                                                                                             | `OnRootMismatch` |
 | `containerSecurityContext.enabled`                               | Enabled containers' Security Context                                                                                                                                                          | `true`           |
 | `containerSecurityContext.runAsUser`                             | Set containers' Security Context runAsUser                                                                                                                                                    | `1001`           |
 | `containerSecurityContext.runAsNonRoot`                          | Set container's Security Context runAsNonRoot                                                                                                                                                 | `true`           |
@@ -339,7 +338,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/minio
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/minio/values.yaml)
 
 ## Configuration and installation details
 
