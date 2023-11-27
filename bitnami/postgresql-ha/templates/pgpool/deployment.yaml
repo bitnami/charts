@@ -15,7 +15,7 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- if and (not .Values.pgpool.customUsersSecret) .Values.pgpool.customUsers.usernames }}
-    checksum/custom-users-secrets: {{ include (print $.Template.BasePath "/custom-users-secrets.yaml") . | sha256sum }}
+    checksum/custom-users-secrets: {{ include (print $.Template.BasePath "/pgpool/custom-users-secrets.yaml") . | sha256sum }}
     {{- end }}
   {{- end }}
 spec:
