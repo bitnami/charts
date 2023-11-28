@@ -72,12 +72,12 @@ kind: Role
 metadata:
   name: {{ printf "%s" (include "sealed-secrets.namespacedRoleName" .) }}
   namespace: {{ $additionalNamespace }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-  {{- if .Values.rbac.labels }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.labels "context" $) | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if $.Values.rbac.labels }}
+  {{- include "common.tplvalues.render" ( dict "value" $.Values.rbac.labels "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
   - apiGroups:
