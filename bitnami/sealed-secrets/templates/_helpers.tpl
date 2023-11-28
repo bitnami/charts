@@ -35,7 +35,7 @@ Create the name of the unsealer cluster role
 {{- if .Values.rbac.clusterRoleName -}}
     {{ printf "%s" .Values.rbac.clusterRoleName }}
 {{- else -}}
-    {{ printf "%s-unsealer" (include "common.names.fullname" .) | quote }}
+    {{ printf "%s-unsealer" (include "common.names.fullname" .) }}
 {{- end -}}
 {{- end -}}
 
