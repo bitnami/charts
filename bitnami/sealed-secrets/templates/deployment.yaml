@@ -112,9 +112,9 @@ spec:
             - "--additional-namespaces"
             - {{ join "," .Values.additionalNamespaces | quote }}
             {{- end }}
-            {{- if $.Values.privateKeyAnnotations }}
+            {{- if .Values.privateKeyAnnotations }}
             {{- $privatekeyAnnotations := ""}}
-            {{- range $k, $v := $.Values.privateKeyAnnotations }}
+            {{- range $k, $v := .Values.privateKeyAnnotations }}
               {{- if not (and $v (kindIs "string" $v)) }}
                 {{ fail "Annotation values have to be strings"}}
               {{- end }}
