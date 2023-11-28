@@ -9,9 +9,6 @@ import { random } from '../support/utils';
 it('allows submitting a workflow using a template created from a file', () => {
   cy.visit('/workflow-templates');
   // Closes walkthrough pop-ups
-  cy.get('[class="modal-close"]').click();
-  cy.get('[class="modal-close"]').click();
-
   cy.contains('New Workflow Template').click();
   const newWorkflow = 'cypress/fixtures/workflow-template.json';
   const workflowName = `vib-testing-template-${random}`
