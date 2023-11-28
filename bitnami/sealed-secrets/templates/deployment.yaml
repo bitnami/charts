@@ -96,9 +96,9 @@ spec:
             {{- if .Values.skipRecreate }}
             - "--skip-recreate"
             {{- end }}
-            {{- if .Values.keyrenewperiod }}
+            {{- if .Values.keyRenewPeriod }}
             - "--key-renew-period"
-            - {{ .Values.keyrenewperiod | quote }}
+            - {{ .Values.keyRenewPeriod | quote }}
             {{- end }}
             {{- if .Values.rateLimit }}
             - "--rate-limit"
