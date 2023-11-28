@@ -19,20 +19,28 @@ jobs:
       - name: Install mardownlint
         run: npm install -g markdownlint-cli@0.33.0
       - name: Checkout project
-        uses: actions/checkout@v3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       - name: Execute markdownlint
         env:
           DIFF_URL: "${{github.event.pull_request.diff_url}}"
           TEMP_FILE: "${{runner.temp}}/pr-${{github.event.number}}.diff"
+          TEMP_OUTPUT: "${{runner.temp}}/output"
         run: |
           # This request doesn't consume API calls.
           curl -Lkso $TEMP_FILE $DIFF_URL
           files_changed="$(sed -nr 's/[\-\+]{3} [ab]\/(.*)/\1/p' $TEMP_FILE | sort | uniq)"
           md_files="$(echo "$files_changed" | grep -o ".*\.md$" | sort | uniq || true)"
           # Create an empty file, useful when the PR changes ignored files
-          touch ${{runner.temp}}/output
+          touch "${TEMP_OUTPUT}"
           exit_code=0
-          markdownlint -o ${{runner.temp}}/output ${md_files[@]} || exit_code=$?
+          for f in ${md_files}; do
+            # Looking for links that do not start with https, # or img
+            if grep --quiet --perl-regexp '\]\((?!(http|#|img))[^\)]*' $f; then
+              echo "::error:: Please ensure all links in $f starts with http(s), # or img"
+              exit 1
+            fi
+          done
+          markdownlint -o "${TEMP_OUTPUT}" ${md_files[@]} || exit_code=$?
           while read -r line; do
             # line format:
             #   file:row[:column] message
@@ -48,7 +56,7 @@ jobs:
             else
               echo "::warning:: Error processing: ${line}"
             fi
-          done < ${{runner.temp}}/output
+          done < "${TEMP_OUTPUT}"
           if [[ $exit_code -ne 0 ]]; then
             echo "::error:: Please review linter messages"
             exit "$exit_code"

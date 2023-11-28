@@ -189,7 +189,7 @@ useIstioLabels: true
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 8.10.4-debian-11-r0
+  tag: 8.11.1-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -219,7 +219,7 @@ security:
   ## Ref: https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch#security
   ##
   elasticPassword: ""
-  ## @param security.existingSecret Name of the existing secret containing the Elasticsearch password and
+  ## @param security.existingSecret Name of the existing secret containing the Elasticsearch password (expected key: `elasticsearch-password`)
   ##
   existingSecret: ""
   ## FIPS mode
@@ -1839,7 +1839,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.6.0-debian-11-r95
+    tag: 1.6.0-debian-11-r96
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2172,7 +2172,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2219,7 +2219,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 11-debian-11-r90
+  tag: 11-debian-11-r91
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

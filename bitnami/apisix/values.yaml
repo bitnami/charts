@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/apisix
-  tag: 3.6.0-debian-11-r5
+  tag: 3.7.0-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -266,6 +266,26 @@ dataPlane:
             - {{ ternary "https" "http" .Values.controlPlane.tls.enabled }}://{{ include "apisix.control-plane.fullname" . }}:{{ .Values.controlPlane.service.ports.configServer }}
           prefix: /apisix
           timeout: 30
+        {{- end }}
+      etcd:
+        host:
+          {{- if .Values.etcd.enabled  }}
+            {{- $replicas := $.Values.etcd.replicaCount | int }}
+            {{- range $i, $_e := until $replicas }}
+          - {{ printf "%s://%s-%d.%s:%v" (ternary "https" "http" $.Values.etcd.auth.client.secureTransport) (include "apisix.etcd.fullname" $ ) $i (include "apisix.etcd.headlessServiceName" $) ( include "apisix.etcd.port" $ ) }}
+            {{- end }}
+          {{- else }}
+          {{- range $node := .Values.externalEtcd.servers }}
+          - {{ ternary "https" "http" $.Values.externalEtcd.secureTransport }}://{{ printf "%s:%v" $node (include "apisix.etcd.port" $) }}
+          {{- end }}
+          {{- end }}
+        prefix: /apisix
+        timeout: 30
+        use_grpc: false
+        startup_retry: 60
+        {{- if (include "apisix.etcd.authEnabled" .) }}
+        user: "{{ print "{{APISIX_ETCD_USER}}" }}"
+        password: "{{ print "{{APISIX_ETCD_PASSWORD}}" }}"
         {{- end }}
       {{- if .Values.dataPlane.tls.enabled }}
       certs:
@@ -1512,7 +1532,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/apisix-dashboard
-    tag: 3.0.1-debian-11-r136
+    tag: 3.0.1-debian-11-r139
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2192,7 +2212,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/apisix-ingress-controller
-    tag: 1.7.0-debian-11-r15
+    tag: 1.7.1-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2831,7 +2851,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##

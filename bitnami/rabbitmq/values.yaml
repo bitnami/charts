@@ -34,7 +34,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.12.8-debian-11-r0
+  tag: 3.12.10-debian-11-r0
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -964,6 +964,20 @@ persistence:
   ##   app: my-app
   labels: {}
 
+## Persistent Volume Claim Retention Policy
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+##
+persistentVolumeClaimRetentionPolicy:
+  ## @param persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for rabbitmq Statefulset
+  ##
+  enabled: false
+  ## @param persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ##
+  whenScaled: Retain
+  ## @param persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  whenDeleted: Retain
+
 ## @section Exposure parameters
 ##
 
@@ -1405,7 +1419,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

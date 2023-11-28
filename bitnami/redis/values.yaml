@@ -91,7 +91,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis
-  tag: 7.2.3-debian-11-r0
+  tag: 7.2.3-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -299,7 +299,7 @@ master:
     capabilities:
       drop:
         - ALL
-  ## @param master.kind Use either Deployment or StatefulSet (default)
+  ## @param master.kind Use either Deployment, StatefulSet (default) or DaemonSet
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
   ##
   kind: StatefulSet
@@ -586,6 +586,10 @@ master:
 ##
 
 replica:
+  ## @param replica.kind Use either DaemonSet or StatefulSet (default)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+  ##
+  kind: StatefulSet
   ## @param replica.replicaCount Number of Redis&reg; replicas to deploy
   ##
   replicaCount: 3
@@ -1056,7 +1060,7 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: 7.2.3-debian-11-r0
+    tag: 7.2.3-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1085,7 +1089,7 @@ sentinel:
   quorum: 2
   ## @param sentinel.getMasterTimeout Amount of time to allow before get_sentinel_master_info() times out.
   ##
-  getMasterTimeout: 99
+  getMasterTimeout: 90
   ## @param sentinel.automateClusterRecovery Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically failover to it.
   ## This also prevents any new replica from starting until the last remaining replica is elected as master to guarantee that it is the one to be elected by Sentinel, and not a newly started replica with no data.
   ## NOTE: This feature requires a "downAfterMilliseconds" value less or equal to 2000.
@@ -1535,7 +1539,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.55.0-debian-11-r0
+    tag: 1.55.0-debian-11-r2
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1847,7 +1851,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1895,7 +1899,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

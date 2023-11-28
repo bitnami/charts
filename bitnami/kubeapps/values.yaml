@@ -208,7 +208,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.2-debian-11-r46
+    tag: 1.25.3-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -294,14 +294,26 @@ frontend:
     fsGroup: 1001
   ## Configure Container Security Context for NGINX
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param frontend.containerSecurityContext.enabled Enabled NGINX containers' Security Context
-  ## @param frontend.containerSecurityContext.runAsUser Set NGINX container's Security Context runAsUser
-  ## @param frontend.containerSecurityContext.runAsNonRoot Set NGINX container's Security Context runAsNonRoot
+  ## @param frontend.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param frontend.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param frontend.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param frontend.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param frontend.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param frontend.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param frontend.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param frontend.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure extra options for frontend containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param frontend.livenessProbe.enabled Enable livenessProbe
@@ -527,7 +539,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.9.0-debian-11-r11
+    tag: 2.9.0-debian-11-r16
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -645,14 +657,26 @@ dashboard:
     fsGroup: 1001
   ## Configure Container Security Context for Dashboard
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param dashboard.containerSecurityContext.enabled Enabled Dashboard containers' Security Context
-  ## @param dashboard.containerSecurityContext.runAsUser Set Dashboard container's Security Context runAsUser
-  ## @param dashboard.containerSecurityContext.runAsNonRoot Set Dashboard container's Security Context runAsNonRoot
+  ## @param dashboard.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param dashboard.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param dashboard.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param dashboard.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param dashboard.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param dashboard.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param dashboard.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param dashboard.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure extra options for Dashboard containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param dashboard.livenessProbe.enabled Enable livenessProbe
@@ -834,7 +858,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.9.0-debian-11-r10
+    tag: 2.9.0-debian-11-r12
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -861,7 +885,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.9.0-debian-11-r10
+    tag: 2.9.0-debian-11-r13
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -992,14 +1016,26 @@ apprepository:
     fsGroup: 1001
   ## Configure Container Security Context for App Repository jobs
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param apprepository.containerSecurityContext.enabled Enabled AppRepository Controller containers' Security Context
-  ## @param apprepository.containerSecurityContext.runAsUser Set AppRepository Controller container's Security Context runAsUser
-  ## @param apprepository.containerSecurityContext.runAsNonRoot Set AppRepository Controller container's Security Context runAsNonRoot
+  ## @param apprepository.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param apprepository.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param apprepository.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param apprepository.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param apprepository.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param apprepository.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param apprepository.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param apprepository.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param apprepository.lifecycleHooks Custom lifecycle hooks for AppRepository Controller containers
   ##
   lifecycleHooks: {}
@@ -1145,7 +1181,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 7.5.1-debian-11-r10
+    tag: 7.5.1-debian-11-r11
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1240,14 +1276,26 @@ authProxy:
     proxy: 3000
   ## Configure Container Security Context for Auth Proxy
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param authProxy.containerSecurityContext.enabled Enabled Auth Proxy containers' Security Context
-  ## @param authProxy.containerSecurityContext.runAsUser Set Auth Proxy container's Security Context runAsUser
-  ## @param authProxy.containerSecurityContext.runAsNonRoot Set Auth Proxy container's Security Context runAsNonRoot
+  ## @param authProxy.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param authProxy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param authProxy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param authProxy.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param authProxy.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param authProxy.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param authProxy.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param authProxy.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## OAuth2 Proxy containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param authProxy.resources.limits.cpu The CPU limits for the OAuth2 Proxy container
@@ -1283,7 +1331,7 @@ pinnipedProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-pinniped-proxy
-    tag: 2.9.0-debian-11-r9
+    tag: 2.9.0-debian-11-r10
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1352,14 +1400,26 @@ pinnipedProxy:
     pinnipedProxy: 3333
   ## Configure Container Security Context for Pinniped Proxy
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param pinnipedProxy.containerSecurityContext.enabled Enabled Pinniped Proxy containers' Security Context
-  ## @param pinnipedProxy.containerSecurityContext.runAsUser Set Pinniped Proxy container's Security Context runAsUser
-  ## @param pinnipedProxy.containerSecurityContext.runAsNonRoot Set Pinniped Proxy container's Security Context runAsNonRoot
+  ## @param pinnipedProxy.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param pinnipedProxy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param pinnipedProxy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param pinnipedProxy.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param pinnipedProxy.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param pinnipedProxy.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param pinnipedProxy.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param pinnipedProxy.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Pinniped Proxy containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param pinnipedProxy.resources.limits.cpu The CPU limits for the Pinniped Proxy container
@@ -1576,7 +1636,7 @@ kubeappsapis:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apis
-    tag: 2.9.0-debian-11-r10
+    tag: 2.9.0-debian-11-r13
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1659,14 +1719,26 @@ kubeappsapis:
     fsGroup: 1001
   ## Configure Container Security Context for Kubeapps APIs
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param kubeappsapis.containerSecurityContext.enabled Enabled KubeappsAPIs containers' Security Context
-  ## @param kubeappsapis.containerSecurityContext.runAsUser Set KubeappsAPIs container's Security Context runAsUser
-  ## @param kubeappsapis.containerSecurityContext.runAsNonRoot Set KubeappsAPIs container's Security Context runAsNonRoot
+  ## @param kubeappsapis.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param kubeappsapis.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param kubeappsapis.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param kubeappsapis.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param kubeappsapis.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param kubeappsapis.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param kubeappsapis.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param kubeappsapis.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure extra options for KubeappsAPIs containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param kubeappsapis.livenessProbe.enabled Enable livenessProbe
@@ -1861,7 +1933,7 @@ ociCatalog:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-oci-catalog
-    tag: 2.9.0-debian-11-r4
+    tag: 2.9.0-debian-11-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1915,14 +1987,26 @@ ociCatalog:
       memory: 32Mi
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param ociCatalog.containerSecurityContext.enabled Enabled OCI Catalog containers' Security Context
-  ## @param ociCatalog.containerSecurityContext.runAsUser Set OCI Catalog container's Security Context runAsUser
-  ## @param ociCatalog.containerSecurityContext.runAsNonRoot Set OCI Catalog container's Security Context runAsNonRoot
+  ## @param ociCatalog.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param ociCatalog.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param ociCatalog.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param ociCatalog.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param ociCatalog.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param ociCatalog.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param ociCatalog.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param ociCatalog.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure extra options for OCI Catalog containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param ociCatalog.livenessProbe.enabled Enable livenessProbe

@@ -1,28 +1,26 @@
 <!--- app-name: Flux -->
 
-# Flux packaged by Bitnami
+# Bitnami package for Flux
 
-Flux is a tool for keeping Kubernetes clusters in sync with sources of configuration
+Source Controller is a component of Flux. Flux is a tool for keeping Kubernetes clusters in sync with sources of configuration.
 
-[Overview of Flux](https://github.com/fluxcd/flux2)
+[Overview of Flux](https://github.com/fluxcd/source-controller)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/flux
+helm install my-release oci://registry-1.docker.io/bitnamicharts/flux
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Flux in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [Flux](https://github.com/bitnami/containers/tree/main/bitnami/fluxcd-kustomize-controller) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Flux in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 

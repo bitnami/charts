@@ -238,7 +238,7 @@ ingress:
 image:
   registry: docker.io
   repository: bitnami/haproxy
-  tag: 2.8.3-debian-11-r29
+  tag: 2.8.4-debian-11-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

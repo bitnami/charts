@@ -57,7 +57,7 @@ commonAnnotations: {}
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 10.2.0-debian-11-r2
+  tag: 10.2.2-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -276,6 +276,12 @@ datasources:
 ## @param notifiers.configMapName Name of a ConfigMap containing Grafana notifiers configuration
 ##
 notifiers:
+  configMapName: ""
+
+## Create alerting rules, contact points, notification policies, templates, and mute timings from a configMap
+## @param alerting.configMapName Name of a ConfigMap containing Grafana alerting configuration
+##
+alerting:
   configMapName: ""
 
 ## @section Grafana Deployment parameters
@@ -866,7 +872,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

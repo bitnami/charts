@@ -40,6 +40,9 @@ spec:
         app.kubernetes.io/part-of: milvus
         app.kubernetes.io/component: data-node
     spec:
+      {{- if semverCompare ">= 1.13" (include "common.capabilities.kubeVersion" .) }}
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
+      {{- end }}
       serviceAccountName: {{ template "milvus.data-node.serviceAccountName" . }}
       {{- include "milvus.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.dataNode.hostAliases }}
@@ -166,6 +169,11 @@ spec:
               # We are using a s3 backend, so this data dir is temporary
             - name: tmp-data-milvus
               mountPath: /bitnami/milvus/data
+            {{- if and .Values.externalEtcd.tls.enabled (not (empty .Values.externalEtcd.tls.existingSecret)) }}
+            - name: etcd-client-certs
+              mountPath: /opt/bitnami/milvus/configs/cert/etcd/client
+              readOnly: true
+            {{- end }}
           {{- if .Values.dataNode.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.dataNode.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -194,6 +202,12 @@ spec:
         - name: component-extra-config
           configMap:
             name: {{ template "milvus.data-node.extraConfigmapName" . }}
+        {{- end }}
+        {{- if and .Values.externalEtcd.tls.enabled (not (empty .Values.externalEtcd.tls.existingSecret)) }}
+        - name: etcd-client-certs
+          secret:
+            secretName: {{ .Values.externalEtcd.tls.existingSecret }}
+            defaultMode: 256
         {{- end }}
         - name: rendered-config
           emptyDir: {}

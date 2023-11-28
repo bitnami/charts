@@ -13,19 +13,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Repo checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         with:
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
           fetch-depth: 1
       - name: Load .env file
-        uses: xom9ikk/dotenv@v2
+        uses: xom9ikk/dotenv@de1ff27d319507880e6621e4d47424c677d95f68
         with:
           path: .github/workflows/
       - name: Updating members of the Bitnami team
+        env:
+          TOKEN: ${{ secrets.BITNAMI_BOT_TOKEN }}
         run: |
           TEAM_MEMBERS=$(curl --request GET \
           --url https://api.github.com/orgs/bitnami/teams/developers/members?per_page=100 \
-          --header 'authorization: Bearer ${{ secrets.BITNAMI_BOT_TOKEN }}' \
+          --header "authorization: Bearer ${TOKEN}" \
           --header 'content-type: application/json' \
           | jq 'sort_by(.login)|map(.login)|join(",")')
           TEAM_MEMBERS='['${TEAM_MEMBERS//','/'","'}']'

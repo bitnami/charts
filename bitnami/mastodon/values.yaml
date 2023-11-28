@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mastodon
-  tag: 4.2.1-debian-11-r1
+  tag: 4.2.1-debian-11-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1230,7 +1230,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1282,9 +1282,9 @@ serviceAccount:
 ## All of these values are only used when postgresql.enabled is set to false
 ## @param externalDatabase.host Database host
 ## @param externalDatabase.port Database port number
-## @param externalDatabase.user Non-root username for JupyterHub
-## @param externalDatabase.password Password for the non-root username for JupyterHub
-## @param externalDatabase.database JupyterHub database name
+## @param externalDatabase.user Non-root username for Mastodon
+## @param externalDatabase.password Password for the non-root username for Mastodon
+## @param externalDatabase.database Mastodon database name
 ## @param externalDatabase.existingSecret Name of an existing secret resource containing the database credentials
 ## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials
 ##

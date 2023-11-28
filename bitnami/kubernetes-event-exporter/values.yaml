@@ -79,7 +79,7 @@ image:
   ##
   registry: docker.io
   repository: bitnami/kubernetes-event-exporter
-  tag: 1.5.0-debian-11-r0
+  tag: 1.6.0-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -133,6 +133,12 @@ rbac:
   ## @param rbac.create Create the RBAC roles for API accessibility
   ##
   create: true
+  ## @param rbac.rules [array] List of rules for the cluster role
+  ##
+  rules:
+    - apiGroups: ["*"]
+      resources: ["*"]
+      verbs: ["get", "watch", "list"]
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ## @param serviceAccount.create Specifies whether a ServiceAccount should be created

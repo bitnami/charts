@@ -3,6 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
+{{- if gt (int64 .Values.master.count) 0 -}}
 {{- if or (not (eq .Values.architecture "replication")) (not .Values.sentinel.enabled) }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: {{ .Values.master.kind }}
@@ -15,7 +16,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if not (eq .Values.master.kind "DaemonSet") }}
   replicas: {{ .Values.master.count }}
+  {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
@@ -471,7 +474,7 @@ spec:
         {{- if .Values.metrics.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
-  {{- if not .Values.master.persistence.enabled }}
+  {{- if or (not .Values.master.persistence.enabled) (eq .Values.master.kind "DaemonSet") }}
         - name: redis-data
           {{- if or .Values.master.persistence.medium .Values.master.persistence.sizeLimit }}
           emptyDir:
@@ -525,4 +528,5 @@ spec:
         {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.master.persistence "global" .Values.global) | nindent 8 }}
   {{- end }}
+{{- end }}
 {{- end }}

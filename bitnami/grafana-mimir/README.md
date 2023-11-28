@@ -1,6 +1,6 @@
 <!--- app-name: Grafana Mimir -->
 
-# Grafana Mimir packaged by Bitnami
+# Bitnami package for Grafana Mimir
 
 Grafana Mimir is an open source, horizontally scalable, highly available, multi-tenant, long-term storage for Prometheus.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/grafana-mimir
+helm install my-release oci://registry-1.docker.io/bitnamicharts/grafana-mimir
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Grafana Mimir in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -25,8 +25,6 @@ This chart bootstraps a [Grafana Mimir](https://github.com/grafana/mimir) Deploy
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/grafana-mimir/get-started/).
-
-Looking to use Grafana Mimir in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -1272,7 +1270,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedmetadata.nameOverride`            | override the subchart name                                                                                | `""`                        |
 | `memcachedmetadata.service.ports.memcached` | Memcached service port                                                                                    | `11211`                     |
 
-See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table
+See <https://github.com/bitnami/readme-generator-for-helm> to create the table
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -1293,7 +1291,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/grafa
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml) as starting point.
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/grafana-mimir/values.yaml) as starting point.
 
 Once the chart is installed the remote write endpoints for Prometheus or Grafana Agent and the read address to be used as datasource in Grafana will be printed. Example:
 

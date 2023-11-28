@@ -1,6 +1,6 @@
 <!--- app-name: Matomo -->
 
-# Matomo packaged by Bitnami
+# Bitnami package for Matomo
 
 Matomo, formerly known as Piwik, is a real time web analytics program. It provides detailed reports on website visitors.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/matomo
+helm install my-release oci://registry-1.docker.io/bitnamicharts/matomo
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Matomo in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -23,8 +23,6 @@ This chart bootstraps a [Matomo](https://github.com/bitnami/containers/tree/main
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/main/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment as a database for the Matomo application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
-
-Looking to use Matomo in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -307,7 +305,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                                                       | Description                                                          | Value            |
 | -------------------------------------------------------------------------- | -------------------------------------------------------------------- | ---------------- |
-| `cronjobs.enabled`                                                         | Enables cronjobs for archive and scheduler tasks                     | `true`           |
+| `cronjobs.taskScheduler.enabled`                                           | Whether to enable scheduled mail-to-task CronJob                     | `true`           |
 | `cronjobs.taskScheduler.schedule`                                          | Kubernetes CronJob schedule                                          | `*/5 * * * *`    |
 | `cronjobs.taskScheduler.suspend`                                           | Whether to create suspended CronJob                                  | `false`          |
 | `cronjobs.taskScheduler.command`                                           | Override default container command (useful when using custom images) | `[]`             |
@@ -322,7 +320,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cronjobs.taskScheduler.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                     | `RuntimeDefault` |
 | `cronjobs.taskScheduler.podAnnotations`                                    | Additional pod annotations                                           | `{}`             |
 | `cronjobs.taskScheduler.podLabels`                                         | Additional pod labels                                                | `{}`             |
-| `cronjobs.archive.enabled`                                                 | Whether to enable scheduled mail-to-task CronJob                     | `false`          |
+| `cronjobs.archive.enabled`                                                 | Whether to enable scheduled mail-to-task CronJob                     | `true`           |
 | `cronjobs.archive.schedule`                                                | Kubernetes CronJob schedule                                          | `*/5 * * * *`    |
 | `cronjobs.archive.suspend`                                                 | Whether to create suspended CronJob                                  | `false`          |
 | `cronjobs.archive.command`                                                 | Override default container command (useful when using custom images) | `[]`             |
@@ -359,7 +357,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/matom
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/matomo/values.yaml)
 
 ## Configuration and installation details
 
@@ -438,6 +436,10 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 3.2.0
+
+This version deprecates `cronjobs.enabled` value in favor of `cronjobs.taskScheduler.enabled` and `cronjobs.archive.enabled` values.
 
 ### To 3.0.0
 

@@ -45,6 +45,12 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
+## @param enableServiceLinks Whether information about services should be injected into all pods' environment variable
+## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+##
+enableServiceLinks: false
+
 ## Enable diagnostic mode in the deployments/statefulsets
 ##
 diagnosticMode:
@@ -125,8 +131,13 @@ milvus:
         - {{ printf "%s://%s-%d.%s:%v" (ternary "https" "http" $.Values.etcd.auth.client.secureTransport) (include "milvus.etcd.fullname" $ ) $i (include "milvus.etcd.headlessServiceName" $) ( include "milvus.etcd.port" $ ) }}          {{- end }}
         {{- else }}
         {{- range $node := .Values.externalEtcd.servers }}
-        - {{ ternary "https" "http" $.Values.externalEtcd.secureTransport }}://{{ printf "%s:%v" $node (include "milvus.etcd.port" $) }}
+        - {{ ternary "https" "http" $.Values.externalEtcd.tls.enabled }}://{{ printf "%s:%v" $node (include "milvus.etcd.port" $) }}
         {{- end }}
+      ssl:
+        enabled: {{ .Values.externalEtcd.tls.enabled }}
+        tlsCert: /opt/bitnami/milvus/configs/cert/etcd/client/{{ .Values.externalEtcd.tls.cert }}
+        tlsKey: /opt/bitnami/milvus/configs/cert/etcd/client/{{ .Values.externalEtcd.tls.key }}
+        tlsCACert: /opt/bitnami/milvus/configs/cert/etcd/client/{{ .Values.externalEtcd.tls.caCert }}
         {{- end }}
     metastore:
       type: etcd
@@ -255,7 +266,7 @@ initJob:
   image:
     registry: docker.io
     repository: bitnami/pymilvus
-    tag: 2.3.1-debian-11-r12
+    tag: 2.3.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4282,7 +4293,7 @@ attu:
   image:
     registry: docker.io
     repository: bitnami/attu
-    tag: 2.3.1-debian-11-r22
+    tag: 2.3.2-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4882,9 +4893,29 @@ externalEtcd:
   ## @param externalEtcd.existingSecretPasswordKey Key inside the secret containing the external etcd password
   ##
   existingSecretPasswordKey: "etcd-root-password"
-  ## @param externalEtcd.secureTransport Use TLS for client-to-server communications
+  ## External etcd TLS connection configuration
   ##
-  secureTransport: false
+  tls:
+    ## @param externalEtcd.tls.enabled Enable TLS for etcd client connections.
+    ##
+    enabled: false
+    ## @param externalEtcd.tls.existingSecret Name of the existing secret containing the TLS certificates for external etcd client communications.
+    ##
+    existingSecret: ""
+    ## @param externalEtcd.tls.cert The secret key from the existingSecret if 'cert' key different from the default (tls.crt)
+    ##
+    cert: tls.crt
+    ## @param externalEtcd.tls.key The secret key from the existingSecret if 'key' key different from the default (tls.key)
+    ## Milvus cannot decrypt key file with password, so now the key must not be encrypted
+    ##
+    key: tls.key
+    ## @param externalEtcd.tls.caCert The secret key from the existingSecret if 'caCert' key different from the default (ca.crt)
+    ##
+    caCert: ca.crt
+    ## @param externalEtcd.tls.keyPassword Password to access the password-protected PEM key if necessary.
+    ## Milvus cannot decrypt key file with password, so now the key must not be encrypted, value here must be empty
+    ##
+    keyPassword: ""
 
 ## @section External S3 parameters
 ## All of these values are only used when redis.enabled is set to false

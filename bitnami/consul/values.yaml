@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/consul
-  tag: 1.17.0-debian-11-r0
+  tag: 1.17.0-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -632,7 +632,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -683,7 +683,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/consul-exporter
-    tag: 0.9.0-debian-11-r299
+    tag: 0.9.0-debian-11-r300
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

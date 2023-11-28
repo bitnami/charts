@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Send to the Solved column
         id: send-solved
-        uses: peter-evans/create-or-update-project-card@v2
+        uses: peter-evans/create-or-update-project-card@dfa240db6fe287ceb681e45d6728c1af70452c58
         # Send to solve only the issues and PRs created by users or the automated PRs with human review required
         if: |
           (github.event.issue != null && github.event.issue.user.login != 'bitnami-bot') ||

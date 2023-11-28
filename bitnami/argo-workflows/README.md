@@ -1,6 +1,6 @@
 <!--- app-name: Argo Workflows -->
 
-# Argo Workflows packaged by Bitnami
+# Bitnami package for Argo Workflows
 
 Argo Workflows is meant to orchestrate Kubernetes jobs in parallel. It uses DAG and step-based workflows
 
@@ -11,18 +11,16 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/argo-workflows
+helm install my-release oci://registry-1.docker.io/bitnamicharts/argo-workflows
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Argo Workflows in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [Argo Workflows](https://argoproj.github.io/workflows) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Argo Workflows in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -377,7 +375,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecret` | The name of an existing secret with database credentials                    | `""`                |
 | `externalDatabase.type`           | Either postgresql or mysql                                                  | `""`                |
 
-See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table
+See <https://github.com/bitnami/readme-generator-for-helm> to create the table
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -402,7 +400,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/argo-
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/argo-workflows/values.yaml)
 
 ## Configuration and installation details
 
