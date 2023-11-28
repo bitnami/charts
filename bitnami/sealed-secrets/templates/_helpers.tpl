@@ -40,7 +40,7 @@ Create the name of the unsealer cluster role
 {{- end -}}
 
 {{/*
-Create the name of the unsealer cluster role
+Create the name of the unsealer namespaced cluster role
 */}}
 {{- define "sealed-secrets.namespacedRoleName" -}}
 {{- if .Values.rbac.namespacedRolesName -}}
