@@ -516,13 +516,13 @@ rbac:
   ## @param rbac.pspEnabled PodSecurityPolicy
   ##
   pspEnabled: false
-  ## @param rbac.clusterRole Specifies whether the Cluster Role resource should be created
+  ## @param rbac.clusterRole Specifies whether the Cluster Role resource should be created. If both rbac.clusterRole and rbac.namespacedRoles are set to false no RBAC will be created.
   ##
   clusterRole: true
   ## @param rbac.clusterRoleName Specifies the name for the Cluster Role resource
   ##
   clusterRoleName: ""
-  ## @param rbac.namespacedRoles Specifies whether the namespaced Roles should be created (in each of the specified additionalNamespaces)
+  ## @param rbac.namespacedRoles Specifies whether the namespaced Roles should be created (in each of the specified additionalNamespaces). If both rbac.clusterRole and rbac.namespacedRoles are set to false no RBAC will be created.
   ##
   namespacedRoles: false
   ## @param rbac.namespacedRolesName Specifies the name for the namesapced Role resource

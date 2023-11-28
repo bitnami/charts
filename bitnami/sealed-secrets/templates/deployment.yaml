@@ -123,9 +123,9 @@ spec:
             - "--privatekey-annotations"
             - {{ trimSuffix "," $privatekeyAnnotations | quote }}
             {{- end }}            
-            {{- if $.Values.privateKeyLabels }}
+            {{- if .Values.privateKeyLabels }}
             {{- $privateKeyLabels := ""}}
-            {{- range $k, $v := $.Values.privateKeyLabels }}
+            {{- range $k, $v := .Values.privateKeyLabels }}
               {{- if not (and $v (kindIs "string" $v)) }}
                 {{ fail "Label values have to be strings"}}
               {{- end }}
