@@ -191,27 +191,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                          | Description                                                                                              | Value   |
-| --------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ------- |
-| `rbac.create`                                 | Specifies whether RBAC resources should be created                                                       | `true`  |
-| `rbac.pspEnabled`                             | PodSecurityPolicy                                                                                        | `false` |
-| `rbac.clusterRole`                            | Specifies whether the Cluster Role resource should be created                                            | `true`  |
-| `rbac.clusterRoleName`                        | Specifies the name for the Cluster Role resource                                                         | `""`    |
-| `rbac.namespacedRoles`                        | Specifies whether the namespaced Roles should be created (in each of the specified additionalNamespaces) | `false` |
-| `rbac.namespacedRolesName`                    | Specifies the name for the namesapced Role resource                                                      | `""`    |
-| `rbac.unsealer.rules`                         | Custom RBAC rules to set for unsealer ClusterRole                                                        | `[]`    |
-| `rbac.keyAdmin.rules`                         | Custom RBAC rules to set for key-admin role                                                              | `[]`    |
-| `rbac.serviceProxier.rules`                   | Custom RBAC rules to set for service-proxier role                                                        | `[]`    |
-| `rbac.labels`                                 | Extra labels to be added to RBAC resources                                                               | `{}`    |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                     | `true`  |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                   | `""`    |
-| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)                                         | `{}`    |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                           | `true`  |
-| `networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created                                                      | `false` |
-| `networkPolicy.allowExternal`                 | Don't require client label for connections                                                               | `true`  |
-| `pdb.create`                                  | Enable a Pod Disruption Budget creation                                                                  | `false` |
-| `pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                           | `""`    |
-| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                           | `""`    |
+| Name                                          | Description                                                                                                                                                                                           | Value   |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                                                                                                    | `true`  |
+| `rbac.pspEnabled`                             | PodSecurityPolicy                                                                                                                                                                                     | `false` |
+| `rbac.clusterRole`                            | Specifies whether the Cluster Role resource should be created. If both rbac.clusterRole and rbac.namespacedRoles are set to false no RBAC will be created.                                            | `true`  |
+| `rbac.clusterRoleName`                        | Specifies the name for the Cluster Role resource                                                                                                                                                      | `""`    |
+| `rbac.namespacedRoles`                        | Specifies whether the namespaced Roles should be created (in each of the specified additionalNamespaces). If both rbac.clusterRole and rbac.namespacedRoles are set to false no RBAC will be created. | `false` |
+| `rbac.namespacedRolesName`                    | Specifies the name for the namesapced Role resource                                                                                                                                                   | `""`    |
+| `rbac.unsealer.rules`                         | Custom RBAC rules to set for unsealer ClusterRole                                                                                                                                                     | `[]`    |
+| `rbac.keyAdmin.rules`                         | Custom RBAC rules to set for key-admin role                                                                                                                                                           | `[]`    |
+| `rbac.serviceProxier.rules`                   | Custom RBAC rules to set for service-proxier role                                                                                                                                                     | `[]`    |
+| `rbac.labels`                                 | Extra labels to be added to RBAC resources                                                                                                                                                            | `{}`    |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                                                                                  | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                                                                                | `""`    |
+| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)                                                                                                                                      | `{}`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                                                                                        | `true`  |
+| `networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created                                                                                                                                                   | `false` |
+| `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                                                                                                            | `true`  |
+| `pdb.create`                                  | Enable a Pod Disruption Budget creation                                                                                                                                                               | `false` |
+| `pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                                                                                        | `""`    |
+| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                                                                                                        | `""`    |
 
 ### Metrics parameters
 
