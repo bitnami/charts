@@ -225,9 +225,13 @@ security:
   tls:
     ## @section OpenSearch admin parameters
     ## @param security.tls.admin.existingSecret Existing secret containing the certificates for admin
+    ## @param security.tls.admin.certKey Key containing the crt for admin certificate (defaults to admin.crt)
+    ## @param security.tls.admin.keyKey Key containing the key for admin certificate (defaults to admin.key)
     ##
     admin:
       existingSecret: ""
+      certKey: ""
+      keyKey: ""
     ## @param security.tls.restEncryption Enable SSL/TLS encryption for OpenSearch REST API.
     ##
     restEncryption: false
@@ -241,19 +245,54 @@ security:
     ## Ref: https://www.open.co/guide/en/opensearch/reference/current/security-settings.html
     ##
     verificationMode: "full"
-    ## @param security.tls.master.existingSecret Existing secret containing the certificates for the master nodes
-    ## @param security.tls.data.existingSecret Existing secret containing the certificates for the data nodes
-    ## @param security.tls.ingest.existingSecret Existing secret containing the certificates for the ingest nodes
-    ## @param security.tls.coordinating.existingSecret Existing secret containing the certificates for the coordinating nodes
+    ## TLS configuration for master nodes
     ##
     master:
+      ## @param security.tls.master.existingSecret Existing secret containing the certificates for the master nodes
+      ## @param security.tls.master.certKey Key containing the crt for master nodes certificate (defaults to tls.crt)
+      ## @param security.tls.master.keyKey Key containing the key for master nodes certificate (defaults to tls.key)
+      ## @param security.tls.master.caKey Key containing the ca for master nodes certificate (defaults to ca.crt)
+      ##
       existingSecret: ""
+      certKey: ""
+      keyKey: ""
+      caKey: ""
+    ## TLS configuration for data nodes
+    ##
     data:
+      ## @param security.tls.data.existingSecret Existing secret containing the certificates for the data nodes
+      ## @param security.tls.data.certKey Key containing the crt for data nodes certificate (defaults to tls.crt)
+      ## @param security.tls.data.keyKey Key containing the key for data nodes certificate (defaults to tls.key)
+      ## @param security.tls.data.caKey Key containing the ca for data nodes certificate (defaults to ca.crt)
+      ##
       existingSecret: ""
+      certKey: ""
+      keyKey: ""
+      caKey: ""
+    ## TLS configuration for ingest nodes
+    ##
     ingest:
+      ## @param security.tls.ingest.existingSecret Existing secret containing the certificates for the ingest nodes
+      ## @param security.tls.ingest.certKey Key containing the crt for ingest nodes certificate (defaults to tls.crt)
+      ## @param security.tls.ingest.keyKey Key containing the key for ingest nodes certificate (defaults to tls.key)
+      ## @param security.tls.ingest.caKey Key containing the ca for ingest nodes certificate (defaults to ca.crt)
+      ##
       existingSecret: ""
+      certKey: ""
+      keyKey: ""
+      caKey: ""
+    ## TLS configuration for coordinating nodes
+    ##
     coordinating:
+      ## @param security.tls.coordinating.existingSecret Existing secret containing the certificates for the coordinating nodes
+      ## @param security.tls.coordinating.certKey Key containing the crt for coordinating nodes certificate (defaults to tls.crt)
+      ## @param security.tls.coordinating.keyKey Key containing the key for coordinating nodes certificate (defaults to tls.key)
+      ## @param security.tls.coordinating.caKey Key containing the ca for coordinating nodes certificate (defaults to ca.crt)
+      ##
       existingSecret: ""
+      certKey: ""
+      keyKey: ""
+      caKey: ""
     ## @param security.tls.keystoreFilename Name of the keystore file
     ##
     keystoreFilename: opensearch.keystore.jks
