@@ -16,3 +16,13 @@ for (const command of ['click']) {
     });
   });
 }
+
+Cypress.on('uncaught:exception', (err) => {
+  // We expect an error "Intl.supportedValuesOf is not a function"
+  // during the installation of a template so we add an exception
+  if (err.message.includes("Intl.supportedValuesOf is not a function")) {
+    return false;
+  }
+  // we still want to ensure there are no other unexpected
+  // errors, so we let them fail the test
+})
