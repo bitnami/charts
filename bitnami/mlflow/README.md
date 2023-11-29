@@ -461,6 +461,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalS3.existingSecretKeySecretKey`   | Name of an existing secret key containing the S3 access key secret | `root-password` |
 | `externalS3.protocol`                     | External S3 protocol                                               | `https`         |
 | `externalS3.bucket`                       | External S3 bucket                                                 | `mlflow`        |
+| `externalS3.serveArtifacts`               | Whether artifact serving is enabled                                | `true`          |
 
 The MLflow chart supports three different ways to load your files in the `run` deployment. In order of priority, they are:
 
