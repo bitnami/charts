@@ -37,6 +37,9 @@ spec:
   ports:
     - name: %%PORT_NAME%%
       port: {{ .Values.service.ports.http }}
+      {{- if not (eq .Values.service.ports.http .Values.%%MAIN_OBJECT_BLOCK%%.containerPorts.http) }}
+      targetPort: {{ .Values.%%MAIN_OBJECT_BLOCK%%.containerPorts.http }}
+      {{- end }}
       protocol: bar
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http)) }}
       nodePort: {{ .Values.service.nodePorts.http }}

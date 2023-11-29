@@ -532,12 +532,21 @@ Return MinIO(TM) fullname
 {{- end -}}
 
 {{/*
-Return the PostgreSQL Hostname
+Return whether S3 is enabled
 */}}
 {{- define "mlflow.v0.s3.enabled" -}}
 {{- if or .Values.minio.enabled .Values.externalS3.host -}}
 {{- true }}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Return whether artifacts should be served from S3
+*/}}
+{{- define "mlflow.v0.s3.serveArtifacts" -}}
+    {{- if and (or .Values.minio.enabled .Values.externalS3.host) .Values.externalS3.serveArtifacts  -}}
+        {{- true }}
+    {{- end -}}
 {{- end -}}
 
 {{/*
