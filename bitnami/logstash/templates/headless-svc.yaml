@@ -17,6 +17,8 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    {{- include "common.tplvalues.render" (dict "value" .Values.service.ports "context" $) | nindent 4 }}
+    {{- range $port := .Values.service.ports }}
+    - {{- omit (include "common.tplvalues.render" ( dict "value" $port "context" $ ) | fromYaml) "nodePort" | toYaml | nindent 6 }}
+    {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}

@@ -105,8 +105,8 @@ spec:
     app.kubernetes.io/component: envoy
   ports:
     - name: metrics
-      port: 8002
+      port: {{ .Values.envoy.service.ports.metrics }}
       protocol: TCP
-      targetPort: 8002
+      targetPort: {{ .Values.envoy.service.targetPorts.metrics }}
 {{- end }}
 {{- end }}

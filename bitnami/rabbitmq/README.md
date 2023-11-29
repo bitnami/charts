@@ -1,6 +1,6 @@
 <!--- app-name: RabbitMQ -->
 
-# RabbitMQ packaged by Bitnami
+# Bitnami package for RabbitMQ
 
 RabbitMQ is an open source general-purpose message broker that is designed for consistent, highly-available messaging scenarios (both synchronous and asynchronous).
 
@@ -11,18 +11,16 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/rabbitmq
+helm install my-release oci://registry-1.docker.io/bitnamicharts/rabbitmq
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use RabbitMQ in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [RabbitMQ](https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use RabbitMQ in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -260,18 +258,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence parameters
 
-| Name                        | Description                                      | Value                      |
-| --------------------------- | ------------------------------------------------ | -------------------------- |
-| `persistence.enabled`       | Enable RabbitMQ data persistence using PVC       | `true`                     |
-| `persistence.storageClass`  | PVC Storage Class for RabbitMQ data volume       | `""`                       |
-| `persistence.selector`      | Selector to match an existing Persistent Volume  | `{}`                       |
-| `persistence.accessModes`   | PVC Access Modes for RabbitMQ data volume        | `["ReadWriteOnce"]`        |
-| `persistence.existingClaim` | Provide an existing PersistentVolumeClaims       | `""`                       |
-| `persistence.mountPath`     | The path the volume will be mounted at           | `/bitnami/rabbitmq/mnesia` |
-| `persistence.subPath`       | The subdirectory of the volume to mount to       | `""`                       |
-| `persistence.size`          | PVC Storage Request for RabbitMQ data volume     | `8Gi`                      |
-| `persistence.annotations`   | Persistence annotations. Evaluated as a template | `{}`                       |
-| `persistence.labels`        | Persistence labels. Evaluated as a template      | `{}`                       |
+| Name                                               | Description                                                                    | Value                      |
+| -------------------------------------------------- | ------------------------------------------------------------------------------ | -------------------------- |
+| `persistence.enabled`                              | Enable RabbitMQ data persistence using PVC                                     | `true`                     |
+| `persistence.storageClass`                         | PVC Storage Class for RabbitMQ data volume                                     | `""`                       |
+| `persistence.selector`                             | Selector to match an existing Persistent Volume                                | `{}`                       |
+| `persistence.accessModes`                          | PVC Access Modes for RabbitMQ data volume                                      | `["ReadWriteOnce"]`        |
+| `persistence.existingClaim`                        | Provide an existing PersistentVolumeClaims                                     | `""`                       |
+| `persistence.mountPath`                            | The path the volume will be mounted at                                         | `/bitnami/rabbitmq/mnesia` |
+| `persistence.subPath`                              | The subdirectory of the volume to mount to                                     | `""`                       |
+| `persistence.size`                                 | PVC Storage Request for RabbitMQ data volume                                   | `8Gi`                      |
+| `persistence.annotations`                          | Persistence annotations. Evaluated as a template                               | `{}`                       |
+| `persistence.labels`                               | Persistence labels. Evaluated as a template                                    | `{}`                       |
+| `persistentVolumeClaimRetentionPolicy.enabled`     | Enable Persistent volume retention policy for rabbitmq Statefulset             | `false`                    |
+| `persistentVolumeClaimRetentionPolicy.whenScaled`  | Volume retention behavior when the replica count of the StatefulSet is reduced | `Retain`                   |
+| `persistentVolumeClaimRetentionPolicy.whenDeleted` | Volume retention behavior that applies when the StatefulSet is deleted         | `Retain`                   |
 
 ### Exposure parameters
 
@@ -395,7 +396,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/rabbi
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq/values.yaml)
 
 ## Configuration and installation details
 

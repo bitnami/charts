@@ -58,7 +58,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2023.11.6-debian-11-r1
+  tag: 2023.11.20-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -86,7 +86,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2023.11.6-debian-11-r1
+  tag: 2023.11.20-debian-11-r0
   digest: ""
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
@@ -436,10 +436,12 @@ containerPorts:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable pod Security Context
 ## @param podSecurityContext.fsGroup Group ID for the container
+## @param podSecurityContext.fsGroupChangePolicy When K8s should preform chown on attached volumes
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
+  fsGroupChangePolicy: "OnRootMismatch"
 ## MinIO&reg; container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
@@ -1062,9 +1064,14 @@ metrics:
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
     ##
     jobLabel: ""
-    ## @param metrics.serviceMonitor.path HTTP path to scrape for metrics
+    ## DEPRECATED metrics.serviceMonitor.path - please use `metrics.serviceMonitor.paths` instead
     ##
-    path: /minio/v2/metrics/cluster
+    ## path: /minio/v2/metrics/cluster
+    ## @param metrics.serviceMonitor.paths HTTP paths to scrape for metrics
+    ##
+    paths:
+      - /minio/v2/metrics/cluster
+      - /minio/v2/metrics/node
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
     ##
     interval: 30s
