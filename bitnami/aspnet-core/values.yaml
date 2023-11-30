@@ -435,7 +435,7 @@ appFromExternalRepo:
       pullSecrets: []
     ## @param appFromExternalRepo.publish.subFolder Sub folder under the Git repository containing the ASP.NET Core app
     ##
-    subFolder: aspnetcore/performance/caching/output/samples/7.x/
+    subFolder: aspnetcore/performance/caching/output/samples/8.x/
     ## @param appFromExternalRepo.publish.extraFlags Extra flags to be appended to "dotnet publish" command
     ##
     extraFlags: []
