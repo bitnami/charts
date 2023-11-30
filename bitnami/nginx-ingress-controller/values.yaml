@@ -416,10 +416,19 @@ nodeSelector: {}
 tolerations: []
 ## @param extraVolumes Optionally specify extra list of additional volumes for Controller pods
 ##
-extraVolumes: []
+extraVolumes:
+  # Workaround for upstream issue reported at https://github.com/kubernetes/ingress-nginx/issues/10601
+  # To be removed once the controller releases a fixed version
+  - name: 
+    emptyDir: {}
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Controller container(s)
 ##
-extraVolumeMounts: []
+extraVolumeMounts:
+  # Workaround for upstream issue reported at https://github.com/kubernetes/ingress-nginx/issues/10601
+  # To be removed once the controller releases a fixed version
+  - name: geoip
+    mountPath: /etc/nginx/geoip/
+    readOnly: true
 ## @param initContainers Add init containers to the controller pods
 ## Example:
 ## initContainers:
