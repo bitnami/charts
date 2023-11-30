@@ -94,7 +94,7 @@ config: {}
 ##
 extraConfig: {}
 ## @param extraHosts A list of external hosts which are part of this cluster
-## Example Use Case: When you have a cluster with nodes spaned acorss multiple K8s or namespaces
+## Example Use Case: When you have a cluster with nodes spanned across multiple K8s or namespaces
 ## extraHosts:
 ##   - datacenter2-opensearch-master-hl.namespace2.svc
 ##   - datacenter2-opensearch-data-hl.namespace2.svc
@@ -463,13 +463,13 @@ ingress:
   ##
   extraRules: []
 
-## @section Master-elegible nodes parameters
+## @section Master-eligible nodes parameters
 
 master:
-  ## @param master.masterOnly Deploy the OpenSearch master-elegible nodes as master-only nodes. Recommended for high-demand deployments.
+  ## @param master.masterOnly Deploy the OpenSearch master-eligible nodes as master-only nodes. Recommended for high-demand deployments.
   ## If you are
   masterOnly: true
-  ## @param master.replicaCount Number of master-elegible replicas to deploy
+  ## @param master.replicaCount Number of master-eligible replicas to deploy
   ##
   replicaCount: 2
 
@@ -500,7 +500,7 @@ master:
   ## @param master.annotations [object] Annotations for the master statefulset
   ##
   annotations: {}
-  ## @param master.updateStrategy.type Master-elegible nodes statefulset stategy type
+  ## @param master.updateStrategy.type Master-eligible nodes statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -534,8 +534,8 @@ master:
   heapSize: 128m
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param master.podSecurityContext.enabled Enabled master-elegible pods' Security Context
-  ## @param master.podSecurityContext.fsGroup Set master-elegible pod's Security Context fsGroup
+  ## @param master.podSecurityContext.enabled Enabled master-eligible pods' Security Context
+  ## @param master.podSecurityContext.fsGroup Set master-eligible pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
@@ -562,15 +562,15 @@ master:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param master.hostAliases master-elegible pods host aliases
+  ## @param master.hostAliases master-eligible pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param master.podLabels Extra labels for master-elegible pods
+  ## @param master.podLabels Extra labels for master-eligible pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param master.podAnnotations Annotations for master-elegible pods
+  ## @param master.podAnnotations Annotations for master-eligible pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
@@ -599,23 +599,23 @@ master:
     ##   - e2e-az2
     ##
     values: []
-  ## @param master.affinity Affinity for master-elegible pods assignment
+  ## @param master.affinity Affinity for master-eligible pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## NOTE: `master.podAffinityPreset`, `master.podAntiAffinityPreset`, and `master.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param master.nodeSelector Node labels for master-elegible pods assignment
+  ## @param master.nodeSelector Node labels for master-eligible pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-  ## @param master.tolerations Tolerations for master-elegible pods assignment
+  ## @param master.tolerations Tolerations for master-eligible pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param master.priorityClassName master-elegible pods' priorityClassName
+  ## @param master.priorityClassName master-eligible pods' priorityClassName
   ##
   priorityClassName: ""
-  ## @param master.schedulerName Name of the k8s scheduler (other than default) for master-elegible pods
+  ## @param master.schedulerName Name of the k8s scheduler (other than default) for master-eligible pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
@@ -631,7 +631,7 @@ master:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: "Parallel"
-  ## Configure extra options for OpenSearch master-elegible containers' liveness, readiness and startup probes
+  ## Configure extra options for OpenSearch master-eligible containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param master.startupProbe.enabled Enable/disable the startup probe (master nodes pod)
   ## @param master.startupProbe.initialDelaySeconds Delay before startup probe is initiated (master nodes pod)
@@ -690,29 +690,29 @@ master:
   ## @param master.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param master.lifecycleHooks for the master-elegible container(s) to automate configuration before or after startup
+  ## @param master.lifecycleHooks for the master-eligible container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param master.extraEnvVars Array with extra environment variables to add to master-elegible nodes
+  ## @param master.extraEnvVars Array with extra environment variables to add to master-eligible nodes
   ## e.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## @param master.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for master-elegible nodes
+  ## @param master.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for master-eligible nodes
   ##
   extraEnvVarsCM: ""
-  ## @param master.extraEnvVarsSecret Name of existing Secret containing extra env vars for master-elegible nodes
+  ## @param master.extraEnvVarsSecret Name of existing Secret containing extra env vars for master-eligible nodes
   ##
   extraEnvVarsSecret: ""
-  ## @param master.extraVolumes Optionally specify extra list of additional volumes for the master-elegible pod(s)
+  ## @param master.extraVolumes Optionally specify extra list of additional volumes for the master-eligible pod(s)
   ##
   extraVolumes: []
-  ## @param master.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the master-elegible container(s)
+  ## @param master.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the master-eligible container(s)
   ##
   extraVolumeMounts: []
-  ## @param master.sidecars Add additional sidecar containers to the master-elegible pod(s)
+  ## @param master.sidecars Add additional sidecar containers to the master-eligible pod(s)
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -723,7 +723,7 @@ master:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param master.initContainers Add additional init containers to the master-elegible pod(s)
+  ## @param master.initContainers Add additional init containers to the master-eligible pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -910,7 +910,7 @@ data:
   ## @param data.annotations [object] Annotations for the data statefulset
   ##
   annotations: {}
-  ## @param data.updateStrategy.type Data-only nodes statefulset stategy type
+  ## @param data.updateStrategy.type Data-only nodes statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -1311,7 +1311,7 @@ coordinating:
   ## @param coordinating.annotations [object] Annotations for the coordinating-only statefulset
   ##
   annotations: {}
-  ## @param coordinating.updateStrategy.type Coordinating-only nodes statefulset stategy type
+  ## @param coordinating.updateStrategy.type Coordinating-only nodes statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -1675,7 +1675,7 @@ ingest:
   ## @param ingest.annotations [object] Annotations for the ingest statefulset
   ##
   annotations: {}
-  ## @param ingest.updateStrategy.type Ingest-only nodes statefulset stategy type
+  ## @param ingest.updateStrategy.type Ingest-only nodes statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -2273,7 +2273,7 @@ sysctlImage:
     ##    memory: 128Mi
     requests: {}
 
-## @section OpenSearch Dashborads Parameters
+## @section OpenSearch Dashboards Parameters
 
 dashboards:
   ## @param dashboards.enabled Enables OpenSearch Dashboards deployment
@@ -2495,7 +2495,7 @@ dashboards:
   ## @param dashboards.servicenameOverride String to fully override opensearch.dashboards.servicename
   ##
   servicenameOverride: ""
-  ## @param dashboards.updateStrategy.type Data-only nodes statefulset stategy type
+  ## @param dashboards.updateStrategy.type Data-only nodes statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
