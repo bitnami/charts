@@ -15,7 +15,7 @@ Return the proper Apache image name
 Return the proper Apache Docker Image Registry Secret Names
 */}}
 {{- define "apache.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.metrics.image) "context" $) -}}
 {{- end -}}
 
 {{/*

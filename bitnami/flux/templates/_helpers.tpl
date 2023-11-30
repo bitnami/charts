@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "flux.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.helmController.image .Values.imageAutomationController.image .Values.imageReflectorController.image .Values.kustomizeController.image .Values.notificationController.image .Values.sourceController.image .Values.volumePermissions.image ) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.helmController.image .Values.imageAutomationController.image .Values.imageReflectorController.image .Values.kustomizeController.image .Values.notificationController.image .Values.sourceController.image .Values.volumePermissions.image ) "context" $) -}}
 {{- end -}}
 
 {{/*

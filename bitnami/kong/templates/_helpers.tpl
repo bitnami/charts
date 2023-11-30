@@ -33,9 +33,9 @@ Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "kong.imagePullSecrets" -}}
 {{- if .Values.migration.image -}}
-    {{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.ingressController.image .Values.migration.image) "global" .Values.global) -}}
+    {{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.ingressController.image .Values.migration.image) "context" $) -}}
 {{- else -}}
-    {{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.ingressController.image) "global" .Values.global) -}}
+    {{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.ingressController.image) "context" $) -}}
 {{- end -}}
 {{- end -}}
 

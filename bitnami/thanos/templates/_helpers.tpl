@@ -39,7 +39,7 @@ Return the proper init container volume-permissions image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "thanos.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) -}}
 {{- end -}}
 
 {{/*

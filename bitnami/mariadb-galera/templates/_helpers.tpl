@@ -23,7 +23,7 @@ Return the proper Prometheus metrics image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "mariadb-galera.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.metrics.image) "context" $) -}}
 {{- end -}}
 
 {{/*

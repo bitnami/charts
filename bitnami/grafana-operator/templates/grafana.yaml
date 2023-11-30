@@ -72,7 +72,7 @@ spec:
           labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 12 }}
             app.kubernetes.io/component: grafana
         spec:
-          {{- include "common.images.pullSecrets" (dict "images" (list .Values.grafana.image) "global" .Values.global) | nindent 10 }}
+          {{- include "common.images.renderPullSecrets" (dict "images" (list .Values.grafana.image) "context" $) | nindent 10 }}
           {{- if .Values.grafana.affinity }}
           affinity: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.affinity "context" $) | nindent 12 }}
           {{- else }}

@@ -24,7 +24,7 @@ Return the proper Odoo image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "odoo.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image) "context" $) }}
 {{- end -}}
 
 {{/*

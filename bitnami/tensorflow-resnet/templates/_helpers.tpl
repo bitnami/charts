@@ -23,7 +23,7 @@ Return the proper tensorflow-resnet client image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "tensorflow-resnet.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.server.image .Values.client.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.server.image .Values.client.image) "context" $) -}}
 {{- end -}}
 
 {{/* Check if there are rolling tags in the images */}}

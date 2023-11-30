@@ -31,7 +31,7 @@ Return the proper Redmine image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "redmine.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.certificates.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.certificates.image) "context" $) -}}
 {{- end -}}
 
 {{/*

@@ -16,7 +16,7 @@ Return the proper Spark image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "spark.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image) "context" $) -}}
 {{- end -}}
 
 {{/*

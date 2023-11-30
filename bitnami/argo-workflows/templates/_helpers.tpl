@@ -105,7 +105,7 @@ Create the name of the workflows service account to use
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "argo-workflows.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.server.image .Values.controller.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.server.image .Values.controller.image) "context" $) -}}
 {{- end -}}
 
 {{/*

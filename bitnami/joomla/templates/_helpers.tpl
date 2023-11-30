@@ -29,7 +29,7 @@ Return the proper image name (for the metrics image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "joomla.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.metrics.image) "context" $) -}}
 {{- end -}}
 
 {{/*

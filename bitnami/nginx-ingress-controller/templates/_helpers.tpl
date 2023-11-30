@@ -40,7 +40,7 @@ Return the proper defaultBackend image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "nginx-ingress-controller.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.defaultBackend.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.defaultBackend.image) "context" $) -}}
 {{- end -}}
 
 {{/*

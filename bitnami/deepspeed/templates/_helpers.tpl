@@ -122,7 +122,7 @@ Get the ssh key secret.
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "deepspeed.v0.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.gitImage .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.gitImage .Values.volumePermissions.image) "context" $) -}}
 {{- end -}}
 
 {{/*

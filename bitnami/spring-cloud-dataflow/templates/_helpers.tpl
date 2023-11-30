@@ -75,7 +75,7 @@ Return the proper Prometheus Rsocket Proxy image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "scdf.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.server.image .Values.skipper.image .Values.waitForBackends.image .Values.metrics.image) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.server.image .Values.skipper.image .Values.waitForBackends.image .Values.metrics.image) "context" $) }}
 {{- end -}}
 
 {{/*

@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "apisix.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.dashboard.image .Values.ingressController.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.dashboard.image .Values.ingressController.image) "context" $) -}}
 {{- end -}}
 
 {{/*

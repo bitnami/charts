@@ -134,7 +134,7 @@ Return the proper image name (for the init container volume-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "grafana-mimir.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.mimir.image .Values.gateway.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.mimir.image .Values.gateway.image .Values.volumePermissions.image) "context" $) -}}
 {{- end -}}
 
 {{/*

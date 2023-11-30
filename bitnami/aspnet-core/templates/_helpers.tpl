@@ -38,7 +38,7 @@ Return the proper .NET SDK image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "aspnet-core.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.appFromExternalRepo.clone.image .Values.appFromExternalRepo.publish.image) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.appFromExternalRepo.clone.image .Values.appFromExternalRepo.publish.image) "context" $) }}
 {{- end -}}
 
 {{/*

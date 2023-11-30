@@ -97,7 +97,7 @@ Return the proper RabbitMQ image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "rmqco.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.clusterOperator.image .Values.rabbitmqImage) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.clusterOperator.image .Values.rabbitmqImage) "context" $) -}}
 {{- end -}}
 
 {{/*

@@ -374,7 +374,7 @@ Name of the Attu service account to use
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "milvus.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.milvus.image .Values.waitContainer.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.milvus.image .Values.waitContainer.image) "context" $) -}}
 {{- end -}}
 
 {{/*

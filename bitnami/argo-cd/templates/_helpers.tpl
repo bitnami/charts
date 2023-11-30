@@ -35,7 +35,7 @@ Return the proper Redis image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "argocd.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.dex.image .Values.volumePermissions.image .Values.redis.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.dex.image .Values.volumePermissions.image .Values.redis.image) "context" $) -}}
 {{- end -}}
 
 {{/*

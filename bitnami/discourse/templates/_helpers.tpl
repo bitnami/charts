@@ -32,7 +32,7 @@ Return the proper Discourse image name
 Return the proper Docker image registry secret names
 */}}
 {{- define "discourse.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image) "context" $) }}
 {{- end -}}
 
 {{/*

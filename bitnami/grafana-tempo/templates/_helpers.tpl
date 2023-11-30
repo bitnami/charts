@@ -91,7 +91,7 @@ Return the proper Grafana Tempo image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "grafana-tempo.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.tempo.image .Values.vulture.image .Values.queryFrontend.query.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.tempo.image .Values.vulture.image .Values.queryFrontend.query.image .Values.volumePermissions.image) "context" $) -}}
 {{- end -}}
 
 {{/*

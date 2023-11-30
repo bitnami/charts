@@ -42,7 +42,7 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: contour
     spec:
-      {{- include "common.images.pullSecrets" ( dict "images" (list .Values.contour.image) "global" .Values.global) | nindent 6 }}
+      {{- include "common.images.renderPullSecrets" ( dict "images" (list .Values.contour.image) "context" $) | nindent 6 }}
       {{- if .Values.contour.priorityClassName }}
       priorityClassName: {{ .Values.contour.priorityClassName | quote }}
       {{- end }}

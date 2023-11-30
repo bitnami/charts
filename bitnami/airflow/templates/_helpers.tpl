@@ -110,7 +110,7 @@ Return the proper load Airflow DAGs image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "airflow.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.web.image .Values.scheduler.image .Values.worker.image .Values.git .Values.metrics.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.web.image .Values.scheduler.image .Values.worker.image .Values.git .Values.metrics.image) "context" $) -}}
 {{- end -}}
 
 {{/*
