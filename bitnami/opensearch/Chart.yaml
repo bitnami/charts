@@ -8,11 +8,11 @@ annotations:
     - name: opensearch-dashboards
       image: docker.io/bitnami/opensearch-dashboards:2.11.0-debian-11-r1
     - name: opensearch
-      image: docker.io/bitnami/opensearch:2.11.0-debian-11-r1
+      image: docker.io/bitnami/opensearch:2.11.1-debian-11-r0
     - name: os-shell
       image: docker.io/bitnami/os-shell:11-debian-11-r91
 apiVersion: v2
-appVersion: 2.11.0
+appVersion: 2.11.1
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -30,4 +30,4 @@ maintainers:
 name: opensearch
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/opensearch
-version: 0.5.0
+version: 0.5.1
