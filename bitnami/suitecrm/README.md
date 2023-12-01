@@ -10,7 +10,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 
 ## This Helm chart is deprecated
 
-The upstream project has been discontinued and no new features.
+The latest branch of SuiteCRM 8 has a bug that makes it incompatible with the chart deployment.
 
 ## TL;DR
 
