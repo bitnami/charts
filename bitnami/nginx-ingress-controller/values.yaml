@@ -415,6 +415,8 @@ nodeSelector: {}
 ##
 tolerations: []
 ## @param extraVolumes Optionally specify extra list of additional volumes for Controller pods
+## @param extraVolumes.ame The name of the volume
+## @param extraVolumes.emptyDir An emptyDir volume source
 ##
 extraVolumes:
   # Workaround for upstream issue reported at https://github.com/kubernetes/ingress-nginx/issues/10601
@@ -422,6 +424,9 @@ extraVolumes:
   - name: 
     emptyDir: {}
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Controller container(s)
+## @param.extraVolumeMounts.name The name of the extra volume mount
+## @param.extraVolumeMounts.mountPath The mount path for the extra volume mount
+## @param.extraVolumeMounts.readOnly Specify whether the extra volume mount should be read-only
 ##
 extraVolumeMounts:
   # Workaround for upstream issue reported at https://github.com/kubernetes/ingress-nginx/issues/10601
