@@ -234,7 +234,7 @@ spec:
         {{- end }}
         # Workaround for upstream issue reported at https://github.com/kubernetes/ingress-nginx/issues/10601
         # To be removed once the controller releases a fixed version
-        - name: 
+        - name: geoip
           emptyDir: {}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
