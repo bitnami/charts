@@ -384,6 +384,7 @@ configuration: ""
 replicaSetConfigurationSettings:
   enabled: false
   configuration: {}
+##    members[0].priority: 3
 ##    chainingAllowed : false
 ##    heartbeatTimeoutSecs : 10
 ##    heartbeatIntervalMillis : 2000
