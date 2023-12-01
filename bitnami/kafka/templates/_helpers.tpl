@@ -452,14 +452,16 @@ Return the SASL mechanism to use for the Kafka exporter to access Kafka
 The exporter uses a different nomenclature so we need to do this hack
 */}}
 {{- define "kafka.metrics.kafka.saslMechanism" -}}
-{{- $saslMechanisms := .Values.sasl.enabledMechanisms }}
-{{- if contains "OAUTHBEARER" (upper $saslMechanisms) }}
+{{- $saslMechanisms := upper .Values.sasl.enabledMechanisms }}
+{{- if .Values.metrics.kafka.saslMechanism -}}
+  {{- print .Values.metrics.kafka.saslMechanism -}}
+{{- else if contains "OAUTHBEARER" $saslMechanisms }}
     {{- print "oauthbearer" -}}
-{{- else if contains "SCRAM-SHA-512" (upper $saslMechanisms) }}
+{{- else if contains "SCRAM-SHA-512" $saslMechanisms }}
     {{- print "scram-sha512" -}}
-{{- else if contains "SCRAM-SHA-256" (upper $saslMechanisms) }}
+{{- else if contains "SCRAM-SHA-256" $saslMechanisms }}
     {{- print "scram-sha256" -}}
-{{- else if contains "PLAIN" (upper $saslMechanisms) }}
+{{- else if contains "PLAIN" $saslMechanisms }}
     {{- print "plain" -}}
 {{- end -}}
 {{- end -}}
@@ -646,7 +648,7 @@ listener.name.{{lower $listener.name}}.oauthbearer.sasl.login.callback.handler.c
   {{- $saslJaasConfig = append $saslJaasConfig (print "password=\"interbroker-password-placeholder\"") }}
   {{- end }}
   {{- end }}
-  {{- if eq (upper $mechanism) "PLAIN" }}
+  {{- if or (eq "PLAIN" (upper $mechanism)) (regexFind "SCRAM" (upper $mechanism)) }}
   {{- if eq $listener.name $.Values.listeners.interbroker.name }}
   {{- $saslJaasConfig = append $saslJaasConfig (printf "user_%s=\"interbroker-password-placeholder\"" $.Values.sasl.interbroker.user) }}
   {{- end }}
