@@ -57,7 +57,7 @@ extraDeploy: []
 ## @param replicaCount Desired number of pod replicas
 replicaCount: 1
 ##
-## @param revisionHistoryLimit Desired number of old ReplicaSets to retain 
+## @param revisionHistoryLimit Desired number of old ReplicaSets to retain
 ## Defaults to 10, if set to 0 old ReplicaSets will be garbage-collected
 revisionHistoryLimit: 10
 ##
@@ -216,6 +216,50 @@ resources:
   ##    memory: 25Mi
   requests: {}
 
+## Configure extra options for Kubernetes event exporter container's liveness, readiness and startup probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe on Kubernetes event exporter container
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 2
+  failureThreshold: 5
+  successThreshold: 1
+## @param readinessProbe.enabled Enable readinessProbe on Kubernetes event exporter container
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 2
+  failureThreshold: 1
+  successThreshold: 1
+## @param startupProbe.enabled Enable startupProbe on Kubernetes event exporter container
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 40
+  periodSeconds: 10
+  timeoutSeconds: 15
+  failureThreshold: 15
+  successThreshold: 1
 ## Configure extra custom startup, liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param customStartupProbe Configure startup probe for Kubernetes event exporter pod
