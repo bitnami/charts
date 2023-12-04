@@ -8,6 +8,10 @@ SuiteCRM is a completely open source, enterprise-grade Customer Relationship Man
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+## This Helm chart is deprecated
+
+The latest branch of SuiteCRM 8 has a bug that makes it incompatible with the chart deployment.
+
 ## TL;DR
 
 ```console
