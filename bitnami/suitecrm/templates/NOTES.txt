@@ -1,4 +1,4 @@
-This Helm chart is deprecated
+This Helm chart is deprecated on our side and will not receive new updates.
 
 CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
