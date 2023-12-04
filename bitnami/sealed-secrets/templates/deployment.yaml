@@ -89,7 +89,7 @@ spec:
           {{- else }}
           args:
             - "--key-prefix"
-            - {{ printf "%s" (include "sealed-secrets.secretName" .) }}
+            - {{ printf "%s" (include "sealed-secrets.secretName" .) | quote }}
             {{- if .Values.updateStatus }}
             - "--update-status"
             {{- end }}
