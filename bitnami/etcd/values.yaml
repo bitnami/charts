@@ -881,9 +881,9 @@ disasterRecovery:
     ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
-    ## @param disasterRecovery.cronjob.podLabels List of labels that will be added to pods created by cronjob
+    ## @param disasterRecovery.cronjob.podLabels [object] Labels that will be added to pods created by cronjob
     ##
-    podLabels: []
+    podLabels: {}
 
   pvc:
     ## @param disasterRecovery.pvc.existingClaim A manually managed Persistent Volume and Claim

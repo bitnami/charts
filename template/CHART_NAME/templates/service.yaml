@@ -11,7 +11,7 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: %%COMPONENT_NAME%%
   {{- if or .Values.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" (dict "values" .Values.service.annotations .Values.commonAnnotations "context" .) | fromYaml }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.service.annotations .Values.commonAnnotations) "context" .) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
@@ -37,6 +37,9 @@ spec:
   ports:
     - name: %%PORT_NAME%%
       port: {{ .Values.service.ports.http }}
+      {{- if not (eq .Values.service.ports.http .Values.%%MAIN_OBJECT_BLOCK%%.containerPorts.http) }}
+      targetPort: {{ .Values.%%MAIN_OBJECT_BLOCK%%.containerPorts.http }}
+      {{- end }}
       protocol: bar
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http)) }}
       nodePort: {{ .Values.service.nodePorts.http }}

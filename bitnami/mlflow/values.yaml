@@ -1349,6 +1349,7 @@ minio:
 ## @param externalS3.existingSecretKeySecretKey Name of an existing secret key containing the S3 access key secret
 ## @param externalS3.protocol External S3 protocol
 ## @param externalS3.bucket External S3 bucket
+## @param externalS3.serveArtifacts Whether artifact serving is enabled
 ##
 externalS3:
   host: ""
@@ -1360,3 +1361,4 @@ externalS3:
   existingSecretKeySecretKey: "root-password"
   protocol: "https"
   bucket: "mlflow"
+  serveArtifacts: true
