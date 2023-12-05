@@ -1,22 +1,25 @@
+{{- if .Values.sourceController.installCRDs }}
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.12.0
-  name: buckets.source.toolkit.fluxcd.io
+  name: helmrepositories.source.toolkit.fluxcd.io
 spec:
   group: source.toolkit.fluxcd.io
   names:
-    kind: Bucket
-    listKind: BucketList
-    plural: buckets
-    singular: bucket
+    kind: HelmRepository
+    listKind: HelmRepositoryList
+    plural: helmrepositories
+    shortNames:
+    - helmrepo
+    singular: helmrepository
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .spec.endpoint
-      name: Endpoint
+    - jsonPath: .spec.url
+      name: URL
       type: string
     - jsonPath: .status.conditions[?(@.type=="Ready")].status
       name: Ready
@@ -30,7 +33,7 @@ spec:
     name: v1beta1
     schema:
       openAPIV3Schema:
-        description: Bucket is the Schema for the buckets API
+        description: HelmRepository is the Schema for the helmrepositories API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -45,8 +48,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: BucketSpec defines the desired state of an S3 compatible
-              bucket
+            description: HelmRepositorySpec defines the reference to a Helm repository.
             properties:
               accessFrom:
                 description: AccessFrom defines an Access Control List for allowing
@@ -75,38 +77,22 @@ spec:
                 required:
                 - namespaceSelectors
                 type: object
-              bucketName:
-                description: The bucket name.
-                type: string
-              endpoint:
-                description: The bucket endpoint address.
-                type: string
-              ignore:
-                description: Ignore overrides the set of excluded patterns in the
-                  .sourceignore format (which is the same as .gitignore). If not provided,
-                  a default will be used, consult the documentation for your version
-                  to find out what those are.
-                type: string
-              insecure:
-                description: Insecure allows connecting to a non-TLS S3 HTTP endpoint.
-                type: boolean
               interval:
-                description: The interval at which to check for bucket updates.
+                description: The interval at which to check the upstream for updates.
                 type: string
-              provider:
-                default: generic
-                description: The S3 compatible storage provider name, default ('generic').
-                enum:
-                - generic
-                - aws
-                - gcp
-                type: string
-              region:
-                description: The bucket region.
-                type: string
+              passCredentials:
+                description: PassCredentials allows the credentials from the SecretRef
+                  to be passed on to a host that does not match the host as defined
+                  in URL. This may be required if the host of the advertised chart
+                  URLs in the index differ from the defined URL. Enabling this should
+                  be done with caution, as it can potentially result in credentials
+                  getting stolen in a MITM-attack.
+                type: boolean
               secretRef:
                 description: The name of the secret containing authentication credentials
-                  for the Bucket.
+                  for the Helm repository. For HTTP/S basic auth the secret must contain
+                  username and password fields. For TLS the secret must contain a
+                  certFile and keyFile, and/or caFile fields.
                 properties:
                   name:
                     description: Name of the referent.
@@ -120,21 +106,24 @@ spec:
                 type: boolean
               timeout:
                 default: 60s
-                description: The timeout for download operations, defaults to 60s.
+                description: The timeout of index downloading, defaults to 60s.
+                type: string
+              url:
+                description: The Helm repository URL, a valid URL contains at least
+                  a protocol and host.
                 type: string
             required:
-            - bucketName
-            - endpoint
             - interval
+            - url
             type: object
           status:
             default:
               observedGeneration: -1
-            description: BucketStatus defines the observed state of a bucket
+            description: HelmRepositoryStatus defines the observed state of the HelmRepository.
             properties:
               artifact:
                 description: Artifact represents the output of the last successful
-                  Bucket sync.
+                  repository sync.
                 properties:
                   checksum:
                     description: Checksum is the SHA256 checksum of the artifact.
@@ -160,7 +149,7 @@ spec:
                 - url
                 type: object
               conditions:
-                description: Conditions holds the conditions for the Bucket.
+                description: Conditions holds the conditions for the HelmRepository.
                 items:
                   description: "Condition contains details for one aspect of the current
                     state of this API Resource. --- This struct is intended for direct
@@ -238,8 +227,7 @@ spec:
                 format: int64
                 type: integer
               url:
-                description: URL is the download link for the artifact output of the
-                  last Bucket sync.
+                description: URL is the download link for the last index fetched.
                 type: string
             type: object
         type: object
@@ -248,8 +236,8 @@ spec:
     subresources:
       status: {}
   - additionalPrinterColumns:
-    - jsonPath: .spec.endpoint
-      name: Endpoint
+    - jsonPath: .spec.url
+      name: URL
       type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
@@ -263,7 +251,7 @@ spec:
     name: v1beta2
     schema:
       openAPIV3Schema:
-        description: Bucket is the Schema for the buckets API.
+        description: HelmRepository is the Schema for the helmrepositories API.
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -278,8 +266,8 @@ spec:
           metadata:
             type: object
           spec:
-            description: BucketSpec specifies the required configuration to produce
-              an Artifact for an object storage bucket.
+            description: HelmRepositorySpec specifies the required configuration to
+              produce an Artifact for a Helm repository index YAML.
             properties:
               accessFrom:
                 description: 'AccessFrom specifies an Access Control List for allowing
@@ -309,45 +297,55 @@ spec:
                 required:
                 - namespaceSelectors
                 type: object
-              bucketName:
-                description: BucketName is the name of the object storage bucket.
-                type: string
-              endpoint:
-                description: Endpoint is the object storage address the BucketName
-                  is located at.
-                type: string
-              ignore:
-                description: Ignore overrides the set of excluded patterns in the
-                  .sourceignore format (which is the same as .gitignore). If not provided,
-                  a default will be used, consult the documentation for your version
-                  to find out what those are.
-                type: string
-              insecure:
-                description: Insecure allows connecting to a non-TLS HTTP Endpoint.
-                type: boolean
+              certSecretRef:
+                description: "CertSecretRef can be given the name of a Secret containing
+                  either or both of \n - a PEM-encoded client certificate (`tls.crt`)
+                  and private key (`tls.key`); - a PEM-encoded CA certificate (`ca.crt`)
+                  \n and whichever are supplied, will be used for connecting to the
+                  registry. The client cert and key are useful if you are authenticating
+                  with a certificate; the CA cert is useful if you are using a self-signed
+                  server certificate. The Secret must be of type `Opaque` or `kubernetes.io/tls`.
+                  \n It takes precedence over the values specified in the Secret referred
+                  to by `.spec.secretRef`."
+                properties:
+                  name:
+                    description: Name of the referent.
+                    type: string
+                required:
+                - name
+                type: object
               interval:
-                description: Interval at which the Bucket Endpoint is checked for
+                description: Interval at which the HelmRepository URL is checked for
                   updates. This interval is approximate and may be subject to jitter
                   to ensure efficient use of resources.
                 pattern: ^([0-9]+(\.[0-9]+)?(ms|s|m|h))+$
                 type: string
+              passCredentials:
+                description: PassCredentials allows the credentials from the SecretRef
+                  to be passed on to a host that does not match the host as defined
+                  in URL. This may be required if the host of the advertised chart
+                  URLs in the index differ from the defined URL. Enabling this should
+                  be done with caution, as it can potentially result in credentials
+                  getting stolen in a MITM-attack.
+                type: boolean
               provider:
                 default: generic
-                description: Provider of the object storage bucket. Defaults to 'generic',
-                  which expects an S3 (API) compatible object storage.
+                description: Provider used for authentication, can be 'aws', 'azure',
+                  'gcp' or 'generic'. This field is optional, and only taken into
+                  account if the .spec.type field is set to 'oci'. When not specified,
+                  defaults to 'generic'.
                 enum:
                 - generic
                 - aws
-                - gcp
                 - azure
-                type: string
-              region:
-                description: Region of the Endpoint where the BucketName is located
-                  in.
+                - gcp
                 type: string
               secretRef:
                 description: SecretRef specifies the Secret containing authentication
-                  credentials for the Bucket.
+                  credentials for the HelmRepository. For HTTP/S basic auth the secret
+                  must contain 'username' and 'password' fields. Support for TLS auth
+                  using the 'certFile' and 'keyFile', and/or 'caFile' keys is deprecated.
+                  Please use `.spec.certSecretRef` instead.
                 properties:
                   name:
                     description: Name of the referent.
@@ -357,25 +355,38 @@ spec:
                 type: object
               suspend:
                 description: Suspend tells the controller to suspend the reconciliation
-                  of this Bucket.
+                  of this HelmRepository.
                 type: boolean
               timeout:
                 default: 60s
-                description: Timeout for fetch operations, defaults to 60s.
+                description: Timeout is used for the index fetch operation for an
+                  HTTPS helm repository, and for remote OCI Repository operations
+                  like pulling for an OCI helm repository. Its default value is 60s.
                 pattern: ^([0-9]+(\.[0-9]+)?(ms|s|m))+$
                 type: string
+              type:
+                description: Type of the HelmRepository. When this field is set to  "oci",
+                  the URL field value must be prefixed with "oci://".
+                enum:
+                - default
+                - oci
+                type: string
+              url:
+                description: URL of the Helm repository, a valid URL contains at least
+                  a protocol and host.
+                type: string
             required:
-            - bucketName
-            - endpoint
             - interval
+            - url
             type: object
           status:
             default:
               observedGeneration: -1
-            description: BucketStatus records the observed state of a Bucket.
+            description: HelmRepositoryStatus records the observed state of the HelmRepository.
             properties:
               artifact:
-                description: Artifact represents the last successful Bucket reconciliation.
+                description: Artifact represents the last successful HelmRepository
+                  reconciliation.
                 properties:
                   digest:
                     description: Digest is the digest of the file in the form of '<algorithm>:<checksum>'.
@@ -418,7 +429,7 @@ spec:
                 - url
                 type: object
               conditions:
-                description: Conditions holds the conditions for the Bucket.
+                description: Conditions holds the conditions for the HelmRepository.
                 items:
                   description: "Condition contains details for one aspect of the current
                     state of this API Resource. --- This struct is intended for direct
@@ -493,16 +504,12 @@ spec:
                 type: string
               observedGeneration:
                 description: ObservedGeneration is the last observed generation of
-                  the Bucket object.
+                  the HelmRepository object.
                 format: int64
                 type: integer
-              observedIgnore:
-                description: ObservedIgnore is the observed exclusion patterns used
-                  for constructing the source artifact.
-                type: string
               url:
                 description: URL is the dynamic fetch link for the latest Artifact.
-                  It is provided on a "best effort" basis, and using the precise BucketStatus.Artifact
+                  It is provided on a "best effort" basis, and using the precise HelmRepositoryStatus.Artifact
                   data is recommended.
                 type: string
             type: object
@@ -511,3 +518,4 @@ spec:
     storage: true
     subresources:
       status: {}
+{{- end -}}
