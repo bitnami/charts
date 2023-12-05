@@ -1046,12 +1046,14 @@ backup:
       ## @param backup.uploadProviders.aws.region Region of aws s3 bucket
       ## @param backup.uploadProviders.aws.existingSecret Name of existing secret object
       ## @param backup.uploadProviders.aws.bucketName aws s3 bucket name
+      ## @param backup.uploadProviders.aws.endpoint aws s3 endpoint, no value default public endpoint aws s3 endpoint
       enabled: false
       accessKeyID: ""
       secretAccessKey: ""
       region: "us-east-1"
       existingSecret: ""
       bucketName: "s3://bucket/influxdb"
+      endpoint: ""
       ## Bitnami AWS CLI image
       ## ref: https://hub.docker.com/r/bitnami/aws-cli/tags
       ## @param backup.uploadProviders.aws.image.registry [default: REGISTRY_NAME] AWS CLI image registry
