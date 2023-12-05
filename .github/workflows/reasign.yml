@@ -1,17 +1,14 @@
 # Copyright VMware, Inc.
 # SPDX-License-Identifier: APACHE-2.0
 
-# This workflow is built to manage the triage support by using GH issues.
-name: '[Support] Organize triage'
+name: '[Support] Review based card movements'
 on:
-  issues:
-    types:
-      - reopened
-      - opened
   pull_request_target:
     types:
-      - reopened
-      - opened
+      - labeled
+  issues:
+    types:
+      - labeled
 permissions:
   contents: read
   pull-requests: write
@@ -20,6 +17,6 @@ permissions:
 concurrency:
   group: card-movement-${{ github.event.issue != null && github.event.issue.number || github.event.number }}
 jobs:
-  call-triage-workflow:
-    uses: bitnami/support/.github/workflows/item-opened.yml@main
+  call-reasign-workflow:
+    uses: bitnami/support/.github/workflows/item-labeled.yml@main
     secrets: inherit
