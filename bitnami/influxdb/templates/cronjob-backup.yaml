@@ -197,6 +197,15 @@ spec:
                       name: {{ include "common.names.fullname" . }}-backup-aws
                       {{- end }}
                       key: region
+                - name: AWS_ENDPOINT_URL_S3
+                  valueFrom:
+                    secretKeyRef:
+                      {{- if .Values.backup.uploadProviders.aws.existingSecret }}
+                      name: {{ .Values.backup.uploadProviders.aws.existingSecret | quote }}
+                      {{- else }}
+                      name: {{ include "common.names.fullname" . }}-backup-aws
+                      {{- end }}
+                      key: endpoint
               volumeMounts:
                 - name: {{ include "common.names.fullname" . }}-backups
                   mountPath: {{ .Values.backup.directory | quote }}
