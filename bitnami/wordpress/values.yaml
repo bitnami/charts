@@ -1217,14 +1217,14 @@ cronJobs:
     args: []
     ## @param
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param cronjobs.taskScheduler.containerSecurityContext.enabled Enabled containers' Security Context
-    ## @param cronjobs.taskScheduler.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-    ## @param cronjobs.taskScheduler.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
-    ## @param cronjobs.taskScheduler.containerSecurityContext.privileged Set container's Security Context privileged
-    ## @param cronjobs.taskScheduler.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
-    ## @param cronjobs.taskScheduler.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
-    ## @param cronjobs.taskScheduler.containerSecurityContext.capabilities.drop List of capabilities to be dropped
-    ## @param cronjobs.taskScheduler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+    ## @param cronJobs.wpScheduler.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param cronJobs.wpScheduler.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param cronJobs.wpScheduler.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param cronJobs.wpScheduler.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param cronJobs.wpScheduler.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param cronJobs.wpScheduler.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param cronJobs.wpScheduler.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param cronJobs.wpScheduler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
@@ -1237,11 +1237,11 @@ cronJobs:
         drop: [ "ALL" ]
       seccompProfile:
         type: "RuntimeDefault"
-    ## @param cronjobs.taskScheduler.podAnnotations Additional pod annotations
+    ## @param cronJobs.wpScheduler.podAnnotations Additional pod annotations
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     podAnnotations: { }
-    ## @param cronjobs.taskScheduler.podLabels Additional pod labels
+    ## @param cronJobs.wpScheduler.podLabels Additional pod labels
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
     ##
     podLabels: { }
