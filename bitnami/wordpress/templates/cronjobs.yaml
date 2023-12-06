@@ -143,6 +143,10 @@ spec:
                 - name: SMTP_PROTOCOL
                   value: {{ .Values.smtpProtocol | quote }}
                 {{- end }}
+                - name: WP_CLI
+                  value: "true"
+                - name: HTTP_HOST
+                  value: "127.0.0.1"
                 {{- if .Values.extraEnvVars }}
                 {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
                 {{- end }}
