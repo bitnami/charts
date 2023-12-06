@@ -100,7 +100,7 @@ spec:
         {{- end }}
         {{- end }}
         {{- if .Values.run.initContainers }}
-        {{- include "common.tplvalues.render" (dict "values" .Values.run.initContainers "context" $) | nindent 8}}
+        {{- include "common.tplvalues.render" (dict "value" .Values.run.initContainers "context" $) | nindent 8}}
         {{- end }}
       containers:
         - name: mlflow
