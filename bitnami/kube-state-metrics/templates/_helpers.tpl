@@ -27,7 +27,7 @@ Return the proper kube-state-metrics image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "kube-state-metrics.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image) "context" $) -}}
 {{- end -}}
 
 {{/*
