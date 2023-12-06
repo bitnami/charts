@@ -1224,29 +1224,29 @@ externalCache:
 ## Configure cron jobs used to perform periodic tasks
 ##
 cronJobs:
-  wpScheduler:
-    ## @param cronJobs.wpScheduler.enabled Whether to enable the WordPress scheduler cron job
+  scheduler:
+    ## @param cronJobs.scheduler.enabled Whether to enable the WordPress scheduler cron job
     ##
     enabled: true
-    ## @param cronJobs.wpScheduler.schedule Schedule for the WordPress scheduler cron job
+    ## @param cronJobs.scheduler.schedule Schedule for the WordPress scheduler cron job
     ##
     schedule: "*/2 * * * *"
-    ## @param cronJobs.wpScheduler.command Override default container command (useful when using custom images)
+    ## @param cronJobs.scheduler.command Override default container command (useful when using custom images)
     ##
     command: []
-    ## @param cronJobs.wpScheduler.args Override default container args (useful when using custom images)
+    ## @param cronJobs.scheduler.args Override default container args (useful when using custom images)
     ##
     args: []
     ## @param
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param cronJobs.wpScheduler.containerSecurityContext.enabled Enabled containers' Security Context
-    ## @param cronJobs.wpScheduler.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-    ## @param cronJobs.wpScheduler.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
-    ## @param cronJobs.wpScheduler.containerSecurityContext.privileged Set container's Security Context privileged
-    ## @param cronJobs.wpScheduler.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
-    ## @param cronJobs.wpScheduler.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
-    ## @param cronJobs.wpScheduler.containerSecurityContext.capabilities.drop List of capabilities to be dropped
-    ## @param cronJobs.wpScheduler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+    ## @param cronJobs.scheduler.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param cronJobs.scheduler.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param cronJobs.scheduler.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param cronJobs.scheduler.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param cronJobs.scheduler.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param cronJobs.scheduler.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param cronJobs.scheduler.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param cronJobs.scheduler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
@@ -1259,39 +1259,39 @@ cronJobs:
         drop: ["ALL"]
       seccompProfile:
         type: "RuntimeDefault"
-    ## @param cronJobs.wpScheduler.podAnnotations Additional pod annotations
+    ## @param cronJobs.scheduler.podAnnotations Additional pod annotations
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     podAnnotations: {}
-    ## @param cronJobs.wpScheduler.podLabels Additional pod labels
+    ## @param cronJobs.scheduler.podLabels Additional pod labels
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
     ##
     podLabels: {}
-    ## @param cronJobs.wpScheduler.failedJobsHistoryLimit The number of failed jobs to keep
+    ## @param cronJobs.scheduler.failedJobsHistoryLimit The number of failed jobs to keep
     ##
     failedJobsHistoryLimit: 5
-    ## @param cronJobs.wpScheduler.successfulJobsHistoryLimit The number of successful jobs to keep
+    ## @param cronJobs.scheduler.successfulJobsHistoryLimit The number of successful jobs to keep
     ##
     successfulJobsHistoryLimit: 5
-    ## @param cronJobs.wpScheduler.concurrencyPolicy Specifies how to treat concurrent executions of a Job
+    ## @param cronJobs.scheduler.concurrencyPolicy Specifies how to treat concurrent executions of a Job
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#concurrency-policy
     ##
     concurrencyPolicy: Forbid
-    ## @param cronJobs.wpScheduler.backoffLimit Specifies the number of retries before marking this Job failed
+    ## @param cronJobs.scheduler.backoffLimit Specifies the number of retries before marking this Job failed
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#pod-backoff-failure-policy
     ##
     backoffLimit: 6
-    ## @param cronJobs.wpScheduler.initContainer Additional init container to be added to the cronjob pod
+    ## @param cronJobs.scheduler.initContainer Additional init container to be added to the cronjob pod
     ##
     initContainer:
       ## Curl image to check for readiness of main service
       ## ref: https://hub.docker.com/r/curlimages/curl/tags/
-      ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Curl image registry
-      ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Curl image repository
-      ## @skip volumePermissions.image.tag Curl image tag (immutable tags are recommended)
-      ## @param volumePermissions.image.digest Curl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-      ## @param volumePermissions.image.pullPolicy Curl image pull policy
-      ## @param volumePermissions.image.pullSecrets Curl image pull secrets
+      ## @param cronJobs.scheduler.initContainer.image.registry [default: REGISTRY_NAME] Curl image registry
+      ## @param cronJobs.scheduler.initContainer.image.repository [default: REPOSITORY_NAME/os-shell] Curl image repository
+      ## @skip cronJobs.scheduler.initContainer.image.tag Curl image tag (immutable tags are recommended)
+      ## @param cronJobs.scheduler.initContainer.image.digest Curl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+      ## @param cronJobs.scheduler.initContainer.image.pullPolicy Curl image pull policy
+      ## @param cronJobs.scheduler.initContainer.image.pullSecrets Curl image pull secrets
       ##
       image:
         registry: docker.io

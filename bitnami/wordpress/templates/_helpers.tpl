@@ -295,8 +295,8 @@ Create the WordPress service URL
 {{- end -}}
 
 {{/*
-Return the proper image name (for the cronJobs wpScheduler initContainer image)
+Return the proper image name (for the cronJobs scheduler initContainer image)
 */}}
-{{- define "wordpress.cronJobs.wpScheduler.initContainer.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.cronJobs.wpScheduler.initContainer.image "global" .Values.global) -}}
+{{- define "wordpress.cronJobs.scheduler.initContainer.image" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.cronJobs.scheduler.initContainer.image "global" .Values.global) -}}
 {{- end -}}

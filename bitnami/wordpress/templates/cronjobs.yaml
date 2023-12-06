@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.cronJobs.wpScheduler.enabled }}
+{{- if .Values.cronJobs.scheduler.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -14,24 +14,24 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
-  schedule: {{ .Values.cronJobs.wpScheduler.schedule | quote }}
-  concurrencyPolicy: {{ .Values.cronJobs.wpScheduler.concurrencyPolicy }}
-  failedJobsHistoryLimit: {{ .Values.cronJobs.wpScheduler.failedJobsHistoryLimit }}
-  successfulJobsHistoryLimit: {{ .Values.cronJobs.wpScheduler.successfulJobsHistoryLimit }}
+  schedule: {{ .Values.cronJobs.scheduler.schedule | quote }}
+  concurrencyPolicy: {{ .Values.cronJobs.scheduler.concurrencyPolicy }}
+  failedJobsHistoryLimit: {{ .Values.cronJobs.scheduler.failedJobsHistoryLimit }}
+  successfulJobsHistoryLimit: {{ .Values.cronJobs.scheduler.successfulJobsHistoryLimit }}
   jobTemplate:
     spec:
       template:
         metadata:
           labels:
-            {{- if .Values.cronJobs.wpScheduler.podLabels }}
-              {{- include "common.tplvalues.render" ( dict "value" .Values.cronJobs.wpScheduler.podLabels "context" $ ) | nindent 12 }}
+            {{- if .Values.cronJobs.scheduler.podLabels }}
+              {{- include "common.tplvalues.render" ( dict "value" .Values.cronJobs.scheduler.podLabels "context" $ ) | nindent 12 }}
             {{- end }}
         spec:
           restartPolicy: OnFailure
           initContainers:
             - name: wp-scheduler-init
-              image: "{{ include "wordpress.cronJobs.wpScheduler.initContainer.image" . }}"
-              imagePullPolicy: {{ .Values.cronJobs.wpScheduler.initContainer.image.pullPolicy | quote }}
+              image: "{{ include "wordpress.cronJobs.scheduler.initContainer.image" . }}"
+              imagePullPolicy: {{ .Values.cronJobs.scheduler.initContainer.image.pullPolicy | quote }}
               command:
                 - 'sh'
                 - '-c'
@@ -53,19 +53,19 @@ spec:
               image: {{ template "wordpress.image" . }}
               imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
               securityContext:
-                {{- if .Values.cronJobs.wpScheduler.containerSecurityContext.enabled }}
-                  {{- omit .Values.cronJobs.wpScheduler.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+                {{- if .Values.cronJobs.scheduler.containerSecurityContext.enabled }}
+                  {{- omit .Values.cronJobs.scheduler.containerSecurityContext "enabled" | toYaml | nindent 16 }}
                 {{- end }}
               command:
-                {{- if .Values.cronJobs.wpScheduler.command }}
-                  {{- include "common.tplvalues.render" (dict "value" .Values.cronJobs.wpScheduler.command "context" $) | nindent 16 }}
+                {{- if .Values.cronJobs.scheduler.command }}
+                  {{- include "common.tplvalues.render" (dict "value" .Values.cronJobs.scheduler.command "context" $) | nindent 16 }}
                 {{- else }}
                 - /bin/bash
                 - -c
                 {{- end }}
               args:
-                {{- if .Values.cronJobs.wpScheduler.args }}
-                  {{- include "common.tplvalues.render" (dict "value" .Values.cronJobs.wpScheduler.args "context" $) | nindent 16 }}
+                {{- if .Values.cronJobs.scheduler.args }}
+                  {{- include "common.tplvalues.render" (dict "value" .Values.cronJobs.scheduler.args "context" $) | nindent 16 }}
                 {{- else }}
                 - . /opt/bitnami/scripts/php-env.sh &&
                   . /opt/bitnami/scripts/wordpress-env.sh &&
