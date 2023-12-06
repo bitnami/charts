@@ -284,3 +284,19 @@ wordpress: cache
        externalCache.port=CACHE_SERVER_PORT
 {{- end -}}
 {{- end -}}
+
+{{/*
+Create the WordPress service URL
+*/}}
+{{- define "wordpress.service.url" -}}
+{{- $scheme := .Values.wordpressScheme -}}
+{{- $port := ternary .Values.service.ports.http .Values.service.ports.https ($scheme | eq "http") -}}
+{{ $scheme }}://{{ include "common.names.fullname" . }}:{{ $port }}
+{{- end -}}
+
+{{/*
+Return the proper image name (for the cronJobs wpScheduler initContainer image)
+*/}}
+{{- define "wordpress.cronJobs.wpScheduler.initContainer.image" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.cronJobs.wpScheduler.initContainer.image "global" .Values.global) -}}
+{{- end -}}

@@ -9,38 +9,64 @@ kind: CronJob
 metadata:
   name: {{ include "common.names.fullname" . }}-wp-scheduler
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- if .Values.commonAnnotations }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
+    {{- end }}
 spec:
   schedule: {{ .Values.cronJobs.wpScheduler.schedule | quote }}
   concurrencyPolicy: {{ .Values.cronJobs.wpScheduler.concurrencyPolicy }}
+  failedJobsHistoryLimit: {{ .Values.cronJobs.wpScheduler.failedJobsHistoryLimit }}
+  successfulJobsHistoryLimit: {{ .Values.cronJobs.wpScheduler.successfulJobsHistoryLimit }}
   jobTemplate:
     spec:
       template:
+        metadata:
+          labels:
+            {{- if .Values.cronJobs.wpScheduler.podLabels }}
+              {{- include "common.tplvalues.render" ( dict "value" .Values.cronJobs.wpScheduler.podLabels "context" $ ) | nindent 12 }}
+            {{- end }}
         spec:
+          restartPolicy: OnFailure
+          initContainers:
+            - name: wp-scheduler-init
+              image: "{{ include "wordpress.cronJobs.wpScheduler.initContainer.image" . }}"
+              imagePullPolicy: {{ .Values.cronJobs.wpScheduler.initContainer.image.pullPolicy | quote }}
+              command:
+                - 'sh'
+                - '-c'
+                - |
+                  URL="{{ include "wordpress.service.url" . }}"
+                  echo "Attempting to curl ${URL}/wp-login.php"
+                  while true; do
+                    STATUS_CODE=$(curl -o /dev/null -w '%{http_code}' -s ${URL}/wp-login.php)
+                    echo "Response: code $STATUS_CODE"
+                    if [ "$STATUS_CODE" = "200" ]; then
+                      break
+                    fi
+                    echo "Waiting for main service to return 200 OK response..."
+                    sleep 5
+                  done
+                  echo "Main service has started."
           containers:
             - name: wp-scheduler
               image: {{ template "wordpress.image" . }}
               imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-              {{- if .Values.cronJobs.wpScheduler.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.cronJobs.wpScheduler.containerSecurityContext "enabled" | toYaml | nindent 16 }}
-              {{- end }}
-              {{- if .Values.cronJobs.wpScheduler.command }}
-              command: {{- include "common.tplvalues.render" (dict "value" .Values.cronJobs.wpScheduler.command "context" $) | nindent 16 }}
-              {{- else }}
+              securityContext:
+                {{- if .Values.cronJobs.wpScheduler.containerSecurityContext.enabled }}
+                  {{- omit .Values.cronJobs.wpScheduler.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+                {{- end }}
               command:
+                {{- if .Values.cronJobs.wpScheduler.command }}
+                  {{- include "common.tplvalues.render" (dict "value" .Values.cronJobs.wpScheduler.command "context" $) | nindent 16 }}
+                {{- else }}
                 - /bin/bash
                 - -c
-              {{- end }}
-              {{- if .Values.cronJobs.wpScheduler.args }}
-              args: {{- include "common.tplvalues.render" (dict "value" .Values.cronJobs.wpScheduler.args "context" $) | nindent 16 }}
-              {{- else }}
+                {{- end }}
               args:
+                {{- if .Values.cronJobs.wpScheduler.args }}
+                  {{- include "common.tplvalues.render" (dict "value" .Values.cronJobs.wpScheduler.args "context" $) | nindent 16 }}
+                {{- else }}
                 - . /opt/bitnami/scripts/php-env.sh &&
                   . /opt/bitnami/scripts/wordpress-env.sh &&
                   . /opt/bitnami/scripts/libbitnami.sh &&
@@ -50,7 +76,7 @@ spec:
                   /opt/bitnami/scripts/wordpress/setup.sh &&
                   /post-init.sh &&
                   /opt/bitnami/php/bin/php /opt/bitnami/wordpress/wp-cron.php
-              {{- end }}
+                {{- end }}
               env:
                 - name: BITNAMI_DEBUG
                   value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
@@ -148,7 +174,7 @@ spec:
                 - name: HTTP_HOST
                   value: "127.0.0.1"
                 {{- if .Values.extraEnvVars }}
-                {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+                  {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
                 {{- end }}
               envFrom:
                 {{- if .Values.extraEnvVarsCM }}
@@ -221,7 +247,4 @@ spec:
             {{- if .Values.extraVolumes }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
             {{- end }}
-          restartPolicy: OnFailure
-  successfulJobsHistoryLimit: {{ .Values.cronJobs.wpScheduler.successfulJobsHistoryLimit }}
-  failedJobsHistoryLimit: {{ .Values.cronJobs.wpScheduler.failedJobsHistoryLimit }}
 {{- end }}
