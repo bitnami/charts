@@ -1209,9 +1209,42 @@ cronJobs:
     ## @param cronJobs.wpScheduler.schedule Schedule for the WordPress scheduler cron job
     ##
     schedule: "*/10 * * * *"
-    ## @param cronJobs.wpScheduler.command Command to run for the WordPress scheduler cron job
+    ## @param cronJobs.wpScheduler.command Override default container command (useful when using custom images)
     ##
-    command: ["/opt/bitnami/php/bin/php", "/opt/bitnami/wordpress/wp-cron.php"]
+    command: []
+    ## @param cronJobs.wpScheduler.args Override default container args (useful when using custom images)
+    ##
+    args: []
+    ## @param
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param cronjobs.taskScheduler.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param cronjobs.taskScheduler.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param cronjobs.taskScheduler.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param cronjobs.taskScheduler.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param cronjobs.taskScheduler.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param cronjobs.taskScheduler.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param cronjobs.taskScheduler.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param cronjobs.taskScheduler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+    ##
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1001
+      runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: [ "ALL" ]
+      seccompProfile:
+        type: "RuntimeDefault"
+    ## @param cronjobs.taskScheduler.podAnnotations Additional pod annotations
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    ##
+    podAnnotations: { }
+    ## @param cronjobs.taskScheduler.podLabels Additional pod labels
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+    ##
+    podLabels: { }
     ## @param cronJobs.wpScheduler.failedJobsHistoryLimit The number of failed jobs to keep
     ##
     failedJobsHistoryLimit: 5
