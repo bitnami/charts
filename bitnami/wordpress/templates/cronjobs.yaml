@@ -1,0 +1,31 @@
+{{- if .Values.cronJobs.wpScheduler.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "common.names.fullname" . }}-wp-scheduler
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels:
+    {{- include "common.labels.standard" . | nindent 4 }}
+  {{- with .Values.cronJobs.wpScheduler.labels }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.cronJobs.wpScheduler.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  schedule: {{ .Values.cronJobs.wpScheduler.schedule | quote }}
+  concurrencyPolicy: {{ .Values.cronJobs.wpScheduler.concurrencyPolicy }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: wp-scheduler
+              image: {{ template "wordpress.image" . }}
+              imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+              command: {{ toYaml .Values.cronJobs.wpScheduler.command | nindent 16 }}
+          restartPolicy: OnFailure
+  successfulJobsHistoryLimit: {{ .Values.cronJobs.wpScheduler.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.cronJobs.wpScheduler.failedJobsHistoryLimit }}
+  {{- end }}

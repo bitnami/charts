@@ -1195,3 +1195,30 @@ externalCache:
   ## @param externalCache.port External cache server port
   ##
   port: 11211
+
+## @section CronJob parameters
+##
+
+## Configure cron jobs used to perform periodic tasks
+##
+cronJobs:
+  wpScheduler:
+    ## @param cronJobs.wpScheduler.enabled Whether to enable the WordPress scheduler cron job
+    ##
+    enabled: true
+    ## @param cronJobs.wpScheduler.schedule Schedule for the WordPress scheduler cron job
+    ##
+    schedule: "*/10 * * * *"
+    ## @param cronJobs.wpScheduler.command Command to run for the WordPress scheduler cron job
+    ##
+    command: ["/opt/bitnami/php/bin/php", "/opt/bitnami/wordpress/wp-cron.php"]
+    ## @param cronJobs.wpScheduler.failedJobsHistoryLimit The number of failed jobs to keep
+    ##
+    failedJobsHistoryLimit: 5
+    ## @param cronJobs.wpScheduler.successfulJobsHistoryLimit The number of successful jobs to keep
+    ##
+    successfulJobsHistoryLimit: 5
+    ## @param cronJobs.wpScheduler.concurrencyPolicy Specifies how to treat concurrent executions of a Job
+    ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#concurrency-policy
+    ##
+    concurrencyPolicy: Forbid
