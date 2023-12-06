@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "common.names.fullname" . }}-wp-scheduler
+  name: {{ include "common.names.fullname" . }}-scheduler
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- if .Values.commonAnnotations }}
@@ -29,7 +29,7 @@ spec:
         spec:
           restartPolicy: OnFailure
           initContainers:
-            - name: wp-scheduler-init
+            - name: scheduler-init
               image: "{{ include "wordpress.cronJobs.scheduler.initContainer.image" . }}"
               imagePullPolicy: {{ .Values.cronJobs.scheduler.initContainer.image.pullPolicy | quote }}
               command:
@@ -49,7 +49,7 @@ spec:
                   done
                   echo "Main service has started."
           containers:
-            - name: wp-scheduler
+            - name: scheduler
               image: {{ template "wordpress.image" . }}
               imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
               securityContext:
