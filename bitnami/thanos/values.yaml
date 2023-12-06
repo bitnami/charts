@@ -1790,7 +1790,8 @@ compactor:
   ## @param compactor.cronJob.suspend This flag tells the controller to suspend subsequent executions
   ## @param compactor.cronJob.successfulJobsHistoryLimit The number of successful finished jobs to retain
   ## @param compactor.cronJob.failedJobsHistoryLimit The number of failed finished jobs to retain
-  ## @param compactor.cronJob.backoffLimit Specifies the number of retries before marking this job failed
+  ## @param compactor.cronJob.backoffLimit The number of retries before marking this job failed
+  ## @param compactor.cronJob.ttlSecondsAfterFinished The maximum retention before removing the job
   ##
   cronJob:
     enabled: false
@@ -1802,6 +1803,7 @@ compactor:
     successfulJobsHistoryLimit: ""
     failedJobsHistoryLimit: ""
     backoffLimit: ""
+    ttlSecondsAfterFinished: ""
   ## @param compactor.restartPolicy Compactor container restart policy.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy
   ##
