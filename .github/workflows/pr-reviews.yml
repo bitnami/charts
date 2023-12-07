@@ -15,6 +15,5 @@ jobs:
     # This is a dummy workflow that triggers a workflow_run
     runs-on: ubuntu-latest
     steps:
-      - id: 
-        run: |
+      - run: |
           echo "::notice:: Comment on PR #${{ github.event.pull_request.number }}"
