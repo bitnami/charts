@@ -1,0 +1,51 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+# This is a hack to run reusable workflows in the main repo context and not from the forked repository.
+# We this hack we can use secrets configured in the organization.
+name: '[Support] PR review comment trigger'
+on:
+  workflow_run:
+    workflows:
+      - '\[Support\] PR review comment card movements'
+    types:
+      - completed
+permissions: {}
+jobs:
+  pr-info:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      author: ${{ steps.get-info.outputs.author }}
+      actor: ${{ steps.get-info.outputs.actor }}
+      labels: ${{ steps.get-info.outputs.labels }}
+      resource_url: ${{ steps.get-info.outputs.resource_url }}
+    steps:
+      - id: get-info
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: |
+          actor="${{ github.event.workflow_run.actor.login }}"
+          pull_request="$(gh api "${{ github.event.workflow_run.pull_requests[0].url }}")"
+          author="$(echo $pull_request | jq -cr '.user.login')"
+          author_association="$(echo $pull_request | jq -cr '.author_association')"
+          labels="$(echo $pull_request | jq -cr '[.labels[].name]')"
+          resource_url="$(echo $pull_request | jq -cr '.html_url')"
+
+          echo "actor=${actor}" >> $GITHUB_OUTPUT
+          echo "author=${author}" >> $GITHUB_OUTPUT
+          echo "author_association=${author_association}" >> $GITHUB_OUTPUT
+          echo "labels=${labels}" >> $GITHUB_OUTPUT
+          echo "resource_url=${resource_url}" >> $GITHUB_OUTPUT
+  call-pr-review-comment:
+    uses: bitnami/support/.github/workflows/pr-review-comment.yml@main
+    needs: pr-info
+    permissions:
+      contents: read
+    secrets: inherit
+    with:
+      author: ${{ needs.pr-info.outputs.author }}
+      actor: ${{ needs.pr-info.outputs.actor }}
+      labels: ${{ needs.pr-info.outputs.labels }}
+      resource_url: ${{ needs.pr-info.outputs.resource_url }}
