@@ -1,18 +1,20 @@
 # Copyright VMware, Inc.
 # SPDX-License-Identifier: APACHE-2.0
 
-name: '[Support] Review based card movements'
+name: '[Support] PR review comment card movements'
 on:
-  pull_request_target:
+  pull_request_review_comment:
     types:
-      - review_requested
-      - synchronize
-permissions:
-  contents: read
+      - created
+permissions: {}
 # Avoid concurrency over the same issue
 concurrency:
-  group: card-movement-${{ github.event.number }}
+  group: card-movement-${{ github.event.pull_request.number }}
 jobs:
-  call-pr-review-workflow:
-    uses: bitnami/support/.github/workflows/pr-review-requested-sync.yml@main
-    secrets: inherit
+  just-notice:
+    # This is a dummy workflow that triggers a workflow_run
+    runs-on: ubuntu-latest
+    steps:
+      - id: 
+        run: |
+          echo "::notice:: Comment on PR #${{ github.event.pull_request.number }}"

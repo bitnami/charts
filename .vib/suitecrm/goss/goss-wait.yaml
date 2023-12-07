@@ -1,8 +1,0 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
-
-command:
-  wait-to-be-available:
-    exec: "sleep 120"
-    exit-status: 0
-    timeout: 130000
