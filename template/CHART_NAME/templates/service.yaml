@@ -11,7 +11,7 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: %%COMPONENT_NAME%%
   {{- if or .Values.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" (dict "values" .Values.service.annotations .Values.commonAnnotations "context" .) | fromYaml }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.service.annotations .Values.commonAnnotations) "context" .) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
