@@ -151,7 +151,7 @@
           "type": "string",
           "form": true,
           "title": "Service Type",
-          "description": "Allowed values: \"ClusterIP\", \"NodePort\" and \"LoadBalancer\"" 
+          "description": "Allowed values: \"ClusterIP\", \"NodePort\" and \"LoadBalancer\""
         }
       }
     },
@@ -205,6 +205,190 @@
           "title": "Enable Metrics",
           "description": "Prometheus Exporter / Metrics",
           "form": true
+        }
+      }
+    },
+    "cronJobs": {
+      "type": "object",
+      "title": "Cron Jobs Configuration",
+      "properties": {
+        "scheduler": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "title": "Enable Scheduler Cron Job",
+              "form": true
+            },
+            "schedule": {
+              "type": "string",
+              "title": "Scheduler Schedule",
+              "form": true
+            },
+            "command": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Scheduler Command",
+              "form": true
+            },
+            "args": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Scheduler Arguments",
+              "form": true
+            },
+            "containerSecurityContext": {
+              "type": "object",
+              "title": "Container Security Context",
+              "form": true,
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "title": "Enable Container Security Context",
+                  "form": true
+                },
+                "runAsUser": {
+                  "type": "integer",
+                  "title": "Run As User",
+                  "form": true
+                },
+                "runAsNonRoot": {
+                  "type": "boolean",
+                  "title": "Run As Non Root",
+                  "form": true
+                },
+                "privileged": {
+                  "type": "boolean",
+                  "title": "Privileged",
+                  "form": true
+                },
+                "readOnlyRootFilesystem": {
+                  "type": "boolean",
+                  "title": "Read-Only Root Filesystem",
+                  "form": true
+                },
+                "allowPrivilegeEscalation": {
+                  "type": "boolean",
+                  "title": "Allow Privilege Escalation",
+                  "form": true
+                },
+                "capabilities": {
+                  "type": "object",
+                  "title": "Capabilities",
+                  "form": true,
+                  "properties": {
+                    "drop": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "title": "Capabilities to Drop",
+                      "form": true
+                    }
+                  }
+                },
+                "seccompProfile": {
+                  "type": "object",
+                  "title": "Seccomp Profile",
+                  "form": true,
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "title": "Seccomp Profile Type",
+                      "form": true
+                    }
+                  }
+                }
+              }
+            },
+            "podAnnotations": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "title": "Pod Annotations",
+              "form": true
+            },
+            "podLabels": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "title": "Pod Labels",
+              "form": true
+            },
+            "failedJobsHistoryLimit": {
+              "type": "integer",
+              "title": "Failed Jobs History Limit",
+              "form": true
+            },
+            "successfulJobsHistoryLimit": {
+              "type": "integer",
+              "title": "Successful Jobs History Limit",
+              "form": true
+            },
+            "concurrencyPolicy": {
+              "type": "string",
+              "title": "Concurrency Policy",
+              "form": true
+            },
+            "backoffLimit": {
+              "type": "integer",
+              "title": "Backoff Limit",
+              "form": true
+            },
+            "initContainer": {
+              "type": "object",
+              "title": "Init Container Configuration",
+              "form": true,
+              "properties": {
+                "image": {
+                  "type": "object",
+                  "title": "Init Container Image",
+                  "form": true,
+                  "properties": {
+                    "registry": {
+                      "type": "string",
+                      "title": "Image Registry",
+                      "form": true
+                    },
+                    "repository": {
+                      "type": "string",
+                      "title": "Image Repository",
+                      "form": true
+                    },
+                    "tag": {
+                      "type": "string",
+                      "title": "Image Tag",
+                      "form": true
+                    },
+                    "digest": {
+                      "type": "string",
+                      "title": "Image Digest",
+                      "form": true
+                    },
+                    "pullPolicy": {
+                      "type": "string",
+                      "title": "Image Pull Policy",
+                      "form": true
+                    },
+                    "pullSecrets": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "title": "Image Pull Secrets",
+                      "form": true
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }

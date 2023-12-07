@@ -1281,7 +1281,7 @@ cronJobs:
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#pod-backoff-failure-policy
     ##
     backoffLimit: 6
-    ## @param cronJobs.scheduler.initContainer Additional init container to be added to the cronjob pod
+    ## Additional init container to be added to the cronjob pod
     ##
     initContainer:
       ## Curl image to check for readiness of main service

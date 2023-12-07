@@ -379,6 +379,34 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalCache.host`                       | External cache server host                                                                     | `localhost`         |
 | `externalCache.port`                       | External cache server port                                                                     | `11211`             |
 
+### CronJob parameters
+
+| Name                                                                   | Description                                                                                          | Value                      |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | -------------------------- |
+| `cronJobs.scheduler.enabled`                                           | Whether to enable the WordPress scheduler cron job                                                   | `true`                     |
+| `cronJobs.scheduler.schedule`                                          | Schedule for the WordPress scheduler cron job                                                        | `*/2 * * * *`              |
+| `cronJobs.scheduler.command`                                           | Override default container command (useful when using custom images)                                 | `[]`                       |
+| `cronJobs.scheduler.args`                                              | Override default container args (useful when using custom images)                                    | `[]`                       |
+| `cronJobs.scheduler.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                 | `true`                     |
+| `cronJobs.scheduler.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                           | `1001`                     |
+| `cronJobs.scheduler.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                        | `true`                     |
+| `cronJobs.scheduler.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                          | `false`                    |
+| `cronJobs.scheduler.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                              | `false`                    |
+| `cronJobs.scheduler.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                            | `false`                    |
+| `cronJobs.scheduler.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                   | `["ALL"]`                  |
+| `cronJobs.scheduler.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                     | `RuntimeDefault`           |
+| `cronJobs.scheduler.podAnnotations`                                    | Additional pod annotations                                                                           | `{}`                       |
+| `cronJobs.scheduler.podLabels`                                         | Additional pod labels                                                                                | `{}`                       |
+| `cronJobs.scheduler.failedJobsHistoryLimit`                            | The number of failed jobs to keep                                                                    | `5`                        |
+| `cronJobs.scheduler.successfulJobsHistoryLimit`                        | The number of successful jobs to keep                                                                | `5`                        |
+| `cronJobs.scheduler.concurrencyPolicy`                                 | Specifies how to treat concurrent executions of a Job                                                | `Forbid`                   |
+| `cronJobs.scheduler.backoffLimit`                                      | Specifies the number of retries before marking this Job failed                                       | `6`                        |
+| `cronJobs.scheduler.initContainer.image.registry`                      | Curl image registry                                                                                  | `REGISTRY_NAME`            |
+| `cronJobs.scheduler.initContainer.image.repository`                    | Curl image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `cronJobs.scheduler.initContainer.image.digest`                        | Curl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `cronJobs.scheduler.initContainer.image.pullPolicy`                    | Curl image pull policy                                                                               | `IfNotPresent`             |
+| `cronJobs.scheduler.initContainer.image.pullSecrets`                   | Curl image pull secrets                                                                              | `[]`                       |
+
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
