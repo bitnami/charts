@@ -86,6 +86,8 @@ extraDeploy:
     metadata:
       name: vib-podinfo
       namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
     spec:
       interval: 5m
       url: https://github.com/stefanprodan/podinfo
@@ -96,6 +98,8 @@ extraDeploy:
     metadata:
       name: vib-podinfo
       namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
     spec:
       interval: 10m
       targetNamespace: '{{ include "common.names.namespace" . }}'
@@ -111,6 +115,8 @@ extraDeploy:
     metadata:
       name: vib-bitnami-charts
       namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
     spec:
       interval: 5m0s
       url: https://github.com/bitnami/charts
@@ -121,6 +127,8 @@ extraDeploy:
     metadata:
       name: vib-dokuwiki
       namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
     spec:
       interval: 5m
       chart:
@@ -147,6 +155,8 @@ extraDeploy:
     metadata:
       name: vib-github-receiver
       namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
     spec:
       type: github
       events:
@@ -167,6 +177,8 @@ extraDeploy:
     metadata:
       name: vib-image-rep-podinfo
       namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
     spec:
       image: stefanprodan/podinfo
       interval: 1h
@@ -179,6 +191,8 @@ extraDeploy:
     metadata:
       name: vib-update-automation
       namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
     spec:
       interval: 5m
       sourceRef:

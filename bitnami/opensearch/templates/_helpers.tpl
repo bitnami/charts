@@ -16,7 +16,7 @@ Return the proper OS image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "opensearch.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.sysctlImage .Values.volumePermissions.image) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.sysctlImage .Values.volumePermissions.image) "context" $) }}
 {{- end -}}
 
 {{/*
@@ -174,7 +174,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Returns true if at least one master-elegible node replica has been configured.
+Returns true if at least one master-eligible node replica has been configured.
 */}}
 {{- define "opensearch.master.enabled" -}}
 {{- if or .Values.master.autoscaling.hpa.enabled (gt (int .Values.master.replicaCount) 0) -}}
@@ -267,8 +267,8 @@ Get the initialization scripts Secret name.
 {{- end -}}
 
 {{/*
- Create the name of the master service account to use
- */}}
+Create the name of the master service account to use
+*/}}
 {{- define "opensearch.master.serviceAccountName" -}}
 {{- if .Values.master.serviceAccount.create -}}
     {{ default (include "opensearch.master.fullname" .) .Values.master.serviceAccount.name }}
@@ -278,8 +278,8 @@ Get the initialization scripts Secret name.
 {{- end -}}
 
 {{/*
- Create the name of the coordinating-only service account to use
- */}}
+Create the name of the coordinating-only service account to use
+*/}}
 {{- define "opensearch.coordinating.serviceAccountName" -}}
 {{- if .Values.coordinating.serviceAccount.create -}}
     {{ default (include "opensearch.coordinating.fullname" .) .Values.coordinating.serviceAccount.name }}
@@ -289,8 +289,8 @@ Get the initialization scripts Secret name.
 {{- end -}}
 
 {{/*
- Create the name of the data service account to use
- */}}
+Create the name of the data service account to use
+*/}}
 {{- define "opensearch.data.serviceAccountName" -}}
 {{- if .Values.data.serviceAccount.create -}}
     {{ default (include "opensearch.data.fullname" .) .Values.data.serviceAccount.name }}
@@ -300,8 +300,8 @@ Get the initialization scripts Secret name.
 {{- end -}}
 
 {{/*
- Create the name of the ingest service account to use
- */}}
+Create the name of the ingest service account to use
+*/}}
 {{- define "opensearch.ingest.serviceAccountName" -}}
 {{- if .Values.ingest.serviceAccount.create -}}
     {{ default (include "opensearch.ingest.fullname" .) .Values.ingest.serviceAccount.name }}
@@ -556,7 +556,7 @@ opensearch: security.tls
 {{- define "opensearch.validateValues.master.replicas" -}}
 {{- if not (include "opensearch.master.enabled" .) -}}
 opensearch: master.replicas
-    Opensearch needs at least one master-elegible node to form a cluster.
+    Opensearch needs at least one master-eligible node to form a cluster.
 {{- end -}}
 {{- end -}}
 
@@ -604,8 +604,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
- Create the name of the dashboards service account to use
- */}}
+Create the name of the dashboards service account to use
+*/}}
 {{- define "opensearch.dashboards.serviceAccountName" -}}
 {{- if .Values.dashboards.serviceAccount.create -}}
     {{ default (include "opensearch.dashboards.fullname" .) .Values.dashboards.serviceAccount.name }}
@@ -662,4 +662,3 @@ Return true if a TLS credentials secret object should be created
     {{- true -}}
 {{- end -}}
 {{- end -}}
-

@@ -384,6 +384,11 @@ configuration: ""
 replicaSetConfigurationSettings:
   enabled: false
   configuration: {}
+## Custom configurations for individual replica set members.
+## Use the prefix 'members[X].' to apply settings to the member X of the replica set.
+## Example: 'members[0].priority: 3' sets the priority of the first replica set member to 3.
+## The index X in 'members[X]' corresponds to the member's position in the replica set.
+##    members[0].priority: 3
 ##    chainingAllowed : false
 ##    heartbeatTimeoutSecs : 10
 ##    heartbeatIntervalMillis : 2000
