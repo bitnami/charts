@@ -48,7 +48,7 @@ data:
         {{- if .Values.useExternalDNS.enabled }}
         full_hostname="${hostname}.{{- include "redis.externalDNS.suffix" . }}"
         {{- else if eq .Values.sentinel.service.type "NodePort" }}
-        full_hostname="${hostname}.{{- include "common.names.namespace" . }}
+        full_hostname="${hostname}.{{- include "common.names.namespace" . }}"
         {{- else }}
         full_hostname="${hostname}.${HEADLESS_SERVICE}"
         {{- end }}
@@ -281,7 +281,7 @@ data:
         {{- if .Values.useExternalDNS.enabled }}
         full_hostname="${hostname}.{{- include "redis.externalDNS.suffix" . }}"
         {{- else if eq .Values.sentinel.service.type "NodePort" }}
-        full_hostname="${hostname}.{{- include "common.names.namespace" . }}
+        full_hostname="${hostname}.{{- include "common.names.namespace" . }}"
         {{- else }}
         full_hostname="${hostname}.${HEADLESS_SERVICE}"
         {{- end }}
@@ -458,7 +458,7 @@ data:
         {{- if .Values.useExternalDNS.enabled }}
         full_hostname="${hostname}.{{- include "redis.externalDNS.suffix" . }}"
         {{- else if eq .Values.sentinel.service.type "NodePort" }}
-        full_hostname="${hostname}.{{- include "common.names.namespace" . }}
+        full_hostname="${hostname}.{{- include "common.names.namespace" . }}"
         {{- else }}
         full_hostname="${hostname}.${HEADLESS_SERVICE}"
         {{- end }}
@@ -538,7 +538,7 @@ data:
         {{- if .Values.useExternalDNS.enabled }}
         full_hostname="${hostname}.{{- include "redis.externalDNS.suffix" . }}"
         {{- else if eq .Values.sentinel.service.type "NodePort" }}
-        full_hostname="${hostname}.{{- include "common.names.namespace" . }}
+        full_hostname="${hostname}.{{- include "common.names.namespace" . }}"
         {{- else }}
         full_hostname="${hostname}.${HEADLESS_SERVICE}"
         {{- end }}
@@ -676,7 +676,7 @@ data:
         {{- if .Values.useExternalDNS.enabled }}
         full_hostname="${hostname}.{{- include "redis.externalDNS.suffix" . }}"
         {{- else if eq .Values.sentinel.service.type "NodePort" }}
-        full_hostname="${hostname}.{{- include "common.names.namespace" . }}
+        full_hostname="${hostname}.{{- include "common.names.namespace" . }}"
         {{- else }}
         full_hostname="${hostname}.${HEADLESS_SERVICE}"
         {{- end }}
