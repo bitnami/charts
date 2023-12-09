@@ -305,7 +305,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                                                       | Description                                                          | Value            |
 | -------------------------------------------------------------------------- | -------------------------------------------------------------------- | ---------------- |
-| `cronjobs.enabled`                                                         | Enables cronjobs for archive and scheduler tasks                     | `true`           |
+| `cronjobs.taskScheduler.enabled`                                           | Whether to enable scheduled mail-to-task CronJob                     | `true`           |
 | `cronjobs.taskScheduler.schedule`                                          | Kubernetes CronJob schedule                                          | `*/5 * * * *`    |
 | `cronjobs.taskScheduler.suspend`                                           | Whether to create suspended CronJob                                  | `false`          |
 | `cronjobs.taskScheduler.command`                                           | Override default container command (useful when using custom images) | `[]`             |
@@ -320,7 +320,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cronjobs.taskScheduler.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                     | `RuntimeDefault` |
 | `cronjobs.taskScheduler.podAnnotations`                                    | Additional pod annotations                                           | `{}`             |
 | `cronjobs.taskScheduler.podLabels`                                         | Additional pod labels                                                | `{}`             |
-| `cronjobs.archive.enabled`                                                 | Whether to enable scheduled mail-to-task CronJob                     | `false`          |
+| `cronjobs.archive.enabled`                                                 | Whether to enable scheduled mail-to-task CronJob                     | `true`           |
 | `cronjobs.archive.schedule`                                                | Kubernetes CronJob schedule                                          | `*/5 * * * *`    |
 | `cronjobs.archive.suspend`                                                 | Whether to create suspended CronJob                                  | `false`          |
 | `cronjobs.archive.command`                                                 | Override default container command (useful when using custom images) | `[]`             |
@@ -436,6 +436,10 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 3.2.0
+
+This version deprecates `cronjobs.enabled` value in favor of `cronjobs.taskScheduler.enabled` and `cronjobs.archive.enabled` values.
 
 ### To 3.0.0
 

@@ -11,10 +11,6 @@ on: # rebuild any PRs and main branch changes
       - '!**.md'
 # Remove all permissions by default.
 permissions: {}
-env:
-  CSP_API_URL: https://console.cloud.vmware.com
-  CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
-  VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
 jobs:
   get-chart:
     runs-on: ubuntu-latest
@@ -70,6 +66,10 @@ jobs:
     name: VIB Publish
     permissions:
       contents: read
+    env:
+      CSP_API_URL: https://console.cloud.vmware.com
+      CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
+      VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         name: Checkout Repository

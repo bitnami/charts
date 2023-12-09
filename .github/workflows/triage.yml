@@ -12,62 +12,14 @@ on:
     types:
       - reopened
       - opened
-# Remove all permissions by default
-permissions: {}
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
 # Avoid concurrency over the same issue
 concurrency:
-  group: card-movement-${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}
+  group: card-movement-${{ github.event.issue != null && github.event.issue.number || github.event.number }}
 jobs:
-  # For any opened or reopened issue, should be sent into Triage
-  send_to_board:
-    name: Organize triage
-    runs-on: ubuntu-latest
-    # Please note that projects cards are created/moved with Bitnami Bot
-    permissions:
-      contents: read
-    steps:
-      - name: Repo checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
-        with:
-          fetch-depth: 1
-      - name: Load .env file
-        uses: xom9ikk/dotenv@de1ff27d319507880e6621e4d47424c677d95f68
-        with:
-          path: .github/workflows/
-      - name: Get author
-        id: get-issue
-        run: |
-          author="${{ github.event.issue != null && github.event.issue.user.login || github.event.pull_request.user.login }}"
-          number="${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}"
-          type="${{ github.event_name != 'issues' && 'pull_request' || 'issue' }}"
-          echo "author=${author}" >> $GITHUB_OUTPUT
-          echo "number=${number}" >> $GITHUB_OUTPUT
-          echo "type=${type}" >> $GITHUB_OUTPUT
-      - name: Send to the board
-        if: ${{steps.get-issue.outputs.author != 'bitnami-bot' || steps.get-issue.outputs.type != 'pull_request'}}
-        uses: peter-evans/create-or-update-project-card@dfa240db6fe287ceb681e45d6728c1af70452c58
-        with:
-          project-name: Support
-          # If the author comes from Bitnami, send it to Bitnami. Otherwise, all to Triage
-          column-name: ${{ (contains(fromJson(env.BITNAMI_TEAM), steps.get-issue.outputs.author)) && 'From Bitnami' || 'Triage' }}
-          token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
-          issue-number: ${{ steps.get-issue.outputs.number }}
-  labeling:
-    name: Set labels for Automated PRs
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-    if: ${{ github.event_name != 'issues' && github.event.pull_request.user.login == 'bitnami-bot' }}
-    # The project API is not efficient and requires several requests to create the project card. For that reason we decided to create
-    # a card for the automated PRs only when it is needed.
-    steps:
-      - name: From Bitnami labeling
-        uses: fmulero/labeler@f49bf680252fc8ac12cbebb6e0ed8ea19d0712da
-        with:
-          add-labels: 'automated, auto-merge'
-      - name: Verify labeling
-        uses: fmulero/labeler@f49bf680252fc8ac12cbebb6e0ed8ea19d0712da
-        with:
-          # Bitnami bot token is required to trigger CI workflows
-          repo-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
-          add-labels: verify
+  call-triage-workflow:
+    uses: bitnami/support/.github/workflows/item-opened.yml@main
+    secrets: inherit

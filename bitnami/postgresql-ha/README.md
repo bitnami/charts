@@ -551,17 +551,20 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 ### Persistence parameters
 
-| Name                        | Description                                                                             | Value                 |
-| --------------------------- | --------------------------------------------------------------------------------------- | --------------------- |
-| `persistence.enabled`       | Enable data persistence                                                                 | `true`                |
-| `persistence.existingClaim` | A manually managed Persistent Volume and Claim                                          | `""`                  |
-| `persistence.storageClass`  | Persistent Volume Storage Class                                                         | `""`                  |
-| `persistence.mountPath`     | The path the volume will be mounted at, useful when using different PostgreSQL images.  | `/bitnami/postgresql` |
-| `persistence.accessModes`   | List of access modes of data volume                                                     | `["ReadWriteOnce"]`   |
-| `persistence.size`          | Persistent Volume Claim size                                                            | `8Gi`                 |
-| `persistence.annotations`   | Persistent Volume Claim annotations                                                     | `{}`                  |
-| `persistence.labels`        | Persistent Volume Claim labels                                                          | `{}`                  |
-| `persistence.selector`      | Selector to match an existing Persistent Volume (this value is evaluated as a template) | `{}`                  |
+| Name                                               | Description                                                                             | Value                 |
+| -------------------------------------------------- | --------------------------------------------------------------------------------------- | --------------------- |
+| `persistence.enabled`                              | Enable data persistence                                                                 | `true`                |
+| `persistence.existingClaim`                        | A manually managed Persistent Volume and Claim                                          | `""`                  |
+| `persistence.storageClass`                         | Persistent Volume Storage Class                                                         | `""`                  |
+| `persistence.mountPath`                            | The path the volume will be mounted at, useful when using different PostgreSQL images.  | `/bitnami/postgresql` |
+| `persistence.accessModes`                          | List of access modes of data volume                                                     | `["ReadWriteOnce"]`   |
+| `persistence.size`                                 | Persistent Volume Claim size                                                            | `8Gi`                 |
+| `persistence.annotations`                          | Persistent Volume Claim annotations                                                     | `{}`                  |
+| `persistence.labels`                               | Persistent Volume Claim labels                                                          | `{}`                  |
+| `persistence.selector`                             | Selector to match an existing Persistent Volume (this value is evaluated as a template) | `{}`                  |
+| `persistentVolumeClaimRetentionPolicy.enabled`     | Enable Persistent volume retention policy for postgresql Statefulset                    | `false`               |
+| `persistentVolumeClaimRetentionPolicy.whenScaled`  | Volume retention behavior when the replica count of the StatefulSet is reduced          | `Retain`              |
+| `persistentVolumeClaimRetentionPolicy.whenDeleted` | Volume retention behavior that applies when the StatefulSet is deleted                  | `Retain`              |
 
 ### Traffic Exposure parameters
 

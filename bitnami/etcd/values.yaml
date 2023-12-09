@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.10-debian-11-r2
+  tag: 3.5.11-debian-11-r0
   digest: ""
   ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
@@ -650,7 +650,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r91
+    tag: 11-debian-11-r92
     digest: ""
     ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
     ##
@@ -881,9 +881,9 @@ disasterRecovery:
     ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
-    ## @param disasterRecovery.cronjob.podLabels List of labels that will be added to pods created by cronjob
+    ## @param disasterRecovery.cronjob.podLabels [object] Labels that will be added to pods created by cronjob
     ##
-    podLabels: []
+    podLabels: {}
 
   pvc:
     ## @param disasterRecovery.pvc.existingClaim A manually managed Persistent Volume and Claim

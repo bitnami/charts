@@ -64,7 +64,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/sealed-secrets
-  tag: 0.24.4-debian-11-r0
+  tag: 0.24.4-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -91,6 +91,45 @@ commandArgs: []
 ## @param args [array] Override default container args (useful when using custom images)
 ##
 args: []
+## @param revisionHistoryLimit Number of old history to retain to allow rollback (If not set, default Kubernetes value is set to 10)
+## e.g:
+revisionHistoryLimit: ""
+## @param createController Specifies whether the Sealed Secrets controller should be created
+##
+createController: true
+## @param secretName The name of an existing TLS secret containing the key used to encrypt secrets
+##
+secretName: ""
+## @param updateStatus Specifies whether the Sealed Secrets controller should update the status subresource
+##
+updateStatus: true
+## @param skipRecreate Specifies whether the Sealed Secrets controller should skip recreating removed secrets
+## Setting it to true allows to optionally restore backward compatibility in low priviledge
+## environments when old versions of the controller did not require watch permissions on secrets
+## for secret re-creation.
+##
+skipRecreate: false
+## @param keyRenewPeriod Specifies key renewal period. Default 30 days. e.g keyRenewPeriod: "720h30m"
+##
+keyRenewPeriod: ""
+## @param rateLimit Number of allowed sustained request per second for verify endpoint
+##
+rateLimit: ""
+## @param rateLimitBurst Number of requests allowed to exceed the rate limit per second for verify endpoint
+##
+rateLimitBurst: ""
+## @param additionalNamespaces List of namespaces used to manage the Sealed Secrets
+##
+additionalNamespaces: []
+## @param privateKeyAnnotations Map of annotations to be set on the sealing keypairs
+##
+privateKeyAnnotations: {}
+## @param privateKeyLabels Map of labels to be set on the sealing keypairs
+##
+privateKeyLabels: {}
+## @param logInfoStdout Specifies whether the Sealed Secrets controller will log info to stdout
+##
+logInfoStdout: false
 ## @param containerPorts.http Controller HTTP container port to open
 ##
 containerPorts:
@@ -477,6 +516,18 @@ rbac:
   ## @param rbac.pspEnabled PodSecurityPolicy
   ##
   pspEnabled: false
+  ## @param rbac.clusterRole Specifies whether the Cluster Role resource should be created. If both rbac.clusterRole and rbac.namespacedRoles are set to false no RBAC will be created.
+  ##
+  clusterRole: true
+  ## @param rbac.clusterRoleName Specifies the name for the Cluster Role resource
+  ##
+  clusterRoleName: ""
+  ## @param rbac.namespacedRoles Specifies whether the namespaced Roles should be created (in each of the specified additionalNamespaces). If both rbac.clusterRole and rbac.namespacedRoles are set to false no RBAC will be created.
+  ##
+  namespacedRoles: false
+  ## @param rbac.namespacedRolesName Specifies the name for the namesapced Role resource
+  ##
+  namespacedRolesName: ""
   ## @param rbac.unsealer.rules Custom RBAC rules to set for unsealer ClusterRole
   ## @param rbac.keyAdmin.rules Custom RBAC rules to set for key-admin role
   ## @param rbac.serviceProxier.rules Custom RBAC rules to set for service-proxier role
@@ -496,6 +547,9 @@ rbac:
     rules: []
   serviceProxier:
     rules: []
+  ## @param rbac.labels Extra labels to be added to RBAC resources
+  ##
+  labels: {}
 
 ## ServiceAccount configuration
 ##
@@ -526,6 +580,17 @@ networkPolicy:
   ## listening on. When true, the controller accept connections from any source (with the correct destination port).
   ##
   allowExternal: true
+
+## Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+## @param pdb.create Enable a Pod Disruption Budget creation
+## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+##
+pdb:
+  create: false
+  minAvailable: ""
+  maxUnavailable: ""
 
 ## @section Metrics parameters
 ##

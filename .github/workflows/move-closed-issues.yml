@@ -9,24 +9,13 @@ on:
   pull_request_target:
     types:
       - closed
-# Remove all permissions by default. Actions are performed by Bitnami Bot
-permissions: {}
+permissions:
+  issues: write
+  pull-requests: write
 # Avoid concurrency over the same issue
 concurrency:
-  group: card-movement-${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}
+  group: card-movement-${{ github.event.repository.id }}-${{ github.event.issue != null && github.event.issue.number || github.event.number }}
 jobs:
-  send_to_solved:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Send to the Solved column
-        id: send-solved
-        uses: peter-evans/create-or-update-project-card@dfa240db6fe287ceb681e45d6728c1af70452c58
-        # Send to solve only the issues and PRs created by users or the automated PRs with human review required
-        if: |
-          (github.event.issue != null && github.event.issue.user.login != 'bitnami-bot') ||
-          (github.event.issue == null && (github.event.pull_request.user.login != 'bitnami-bot' || contains(github.event.pull_request.labels.*.name, 'review-required')))
-        with:
-          project-name: Support
-          column-name: 'Solved'
-          token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
-          issue-number: ${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}
+  call-move-closed-workflow:
+    uses: bitnami/support/.github/workflows/item-closed.yml@main
+    secrets: inherit

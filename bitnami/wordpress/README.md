@@ -277,50 +277,58 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics Parameters
 
-| Name                                         | Description                                                                                                     | Value                             |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------- |
-| `metrics.enabled`                            | Start a sidecar prometheus exporter to expose metrics                                                           | `false`                           |
-| `metrics.image.registry`                     | Apache exporter image registry                                                                                  | `REGISTRY_NAME`                   |
-| `metrics.image.repository`                   | Apache exporter image repository                                                                                | `REPOSITORY_NAME/apache-exporter` |
-| `metrics.image.digest`                       | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                              |
-| `metrics.image.pullPolicy`                   | Apache exporter image pull policy                                                                               | `IfNotPresent`                    |
-| `metrics.image.pullSecrets`                  | Apache exporter image pull secrets                                                                              | `[]`                              |
-| `metrics.containerPorts.metrics`             | Prometheus exporter container port                                                                              | `9117`                            |
-| `metrics.livenessProbe.enabled`              | Enable livenessProbe on Prometheus exporter containers                                                          | `true`                            |
-| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                         | `15`                              |
-| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                | `10`                              |
-| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                               | `5`                               |
-| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                             | `3`                               |
-| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                             | `1`                               |
-| `metrics.readinessProbe.enabled`             | Enable readinessProbe on Prometheus exporter containers                                                         | `true`                            |
-| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                        | `5`                               |
-| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                               | `10`                              |
-| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                              | `3`                               |
-| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                            | `3`                               |
-| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                            | `1`                               |
-| `metrics.startupProbe.enabled`               | Enable startupProbe on Prometheus exporter containers                                                           | `false`                           |
-| `metrics.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                          | `10`                              |
-| `metrics.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                 | `10`                              |
-| `metrics.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                | `1`                               |
-| `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                              | `15`                              |
-| `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                              | `1`                               |
-| `metrics.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                             | `{}`                              |
-| `metrics.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                            | `{}`                              |
-| `metrics.customStartupProbe`                 | Custom startupProbe that overrides the default one                                                              | `{}`                              |
-| `metrics.resources.limits`                   | The resources limits for the Prometheus exporter container                                                      | `{}`                              |
-| `metrics.resources.requests`                 | The requested resources for the Prometheus exporter container                                                   | `{}`                              |
-| `metrics.service.ports.metrics`              | Prometheus metrics service port                                                                                 | `9150`                            |
-| `metrics.service.annotations`                | Additional custom annotations for Metrics service                                                               | `{}`                              |
-| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator                                   | `false`                           |
-| `metrics.serviceMonitor.namespace`           | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)                                   | `""`                              |
-| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped.                                                                    | `""`                              |
-| `metrics.serviceMonitor.scrapeTimeout`       | Timeout after which the scrape is ended                                                                         | `""`                              |
-| `metrics.serviceMonitor.labels`              | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                           | `{}`                              |
-| `metrics.serviceMonitor.selector`            | Prometheus instance selector labels                                                                             | `{}`                              |
-| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping                                                              | `[]`                              |
-| `metrics.serviceMonitor.metricRelabelings`   | MetricRelabelConfigs to apply to samples before ingestion                                                       | `[]`                              |
-| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                        | `false`                           |
-| `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.                               | `""`                              |
+| Name                                                        | Description                                                                                                     | Value                             |
+| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `metrics.enabled`                                           | Start a sidecar prometheus exporter to expose metrics                                                           | `false`                           |
+| `metrics.image.registry`                                    | Apache exporter image registry                                                                                  | `REGISTRY_NAME`                   |
+| `metrics.image.repository`                                  | Apache exporter image repository                                                                                | `REPOSITORY_NAME/apache-exporter` |
+| `metrics.image.digest`                                      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                              |
+| `metrics.image.pullPolicy`                                  | Apache exporter image pull policy                                                                               | `IfNotPresent`                    |
+| `metrics.image.pullSecrets`                                 | Apache exporter image pull secrets                                                                              | `[]`                              |
+| `metrics.containerPorts.metrics`                            | Prometheus exporter container port                                                                              | `9117`                            |
+| `metrics.livenessProbe.enabled`                             | Enable livenessProbe on Prometheus exporter containers                                                          | `true`                            |
+| `metrics.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                         | `15`                              |
+| `metrics.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                | `10`                              |
+| `metrics.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                               | `5`                               |
+| `metrics.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                             | `3`                               |
+| `metrics.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                             | `1`                               |
+| `metrics.readinessProbe.enabled`                            | Enable readinessProbe on Prometheus exporter containers                                                         | `true`                            |
+| `metrics.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                        | `5`                               |
+| `metrics.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                               | `10`                              |
+| `metrics.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                              | `3`                               |
+| `metrics.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                            | `3`                               |
+| `metrics.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                            | `1`                               |
+| `metrics.startupProbe.enabled`                              | Enable startupProbe on Prometheus exporter containers                                                           | `false`                           |
+| `metrics.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                          | `10`                              |
+| `metrics.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                 | `10`                              |
+| `metrics.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                | `1`                               |
+| `metrics.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                              | `15`                              |
+| `metrics.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                              | `1`                               |
+| `metrics.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                             | `{}`                              |
+| `metrics.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                            | `{}`                              |
+| `metrics.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                              | `{}`                              |
+| `metrics.resources.limits`                                  | The resources limits for the Prometheus exporter container                                                      | `{}`                              |
+| `metrics.resources.requests`                                | The requested resources for the Prometheus exporter container                                                   | `{}`                              |
+| `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                            | `true`                            |
+| `metrics.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                      | `1001`                            |
+| `metrics.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                   | `true`                            |
+| `metrics.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                     | `false`                           |
+| `metrics.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                         | `false`                           |
+| `metrics.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                       | `false`                           |
+| `metrics.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                              | `["ALL"]`                         |
+| `metrics.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                | `RuntimeDefault`                  |
+| `metrics.service.ports.metrics`                             | Prometheus metrics service port                                                                                 | `9150`                            |
+| `metrics.service.annotations`                               | Additional custom annotations for Metrics service                                                               | `{}`                              |
+| `metrics.serviceMonitor.enabled`                            | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator                                   | `false`                           |
+| `metrics.serviceMonitor.namespace`                          | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)                                   | `""`                              |
+| `metrics.serviceMonitor.interval`                           | Interval at which metrics should be scraped.                                                                    | `""`                              |
+| `metrics.serviceMonitor.scrapeTimeout`                      | Timeout after which the scrape is ended                                                                         | `""`                              |
+| `metrics.serviceMonitor.labels`                             | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                           | `{}`                              |
+| `metrics.serviceMonitor.selector`                           | Prometheus instance selector labels                                                                             | `{}`                              |
+| `metrics.serviceMonitor.relabelings`                        | RelabelConfigs to apply to samples before scraping                                                              | `[]`                              |
+| `metrics.serviceMonitor.metricRelabelings`                  | MetricRelabelConfigs to apply to samples before ingestion                                                       | `[]`                              |
+| `metrics.serviceMonitor.honorLabels`                        | Specify honorLabels parameter to add the scrape endpoint                                                        | `false`                           |
+| `metrics.serviceMonitor.jobLabel`                           | The name of the label on the target service to use as the job name in prometheus.                               | `""`                              |
 
 ### NetworkPolicy parameters
 
