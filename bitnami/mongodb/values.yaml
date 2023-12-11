@@ -126,7 +126,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb
-  tag: 7.0.4-debian-11-r0
+  tag: 7.0.4-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -384,6 +384,11 @@ configuration: ""
 replicaSetConfigurationSettings:
   enabled: false
   configuration: {}
+## Custom configurations for individual replica set members.
+## Use the prefix 'members[X].' to apply settings to the member X of the replica set.
+## Example: 'members[0].priority: 3' sets the priority of the first replica set member to 3.
+## The index X in 'members[X]' corresponds to the member's position in the replica set.
+##    members[0].priority: 3
 ##    chainingAllowed : false
 ##    heartbeatTimeoutSecs : 10
 ##    heartbeatIntervalMillis : 2000
@@ -819,7 +824,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.28.4-debian-11-r0
+      tag: 1.28.4-debian-11-r2
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1366,7 +1371,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r91
+    tag: 11-debian-11-r92
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2149,7 +2154,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.40.0-debian-11-r0
+    tag: 0.40.0-debian-11-r1
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

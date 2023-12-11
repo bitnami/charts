@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.7.4-debian-11-r0
+  tag: 2.7.4-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -835,7 +835,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r92
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -986,7 +986,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.453.0-debian-11-r0
+        tag: 0.455.0-debian-11-r5
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1025,7 +1025,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.53.1-debian-11-r0
+        tag: 2.55.0-debian-11-r0
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1046,12 +1046,14 @@ backup:
       ## @param backup.uploadProviders.aws.region Region of aws s3 bucket
       ## @param backup.uploadProviders.aws.existingSecret Name of existing secret object
       ## @param backup.uploadProviders.aws.bucketName aws s3 bucket name
+      ## @param backup.uploadProviders.aws.endpoint aws s3 endpoint, no value default public endpoint aws s3 endpoint
       enabled: false
       accessKeyID: ""
       secretAccessKey: ""
       region: "us-east-1"
       existingSecret: ""
       bucketName: "s3://bucket/influxdb"
+      endpoint: ""
       ## Bitnami AWS CLI image
       ## ref: https://hub.docker.com/r/bitnami/aws-cli/tags
       ## @param backup.uploadProviders.aws.image.registry [default: REGISTRY_NAME] AWS CLI image registry
@@ -1064,7 +1066,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/aws-cli
-        tag: 2.13.30-debian-11-r0
+        tag: 2.14.6-debian-11-r0
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

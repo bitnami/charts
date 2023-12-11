@@ -29,6 +29,39 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
+Create the name of the unsealer cluster role
+*/}}
+{{- define "sealed-secrets.clusterRoleName" -}}
+{{- if .Values.rbac.clusterRoleName -}}
+    {{ printf "%s" .Values.rbac.clusterRoleName }}
+{{- else -}}
+    {{ printf "%s-unsealer" (include "common.names.fullname" .) }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the unsealer namespaced cluster role
+*/}}
+{{- define "sealed-secrets.namespacedRoleName" -}}
+{{- if .Values.rbac.namespacedRolesName -}}
+    {{ printf "%s" .Values.rbac.namespacedRolesName }}
+{{- else -}}
+    {{ printf "%s-unsealer" (include "common.names.fullname" .) | quote }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the secret that hold keys
+*/}}
+{{- define "sealed-secrets.secretName" -}}
+{{- if .Values.secretName -}}
+    {{ printf "%s" .Values.secretName }}
+{{- else -}}
+    {{ printf "%s-key" (include "common.names.fullname" .) | quote }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the appropriate apiVersion for PodSecurityPolicy.
 */}}
 {{- define "podSecurityPolicy.apiVersion" -}}
