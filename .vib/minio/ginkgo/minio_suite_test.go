@@ -41,7 +41,6 @@ func TestMinio(t *testing.T) {
 }
 
 func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, stmt string) error {
-
 	securityContext := &v1.SecurityContext{
 		Privileged:               &[]bool{false}[0],
 		AllowPrivilegeEscalation: &[]bool{false}[0],
