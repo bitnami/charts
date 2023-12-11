@@ -41,9 +41,9 @@ func TestMariaDB(t *testing.T) {
 
 func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, stmt string) error {
 	securityContext := &v1.SecurityContext{
-		Privileged:               new(bool),
-		AllowPrivilegeEscalation: new(bool),
-		RunAsNonRoot:             new(bool),
+		Privileged:               &[]bool{false}[0],
+		AllowPrivilegeEscalation: &[]bool{false}[0],
+		RunAsNonRoot:             &[]bool{true}[0],
 		Capabilities: &v1.Capabilities{
 			Drop: []v1.Capability{"ALL"},
 		},
@@ -52,9 +52,6 @@ func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, s
 		},
 	}
 
-	*securityContext.Privileged = false
-	*securityContext.AllowPrivilegeEscalation = false
-	*securityContext.RunAsNonRoot = true
 	job := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
