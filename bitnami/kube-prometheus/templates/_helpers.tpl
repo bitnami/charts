@@ -219,7 +219,7 @@ Return the proper Blackbox Exporter Image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "kube-prometheus.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.operator.image .Values.operator.prometheusConfigReloader.image .Values.prometheus.image .Values.prometheus.thanos.image .Values.alertmanager.image .Values.blackboxExporter.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.operator.image .Values.operator.prometheusConfigReloader.image .Values.prometheus.image .Values.prometheus.thanos.image .Values.alertmanager.image .Values.blackboxExporter.image) "context" $) -}}
 {{- end -}}
 
 {{/*
