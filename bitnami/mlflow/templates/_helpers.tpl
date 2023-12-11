@@ -78,7 +78,14 @@ Return the MLflow Tracking Secret key for the user
 Return the MLFlow Trakcing Port
 */}}
 {{- define "mlflow.v0.tracking.port" -}}
-{{- int ( ternary .Values.tracking.service.ports.https .Values.tracking.service.ports.http .Values.tracking.tls.enabled ) -}}
+{{- ternary .Values.tracking.service.ports.https .Values.tracking.service.ports.http .Values.tracking.tls.enabled -}}
+{{- end -}}
+
+{{/*
+Return the MLFlow Trakcing Port Name
+*/}}
+{{- define "mlflow.v0.tracking.portName" -}}
+{{- printf "%s-mlflow" (ternary "https" "http" .Values.tracking.tls.enabled) -}}
 {{- end -}}
 
 {{/*
