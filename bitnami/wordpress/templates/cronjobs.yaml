@@ -4,7 +4,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if .Values.cronJobs.scheduler.enabled }}
-apiVersion: batch/v1
+apiVersion: {{ include "common.capabilities.cronjob.apiVersion" . }}
 kind: CronJob
 metadata:
   name: {{ include "common.names.fullname" . }}-scheduler
