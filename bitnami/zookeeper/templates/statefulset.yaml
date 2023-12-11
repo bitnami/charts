@@ -443,7 +443,7 @@ spec:
         - name: scripts
           configMap:
             name: {{ printf "%s-scripts" (include "common.names.fullname" .) }}
-            defaultMode: 0755
+            defaultMode: 493
         {{- if or .Values.configuration .Values.existingConfigmap }}
         - name: config
           configMap:
