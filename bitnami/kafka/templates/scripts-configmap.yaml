@@ -157,7 +157,7 @@ data:
         read -r -a hosts <<<"$(tr ',' ' ' <<<"${EXTERNAL_ACCESS_HOSTS_LIST}")"
         host="${hosts[$POD_ID]}"
       elif [[ "$EXTERNAL_ACCESS_HOST_USE_PUBLIC_IP" =~ ^(yes|true)$ ]]; then
-        host=$(curl -s https://ipinfo.io/ip)
+        host=$(curl -s https://ifconfig.me)
       else
         error "External access hostname not provided"
       fi
