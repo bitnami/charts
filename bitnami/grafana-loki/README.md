@@ -156,7 +156,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.priorityClassName`                     | Compactor pods' priorityClassName                                                                   | `""`                |
 | `compactor.schedulerName`                         | Kubernetes pod scheduler registry                                                                   | `""`                |
 | `compactor.updateStrategy.type`                   | Compactor statefulset strategy type                                                                 | `RollingUpdate`     |
-| `compactor.updateStrategy.rollingUpdate`          | Compactor statefulset rolling update configuration parameters                                       | `{}`                |
+| `compactor.updateStrategy.rollingUpdate`          | Compactor statefulset rolling update configuration parameters                                       | `nil`               |
 | `compactor.extraVolumes`                          | Optionally specify extra list of additional volumes for the Compactor pod(s)                        | `[]`                |
 | `compactor.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Compactor container(s)             | `[]`                |
 | `compactor.sidecars`                              | Add additional sidecar containers to the Compactor pod(s)                                           | `[]`                |
@@ -254,7 +254,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.priorityClassName`                     | Gateway pods' priorityClassName                                                                       | `""`                    |
 | `gateway.schedulerName`                         | Kubernetes pod scheduler registry                                                                     | `""`                    |
 | `gateway.updateStrategy.type`                   | Gateway statefulset strategy type                                                                     | `RollingUpdate`         |
-| `gateway.updateStrategy.rollingUpdate`          | Gateway statefulset rolling update configuration parameters                                           | `{}`                    |
+| `gateway.updateStrategy.rollingUpdate`          | Gateway statefulset rolling update configuration parameters                                           | `nil`                   |
 | `gateway.extraVolumes`                          | Optionally specify extra list of additional volumes for the Gateway pod(s)                            | `[]`                    |
 | `gateway.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Gateway container(s)                 | `[]`                    |
 | `gateway.sidecars`                              | Add additional sidecar containers to the Gateway pod(s)                                               | `[]`                    |
@@ -346,7 +346,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexGateway.priorityClassName`                     | index-gateway pods' priorityClassName                                                                  | `""`            |
 | `indexGateway.schedulerName`                         | Kubernetes pod scheduler registry                                                                      | `""`            |
 | `indexGateway.updateStrategy.type`                   | index-gateway statefulset strategy type                                                                | `RollingUpdate` |
-| `indexGateway.updateStrategy.rollingUpdate`          | index-gateway statefulset rolling update configuration parameters                                      | `{}`            |
+| `indexGateway.updateStrategy.rollingUpdate`          | index-gateway statefulset rolling update configuration parameters                                      | `nil`           |
 | `indexGateway.extraVolumes`                          | Optionally specify extra list of additional volumes for the index-gateway pod(s)                       | `[]`            |
 | `indexGateway.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the index-gateway container(s)            | `[]`            |
 | `indexGateway.sidecars`                              | Add additional sidecar containers to the index-gateway pod(s)                                          | `[]`            |
@@ -425,7 +425,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.priorityClassName`                     | Distributor pods' priorityClassName                                                                   | `""`            |
 | `distributor.schedulerName`                         | Kubernetes pod scheduler registry                                                                     | `""`            |
 | `distributor.updateStrategy.type`                   | Distributor statefulset strategy type                                                                 | `RollingUpdate` |
-| `distributor.updateStrategy.rollingUpdate`          | Distributor statefulset rolling update configuration parameters                                       | `{}`            |
+| `distributor.updateStrategy.rollingUpdate`          | Distributor statefulset rolling update configuration parameters                                       | `nil`           |
 | `distributor.extraVolumes`                          | Optionally specify extra list of additional volumes for the Distributor pod(s)                        | `[]`            |
 | `distributor.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Distributor container(s)             | `[]`            |
 | `distributor.sidecars`                              | Add additional sidecar containers to the Distributor pod(s)                                           | `[]`            |
@@ -505,7 +505,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.priorityClassName`                     | Ingester pods' priorityClassName                                                                   | `""`            |
 | `ingester.schedulerName`                         | Kubernetes pod scheduler registry                                                                  | `""`            |
 | `ingester.updateStrategy.type`                   | Ingester statefulset strategy type                                                                 | `RollingUpdate` |
-| `ingester.updateStrategy.rollingUpdate`          | Ingester statefulset rolling update configuration parameters                                       | `{}`            |
+| `ingester.updateStrategy.rollingUpdate`          | Ingester statefulset rolling update configuration parameters                                       | `nil`           |
 | `ingester.extraVolumes`                          | Optionally specify extra list of additional volumes for the Ingester pod(s)                        | `[]`            |
 | `ingester.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the ingester container(s)             | `[]`            |
 | `ingester.sidecars`                              | Add additional sidecar containers to the Ingester pod(s)                                           | `[]`            |
@@ -597,7 +597,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.priorityClassName`                     | Querier pods' priorityClassName                                                                   | `""`            |
 | `querier.schedulerName`                         | Kubernetes pod scheduler registry                                                                 | `""`            |
 | `querier.updateStrategy.type`                   | Querier statefulset strategy type                                                                 | `RollingUpdate` |
-| `querier.updateStrategy.rollingUpdate`          | Querier statefulset rolling update configuration parameters                                       | `{}`            |
+| `querier.updateStrategy.rollingUpdate`          | Querier statefulset rolling update configuration parameters                                       | `nil`           |
 | `querier.extraVolumes`                          | Optionally specify extra list of additional volumes for the Querier pod(s)                        | `[]`            |
 | `querier.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the querier container(s)             | `[]`            |
 | `querier.sidecars`                              | Add additional sidecar containers to the Querier pod(s)                                           | `[]`            |
@@ -688,7 +688,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.priorityClassName`                     | queryFrontend pods' priorityClassName                                                                   | `""`            |
 | `queryFrontend.schedulerName`                         | Kubernetes pod scheduler registry                                                                       | `""`            |
 | `queryFrontend.updateStrategy.type`                   | queryFrontend statefulset strategy type                                                                 | `RollingUpdate` |
-| `queryFrontend.updateStrategy.rollingUpdate`          | queryFrontend statefulset rolling update configuration parameters                                       | `{}`            |
+| `queryFrontend.updateStrategy.rollingUpdate`          | queryFrontend statefulset rolling update configuration parameters                                       | `nil`           |
 | `queryFrontend.extraVolumes`                          | Optionally specify extra list of additional volumes for the queryFrontend pod(s)                        | `[]`            |
 | `queryFrontend.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the queryFrontend container(s)             | `[]`            |
 | `queryFrontend.sidecars`                              | Add additional sidecar containers to the queryFrontend pod(s)                                           | `[]`            |
@@ -769,7 +769,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryScheduler.priorityClassName`                     | queryScheduler pods' priorityClassName                                                                   | `""`            |
 | `queryScheduler.schedulerName`                         | Kubernetes pod scheduler registry                                                                        | `""`            |
 | `queryScheduler.updateStrategy.type`                   | queryScheduler statefulset strategy type                                                                 | `RollingUpdate` |
-| `queryScheduler.updateStrategy.rollingUpdate`          | queryScheduler statefulset rolling update configuration parameters                                       | `{}`            |
+| `queryScheduler.updateStrategy.rollingUpdate`          | queryScheduler statefulset rolling update configuration parameters                                       | `nil`           |
 | `queryScheduler.extraVolumes`                          | Optionally specify extra list of additional volumes for the queryScheduler pod(s)                        | `[]`            |
 | `queryScheduler.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the queryScheduler container(s)             | `[]`            |
 | `queryScheduler.sidecars`                              | Add additional sidecar containers to the queryScheduler pod(s)                                           | `[]`            |
@@ -850,7 +850,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.priorityClassName`                     | Ruler pods' priorityClassName                                                                   | `""`            |
 | `ruler.schedulerName`                         | Kubernetes pod scheduler registry                                                               | `""`            |
 | `ruler.updateStrategy.type`                   | Ruler statefulset strategy type                                                                 | `RollingUpdate` |
-| `ruler.updateStrategy.rollingUpdate`          | Ruler statefulset rolling update configuration parameters                                       | `{}`            |
+| `ruler.updateStrategy.rollingUpdate`          | Ruler statefulset rolling update configuration parameters                                       | `nil`           |
 | `ruler.extraVolumes`                          | Optionally specify extra list of additional volumes for the Ruler pod(s)                        | `[]`            |
 | `ruler.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the ruler container(s)             | `[]`            |
 | `ruler.sidecars`                              | Add additional sidecar containers to the Ruler pod(s)                                           | `[]`            |
@@ -942,7 +942,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tableManager.priorityClassName`                     | table-manager pods' priorityClassName                                                                  | `""`            |
 | `tableManager.schedulerName`                         | Kubernetes pod scheduler registry                                                                      | `""`            |
 | `tableManager.updateStrategy.type`                   | table-manager statefulset strategy type                                                                | `RollingUpdate` |
-| `tableManager.updateStrategy.rollingUpdate`          | table-manager statefulset rolling update configuration parameters                                      | `{}`            |
+| `tableManager.updateStrategy.rollingUpdate`          | table-manager statefulset rolling update configuration parameters                                      | `nil`           |
 | `tableManager.extraVolumes`                          | Optionally specify extra list of additional volumes for the table-manager pod(s)                       | `[]`            |
 | `tableManager.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the table-manager container(s)            | `[]`            |
 | `tableManager.sidecars`                              | Add additional sidecar containers to the table-manager pod(s)                                          | `[]`            |
@@ -1027,7 +1027,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.priorityClassName`                     | Promtail pods' priorityClassName                                                                                 | `""`                       |
 | `promtail.schedulerName`                         | Kubernetes pod scheduler registry                                                                                | `""`                       |
 | `promtail.updateStrategy.type`                   | Promtail statefulset strategy type                                                                               | `RollingUpdate`            |
-| `promtail.updateStrategy.rollingUpdate`          | Promtail statefulset rolling update configuration parameters                                                     | `{}`                       |
+| `promtail.updateStrategy.rollingUpdate`          | Promtail statefulset rolling update configuration parameters                                                     | `nil`                      |
 | `promtail.extraVolumes`                          | Optionally specify extra list of additional volumes for the Promtail pod(s)                                      | `[]`                       |
 | `promtail.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the promtail container(s)                           | `[]`                       |
 | `promtail.sidecars`                              | Add additional sidecar containers to the Promtail pod(s)                                                         | `[]`                       |

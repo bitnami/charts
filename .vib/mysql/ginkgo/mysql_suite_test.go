@@ -40,6 +40,17 @@ func TestMysql(t *testing.T) {
 }
 
 func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, stmt string) error {
+	securityContext := &v1.SecurityContext{
+		Privileged:               &[]bool{false}[0],
+		AllowPrivilegeEscalation: &[]bool{false}[0],
+		RunAsNonRoot:             &[]bool{true}[0],
+		Capabilities: &v1.Capabilities{
+			Drop: []v1.Capability{"ALL"},
+		},
+		SeccompProfile: &v1.SeccompProfile{
+			Type: "RuntimeDefault",
+		},
+	}
 	job := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
@@ -74,6 +85,7 @@ func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, s
 									Value: port,
 								},
 							},
+							SecurityContext: securityContext,
 						},
 					},
 				},

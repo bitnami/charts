@@ -184,7 +184,7 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
-            {{- if (regexFind "SSL" (upper .Values.listeners.client.protocol)) }}
+            {{- if and (regexFind "SSL" (upper .Values.listeners.client.protocol)) .Values.provisioning.auth.tls.passwordsSecret }}
             - name: KAFKA_CLIENT_KEY_PASSWORD
               valueFrom:
                 secretKeyRef:
