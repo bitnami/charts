@@ -91,6 +91,10 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "kafka.serviceAccountName" . }}
       enableServiceLinks: {{ .Values.controller.enableServiceLinks }}
+      {{- if .Values.dnsService.enabled }}
+      dnsPolicy: {{ .Values.dnsService.dnsPolicy }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dnsService.dnsConfig "context" $) | nindent 8 }}
+      {{- end }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.controller.persistence.enabled }}
         - name: volume-permissions

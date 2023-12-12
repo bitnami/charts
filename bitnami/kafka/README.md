@@ -453,6 +453,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.explicitNamespacesSelector`                   | A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed                                            | `{}`                      |
 | `networkPolicy.externalAccess.from`                          | customize the from section for External Access on tcp-external port                                                                       | `[]`                      |
 | `networkPolicy.egressRules.customRules`                      | Custom network policy rule                                                                                                                | `{}`                      |
+| `dnsService.enabled`                                         | Specifies whether to use customized DNS-Pod service                                                                                       | `false`                   |
+| `dnsService.dnsPolicy`                                       | Specifies the DNS policy for the Kafka pods                                                                                               | `Default`                 |
+| `dnsService.dnsConfig`                                       | allows users more control on the DNS settings for a Pod.                                                                                  | `{}`                      |
 
 ### Volume Permissions parameters
 
