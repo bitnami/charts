@@ -50,9 +50,12 @@ spec:
             {{- end }}
             {{- end }}
             - name: {{ include "common.names.fullname" . }}-backups
-            {{- if .Values.persistence.enabled }}
+            {{- if .Values.backup.persistence.enabled }}
               persistentVolumeClaim:
-                claimName: {{ include "common.names.fullname" . }}-backups
+                claimName: {{ default (printf "%s-%s" (include "common.names.fullname" . ) "backups") .Values.backup.persistence.existingClaim }}
+            {{- else if .Values.persistence.enabled }}
+              persistentVolumeClaim:
+                claimName: {{ default (printf "%s-%s" (include "common.names.fullname" . ) "backups") .Values.persistence.existingClaim }}
             {{- else }}
               emptyDir: {}
             {{- end }}

@@ -924,6 +924,36 @@ backup:
   ## @param backup.retentionDays Retention time in days for backups (older backups are deleted)
   ##
   retentionDays: 10
+
+  ## Persistence parameters
+  ##
+  persistence:
+    ## @param backup.persistence.enabled Enable data persistence for backup volume
+    ##
+    enabled: false
+    ## @param backup.persistence.existingClaim Use a existing PVC which must be created manually before bound
+    ## If defined, PVC must be created manually before volume will be bound
+    ## The value is evaluated as a template
+    ##
+    existingClaim: ""
+    ## @param backup.persistence.storageClass Specify the `storageClass` used to provision the volume
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ## set, choosing the default provisioner.
+    ##
+    storageClass: ""
+    ## @param backup.persistence.accessModes Access mode of data volume
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param backup.persistence.size Size of data volume
+    ##
+    size: 8Gi
+    ## @param backup.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+
   ## Cronjob configuration
   ## This cronjob is used to create InfluxDB&trade; backups
   ##
