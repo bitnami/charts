@@ -109,3 +109,32 @@ Get the InfluxDB&trade; initialization scripts secret.
 {{- define "influxdb.initdbScriptsSecret" -}}
 {{- printf "%s" (tpl .Values.influxdb.initdbScriptsSecret $) -}}
 {{- end -}}
+
+{{- /*
+Helper template for determining which persistence settings to use for backup PVC.
+Allows backwards-compatibility for users that have not defined a backups.persistence dict in their values files.
+*/}}
+{{- define "influxdb.backup.pvc" }}
+{{- $ := index . 0 }}
+{{- $persistence := index . 1 }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "common.names.fullname" $ }}-backups
+  namespace: {{ $.Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: influxdb
+  {{- if or $persistence.annotations $.Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list $persistence.annotations $.Values.commonAnnotations ) "context" $ ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  accessModes:
+  {{- range $persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ $persistence.size | quote }}
+  {{- include "common.storage.class" ( dict "persistence" $persistence "global" $) | nindent 2 }}
+{{- end }}

@@ -50,7 +50,7 @@ spec:
             {{- end }}
             {{- end }}
             - name: {{ include "common.names.fullname" . }}-backups
-            {{- if .Values.persistence.enabled }}
+            {{- if or .Values.backup.persistence.enabled .Values.persistence.enabled }}
               persistentVolumeClaim:
                 claimName: {{ include "common.names.fullname" . }}-backups
             {{- else }}

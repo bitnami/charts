@@ -278,6 +278,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.enabled`                                                   | Enable InfluxDB&trade; backup                                                                                    | `false`                            |
 | `backup.directory`                                                 | Directory where backups are stored                                                                               | `/backups`                         |
 | `backup.retentionDays`                                             | Retention time in days for backups (older backups are deleted)                                                   | `10`                               |
+| `backup.persistence.enabled`                                       | Enable data persistence for backup volume                                                                        | `true`                             |
+| `backup.persistence.existingClaim`                                 | Use a existing PVC which must be created manually before bound                                                   | `""`                               |
+| `backup.persistence.storageClass`                                  | Specify the `storageClass` used to provision the volume                                                          | `""`                               |
+| `backup.persistence.accessModes`                                   | Access mode of data volume                                                                                       | `["ReadWriteOnce"]`                |
+| `backup.persistence.size`                                          | Size of data volume                                                                                              | `8Gi`                              |
+| `backup.persistence.annotations`                                   | Persistent Volume Claim annotations                                                                              | `{}`                               |
 | `backup.cronjob.schedule`                                          | Schedule in Cron format to save snapshots                                                                        | `0 2 * * *`                        |
 | `backup.cronjob.historyLimit`                                      | Number of successful finished jobs to retain                                                                     | `1`                                |
 | `backup.cronjob.podAnnotations`                                    | Pod annotations                                                                                                  | `{}`                               |
@@ -443,6 +449,8 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 The data is persisted by default using PVC(s). You can disable the persistence setting the `persistence.enabled` parameter to `false`.
 A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `persistence.storageClass` or set `persistence.existingClaim` if you have already existing persistent volumes to use.
+
+If you would like to define persistence settings for a backup volume that differ from the persistence settings for the database volume, you may do so under the `backup.persistence` section of the configuration. If this section is undefined, but `backup.enabled` is set to true, the backup volume will be defined using the `persistence` parameter section.
 
 ### Adjust permissions of persistent volume mountpoint
 
