@@ -42,6 +42,16 @@ sidecars:
     volumeMounts:
       - name: dex-vib-config
         mountPath: /config
+    securityContext:
+      runAsUser: 1001
+      runAsNonRoot: true
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+
 extraVolumes:
   - name: dex-vib-config
     configMap:

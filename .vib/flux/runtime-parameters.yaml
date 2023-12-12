@@ -90,7 +90,7 @@ extraDeploy:
         "helm.sh/hook": post-install
     spec:
       interval: 5m
-      url: https://github.com/stefanprodan/podinfo
+      url: https://github.com/javsalgar/podinfo
       ref:
         branch: master
   - apiVersion: kustomize.toolkit.fluxcd.io/v1
