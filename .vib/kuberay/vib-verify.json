@@ -51,7 +51,7 @@
             "resources": {
               "path": "/.vib/kuberay/cypress"
             },
-            "endpoint": "lb-kuberay-cluster-head-vib-svc",
+            "endpoint": "lb-kuberay-cluster-head-vib-svc-http",
             "app_protocol": "HTTP"
           }
         }
