@@ -39,6 +39,9 @@ spec:
           {{- if .Values.podSecurityContext.enabled }}
           securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          {{- if .Values.disasterRecovery.cronjob.serviceAccountName }}
+          serviceAccountName: {{ .Values.disasterRecovery.cronjob.serviceAccountName | quote }}
+          {{- end }}
           {{- if and .Values.volumePermissions.enabled (or .Values.podSecurityContext.enabled .Values.containerSecurityContext.enabled) }}
           initContainers:
             - name: volume-permissions
