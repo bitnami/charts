@@ -109,6 +109,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.image.pullPolicy`                                  | PyMilvus image pull policy                                                                                                                          | `IfNotPresent`             |
 | `initJob.image.pullSecrets`                                 | PyMilvus image pull secrets                                                                                                                         | `[]`                       |
 | `initJob.enableDefaultInitContainers`                       | Deploy default init containers                                                                                                                      | `true`                     |
+| `initJob.tls.existingSecret`                                | Name of the existing secret containing the TLS certificates for initJob.                                                                            | `""`                 |
+| `initJob.tls.cert`                                          | The secret key from the existingSecret if 'cert' key different from the default (client.pem)                                                        | `tls.crt`            |
+| `initJob.tls.key`                                           | The secret key from the existingSecret if 'key' key different from the default (client.key)                                                         | `tls.key`            |
+| `initJob.tls.caCert`                                        | The secret key from the existingSecret if 'caCert' key different from the default (ca.crt)                                                          | `ca.crt`             |
+| `initJob.tls.keyPassword`                                   | Password to access the password-protected PEM key if necessary.                                                                                     | `""`                 |
 | `initJob.backoffLimit`                                      | set backoff limit of the job                                                                                                                        | `10`                       |
 | `initJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the credential init job                                                                     | `[]`                       |
 | `initJob.extraCommands`                                     | Extra commands to pass to the generation job                                                                                                        | `""`                       |
@@ -1116,8 +1121,14 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Proxy Deployment Parameters
 
 | Name                                                      | Description                                                                                     | Value            |
-| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ---------------- |
+|---------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ---------------- |
 | `proxy.enabled`                                           | Enable Proxy deployment                                                                         | `true`           |
+| `proxy.tls.mode`                                          | TLS mode for proxy. Allowed values: `0`, `1`, `2`                                               | `0`              |
+| `proxy.tls.existingSecret`                                | Name of the existing secret containing the TLS certificates for proxy.                          | `""`             |
+| `proxy.tls.cert`                                          | The secret key from the existingSecret if 'cert' key different from the default (server.pem)    | `tls.crt`        |
+| `proxy.tls.key`                                           | The secret key from the existingSecret if 'key' key different from the default (server.key)     | `tls.key`        |
+| `proxy.tls.caCert`                                        | The secret key from the existingSecret if 'caCert' key different from the default (ca.crt)      | `ca.crt`         |
+| `proxy.tls.keyPassword`                                   | Password to access the password-protected PEM key if necessary.                                 | `""`             |
 | `proxy.extraEnvVars`                                      | Array with extra environment variables to add to proxy nodes                                    | `[]`             |
 | `proxy.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for proxy nodes                            | `""`             |
 | `proxy.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for proxy nodes                               | `""`             |
