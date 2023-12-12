@@ -495,7 +495,7 @@ enableServiceLinks: true
 dnsService:
   ## @param dnsService.enabled Specifies whether to use customized DNS-Pod service
   enabled: false
-  ## @param dnsService.dnsPolicy Specifies the DNS policy for the Kafka pods
+  ## @param dnsService.dnsPolicy Specifies the DNS policy for the zookeeper pods
   ## DNS policies can be set on a per-Pod basis. Currently Kubernetes supports the following Pod-specific DNS policies.
   ## Available options: Default, ClusterFirst, ClusterFirstWithHostNet, None
   dnsPolicy: Default
