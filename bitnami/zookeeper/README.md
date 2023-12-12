@@ -196,7 +196,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.maxUnavailable`                                | Maximum unavailable ZooKeeper replicas                                                                                                                                                            | `1`              |
 | `enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                             | `true`           |
 | `dnsService.enabled`                                | Specifies whether to use customized DNS-Pod service                                                                                                                                               | `false`          |
-| `dnsService.dnsPolicy`                              | Specifies the DNS policy for the Kafka pods                                                                                                                                                       | `Default`        |
+| `dnsService.dnsPolicy`                              | Specifies the DNS policy for the zookeeper pods                                                                                                                                                   | `Default`        |
 | `dnsService.dnsConfig`                              | allows users more control on the DNS settings for a Pod.                                                                                                                                          | `{}`             |
 
 ### Traffic Exposure parameters
