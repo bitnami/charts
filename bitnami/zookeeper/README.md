@@ -221,6 +221,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.headless.servicenameOverride`      | String to partially override headless service name                                      | `""`        |
 | `networkPolicy.enabled`                     | Specifies whether a NetworkPolicy should be created                                     | `false`     |
 | `networkPolicy.allowExternal`               | Don't require client label for connections                                              | `true`      |
+| `dnsService.enabled`                        | Specifies whether to use customized DNS-Pod service                                     | `false`     |
+| `dnsService.dnsPolicy`                      | Specifies the DNS policy for the Kafka pods                                             | `Default`   |
+| `dnsService.dnsConfig`                      | allows users more control on the DNS settings for a Pod.                                | `{}`        |
 
 ### Other Parameters
 
