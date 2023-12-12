@@ -6,20 +6,20 @@ on:
   pull_request_review_comment:
     types:
       - created
-  pull_request_review:
-    types:
-      - submitted
-      - dismissed
 permissions: {}
 # Avoid concurrency over the same issue
 concurrency:
   group: card-movement-${{ github.event.pull_request.number }}
 jobs:
-  call-pr-review-comment-workflow:
-    if: ${{ github.event_name == 'pull_request_review_comment' }}
-    uses: bitnami/support/.github/workflows/pr-review-comment.yml@main
-    secrets: inherit
-  call-pr-review-workflow:
-    if: ${{ github.event_name == 'pull_request_review' }}
-    uses: bitnami/support/.github/workflows/pr-review.yml@main
-    secrets: inherit
+  just-notice:
+    # This is a dummy workflow that triggers a workflow_run
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "::notice:: Comment on PR #${{ github.event.pull_request.number }}"
+          echo "${{ github.event.pull_request.number }}" > pull_request_number
+      - name: Upload the PR number
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32
+        with:
+          name: pull_request_number
+          path: ./pull_request_number

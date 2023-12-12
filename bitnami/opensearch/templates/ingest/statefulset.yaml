@@ -268,7 +268,7 @@ spec:
             defaultMode: 256
             sources:
               - secret:
-                  name: {{ include "opensearch.master.tlsSecretName" . }}
+                  name: {{ include "opensearch.ingest.tlsSecretName" . }}
               - secret:
                   name: {{ include "opensearch.admin.tlsSecretName" . }}
         {{- end }}
