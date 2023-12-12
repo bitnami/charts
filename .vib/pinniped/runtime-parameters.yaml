@@ -93,7 +93,6 @@ extraDeploy:
               periodSeconds: 2
               failureThreshold: 9
             securityContext:
-              runAsUser: 1001
               runAsNonRoot: true
               privileged: false
               allowPrivilegeEscalation: false
