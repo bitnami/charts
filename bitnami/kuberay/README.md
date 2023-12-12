@@ -2,9 +2,9 @@
 
 # KubeRay packaged by Bitnami
 
-Kuberay is a tool for securely managing and accessing secrets using a unified interface. Features secure storage, dynamic secrets, data encryption and revocation.
+KubeRay is a Kubernetes operator for deploying and management of Ray applications on Kubernetes using CustomResourceDefinitions.
 
-[Overview of KubeRay](https://www.kuberayproject.io/)
+[Overview of KubeRay](https://www.ray.io/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
