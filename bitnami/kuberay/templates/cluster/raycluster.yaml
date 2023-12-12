@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.cluster.enabled }}
 apiVersion: ray.io/v1
 kind: RayCluster

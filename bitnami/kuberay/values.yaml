@@ -369,18 +369,47 @@ operator:
 
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param operator.autoscaling.enabled Enable autoscaling for operator
-  ## @param operator.autoscaling.minReplicas Minimum number of operator replicas
-  ## @param operator.autoscaling.maxReplicas Maximum number of operator replicas
-  ## @param operator.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param operator.autoscaling.targetMemory Target Memory utilization percentage
   ##
   autoscaling:
-    enabled: false
-    minReplicas: ""
-    maxReplicas: ""
-    targetCPU: ""
-    targetMemory: ""
+    vpa:
+      ## @param operator.autoscaling.vpa.enabled Enable VPA
+      ##
+      enabled: false
+      ## @param operator.autoscaling.vpa.annotations Annotations for VPA resource
+      ##
+      annotations: {}
+      ## @param operator.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+      ##
+      controlledResources: []
+      ## @param operator.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      maxAllowed: {}
+      ## @param operator.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      minAllowed: {}
+      updatePolicy:
+        ## @param operator.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+        ##
+        updateMode: Auto
+    hpa:
+      ## @param operator.autoscaling.hpa.enabled Enable autoscaling for operator
+      ##
+      enabled: false
+      ## @param operator.autoscaling.hpa.minReplicas Minimum number of operator replicas
+      ##
+      minReplicas: ""
+      ## @param operator.autoscaling.hpa.maxReplicas Maximum number of operator replicas
+      ##
+      maxReplicas: ""
+      ## @param operator.autoscaling.hpa.targetCPU Target CPU utilization percentage
+      ##
+      targetCPU: ""
+      ## @param operator.autoscaling.hpa.targetMemory Target Memory utilization percentage
+      ##
+      targetMemory: ""
 
   ## @section Kuberay Operator Traffic Exposure Parameters
   ##
@@ -909,21 +938,49 @@ apiserver:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param apiserver.autoscaling.enabled Enable autoscaling for operator
-  ## @param apiserver.autoscaling.minReplicas Minimum number of operator replicas
-  ## @param apiserver.autoscaling.maxReplicas Maximum number of operator replicas
-  ## @param apiserver.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param apiserver.autoscaling.targetMemory Target Memory utilization percentage
   ##
   autoscaling:
-    enabled: false
-    minReplicas: ""
-    maxReplicas: ""
-    targetCPU: ""
-    targetMemory: ""
+    vpa:
+      ## @param apiserver.autoscaling.vpa.enabled Enable VPA
+      ##
+      enabled: false
+      ## @param apiserver.autoscaling.vpa.annotations Annotations for VPA resource
+      ##
+      annotations: {}
+      ## @param apiserver.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+      ##
+      controlledResources: []
+      ## @param apiserver.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      maxAllowed: {}
+      ## @param apiserver.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      minAllowed: {}
+      updatePolicy:
+        ## @param apiserver.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+        ##
+        updateMode: Auto
+    hpa:
+      ## @param apiserver.autoscaling.hpa.enabled Enable autoscaling for apiserver
+      ##
+      enabled: false
+      ## @param apiserver.autoscaling.hpa.minReplicas Minimum number of apiserver replicas
+      ##
+      minReplicas: ""
+      ## @param apiserver.autoscaling.hpa.maxReplicas Maximum number of apiserver replicas
+      ##
+      maxReplicas: ""
+      ## @param apiserver.autoscaling.hpa.targetCPU Target CPU utilization percentage
+      ##
+      targetCPU: ""
+      ## @param apiserver.autoscaling.hpa.targetMemory Target Memory utilization percentage
+      ##
+      targetMemory: ""
 
   ## @section Kuberay API Server Traffic Exposure Parameters
   ##
