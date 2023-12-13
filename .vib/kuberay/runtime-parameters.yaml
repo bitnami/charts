@@ -72,7 +72,6 @@ extraDeploy:
             - name: job-runner
               image: '{{ include "kuberay.ray.image" . }}'
               securityContext:
-                runAsUser: 1001
                 runAsNonRoot: true
                 privileged: false
                 readOnlyRootFilesystem: true
