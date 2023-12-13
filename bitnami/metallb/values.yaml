@@ -395,8 +395,10 @@ controller:
   ##
   logLevel: info
   ## @param controller.tlsMinVersion Sets the minimum TLS version for the controller
+  ## e.g:
+  ## namespace: VersionTLS12
   ##
-  tlsMinVersion: VersionTLS12
+  tlsMinVersion: ""
   ## @param controller.tlsCipherSuites Comma separated list of TLS cipher suites for the controller
   ##  
   tlsCipherSuites: ""
