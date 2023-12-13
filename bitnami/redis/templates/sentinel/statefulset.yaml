@@ -134,6 +134,10 @@ spec:
             - /opt/bitnami/scripts/start-scripts/start-node.sh
           {{- end }}
           env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: REDIS_MASTER_PORT_NUMBER
@@ -265,7 +269,7 @@ spec:
               command:
                 - sh
                 - -c
-                - /health/ping_readiness_local.sh {{ .Values.replica.readinessProbe.timeoutSeconds }}
+                - /health/ping_readiness_local_and_update_master_svc.sh {{ .Values.replica.readinessProbe.timeoutSeconds }}
           {{- end }}
           {{- end }}
           {{- if .Values.replica.resources }}

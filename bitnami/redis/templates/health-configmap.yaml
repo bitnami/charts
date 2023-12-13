@@ -43,6 +43,71 @@ data:
       echo "$response"
       exit 1
     fi
+  checking_master_local.sh: |-
+    #!/bin/bash
+
+    [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
+    [[ -n "$REDIS_PASSWORD" ]] && export REDISCLI_AUTH="$REDIS_PASSWORD"
+    response=$(
+      timeout -s 15 $1 \
+      redis-cli \
+        -h localhost \
+{{- if .Values.tls.enabled }}
+        -p $REDIS_TLS_PORT \
+        --tls \
+        --cacert {{ template "redis.tlsCACert" . }} \
+        {{- if .Values.tls.authClients }}
+          --cert {{ template "redis.tlsCert" . }} \
+          --key {{ template "redis.tlsCertKey" . }} \
+        {{- end }}
+{{- else }}
+        -p $REDIS_PORT \
+{{- end }}
+        info Replication | grep -e "^role:" | tr -cd "[:print:]"
+    )
+    if [ "$?" -eq "124" ]; then
+      echo "Timed out"
+      exit 1
+    fi
+    [ "$response" = "role:master" ]
+  patch_master_svc.sh: |-
+    #!/bin/bash
+    CURL="curl -s --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+    URL="https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$(</var/run/secrets/kubernetes.io/serviceaccount/namespace)/services/{{ template "common.names.fullname" $ }}-master"
+    AUTH_HEADER="Authorization: Bearer $(</var/run/secrets/kubernetes.io/serviceaccount/token)"
+
+    response=$(
+      timeout -s 15 $1 \
+      ${CURL} --request GET \
+        --header "${AUTH_HEADER}" "${URL}" | \
+        jq ".spec.selector.\"statefulset.kubernetes.io/pod-name\"" -Mr
+    )
+    if [ "$?" -eq "124" ]; then
+      echo "Timed out"
+      exit 1
+    fi
+    if [ "$response" = "null" ]; then
+      exit 1
+    fi
+    if [ "$response" = "$POD_NAME" ]; then
+      exit 0
+    fi
+    PATCH=$(echo "{}" | jq ".spec.selector.\"statefulset.kubernetes.io/pod-name\"=\"$POD_NAME\"" -Mc)
+    timeout -s 15 $1 \
+    ${CURL} --request PATCH \
+      --header "${AUTH_HEADER}" "${URL}" \
+      --header "Content-Type: application/merge-patch+json" \
+      --data "${PATCH}" 1>/dev/null
+  ping_readiness_local_and_update_master_svc.sh: |-
+    script_dir="$(dirname "$0")"
+
+    if "$script_dir/ping_readiness_local.sh" $1; then
+      if "$script_dir/checking_master_local.sh" $1; then
+        "$script_dir/patch_master_svc.sh" $1
+      else
+        exit 0
+      fi
+    fi
   ping_liveness_local.sh: |-
     #!/bin/bash
 

@@ -9,16 +9,17 @@ SPDX-License-Identifier: APACHE-2.0
 
 {{ $sentinelport := 0}}
 {{ $redisport := 0}}
+{{ $fullname := include "common.names.fullname" . }}
 {{- if $portsmap }}
 {{ $sentinelport = index $portsmap (printf "%s-%s" (include "common.names.fullname" $) "sentinel") }}
 {{ $redisport = index $portsmap (printf "%s-%s" (include "common.names.fullname" $) "redis") }}
 {{- else }}
 {{- end }}
-
+{{- range (tuple . (merge (dict "name" (printf "%s-%s" $fullname "master") "matchLabels" (dict "statefulset.kubernetes.io/pod-name" (printf "%s-node-0" $fullname))) . )) }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ default $fullname .name }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: node
@@ -97,5 +98,10 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.replica.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: node
+    {{- range $key,$val := .matchLabels }}
+    {{ $key }}: {{ $val }}
+    {{- end }}
+---
+{{- end }}
 {{- end }}
 {{- end }}

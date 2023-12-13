@@ -290,6 +290,10 @@ redis: architecture
     Using redis sentinel on standalone mode is not supported.
     To deploy redis sentinel, please select the "replication" mode
     (--set "architecture=replication,sentinel.enabled=true")
+{{- else if and .Values.sentinel.enabled (gt (int64 .Values.replica.replicaCount) 1) (not .Values.rbac.create) }}
+redis: architecture
+    In order to enabled sentinel and replica.replicaCount > 1, you
+    also need to enabled rbac.create field
 {{- end -}}
 {{- end -}}
 
