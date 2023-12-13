@@ -367,7 +367,7 @@ spec:
         - name: scripts
           configMap:
             name: {{ include "common.names.fullname" . }}-scripts
-            defaultMode: 0755
+            defaultMode: 493
         {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled }}
         - name: kafka-autodiscovery-shared
           emptyDir: {}

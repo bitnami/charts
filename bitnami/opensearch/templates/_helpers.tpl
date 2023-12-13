@@ -335,6 +335,42 @@ Return the opensearch admin TLS credentials secret for all nodes.
 {{- end -}}
 
 {{/*
+Return the opensearch TLS credentials secret for coordinating nodes.
+*/}}
+{{- define "opensearch.coordinating.tlsSecretName" -}}
+{{- $secretName := .Values.security.tls.coordinating.existingSecret -}}
+{{- if $secretName -}}
+    {{- printf "%s" (tpl $secretName $) -}}
+{{- else -}}
+    {{- printf "%s-crt" (include "opensearch.coordinating.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the opensearch TLS credentials secret for data nodes.
+*/}}
+{{- define "opensearch.data.tlsSecretName" -}}
+{{- $secretName := .Values.security.tls.data.existingSecret -}}
+{{- if $secretName -}}
+    {{- printf "%s" (tpl $secretName $) -}}
+{{- else -}}
+    {{- printf "%s-crt" (include "opensearch.data.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the opensearch TLS credentials secret for ingest nodes.
+*/}}
+{{- define "opensearch.ingest.tlsSecretName" -}}
+{{- $secretName := .Values.security.tls.ingest.existingSecret -}}
+{{- if $secretName -}}
+    {{- printf "%s" (tpl $secretName $) -}}
+{{- else -}}
+    {{- printf "%s-crt" (include "opensearch.ingest.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return true if a TLS credentials secret object should be created
 */}}
 {{- define "opensearch.createTlsSecret" -}}

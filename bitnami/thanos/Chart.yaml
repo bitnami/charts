@@ -8,7 +8,7 @@ annotations:
     - name: os-shell
       image: docker.io/bitnami/os-shell:11-debian-11-r91
     - name: thanos
-      image: docker.io/bitnami/thanos:0.32.5-debian-11-r1
+      image: docker.io/bitnami/thanos:0.32.5-debian-11-r2
 apiVersion: v2
 appVersion: 0.32.5
 dependencies:
@@ -35,4 +35,4 @@ maintainers:
 name: thanos
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/thanos
-version: 12.16.1
+version: 12.17.0

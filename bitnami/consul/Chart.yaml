@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: consul-exporter
-      image: docker.io/bitnami/consul-exporter:0.9.0-debian-11-r300
+      image: docker.io/bitnami/consul-exporter:0.9.0-debian-11-r301
     - name: consul
-      image: docker.io/bitnami/consul:1.17.0-debian-11-r1
+      image: docker.io/bitnami/consul:1.17.0-debian-11-r2
     - name: os-shell
       image: docker.io/bitnami/os-shell:11-debian-11-r91
 apiVersion: v2
@@ -32,4 +32,4 @@ maintainers:
 name: consul
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/consul
-version: 10.14.4
+version: 10.14.5

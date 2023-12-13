@@ -75,7 +75,7 @@ loki:
   image:
     registry: docker.io
     repository: bitnami/grafana-loki
-    tag: 2.9.2-debian-11-r1
+    tag: 2.9.2-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -444,12 +444,12 @@ compactor:
   ##
   schedulerName: ""
   ## @param compactor.updateStrategy.type Compactor statefulset strategy type
-  ## @param compactor.updateStrategy.rollingUpdate Compactor statefulset rolling update configuration parameters
+  ## @param compactor.updateStrategy.rollingUpdate [object,nullable] Compactor statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
+    rollingUpdate: null
   ## @param compactor.extraVolumes Optionally specify extra list of additional volumes for the Compactor pod(s)
   ##
   extraVolumes: []
@@ -798,12 +798,12 @@ gateway:
   ##
   schedulerName: ""
   ## @param gateway.updateStrategy.type Gateway statefulset strategy type
-  ## @param gateway.updateStrategy.rollingUpdate Gateway statefulset rolling update configuration parameters
+  ## @param gateway.updateStrategy.rollingUpdate [object,nullable] Gateway statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
+    rollingUpdate: null
   ## @param gateway.extraVolumes Optionally specify extra list of additional volumes for the Gateway pod(s)
   ##
   extraVolumes: []
@@ -1162,12 +1162,12 @@ indexGateway:
   ##
   schedulerName: ""
   ## @param indexGateway.updateStrategy.type index-gateway statefulset strategy type
-  ## @param indexGateway.updateStrategy.rollingUpdate index-gateway statefulset rolling update configuration parameters
+  ## @param indexGateway.updateStrategy.rollingUpdate [object,nullable] index-gateway statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
+    rollingUpdate: null
   ## @param indexGateway.extraVolumes Optionally specify extra list of additional volumes for the index-gateway pod(s)
   ##
   extraVolumes: []
@@ -1429,12 +1429,12 @@ distributor:
   ##
   schedulerName: ""
   ## @param distributor.updateStrategy.type Distributor statefulset strategy type
-  ## @param distributor.updateStrategy.rollingUpdate Distributor statefulset rolling update configuration parameters
+  ## @param distributor.updateStrategy.rollingUpdate [object,nullable] Distributor statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
+    rollingUpdate: null
   ## @param distributor.extraVolumes Optionally specify extra list of additional volumes for the Distributor pod(s)
   ##
   extraVolumes: []
@@ -1700,12 +1700,12 @@ ingester:
   ##
   schedulerName: ""
   ## @param ingester.updateStrategy.type Ingester statefulset strategy type
-  ## @param ingester.updateStrategy.rollingUpdate Ingester statefulset rolling update configuration parameters
+  ## @param ingester.updateStrategy.rollingUpdate [object,nullable] Ingester statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
+    rollingUpdate: null
   ## @param ingester.extraVolumes Optionally specify extra list of additional volumes for the Ingester pod(s)
   ##
   extraVolumes: []
@@ -2011,12 +2011,12 @@ querier:
   ##
   schedulerName: ""
   ## @param querier.updateStrategy.type Querier statefulset strategy type
-  ## @param querier.updateStrategy.rollingUpdate Querier statefulset rolling update configuration parameters
+  ## @param querier.updateStrategy.rollingUpdate [object,nullable] Querier statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
+    rollingUpdate: null
   ## @param querier.extraVolumes Optionally specify extra list of additional volumes for the Querier pod(s)
   ##
   extraVolumes: []
@@ -2318,12 +2318,12 @@ queryFrontend:
   ##
   schedulerName: ""
   ## @param queryFrontend.updateStrategy.type queryFrontend statefulset strategy type
-  ## @param queryFrontend.updateStrategy.rollingUpdate queryFrontend statefulset rolling update configuration parameters
+  ## @param queryFrontend.updateStrategy.rollingUpdate [object,nullable] queryFrontend statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
+    rollingUpdate: null
   ## @param queryFrontend.extraVolumes Optionally specify extra list of additional volumes for the queryFrontend pod(s)
   ##
   extraVolumes: []
@@ -2595,12 +2595,12 @@ queryScheduler:
   ##
   schedulerName: ""
   ## @param queryScheduler.updateStrategy.type queryScheduler statefulset strategy type
-  ## @param queryScheduler.updateStrategy.rollingUpdate queryScheduler statefulset rolling update configuration parameters
+  ## @param queryScheduler.updateStrategy.rollingUpdate [object,nullable] queryScheduler statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
+    rollingUpdate: null
   ## @param queryScheduler.extraVolumes Optionally specify extra list of additional volumes for the queryScheduler pod(s)
   ##
   extraVolumes: []
@@ -2869,12 +2869,12 @@ ruler:
   ##
   schedulerName: ""
   ## @param ruler.updateStrategy.type Ruler statefulset strategy type
-  ## @param ruler.updateStrategy.rollingUpdate Ruler statefulset rolling update configuration parameters
+  ## @param ruler.updateStrategy.rollingUpdate [object,nullable] Ruler statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
+    rollingUpdate: null
   ## @param ruler.extraVolumes Optionally specify extra list of additional volumes for the Ruler pod(s)
   ##
   extraVolumes: []
@@ -3179,12 +3179,12 @@ tableManager:
   ##
   schedulerName: ""
   ## @param tableManager.updateStrategy.type table-manager statefulset strategy type
-  ## @param tableManager.updateStrategy.rollingUpdate table-manager statefulset rolling update configuration parameters
+  ## @param tableManager.updateStrategy.rollingUpdate [object,nullable] table-manager statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
+    rollingUpdate: null
   ## @param tableManager.extraVolumes Optionally specify extra list of additional volumes for the table-manager pod(s)
   ##
   extraVolumes: []
@@ -3480,12 +3480,12 @@ promtail:
   ##
   schedulerName: ""
   ## @param promtail.updateStrategy.type Promtail statefulset strategy type
-  ## @param promtail.updateStrategy.rollingUpdate Promtail statefulset rolling update configuration parameters
+  ## @param promtail.updateStrategy.rollingUpdate [object,nullable] Promtail statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
+    rollingUpdate: null
   ## @param promtail.extraVolumes Optionally specify extra list of additional volumes for the Promtail pod(s)
   ##
   extraVolumes: []
