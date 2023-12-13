@@ -16,7 +16,10 @@ metadata:
     app.kubernetes.io/component: apiserver
   {{- if or .Values.apiserver.service.annotations .Values.commonAnnotations (and .Values.apiserver.metrics.enabled .Values.apiserver.metrics.annotations) }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.apiserver.service.annotations .Values.commonAnnotations ) "context" . ) }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  annotations: 
+    {{- if or .Values.apiserver.service.annotations .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+    {{- end }}
     {{- if and .Values.apiserver.metrics.enabled .Values.apiserver.metrics.annotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.apiserver.metrics.annotations "context" $) | nindent 4 }}
     {{- end }}

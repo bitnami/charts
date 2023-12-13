@@ -16,7 +16,10 @@ metadata:
     app.kubernetes.io/component: operator
   {{- if or .Values.operator.service.annotations .Values.commonAnnotations (and .Values.operator.metrics.enabled .Values.operator.metrics.annotations) }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.operator.service.annotations .Values.commonAnnotations ) "context" . ) }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  annotations: 
+    {{- if or .Values.operator.service.annotations .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+    {{- end }}
     {{- if and .Values.operator.metrics.enabled .Values.operator.metrics.annotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.operator.metrics.annotations "context" $) | nindent 4 }}
     {{- end }}
