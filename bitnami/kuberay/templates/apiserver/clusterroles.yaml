@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.apiserver.enabled .Values.apiserver.rbac.create .Values.apiserver.rbac.allNamespaces }}
+{{- if and .Values.apiserver.enabled .Values.apiserver.rbac.create .Values.apiserver.watchAllNamespaces }}
 kind: ClusterRole
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:

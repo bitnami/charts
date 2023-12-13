@@ -4,7 +4,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if and .Values.operator.enabled .Values.operator.rbac.create }}
-{{- if .Values.operator.rbac.allNamespaces }}
+{{- if .Values.operator.watchAllNamespaces }}
 kind: ClusterRole
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:

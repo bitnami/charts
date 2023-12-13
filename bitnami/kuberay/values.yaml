@@ -194,6 +194,12 @@ operator:
   ## @param operator.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
+  ## @param operator.watchAllNamespaces Watch for KubeRay resources in all namespaces
+  ##
+  watchAllNamespaces: true
+  ## @param operator.watchNamespaces [array] Watch for KubeRay resources in the given namespaces
+  ##
+  watchNamespaces: []
   ## Kuberay Operator resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## @param operator.resources.limits The resources limits for the Kuberay Operator containers
@@ -766,6 +772,12 @@ apiserver:
   ## @param apiserver.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
+  ## @param apiserver.watchAllNamespaces Watch for KubeRay resources in all namespaces
+  ##
+  watchAllNamespaces: true
+  ## @param apiserver.watchNamespaces [array] Watch for KubeRay resources in the given namespaces
+  ##
+  watchNamespaces: []
   ## Kuberay API Server resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## @param apiserver.resources.limits The resources limits for the Kuberay API Server containers
