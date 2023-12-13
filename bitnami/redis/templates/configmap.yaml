@@ -8,7 +8,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ printf "%s-configuration" (include "common.names.fullname" .) }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -48,7 +48,7 @@ data:
   sentinel.conf: |-
     dir "/tmp"
     port {{ .Values.sentinel.containerPorts.sentinel }}
-    sentinel monitor {{ .Values.sentinel.masterSet }} {{ template "common.names.fullname" . }}-node-0.{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} {{ .Values.sentinel.service.ports.redis }} {{ .Values.sentinel.quorum }}
+    sentinel monitor {{ .Values.sentinel.masterSet }} {{ template "common.names.fullname" . }}-node-0.{{ template "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} {{ .Values.sentinel.service.ports.redis }} {{ .Values.sentinel.quorum }}
     sentinel down-after-milliseconds {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.downAfterMilliseconds }}
     sentinel failover-timeout {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.failoverTimeout }}
     sentinel parallel-syncs {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.parallelSyncs }}

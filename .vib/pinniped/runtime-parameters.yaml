@@ -92,6 +92,14 @@ extraDeploy:
               timeoutSeconds: 90
               periodSeconds: 2
               failureThreshold: 9
+            securityContext:
+              runAsNonRoot: true
+              privileged: false
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: ["ALL"]
+              seccompProfile:
+                type: "RuntimeDefault"
             env:
               - name: LDAP_ADMIN_USERNAME
                 value: "admin"
