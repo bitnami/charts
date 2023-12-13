@@ -66,7 +66,7 @@ func createJob(ctx context.Context, c kubernetes.Interface, name string, port st
 							Command: []string{"curl", "-X", op, fmt.Sprintf("http://%s/%s", releaseName, index)},
 						},
 					},
-					SecurityContext: securityContext},
+					SecurityContext: securityContext,
 				},
 			},
 		},
