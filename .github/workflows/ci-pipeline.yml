@@ -114,8 +114,8 @@ jobs:
           CHART: ${{ needs.get-chart.outputs.chart }}
         run: |
           # Log chart info
-          chart_version="$(yq e '.version' ${CHART}/Chart.yaml)"
-          app_version="$(yq e '.appVersion' ${CHART}/Chart.yaml)"
+          chart_version="$(yq e '.version' bitnami/${CHART}/Chart.yaml)"
+          app_version="$(yq e '.appVersion' bitnami/${CHART}/Chart.yaml)"
           echo "::info:: Chart: ${CHART}"
           echo "::info:: ChartVersion: ${chart_version}"
           echo "::info:: AppVersion: ${app_version}"
