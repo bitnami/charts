@@ -112,9 +112,7 @@ jobs:
           # Log chart info
           chart_version="$(yq e '.version' bitnami/${CHART}/Chart.yaml)"
           app_version="$(yq e '.appVersion' bitnami/${CHART}/Chart.yaml)"
-          echo "Chart: ${CHART}"
-          echo "ChartVersion: ${chart_version}"
-          echo "AppVersion: ${app_version}"
+          echo "Chart: ${CHART} ChartVersion: ${chart_version} AppVersion: ${app_version}"
       - id: get-asset-vib-config
         name: Get asset-specific configuration for VIB action
         run: |
