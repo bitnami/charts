@@ -45,9 +45,7 @@ spec:
     - name: {{ .Values.service.portNames.amqp }}
       port: {{ .Values.service.ports.amqp }}
       targetPort: amqp
-      {{- if (eq .Values.service.type "ClusterIP") }}
-      nodePort: null
-      {{- else if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.amqp)) }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.amqp)) }}
       nodePort: {{ .Values.service.nodePorts.amqp }}
       {{- end }}
     {{- end }}
@@ -55,9 +53,7 @@ spec:
     - name: {{ .Values.service.portNames.amqpTls }}
       port: {{ .Values.service.ports.amqpTls }}
       targetPort: amqp-tls
-      {{- if (eq .Values.service.type "ClusterIP") }}
-      nodePort: null
-      {{- else if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.amqpTls)) }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.amqpTls)) }}
       nodePort: {{ .Values.service.nodePorts.amqpTls }}
       {{- end }}
     {{- end }}
@@ -65,9 +61,7 @@ spec:
     - name: {{ .Values.service.portNames.epmd }}
       port: {{ .Values.service.ports.epmd }}
       targetPort: epmd
-      {{- if (eq .Values.service.type "ClusterIP") }}
-      nodePort: null
-      {{- else if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.epmd)) }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.epmd)) }}
       nodePort: {{ .Values.service.nodePorts.epmd }}
       {{- end }}
     {{- end }}
@@ -75,9 +69,7 @@ spec:
     - name: {{ .Values.service.portNames.dist }}
       port: {{ .Values.service.ports.dist }}
       targetPort: dist
-      {{- if eq .Values.service.type "ClusterIP" }}
-      nodePort: null
-      {{- else if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.dist)) }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.dist)) }}
       nodePort: {{ .Values.service.nodePorts.dist }}
       {{- end }}
     {{- end }}
@@ -85,9 +77,7 @@ spec:
     - name: {{ .Values.service.portNames.manager }}
       port: {{ .Values.service.ports.manager  }}
       targetPort: stats
-      {{- if eq .Values.service.type "ClusterIP" }}
-      nodePort: null
-      {{- else if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.manager)) }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.manager)) }}
       nodePort: {{ .Values.service.nodePorts.manager }}
       {{- end }}
     {{- end }}
@@ -95,9 +85,7 @@ spec:
     - name: {{ .Values.service.portNames.metrics }}
       port: {{ .Values.service.ports.metrics }}
       targetPort: metrics
-      {{- if eq .Values.service.type "ClusterIP" }}
-      nodePort: null
-      {{- else if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.metrics)) }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.metrics)) }}
       nodePort: {{ .Values.service.nodePorts.metrics }}
       {{- end }}
     {{- end }}
