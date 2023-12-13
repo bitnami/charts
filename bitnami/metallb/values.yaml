@@ -404,6 +404,9 @@ controller:
   ## Allowed values: enabled, disabled or only webhook if we want the controller to act as webhook endpoint only
   ##
   webhookMode: enabled
+  ## @param controller.extraArgs Add extra arguments to the default arguments for the controller
+  ##
+  extraArgs: []
 
   ## @section MetalLB controller Prometheus metrics export
   ##

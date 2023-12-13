@@ -168,6 +168,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.tlsMinVersion`                                     | Sets the minimum TLS version for the controller                                                                                             | `VersionTLS12`                       |
 | `controller.tlsCipherSuites`                                   | Comma separated list of TLS cipher suites for the controller                                                                                | `""`                                 |
 | `controller.webhookMode`                                       | Controller webhook mode                                                                                                                     | `enabled`                            |
+| `controller.extraArgs`                                         | Add extra arguments to the default arguments for the controller                                                                             | `[]`                                 |
 
 ### MetalLB controller Prometheus metrics export
 

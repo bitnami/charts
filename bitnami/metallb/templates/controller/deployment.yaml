@@ -101,6 +101,9 @@ spec:
             {{- if .Values.controller.tlsCipherSuites }}
             - --tls-cipher-suites={{ .Values.controller.tlsCipherSuites }}
             {{- end }}
+            {{- if .Values.controller.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
           {{- end }}
           {{- if .Values.controller.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.controller.lifecycleHooks "context" $) | nindent 12 }}
