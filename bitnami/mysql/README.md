@@ -177,6 +177,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.persistence.accessModes`                           | MySQL primary persistent volume access Modes                                                                    | `["ReadWriteOnce"]` |
 | `primary.persistence.size`                                  | MySQL primary persistent volume size                                                                            | `8Gi`               |
 | `primary.persistence.selector`                              | Selector to match an existing Persistent Volume                                                                 | `{}`                |
+| `primary.persistentVolumeClaimRetentionPolicy.enabled`      | Enable Persistent volume retention policy for Primary StatefulSet                                               | `false`             |
+| `primary.persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced                                  | `Retain`            |
+| `primary.persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                                          | `Retain`            |
 | `primary.extraVolumes`                                      | Optionally specify extra list of additional volumes to the MySQL Primary pod(s)                                 | `[]`                |
 | `primary.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the MySQL Primary container(s)                     | `[]`                |
 | `primary.initContainers`                                    | Add additional init containers for the MySQL Primary pod(s)                                                     | `[]`                |
@@ -270,6 +273,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.persistence.accessModes`                           | MySQL secondary persistent volume access Modes                                                                      | `["ReadWriteOnce"]` |
 | `secondary.persistence.size`                                  | MySQL secondary persistent volume size                                                                              | `8Gi`               |
 | `secondary.persistence.selector`                              | Selector to match an existing Persistent Volume                                                                     | `{}`                |
+| `secondary.persistentVolumeClaimRetentionPolicy.enabled`      | Enable Persistent volume retention policy for read only StatefulSet                                                 | `false`             |
+| `secondary.persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced                                      | `Retain`            |
+| `secondary.persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                                              | `Retain`            |
 | `secondary.extraVolumes`                                      | Optionally specify extra list of additional volumes to the MySQL secondary pod(s)                                   | `[]`                |
 | `secondary.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the MySQL secondary container(s)                       | `[]`                |
 | `secondary.initContainers`                                    | Add additional init containers for the MySQL secondary pod(s)                                                       | `[]`                |
