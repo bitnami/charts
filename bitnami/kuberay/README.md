@@ -32,8 +32,10 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release my-repo/kuberay
+helm install my-release REGISTRY_NAME/REPOSITORY_NAME/kuberay
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys kuberay on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -187,7 +189,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.ingress.enabled`                  | Enable ingress record generation for Kuberay                                                                                     | `false`                  |
 | `operator.ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `operator.ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `operator.ingress.hostname`                 | Default host for the ingress record                                                                                              | `vault.local`            |
+| `operator.ingress.hostname`                 | Default host for the ingress record                                                                                              | `kuberay-operator.local` |
 | `operator.ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `operator.ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
 | `operator.ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
@@ -318,35 +320,35 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kuberay API Server Traffic Exposure Parameters
 
-| Name                                         | Description                                                                                                                      | Value                    |
-| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `apiserver.service.type`                     | Kuberay API Server service type                                                                                                  | `ClusterIP`              |
-| `apiserver.service.ports.http`               | Kuberay API Server service HTTP port                                                                                             | `80`                     |
-| `apiserver.service.ports.grpc`               | Kuberay API Server service HTTP port                                                                                             | `8887`                   |
-| `apiserver.service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
-| `apiserver.service.nodePorts.grpc`           | Node port for GRPC                                                                                                               | `""`                     |
-| `apiserver.service.clusterIP`                | Kuberay API Server service Cluster IP                                                                                            | `""`                     |
-| `apiserver.service.loadBalancerIP`           | Kuberay API Server service Load Balancer IP                                                                                      | `""`                     |
-| `apiserver.service.loadBalancerSourceRanges` | Kuberay API Server service Load Balancer sources                                                                                 | `[]`                     |
-| `apiserver.service.externalTrafficPolicy`    | Kuberay API Server service external traffic policy                                                                               | `Cluster`                |
-| `apiserver.service.annotations`              | Additional custom annotations for Kuberay API Server service                                                                     | `{}`                     |
-| `apiserver.service.extraPorts`               | Extra ports to expose in Kuberay API Server service (normally used with the `sidecars` value)                                    | `[]`                     |
-| `apiserver.service.sessionAffinity`          | Control where web requests go, to the same pod or round-robin                                                                    | `None`                   |
-| `apiserver.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `apiserver.ingress.enabled`                  | Enable ingress record generation for Kuberay                                                                                     | `false`                  |
-| `apiserver.ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `apiserver.ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `apiserver.ingress.hostname`                 | Default host for the ingress record                                                                                              | `vault.local`            |
-| `apiserver.ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `apiserver.ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
-| `apiserver.ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `apiserver.ingress.tls`                      | Enable TLS configuration for the host defined at `client.ingress.hostname` parameter                                             | `false`                  |
-| `apiserver.ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `apiserver.ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `apiserver.ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `apiserver.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `apiserver.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `apiserver.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                                         | Description                                                                                                                      | Value                     |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `apiserver.service.type`                     | Kuberay API Server service type                                                                                                  | `ClusterIP`               |
+| `apiserver.service.ports.http`               | Kuberay API Server service HTTP port                                                                                             | `80`                      |
+| `apiserver.service.ports.grpc`               | Kuberay API Server service HTTP port                                                                                             | `8887`                    |
+| `apiserver.service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                      |
+| `apiserver.service.nodePorts.grpc`           | Node port for GRPC                                                                                                               | `""`                      |
+| `apiserver.service.clusterIP`                | Kuberay API Server service Cluster IP                                                                                            | `""`                      |
+| `apiserver.service.loadBalancerIP`           | Kuberay API Server service Load Balancer IP                                                                                      | `""`                      |
+| `apiserver.service.loadBalancerSourceRanges` | Kuberay API Server service Load Balancer sources                                                                                 | `[]`                      |
+| `apiserver.service.externalTrafficPolicy`    | Kuberay API Server service external traffic policy                                                                               | `Cluster`                 |
+| `apiserver.service.annotations`              | Additional custom annotations for Kuberay API Server service                                                                     | `{}`                      |
+| `apiserver.service.extraPorts`               | Extra ports to expose in Kuberay API Server service (normally used with the `sidecars` value)                                    | `[]`                      |
+| `apiserver.service.sessionAffinity`          | Control where web requests go, to the same pod or round-robin                                                                    | `None`                    |
+| `apiserver.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                      |
+| `apiserver.ingress.enabled`                  | Enable ingress record generation for Kuberay                                                                                     | `false`                   |
+| `apiserver.ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific`  |
+| `apiserver.ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                      |
+| `apiserver.ingress.hostname`                 | Default host for the ingress record                                                                                              | `kuberay-apiserver.local` |
+| `apiserver.ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                      |
+| `apiserver.ingress.path`                     | Default path for the ingress record                                                                                              | `/`                       |
+| `apiserver.ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                      |
+| `apiserver.ingress.tls`                      | Enable TLS configuration for the host defined at `client.ingress.hostname` parameter                                             | `false`                   |
+| `apiserver.ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                   |
+| `apiserver.ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                      |
+| `apiserver.ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                      |
+| `apiserver.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                      |
+| `apiserver.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                      |
+| `apiserver.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                      |
 
 ### Kuberay API Server RBAC Parameters
 
@@ -389,7 +391,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                             | Description                                                                                                              | Value            |
 | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------- |
 | `cluster.head.rayStartParams`                                    | Set Ray start parameters                                                                                                 | `{}`             |
-| `cluster.head.replicaCount`                                      | Number of Ray Cluster Worker (common) replicas to deploy                                                                 | `1`              |
 | `cluster.head.resources.limits`                                  | The resources limits for the Ray Cluster Worker (common) containers                                                      | `{}`             |
 | `cluster.head.resources.requests`                                | The requested resources for the Ray Cluster Worker (common) containers                                                   | `{}`             |
 | `cluster.head.podSecurityContext.enabled`                        | Enabled Ray Cluster Worker (common) pods' Security Context                                                               | `true`           |
@@ -415,7 +416,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.head.affinity`                                          | Affinity for Ray Cluster Worker (common) pods assignment                                                                 | `{}`             |
 | `cluster.head.nodeSelector`                                      | Node labels for Ray Cluster Worker (common) pods assignment                                                              | `{}`             |
 | `cluster.head.tolerations`                                       | Tolerations for Ray Cluster Worker (common) pods assignment                                                              | `[]`             |
-| `cluster.head.updateStrategy.type`                               | Ray Cluster Worker (common) statefulset strategy type                                                                    | `RollingUpdate`  |
 | `cluster.head.priorityClassName`                                 | Ray Cluster Worker (common) pods' priorityClassName                                                                      | `""`             |
 | `cluster.head.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`             |
 | `cluster.head.schedulerName`                                     | Name of the k8s scheduler (other than default) for Ray Cluster Worker (common) pods                                      | `""`             |
@@ -463,7 +463,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.worker.common.affinity`                                          | Affinity for Ray Cluster Worker (common) pods assignment                                                                 | `{}`             |
 | `cluster.worker.common.nodeSelector`                                      | Node labels for Ray Cluster Worker (common) pods assignment                                                              | `{}`             |
 | `cluster.worker.common.tolerations`                                       | Tolerations for Ray Cluster Worker (common) pods assignment                                                              | `[]`             |
-| `cluster.worker.common.updateStrategy.type`                               | Ray Cluster Worker (common) statefulset strategy type                                                                    | `RollingUpdate`  |
 | `cluster.worker.common.priorityClassName`                                 | Ray Cluster Worker (common) pods' priorityClassName                                                                      | `""`             |
 | `cluster.worker.common.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`             |
 | `cluster.worker.common.schedulerName`                                     | Name of the k8s scheduler (other than default) for Ray Cluster Worker (common) pods                                      | `""`             |
@@ -489,19 +488,19 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set apiserver.enabled=true \
-    my-repo/kuberay
+    REGISTRY_NAME/REPOSITORY_NAME/kuberay
 ```
 
-The above command enables the Kuberay CSI Provider deployment.
+The above command enables the KubeRay API Server.
 
 > NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/kuberay
+helm install my-release -f values.yaml REGISTRY_NAME/REPOSITORY_NAME/kuberay
 ```
-
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/kuberay/values.yaml)
 
 ## Configuration and installation details

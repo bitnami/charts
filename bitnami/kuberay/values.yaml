@@ -479,7 +479,7 @@ operator:
     apiVersion: ""
     ## @param operator.ingress.hostname Default host for the ingress record
     ##
-    hostname: vault.local
+    hostname: kuberay-operator.local
     ## @param operator.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
     ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
@@ -620,7 +620,7 @@ operator:
     ## @param operator.metrics.annotations [object] Annotations for the server service in order to scrape metrics
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.server.service.ports.metrics }}"
+      prometheus.io/port: "{{ .Values.operator.service.ports.metrics }}"
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:
@@ -1054,7 +1054,7 @@ apiserver:
     apiVersion: ""
     ## @param apiserver.ingress.hostname Default host for the ingress record
     ##
-    hostname: vault.local
+    hostname: kuberay-apiserver.local
     ## @param apiserver.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
     ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
@@ -1195,7 +1195,7 @@ apiserver:
     ## @param apiserver.metrics.annotations [object] Annotations for the server service in order to scrape metrics
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.server.service.ports.metrics }}"
+      prometheus.io/port: "{{ .Values.apiserver.service.ports.http }}"
     ## Prometheus API Server ServiceMonitor configuration
     ##
     serviceMonitor:
@@ -1258,9 +1258,6 @@ cluster:
     ## @param cluster.head.rayStartParams Set Ray start parameters
     ##
     rayStartParams: {}
-    ## @param cluster.head.replicaCount Number of Ray Cluster Worker (common) replicas to deploy
-    ##
-    replicaCount: 1
     ## Ray Cluster Worker (common) resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ## @param cluster.head.resources.limits The resources limits for the Ray Cluster Worker (common) containers
@@ -1355,14 +1352,6 @@ cluster:
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
-    ## @param cluster.head.updateStrategy.type Ray Cluster Worker (common) statefulset strategy type
-    ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-    ##
-    updateStrategy:
-      ## StrategyType
-      ## Can be set to RollingUpdate or OnDelete
-      ##
-      type: RollingUpdate
 
     ## @param cluster.head.priorityClassName Ray Cluster Worker (common) pods' priorityClassName
     ##
@@ -1535,14 +1524,6 @@ cluster:
       ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
       ##
       tolerations: []
-      ## @param cluster.worker.common.updateStrategy.type Ray Cluster Worker (common) statefulset strategy type
-      ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-      ##
-      updateStrategy:
-        ## StrategyType
-        ## Can be set to RollingUpdate or OnDelete
-        ##
-        type: RollingUpdate
 
       ## @param cluster.worker.common.priorityClassName Ray Cluster Worker (common) pods' priorityClassName
       ##

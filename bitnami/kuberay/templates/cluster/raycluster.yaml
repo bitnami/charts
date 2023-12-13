@@ -113,6 +113,15 @@ spec:
               {{- if .Values.cluster.head.extraVolumeMounts }}
               {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.extraVolumeMounts "context" $) | nindent 14 }}
               {{- end }}
+          {{- if .Values.cluster.head.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cluster.head.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cluster.head.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.cluster.head.sidecars }}
           {{- include "common.tplvalues.render" ( dict "value" .Values.cluster.head.sidecars "context" $) | nindent 10 }}
           {{- end }}
@@ -138,7 +147,7 @@ spec:
           {{- if $podAnnotations }}
           annotations: {{- include "common.tplvalues.render" (dict "value" $podAnnotations "context" $) | nindent 12 }}
           {{- end }}
-          {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list (coalesce .podLabels $.Values.cluster.head.podLabels) $.Values.commonLabels ) "context" $) }}
+          {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list (coalesce .podLabels $.Values.cluster.worker.common.podLabels) $.Values.commonLabels ) "context" $) }}
           labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 12 }}
             app.kubernetes.io/part-of: kuberay
             app.kubernetes.io/component: {{ printf "cluster-worker-%s" .groupName }}
@@ -231,6 +240,18 @@ spec:
               {{- $resources := coalesce .resources $.Values.cluster.worker.common.resources }}
               {{- if $resources }}
               resources: {{- toYaml $resources | nindent 16 }}
+              {{- end }}
+              {{- $customLivenessProbe := coalesce .customLivenessProbe $.Values.cluster.worker.common.customLivenessProbe }}
+              {{- if $customLivenessProbe }}
+              livenessProbe: {{- include "common.tplvalues.render" (dict "value" $customLivenessProbe "context" $) | nindent 12 }}
+              {{- end }}
+              {{- $customReadinessProbe := coalesce .customReadinessProbe $.Values.cluster.worker.common.customReadinessProbe }}
+              {{- if $customReadinessProbe }}
+              readinessProbe: {{- include "common.tplvalues.render" (dict "value" $customReadinessProbe "context" $) | nindent 12 }}
+              {{- end }}
+              {{- $customStartupProbe := coalesce .customStartupProbe $.Values.cluster.worker.common.customStartupProbe }}
+              {{- if $customStartupProbe }}
+              startupProbe: {{- include "common.tplvalues.render" (dict "value" $customStartupProbe "context" $) | nindent 12 }}
               {{- end }}
               {{- $lifecycleHooks := coalesce .lifecycleHooks $.Values.cluster.worker.common.lifecycleHooks }}
               {{- if $lifecycleHooks }}

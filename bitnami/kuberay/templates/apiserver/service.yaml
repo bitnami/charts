@@ -14,9 +14,12 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: kuberay
     app.kubernetes.io/component: apiserver
-  {{- if or .Values.apiserver.service.annotations .Values.commonAnnotations }}
+  {{- if or .Values.apiserver.service.annotations .Values.commonAnnotations (and .Values.apiserver.metrics.enabled .Values.apiserver.metrics.annotations) }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.apiserver.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+    {{- if and .Values.apiserver.metrics.enabled .Values.apiserver.metrics.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.apiserver.metrics.annotations "context" $) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   type: {{ .Values.apiserver.service.type }}

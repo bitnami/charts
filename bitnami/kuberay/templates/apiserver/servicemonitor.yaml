@@ -27,7 +27,7 @@ spec:
       {{- include "common.tplvalues.render" (dict "value" .Values.apiserver.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
   endpoints:
-    - port: http-metrics
+    - port: http
       path: "/metrics"
       {{- if .Values.apiserver.metrics.serviceMonitor.interval }}
       interval: {{ .Values.apiserver.metrics.serviceMonitor.interval }}

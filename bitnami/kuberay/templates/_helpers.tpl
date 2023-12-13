@@ -105,7 +105,7 @@ Create the name of the service account to use (Kuberay Operator)
 */}}
 {{- define "kuberay.cluster.serviceAccountName" -}}
 {{- if .Values.cluster.serviceAccount.create -}}
-    {{ default (include "kuberay.cluster.fullname" .) .Values.operator.serviceAccount.name }}
+    {{ default (include "kuberay.cluster.fullname" .) .Values.cluster.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.cluster.serviceAccount.name }}
 {{- end -}}
