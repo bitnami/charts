@@ -1,5 +1,7 @@
 operator:
   enabled: true
+  # Necessary to avoid conflicts in parallel deployments
+  watchAllNamespaces: false
   containerPorts:
     metrics: 8100
   service:
@@ -27,6 +29,8 @@ operator:
 
 apiserver:
   enabled: true
+  # Necessary to avoid conflicts in parallel deployments
+  watchAllNamespaces: false
   service:
     ports:
       http: 8300
