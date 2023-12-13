@@ -84,6 +84,7 @@ spec:
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       enableServiceLinks: {{ .Values.enableServiceLinks }}
+      {{- if .Values.initContainers }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
@@ -120,10 +121,9 @@ spec:
               {{- if .Values.persistence.subPath }}
               subPath: {{ .Values.persistence.subPath }}
               {{- end }}
-        {{- end }}
-        {{- if .Values.initContainers }}
+        {{- end }}      
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
-        {{- end }}
+      {{- end }}
       containers:
         - name: rabbitmq
           image: {{ template "rabbitmq.image" . }}
@@ -248,6 +248,7 @@ spec:
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+          {{- if .Values.envFrom }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
@@ -257,6 +258,7 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
+          {{- end }}
           ports:
             - name: amqp
               containerPort: {{ .Values.containerPorts.amqp }}
