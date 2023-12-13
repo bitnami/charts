@@ -113,7 +113,7 @@ func containerLogsContainPattern(ctx context.Context, c cv1.PodsGetter, podLabel
 
 	k8seePods = getPodsByLabelOrDie(ctx, c, podLabel)
 	containerLogs = getContainerLogsOrDie(ctx, c, k8seePods.Items[0].GetName(), containerName)
-
+	fmt.Println(containerLogs)
 	return containsPattern(containerLogs, pattern)
 }
 

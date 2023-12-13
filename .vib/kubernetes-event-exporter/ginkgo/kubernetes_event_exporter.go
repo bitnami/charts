@@ -47,7 +47,7 @@ var _ = Describe("Kubernetes Event Exporter:", func() {
 				podLabel := "app.kubernetes.io/name=kubernetes-event-exporter"
 				containerName := "event-exporter"
 
-				containsPattern, _ := retry("containerLogsContainPattern", 12, 15*time.Second, func() (bool, error) {
+				containsPattern, _ := retry("containerLogsContainPattern", 1, 60*time.Second, func() (bool, error) {
 					return containerLogsContainPattern(ctx, coreclient, podLabel, containerName, pattern)
 				})
 				Expect(containsPattern).To(BeTrue())
