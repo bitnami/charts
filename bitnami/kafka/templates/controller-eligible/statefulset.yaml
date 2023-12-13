@@ -210,8 +210,8 @@ spec:
             {{- end }}
             {{- end }}
             {{- if .Values.metrics.jmx.enabled }}
-            - name: JMX_PORT
-              value: {{ .Values.metrics.jmx.kafkaJmxPort | quote }}
+            - name: KAFKA_JMX_OPTS
+              value: "-javaagent:/opt/bitnami/jmx-exporter/jmx_prometheus_javaagent.jar={{ .Values.metrics.jmx.containerPorts.metrics }}:/etc/jmx-kafka/jmx-kafka-prometheus.yml"
             {{- end }}
             {{- if .Values.controller.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.controller.extraEnvVars "context" $) | nindent 12 }}
@@ -249,6 +249,10 @@ spec:
             {{- if .Values.externalAccess.enabled }}
             - name: external
               containerPort: {{ .Values.listeners.external.containerPort }}
+            {{- end }}
+            {{- if .Values.metrics.jmx.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.metrics.jmx.containerPorts.metrics }}
             {{- end }}
             {{- if .Values.listeners.extraListeners }}
             {{- include "kafka.extraListeners.containerPorts" . | nindent 12 }}
@@ -301,6 +305,10 @@ spec:
               mountPath: /opt/bitnami/kafka/config/log4j.properties
               subPath: log4j.properties
             {{- end }}
+            {{- if .Values.metrics.jmx.enabled }}
+            - name: jmx-config
+              mountPath: /etc/jmx-kafka
+            {{- end }}
             {{- if or .Values.tls.zookeeper.enabled (include "kafka.sslEnabled" .) }}
             - name: kafka-shared-certs
               mountPath: /opt/bitnami/kafka/config/certs
@@ -312,37 +320,6 @@ spec:
             {{- if .Values.controller.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
-        {{- if .Values.metrics.jmx.enabled }}
-        - name: jmx-exporter
-          image: {{ include "kafka.metrics.jmx.image" . }}
-          imagePullPolicy: {{ .Values.metrics.jmx.image.pullPolicy | quote }}
-          {{- if .Values.metrics.jmx.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.jmx.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
-          {{- else }}
-          command:
-            - java
-          args:
-            - -XX:MaxRAMPercentage=100
-            - -XshowSettings:vm
-            - -jar
-            - jmx_prometheus_httpserver.jar
-            - "5556"
-            - /etc/jmx-kafka/jmx-kafka-prometheus.yml
-          {{- end }}
-          ports:
-            - name: metrics
-              containerPort: {{ .Values.metrics.jmx.containerPorts.metrics }}
-          {{- if .Values.metrics.jmx.resources }}
-          resources: {{- toYaml .Values.metrics.jmx.resources | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-            - name: jmx-config
-              mountPath: /etc/jmx-kafka
-        {{- end }}
         {{- if .Values.controller.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.controller.sidecars "context" $) | nindent 8 }}
         {{- end }}

@@ -65,17 +65,10 @@ Return the proper Kafka exporter image name
 {{- end -}}
 
 {{/*
-Return the proper JMX exporter image name
-*/}}
-{{- define "kafka.metrics.jmx.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.metrics.jmx.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "kafka.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.externalAccess.autoDiscovery.image .Values.volumePermissions.image .Values.metrics.kafka.image .Values.metrics.jmx.image) "global" .Values.global) }}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.externalAccess.autoDiscovery.image .Values.volumePermissions.image .Values.metrics.kafka.image) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -986,7 +979,6 @@ Check if there are rolling tags in the images
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.externalAccess.autoDiscovery.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.kafka.image }}
-{{- include "common.warnings.rollingTag" .Values.metrics.jmx.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}
 

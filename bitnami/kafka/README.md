@@ -542,21 +542,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.kafka.serviceAccount.name`                               | The name of the service account to use. If not set and `create` is `true`, a name is generated                                   | `""`                                                                                    |
 | `metrics.kafka.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                           | `true`                                                                                  |
 | `metrics.jmx.enabled`                                             | Whether or not to expose JMX metrics to Prometheus                                                                               | `false`                                                                                 |
-| `metrics.jmx.kafkaJmxPort`                                        | JMX port where the exporter will collect metrics, exposed in the Kafka container.                                                | `5555`                                                                                  |
-| `metrics.jmx.image.registry`                                      | JMX exporter image registry                                                                                                      | `REGISTRY_NAME`                                                                         |
-| `metrics.jmx.image.repository`                                    | JMX exporter image repository                                                                                                    | `REPOSITORY_NAME/jmx-exporter`                                                          |
-| `metrics.jmx.image.digest`                                        | JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                     | `""`                                                                                    |
-| `metrics.jmx.image.pullPolicy`                                    | JMX exporter image pull policy                                                                                                   | `IfNotPresent`                                                                          |
-| `metrics.jmx.image.pullSecrets`                                   | Specify docker-registry secret names as an array                                                                                 | `[]`                                                                                    |
-| `metrics.jmx.containerSecurityContext.enabled`                    | Enable Prometheus JMX exporter containers' Security Context                                                                      | `true`                                                                                  |
-| `metrics.jmx.containerSecurityContext.runAsUser`                  | Set Prometheus JMX exporter containers' Security Context runAsUser                                                               | `1001`                                                                                  |
-| `metrics.jmx.containerSecurityContext.runAsNonRoot`               | Set Prometheus JMX exporter containers' Security Context runAsNonRoot                                                            | `true`                                                                                  |
-| `metrics.jmx.containerSecurityContext.allowPrivilegeEscalation`   | Set Prometheus JMX exporter containers' Security Context allowPrivilegeEscalation                                                | `false`                                                                                 |
-| `metrics.jmx.containerSecurityContext.readOnlyRootFilesystem`     | Set Prometheus JMX exporter containers' Security Context readOnlyRootFilesystem                                                  | `true`                                                                                  |
-| `metrics.jmx.containerSecurityContext.capabilities.drop`          | Set Prometheus JMX exporter containers' Security Context capabilities to be dropped                                              | `["ALL"]`                                                                               |
 | `metrics.jmx.containerPorts.metrics`                              | Prometheus JMX exporter metrics container port                                                                                   | `5556`                                                                                  |
-| `metrics.jmx.resources.limits`                                    | The resources limits for the JMX exporter container                                                                              | `{}`                                                                                    |
-| `metrics.jmx.resources.requests`                                  | The requested resources for the JMX exporter container                                                                           | `{}`                                                                                    |
 | `metrics.jmx.service.ports.metrics`                               | Prometheus JMX exporter metrics service port                                                                                     | `5556`                                                                                  |
 | `metrics.jmx.service.clusterIP`                                   | Static clusterIP or None for headless services                                                                                   | `""`                                                                                    |
 | `metrics.jmx.service.sessionAffinity`                             | Control where client requests go, to the same pod or round-robin                                                                 | `None`                                                                                  |
@@ -1108,6 +1094,23 @@ This guide is an adaptation from upstream documentation: [Migrate from ZooKeeper
     For more information about decommissioning kafka broker check the [Kafka documentation](https://www.confluent.io/blog/remove-kafka-brokers-from-any-cluster-the-easy-way/).
 
 ## Upgrading
+
+### To 27.0.0
+
+This major release drops the jmx-exporter container (if `metrics.jmx.enabled`) in favor of embedding the exporter as a Java agent directly in the JVM that runs the Kafka controller or broker.
+This implies the follow values are no longer relevant because there is no longer a separate jmx-exporter container or image:
+
+- `metrics.jmx.image.registry`
+- `metrics.jmx.image.repository`
+- `metrics.jmx.image.tag`
+- `metrics.jmx.image.pullPolicy`
+- `metrics.jmx.image.pullSecrets`
+- `metrics.jmx.containerSecurityContext.enabled`
+- `metrics.jmx.containerSecurityContext.runAsUser`
+- `metrics.jmx.containerSecurityContext.runAsNonRoot`
+- `metrics.jmx.resources.limits`
+- `metrics.jmx.resources.requests`
+- `metrics.jmx.kafkaJmxPort`
 
 ### To 26.0.0
 

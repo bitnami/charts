@@ -1925,70 +1925,10 @@ metrics:
     ## @param metrics.jmx.enabled Whether or not to expose JMX metrics to Prometheus
     ##
     enabled: false
-    ## @param metrics.jmx.kafkaJmxPort JMX port where the exporter will collect metrics, exposed in the Kafka container.
-    ##
-    kafkaJmxPort: 5555
-    ## Bitnami JMX exporter image
-    ## ref: https://hub.docker.com/r/bitnami/jmx-exporter/tags/
-    ## @param metrics.jmx.image.registry [default: REGISTRY_NAME] JMX exporter image registry
-    ## @param metrics.jmx.image.repository [default: REPOSITORY_NAME/jmx-exporter] JMX exporter image repository
-    ## @skip metrics.jmx.image.tag JMX exporter image tag (immutable tags are recommended)
-    ## @param metrics.jmx.image.digest JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-    ## @param metrics.jmx.image.pullPolicy JMX exporter image pull policy
-    ## @param metrics.jmx.image.pullSecrets Specify docker-registry secret names as an array
-    ##
-    image:
-      registry: docker.io
-      repository: bitnami/jmx-exporter
-      tag: 0.20.0-debian-11-r1
-      digest: ""
-      ## Specify a imagePullPolicy
-      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-      ##
-      pullPolicy: IfNotPresent
-      ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
-      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-      ## e.g:
-      ## pullSecrets:
-      ##   - myRegistryKeySecretName
-      ##
-      pullSecrets: []
-    ## Prometheus JMX exporter containers' Security Context
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param metrics.jmx.containerSecurityContext.enabled Enable Prometheus JMX exporter containers' Security Context
-    ## @param metrics.jmx.containerSecurityContext.runAsUser Set Prometheus JMX exporter containers' Security Context runAsUser
-    ## @param metrics.jmx.containerSecurityContext.runAsNonRoot Set Prometheus JMX exporter containers' Security Context runAsNonRoot
-    ## @param metrics.jmx.containerSecurityContext.allowPrivilegeEscalation Set Prometheus JMX exporter containers' Security Context allowPrivilegeEscalation
-    ## @param metrics.jmx.containerSecurityContext.readOnlyRootFilesystem Set Prometheus JMX exporter containers' Security Context readOnlyRootFilesystem
-    ## @param metrics.jmx.containerSecurityContext.capabilities.drop Set Prometheus JMX exporter containers' Security Context capabilities to be dropped
-    ## e.g:
-    ##   containerSecurityContext:
-    ##     enabled: true
-    ##     capabilities:
-    ##       drop: ["NET_RAW"]
-    ##     readOnlyRootFilesystem: true
-    ##
-    containerSecurityContext:
-      enabled: true
-      runAsUser: 1001
-      runAsNonRoot: true
-      allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: true
-      capabilities:
-        drop: ["ALL"]
     ## @param metrics.jmx.containerPorts.metrics Prometheus JMX exporter metrics container port
     ##
     containerPorts:
       metrics: 5556
-    ## Prometheus JMX exporter resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-    ## @param metrics.jmx.resources.limits The resources limits for the JMX exporter container
-    ## @param metrics.jmx.resources.requests The requested resources for the JMX exporter container
-    ##
-    resources:
-      limits: {}
-      requests: {}
     ## Prometheus JMX exporter service configuration
     ##
     service:
@@ -2029,7 +1969,6 @@ metrics:
     ## https://github.com/helm/charts/tree/master/incubator/kafka
     ##
     config: |-
-      jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:{{ .Values.metrics.jmx.kafkaJmxPort }}/jmxrmi
       lowercaseOutputName: true
       lowercaseOutputLabelNames: true
       ssl: false
