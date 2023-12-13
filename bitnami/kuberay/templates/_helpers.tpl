@@ -43,17 +43,6 @@ Create the name of the service account to use (Kuberay Operator)
 {{- end -}}
 
 {{/*
-Name of the operator ConfigMap
-*/}}
-{{- define "kuberay.operator.configmapName" -}}
-{{- if .Values.operator.existingConfigMap -}}
-    {{ include "common.tplvalues.render" (dict "value" .Values.operator.existingConfigMap "context" $) }}
-{{- else -}}
-    {{ include "kuberay.operator.fullname" . }}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return the proper Kuberay Kubernetes API Server fullname
 */}}
 {{- define "kuberay.apiserver.fullname" -}}
