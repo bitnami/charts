@@ -225,7 +225,7 @@ data:
     SLEEP_PERIOD=10
 
     {{- if and .Values.auth.enabled .Values.auth.rootPassword }}
-    usernameAndPassword="-u ${MONGODB_ROOT_USER} -p ${MONGODB_ROOT_PASSWORD}"
+    usernameAndPassword="{{- if .Values.tls.enabled}} --tls {{ if .Values.tls.mTLS.enabled }}--tlsCertificateKeyFile=/certs/mongodb.pem {{ end }}--tlsCAFile=/certs/mongodb-ca-cert{{- end }} -u ${MONGODB_ROOT_USER} -p ${MONGODB_ROOT_PASSWORD}"
     {{- else }}
     usernameAndPassword=""
     {{- end }}
@@ -261,8 +261,14 @@ data:
       for key in ${!desiredRsConf[@]}; do
         value=${desiredRsConf[$key]}
         if ! $(echo "\"${currentRsConf}"\" | grep -q -e "${key}: ${value},"); then
-           logger "rs conf setting: ${key} value will be set to: ${value}"
-           settingsToConfigure="${settingsToConfigure}cfg.settings.${key} = ${value}; "
+           if [[ $key =~ ^members\[[0-9]+\]\..+ ]]; then
+            memberIndex=$(echo $key | grep -o -E '[0-9]+')
+            nodeConfigKey=${key#*.}
+            settingsToConfigure="${settingsToConfigure}cfg.members[${memberIndex}].${nodeConfigKey} = ${value}; "
+          else
+            # General rs settings
+            settingsToConfigure="${settingsToConfigure}cfg.settings.${key} = ${value}; "
+          fi
            desiredEqualsactual=false
         else
           logger "rs conf: ${key} is already at desired value: ${value}"

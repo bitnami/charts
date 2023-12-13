@@ -8,9 +8,9 @@ annotations:
     - name: apache-exporter
       image: docker.io/bitnami/apache-exporter:1.0.3-debian-11-r1
     - name: joomla
-      image: docker.io/bitnami/joomla:5.0.0-debian-11-r1
+      image: docker.io/bitnami/joomla:5.0.1-debian-11-r0
 apiVersion: v2
-appVersion: 5.0.0
+appVersion: 5.0.1
 dependencies:
 - condition: mariadb.enabled
   name: mariadb
@@ -36,4 +36,4 @@ maintainers:
 name: joomla
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/joomla
-version: 17.1.2
+version: 17.1.3

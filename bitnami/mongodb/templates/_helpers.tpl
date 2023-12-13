@@ -425,13 +425,19 @@ mongodb: tls.hidden.existingSecrets
 Validate values of MongoDB&reg; exporter URI string - auth.enabled and/or tls.enabled must be enabled or it defaults
 */}}
 {{- define "mongodb.mongodb_exporter.uri" -}}
-    {{- $uriTlsArgs := ternary "tls=true{{if .Values.tls.mTLS.enabled }}&tlsCertificateKeyFile=/certs/mongodb.pem{{ end }}&tlsCAFile=/certs/mongodb-ca-cert" "" .Values.tls.enabled -}}
-    {{- if .Values.metrics.username }}
+    {{- $tlsEnabled := .Values.tls.enabled -}}
+    {{- $mTlsEnabled := and $tlsEnabled .Values.tls.mTLS.enabled -}}
+    {{- $tlsArgs := "" -}}
+    {{- if $tlsEnabled -}}
+        {{- $tlsCertKeyFile := ternary "&tlsCertificateKeyFile=/certs/mongodb.pem" "" $mTlsEnabled -}}
+        {{- $tlsArgs = printf "tls=true%s&tlsCAFile=/certs/mongodb-ca-cert" $tlsCertKeyFile -}}
+    {{- end -}}
+    {{- if .Values.metrics.username -}}
         {{- $uriAuth := ternary "$(echo $MONGODB_METRICS_USERNAME | sed -r \"s/@/%40/g;s/:/%3A/g\"):$(echo $MONGODB_METRICS_PASSWORD | sed -r \"s/@/%40/g;s/:/%3A/g\")@" "" .Values.auth.enabled -}}
-        {{- printf "mongodb://%slocalhost:%d/admin?%s" $uriAuth (int .Values.containerPorts.mongodb) $uriTlsArgs -}}
+        {{- printf "mongodb://%slocalhost:%d/admin?%s" $uriAuth (int .Values.containerPorts.mongodb) $tlsArgs -}}
     {{- else -}}
         {{- $uriAuth := ternary "$MONGODB_ROOT_USER:$(echo $MONGODB_ROOT_PASSWORD | sed -r \"s/@/%40/g;s/:/%3A/g\")@" "" .Values.auth.enabled -}}
-        {{- printf "mongodb://%slocalhost:%d/admin?%s" $uriAuth (int .Values.containerPorts.mongodb) $uriTlsArgs -}}
+        {{- printf "mongodb://%slocalhost:%d/admin?%s" $uriAuth (int .Values.containerPorts.mongodb) $tlsArgs -}}
     {{- end -}}
 {{- end -}}
 

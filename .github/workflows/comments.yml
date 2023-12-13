@@ -6,61 +6,14 @@ on:
   issue_comment:
     types:
       - created
-# Remove all permissions by default
-permissions: {}
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
 # Avoid concurrency over the same issue
 concurrency:
   group: card-movement-${{ github.event.issue.number }}
 jobs:
-  comments_handler:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      repository-projects: write
-      issues: read
-      pull-requests: read
-    steps:
-      - name: Repo checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
-      - name: Load .env file
-        uses: xom9ikk/dotenv@de1ff27d319507880e6621e4d47424c677d95f68
-        with:
-          path: .github/workflows/
-      - name: Move into From Build Maintenance
-        uses: peter-evans/create-or-update-project-card@dfa240db6fe287ceb681e45d6728c1af70452c58
-        # The comment was created by bitnami-bot in a pull_request created by bitnami-bot
-        if: ${{ github.actor == 'bitnami-bot' && github.event.issue.user.login == 'bitnami-bot' && github.event.issue.pull_request != null }}
-        with:
-          project-name: Support
-          column-name: Build Maintenance
-          # Required to trigger moving-cards.yml workflow (clean labels and assign people to work on it)
-          token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
-      - name: Move into Pending
-        uses: peter-evans/create-or-update-project-card@dfa240db6fe287ceb681e45d6728c1af70452c58
-        if: |
-          (github.actor != 'bitnami-bot' || github.event.issue.user.login != 'bitnami-bot' || github.event.issue.pull_request == null) &&
-          contains(fromJson(env.BITNAMI_TEAM), github.actor) &&
-          (!contains(github.event.issue.labels.*.name, 'bitnami'))
-        with:
-          project-name: Support
-          column-name: Pending
-      - name: Move into In Progress
-        uses: peter-evans/create-or-update-project-card@dfa240db6fe287ceb681e45d6728c1af70452c58
-        if: |
-          (github.actor != 'bitnami-bot' || github.event.issue.user.login != 'bitnami-bot' || github.event.issue.pull_request == null) &&
-          (!contains(fromJson(env.BITNAMI_TEAM), github.actor)) &&
-          contains(github.event.issue.labels.*.name, 'in-progress')
-        with:
-          project-name: Support
-          column-name: In progress
-      - name: Move into Triage
-        uses: peter-evans/create-or-update-project-card@dfa240db6fe287ceb681e45d6728c1af70452c58
-        if: |
-          (github.actor != 'bitnami-bot' || github.event.issue.user.login != 'bitnami-bot' || github.event.issue.pull_request == null) &&
-          (!contains(fromJson(env.BITNAMI_TEAM), github.actor)) &&
-          (!contains(github.event.issue.labels.*.name, 'in-progress'))
-        with:
-          project-name: Support
-          column-name: Triage
-          # Needs reasignation of the task
-          token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
+  call-comments-workflow:
+    uses: bitnami/support/.github/workflows/comment-created.yml@main
+    secrets: inherit
