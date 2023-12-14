@@ -1,0 +1,32 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.apiserver.enabled .Values.apiserver.rbac.create (not .Values.apiserver.watchAllNamespaces) }}
+{{- $watchNamespaces := default (list (include "common.names.namespace" .)) .Values.apiserver.watchNamespaces }}
+{{- range $namespace := $watchNamespaces }}
+---
+kind: RoleBinding
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" $ }}
+metadata:
+  name: {{ include "kuberay.apiserver.fullname" $ | trunc 63 | trimSuffix "-" }}
+  namespace: {{ $namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" $.Values.apiserver.image "chart" $.Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.commonLabels $versionLabel ) "context" $ ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: kuberay
+    app.kubernetes.io/component: apiserver
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "kuberay.apiserver.fullname" $ | trunc 63 | trimSuffix "-" }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "kuberay.apiserver.serviceAccountName" $ }}
+    namespace: {{ include "common.names.namespace" $ | quote }}
+{{- end }}
+{{- end }}
