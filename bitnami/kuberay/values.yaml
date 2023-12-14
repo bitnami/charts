@@ -200,6 +200,9 @@ operator:
   ## @param operator.watchNamespaces [array] Watch for KubeRay resources in the given namespaces
   ##
   watchNamespaces: []
+  ## @param operator.enableBatchScheduler Enable batch scheduler component
+  ##
+  enableBatchScheduler: false
   ## Kuberay Operator resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## @param operator.resources.limits The resources limits for the Kuberay Operator containers
