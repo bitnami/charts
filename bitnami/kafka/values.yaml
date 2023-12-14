@@ -1350,6 +1350,32 @@ externalAccess:
     resources:
       limits: {}
       requests: {}
+    ## Kafka provisioning containers' Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param externalAccess.autoDiscovery.containerSecurityContext.enabled Enable Kafka auto-discovery containers' Security Context
+    ## @param externalAccess.autoDiscovery.containerSecurityContext.runAsUser Set Kafka auto-discovery containers' Security Context runAsUser
+    ## @param externalAccess.autoDiscovery.containerSecurityContext.runAsNonRoot Set Kafka auto-discovery containers' Security Context runAsNonRoot
+    ## @param externalAccess.autoDiscovery.containerSecurityContext.allowPrivilegeEscalation Set Kafka auto-discovery containers' Security Context allowPrivilegeEscalation
+    ## @param externalAccess.autoDiscovery.containerSecurityContext.readOnlyRootFilesystem Set Kafka auto-discovery containers' Security Context readOnlyRootFilesystem
+    ## @param externalAccess.autoDiscovery.containerSecurityContext.capabilities.drop Set Kafka auto-discovery containers' Security Context capabilities to be dropped
+    ## @param externalAccess.autoDiscovery.containerSecurityContext.seccompProfile.type Set Kafka auto-discovery seccomp profile type 
+    ## e.g:
+    ##   containerSecurityContext:
+    ##     enabled: true
+    ##     capabilities:
+    ##       drop: ["NET_RAW"]
+    ##     readOnlyRootFilesystem: true
+    ##
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1001
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
   ## Service settings
   controller:
     ## @param externalAccess.controller.forceExpose If set to true, force exposing controller-eligible nodes although they are configured as controller-only nodes
