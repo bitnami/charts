@@ -1423,6 +1423,15 @@ cluster:
     ##    command: ['sh', '-c', 'echo "hello world"']
     ##
     initContainers: []
+    ## @param cluster.head.customLivenessProbe Custom livenessProbe that overrides the default one
+    ##
+    customLivenessProbe: {}
+    ## @param cluster.head.customReadinessProbe Custom readinessProbe that overrides the default one
+    ##
+    customReadinessProbe: {}
+    ## @param cluster.head.customStartupProbe Custom startupProbe that overrides the default one
+    ##
+    customStartupProbe: {}
   ## @section Ray Cluster Worker Parameters
   ##
   worker:

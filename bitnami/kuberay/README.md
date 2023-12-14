@@ -432,6 +432,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.head.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Ray Cluster Worker (common) container(s)                | `[]`             |
 | `cluster.head.sidecars`                                          | Add additional sidecar containers to the Ray Cluster Worker (common) pod(s)                                              | `[]`             |
 | `cluster.head.initContainers`                                    | Add additional init containers to the Ray Cluster Worker (common) pod(s)                                                 | `[]`             |
+| `cluster.head.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                      | `{}`             |
+| `cluster.head.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`             |
+| `cluster.head.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`             |
 
 ### Ray Cluster Worker Parameters
 
