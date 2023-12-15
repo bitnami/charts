@@ -4177,6 +4177,9 @@ metrics:
   ## @param metrics.enabled Enable the export of Prometheus metrics
   ##
   enabled: false
+  ## @param metrics.runbookUrl Prefix for runbook URLs. Use this to override the first part of the runbookURLs that is common to all rules
+  ##
+  runbookUrl: "https://github.com/thanos-io/thanos/tree/main/mixin"
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
