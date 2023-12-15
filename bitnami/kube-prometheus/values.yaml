@@ -2109,7 +2109,7 @@ alertmanager:
   configuration: {}
   ## @param alertmanager.configMatcherStrategy alertmanagerConfigMatcherStrategy defines how AlertmanagerConfig objects match the alerts.
   ## E.g.
-  ## onfigMatcherStrategy:
+  ## configMatcherStrategy:
   ##   type: OnNamespace
   ## If type set to `OnNamespace`, the operator injects a label matcher matching the
   ## namespace of the AlertmanagerConfig object for all its routes and inhibition
