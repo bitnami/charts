@@ -1,10 +1,10 @@
 <!--- app-name: KubeRay -->
 
-# KubeRay packaged by Bitnami
+# Bitnami package for KubeRay
 
 KubeRay is a Kubernetes operator for deploying and management of Ray applications on Kubernetes using CustomResourceDefinitions.
 
-[Overview of KubeRay](https://www.ray.io/)
+[Overview of KubeRay](https://ray.io)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
