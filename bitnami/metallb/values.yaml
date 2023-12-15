@@ -90,7 +90,7 @@ prometheusRule:
 
 ## @section Controller parameters
 
-## Metallb Controller deployment.
+## MetalLB Controller deployment.
 ## ref: https://hub.docker.com/r/bitnami/metallb-controller/tags
 ##
 controller:
@@ -119,7 +119,7 @@ controller:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param controller.updateStrategy.type Metallb controller deployment strategy type.
+  ## @param controller.updateStrategy.type MetalLB controller deployment strategy type.
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   ## e.g:
   ## updateStrategy:
@@ -150,14 +150,18 @@ controller:
     ## @param controller.psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
     ##
     create: true
-  ## @param controller.priorityClassName Metallb controller pods' priorityClassName
+  ## @param controller.priorityClassName MetalLB controller pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param controller.runtimeClassName Name of the runtime class to be used by MetalLB controller pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param controller.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param controller.terminationGracePeriodSeconds In seconds, time the given to the Metallb controller pod needs to terminate gracefully
+  ## @param controller.terminationGracePeriodSeconds In seconds, time the given to the MetalLB controller pod needs to terminate gracefully
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: 0
@@ -236,17 +240,17 @@ controller:
     values: []
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param controller.podSecurityContext.enabled Enabled Metallb Controller pods' Security Context
-  ## @param controller.podSecurityContext.fsGroup Set Metallb Controller pod's Security Context fsGroup
+  ## @param controller.podSecurityContext.enabled Enabled MetalLB Controller pods' Security Context
+  ## @param controller.podSecurityContext.fsGroup Set MetalLB Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param controller.containerSecurityContext.enabled Enabled Metallb Controller containers' Security Context
-  ## @param controller.containerSecurityContext.runAsUser Set Metallb Controller containers' Security Context runAsUser
-  ## @param controller.containerSecurityContext.runAsNonRoot Set Metallb Controller container's Security Context runAsNonRoot
+  ## @param controller.containerSecurityContext.enabled Enabled MetalLB Controller containers' Security Context
+  ## @param controller.containerSecurityContext.runAsUser Set MetalLB Controller containers' Security Context runAsUser
+  ## @param controller.containerSecurityContext.runAsNonRoot Set MetalLB Controller container's Security Context runAsNonRoot
   ## @param controller.containerSecurityContext.allowPrivilegeEscalation Enables privilege Escalation context for the pod.
   ## @param controller.containerSecurityContext.readOnlyRootFilesystem Allows the pod to mount the RootFS as ReadOnly
   ## @param controller.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
@@ -266,7 +270,7 @@ controller:
   ## @param controller.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param controller.lifecycleHooks for the Metallb Controller container(s) to automate configuration before or after startup
+  ## @param controller.lifecycleHooks for the MetalLB Controller container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
   ## @param controller.extraEnvVars Extra environment variable to pass to the running container.
@@ -276,19 +280,19 @@ controller:
   ##    value: env_var_value
   ##
   extraEnvVars: []
-  ## @param controller.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Metallb controller nodes
+  ## @param controller.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for MetalLB controller nodes
   ##
   extraEnvVarsCM: ""
-  ## @param controller.extraEnvVarsSecret Name of existing Secret containing extra env vars for Metallb controller nodes
+  ## @param controller.extraEnvVarsSecret Name of existing Secret containing extra env vars for MetalLB controller nodes
   ##
   extraEnvVarsSecret: ""
-  ## @param controller.extraVolumes Optionally specify extra list of additional volumes for the Metallb controller pod(s)
+  ## @param controller.extraVolumes Optionally specify extra list of additional volumes for the MetalLB controller pod(s)
   ##
   extraVolumes: []
-  ## @param controller.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Metallb controller container(s)
+  ## @param controller.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the MetalLB controller container(s)
   ##
   extraVolumeMounts: []
-  ## @param controller.sidecars Add additional sidecar containers to the Metallb Controller pod(s)
+  ## @param controller.sidecars Add additional sidecar containers to the MetalLB Controller pod(s)
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -299,7 +303,7 @@ controller:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param controller.initContainers Add additional init containers to the Metallb Controller pod(s)
+  ## @param controller.initContainers Add additional init containers to the MetalLB Controller pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -389,9 +393,24 @@ controller:
 
   ## @param controller.logLevel Sets the controller log level. Does not work if the args are overridden
   ##
-  logLevel: "info"
+  logLevel: info
+  ## @param controller.tlsMinVersion Sets the minimum TLS version for the controller
+  ## e.g:
+  ## namespace: VersionTLS12
+  ##
+  tlsMinVersion: ""
+  ## @param controller.tlsCipherSuites Comma separated list of TLS cipher suites for the controller
+  ##  
+  tlsCipherSuites: ""
+  ## @param controller.webhookMode Controller webhook mode
+  ## Allowed values: enabled, disabled or only webhook if we want the controller to act as webhook endpoint only
+  ##
+  webhookMode: enabled
+  ## @param controller.extraArgs Add extra arguments to the default arguments for the controller
+  ##
+  extraArgs: []
 
-  ## @section Metallb controller Prometheus metrics export
+  ## @section MetalLB controller Prometheus metrics export
   ##
   metrics:
     ## @param controller.metrics.enabled Enable the export of Prometheus metrics
@@ -451,7 +470,7 @@ controller:
 
 ## @section Speaker parameters
 
-## Metallb Speaker daemonset.
+## MetalLB Speaker daemonset.
 ## ref: https://hub.docker.com/r/bitnami/metallb-speaker/tags
 ##
 speaker:
@@ -516,6 +535,10 @@ speaker:
   ## @param speaker.priorityClassName Speaker pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param speaker.runtimeClassName Name of the runtime class to be used by Speaker pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param speaker.terminationGracePeriodSeconds In seconds, time the given to the Speaker pod needs to terminate gracefully
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##

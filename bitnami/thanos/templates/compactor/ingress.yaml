@@ -21,7 +21,7 @@ spec:
   {{- end }}
   rules:
     {{- if .Values.compactor.ingress.hostname }}
-    - host: {{ .Values.compactor.ingress.hostname }}
+    - host: {{ include "common.tplvalues.render" ( dict "value" .Values.compactor.ingress.hostname "context" $ ) }}
       http:
         paths:
           - path: {{ .Values.compactor.ingress.path }}
@@ -51,7 +51,7 @@ spec:
       secretName: {{ printf "%s-tls" .Values.compactor.ingress.hostname }}
     {{- end }}
     {{- if .Values.compactor.ingress.extraTls }}
-    {{- toYaml .Values.compactor.ingress.extraTls | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.compactor.ingress.extraTls "context" $) | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}

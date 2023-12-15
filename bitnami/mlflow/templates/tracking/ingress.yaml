@@ -32,7 +32,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.tracking.ingress.pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "mlflow.v0.tracking.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "mlflow.v0.tracking.fullname" .) "servicePort" (include "mlflow.v0.tracking.protocol" $)  "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.tracking.ingress.extraHosts }}
     - host: {{ .name | quote }}
@@ -42,7 +42,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "mlflow.v0.tracking.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "mlflow.v0.tracking.fullname" $) "servicePort" (include "mlflow.v0.tracking.protocol" $) "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.tracking.ingress.extraRules }}
     {{- include "common.tplvalues.render" (dict "value" .Values.tracking.ingress.extraRules "context" $) | nindent 4 }}

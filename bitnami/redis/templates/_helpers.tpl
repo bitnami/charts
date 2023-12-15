@@ -240,7 +240,7 @@ Return Redis&reg; password
     {{- else if not (empty .Values.auth.password) -}}
         {{- .Values.auth.password -}}
     {{- else -}}
-        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "redis.secretName" .) "Length" 10 "Key" (include "redis.secretPasswordKey" .))  -}}
+        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (include "redis.secretName" .) "Length" 10 "Key" (include "redis.secretPasswordKey" .))  -}}
     {{- end -}}
 {{- end -}}
 {{- end }}

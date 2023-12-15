@@ -91,7 +91,6 @@ The order in which this function returns a secret password:
 
 {{- $password := "" }}
 {{- $subchart := "" }}
-{{- $failOnNew := default true .failOnNew }}
 {{- $chartName := default "" .chartName }}
 {{- $passwordLength := default 10 .length }}
 {{- $providedPasswordKey := include "common.utils.getKeyFromList" (dict "keys" .providedValues "context" $.context) }}
@@ -100,8 +99,10 @@ The order in which this function returns a secret password:
 {{- if $secretData }}
   {{- if hasKey $secretData .key }}
     {{- $password = index $secretData .key | quote }}
-  {{- else if $failOnNew }}
+  {{- else if not (eq .failOnNew false) }}
     {{- printf "\nPASSWORDS ERROR: The secret \"%s\" does not contain the key \"%s\"\n" .secret .key | fail -}}
+  {{- else if $providedPasswordValue }}
+    {{- $password = $providedPasswordValue | toString | b64enc | quote }}
   {{- end -}}
 {{- else if $providedPasswordValue }}
   {{- $password = $providedPasswordValue | toString | b64enc | quote }}
