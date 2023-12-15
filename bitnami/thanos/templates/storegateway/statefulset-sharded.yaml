@@ -29,7 +29,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if not .Values.storegateway.autoscaling.enabled }}
+  {{- if not $.Values.storegateway.autoscaling.enabled }}
   replicas: {{ .Values.storegateway.replicaCount }}
   {{- end }}
   podManagementPolicy: {{ $.Values.storegateway.podManagementPolicy }}
