@@ -98,14 +98,14 @@ The order in which this function returns a secret password:
 {{- $secretData := (lookup "v1" "Secret" (include "common.names.namespace" .context) .secret).data }}
 {{- if $secretData }}
   {{- if hasKey $secretData .key }}
-    {{- $password = index $secretData .key | quote }}
+    {{- $password = index $secretData .key }}
   {{- else if not (eq .failOnNew false) }}
     {{- printf "\nPASSWORDS ERROR: The secret \"%s\" does not contain the key \"%s\"\n" .secret .key | fail -}}
   {{- else if $providedPasswordValue }}
-    {{- $password = $providedPasswordValue | toString | b64enc | quote }}
+    {{- $password = $providedPasswordValue | toString | b64enc }}
   {{- end -}}
 {{- else if $providedPasswordValue }}
-  {{- $password = $providedPasswordValue | toString | b64enc | quote }}
+  {{- $password = $providedPasswordValue | toString | b64enc }}
 {{- else }}
 
   {{- if .context.Values.enabled }}
@@ -121,12 +121,12 @@ The order in which this function returns a secret password:
     {{- $subStr := list (lower (randAlpha 1)) (randNumeric 1) (upper (randAlpha 1)) | join "_" }}
     {{- $password = randAscii $passwordLength }}
     {{- $password = regexReplaceAllLiteral "\\W" $password "@" | substr 5 $passwordLength }}
-    {{- $password = printf "%s%s" $subStr $password | toString | shuffle | b64enc | quote }}
+    {{- $password = printf "%s%s" $subStr $password | toString | shuffle | b64enc }}
   {{- else }}
-    {{- $password = randAlphaNum $passwordLength | b64enc | quote }}
+    {{- $password = randAlphaNum $passwordLength | b64enc }}
   {{- end }}
 {{- end -}}
-{{- printf "%s" $password -}}
+{{- printf "%s" $password | quote -}}
 {{- end -}}
 
 {{/*
