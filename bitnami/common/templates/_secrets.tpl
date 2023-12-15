@@ -78,6 +78,7 @@ Params:
   - chartName - String - Optional - Name of the chart used when said chart is deployed as a subchart.
   - context - Context - Required - Parent context.
   - failOnNew - Boolean - Optional - Default to true. If set to false, skip errors adding new keys to existing secrets.
+  - skipB64enc - Boolean - Optional - Default to false. If set to true, no the secret will not be base64 encrypted.
   - skipQuote - Boolean - Optional - Default to false. If set to true, no quotes will be added around the secret.
 The order in which this function returns a secret password:
   1. Already existing 'Secret' resource
@@ -127,7 +128,9 @@ The order in which this function returns a secret password:
     {{- $password = randAlphaNum $passwordLength }}
   {{- end }}
 {{- end -}}
+{{- if not .skipB64enc }}
 {{ $password = $password | b64enc }}
+{{- end -}}
 {{- if .skipQuote -}}
 {{- printf "%s" $password -}}
 {{- else -}}
