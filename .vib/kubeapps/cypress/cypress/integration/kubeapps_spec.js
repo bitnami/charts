@@ -22,6 +22,33 @@ it('allows managing a helm chart release', () => {
     cy.contains('Deploy').click();
 
     cy.get('#releaseName').type(releaseName);
+
+    // Disable securityContext parameters, as some platforms may not allow to enforce
+    // a specific UID/GID when installing
+    cy.get('input[title="Search"]').type('SecurityContext{enter}');
+
+    // 1. containerSecurity Context
+    cy.contains('td', 'containerSecurityContext').within(() => {
+      cy.get('cds-button').click();
+    });
+    cy.contains('tr', 'containerSecurityContext/enabled').within(() => {
+      cy.contains('cds-toggle', 'true').click('left');
+    });
+    cy.contains('td', 'containerSecurityContext').within(() => {
+      cy.get('cds-button').click();
+    });
+
+    // 2. podSecurityContext Context
+    cy.contains('td', 'podSecurityContext').within(() => {
+      cy.get('cds-button').click();
+    });
+    cy.contains('tr', 'podSecurityContext/enabled').within(() => {
+      cy.contains('cds-toggle', 'true').click('left');
+    });
+    cy.contains('td', 'containerSecurityContext').within(() => {
+      cy.get('cds-button').click();
+    });
+
     cy.contains('cds-button', 'Deploy').click();
     cy.get('.application-status-pie-chart-title', { timeout: (Cypress.config('defaultCommandTimeout') * 3) }).should(
       'have.text',
