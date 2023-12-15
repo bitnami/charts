@@ -965,6 +965,9 @@ Init container definition for waiting for Kubernetes autodiscovery
           fieldPath: metadata.name
     - name: AUTODISCOVERY_SERVICE_TYPE
       value: {{ $externalAccessService.service.type | quote }}
+  {{- if .context.Values.externalAccess.autoDiscovery.containerSecurityContext.enabled }}
+  securityContext: {{- omit .context.Values.externalAccess.autoDiscovery.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  {{- end }}
   {{- if .context.Values.externalAccess.autoDiscovery.resources }}
   resources: {{- toYaml .context.Values.externalAccess.autoDiscovery.resources | nindent 12 }}
   {{- end }}
