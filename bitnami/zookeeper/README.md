@@ -195,9 +195,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.minAvailable`                                  | Minimum available ZooKeeper replicas                                                                                                                                                              | `""`             |
 | `pdb.maxUnavailable`                                | Maximum unavailable ZooKeeper replicas                                                                                                                                                            | `1`              |
 | `enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                             | `true`           |
-| `dnsService.enabled`                                | Specifies whether to use customized DNS-Pod service                                                                                                                                               | `false`          |
-| `dnsService.dnsPolicy`                              | Specifies the DNS policy for the zookeeper pods                                                                                                                                                   | `Default`        |
-| `dnsService.dnsConfig`                              | allows users more control on the DNS settings for a Pod.                                                                                                                                          | `{}`             |
+| `dnsPolicy`                                         | Specifies the DNS policy for the zookeeper pods                                                                                                                                                   | `""`             |
+| `dnsConfig`                                         | allows users more control on the DNS settings for a Pod. Required if `dnsPolicy` is set to `None`                                                                                                 | `{}`             |
 
 ### Traffic Exposure parameters
 
