@@ -59,7 +59,37 @@ spec:
               from pymilvus import connections
               from pymilvus import utility
               # Authenticate using default root user credentials
-              connections.connect(alias='default', host='{{ include "milvus.proxy.fullname" . }}', port='{{ .Values.proxy.service.ports.grpc }}', password='Milvus', user='root')
+              {{- if eq (int .Values.proxy.tls.mode) 0}}
+              connections.connect(
+                  alias='default',
+                  host='{{ include "milvus.proxy.fullname" . }}',
+                  port='{{ .Values.proxy.service.ports.grpc }}',
+                  password='Milvus',
+                  user='root',
+                  server_name='localhost')
+              {{- else if eq (int .Values.proxy.tls.mode) 1}}
+              connections.connect(
+                  alias='default',
+                  host='{{ include "milvus.proxy.fullname" . }}',
+                  port='{{ .Values.proxy.service.ports.grpc }}',
+                  secure=True,
+                  server_pem_path='/opt/bitnami/milvus/configs/cert/milvus/client/{{ .Values.initJob.tls.cert }}',
+                  password='Milvus',
+                  user='root',
+                  server_name='localhost')
+              {{- else }}
+              connections.connect(
+                  alias='default',
+                  host='{{ include "milvus.proxy.fullname" . }}',
+                  port='{{ .Values.proxy.service.ports.grpc }}',
+                  secure=True,
+                  client_pem_path='/opt/bitnami/milvus/configs/cert/milvus/client/{{ .Values.initJob.tls.cert }}',
+                  client_key_path='/opt/bitnami/milvus/configs/cert/milvus/client/{{ .Values.initJob.tls.key }}',
+                  ca_pem_path='/opt/bitnami/milvus/configs/cert/milvus/client/{{ .Values.initJob.tls.caCert }}',
+                  password='Milvus',
+                  user='root',
+                  server_name='localhost')
+              {{- end }}
               # Reset root password
               utility.reset_password('root', 'Milvus', os.environ['MILVUS_ROOT_PASSWORD'], using='default')
               utility.create_user('{{ .Values.milvus.auth.username }}', os.environ['MILVUS_PASSWORD'], using='default')
@@ -99,6 +129,11 @@ spec:
           volumeMounts:
             - name: tmp
               mountPath: /tmp
+            {{- if and (ne (int .Values.proxy.tls.mode) 0) (not (empty .Values.initJob.tls.existingSecret)) }}
+            - name: milvus-client-certs
+              mountPath: /opt/bitnami/milvus/configs/cert/milvus/client
+              readOnly: true
+            {{- end }}
           {{- if .Values.initJob.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.initJob.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -108,6 +143,12 @@ spec:
       volumes:
         - name: tmp
           emptyDir: {}
+        {{- if and (ne (int .Values.proxy.tls.mode) 0) (not (empty .Values.initJob.tls.existingSecret)) }}
+        - name: milvus-client-certs
+          secret:
+            secretName: {{ .Values.initJob.tls.existingSecret }}
+            defaultMode: 256
+        {{- end }}
       {{- if .Values.initJob.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.initJob.extraVolumes "context" $) | nindent 8 }}
       {{- end }}

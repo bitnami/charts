@@ -15,7 +15,7 @@ metadata:
  {{- if or .Values.commonAnnotations .Values.indexNode.service.annotations (and .Values.indexNode.metrics.enabled .Values.indexNode.metrics.annotations) }}
   annotations:
     {{- if or .Values.indexNode.service.annotations .Values.commonAnnotations }}
-    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.indeindexNodexCoord.service.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.indexNode.service.annotations .Values.commonAnnotations ) "context" . ) }}
     {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if and .Values.indexNode.metrics.enabled .Values.indexNode.metrics.annotations }}

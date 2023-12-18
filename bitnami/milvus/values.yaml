@@ -284,6 +284,28 @@ initJob:
   ## @param initJob.enableDefaultInitContainers Deploy default init containers
   ##
   enableDefaultInitContainers: true
+  ## @section TLS Client Configuration Parameters Connecting to Proxy
+  ##
+  tls:
+    ## @param initJob.tls.existingSecret Name of the existing secret containing the TLS certificates for initJob.
+    ## if proxy.tls.mode equals to 1, existingSecret should contain a server cert
+    ## if proxy.tls.mode equals to 2, existingSecret should contain a client cert, a client key and a CA cert
+    ##
+    existingSecret: ""
+    ## @param initJob.tls.cert The secret key from the existingSecret if 'cert' key different from the default (client.pem)
+    ##
+    cert: client.pem
+    ## @param initJob.tls.key The secret key from the existingSecret if 'key' key different from the default (client.key)
+    ## Milvus cannot decrypt key file with password, so now the key must not be encrypted
+    ##
+    key: client.key
+    ## @param initJob.tls.caCert The secret key from the existingSecret if 'caCert' key different from the default (ca.pem)
+    ##
+    caCert: ca.pem
+    ## @param initJob.tls.keyPassword Password to access the password-protected PEM key if necessary.
+    ## Milvus cannot decrypt key file with password, so now the key must not be encrypted, value here must be empty
+    ##
+    keyPassword: ""
   ## @param initJob.backoffLimit set backoff limit of the job
   ##
   backoffLimit: 10
@@ -3790,6 +3812,33 @@ proxy:
   ## @param proxy.enabled Enable Proxy deployment
   ##
   enabled: true
+  ## @section Proxy TLS Connection Configuration Parameters
+  ##
+  tls:
+    ## @param proxy.tls.mode TLS mode for proxy. Allowed values: `0`, `1`, `2`
+    ## 0 for close, 1 for one-way authentication, 2 for two-way authentication.
+    ##
+    mode: 0
+    ## @param proxy.tls.existingSecret Name of the existing secret containing the TLS certificates for proxy.
+    ## if mode equals to 1, existingSecret should contain a server cert and a server key
+    ## if mode equals to 2, existingSecret should contain a server cert, a server key and a CA cert
+    ##
+    existingSecret: ""
+    ## @param proxy.tls.cert The secret key from the existingSecret if 'cert' key different from the default (server.pem)
+    ##
+    cert: server.pem
+    ## @param proxy.tls.key The secret key from the existingSecret if 'key' key different from the default (server.key)
+    ## Milvus cannot decrypt key file with password, so now the key must not be encrypted
+    ##
+    key: server.key
+    ## @param proxy.tls.caCert The secret key from the existingSecret if 'caCert' key different from the default (ca.pem)
+    ##
+    caCert: ca.pem
+    ## @param proxy.tls.keyPassword Password to access the password-protected PEM key if necessary.
+    ## Milvus cannot decrypt key file with password, so now the key must not be encrypted, value here must be empty
+    ##
+    keyPassword: ""
+
   ## @param proxy.extraEnvVars Array with extra environment variables to add to proxy nodes
   ## e.g:
   ## extraEnvVars:
