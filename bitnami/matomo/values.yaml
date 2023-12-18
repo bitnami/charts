@@ -945,6 +945,9 @@ cronjobs:
     ## @param cronjobs.taskScheduler.suspend Whether to create suspended CronJob
     ##
     suspend: false
+    ## @param cronjobs.taskScheduler.affinity Affinity for CronJob pod assignment
+    ##
+    affinity: {}
     ## @param cronjobs.taskScheduler.command Override default container command (useful when using custom images)
     ##
     command: []
@@ -991,6 +994,9 @@ cronjobs:
     ## @param cronjobs.archive.suspend Whether to create suspended CronJob
     ##
     suspend: false
+    ## @param cronjobs.archive.affinity Affinity for CronJob pod assignment
+    ##
+    affinity: {}
     ## @param cronjobs.archive.command Override default container command (useful when using custom images)
     ##
     command: []

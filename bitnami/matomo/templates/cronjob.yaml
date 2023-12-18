@@ -35,6 +35,9 @@ spec:
         spec:
           {{- include "matomo.imagePullSecrets" . | nindent 10 }}
           restartPolicy: OnFailure
+          {{- if .Values.cronjobs.archive.affinity }}
+          affinity: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.archive.affinity "context" $) | nindent 12 }}
+          {{- end }}
           initContainers:
             {{ include "matomo.initContainers" . | nindent 12 }}
           containers:
@@ -168,6 +171,9 @@ spec:
           {{- end }}
         spec:
           {{- include "matomo.imagePullSecrets" . | nindent 10 }}
+          {{- if .Values.cronjobs.taskScheduler.affinity }}
+          affinity: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.taskScheduler.affinity "context" $) | nindent 12 }}
+          {{- end }}
           restartPolicy: OnFailure
           initContainers:
             {{ include "matomo.initContainers" . | nindent 12 }}

@@ -265,6 +265,9 @@ discourse:
   ##   - https://github.com/discourse/discourse-oauth2-basic
   ##
   plugins: []
+  ## @param discourse.persistPlugins Persist plugins across container restarts
+  ##
+  persistPlugins: true
   ## @param discourse.command Custom command to override image cmd
   ##
   command: []
