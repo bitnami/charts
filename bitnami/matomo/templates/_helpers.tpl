@@ -176,17 +176,18 @@ Return the matomo pods needed initContainers
   {{- end }}
   securityContext:
     runAsUser: 0
-  command:
   {{- if .Values.certificates.command }}
   command: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.command "context" $) | nindent 4 }}
   {{- else if .Values.certificates.customCertificate.certificateSecret }}
-  - sh
-  - -c
-  - install_packages ca-certificates openssl
+  command:
+    - sh
+    - -c
+    - install_packages ca-certificates openssl
   {{- else }}
-  - sh
-  - -c
-  - install_packages ca-certificates openssl
+  command:
+    - sh
+    - -c
+    - install_packages ca-certificates openssl
     && openssl req -new -x509 -days 3650 -nodes -sha256
       -subj "/CN=$(hostname)" -addext "subjectAltName = DNS:$(hostname)"
       -out  /etc/ssl/certs/ssl-cert-snakeoil.pem
