@@ -218,7 +218,7 @@ spec:
                 - name: matomo-data
                   mountPath: /bitnami/matomo
                 {{- if .Values.extraVolumeMounts }}
-                {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+                {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 16 }}
                 {{- end }}
           volumes:
             {{- if .Values.certificates.customCAs }}
