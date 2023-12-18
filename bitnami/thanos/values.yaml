@@ -4177,9 +4177,6 @@ metrics:
   ## @param metrics.enabled Enable the export of Prometheus metrics
   ##
   enabled: false
-  ## @param metrics.runbookUrl Prefix for runbook URLs. Use this to override the first part of the runbookURLs that is common to all rules
-  ##
-  runbookUrl: "https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-"
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -4293,6 +4290,9 @@ metrics:
       ## @param metrics.prometheusRule.default.disabled disable one specific prometheus alert rule
       ##
       disabled: {}
+    ## @param metrics.prometheusRule.runbookUrl Prefix for runbook URLs. Use this to override the first part of the runbookURLs that is common to all rules
+    ##
+    runbookUrl: "https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-"
     ## @param metrics.prometheusRule.namespace Namespace in which the PrometheusRule CRD is created
     ##
     namespace: ""
