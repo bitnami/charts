@@ -4307,7 +4307,7 @@ metrics:
     ##         - alert: ThanosCompactMultipleRunning
     ##           annotations:
     ##             description: No more than one Thanos Compact instance should be running at once. There are {{`{{`}}$value{{`}}`}} instances running.
-    ##             runbook_url: {{ .Values.metrics.runbookUrl }}thanoscompactmultiplerunning
+    ##             runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanoscompactmultiplerunning
     ##             summary: Thanos Compact has multiple instances running.
     ##           expr: sum by (job) (up{job=~"{{ template "common.names.fullname" . }}-compact.*"}) > 1
     ##           for: 5m
