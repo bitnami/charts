@@ -21,7 +21,7 @@ spec:
   {{- end }}
   rules:
     {{- if .Values.queryFrontend.ingress.hostname }}
-    - host: {{ .Values.queryFrontend.ingress.hostname }}
+    - host: {{ include "common.tplvalues.render" ( dict "value" .Values.queryFrontend.ingress.hostname "context" $ ) }}
       http:
         paths:
           - path: {{ .Values.queryFrontend.ingress.path }}
@@ -51,7 +51,7 @@ spec:
       secretName: {{ printf "%s-query-frontend" (include "common.names.fullname" .) }}
     {{- end }}
     {{- if .Values.queryFrontend.ingress.extraTls }}
-    {{- toYaml .Values.queryFrontend.ingress.extraTls | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.ingress.extraTls "context" $) | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}

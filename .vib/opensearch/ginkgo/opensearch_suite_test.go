@@ -61,12 +61,12 @@ func createJob(ctx context.Context, c kubernetes.Interface, name string, port st
 					RestartPolicy: "Never",
 					Containers: []v1.Container{
 						{
-							Name:    "opensearch",
-							Image:   image,
-							Command: []string{"curl", "-X", op, fmt.Sprintf("http://%s/%s", releaseName, index)},
+							Name:            "opensearch",
+							Image:           image,
+							Command:         []string{"curl", "-X", op, fmt.Sprintf("http://%s/%s", releaseName, index)},
+							SecurityContext: securityContext,
 						},
 					},
-					SecurityContext: securityContext},
 				},
 			},
 		},

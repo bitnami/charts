@@ -135,6 +135,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------------- |
 | `discourse.skipInstall`                           | Do not run the Discourse installation wizard                                                 | `false`         |
 | `discourse.plugins`                               | List of plugins to be installed before the container initialization                          | `[]`            |
+| `discourse.persistPlugins`                        | Persist plugins across container restarts                                                    | `true`          |
 | `discourse.command`                               | Custom command to override image cmd                                                         | `[]`            |
 | `discourse.args`                                  | Custom args for the custom command                                                           | `[]`            |
 | `discourse.extraEnvVars`                          | Array with extra environment variables to add Discourse pods                                 | `[]`            |
@@ -399,6 +400,18 @@ By default, this Chart only deploys a single pod running Discourse. Should you w
     persistence.storageClass=nfs
     postgresql.primary.persistence.storageClass=nfs
     ```
+
+### Installing plugins
+
+You can install custom Discourse plugins during the release installation listing the desired plugin repositories via the `discourse.plugins` parameter. For example:
+
+```yaml
+discourse:
+  plugins:
+  - https://github.com/discourse/discourse-oauth2-basic
+```
+
+> Note: By default, plugins are persisted after the 1st installation, therefore it's not possible to update them on subsequent upgrades. If you want plugins to be updated on every upgrade, set the `discourse.persistPlugins` parameter to `false`.
 
 ### Sidecars
 

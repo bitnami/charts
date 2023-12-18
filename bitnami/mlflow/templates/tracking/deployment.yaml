@@ -201,7 +201,7 @@ spec:
           resources: {{- toYaml .Values.tracking.resources | nindent 12 }}
           {{- end }}
           ports:
-            - name: {{ include "mlflow.v0.tracking.protocol" . }}
+            - name: {{ include "mlflow.v0.tracking.portName" . }}
               containerPort: {{ .Values.tracking.containerPorts.http }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.tracking.customLivenessProbe }}
@@ -210,11 +210,11 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.tracking.livenessProbe "enabled") "context" $) | nindent 12 }}
             {{- if .Values.tracking.auth.enabled }}
             tcpSocket:
-              port: {{ include "mlflow.v0.tracking.protocol" . }}
+              port: {{ include "mlflow.v0.tracking.portName" . }}
             {{- else }}
             httpGet:
               path: /
-              port: {{ include "mlflow.v0.tracking.protocol" . }}
+              port: {{ include "mlflow.v0.tracking.portName" . }}
             {{- end }}
           {{- end }}
           {{- if .Values.tracking.customReadinessProbe }}
@@ -223,11 +223,11 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.tracking.readinessProbe "enabled") "context" $) | nindent 12 }}
             {{- if .Values.tracking.auth.enabled }}
             tcpSocket:
-              port: {{ include "mlflow.v0.tracking.protocol" . }}
+              port: {{ include "mlflow.v0.tracking.portName" . }}
             {{- else }}
             httpGet:
               path: /
-              port: {{ include "mlflow.v0.tracking.protocol" . }}
+              port: {{ include "mlflow.v0.tracking.portName" . }}
             {{- end }}
           {{- end }}
           {{- if .Values.tracking.customStartupProbe }}
@@ -236,11 +236,11 @@ spec:
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.tracking.startupProbe "enabled") "context" $) | nindent 12 }}
             {{- if .Values.tracking.auth.enabled }}
             tcpSocket:
-              port: {{ include "mlflow.v0.tracking.protocol" . }}
+              port: {{ include "mlflow.v0.tracking.portName" . }}
             {{- else }}
             httpGet:
               path: /
-              port: {{ include "mlflow.v0.tracking.protocol" . }}
+              port: {{ include "mlflow.v0.tracking.portName" . }}
             {{- end }}
           {{- end }}
           {{- end }}

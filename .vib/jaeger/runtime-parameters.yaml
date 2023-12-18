@@ -29,6 +29,14 @@ agent:
       image: jaegertracing/example-hotrod:1.39
       args:
         - all
+      securityContext:
+        runAsNonRoot: true
+        privileged: false
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop: ["ALL"]
+        seccompProfile:
+          type: "RuntimeDefault"
     - name: trace-generator
       image: bitnami/os-shell:11-debian-11-r2
       command:
@@ -41,6 +49,15 @@ agent:
             curl 'http://127.0.0.1:8080/dispatch?customer=392&nonse=0.45838884710501726'
             sleep 5
           done
+      securityContext:
+        runAsNonRoot: true
+        privileged: false
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop: ["ALL"]
+        seccompProfile:
+          type: "RuntimeDefault"
+
 cassandra:
   enabled: true
   keyspace: bitnami_test_jaeger

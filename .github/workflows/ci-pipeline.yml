@@ -88,10 +88,6 @@ jobs:
     needs: get-chart
     permissions:
       contents: read
-    env:
-      CSP_API_URL: https://console.cloud.vmware.com
-      CSP_API_TOKEN: ${{ secrets.CSP_API_TESTING_TOKEN }}
-      VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
     # Given performance issues of the action feature on GH's side, we need to be very restrictive in the job's triggers:
     # -> The 'Get modified charts' job suceededs AND
     #  ( ---> The pipeline was triggered due to a label addition and said label was the 'verify' one OR
@@ -108,6 +104,15 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
+      - id: log-chart-info
+        name: Get chart version and app version
+        env:
+          CHART: ${{ needs.get-chart.outputs.chart }}
+        run: |
+          # Log chart info
+          chart_version="$(yq e '.version' bitnami/${CHART}/Chart.yaml)"
+          app_version="$(yq e '.appVersion' bitnami/${CHART}/Chart.yaml)"
+          echo "Chart: ${CHART} ChartVersion: ${chart_version} AppVersion: ${app_version}"
       - id: get-asset-vib-config
         name: Get asset-specific configuration for VIB action
         run: |
@@ -133,6 +138,9 @@ jobs:
           verification-mode: ${{ steps.get-asset-vib-config.outputs.verification_mode }}
           runtime-parameters-file: ${{ steps.get-asset-vib-config.outputs.runtime_parameters_file }}
         env:
+          CSP_API_URL: https://console.cloud.vmware.com
+          CSP_API_TOKEN: ${{ secrets.CSP_API_TESTING_TOKEN }}
+          VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
           # Target-Platform used by default
           VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
           # Alternative Target-Platform to be used in case of incompatibilities
