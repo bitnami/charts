@@ -163,6 +163,10 @@ spec:
                   name: {{ include "smtp.secretName" . }}
                   key: smtp-password
             {{- end }}
+            {{- if not .Values.discourse.persistPlugins }}
+            - name: DISCOURSE_DATA_TO_PERSIST
+              value: "public/backups public/uploads"
+            {{- end }}
             {{- if .Values.discourse.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.discourse.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

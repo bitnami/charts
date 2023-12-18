@@ -191,7 +191,7 @@ spec:
           topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" $topologySpreadConstraints "context" .) | nindent 12 }}
           {{- end }}
           {{- $podSecurityContext := coalesce .podSecurityContext $.Values.cluster.worker.common.podSecurityContext }}
-          {{- if $podSecurityContext }}
+          {{- if $podSecurityContext.enabled }}
           securityContext: {{- omit $podSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- $terminationGracePeriodSeconds := coalesce .terminationGracePeriodSeconds $.Values.cluster.worker.common.terminationGracePeriodSeconds }}
