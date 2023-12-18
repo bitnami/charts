@@ -174,6 +174,8 @@ Return the matomo pods needed initContainers
   {{- range (default .Values.image.pullSecrets .Values.certificates.image.pullSecrets) }}
     - name: {{ . }}
   {{- end }}
+  securityContext:
+    runAsUser: 0
   command:
   {{- if .Values.certificates.command }}
   command: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.command "context" $) | nindent 4 }}
