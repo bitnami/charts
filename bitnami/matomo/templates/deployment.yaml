@@ -221,9 +221,6 @@ spec:
           volumeMounts:
             - name: matomo-data
               mountPath: /bitnami/matomo
-            - name: etc-ssl-certs
-              mountPath: /etc/ssl/certs
-              readOnly: true
             {{- if .Values.certificates.customCertificate.certificateSecret }}
             - name: custom-certificate
               mountPath: {{ .Values.certificates.customCertificate.certificateLocation }}
