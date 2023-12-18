@@ -181,9 +181,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumeMounts`                          | Optionally specify extra list of additional volumeMounts for the Kafka container(s)                                                     | `[]`                       |
 | `sidecars`                                   | Add additional sidecar containers to the Kafka pod(s)                                                                                   | `[]`                       |
 | `initContainers`                             | Add additional Add init containers to the Kafka pod(s)                                                                                  | `[]`                       |
-| `dnsService.enabled`                         | Specifies whether to use customized DNS-Pod service                                                                                     | `false`                    |
-| `dnsService.dnsPolicy`                       | Specifies the DNS policy for the Kafka pods                                                                                             | `Default`                  |
-| `dnsService.dnsConfig`                       | allows users more control on the DNS settings for a Pod.                                                                                | `{}`                       |
+| `dnsPolicy`                                  | Specifies the DNS policy for the zookeeper pods                                                                                         | `""`                       |
+| `dnsConfig`                                  | allows users more control on the DNS settings for a Pod. Required if `dnsPolicy` is set to `None`                                       | `{}`                       |
 
 ### Controller-eligible statefulset parameters
 
