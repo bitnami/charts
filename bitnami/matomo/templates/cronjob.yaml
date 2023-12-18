@@ -217,8 +217,9 @@ spec:
               volumeMounts:
                 - name: matomo-data
                   mountPath: /bitnami/matomo
-                - name: scalingo-ca
-                  mountPath: /scalingo.pem
+                {{- if .Values.extraVolumeMounts }}
+                {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+                {{- end }}
           volumes:
             {{- if .Values.certificates.customCAs }}
             - name: etc-ssl-certs
