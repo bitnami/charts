@@ -165,6 +165,8 @@ Return the matomo pods needed initContainers
   volumeMounts:
     - name: matomo-data
       mountPath: /bitnami/matomo
+    - name: etc-ssl-certs
+      mountPath: /etc/ssl/certs
 {{- end }}
 {{- if .Values.certificates.customCAs }}
 - name: certificates
