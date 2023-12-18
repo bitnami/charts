@@ -21,7 +21,7 @@ spec:
   {{- end }}
   rules:
     {{- if .Values.query.ingress.grpc.hostname }}
-    - host: {{ .Values.query.ingress.grpc.hostname }}
+    - host: {{ include "common.tplvalues.render" ( dict "value" .Values.query.ingress.grpc.hostname "context" $ ) }}
       http:
         paths:
           - path: {{ .Values.query.ingress.grpc.path }}
@@ -51,7 +51,7 @@ spec:
       secretName: {{ .Values.query.ingress.grpc.secretName | default (printf "%s-tls" .Values.query.ingress.grpc.hostname) }}
     {{- end }}
     {{- if .Values.query.ingress.grpc.extraTls }}
-    {{- toYaml .Values.query.ingress.grpc.extraTls | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.query.ingress.grpc.extraTls "context" $) | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}

@@ -54,6 +54,9 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.tolerations "context" $) | nindent 8 }}
       {{- end }}
       hostNetwork: true
+      {{- if .Values.controller.runtimeClassName }}
+      runtimeClassName: {{ .Values.controller.runtimeClassName | quote }}
+      {{- end }}
       {{- if .Values.speaker.priorityClassName }}
       priorityClassName: {{ .Values.speaker.priorityClassName | quote }}
       {{- end }}

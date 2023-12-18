@@ -16,7 +16,7 @@ Return the proper OS image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "opensearch.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.sysctlImage .Values.volumePermissions.image) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.sysctlImage .Values.volumePermissions.image) "context" $) }}
 {{- end -}}
 
 {{/*
@@ -331,6 +331,42 @@ Return the opensearch admin TLS credentials secret for all nodes.
     {{- printf "%s" (tpl $secretName $) -}}
 {{- else -}}
     {{- printf "%s-admin-crt" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the opensearch TLS credentials secret for coordinating nodes.
+*/}}
+{{- define "opensearch.coordinating.tlsSecretName" -}}
+{{- $secretName := .Values.security.tls.coordinating.existingSecret -}}
+{{- if $secretName -}}
+    {{- printf "%s" (tpl $secretName $) -}}
+{{- else -}}
+    {{- printf "%s-crt" (include "opensearch.coordinating.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the opensearch TLS credentials secret for data nodes.
+*/}}
+{{- define "opensearch.data.tlsSecretName" -}}
+{{- $secretName := .Values.security.tls.data.existingSecret -}}
+{{- if $secretName -}}
+    {{- printf "%s" (tpl $secretName $) -}}
+{{- else -}}
+    {{- printf "%s-crt" (include "opensearch.data.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the opensearch TLS credentials secret for ingest nodes.
+*/}}
+{{- define "opensearch.ingest.tlsSecretName" -}}
+{{- $secretName := .Values.security.tls.ingest.existingSecret -}}
+{{- if $secretName -}}
+    {{- printf "%s" (tpl $secretName $) -}}
+{{- else -}}
+    {{- printf "%s-crt" (include "opensearch.ingest.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -662,4 +698,3 @@ Return true if a TLS credentials secret object should be created
     {{- true -}}
 {{- end -}}
 {{- end -}}
-

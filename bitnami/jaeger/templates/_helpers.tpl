@@ -32,7 +32,7 @@ Create the name of the query deployment
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "jaeger.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.cqlshImage) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.cqlshImage) "context" $) }}
 {{- end -}}
 
 {{/*

@@ -5,7 +5,7 @@ SPDX-License-Identifier: APACHE-2.0
 
 {{- if or .Release.IsUpgrade (ne .Values.sentinel.service.type "NodePort") .Values.sentinel.service.nodePorts.redis -}}
 {{- if and (eq .Values.architecture "replication") .Values.sentinel.enabled }}
-{{ $portsmap := (lookup "v1" "ConfigMap" $.Release.Namespace (printf "%s-%s" ( include "common.names.fullname" . ) "ports-configmap")).data }}
+{{ $portsmap := (lookup "v1" "ConfigMap" (include "common.names.namespace" .) (printf "%s-%s" ( include "common.names.fullname" . ) "ports-configmap")).data }}
 
 {{ $sentinelport := 0}}
 {{ $redisport := 0}}
@@ -19,7 +19,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: node
   {{- if or .Values.sentinel.service.annotations .Values.commonAnnotations }}
