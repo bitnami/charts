@@ -26,7 +26,7 @@ spec:
   {{- if and (eq .Values.replica.service.type "LoadBalancer") (not (empty .Values.replica.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.replica.service.loadBalancerIP }}
   {{- end }}
-  {{- if and (eq .Values.replica.service.type "LoadBalancer") (not (empty .Values.replica.service.loadBalancerClass)) }}
+  {{- if and (eq .Values.replica.service.type "LoadBalancer")  .Values.replica.service.loadBalancerClass }}
   loadBalancerClass: {{ .Values.replica.service.loadBalancerClass }}
   {{- end }}
   {{- if and (eq .Values.replica.service.type "LoadBalancer") (not (empty .Values.replica.service.loadBalancerSourceRanges)) }}

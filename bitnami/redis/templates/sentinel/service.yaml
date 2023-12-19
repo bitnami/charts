@@ -34,7 +34,7 @@ spec:
   {{- if and (eq .Values.sentinel.service.type "LoadBalancer") (not (empty .Values.sentinel.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.sentinel.service.loadBalancerIP }}
   {{- end }}
-  {{- if and (eq .Values.sentinel.service.type "LoadBalancer") (not (empty .Values.sentinel.service.loadBalancerClass)) }}
+  {{- if and (eq .Values.sentinel.service.type "LoadBalancer")  .Values.sentinel.service.loadBalancerClass }}
   loadBalancerClass: {{ .Values.sentinel.service.loadBalancerClass }}
   {{- end }}
   {{- if and (eq .Values.sentinel.service.type "LoadBalancer") (not (empty .Values.sentinel.service.loadBalancerSourceRanges)) }}
