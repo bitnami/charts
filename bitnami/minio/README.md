@@ -67,6 +67,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                | Description                                                                                  | Value           |
 | ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
 | `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `namespaceOverride` | String to fully override common.names.namespace                                              | `""`            |
 | `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`            |
 | `commonLabels`      | Labels to add to all deployed objects                                                        | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects                                                   | `{}`            |
@@ -313,7 +314,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                           | `{}`                                                     |
 | `metrics.serviceMonitor.apiVersion`        | ApiVersion for the serviceMonitor Resource (defaults to "monitoring.coreos.com/v1")                                           | `""`                                                     |
 | `metrics.serviceMonitor.tlsConfig`         | Additional TLS configuration for metrics endpoint with "https" scheme                                                         | `{}`                                                     |
-| `metrics.prometheusRule.enabled`           | Create a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                                                  |
+| `metrics.prometheusRule.enabled`           | Create a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `true`                                                   |
 | `metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                 | `""`                                                     |
 | `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                         | `{}`                                                     |
 | `metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                   | `[]`                                                     |
