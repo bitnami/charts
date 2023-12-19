@@ -290,9 +290,11 @@ spec:
             defaultMode: 256
             sources:
               - secret:
-                  name: {{ include "opensearch.data.tlsSecretName" . }}
+                  name: {{ include "opensearch.node.tlsSecretName" (dict "nodeRole" "data" "context" $) }}
+                  items: {{- include "opensearch.node.tlsSecretItems" (dict "nodeRole" "data" "context" $) | nindent 20 }}
               - secret:
-                  name: {{ include "opensearch.admin.tlsSecretName" . }}
+                  name: {{ include "opensearch.admin.tlsSecretName" (dict "context" $) }}
+                  items: {{- include "opensearch.admin.tlsSecretItems" (dict "context" $) | nindent 20 }}
         {{- end }}
         {{- if .Values.initScripts }}
         - name: custom-init-scripts

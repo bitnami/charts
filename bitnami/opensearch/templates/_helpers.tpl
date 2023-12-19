@@ -311,63 +311,95 @@ Create the name of the ingest service account to use
 {{- end -}}
 
 {{/*
-Return the opensearch TLS credentials secret for master nodes.
+Return the opensearch TLS credentials secret for typed nodes.
 */}}
-{{- define "opensearch.master.tlsSecretName" -}}
-{{- $secretName := .Values.security.tls.master.existingSecret -}}
+{{- define "opensearch.node.tlsSecretName" -}}
+{{- $secretName := index .context.Values.security.tls .nodeRole "existingSecret" -}}
 {{- if $secretName -}}
-    {{- printf "%s" (tpl $secretName $) -}}
+    {{- printf "%s" (tpl $secretName .context) -}}
 {{- else -}}
-    {{- printf "%s-crt" (include "opensearch.master.fullname" .) -}}
+    {{- printf "%s-crt" (include (printf "opensearch.%s.fullname" .nodeRole) .context) -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Return the opensearch TLS credentials secret items for typed nodes.
+*/}}
+{{- define "opensearch.node.tlsSecretItems" -}}
+{{- $items := list }}
+{{- $items = append $items (dict "key" (include "opensearch.node.tlsSecretCertKey" (dict "nodeRole" .nodeRole "context" .context)) "path" "tls.crt") }}
+{{- $items = append $items (dict "key" (include "opensearch.node.tlsSecretKeyKey" (dict "nodeRole" .nodeRole "context" .context)) "path" "tls.key") }}
+{{- $items = append $items (dict "key" (include "opensearch.node.tlsSecretCAKey" (dict "nodeRole" .nodeRole "context" .context)) "path" "ca.crt") }}
+{{ $items | toYaml }}
+{{- end -}}
+
+{{/*
+Return the opensearch TLS credentials secret key of the certificate for typed nodes.
+*/}}
+{{- define "opensearch.node.tlsSecretCertKey" -}}
+{{- include "opensearch.tlsSecretKey" (dict "type" .nodeRole "secretKey" "certKey" "defaultKey" "tls.crt" "context" .context) -}}
+{{- end -}}
+
+{{/*
+Return the opensearch TLS credentials secret key of the certificates key for typed nodes.
+*/}}
+{{- define "opensearch.node.tlsSecretKeyKey" -}}
+{{- include "opensearch.tlsSecretKey" (dict "type" .nodeRole "secretKey" "keyKey" "defaultKey" "tls.key" "context" .context) -}}
+{{- end -}}
+
+{{/*
+Return the opensearch TLS credentials secret key of the ca certificate for typed nodes.
+*/}}
+{{- define "opensearch.node.tlsSecretCAKey" -}}
+{{- include "opensearch.tlsSecretKey" (dict "type" .nodeRole "secretKey" "caKey" "defaultKey" "ca.crt" "context" .context) -}}
 {{- end -}}
 
 {{/*
 Return the opensearch admin TLS credentials secret for all nodes.
 */}}
 {{- define "opensearch.admin.tlsSecretName" -}}
-{{- $secretName := .Values.security.tls.admin.existingSecret -}}
+{{- $secretName := .context.Values.security.tls.admin.existingSecret -}}
 {{- if $secretName -}}
-    {{- printf "%s" (tpl $secretName $) -}}
+    {{- printf "%s" (tpl $secretName .context) -}}
 {{- else -}}
-    {{- printf "%s-admin-crt" (include "common.names.fullname" .) -}}
+    {{- printf "%s-admin-crt" (include "common.names.fullname" .context) -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return the opensearch TLS credentials secret for coordinating nodes.
+Return the opensearch TLS credentials secret items for all nodes.
 */}}
-{{- define "opensearch.coordinating.tlsSecretName" -}}
-{{- $secretName := .Values.security.tls.coordinating.existingSecret -}}
-{{- if $secretName -}}
-    {{- printf "%s" (tpl $secretName $) -}}
-{{- else -}}
-    {{- printf "%s-crt" (include "opensearch.coordinating.fullname" .) -}}
-{{- end -}}
+{{- define "opensearch.admin.tlsSecretItems" -}}
+{{- $items := list }}
+{{- $items = append $items (dict "key" (include "opensearch.admin.tlsSecretCertKey" (dict "context" .context)) "path" "admin.crt") }}
+{{- $items = append $items (dict "key" (include "opensearch.admin.tlsSecretKeyKey" (dict "context" .context)) "path" "admin.key") }}
+{{ $items | toYaml }}
 {{- end -}}
 
 {{/*
-Return the opensearch TLS credentials secret for data nodes.
+Return the opensearch TLS credentials secret key of the certificate for all nodes.
 */}}
-{{- define "opensearch.data.tlsSecretName" -}}
-{{- $secretName := .Values.security.tls.data.existingSecret -}}
-{{- if $secretName -}}
-    {{- printf "%s" (tpl $secretName $) -}}
-{{- else -}}
-    {{- printf "%s-crt" (include "opensearch.data.fullname" .) -}}
-{{- end -}}
+{{- define "opensearch.admin.tlsSecretCertKey" -}}
+{{- include "opensearch.tlsSecretKey" (dict "type" "admin" "secretKey" "certKey" "defaultKey" "admin.crt" "context" .context) -}}
 {{- end -}}
 
 {{/*
-Return the opensearch TLS credentials secret for ingest nodes.
+Return the opensearch TLS credentials secret key of the certificates key for all nodes.
 */}}
-{{- define "opensearch.ingest.tlsSecretName" -}}
-{{- $secretName := .Values.security.tls.ingest.existingSecret -}}
-{{- if $secretName -}}
-    {{- printf "%s" (tpl $secretName $) -}}
-{{- else -}}
-    {{- printf "%s-crt" (include "opensearch.ingest.fullname" .) -}}
+{{- define "opensearch.admin.tlsSecretKeyKey" -}}
+{{- include "opensearch.tlsSecretKey" (dict "type" "admin" "secretKey" "keyKey" "defaultKey" "admin.key" "context" .context) -}}
 {{- end -}}
+
+{{/*
+Return the opensearch TLS credentials secret key of the given type.
+*/}}
+{{- define "opensearch.tlsSecretKey" -}}
+{{- $secretConfig := index .context.Values.security.tls .type -}}
+{{- if $secretConfig.externalSecret }}
+{{ index $secretConfig .secretKey | default .defaultKey }}
+{{- else }}
+{{- printf .defaultKey }}
+{{- end }}
 {{- end -}}
 
 {{/*
