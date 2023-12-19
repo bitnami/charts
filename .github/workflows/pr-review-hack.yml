@@ -22,7 +22,7 @@ jobs:
       actor: ${{ steps.get-info.outputs.actor }}
       labels: ${{ steps.get-info.outputs.labels }}
       resource_url: ${{ steps.get-info.outputs.resource_url }}
-    if: {{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - id: get-info
         env:
