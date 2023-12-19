@@ -42,6 +42,9 @@ spec:
       {{- if .Values.compactor.cronJob.activeDeadlineSeconds }}
       activeDeadlineSeconds: {{ .Values.compactor.cronJob.activeDeadlineSeconds }}
       {{- end }}
+      {{- if .Values.compactor.cronJob.ttlSecondsAfterFinished }}
+      ttlSecondsAfterFinished: {{ .Values.compactor.cronJob.ttlSecondsAfterFinished }}
+      {{- end }}
       template:
         {{- include "thanos.compactor.podTemplate" . | nindent 8 }}
 {{- end }}

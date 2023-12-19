@@ -7,7 +7,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ printf "%s-scripts" (include "common.names.fullname" .) }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -48,7 +48,7 @@ data:
         {{- if .Values.useExternalDNS.enabled }}
         full_hostname="${hostname}.{{- include "redis.externalDNS.suffix" . }}"
         {{- else if eq .Values.sentinel.service.type "NodePort" }}
-        full_hostname="${hostname}.{{- .Release.Namespace }}"
+        full_hostname="${hostname}.{{- include "common.names.namespace" . }}"
         {{- else }}
         full_hostname="${hostname}.${HEADLESS_SERVICE}"
         {{- end }}
@@ -71,12 +71,12 @@ data:
 
     REDISPORT=$(get_port "$HOSTNAME" "REDIS")
 
-    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
 
     if [ -n "$REDIS_EXTERNAL_MASTER_HOST" ]; then
         REDIS_SERVICE="$REDIS_EXTERNAL_MASTER_HOST"
     else
-        REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+        REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
     fi
 
     SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "SENTINEL")
@@ -251,8 +251,8 @@ data:
     . /opt/bitnami/scripts/libvalidations.sh
     . /opt/bitnami/scripts/libfile.sh
 
-    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
-    REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+    REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
 
     get_port() {
         hostname="$1"
@@ -281,7 +281,7 @@ data:
         {{- if .Values.useExternalDNS.enabled }}
         full_hostname="${hostname}.{{- include "redis.externalDNS.suffix" . }}"
         {{- else if eq .Values.sentinel.service.type "NodePort" }}
-        full_hostname="${hostname}.{{- .Release.Namespace }}"
+        full_hostname="${hostname}.{{- include "common.names.namespace" . }}"
         {{- else }}
         full_hostname="${hostname}.${HEADLESS_SERVICE}"
         {{- end }}
@@ -450,7 +450,7 @@ data:
     . /opt/bitnami/scripts/libvalidations.sh
     . /opt/bitnami/scripts/libos.sh
 
-    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
 
     get_full_hostname() {
         hostname="$1"
@@ -458,7 +458,7 @@ data:
         {{- if .Values.useExternalDNS.enabled }}
         full_hostname="${hostname}.{{- include "redis.externalDNS.suffix" . }}"
         {{- else if eq .Values.sentinel.service.type "NodePort" }}
-        full_hostname="${hostname}.{{- .Release.Namespace }}"
+        full_hostname="${hostname}.{{- include "common.names.namespace" . }}"
         {{- else }}
         full_hostname="${hostname}.${HEADLESS_SERVICE}"
         {{- end }}
@@ -492,7 +492,7 @@ data:
       [[ "$REDIS_MASTER_HOST" != "$(get_full_hostname $HOSTNAME)" ]]
     }
 
-    REDIS_SERVICE="{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+    REDIS_SERVICE="{{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
 
     {{ if .Values.auth.sentinel -}}
     # redis-cli automatically consumes credentials from the REDISCLI_AUTH variable
@@ -530,7 +530,7 @@ data:
         [[ "$REDIS_ROLE" == "master" ]]
     }
 
-    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{- include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
 
     get_full_hostname() {
         hostname="$1"
@@ -538,7 +538,7 @@ data:
         {{- if .Values.useExternalDNS.enabled }}
         full_hostname="${hostname}.{{- include "redis.externalDNS.suffix" . }}"
         {{- else if eq .Values.sentinel.service.type "NodePort" }}
-        full_hostname="${hostname}.{{- .Release.Namespace }}"
+        full_hostname="${hostname}.{{- include "common.names.namespace" . }}"
         {{- else }}
         full_hostname="${hostname}.${HEADLESS_SERVICE}"
         {{- end }}
@@ -572,7 +572,7 @@ data:
         [[ "$REDIS_MASTER_HOST" != "$(get_full_hostname $HOSTNAME)" ]]
     }
 
-    REDIS_SERVICE="{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+    REDIS_SERVICE="{{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
 
     # redis-cli automatically consumes credentials from the REDISCLI_AUTH variable
     [[ -n "$REDIS_PASSWORD" ]] && export REDISCLI_AUTH="$REDIS_PASSWORD"
@@ -676,7 +676,7 @@ data:
         {{- if .Values.useExternalDNS.enabled }}
         full_hostname="${hostname}.{{- include "redis.externalDNS.suffix" . }}"
         {{- else if eq .Values.sentinel.service.type "NodePort" }}
-        full_hostname="${hostname}.{{- .Release.Namespace }}"
+        full_hostname="${hostname}.{{- include "common.names.namespace" . }}"
         {{- else }}
         full_hostname="${hostname}.${HEADLESS_SERVICE}"
         {{- end }}
@@ -698,7 +698,7 @@ data:
     }
 
     REDISPORT=$(get_port "$HOSTNAME" "REDIS")
-    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
 
     [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
     [[ -f $REDIS_MASTER_PASSWORD_FILE ]] && export REDIS_MASTER_PASSWORD="$(< "${REDIS_MASTER_PASSWORD_FILE}")"

@@ -1790,7 +1790,8 @@ compactor:
   ## @param compactor.cronJob.suspend This flag tells the controller to suspend subsequent executions
   ## @param compactor.cronJob.successfulJobsHistoryLimit The number of successful finished jobs to retain
   ## @param compactor.cronJob.failedJobsHistoryLimit The number of failed finished jobs to retain
-  ## @param compactor.cronJob.backoffLimit Specifies the number of retries before marking this job failed
+  ## @param compactor.cronJob.backoffLimit The number of retries before marking this job failed
+  ## @param compactor.cronJob.ttlSecondsAfterFinished The maximum retention before removing the job
   ##
   cronJob:
     enabled: false
@@ -1802,6 +1803,7 @@ compactor:
     successfulJobsHistoryLimit: ""
     failedJobsHistoryLimit: ""
     backoffLimit: ""
+    ttlSecondsAfterFinished: ""
   ## @param compactor.restartPolicy Compactor container restart policy.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy
   ##
@@ -3446,6 +3448,9 @@ receive:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
+  ## @param receive.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
+  ##
+  minReadySeconds: 0
   ## K8s Pod Security Context for Thanos Receive pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param receive.podSecurityContext.enabled Enable security context for the Thanos Receive pods
