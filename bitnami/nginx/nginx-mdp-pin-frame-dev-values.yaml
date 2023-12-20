@@ -508,6 +508,7 @@ serverBlock: |-
        }
       proxy_pass https://10.10.116.106$request_uri;
    }
+  }
   
 
 
