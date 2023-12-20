@@ -226,6 +226,11 @@ ingress:
   ##
   extraRules: []
 
+## @param terminationGracePeriodSeconds Seconds HAProxy pod needs to terminate gracefully
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+terminationGracePeriodSeconds: ""
+
+
 ## @section HAProxy Parameters
 ##
 ## @param image.registry [default: REGISTRY_NAME] HAProxy image registry
