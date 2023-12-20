@@ -500,8 +500,11 @@ serverBlock: |-
      listen 0.0.0.0:8080;
      proxy_ssl_verify off;
      location / {
-       proxy_pass https://10.10.116.106;
+      
+      if($request_uri ~* "/mdp-pin-frame-dev/(.*)"){
+       rewrite ^/[^/]+(/.*)$ $1 break;
      }
+      proxy_pass https://10.10.116.106/;
    }
 
 
