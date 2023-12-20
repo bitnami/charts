@@ -75,21 +75,28 @@ Return the MLflow Tracking Secret key for the user
 {{- end -}}
 
 {{/*
-Return the MLFlow Trakcing Port
+Return the MLFlow Tracking Port
 */}}
 {{- define "mlflow.v0.tracking.port" -}}
-{{ ternary .Values.tracking.service.ports.https .Values.tracking.service.ports.http .Values.tracking.tls.enabled }}
+{{- int ( ternary .Values.tracking.service.ports.https .Values.tracking.service.ports.http .Values.tracking.tls.enabled ) -}}
 {{- end -}}
 
 {{/*
-Return the MLFlow Trakcing Protocol
+Return the MLFlow Tracking Port Name
+*/}}
+{{- define "mlflow.v0.tracking.portName" -}}
+{{- ternary "https" "http" .Values.tracking.tls.enabled -}}
+{{- end -}}
+
+{{/*
+Return the MLFlow Tracking Protocol
 */}}
 {{- define "mlflow.v0.tracking.protocol" -}}
 {{- ternary "https" "http" .Values.tracking.tls.enabled -}}
 {{- end -}}
 
 {{/*
-Return the MLFlow Trakcing URI
+Return the MLFlow Tracking URI
 */}}
 {{- define "mlflow.v0.tracking.uri" -}}
 {{ printf "%s://%s:%v" (include "mlflow.v0.tracking.protocol" .) (include "mlflow.v0.tracking.fullname" .) (include "mlflow.v0.tracking.port" .) }}
@@ -532,12 +539,21 @@ Return MinIO(TM) fullname
 {{- end -}}
 
 {{/*
-Return the PostgreSQL Hostname
+Return whether S3 is enabled
 */}}
 {{- define "mlflow.v0.s3.enabled" -}}
 {{- if or .Values.minio.enabled .Values.externalS3.host -}}
 {{- true }}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Return whether artifacts should be served from S3
+*/}}
+{{- define "mlflow.v0.s3.serveArtifacts" -}}
+    {{- if and (or .Values.minio.enabled .Values.externalS3.host) .Values.externalS3.serveArtifacts  -}}
+        {{- true }}
+    {{- end -}}
 {{- end -}}
 
 {{/*

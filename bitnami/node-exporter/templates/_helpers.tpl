@@ -16,7 +16,7 @@ Return the proper Node Exporter image name
 Return the proper Docker Image Registry Secret Names for Node Exporter image
 */}}
 {{- define "node-exporter.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image) "context" $) -}}
 {{- end -}}
 
 {{/*

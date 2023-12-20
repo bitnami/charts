@@ -31,7 +31,7 @@ spec:
       annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.controller.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
-      {{- include "common.images.pullSecrets" (dict "images" (list .Values.speaker.image .Values.controller.image) "global" .Values.global) | nindent 6 }}
+      {{- include "common.images.renderPullSecrets" (dict "images" (list .Values.speaker.image .Values.controller.image) "context" $) | nindent 6 }}
       {{- if .Values.controller.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.controller.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -54,6 +54,9 @@ spec:
       {{- end }}
       {{- if .Values.controller.priorityClassName }}
       priorityClassName: {{ .Values.controller.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.controller.runtimeClassName }}
+      runtimeClassName: {{ .Values.controller.runtimeClassName | quote }}
       {{- end }}
       {{- if .Values.controller.schedulerName }}
       schedulerName: {{ .Values.controller.schedulerName | quote }}
@@ -91,6 +94,16 @@ spec:
             - --port={{ .Values.controller.containerPorts.metrics }}
             - --cert-service-name=metallb-webhook-service
             - --log-level={{ .Values.controller.logLevel }}
+            - --webhook-mode={{ .Values.controller.webhookMode }}
+            {{- if .Values.controller.tlsMinVersion }}
+            - --tls-min-version={{ .Values.controller.tlsMinVersion }}
+            {{- end }}
+            {{- if .Values.controller.tlsCipherSuites }}
+            - --tls-cipher-suites={{ .Values.controller.tlsCipherSuites }}
+            {{- end }}
+            {{- if .Values.controller.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
           {{- end }}
           {{- if .Values.controller.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.controller.lifecycleHooks "context" $) | nindent 12 }}

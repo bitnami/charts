@@ -29,6 +29,13 @@ Create the name of the query deployment
 {{- end -}}
 
 {{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "jaeger.imagePullSecrets" -}}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.cqlshImage) "context" $) }}
+{{- end -}}
+
+{{/*
 Create a container for checking cassandra availability
 */}}
 {{- define "jaeger.waitForDBInitContainer" -}}

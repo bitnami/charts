@@ -265,6 +265,9 @@ discourse:
   ##   - https://github.com/discourse/discourse-oauth2-basic
   ##
   plugins: []
+  ## @param discourse.persistPlugins Persist plugins across container restarts
+  ##
+  persistPlugins: true
   ## @param discourse.command Custom command to override image cmd
   ##
   command: []
@@ -677,7 +680,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

@@ -1,28 +1,26 @@
 <!--- app-name: Flux -->
 
-# Flux packaged by Bitnami
+# Bitnami package for Flux
 
-Flux is a tool for keeping Kubernetes clusters in sync with sources of configuration
+Source Controller is a component of Flux. Flux is a tool for keeping Kubernetes clusters in sync with sources of configuration.
 
-[Overview of Flux](https://github.com/fluxcd/flux2)
+[Overview of Flux](https://github.com/fluxcd/source-controller)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/flux
+helm install my-release oci://registry-1.docker.io/bitnamicharts/flux
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Flux in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [Flux](https://github.com/bitnami/containers/tree/main/bitnami/fluxcd-kustomize-controller) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Flux in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -84,6 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                                    | Description                                                                                                                                                     | Value                                         |
 | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
 | `kustomizeController.enabled`                                           | Enable Kustomize Controller                                                                                                                                     | `true`                                        |
+| `kustomizeController.installCRDs`                                       | Flag to install Kustomize Controller CRDs                                                                                                                       | `true`                                        |
 | `kustomizeController.image.registry`                                    | Kustomize Controller image registry                                                                                                                             | `REGISTRY_NAME`                               |
 | `kustomizeController.image.repository`                                  | Kustomize Controller image repository                                                                                                                           | `REPOSITORY_NAME/fluxcd-kustomize-controller` |
 | `kustomizeController.image.digest`                                      | Kustomize Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                                          |
@@ -205,6 +204,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                               | Description                                                                                                                                                | Value                                    |
 | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
 | `helmController.enabled`                                           | Enable Helm Controller                                                                                                                                     | `true`                                   |
+| `helmController.installCRDs`                                       | Flag to install Helm Controller CRDs                                                                                                                       | `true`                                   |
 | `helmController.image.registry`                                    | Helm Controller image registry                                                                                                                             | `REGISTRY_NAME`                          |
 | `helmController.image.repository`                                  | Helm Controller image repository                                                                                                                           | `REPOSITORY_NAME/fluxcd-helm-controller` |
 | `helmController.image.digest`                                      | Helm Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                                     |
@@ -326,6 +326,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                                 | Description                                                                                                                                                  | Value                                      |
 | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------ |
 | `sourceController.enabled`                                           | Enable Source Controller                                                                                                                                     | `true`                                     |
+| `sourceController.installCRDs`                                       | Flag to install Source Controller CRDs                                                                                                                       | `true`                                     |
 | `sourceController.image.registry`                                    | Source Controller image registry                                                                                                                             | `REGISTRY_NAME`                            |
 | `sourceController.image.repository`                                  | Source Controller image repository                                                                                                                           | `REPOSITORY_NAME/fluxcd-source-controller` |
 | `sourceController.image.digest`                                      | Source Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                                       |
@@ -486,6 +487,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                                       | Description                                                                                                                                                        | Value                                            |
 | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------ |
 | `notificationController.enabled`                                           | Enable Notification Controller                                                                                                                                     | `true`                                           |
+| `notificationController.installCRDs`                                       | Flag to install Notification Controller CRDs                                                                                                                       | `true`                                           |
 | `notificationController.image.registry`                                    | Notification Controller image registry                                                                                                                             | `REGISTRY_NAME`                                  |
 | `notificationController.image.repository`                                  | Notification Controller image repository                                                                                                                           | `REPOSITORY_NAME/fluxcd-notification-controller` |
 | `notificationController.image.digest`                                      | Notification Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                                             |
@@ -607,6 +609,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                                          | Description                                                                                                                                                            | Value                                                |
 | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
 | `imageAutomationController.enabled`                                           | Enable Image Automation Controller                                                                                                                                     | `true`                                               |
+| `imageAutomationController.installCRDs`                                       | Flag to install Image Automation Controller CRDs                                                                                                                       | `true`                                               |
 | `imageAutomationController.image.registry`                                    | Image Automation Controller image registry                                                                                                                             | `REGISTRY_NAME`                                      |
 | `imageAutomationController.image.repository`                                  | Image Automation Controller image repository                                                                                                                           | `REPOSITORY_NAME/fluxcd-image-automation-controller` |
 | `imageAutomationController.image.digest`                                      | Image Automation Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                                                 |
@@ -728,6 +731,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                                         | Description                                                                                                                                                           | Value                                               |
 | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
 | `imageReflectorController.enabled`                                           | Enable Image Reflector Controller                                                                                                                                     | `true`                                              |
+| `imageReflectorController.installCRDs`                                       | Flag to install Image Reflector Controller CRDs                                                                                                                       | `true`                                              |
 | `imageReflectorController.image.registry`                                    | Image Reflector Controller image registry                                                                                                                             | `REGISTRY_NAME`                                     |
 | `imageReflectorController.image.repository`                                  | Image Reflector Controller image repository                                                                                                                           | `REPOSITORY_NAME/fluxcd-image-reflector-controller` |
 | `imageReflectorController.image.digest`                                      | Image Reflector Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                                                |

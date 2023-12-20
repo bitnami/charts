@@ -18,6 +18,9 @@ Some of the items that need to be implemented are:
 - affinity
 - nodeSelector
 - tolerations (that would override the default one)
+- daemonsetAnnotations
+- deploymentAnnotations
+- statefulsetAnnotations
 - podAnnotations
 - priorityClassName
 - lifecycleHooks

@@ -16,7 +16,7 @@ Return the proper ES image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "elasticsearch.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.sysctlImage .Values.volumePermissions.image) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.sysctlImage .Values.volumePermissions.image) "context" $) }}
 {{- end -}}
 
 {{/*

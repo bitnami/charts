@@ -1,6 +1,6 @@
 <!--- app-name: MLflow -->
 
-# MLflow packaged by Bitnami
+# Bitnami package for MLflow
 
 MLflow is an open-source platform designed to manage the end-to-end machine learning lifecycle. It allows you to track experiments, package code into reproducible runs, and share and deploy models.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mlflow
+helm install my-release oci://registry-1.docker.io/bitnamicharts/mlflow
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use MLflow in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -23,8 +23,6 @@ This chart bootstraps a [MLflow](https://github.com/bitnami/containers/tree/main
 Python is built for full integration into Python that enables you to use it with its libraries and main packages.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use MLflow in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -463,6 +461,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalS3.existingSecretKeySecretKey`   | Name of an existing secret key containing the S3 access key secret | `root-password` |
 | `externalS3.protocol`                     | External S3 protocol                                               | `https`         |
 | `externalS3.bucket`                       | External S3 bucket                                                 | `mlflow`        |
+| `externalS3.serveArtifacts`               | Whether artifact serving is enabled                                | `true`          |
 
 The MLflow chart supports three different ways to load your files in the `run` deployment. In order of priority, they are:
 

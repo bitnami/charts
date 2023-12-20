@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/cert-manager
+helm install my-release oci://registry-1.docker.io/bitnamicharts/cert-manager
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use cert-manager in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -23,8 +23,6 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 This chart bootstraps a [cert-manager](https://cert-manager.io/) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use cert-manager in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -139,6 +137,27 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Controller container(s)                       | `[]`                           |
 | `controller.initContainers`                                    | Add additional init containers to the Controller pods                                                      | `[]`                           |
 | `controller.sidecars`                                          | Add additional sidecar containers to the Controller pod                                                    | `[]`                           |
+| `controller.livenessProbe.enabled`                             | Enable livenessProbe                                                                                       | `true`                         |
+| `controller.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                    | `60`                           |
+| `controller.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                           | `10`                           |
+| `controller.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                          | `1`                            |
+| `controller.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                        | `3`                            |
+| `controller.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                        | `1`                            |
+| `controller.readinessProbe.enabled`                            | Enable readinessProbe                                                                                      | `true`                         |
+| `controller.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                   | `5`                            |
+| `controller.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                          | `5`                            |
+| `controller.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                         | `1`                            |
+| `controller.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                       | `3`                            |
+| `controller.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                       | `1`                            |
+| `controller.startupProbe.enabled`                              | Enable startupProbe                                                                                        | `false`                        |
+| `controller.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                     | `5`                            |
+| `controller.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                            | `5`                            |
+| `controller.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                           | `1`                            |
+| `controller.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                         | `3`                            |
+| `controller.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                         | `1`                            |
+| `controller.customStartupProbe`                                | Override default startup probe                                                                             | `{}`                           |
+| `controller.customLivenessProbe`                               | Override default liveness probe                                                                            | `{}`                           |
+| `controller.customReadinessProbe`                              | Override default readiness probe                                                                           | `{}`                           |
 | `controller.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                       | `true`                         |
 | `controller.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                     | `""`                           |
 | `controller.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                       | `{}`                           |
@@ -263,6 +282,27 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.lifecycleHooks`                                    | Add lifecycle hooks to the CAInjector deployment                                                           | `{}`                         |
 | `cainjector.updateStrategy.type`                               | Controller deployment update strategy                                                                      | `RollingUpdate`              |
 | `cainjector.updateStrategy.rollingUpdate`                      | Controller deployment rolling update configuration parameters                                              | `{}`                         |
+| `cainjector.livenessProbe.enabled`                             | Enable livenessProbe                                                                                       | `true`                       |
+| `cainjector.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                    | `60`                         |
+| `cainjector.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                           | `10`                         |
+| `cainjector.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                          | `1`                          |
+| `cainjector.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                        | `3`                          |
+| `cainjector.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                        | `1`                          |
+| `cainjector.readinessProbe.enabled`                            | Enable readinessProbe                                                                                      | `true`                       |
+| `cainjector.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                   | `5`                          |
+| `cainjector.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                          | `5`                          |
+| `cainjector.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                         | `1`                          |
+| `cainjector.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                       | `3`                          |
+| `cainjector.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                       | `1`                          |
+| `cainjector.startupProbe.enabled`                              | Enable startupProbe                                                                                        | `false`                      |
+| `cainjector.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                     | `5`                          |
+| `cainjector.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                            | `5`                          |
+| `cainjector.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                           | `1`                          |
+| `cainjector.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                         | `3`                          |
+| `cainjector.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                         | `1`                          |
+| `cainjector.customStartupProbe`                                | Override default startup probe                                                                             | `{}`                         |
+| `cainjector.customLivenessProbe`                               | Override default liveness probe                                                                            | `{}`                         |
+| `cainjector.customReadinessProbe`                              | Override default readiness probe                                                                           | `{}`                         |
 | `cainjector.extraArgs`                                         | Extra arguments to pass to the CAInjector container                                                        | `[]`                         |
 | `cainjector.extraEnvVars`                                      | Add extra environment variables to the CAInjector container                                                | `[]`                         |
 | `cainjector.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars                                                       | `""`                         |
@@ -318,7 +358,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/cert-
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/cert-manager/values.yaml)
 
 ## Configuration and installation details
 

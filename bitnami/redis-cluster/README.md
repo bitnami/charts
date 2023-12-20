@@ -11,10 +11,10 @@ Disclaimer: Redis is a registered trademark of Redis Ltd. Any rights therein are
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redis-cluster
+helm install my-release oci://registry-1.docker.io/bitnamicharts/redis-cluster
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Redisreg; Cluster in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -33,8 +33,6 @@ The main features of each chart are the following:
 | Supports multiple databases                            | Supports only one database. Better if you have a big dataset           |
 | Single write point (single master)                     | Multiple write points (multiple masters)                               |
 | ![Redis&reg; Topology](img/redis-topology.png) | ![Redis&reg; Cluster Topology](img/redis-cluster-topology.png) |
-
-Looking to use Redisreg; Cluster in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -370,7 +368,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/redis
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/redis-cluster/values.yaml)
 > **Note for minikube users**: Current versions of minikube (v0.24.1 at the time of writing) provision `hostPath` persistent volumes that are only writable by root. Using chart defaults cause pod failure for the Redis&reg; pod as it attempts to write to the `/bitnami` directory. See minikube issue [1990](https://github.com/kubernetes/minikube/issues/1990) for more information.
 
 ## Configuration and installation details

@@ -80,7 +80,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.6.0-debian-11-r1
+  tag: 3.6.1-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -439,6 +439,29 @@ sidecars: []
 ##         containerPort: 1234
 ##
 initContainers: []
+
+## DNS-Pod services
+## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+## @param dnsPolicy Specifies the DNS policy for the zookeeper pods
+## DNS policies can be set on a per-Pod basis. Currently Kubernetes supports the following Pod-specific DNS policies.
+## Available options: Default, ClusterFirst, ClusterFirstWithHostNet, None
+## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+dnsPolicy: ""
+## @param dnsConfig  allows users more control on the DNS settings for a Pod. Required if `dnsPolicy` is set to `None`
+## The dnsConfig field is optional and it can work with any dnsPolicy settings.
+## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config
+## E.g.
+## dnsConfig:
+##   nameservers:
+##     - 192.0.2.1 # this is an example
+##   searches:
+##     - ns1.svc.cluster-domain.example
+##     - my.dns.search.suffix
+##   options:
+##     - name: ndots
+##       value: "2"
+##     - name: edns0
+dnsConfig: {}
 
 ## @section Controller-eligible statefulset parameters
 ##
@@ -1328,7 +1351,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.28.3-debian-11-r0
+      tag: 1.28.4-debian-11-r2
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1350,6 +1373,32 @@ externalAccess:
     resources:
       limits: {}
       requests: {}
+    ## Kafka provisioning containers' Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param externalAccess.autoDiscovery.containerSecurityContext.enabled Enable Kafka auto-discovery containers' Security Context
+    ## @param externalAccess.autoDiscovery.containerSecurityContext.runAsUser Set Kafka auto-discovery containers' Security Context runAsUser
+    ## @param externalAccess.autoDiscovery.containerSecurityContext.runAsNonRoot Set Kafka auto-discovery containers' Security Context runAsNonRoot
+    ## @param externalAccess.autoDiscovery.containerSecurityContext.allowPrivilegeEscalation Set Kafka auto-discovery containers' Security Context allowPrivilegeEscalation
+    ## @param externalAccess.autoDiscovery.containerSecurityContext.readOnlyRootFilesystem Set Kafka auto-discovery containers' Security Context readOnlyRootFilesystem
+    ## @param externalAccess.autoDiscovery.containerSecurityContext.capabilities.drop Set Kafka auto-discovery containers' Security Context capabilities to be dropped
+    ## @param externalAccess.autoDiscovery.containerSecurityContext.seccompProfile.type Set Kafka auto-discovery seccomp profile type 
+    ## e.g:
+    ##   containerSecurityContext:
+    ##     enabled: true
+    ##     capabilities:
+    ##       drop: ["NET_RAW"]
+    ##     readOnlyRootFilesystem: true
+    ##
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1001
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
   ## Service settings
   controller:
     ## @param externalAccess.controller.forceExpose If set to true, force exposing controller-eligible nodes although they are configured as controller-only nodes
@@ -1578,7 +1627,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r92
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1660,7 +1709,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.7.0-debian-11-r132
+      tag: 1.7.0-debian-11-r134
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1708,6 +1757,60 @@ metrics:
     ##
     containerPorts:
       metrics: 9308
+    ## @param metrics.kafka.livenessProbe.enabled Enable livenessProbe
+    ## @param metrics.kafka.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param metrics.kafka.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param metrics.kafka.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param metrics.kafka.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param metrics.kafka.livenessProbe.successThreshold Success threshold for livenessProbe
+    ##
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 1
+      successThreshold: 1
+      failureThreshold: 3
+    ## @param metrics.kafka.readinessProbe.enabled Enable readinessProbe
+    ## @param metrics.kafka.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+    ## @param metrics.kafka.readinessProbe.periodSeconds Period seconds for readinessProbe
+    ## @param metrics.kafka.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+    ## @param metrics.kafka.readinessProbe.failureThreshold Failure threshold for readinessProbe
+    ## @param metrics.kafka.readinessProbe.successThreshold Success threshold for readinessProbe
+    ##
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 1
+      successThreshold: 1
+      failureThreshold: 3
+    ## @param metrics.kafka.startupProbe.enabled Enable startupProbe
+    ## @param metrics.kafka.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+    ## @param metrics.kafka.startupProbe.periodSeconds Period seconds for startupProbe
+    ## @param metrics.kafka.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+    ## @param metrics.kafka.startupProbe.failureThreshold Failure threshold for startupProbe
+    ## @param metrics.kafka.startupProbe.successThreshold Success threshold for startupProbe
+    ##
+    startupProbe:
+      enabled: false
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 1
+      successThreshold: 1
+      failureThreshold: 3
+    ## Custom Startup probes
+    ## @param metrics.kafka.customStartupProbe Override default startup probe
+    ##
+    customStartupProbe: {}
+    ## Custom Liveness probes
+    ## @param metrics.kafka.customLivenessProbe Override default liveness probe
+    ##
+    customLivenessProbe: {}
+    ## Custom Rediness probes
+    ## @param metrics.kafka.customReadinessProbe Override default readiness probe
+    ##
+    customReadinessProbe: {}
     ## Kafka exporter resource requests and limits
     ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## @param metrics.kafka.resources.limits The resources limits for the container
@@ -1914,7 +2017,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.20.0-debian-11-r0
+      tag: 0.20.0-debian-11-r1
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

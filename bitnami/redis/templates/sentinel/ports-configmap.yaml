@@ -71,14 +71,14 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "common.names.fullname" . }}-ports-configmap
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-{{ $portsmap := (lookup "v1" "ConfigMap" $.Release.Namespace (printf "%s-%s" ( include "common.names.fullname" . ) "ports-configmap")).data }}
+{{ $portsmap := (lookup "v1" "ConfigMap" (include "common.names.namespace" .) (printf "%s-%s" ( include "common.names.fullname" . ) "ports-configmap")).data }}
 {{- if $portsmap }}
 {{- /* configmap already exists, do not install again */ -}}
   {{- range $name, $value := $portsmap }}

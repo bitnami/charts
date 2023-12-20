@@ -458,6 +458,11 @@ spec:
           persistentVolumeClaim:
             claimName: {{ template "mongodb.fullname" . }}
   {{- else }}
+  {{- if .Values.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
     - metadata:
         name: datadir
