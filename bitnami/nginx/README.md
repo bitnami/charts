@@ -214,6 +214,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.clusterIP`                | NGINX service Cluster IP                                                                                                         | `""`                     |
 | `service.loadBalancerIP`           | LoadBalancer service IP address                                                                                                  | `""`                     |
 | `service.loadBalancerSourceRanges` | NGINX service Load Balancer sources                                                                                              | `[]`                     |
+| `service.loadBalancerClass`        | service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)                                         | `""`                     |
 | `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |

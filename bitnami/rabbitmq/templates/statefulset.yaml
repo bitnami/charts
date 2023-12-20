@@ -172,10 +172,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: K8S_SERVICE_NAME
-              value: {{ printf "%s-%s" (include "common.names.fullname" .) (default "headless" .Values.servicenameOverride) }}
-            - name: K8S_ADDRESS_TYPE
-              value: {{ .Values.clustering.addressType }}
+            {{- $svcName := printf "%s-%s" (include "common.names.fullname" .) (default "headless" .Values.servicenameOverride) }}
             {{- if .Values.featureFlags }}
             - name: RABBITMQ_FEATURE_FLAGS
               value: {{ .Values.featureFlags }}
@@ -184,9 +181,7 @@ spec:
               value: {{ ternary "yes" "no" .Values.clustering.forceBoot | quote }}
             {{- if (eq "hostname" .Values.clustering.addressType) }}
             - name: RABBITMQ_NODE_NAME
-              value: "rabbit@$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
-            - name: K8S_HOSTNAME_SUFFIX
-              value: ".$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
+              value: "rabbit@$(MY_POD_NAME).{{ $svcName }}.$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             {{- else }}
             - name: RABBITMQ_NODE_NAME
               value: "rabbit@$(MY_POD_NAME)"

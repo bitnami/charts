@@ -57,7 +57,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.32.5-debian-11-r2
+  tag: 0.33.0-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3448,6 +3448,9 @@ receive:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
+  ## @param receive.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
+  ##
+  minReadySeconds: 0
   ## K8s Pod Security Context for Thanos Receive pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param receive.podSecurityContext.enabled Enable security context for the Thanos Receive pods
@@ -4290,6 +4293,9 @@ metrics:
       ## @param metrics.prometheusRule.default.disabled disable one specific prometheus alert rule
       ##
       disabled: {}
+    ## @param metrics.prometheusRule.runbookUrl Prefix for runbook URLs. Use this to override the first part of the runbookURLs that is common to all rules
+    ##
+    runbookUrl: "https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-"
     ## @param metrics.prometheusRule.namespace Namespace in which the PrometheusRule CRD is created
     ##
     namespace: ""
@@ -4304,7 +4310,7 @@ metrics:
     ##         - alert: ThanosCompactMultipleRunning
     ##           annotations:
     ##             description: No more than one Thanos Compact instance should be running at once. There are {{`{{`}}$value{{`}}`}} instances running.
-    ##             runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanoscompactmultiplerunning
+    ##             runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanoscompactmultiplerunning
     ##             summary: Thanos Compact has multiple instances running.
     ##           expr: sum by (job) (up{job=~"{{ template "common.names.fullname" . }}-compact.*"}) > 1
     ##           for: 5m
@@ -4332,7 +4338,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r91
+    tag: 11-debian-11-r92
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
