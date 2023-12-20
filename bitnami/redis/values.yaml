@@ -94,7 +94,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis
-  tag: 7.2.3-debian-11-r1
+  tag: 7.2.3-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -535,6 +535,10 @@ master:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
+    ## @param master.service.loadBalancerClass master service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
     ## @param master.service.loadBalancerSourceRanges Redis&reg; master service Load Balancer sources
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g.
@@ -982,6 +986,10 @@ replica:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
+    ## @param replica.service.loadBalancerClass replicas service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
     ## @param replica.service.loadBalancerSourceRanges Redis&reg; replicas service Load Balancer sources
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g.
@@ -1063,7 +1071,7 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: 7.2.3-debian-11-r1
+    tag: 7.2.3-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1330,6 +1338,10 @@ sentinel:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
+    ## @param sentinel.service.loadBalancerClass sentinel service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
     ## @param sentinel.service.loadBalancerSourceRanges Redis&reg; Sentinel service Load Balancer sources
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g.
@@ -1542,7 +1554,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.55.0-debian-11-r2
+    tag: 1.55.0-debian-11-r3
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1691,6 +1703,10 @@ metrics:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
+    ## @param metrics.service.loadBalancerClass exporter service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
     ## @param metrics.service.loadBalancerSourceRanges Redis&reg; exporter service Load Balancer sources
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g.
@@ -1854,7 +1870,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r91
+    tag: 11-debian-11-r92
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1902,7 +1918,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r91
+    tag: 11-debian-11-r92
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
