@@ -4,7 +4,7 @@
 
 Redis(R) is an open source, advanced key-value store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets and sorted sets.
 
-[Overview of Redis&reg;](https://redis.io)
+[Overview of Redis&reg;](http://redis.io)
 
 Disclaimer: Redis is a registered trademark of Redis Ltd. Any rights therein are reserved to Redis Ltd. Any use by Bitnami is for referential purposes only and does not indicate any sponsorship, endorsement, or affiliation between Redis Ltd.
 
@@ -221,6 +221,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.service.internalTrafficPolicy`                     | Redis&reg; master service internal traffic policy (requires Kubernetes v1.22 or greater to be usable) | `Cluster`                |
 | `master.service.clusterIP`                                 | Redis&reg; master service Cluster IP                                                                  | `""`                     |
 | `master.service.loadBalancerIP`                            | Redis&reg; master service Load Balancer IP                                                            | `""`                     |
+| `master.service.loadBalancerClass`                         | master service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)       | `""`                     |
 | `master.service.loadBalancerSourceRanges`                  | Redis&reg; master service Load Balancer sources                                                       | `[]`                     |
 | `master.service.externalIPs`                               | Redis&reg; master service External IPs                                                                | `[]`                     |
 | `master.service.annotations`                               | Additional custom annotations for Redis&reg; master service                                           | `{}`                     |
@@ -334,6 +335,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                          | `[]`                     |
 | `replica.service.clusterIP`                                 | Redis&reg; replicas service Cluster IP                                                                  | `""`                     |
 | `replica.service.loadBalancerIP`                            | Redis&reg; replicas service Load Balancer IP                                                            | `""`                     |
+| `replica.service.loadBalancerClass`                         | replicas service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)       | `""`                     |
 | `replica.service.loadBalancerSourceRanges`                  | Redis&reg; replicas service Load Balancer sources                                                       | `[]`                     |
 | `replica.service.annotations`                               | Additional custom annotations for Redis&reg; replicas service                                           | `{}`                     |
 | `replica.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                    | `None`                   |
@@ -436,6 +438,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                                                              | `[]`                             |
 | `sentinel.service.clusterIP`                                 | Redis&reg; Sentinel service Cluster IP                                                                                                      | `""`                             |
 | `sentinel.service.loadBalancerIP`                            | Redis&reg; Sentinel service Load Balancer IP                                                                                                | `""`                             |
+| `sentinel.service.loadBalancerClass`                         | sentinel service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)                                           | `""`                             |
 | `sentinel.service.loadBalancerSourceRanges`                  | Redis&reg; Sentinel service Load Balancer sources                                                                                           | `[]`                             |
 | `sentinel.service.annotations`                               | Additional custom annotations for Redis&reg; Sentinel service                                                                               | `{}`                             |
 | `sentinel.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                        | `None`                           |
@@ -531,6 +534,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.externalTrafficPolicy`                     | Redis&reg; exporter service external traffic policy                                                                 | `Cluster`                        |
 | `metrics.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                                      | `[]`                             |
 | `metrics.service.loadBalancerIP`                            | Redis&reg; exporter service Load Balancer IP                                                                        | `""`                             |
+| `metrics.service.loadBalancerClass`                         | exporter service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)                   | `""`                             |
 | `metrics.service.loadBalancerSourceRanges`                  | Redis&reg; exporter service Load Balancer sources                                                                   | `[]`                             |
 | `metrics.service.annotations`                               | Additional custom annotations for Redis&reg; exporter service                                                       | `{}`                             |
 | `metrics.service.clusterIP`                                 | Redis&reg; exporter service Cluster IP                                                                              | `""`                             |
