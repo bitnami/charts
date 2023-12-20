@@ -109,6 +109,51 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.cainjector.extraEnvVarsSecret "context" $) }}
             {{- end }}
+          {{- if .Values.cainjector.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.cainjector.startupProbe.enabled }}
+          startupProbe:
+            # Using exec instead of tcpSocket to avoid noise in te logs
+            exec:
+              command:
+                - pgrep
+                - cainjector
+            initialDelaySeconds: {{ .Values.cainjector.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.cainjector.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.cainjector.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.cainjector.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.cainjector.startupProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.cainjector.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.cainjector.livenessProbe.enabled }}
+          livenessProbe:
+            # Using exec instead of tcpSocket to avoid noise in te logs
+            exec:
+              command:
+                - pgrep
+                - cainjector
+            initialDelaySeconds: {{ .Values.cainjector.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.cainjector.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.cainjector.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.cainjector.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.cainjector.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.cainjector.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.cainjector.readinessProbe.enabled }}
+          readinessProbe:
+            # Using exec instead of tcpSocket to avoid noise in te logs
+            exec:
+              command:
+                - pgrep
+                - cainjector
+            initialDelaySeconds: {{ .Values.cainjector.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.cainjector.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.cainjector.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.cainjector.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.cainjector.readinessProbe.failureThreshold }}
+          {{- end }}
           {{- if .Values.cainjector.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
