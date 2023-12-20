@@ -592,10 +592,6 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Notable changes
 
-### To 25.0.0
-
-This major release bumps the MariaDB version to 11.2. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading/) for upgrading to MariaDB 11.2. No major issues are expected during the upgrade.
-
 ### To 23.0.0
 
 This major release bumps the MariaDB version to 10.6. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading/) for upgrading to MariaDB 10.6. No major issues are expected during the upgrade.
