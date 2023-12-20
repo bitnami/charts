@@ -499,13 +499,16 @@ serverBlock: |-
    server {
      listen 0.0.0.0:8080;
      proxy_ssl_verify off;
+  
+    location ~ ^/mdp-pin-frame-dev(/|$) {
+      rewrite ^/[^/]+(/.*)$ $1 break;
+      proxy_pass https://10.10.116.106/;
+    }
+  
      location / {
-      
-      location ~ ^/mdp-pin-frame-dev(/|$) {
-       rewrite ^/[^/]+(/.*)$ $1 break;
-     }
       proxy_pass https://10.10.116.106/;
    }
+  
 
 
 ## @param existingServerBlockConfigmap ConfigMap with custom server block to be added to NGINX configuration
