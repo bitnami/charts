@@ -9,7 +9,7 @@ apiVersion: {{ default "monitoring.coreos.com/v1" .Values.metrics.serviceMonitor
 kind: ServiceMonitor
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ $releaseNamespace | quote  }}
+  namespace: {{ $releaseNamespace | quote }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
