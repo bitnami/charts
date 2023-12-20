@@ -129,7 +129,7 @@ The order in which this function returns a secret password:
   {{- end }}
 {{- end -}}
 {{- if not .skipB64enc }}
-{{ $password = $password | b64enc }}
+{{- $password = $password | b64enc }}
 {{- end -}}
 {{- if .skipQuote -}}
 {{- printf "%s" $password -}}

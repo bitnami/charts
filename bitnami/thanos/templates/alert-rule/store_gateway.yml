@@ -30,7 +30,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Store {{`{{`}} $labels.job {{`}}`}} is failing to handle {{`{{`}} $value | humanize {{`}}`}}% of requests.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosstoregrpcerrorrate
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosstoregrpcerrorrate
         summary: Thanos Store is failing to handle qrpcd requests.
       expr: |
         (
@@ -53,7 +53,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Store {{`{{`}} $labels.job {{`}}`}} has a 99th percentile latency of {{`{{`}} $value {{`}}`}} seconds for store series gate requests.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosstoreseriesgatelatencyhigh
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosstoreseriesgatelatencyhigh
         summary: Thanos Store has high latency for store series gate requests.
       expr: |
         (
@@ -75,7 +75,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Store {{`{{`}} $labels.job {{`}}`}} Bucket is failing to execute {{`{{`}} $value | humanize {{`}}`}}% of operations.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosstorebuckethighoperationfailures
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosstorebuckethighoperationfailures
         summary: Thanos Store Bucket is failing to execute operations.
       expr: |
         (
@@ -98,7 +98,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Store {{`{{`}} $labels.job {{`}}`}} Bucket has a 99th percentile latency of {{`{{`}} $value {{`}}`}} seconds for the bucket operations.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosstoreobjstoreoperationlatencyhigh
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosstoreobjstoreoperationlatencyhigh
         summary: Thanos Store is having high latency for bucket operations.
       expr: |
         (
