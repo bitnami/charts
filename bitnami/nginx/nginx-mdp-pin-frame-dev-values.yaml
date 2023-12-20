@@ -501,14 +501,16 @@ serverBlock: |-
      proxy_ssl_verify off;
   
      location / {
-      if ($request_uri ~ ^/mdp-pin-frame-dev-nginx(/.*)$) {
-           # Remove the first path segment
-           set $new_uri $1;
-           proxy_pass https://10.10.116.106$new_uri;
-       }
-      proxy_pass https://10.10.116.106$request_uri;
+        if ($request_uri ~ ^/mdp-pin-frame-dev-nginx(/.*)$) {
+             # Remove the first path segment
+             set $new_uri $1;
+             proxy_pass https://10.10.116.106$new_uri;
+        }
+        proxy_pass https://10.10.116.106$request_uri;
+      }
+      
    }
-  }
+  
   
 
 
