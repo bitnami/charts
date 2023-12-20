@@ -18,7 +18,7 @@ annotations:
     - name: harbor-registryctl
       image: docker.io/bitnami/harbor-registryctl:2.10.0-debian-11-r0
     - name: harbor-portal
-      image: docker.io/bitnami/harbor-portal:2.10.0-debian-11-r0
+      image: docker.io/bitnami/harbor-portal:2.10.0-debian-11-r1
     - name: nginx
       image: docker.io/bitnami/nginx:1.25.3-debian-11-r2
     - name: os-shell
@@ -55,4 +55,4 @@ maintainers:
 name: harbor
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/harbor
-version: 19.2.2
+version: 19.2.3
