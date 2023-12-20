@@ -501,7 +501,7 @@ serverBlock: |-
      proxy_ssl_verify off;
      location / {
       
-      if($request_uri ~* "/mdp-pin-frame-dev/(.*)"){
+      location ~ ^/mdp-pin-frame-dev(/|$) {
        rewrite ^/[^/]+(/.*)$ $1 break;
      }
       proxy_pass https://10.10.116.106/;
