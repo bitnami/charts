@@ -10,7 +10,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ $fullname }}
-  namespace: {{ .Release.Namespace | quote  }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: minio-provisioning
   annotations:
@@ -283,6 +283,9 @@ spec:
             {{- end }}
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.provisioning.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       volumes:
         {{- if .Values.provisioning.enabled }}

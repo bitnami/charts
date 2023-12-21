@@ -347,6 +347,11 @@ spec:
         - name: data
           emptyDir: {}
   {{- else }}
+  {{- if .Values.secondary.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.secondary.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.secondary.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
     - metadata:
         name: data
