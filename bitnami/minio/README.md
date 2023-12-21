@@ -67,6 +67,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                | Description                                                                                  | Value           |
 | ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
 | `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `namespaceOverride` | String to fully override common.names.namespace                                              | `""`            |
 | `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`            |
 | `commonLabels`      | Labels to add to all deployed objects                                                        | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects                                                   | `{}`            |
