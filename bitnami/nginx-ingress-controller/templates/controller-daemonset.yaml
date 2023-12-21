@@ -213,6 +213,10 @@ spec:
               name: nginx-template-volume
               readOnly: true
             {{- end }}
+            # Workaround for upstream issue reported at https://github.com/kubernetes/ingress-nginx/issues/10601
+            # To be removed once the controller releases a fixed version
+            - name: geoip
+              mountPath: /etc/nginx/geoip/
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -228,6 +232,10 @@ spec:
               - key: {{ .Values.customTemplate.configMapKey }}
                 path: nginx.tmpl
         {{- end }}
+        # Workaround for upstream issue reported at https://github.com/kubernetes/ingress-nginx/issues/10601
+        # To be removed once the controller releases a fixed version
+        - name: geoip
+          emptyDir: {}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

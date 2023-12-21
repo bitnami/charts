@@ -67,6 +67,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                | Description                                                                                  | Value           |
 | ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
 | `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `namespaceOverride` | String to fully override common.names.namespace                                              | `""`            |
 | `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`            |
 | `commonLabels`      | Labels to add to all deployed objects                                                        | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects                                                   | `{}`            |
@@ -120,6 +121,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `statefulset.drivesPerNode`                                      | Number of drives attached to every node (only for MinIO&reg; distributed mode)                                                                                                                | `1`              |
 | `provisioning.enabled`                                           | Enable MinIO&reg; provisioning Job                                                                                                                                                            | `false`          |
 | `provisioning.schedulerName`                                     | Name of the k8s scheduler (other than default) for MinIO&reg; provisioning                                                                                                                    | `""`             |
+| `provisioning.nodeSelector`                                      | Node labels for pod assignment. Evaluated as a template.                                                                                                                                      | `{}`             |
 | `provisioning.podLabels`                                         | Extra labels for provisioning pods                                                                                                                                                            | `{}`             |
 | `provisioning.podAnnotations`                                    | Provisioning Pod annotations.                                                                                                                                                                 | `{}`             |
 | `provisioning.command`                                           | Default provisioning container command (useful when using custom images). Use array form                                                                                                      | `[]`             |

@@ -303,6 +303,60 @@ controller:
   ##         containerPort: 1234
   ##
   sidecars: []
+  ## @param controller.livenessProbe.enabled Enable livenessProbe
+  ## @param controller.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param controller.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param controller.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param controller.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param controller.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
+  ## @param controller.readinessProbe.enabled Enable readinessProbe
+  ## @param controller.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param controller.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param controller.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param controller.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param controller.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
+  ## @param controller.startupProbe.enabled Enable startupProbe
+  ## @param controller.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param controller.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param controller.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param controller.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param controller.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
+  ## Custom Startup probes for controller
+  ## @param controller.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
+  ## Custom Liveness probes for controller
+  ## @param controller.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: {}
+  ## Custom Rediness probes controller
+  ## @param controller.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: {}
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -755,6 +809,60 @@ cainjector:
   updateStrategy:
     type: RollingUpdate
     rollingUpdate: {}
+  ## @param cainjector.livenessProbe.enabled Enable livenessProbe
+  ## @param cainjector.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param cainjector.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param cainjector.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param cainjector.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param cainjector.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
+  ## @param cainjector.readinessProbe.enabled Enable readinessProbe
+  ## @param cainjector.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param cainjector.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param cainjector.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param cainjector.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param cainjector.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
+  ## @param cainjector.startupProbe.enabled Enable startupProbe
+  ## @param cainjector.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param cainjector.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param cainjector.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param cainjector.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param cainjector.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
+  ## Custom Startup probes for cainjector
+  ## @param cainjector.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
+  ## Custom Liveness probes for cainjector
+  ## @param cainjector.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: {}
+  ## Custom Rediness probes cainjector
+  ## @param cainjector.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: {}
   ## @param cainjector.extraArgs Extra arguments to pass to the CAInjector container
   ## E.g:
   ## extraArgs:
