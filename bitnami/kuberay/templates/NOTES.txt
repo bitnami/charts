@@ -1,0 +1,47 @@
+CHART NAME: {{ .Chart.Name  }}
+CHART VERSION: {{ .Chart.Version  }}
+APP VERSION: {{ .Chart.AppVersion  }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ include "common.names.namespace" . | quote }} -ti <NAME OF THE POD> -- bash
+
+{{- else }}
+
+The following controllers have been deployed:
+
+  {{- if .Values.operator.enabled }}
+  - operator
+  {{- end }}
+  {{- if .Values.apiserver.enabled }}
+  - apiserver
+  {{- end }}
+  {{- if .Values.cluster.enabled }}
+  - cluster
+  {{- end }}
+{{- end }}
+
+Check the status of the pods by running this command:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Check the Kuberay documentation for instructions on how to deploy RayClusters, RayJobs or RayServices:
+
+https://docs.ray.io/en/latest/cluster/kubernetes/getting-started.html
+
+{{- include "common.warnings.rollingTag" .Values.operator.image }}
+{{- include "common.warnings.rollingTag" .Values.apiserver.image }}
+{{- include "common.warnings.rollingTag" .Values.rayImage }}
+{{- include "kuberay.validateValues" . }}

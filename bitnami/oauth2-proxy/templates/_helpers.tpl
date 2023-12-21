@@ -14,7 +14,7 @@ Return the proper OAuth2 Proxy image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "oauth2-proxy.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image) "context" $) -}}
 {{- end -}}
 
 {{/*

@@ -4,11 +4,12 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if .Values.metrics.serviceMonitor.enabled }}
+{{- $releaseNamespace := default (include "common.names.namespace" .) .Values.metrics.prometheusRule.namespace }}
 apiVersion: {{ default "monitoring.coreos.com/v1" .Values.metrics.serviceMonitor.apiVersion }}
 kind: ServiceMonitor
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ default .Release.Namespace .Values.metrics.serviceMonitor.namespace | quote }}
+  namespace: {{ $releaseNamespace | quote }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
@@ -56,7 +57,7 @@ spec:
   {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace | quote }}
+      - {{ include "common.names.namespace" . | quote }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
       {{- if .Values.metrics.serviceMonitor.selector }}

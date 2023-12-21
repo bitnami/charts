@@ -320,6 +320,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 11.0.0
+
+This major release bumps the MariaDB version to 11.2. No major issues are expected during the upgrade.
+
 ### To 10.0.0
 
 This major release bumps the MariaDB version to 11.1. No major issues are expected during the upgrade.
