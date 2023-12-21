@@ -884,6 +884,9 @@ disasterRecovery:
     ## @param disasterRecovery.cronjob.podLabels [object] Labels that will be added to pods created by cronjob
     ##
     podLabels: {}
+    ## @param disasterRecovery.cronjob.serviceAccountName Specifies the service account to use for disaster recovery cronjob
+    ##
+    serviceAccountName: ""
 
   pvc:
     ## @param disasterRecovery.pvc.existingClaim A manually managed Persistent Volume and Claim
