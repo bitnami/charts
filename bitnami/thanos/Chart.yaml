@@ -35,4 +35,4 @@ maintainers:
 name: thanos
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/thanos
-version: 12.20.0
+version: 12.20.1
