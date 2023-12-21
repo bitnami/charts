@@ -26,6 +26,7 @@ service:
     interbroker: 19094
 controller:
   logPersistence:
+    enabled: true
     mountPath: /opt/bitnami/kafka/logs
   persistence:
     mountPath: /bitnami/kafka
