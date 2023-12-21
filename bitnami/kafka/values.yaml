@@ -440,6 +440,29 @@ sidecars: []
 ##
 initContainers: []
 
+## DNS-Pod services
+## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+## @param dnsPolicy Specifies the DNS policy for the zookeeper pods
+## DNS policies can be set on a per-Pod basis. Currently Kubernetes supports the following Pod-specific DNS policies.
+## Available options: Default, ClusterFirst, ClusterFirstWithHostNet, None
+## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+dnsPolicy: ""
+## @param dnsConfig  allows users more control on the DNS settings for a Pod. Required if `dnsPolicy` is set to `None`
+## The dnsConfig field is optional and it can work with any dnsPolicy settings.
+## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config
+## E.g.
+## dnsConfig:
+##   nameservers:
+##     - 192.0.2.1 # this is an example
+##   searches:
+##     - ns1.svc.cluster-domain.example
+##     - my.dns.search.suffix
+##   options:
+##     - name: ndots
+##       value: "2"
+##     - name: edns0
+dnsConfig: {}
+
 ## @section Controller-eligible statefulset parameters
 ##
 controller:
@@ -1734,6 +1757,60 @@ metrics:
     ##
     containerPorts:
       metrics: 9308
+    ## @param metrics.kafka.livenessProbe.enabled Enable livenessProbe
+    ## @param metrics.kafka.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param metrics.kafka.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param metrics.kafka.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param metrics.kafka.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param metrics.kafka.livenessProbe.successThreshold Success threshold for livenessProbe
+    ##
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 1
+      successThreshold: 1
+      failureThreshold: 3
+    ## @param metrics.kafka.readinessProbe.enabled Enable readinessProbe
+    ## @param metrics.kafka.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+    ## @param metrics.kafka.readinessProbe.periodSeconds Period seconds for readinessProbe
+    ## @param metrics.kafka.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+    ## @param metrics.kafka.readinessProbe.failureThreshold Failure threshold for readinessProbe
+    ## @param metrics.kafka.readinessProbe.successThreshold Success threshold for readinessProbe
+    ##
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 1
+      successThreshold: 1
+      failureThreshold: 3
+    ## @param metrics.kafka.startupProbe.enabled Enable startupProbe
+    ## @param metrics.kafka.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+    ## @param metrics.kafka.startupProbe.periodSeconds Period seconds for startupProbe
+    ## @param metrics.kafka.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+    ## @param metrics.kafka.startupProbe.failureThreshold Failure threshold for startupProbe
+    ## @param metrics.kafka.startupProbe.successThreshold Success threshold for startupProbe
+    ##
+    startupProbe:
+      enabled: false
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 1
+      successThreshold: 1
+      failureThreshold: 3
+    ## Custom Startup probes
+    ## @param metrics.kafka.customStartupProbe Override default startup probe
+    ##
+    customStartupProbe: {}
+    ## Custom Liveness probes
+    ## @param metrics.kafka.customLivenessProbe Override default liveness probe
+    ##
+    customLivenessProbe: {}
+    ## Custom Rediness probes
+    ## @param metrics.kafka.customReadinessProbe Override default readiness probe
+    ##
+    customReadinessProbe: {}
     ## Kafka exporter resource requests and limits
     ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## @param metrics.kafka.resources.limits The resources limits for the container

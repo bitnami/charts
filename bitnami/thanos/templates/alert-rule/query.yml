@@ -30,7 +30,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Query {{`{{`}} $labels.job {{`}}`}} is failing to handle {{`{{`}} $value | humanize {{`}}`}}% of "query" requests.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosqueryhttprequestqueryerrorratehigh
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosqueryhttprequestqueryerrorratehigh
         summary: Thanos Query is failing to handle requests.
       expr: |
         (
@@ -52,7 +52,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Query {{`{{`}} $labels.job {{`}}`}} is failing to handle {{`{{`}} $value | humanize {{`}}`}}% of "query_range" requests.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosqueryhttprequestqueryrangeerrorratehigh
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosqueryhttprequestqueryrangeerrorratehigh
         summary: Thanos Query is failing to handle requests.
       expr: |
         (
@@ -74,7 +74,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Query {{`{{`}} $labels.job {{`}}`}} is failing to handle {{`{{`}} $value | humanize {{`}}`}}% of requests.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosquerygrpcservererrorrate
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosquerygrpcservererrorrate
         summary: Thanos Query is failing to handle requests.
       expr: |
         (
@@ -97,7 +97,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Query {{`{{`}} $labels.job {{`}}`}} is failing to send {{`{{`}} $value | humanize {{`}}`}}% of requests.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosquerygrpcclienterrorrate
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosquerygrpcclienterrorrate
         summary: Thanos Query is failing to send requests.
       expr: |
         (
@@ -119,7 +119,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Query {{`{{`}} $labels.job {{`}}`}} have {{`{{`}} $value | humanize{{`}}`}}% of failing DNS queries for store endpoints.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosqueryhighdnsfailures
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosqueryhighdnsfailures
         summary: Thanos Query is having high number of DNS failures.
       expr: |
         (
@@ -141,7 +141,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Query {{`{{`}} $labels.job {{`}}`}} has a 99th percentile latency of {{`{{`}} $value {{`}}`}} seconds for instant queries.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosqueryinstantlatencyhigh
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosqueryinstantlatencyhigh
         summary: Thanos Query has high latency for queries.
       expr: |
         (
@@ -163,7 +163,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Query {{`{{`}} $labels.job {{`}}`}} has a 99th percentile latency of {{`{{`}} $value {{`}}`}} seconds for range queries.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosqueryrangelatencyhigh
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosqueryrangelatencyhigh
         summary: Thanos Query has high latency for queries.
       expr: |
         (
@@ -185,7 +185,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Query {{`{{`}} $labels.job {{`}}`}} has been overloaded for more than 15 minutes. This may be a symptom of excessive simultanous complex requests, low performance of the Prometheus API, or failures within these components. Assess the health of the Thanos query instances, the connnected Prometheus instances, look for potential senders of these requests and then contact support.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosqueryoverload
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosqueryoverload
         summary: Thanos query reaches its maximum capacity serving concurrent requests.
       expr: |
         (

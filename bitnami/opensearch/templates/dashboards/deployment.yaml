@@ -170,9 +170,9 @@ spec:
         {{- if .Values.security.enabled }}
         - name: opensearch-certificates
           secret:
-            secretName: {{ include "opensearch.master.tlsSecretName" . }}
+            secretName: {{ include "opensearch.node.tlsSecretName" (dict "nodeRole" "master" "context" $) }}
             items:
-              - key: ca.crt
+              - key: {{ include "opensearch.node.tlsSecretCAKey" (dict "nodeRole" "master" "context" $) }}
                 path: ca.crt
         {{- end }}
         {{- if .Values.dashboards.tls.enabled }}
