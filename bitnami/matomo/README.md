@@ -308,6 +308,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cronjobs.taskScheduler.enabled`                                           | Whether to enable scheduled mail-to-task CronJob                     | `true`           |
 | `cronjobs.taskScheduler.schedule`                                          | Kubernetes CronJob schedule                                          | `*/5 * * * *`    |
 | `cronjobs.taskScheduler.suspend`                                           | Whether to create suspended CronJob                                  | `false`          |
+| `cronjobs.taskScheduler.affinity`                                          | Affinity for CronJob pod assignment                                  | `{}`             |
 | `cronjobs.taskScheduler.command`                                           | Override default container command (useful when using custom images) | `[]`             |
 | `cronjobs.taskScheduler.args`                                              | Override default container args (useful when using custom images)    | `[]`             |
 | `cronjobs.taskScheduler.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                 | `true`           |
@@ -323,6 +324,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cronjobs.archive.enabled`                                                 | Whether to enable scheduled mail-to-task CronJob                     | `true`           |
 | `cronjobs.archive.schedule`                                                | Kubernetes CronJob schedule                                          | `*/5 * * * *`    |
 | `cronjobs.archive.suspend`                                                 | Whether to create suspended CronJob                                  | `false`          |
+| `cronjobs.archive.affinity`                                                | Affinity for CronJob pod assignment                                  | `{}`             |
 | `cronjobs.archive.command`                                                 | Override default container command (useful when using custom images) | `[]`             |
 | `cronjobs.archive.args`                                                    | Override default container args (useful when using custom images)    | `[]`             |
 | `cronjobs.archive.containerSecurityContext.enabled`                        | Enabled containers' Security Context                                 | `true`           |
@@ -436,6 +438,10 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 4.0.0
+
+This major release bumps the MariaDB version to 11.2. No major issues are expected during the upgrade.
 
 ### To 3.2.0
 

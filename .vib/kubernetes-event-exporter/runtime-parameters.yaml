@@ -1,4 +1,6 @@
 config:
+  kubeQPS: 60
+  kubeBurst: 60
   logLevel: debug
   logFormat: pretty
   receivers:

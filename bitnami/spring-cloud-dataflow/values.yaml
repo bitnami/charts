@@ -61,7 +61,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-dataflow
-    tag: 2.11.1-debian-11-r1
+    tag: 2.11.1-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -93,7 +93,7 @@ server:
     image:
       registry: docker.io
       repository: bitnami/spring-cloud-dataflow-composed-task-runner
-      tag: 2.11.1-debian-11-r1
+      tag: 2.11.1-debian-11-r2
       digest: ""
   ## Spring Cloud Dataflow Server configuration parameters
   ##
@@ -610,7 +610,7 @@ skipper:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-skipper
-    tag: 2.11.1-debian-11-r1
+    tag: 2.11.1-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1095,7 +1095,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/prometheus-rsocket-proxy
-    tag: 1.5.3-debian-11-r0
+    tag: 1.5.3-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1444,7 +1444,7 @@ waitForBackends:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.28.4-debian-11-r0
+    tag: 1.28.4-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1497,7 +1497,7 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 10.11.6-debian-11-r0
+    tag: 10.11.6-debian-11-r2
     digest: ""
   ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##

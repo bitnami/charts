@@ -34,7 +34,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.12.10-debian-11-r1
+  tag: 3.12.10-debian-11-r3
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -253,6 +253,10 @@ clustering:
   ## @param clustering.enabled Enable RabbitMQ clustering
   ##
   enabled: true
+  ## @param clustering.name RabbitMQ cluster name
+  ## If not set, a name is generated using the common.names.fullname template
+  ##
+  name: ""
   ## @param clustering.addressType Switch clustering mode. Either `ip` or `hostname`
   ##
   addressType: hostname
@@ -390,8 +394,13 @@ configuration: |-
   {{- if .Values.clustering.enabled }}
   ## Clustering
   ##
+  cluster_name = {{ default (include "common.names.fullname" .) .Values.clustering.name }}
   cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
   cluster_formation.k8s.host = kubernetes.default
+  cluster_formation.k8s.address_type = {{ .Values.clustering.addressType }}
+  {{- $svcName := printf "%s-%s" (include "common.names.fullname" .) (default "headless" .Values.servicenameOverride) }}
+  cluster_formation.k8s.service_name = {{ $svcName }}
+  cluster_formation.k8s.hostname_suffix = .{{ $svcName }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}
   cluster_formation.node_cleanup.interval = 10
   cluster_formation.node_cleanup.only_log_warning = true
   cluster_partition_handling = {{ .Values.clustering.partitionHandling }}
@@ -1419,7 +1428,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r91
+    tag: 11-debian-11-r92
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

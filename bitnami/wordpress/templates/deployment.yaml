@@ -130,6 +130,14 @@ spec:
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "yes" "no" .Values.allowEmptyPassword | quote }}
+            - name: WORDPRESS_SKIP_BOOTSTRAP
+              value: {{ ternary "yes" "no" .Values.wordpressSkipInstall | quote }}
+            {{- if or .Values.wordpressConfiguration .Values.existingWordPressConfigurationSecret }}
+            # Override the default data to persist omiting wp-config.php from the list since
+            # it is mounted as a read-only file from a Secret
+            - name: WORDPRESS_DATA_TO_PERSIST
+              value: "wp-content"
+            {{- else }}
             - name: MARIADB_HOST
               value: {{ include "wordpress.databaseHost" . | quote }}
             - name: MARIADB_PORT_NUMBER
@@ -162,8 +170,6 @@ spec:
               value: {{ ternary "yes" "no" .Values.htaccessPersistenceEnabled | quote }}
             - name: WORDPRESS_BLOG_NAME
               value: {{ .Values.wordpressBlogName | quote }}
-            - name: WORDPRESS_SKIP_BOOTSTRAP
-              value: {{ ternary "yes" "no" .Values.wordpressSkipInstall | quote }}
             - name: WORDPRESS_TABLE_PREFIX
               value: {{ .Values.wordpressTablePrefix | quote }}
             - name: WORDPRESS_SCHEME
@@ -172,13 +178,8 @@ spec:
               value: {{ .Values.wordpressExtraConfigContent | quote }}
             - name: WORDPRESS_PLUGINS
               value: {{ join "," .Values.wordpressPlugins | quote }}
-            - name: APACHE_HTTP_PORT_NUMBER
-              value: {{ .Values.containerPorts.http | quote }}
-            - name: APACHE_HTTPS_PORT_NUMBER
-              value: {{ .Values.containerPorts.https | quote }}
-            {{- if .Values.overrideDatabaseSettings }}
             - name: WORDPRESS_OVERRIDE_DATABASE_SETTINGS
-              value: "yes"
+              value: {{ ternary "yes" "no" .Values.overrideDatabaseSettings | quote }}
             {{- end }}
             {{- if .Values.multisite.enable }}
             - name: WORDPRESS_ENABLE_MULTISITE
@@ -217,6 +218,10 @@ spec:
             - name: SMTP_PROTOCOL
               value: {{ .Values.smtpProtocol | quote }}
             {{- end }}
+            - name: APACHE_HTTP_PORT_NUMBER
+              value: {{ .Values.containerPorts.http | quote }}
+            - name: APACHE_HTTPS_PORT_NUMBER
+              value: {{ .Values.containerPorts.https | quote }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
