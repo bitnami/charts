@@ -1,0 +1,50 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.apiserver.metrics.enabled .Values.apiserver.metrics.serviceMonitor.enabled  }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "kuberay.apiserver.fullname" . }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.apiserver.metrics.serviceMonitor.namespace | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.apiserver.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: kuberay
+    app.kubernetes.io/component: apiserver
+  {{- if or .Values.apiserver.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.apiserver.metrics.serviceMonitor.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  jobLabel: {{ .Values.apiserver.metrics.serviceMonitor.jobLabel | quote }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: kuberay
+      app.kubernetes.io/component: apiserver
+      {{- if .Values.apiserver.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.apiserver.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
+  endpoints:
+    - port: http
+      path: "/metrics"
+      {{- if .Values.apiserver.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.apiserver.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.apiserver.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.apiserver.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.apiserver.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.apiserver.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.apiserver.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.apiserver.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.apiserver.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.apiserver.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+    - {{ include "common.names.namespace" . | quote }}
+{{- end }}

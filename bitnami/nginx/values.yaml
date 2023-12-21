@@ -581,6 +581,10 @@ service:
   ##   - 10.10.10.0/24
   ##
   loadBalancerSourceRanges: []
+  ## @param service.loadBalancerClass service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ##
+  loadBalancerClass: ""
   ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
   ##
   extraPorts: []

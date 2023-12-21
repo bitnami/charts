@@ -40,27 +40,15 @@ spec:
   loadBalancerIP: {{ .Values.tracking.service.loadBalancerIP }}
   {{- end }}
   ports:
-    {{- if .Values.tracking.tls.enabled }}
-    - name: https
-      port: {{ .Values.tracking.service.ports.https }}
+    - name: {{ include "mlflow.v0.tracking.portName" . }}
+      port: {{ get .Values.tracking.service.ports (include "mlflow.v0.tracking.protocol" .) }}
       protocol: TCP
-      {{- if and (or (eq .Values.tracking.service.type "NodePort") (eq .Values.tracking.service.type "LoadBalancer")) (not (empty .Values.tracking.service.nodePorts.https)) }}
-      nodePort: {{ .Values.tracking.service.nodePorts.https }}
+      {{- if and (or (eq .Values.tracking.service.type "NodePort") (eq .Values.tracking.service.type "LoadBalancer")) (not (empty (get .Values.tracking.service.nodePorts (include "mlflow.v0.tracking.protocol" .)))) }}
+      nodePort: {{ get .Values.tracking.service.nodePorts (include "mlflow.v0.tracking.protocol" .) }}
       {{- else if eq .Values.tracking.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-      targetPort: https
-    {{- else }}
-    - name: http
-      port: {{ .Values.tracking.service.ports.http }}
-      protocol: TCP
-      {{- if and (or (eq .Values.tracking.service.type "NodePort") (eq .Values.tracking.service.type "LoadBalancer")) (not (empty .Values.tracking.service.nodePorts.http)) }}
-      nodePort: {{ .Values.tracking.service.nodePorts.http }}
-      {{- else if eq .Values.tracking.service.type "ClusterIP" }}
-      nodePort: null
-      {{- end }}
-      targetPort: http
-    {{- end }}
+      targetPort: {{ include "mlflow.v0.tracking.portName" . }}
     {{- if .Values.tracking.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.tracking.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}

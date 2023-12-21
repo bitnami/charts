@@ -8,7 +8,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
   name: {{ template "common.names.fullname" . }}
-  namespace: {{ default .Release.Namespace .Values.metrics.podMonitor.namespace | quote }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.metrics.podMonitor.namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- if .Values.metrics.podMonitor.additionalLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podMonitor.additionalLabels "context" $) | nindent 4 }}
@@ -45,7 +45,7 @@ spec:
   {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ include "common.names.namespace" . | quote }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: metrics

@@ -509,15 +509,16 @@ spec:
             {{- $database := required "In order to enable metrics you need to specify a database (.Values.auth.database or .Values.global.postgresql.auth.database)" (include "postgresql.v1.database" .) }}
             - name: DATA_SOURCE_URI
               value: {{ printf "127.0.0.1:%d/%s?sslmode=disable" (int (include "postgresql.v1.service.port" .)) $database }}
+            {{- $pwdKey := ternary (include "postgresql.v1.adminPasswordKey" .) (include "postgresql.v1.userPasswordKey" .) (or (eq $customUser "postgres") (empty $customUser)) }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: DATA_SOURCE_PASS_FILE
-              value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.v1.userPasswordKey" .) }}
+              value: {{ printf "/opt/bitnami/postgresql/secrets/%s" $pwdKey }}
             {{- else }}
             - name: DATA_SOURCE_PASS
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql.v1.secretName" . }}
-                  key: {{ include "postgresql.v1.userPasswordKey" . }}
+                  key: {{ $pwdKey }}
             {{- end }}
             - name: DATA_SOURCE_USER
               value: {{ default "postgres" $customUser | quote }}

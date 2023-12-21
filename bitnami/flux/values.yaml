@@ -69,6 +69,9 @@ kustomizeController:
   ## @param kustomizeController.enabled Enable Kustomize Controller
   ##
   enabled: true
+  ## @param kustomizeController.installCRDs Flag to install Kustomize Controller CRDs
+  ##
+  installCRDs: true
   ## Bitnami Kustomize Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-kustomize-controller/tags/
   ## @param kustomizeController.image.registry [default: REGISTRY_NAME] Kustomize Controller image registry
@@ -504,6 +507,9 @@ helmController:
   ## @param helmController.enabled Enable Helm Controller
   ##
   enabled: true
+  ## @param helmController.installCRDs Flag to install Helm Controller CRDs
+  ##
+  installCRDs: true
   ## Bitnami Helm Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
   ## @param helmController.image.registry [default: REGISTRY_NAME] Helm Controller image registry
@@ -939,6 +945,9 @@ sourceController:
   ## @param sourceController.enabled Enable Source Controller
   ##
   enabled: true
+  ## @param sourceController.installCRDs Flag to install Source Controller CRDs
+  ##
+  installCRDs: true
   ## Bitnami Source Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
   ## @param sourceController.image.registry [default: REGISTRY_NAME] Source Controller image registry
@@ -1534,6 +1543,9 @@ notificationController:
   ## @param notificationController.enabled Enable Notification Controller
   ##
   enabled: true
+  ## @param notificationController.installCRDs Flag to install Notification Controller CRDs
+  ##
+  installCRDs: true
   ## Bitnami Notification Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-notification-controller/tags/
   ## @param notificationController.image.registry [default: REGISTRY_NAME] Notification Controller image registry
@@ -1969,6 +1981,9 @@ imageAutomationController:
   ## @param imageAutomationController.enabled Enable Image Automation Controller
   ##
   enabled: true
+  ## @param imageAutomationController.installCRDs Flag to install Image Automation Controller CRDs
+  ##
+  installCRDs: true
   ## Bitnami Image Automation Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-image-automation-controller/tags/
   ## @param imageAutomationController.image.registry [default: REGISTRY_NAME] Image Automation Controller image registry
@@ -2404,6 +2419,9 @@ imageReflectorController:
   ## @param imageReflectorController.enabled Enable Image Reflector Controller
   ##
   enabled: true
+  ## @param imageReflectorController.installCRDs Flag to install Image Reflector Controller CRDs
+  ##
+  installCRDs: true
   ## Bitnami Image Reflector Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
   ## @param imageReflectorController.image.registry [default: REGISTRY_NAME] Image Reflector Controller image registry

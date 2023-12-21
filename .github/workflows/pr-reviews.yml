@@ -1,43 +1,25 @@
 # Copyright VMware, Inc.
 # SPDX-License-Identifier: APACHE-2.0
 
-name: '[Support] Review based card movements'
+name: '[Support] PR review comment card movements'
 on:
-  pull_request_target:
+  pull_request_review_comment:
     types:
-      - review_requested
-      - synchronize
-# Remove all permissions by default
+      - created
 permissions: {}
+# Avoid concurrency over the same issue
 concurrency:
-  group: card-movement-${{ github.event.number }}
+  group: card-movement-${{ github.event.pull_request.number }}
 jobs:
-  handler:
+  just-notice:
+    # This is a dummy workflow that triggers a workflow_run
     runs-on: ubuntu-latest
-    permissions:
-      repository-projects: write
-      contents: read
-      issues: read
-      pull-requests: read
-    # This job will ignore:
-    # * Events triggered by bitnami-bot (README commits for example).
-    # * Events triggered over automated PRs (They are managed in comments.yml workflow).
-    # * PRs with 'bitnami' label.
-    if: |
-      github.actor != 'bitnami-bot' && github.event.pull_request.user.login != 'bitnami-bot' &&
-      (!contains(github.event.pull_request.labels.*.name, 'bitnami')) && (!contains(github.event.pull_request.labels.*.name, 'triage'))
     steps:
-      - name: Repo checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
-      - name: Load .env file
-        uses: xom9ikk/dotenv@de1ff27d319507880e6621e4d47424c677d95f68
+      - run: |
+          echo "::notice:: Comment on PR #${{ github.event.pull_request.number }}"
+          echo "${{ github.event.pull_request.number }}" > pull_request_number
+      - name: Upload the PR number
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32
         with:
-          path: .github/workflows/
-      - name: Move into In Progress
-        # Move the card only if the actor is not a Bitnami member
-        if: ${{ !contains(fromJson(env.BITNAMI_TEAM), github.actor) }}
-        uses: peter-evans/create-or-update-project-card@dfa240db6fe287ceb681e45d6728c1af70452c58
-        with:
-          project-name: Support
-          column-name: In progress
-          issue-number: ${{ github.event.number }}
+          name: pull_request_number
+          path: ./pull_request_number

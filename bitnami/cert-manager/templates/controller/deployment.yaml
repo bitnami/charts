@@ -123,8 +123,48 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.controller.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           ports:
-            - protocol: TCP
+            - name: http
+              protocol: TCP
               containerPort: {{ .Values.controller.containerPort }}
+          {{- if .Values.controller.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.controller.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.controller.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              port: http
+              path: /metrics
+            initialDelaySeconds: {{ .Values.controller.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.controller.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.controller.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.controller.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.controller.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.controller.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.controller.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.controller.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /metrics
+            initialDelaySeconds: {{ .Values.controller.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.controller.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.controller.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.controller.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.controller.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.controller.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.controller.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.controller.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              port: http
+              path: /metrics
+            initialDelaySeconds: {{ .Values.controller.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.controller.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.controller.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.controller.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.controller.startupProbe.failureThreshold }}
+          {{- end }}
           {{- if .Values.controller.resources }}
           resources: {{- toYaml .Values.controller.resources | nindent 12 }}
           {{- end }}
