@@ -1,0 +1,16 @@
+image:
+  debug: true
+kong:
+  extraEnvVars:
+    - name: KONG_PROXY_LISTEN
+      value: "0.0.0.0:8000 proxy_protocol, 0.0.0.0:8443 ssl proxy_protocol"
+    - name: KONG_REAL_IP_HEADER
+      value: "proxy_protocol"
+    - name: KONG_TRUSTED_IPS
+      value: "0.0.0.0/0,::/0"
+postgresql:
+  auth:
+    existingSecret: kong-postgresql-password
+  persistence:
+    enabled: true
+    size: 10Gi
