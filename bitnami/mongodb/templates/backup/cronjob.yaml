@@ -39,9 +39,6 @@ spec:
       {{- if .Values.backup.cronjob.ttlSecondsAfterFinished }}
       ttlSecondsAfterFinished: {{ .Values.backup.cronjob.ttlSecondsAfterFinished }}
       {{- end }}
-      {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
-      {{- end }}
       template:
         metadata:
           labels: {{- include "common.labels.standard" . | nindent 12 }}

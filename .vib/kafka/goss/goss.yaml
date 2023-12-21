@@ -10,7 +10,7 @@ file:
   {{ .Vars.controller.logPersistence.mountPath }}:
     exists: true
     filetype: directory
-    mode: "2777"
+    mode: "2775"
     owner: root
   /opt/bitnami/kafka/config/server.properties:
     exists: true

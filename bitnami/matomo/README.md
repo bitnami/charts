@@ -439,6 +439,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 4.0.0
+
+This major release bumps the MariaDB version to 11.2. No major issues are expected during the upgrade.
+
 ### To 3.2.0
 
 This version deprecates `cronjobs.enabled` value in favor of `cronjobs.taskScheduler.enabled` and `cronjobs.archive.enabled` values.
