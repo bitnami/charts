@@ -59,6 +59,9 @@ spec:
             {{- end }}
           {{- end }}
         spec:
+          {{- if .Values.podSecurityContext.enabled }}
+          securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           enableServiceLinks: {{ .Values.enableServiceLinks }}
           {{- if .Values.tls.enabled }}
           initContainers:
