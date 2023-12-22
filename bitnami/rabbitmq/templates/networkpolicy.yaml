@@ -25,6 +25,7 @@ spec:
         - port: {{ .Values.service.ports.amqpTls }}
         - port: {{ .Values.service.ports.dist }}
         - port: {{ .Values.service.ports.manager }}
+        - port: {{ .Values.service.ports.mqtt }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:

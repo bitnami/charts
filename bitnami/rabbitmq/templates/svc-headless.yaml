@@ -37,6 +37,11 @@ spec:
       port: {{ .Values.service.ports.manager  }}
       targetPort: stats
     {{- end }}
+    {{- if .Values.service.mqttPortEnabled }}
+    - name: {{ .Values.service.portNames.mqtt }}
+      port: {{ .Values.service.ports.mqtt }}
+      targetPort: mqtt
+    {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
   publishNotReadyAddresses: true

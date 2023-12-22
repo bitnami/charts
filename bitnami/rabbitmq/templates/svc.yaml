@@ -81,6 +81,16 @@ spec:
       nodePort: {{ .Values.service.nodePorts.dist }}
       {{- end }}
     {{- end }}
+    {{- if .Values.service.mqttPortEnabled }}
+    - name: {{ .Values.service.portNames.mqtt }}
+      port: {{ .Values.service.ports.mqtt }}
+      targetPort: mqtt
+      {{- if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- else if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.dist)) }}
+      nodePort: {{ .Values.service.nodePorts.mqtt }}
+      {{- end }}
+    {{- end }}
     {{- if .Values.service.managerPortEnabled }}
     - name: {{ .Values.service.portNames.manager }}
       port: {{ .Values.service.ports.manager  }}

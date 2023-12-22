@@ -261,6 +261,8 @@ spec:
               containerPort: {{ .Values.containerPorts.manager }}
             - name: epmd
               containerPort: {{ .Values.containerPorts.epmd }}
+            - name: mqtt
+              containerPort: {{ .Values.containerPorts.mqtt }}
             {{- if .Values.metrics.enabled }}
             - name: metrics
               containerPort: {{ .Values.containerPorts.metrics }}

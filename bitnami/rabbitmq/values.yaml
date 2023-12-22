@@ -323,6 +323,7 @@ extraEnvVarsSecret: ""
 ## @param containerPorts.manager
 ## @param containerPorts.epmd
 ## @param containerPorts.metrics
+## @param containerPorts.mqtt
 ##
 containerPorts:
   amqp: 5672
@@ -331,6 +332,7 @@ containerPorts:
   manager: 15672
   epmd: 4369
   metrics: 9419
+  mqtt: 1883
 
 ## @param initScripts Dictionary of init scripts. Evaluated as a template.
 ## Specify dictionary of scripts to be run at first boot
@@ -1010,6 +1012,10 @@ service:
   ## @param service.epmdPortEnabled RabbitMQ EPMD Discovery service port
   ##
   epmdPortEnabled: true
+  ## @param service.mqttPortEnabled MQTT service port  
+  ##
+  mqttPortEnabled: true
+
   ## Service ports
   ## @param service.ports.amqp Amqp service port
   ## @param service.ports.amqpTls Amqp TLS service port
@@ -1017,6 +1023,7 @@ service:
   ## @param service.ports.manager RabbitMQ Manager service port
   ## @param service.ports.metrics RabbitMQ Prometheues metrics service port
   ## @param service.ports.epmd EPMD Discovery service port
+  ## @param service.ports.mqtt MQTT service port  
   ##
   ports:
     amqp: 5672
@@ -1025,6 +1032,8 @@ service:
     manager: 15672
     metrics: 9419
     epmd: 4369
+    mqtt: 1883
+
   ## Service ports name
   ## @param service.portNames.amqp Amqp service port name
   ## @param service.portNames.amqpTls Amqp TLS service port name
@@ -1032,6 +1041,7 @@ service:
   ## @param service.portNames.manager RabbitMQ Manager service port name
   ## @param service.portNames.metrics RabbitMQ Prometheues metrics service port name
   ## @param service.portNames.epmd EPMD Discovery service port name
+  ## @param service.portNames.mqtt MQTT service port name  
   ##
   portNames:
     amqp: "amqp"
@@ -1040,6 +1050,7 @@ service:
     manager: "http-stats"
     metrics: "metrics"
     epmd: "epmd"
+    mqtt: "mqtt"
 
   ## Node ports to expose
   ## @param service.nodePorts.amqp Node port for Ampq
@@ -1048,6 +1059,7 @@ service:
   ## @param service.nodePorts.manager Node port for RabbitMQ Manager
   ## @param service.nodePorts.epmd Node port for EPMD Discovery
   ## @param service.nodePorts.metrics Node port for RabbitMQ Prometheues metrics
+  ## @param service.nodePorts.mqtt Node port for RabbitMQ Mqtt
   ##
   nodePorts:
     amqp: ""
@@ -1056,6 +1068,8 @@ service:
     manager: ""
     epmd: ""
     metrics: ""
+    mqtt: ""
+
   ## @param service.extraPorts Extra ports to expose in the service
   ## E.g.:
   ## extraPorts:
