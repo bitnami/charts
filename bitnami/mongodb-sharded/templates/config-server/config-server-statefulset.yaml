@@ -124,8 +124,10 @@ spec:
               {{- else }}
               value: "no"
               {{- end }}
-            - name: MONGODB_MAX_TIMEOUT
-              value: {{ .Values.common.mongodbMaxWaitTimeout | quote }}
+            - name: MONGODB_INIT_RETRY_ATTEMPTS
+              value: {{ .Values.common.mongodbInitRetryAttempts | quote }}
+            - name: MONGODB_INIT_RETRY_DELAY
+              value: {{ .Values.common.mongodbInitRetryDelay | quote }}
             - name: MONGODB_SHARDING_MODE
               value: "configsvr"
             - name: MONGODB_POD_NAME
