@@ -1,0 +1,75 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+{{- if (eq .Values.service.type "LoadBalancer") }}
+
+---------------------------------------------------------------------------------------------
+ WARNING
+
+    By specifying "serviceType=LoadBalancer" and not configuring the authentication
+    you have most likely exposed the solr externally without any
+    authentication mechanism.
+
+    For security reasons, we strongly suggest that you switch to "ClusterIP" or
+    "NodePort". As alternative, you can also configure the Solr authentication.
+
+---------------------------------------------------------------------------------------------
+{{- end }}
+
+** Please be patient while the chart is being deployed **
+
+Solr can be accessed via port {{ .Values.service.ports.http }} on the following DNS name from within your cluster:
+
+    {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.ports.http }}
+
+{{- if .Values.auth.enabled }}
+
+To get the Solr credentials execute the following commands:
+
+    echo Username: {{ .Values.auth.adminUsername }}
+    echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "solr.secretName" . }} -o jsonpath="{.data.solr-password}" | base64 -d)
+
+{{- end }}
+
+To connect to your Solr cluster from outside the cluster, perform the following steps:
+
+{{- if contains "NodePort" .Values.service.type }}
+
+1. Obtain the NodePort IP and ports:
+
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+    echo "Solr URL: ${NODE_IP}:${NODE_PORT}"
+
+{{- else if contains "LoadBalancer" .Values.service.type }}
+
+1. Obtain the LoadBalancer IP
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
+
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    echo "Solr URL: ${SERVICE_IP}:{{ .Values.service.ports.http }}"
+
+{{- else if contains "ClusterIP" .Values.service.type }}
+
+1. Create a port-forward to the Solr client port:
+
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} {{ .Values.service.ports.http }}:{{ .Values.service.ports.http }} &
+    echo "Solr URL: 127.0.0.1:{{ .Values.service.ports.http }}"
+
+{{- end }}
+
+2. Access the Solr cluster using using the obtained URL.
+
+{{- if .Values.metrics.enabled  }}
+
+Solr Prometheus metrics can be accessed via port {{ .Values.metrics.service.ports.http }} on the following DNS name from within your cluster:
+
+    {{ printf "%s-exporter" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.metrics.service.ports.http }}/metrics
+
+{{- end }}
+
+{{- include "solr.checkRollingTags" . }}
+{{- include "solr.validateValues" . }}

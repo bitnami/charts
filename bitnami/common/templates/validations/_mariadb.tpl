@@ -1,3 +1,8 @@
+{{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 {{/*
 Validate MariaDB required passwords are not empty.
@@ -18,7 +23,7 @@ Params:
   {{- $valueKeyPassword := printf "%s.password" $authPrefix -}}
   {{- $valueKeyReplicationPassword := printf "%s.replicationPassword" $authPrefix -}}
 
-  {{- if and (not $existingSecret) (eq $enabled "true") -}}
+  {{- if and (or (not $existingSecret) (eq $existingSecret "\"\"")) (eq $enabled "true") -}}
     {{- $requiredPasswords := list -}}
 
     {{- $requiredRootPassword := dict "valueKey" $valueKeyRootPassword "secret" .secret "field" "mariadb-root-password" -}}

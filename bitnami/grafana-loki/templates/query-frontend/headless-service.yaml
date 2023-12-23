@@ -1,0 +1,40 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "grafana-loki.query-frontend.fullname" . }}-headless
+  namespace: {{ .Release.Namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.loki.image "chart" .Chart ) ) }}  
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-loki
+    app.kubernetes.io/component: query-frontend
+  {{- if or .Values.commonAnnotations .Values.queryFrontend.service.headless.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.queryFrontend.service.headless.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  # NOTE: this is based on this https://github.com/grafana/helm-charts/pull/451. Should be reviewed if it is actually necessary in the future
+  publishNotReadyAddresses: true
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: http
+      port: {{ .Values.queryFrontend.service.ports.http }}
+      targetPort: http
+      protocol: TCP
+    - name: grpc
+      port: {{ .Values.queryFrontend.service.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+    {{- if .Values.queryFrontend.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.queryFrontend.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-loki
+    app.kubernetes.io/component: query-frontend

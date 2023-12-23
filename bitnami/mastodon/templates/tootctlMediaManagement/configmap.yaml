@@ -1,0 +1,56 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.tootctlMediaManagement.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "mastodon.tootctlMediaManagement.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mastodon
+    app.kubernetes.io/component: tootctlMediaManagement
+data:
+  media-cache-manage.sh: |
+    set -o errexit
+    set -o nounset
+    set -o pipefail
+    # set -o xtrace # Uncomment this line for debugging purposes
+    # Load libraries
+    . /opt/bitnami/scripts/liblog.sh
+    . /opt/bitnami/scripts/libos.sh
+    . /opt/bitnami/scripts/libvalidations.sh
+    . /opt/bitnami/scripts/libmastodon.sh
+    # Load Mastodon environment variables
+    . /opt/bitnami/scripts/mastodon-env.sh
+    # Load Mastodon configuration
+    eval "$(mastodon_runtime_env)"
+    #List usage
+    #tootctl media usage
+    {{- if .Values.tootctlMediaManagement.removeAttachments }}
+    #Attachements:
+    tootctl media remove --days={{ .Values.tootctlMediaManagement.removeAttachmentsDays }}
+    {{- end }}
+    {{- if .Values.tootctlMediaManagement.removeCustomEmoji }}
+    #Remote Custom Emoji (remote)
+    tootctl emoji purge --remote-only
+    {{- end }}
+    {{- if .Values.tootctlMediaManagement.removePreviewCards }}
+    #Preview cards:
+    tootctl preview_cards remove --days={{ .Values.tootctlMediaManagement.removePreviewCardsDays }}
+    {{- end }}
+    {{- if .Values.tootctlMediaManagement.removeAvatars }}
+    #Avatars
+    tootctl media remove --prune-profiles {{ template "mastodon.tootctlMediaManagement.includeFollows" . }} --days={{ .Values.tootctlMediaManagement.removeAvatarsDays }}
+    {{- end }}
+    {{- if .Values.tootctlMediaManagement.removeHeaders }}
+    #Headers
+    tootctl media remove --remove-headers {{ template "mastodon.tootctlMediaManagement.includeFollows" . }} --days={{ .Values.tootctlMediaManagement.removeHeadersDays }}
+    {{- end }}
+    {{- if .Values.tootctlMediaManagement.removeOrphans }}
+    #Orphaned files
+    tootctl media remove-orphans
+    {{- end }}
+{{- end }}

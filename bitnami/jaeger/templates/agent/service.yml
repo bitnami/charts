@@ -1,0 +1,85 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name:  {{ include "jaeger.agent.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: jaeger
+    app.kubernetes.io/component: agent
+  {{- if or .Values.agent.service.annotations .Values.agent.service.metrics.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.agent.service.annotations .Values.agent.service.metrics.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.agent.service.type }}
+  {{- if and (eq .Values.agent.service.type "LoadBalancer") (not (empty .Values.agent.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.agent.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.agent.service.type "LoadBalancer") (not (empty .Values.agent.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.agent.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and .Values.agent.service.clusterIP (eq .Values.agent.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.agent.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.agent.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.agent.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.agent.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.agent.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.agent.service.type "LoadBalancer") (eq .Values.agent.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.agent.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  ports:
+    - name: compact
+      port: {{ .Values.agent.service.ports.compact }}
+      targetPort: {{ .Values.agent.containerPorts.compact }}
+      {{- if and (or (eq .Values.agent.service.type "NodePort") (eq .Values.agent.service.type "LoadBalancer")) (not (empty .Values.agent.service.nodePorts.compact)) }}
+      nodePort: {{ .Values.agent.service.nodePorts.compact }}
+      {{- else if eq .Values.agent.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: binary
+      port: {{ .Values.agent.service.ports.binary }}
+      targetPort: {{ .Values.agent.containerPorts.binary }}
+      {{- if and (or (eq .Values.agent.service.type "NodePort") (eq .Values.agent.service.type "LoadBalancer")) (not (empty .Values.agent.service.nodePorts.binary)) }}
+      nodePort: {{ .Values.agent.service.nodePorts.binary }}
+      {{- else if eq .Values.agent.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: config
+      port: {{ .Values.agent.service.ports.config }}
+      targetPort: {{ .Values.agent.containerPorts.config }}
+      {{- if and (or (eq .Values.agent.service.type "NodePort") (eq .Values.agent.service.type "LoadBalancer")) (not (empty .Values.agent.service.nodePorts.config)) }}
+      nodePort: {{ .Values.agent.service.nodePorts.config }}
+      {{- else if eq .Values.agent.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: zipkin
+      port: {{ .Values.agent.service.ports.zipkin }}
+      targetPort: {{ .Values.agent.containerPorts.zipkin }}
+      {{- if and (or (eq .Values.agent.service.type "NodePort") (eq .Values.agent.service.type "LoadBalancer")) (not (empty .Values.agent.service.nodePorts.zipkin)) }}
+      nodePort: {{ .Values.agent.service.nodePorts.zipkin }}
+      {{- else if eq .Values.agent.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: admin
+      port: {{ .Values.agent.service.ports.admin }}
+      targetPort: {{ .Values.agent.containerPorts.admin }}
+      {{- if and (or (eq .Values.agent.service.type "NodePort") (eq .Values.agent.service.type "LoadBalancer")) (not (empty .Values.agent.service.nodePorts.admin)) }}
+      nodePort: {{ .Values.agent.service.nodePorts.admin }}
+      {{- else if eq .Values.agent.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.agent.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.agent.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.agent.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: jaeger
+    app.kubernetes.io/component: agent

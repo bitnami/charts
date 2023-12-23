@@ -1,0 +1,17 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+command:
+  airflow-trigger-dag:
+    exec: airflow dags trigger example_bash_operator
+    exit-status: 0
+    timeout: 40000
+file:
+  /opt/bitnami/airflow/airflow.cfg:
+    mode: "0644"
+    filetype: file
+    exists: true
+    group: root
+  /opt/bitnami/airflow/dags:
+    filetype: directory
+    exists: true

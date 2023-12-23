@@ -1,4 +1,9 @@
 {{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
 Return the proper certificate image name
 */}}
 {{- define "certificates.image" -}}
@@ -30,7 +35,7 @@ Return the proper image name (for the init container volume-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "dokuwiki.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image .Values.certificates.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -49,4 +54,6 @@ Return  the proper Storage Class
 {{- define "dokuwiki.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image -}}
 {{- include "common.warnings.rollingTag" .Values.metrics.image -}}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image -}}
+{{- include "common.warnings.rollingTag" .Values.certificates.image -}}
 {{- end -}}

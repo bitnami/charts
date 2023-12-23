@@ -1,0 +1,38 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+command:
+  {{- $user := (split ":" .Vars.secrets.localUsers)._0 }}
+  {{- $pwd := (split ":" .Vars.secrets.localUsers)._1 }}
+  {{- $target := printf "target_%s" (randAlphaNum 5 | toLower) }}
+  {{- $pipeline := printf "pipe_%s" (randAlphaNum 5 | toLower) }}
+  {{- $example_pipeline := "ICBqb2JzOgogIC0gbmFtZTogam9iCiAgICBwdWJsaWM6IHRydWUKICAgIHBsYW46CiAgICAtIHRhc2s6IHNpbXBsZS10YXNrCiAgICAgIGNvbmZpZzoKICAgICAgICBwbGF0Zm9ybTogbGludXgKICAgICAgICBpbWFnZV9yZXNvdXJjZToKICAgICAgICAgIHR5cGU6IHJlZ2lzdHJ5LWltYWdlCiAgICAgICAgICBzb3VyY2U6IHsgcmVwb3NpdG9yeTogYml0bmFtaS9iaXRuYW1pLXNoZWxsIH0KICAgICAgICBydW46CiAgICAgICAgICBwYXRoOiBlY2hvCiAgICAgICAgICBhcmdzOiBbIkhlbGxvIHdvcmxkISJd" }}
+  {{- $port := .Vars.service.web.ports.http }}
+  {{ if not ( has "air-gapped" .Vars.target_platform_properties ) }}
+  create-pipeline-trigger-job:
+    exec: fly -t {{ $target }} login -c http://concourse-web:{{ $port }} -u {{ $user }} -p '{{ $pwd }}' && (echo '{{ $example_pipeline }}' | base64 -d) > /tmp/pipeline.yaml && fly -t {{ $target }} set-pipeline -p {{ $pipeline }} -c /tmp/pipeline.yaml -n && fly -t {{ $target }} unpause-pipeline -p {{ $pipeline }} && fly -t {{ $target }} trigger-job -j {{ $pipeline }}/job && sleep 35 && fly -t {{ $target }} jobs -p {{ $pipeline }}
+    exit-status: 0
+    stdout:
+      - "succeeded"
+    timeout: 40000
+  {{ end }}
+  check-db-config:
+    exec: $(echo $CONCOURSE_POSTGRES_DATABASE | grep -q {{ .Vars.postgresql.auth.database }}) && $(echo $CONCOURSE_POSTGRES_USER | grep -q {{ .Vars.postgresql.auth.username }}) && $(echo $CONCOURSE_POSTGRES_PASSWORD | grep -q {{ .Vars.postgresql.auth.password }})
+    exit-status: 0
+  check-ports-config:
+    exec: $(echo $CONCOURSE_BIND_PORT | grep -q {{ .Vars.web.containerPorts.http }}) && $(echo $CONCOURSE_TSA_BIND_PORT | grep -q {{ .Vars.web.containerPorts.tsa }}) && $(echo $CONCOURSE_TSA_DEBUG_BIND_PORT | grep -q {{ .Vars.web.containerPorts.pprof }})
+    exit-status: 0
+  {{- $uid := .Vars.web.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.web.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+  {{ if .Vars.web.serviceAccount.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}

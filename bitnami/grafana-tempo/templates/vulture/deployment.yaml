@@ -1,0 +1,157 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.vulture.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "grafana-tempo.vulture.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.vulture.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: vulture
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.vulture.replicaCount }}
+  {{- if .Values.vulture.updateStrategy }}
+  strategy: {{- toYaml .Values.vulture.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.vulture.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: vulture
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/tempo-configmap.yaml") . | sha256sum }}
+        {{- if .Values.vulture.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.vulture.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: vulture
+    spec:
+      serviceAccountName: {{ template "grafana-tempo.serviceAccountName" . }}
+      {{- include "grafana-tempo.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.vulture.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vulture.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.vulture.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.vulture.podAffinityPreset "component" "vulture" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.vulture.podAntiAffinityPreset "component" "vulture" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.vulture.nodeAffinityPreset.type "key" .Values.vulture.nodeAffinityPreset.key "values" .Values.vulture.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.vulture.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.vulture.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vulture.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vulture.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.vulture.priorityClassName }}
+      priorityClassName: {{ .Values.vulture.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.vulture.schedulerName }}
+      schedulerName: {{ .Values.vulture.schedulerName }}
+      {{- end }}
+      {{- if .Values.vulture.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.vulture.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.vulture.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.vulture.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: grafana-tempo-vulture
+          image: {{ template "grafana-tempo.vultureImage" . }}
+          imagePullPolicy: {{ .Values.vulture.image.pullPolicy }}
+          {{- if .Values.vulture.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.vulture.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.vulture.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.vulture.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -prometheus-listen-address=0.0.0.0:{{ .Values.vulture.containerPorts.http }}
+            - -tempo-push-url=http://{{ template "grafana-tempo.distributor.fullname" . }}
+            - -tempo-query-url=http://{{ template "grafana-tempo.query-frontend.fullname" . }}:{{ .Values.queryFrontend.service.ports.http }}
+          {{- end }}
+          {{- if .Values.vulture.extraEnvVars }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          envFrom:
+            {{- if .Values.vulture.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.vulture.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.vulture.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.vulture.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          ports:
+            - containerPort: {{ .Values.vulture.containerPorts.http }}
+              name: http
+          {{- if .Values.vulture.resources }}
+          resources: {{- toYaml .Values.vulture.resources | nindent 12 }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.vulture.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.vulture.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vulture.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /metrics
+              port: {{ .Values.vulture.containerPorts.http }}
+          {{- end }}
+          {{- if .Values.vulture.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.vulture.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vulture.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /metrics
+              port: {{ .Values.vulture.containerPorts.http }}
+          {{- end }}
+          {{- if .Values.vulture.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.vulture.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vulture.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- end }}
+          {{- if .Values.vulture.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: tempo-config
+              mountPath: /bitnami/grafana-tempo/conf
+          {{- if .Values.vulture.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.vulture.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.vulture.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.vulture.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: tempo-config
+          configMap:
+            name: {{ template "grafana-tempo.tempoConfigmapName" . }}
+        {{- if .Values.vulture.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.vulture.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

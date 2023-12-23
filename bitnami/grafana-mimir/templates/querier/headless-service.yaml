@@ -1,0 +1,47 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name:  {{ template "grafana-mimir.querier.fullname" . }}-headless
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: querier
+  {{- if or .Values.commonAnnotations .Values.querier.service.headless.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.querier.service.headless.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  publishNotReadyAddresses: true
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: http
+      port: {{ .Values.querier.service.ports.http }}
+      targetPort: http
+      protocol: TCP
+      {{- if and (or (eq .Values.querier.service.type "NodePort") (eq .Values.querier.service.type "LoadBalancer")) (not (empty .Values.querier.service.nodePorts.http)) }}
+      nodePort: {{ .Values.querier.service.nodePorts.http }}
+      {{- else if eq .Values.querier.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: grpc
+      port: {{ .Values.querier.service.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      {{- if and (or (eq .Values.querier.service.type "NodePort") (eq .Values.querier.service.type "LoadBalancer")) (not (empty .Values.querier.service.nodePorts.grpc)) }}
+      nodePort: {{ .Values.querier.service.nodePorts.grpc }}
+      {{- else if eq .Values.querier.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.querier.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.querier.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.querier.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: querier

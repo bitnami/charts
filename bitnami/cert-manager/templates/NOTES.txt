@@ -1,0 +1,13 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
+In order to begin using certificates, you will need to set up Issuer or ClustersIssuer resources.
+
+https://cert-manager.io/docs/configuration/
+
+To configure a new ingress to automatically provision certificates, you will find some information in the following link:
+
+https://cert-manager.io/docs/usage/ingress/

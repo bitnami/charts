@@ -1,0 +1,45 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+command:
+  {{- $mongos := .Vars.mongos.replicaCount }}
+  {{- $shards := .Vars.shards }}
+  {{- $shardNodes := .Vars.shardsvr.dataNode.replicaCount }}
+  {{- $collection := printf "test_%s" (randAlpha 5) }}
+  {{- $dbUser := .Vars.auth.rootUser }}
+  {{- $dbPassword := .Vars.auth.rootPassword }}
+  {{- $authOptions := printf "-u %s -p %s" $dbUser $dbPassword }}
+  {{- $svcPort := .Vars.mongos.servicePerReplica.port }}
+  {{- $localEndpoint := printf "%s:%d" "localhost" .Vars.common.containerPorts.mongodb }}
+  mongos-check:
+    exec: mongosh --quiet {{ $authOptions }} {{ $localEndpoint }} --eval "db.createCollection('{{ $collection }}')"{{ range $e, $i := until $mongos }} && mongosh --quiet {{ $authOptions }} mongodb-sharded-{{ $i }}:{{ $svcPort }} --eval "db.getCollectionNames()" | grep {{ $collection }}{{ end }}
+    exit-status: 0
+    timeout: 20000
+  sharding-status:
+    exec: if [ "$(mongosh --quiet {{ $authOptions }} {{ $localEndpoint }} --eval 'sh.status()' | grep 'state.*1' | wc -l)" -ne {{ $shards }} ]; then exit 1; fi
+    exit-status: 0
+    timeout: 20000
+  shard-data-nodes:
+    exec: mongosh --quiet {{ $authOptions }} {{ $localEndpoint }} --eval "sh.status()"
+    exit-status: 0
+    stdout:
+    {{ range $e, $shard := until $shards }}
+    {{ range $e, $shardNode := until $shardNodes }}
+      - /host.*mongodb-sharded-shard{{ $shard }}-data-{{ $shardNode }}/
+    {{ end }}
+    {{ end }}
+    timeout: 20000
+  {{- $uid := .Vars.mongos.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.mongos.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+file:
+  /opt/bitnami/mongodb/conf/keyfile:
+    mode: "0600"
+    filetype: file
+    contents:
+      - "{{ .Vars.auth.replicaSetKey }}"
+    exists: true

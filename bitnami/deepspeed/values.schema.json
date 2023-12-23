@@ -1,0 +1,1479 @@
+{
+    "title": "Chart Values",
+    "type": "object",
+    "properties": {
+        "global": {
+            "type": "object",
+            "properties": {
+                "imageRegistry": {
+                    "type": "string",
+                    "description": "Global Docker image registry",
+                    "default": ""
+                },
+                "imagePullSecrets": {
+                    "type": "array",
+                    "description": "Global Docker registry secret names as an array",
+                    "default": [],
+                    "items": {}
+                },
+                "storageClass": {
+                    "type": "string",
+                    "description": "Global StorageClass for Persistent Volume(s)",
+                    "default": ""
+                }
+            }
+        },
+        "kubeVersion": {
+            "type": "string",
+            "description": "Override Kubernetes version",
+            "default": ""
+        },
+        "nameOverride": {
+            "type": "string",
+            "description": "String to partially override common.names.fullname",
+            "default": ""
+        },
+        "fullnameOverride": {
+            "type": "string",
+            "description": "String to fully override common.names.fullname",
+            "default": ""
+        },
+        "commonLabels": {
+            "type": "object",
+            "description": "Labels to add to all deployed objects",
+            "default": {}
+        },
+        "commonAnnotations": {
+            "type": "object",
+            "description": "Annotations to add to all deployed objects",
+            "default": {}
+        },
+        "clusterDomain": {
+            "type": "string",
+            "description": "Kubernetes cluster domain name",
+            "default": "cluster.local"
+        },
+        "extraDeploy": {
+            "type": "array",
+            "description": "Array of extra objects to deploy with the release",
+            "default": [],
+            "items": {}
+        },
+        "diagnosticMode": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable diagnostic mode (all probes will be disabled and the command will be overridden)",
+                    "default": false
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Command to override all containers in the deployments/statefulsets",
+                    "default": [
+                        "sleep"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Args to override all containers in the deployments/statefulsets",
+                    "default": [
+                        "infinity"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "registry": {
+                    "type": "string",
+                    "description": "Deepspeed image registry",
+                    "default": "docker.io"
+                },
+                "repository": {
+                    "type": "string",
+                    "description": "Deepspeed image repository",
+                    "default": "bitnami/deepspeed"
+                },
+                "tag": {
+                    "type": "string",
+                    "description": "Deepspeed image tag (immutable tags are recommended)",
+                    "default": "0.10.0-debian-11-r17"
+                },
+                "digest": {
+                    "type": "string",
+                    "description": "Deepspeed image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                    "default": ""
+                },
+                "pullPolicy": {
+                    "type": "string",
+                    "description": "Deepspeed image pull policy",
+                    "default": "IfNotPresent"
+                },
+                "pullSecrets": {
+                    "type": "array",
+                    "description": "Specify docker-registry secret names as an array",
+                    "default": [],
+                    "items": {}
+                }
+            }
+        },
+        "source": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "Where the source comes from: Possible values: configmap, git, custom",
+                    "default": "configmap"
+                },
+                "launchCommand": {
+                    "type": "string",
+                    "description": "deepspeed command to run over the project",
+                    "default": ""
+                },
+                "configMap": {
+                    "type": "object",
+                    "description": "List of files of the project",
+                    "default": {}
+                },
+                "existingConfigMap": {
+                    "type": "string",
+                    "description": "Name of a configmap containing the files of the project",
+                    "default": ""
+                },
+                "git": {
+                    "type": "object",
+                    "properties": {
+                        "repository": {
+                            "type": "string",
+                            "description": "Repository that holds the files",
+                            "default": ""
+                        },
+                        "revision": {
+                            "type": "string",
+                            "description": "Revision from the repository to checkout",
+                            "default": ""
+                        },
+                        "extraVolumeMounts": {
+                            "type": "array",
+                            "description": "Add extra volume mounts for the Git container",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                }
+            }
+        },
+        "config": {
+            "type": "object",
+            "properties": {
+                "defaultHostFile": {
+                    "type": "string",
+                    "description": "Host file generated by default (only edit if you know what you are doing)",
+                    "default": "{{- $workers := $.Values.worker.replicaCount | int }}\n{{- range $i, $e := until $workers }}\n{{ include \"deepspeed.v0.worker.fullname\" $ }}-{{ $i }}.{{ printf \"%s-headless\" (include \"deepspeed.v0.worker.fullname\" $) }} slots={{ $.Values.worker.slotsPerNode }}\n{{- end }}\n"
+                },
+                "overrideHostFile": {
+                    "type": "string",
+                    "description": "Override default host file with the content in this value",
+                    "default": ""
+                },
+                "existingHostFileConfigMap": {
+                    "type": "string",
+                    "description": "Name of a ConfigMap containing the hostfile",
+                    "default": ""
+                },
+                "defaultSSHClient": {
+                    "type": "string",
+                    "description": "Default SSH client configuration for the client node (only edit if you know what you are doing)",
+                    "default": "{{- $workers := $.Values.worker.replicaCount | int }}\n{{- range $i, $e := until $workers }}\nHost {{ include \"deepspeed.v0.worker.fullname\" $ }}-{{ $i }}.{{ printf \"%s-headless\" (include \"deepspeed.v0.worker.fullname\" $) }}\n  Port {{ $.Values.worker.containerPorts.ssh }}\n  IdentityFile /bitnami/ssh/client-private-key/id_rsa\n  StrictHostKeyChecking no\n{{- end }}\n"
+                },
+                "overrideSSHClient": {
+                    "type": "string",
+                    "description": "Override default SSH cliient configuration with the content in this value",
+                    "default": ""
+                },
+                "existingSSHClientConfigMap": {
+                    "type": "string",
+                    "description": "Name of a ConfigMap containing the SSH client configuration",
+                    "default": ""
+                },
+                "defaultSSHServer": {
+                    "type": "string",
+                    "description": "Default SSH Server configuration for the worker nodes (only edit if you know what you are doing)",
+                    "default": "Port {{ .Values.worker.containerPorts.ssh }}\nPasswordAuthentication no\nUsePAM no\nPermitUserEnvironment yes\n"
+                },
+                "overrideSSHServer": {
+                    "type": "string",
+                    "description": "Overidde SSH Server configuration with the content in this value",
+                    "default": ""
+                },
+                "existingSSHServerConfigMap": {
+                    "type": "string",
+                    "description": "Name of a ConfigMap with with the SSH Server configuration",
+                    "default": ""
+                },
+                "sshPrivateKey": {
+                    "type": "string",
+                    "description": "Private key for the client node to connect to the worker nodes",
+                    "default": ""
+                },
+                "existingSSHKeySecret": {
+                    "type": "string",
+                    "description": "Name of a secret containing the ssh private key",
+                    "default": ""
+                }
+            }
+        },
+        "client": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable Client deployment",
+                    "default": true
+                },
+                "useJob": {
+                    "type": "boolean",
+                    "description": "Deploy as job",
+                    "default": false
+                },
+                "backoffLimit": {
+                    "type": "number",
+                    "description": "set backoff limit of the job",
+                    "default": 10
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array with extra environment variables to add to client nodes",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap containing extra env vars for client nodes",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Name of existing Secret containing extra env vars for client nodes",
+                    "default": ""
+                },
+                "annotations": {
+                    "type": "object",
+                    "description": "Annotations for the client deployment",
+                    "default": {}
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "string",
+                    "description": "Client termination grace period (in seconds)",
+                    "default": ""
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe on Client nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 30
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 20
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe on Client nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 30
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 20
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe on Client containers",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 30
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Custom startupProbe that overrides the default one",
+                    "default": {}
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the client containers",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the client containers",
+                            "default": {}
+                        }
+                    }
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Client pods' Security Context",
+                            "default": true
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Set Client pod's Security Context fsGroup",
+                            "default": 1001
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set Client container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Client containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set Client containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set Client containers' Security Context runAsGroup",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set Client containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set Client containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set Client container's privilege escalation",
+                            "default": false
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "Set Client container's Security Context runAsNonRoot",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "for the client container(s) to automate configuration before or after startup",
+                    "default": {}
+                },
+                "runtimeClassName": {
+                    "type": "string",
+                    "description": "Name of the runtime class to be used by pod(s)",
+                    "default": ""
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "client pods host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "labels": {
+                    "type": "object",
+                    "description": "Extra labels for the client deployment",
+                    "default": {}
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for client pods",
+                    "default": {}
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Annotations for client pods",
+                    "default": {}
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod affinity preset. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod anti-affinity preset. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Node affinity preset type. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Node label key to match. Ignored if `client.affinity` is set",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "Node label values to match. Ignored if `client.affinity` is set",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Affinity for Client pods assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Node labels for Client pods assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Tolerations for Client pods assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "topologySpreadConstraints": {
+                    "type": "array",
+                    "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains",
+                    "default": [],
+                    "items": {}
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "Client pods' priorityClassName",
+                    "default": ""
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Kubernetes pod scheduler registry",
+                    "default": ""
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Client statefulset strategy type",
+                            "default": "RollingUpdate"
+                        },
+                        "rollingUpdate": {
+                            "type": "object",
+                            "description": "Client statefulset rolling update configuration parameters",
+                            "default": {}
+                        }
+                    }
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the Client pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the Client container(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Add additional sidecar containers to the Client pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "enableDefaultInitContainers": {
+                    "type": "boolean",
+                    "description": "Deploy default init containers",
+                    "default": true
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Add additional init containers to the Client pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "networkPolicy": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable creation of NetworkPolicy resources",
+                            "default": false
+                        },
+                        "extraIngress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraEgress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "serviceAccount": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Enable creation of ServiceAccount for Client pods",
+                            "default": false
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "The name of the ServiceAccount to use",
+                            "default": ""
+                        },
+                        "automountServiceAccountToken": {
+                            "type": "boolean",
+                            "description": "Allows auto mount of ServiceAccountToken on the serviceAccount created",
+                            "default": false
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for the ServiceAccount",
+                            "default": {}
+                        }
+                    }
+                },
+                "persistence": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Use a PVC to persist data",
+                            "default": false
+                        },
+                        "storageClass": {
+                            "type": "string",
+                            "description": "discourse & sidekiq data Persistent Volume Storage Class",
+                            "default": ""
+                        },
+                        "existingClaim": {
+                            "type": "string",
+                            "description": "Use a existing PVC which must be created manually before bound",
+                            "default": ""
+                        },
+                        "mountPath": {
+                            "type": "string",
+                            "description": "Path to mount the volume at",
+                            "default": "/bitnami/deepspeed/data"
+                        },
+                        "accessModes": {
+                            "type": "array",
+                            "description": "Persistent Volume Access Mode",
+                            "default": [
+                                "ReadWriteOnce"
+                            ],
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "dataSource": {
+                            "type": "object",
+                            "description": "Custom PVC data source",
+                            "default": {}
+                        },
+                        "selector": {
+                            "type": "object",
+                            "description": "Selector to match an existing Persistent Volume for the client data PVC",
+                            "default": {}
+                        },
+                        "size": {
+                            "type": "string",
+                            "description": "Size of data volume",
+                            "default": "8Gi"
+                        },
+                        "labels": {
+                            "type": "object",
+                            "description": "Persistent Volume labels",
+                            "default": {}
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Persistent Volume annotations",
+                            "default": {}
+                        }
+                    }
+                }
+            }
+        },
+        "worker": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable Worker deployment",
+                    "default": true
+                },
+                "slotsPerNode": {
+                    "type": "number",
+                    "description": "Number of slots available per worker node",
+                    "default": 1
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array with extra environment variables to add to client nodes",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap containing extra env vars for client nodes",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Name of existing Secret containing extra env vars for client nodes",
+                    "default": ""
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "replicaCount": {
+                    "type": "number",
+                    "description": "Number of Worker replicas to deploy",
+                    "default": 3
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "string",
+                    "description": "Worker termination grace period (in seconds)",
+                    "default": ""
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "ssh": {
+                            "type": "number",
+                            "description": "SSH port for Worker",
+                            "default": 2222
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe on Worker nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 30
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe on Worker nodes",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 30
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe on Worker containers",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 30
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Custom startupProbe that overrides the default one",
+                    "default": {}
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the client containers",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the client containers",
+                            "default": {}
+                        }
+                    }
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Worker pods' Security Context",
+                            "default": true
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Set Worker pod's Security Context fsGroup",
+                            "default": 1001
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set Worker container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Worker containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set Worker containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set Worker containers' Security Context runAsGroup",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set Worker containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set Worker containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set Worker container's privilege escalation",
+                            "default": false
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "Set Worker container's Security Context runAsNonRoot",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "for the client container(s) to automate configuration before or after startup",
+                    "default": {}
+                },
+                "runtimeClassName": {
+                    "type": "string",
+                    "description": "Name of the runtime class to be used by pod(s)",
+                    "default": ""
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "client pods host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "labels": {
+                    "type": "object",
+                    "description": "Labels for the worker deployment",
+                    "default": {}
+                },
+                "annotations": {
+                    "type": "object",
+                    "description": "Annotations for the worker deployment",
+                    "default": {}
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for client pods",
+                    "default": {}
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Annotations for client pods",
+                    "default": {}
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod affinity preset. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod anti-affinity preset. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Node affinity preset type. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Node label key to match. Ignored if `client.affinity` is set",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "Node label values to match. Ignored if `client.affinity` is set",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Affinity for Worker pods assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Node labels for Worker pods assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Tolerations for Worker pods assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "topologySpreadConstraints": {
+                    "type": "array",
+                    "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains",
+                    "default": [],
+                    "items": {}
+                },
+                "podManagementPolicy": {
+                    "type": "string",
+                    "description": "Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join",
+                    "default": "Parallel"
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "Worker pods' priorityClassName",
+                    "default": ""
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Kubernetes pod scheduler registry",
+                    "default": ""
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Worker statefulset strategy type",
+                            "default": "RollingUpdate"
+                        },
+                        "rollingUpdate": {
+                            "type": "object",
+                            "description": "Worker statefulset rolling update configuration parameters",
+                            "default": {}
+                        }
+                    }
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the Worker pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the Worker container(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Add additional sidecar containers to the Worker pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "enableDefaultInitContainers": {
+                    "type": "boolean",
+                    "description": "Deploy default init containers",
+                    "default": true
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Add additional init containers to the Worker pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "headlessServiceAnnotations": {
+                    "type": "object",
+                    "description": "Annotations for the headless service",
+                    "default": {}
+                },
+                "externalAccess": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Create a service per worker node",
+                            "default": false
+                        },
+                        "service": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Worker service type",
+                                    "default": "ClusterIP"
+                                },
+                                "loadBalancerIPs": {
+                                    "type": "array",
+                                    "description": "Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "externalIPs": {
+                                    "type": "array",
+                                    "description": "Use distinct service host IPs to configure Kafka external listener when service type is NodePort. Length must be the same as replicaCount",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "loadBalancerAnnotations": {
+                                    "type": "array",
+                                    "description": "Array of load balancer annotations for each Kafka broker. Length must be the same as replicaCount",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "publishNotReadyAddresses": {
+                                    "type": "boolean",
+                                    "description": "Indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready",
+                                    "default": false
+                                },
+                                "ports": {
+                                    "type": "object",
+                                    "properties": {
+                                        "ssh": {
+                                            "type": "number",
+                                            "description": "Worker GRPC service port",
+                                            "default": 22
+                                        }
+                                    }
+                                },
+                                "nodePorts": {
+                                    "type": "array",
+                                    "description": "Array of node ports used for each Kafka broker. Length must be the same as replicaCount",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "sessionAffinityConfig": {
+                                    "type": "object",
+                                    "description": "Additional settings for the sessionAffinity",
+                                    "default": {}
+                                },
+                                "sessionAffinity": {
+                                    "type": "string",
+                                    "description": "Control where client requests go, to the same pod or round-robin",
+                                    "default": "None"
+                                },
+                                "loadBalancerSourceRanges": {
+                                    "type": "array",
+                                    "description": "Worker service Load Balancer sources",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "externalTrafficPolicy": {
+                                    "type": "string",
+                                    "description": "Worker service external traffic policy",
+                                    "default": "Cluster"
+                                },
+                                "labels": {
+                                    "type": "object",
+                                    "description": "Additional custom labels for Worker service",
+                                    "default": {}
+                                },
+                                "annotations": {
+                                    "type": "object",
+                                    "description": "Additional custom annotations for Worker service",
+                                    "default": {}
+                                },
+                                "extraPorts": {
+                                    "type": "array",
+                                    "description": "Extra ports to expose in the Worker service",
+                                    "default": [],
+                                    "items": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "serviceAccount": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Enable creation of ServiceAccount for Data Coordinator pods",
+                            "default": false
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "The name of the ServiceAccount to use",
+                            "default": ""
+                        },
+                        "automountServiceAccountToken": {
+                            "type": "boolean",
+                            "description": "Allows auto mount of ServiceAccountToken on the serviceAccount created",
+                            "default": false
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for the ServiceAccount",
+                            "default": {}
+                        }
+                    }
+                },
+                "networkPolicy": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable creation of NetworkPolicy resources",
+                            "default": false
+                        },
+                        "allowExternal": {
+                            "type": "boolean",
+                            "description": "The Policy model to apply",
+                            "default": true
+                        },
+                        "extraIngress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraEgress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "persistence": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Use a PVC to persist data",
+                            "default": false
+                        },
+                        "storageClass": {
+                            "type": "string",
+                            "description": "discourse & sidekiq data Persistent Volume Storage Class",
+                            "default": ""
+                        },
+                        "existingClaim": {
+                            "type": "string",
+                            "description": "Use a existing PVC which must be created manually before bound",
+                            "default": ""
+                        },
+                        "mountPath": {
+                            "type": "string",
+                            "description": "Path to mount the volume at",
+                            "default": "/bitnami/deepspeed/data"
+                        },
+                        "accessModes": {
+                            "type": "array",
+                            "description": "Persistent Volume Access Mode",
+                            "default": [
+                                "ReadWriteOnce"
+                            ],
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "selector": {
+                            "type": "object",
+                            "description": "Selector to match an existing Persistent Volume for the worker data PVC",
+                            "default": {}
+                        },
+                        "dataSource": {
+                            "type": "object",
+                            "description": "Custom PVC data source",
+                            "default": {}
+                        },
+                        "size": {
+                            "type": "string",
+                            "description": "Size of data volume",
+                            "default": "8Gi"
+                        },
+                        "labels": {
+                            "type": "object",
+                            "description": "Persistent Volume labels",
+                            "default": {}
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Persistent Volume annotations",
+                            "default": {}
+                        }
+                    }
+                }
+            }
+        },
+        "gitImage": {
+            "type": "object",
+            "properties": {
+                "registry": {
+                    "type": "string",
+                    "description": "Git image registry",
+                    "default": "docker.io"
+                },
+                "repository": {
+                    "type": "string",
+                    "description": "Git image repository",
+                    "default": "bitnami/git"
+                },
+                "tag": {
+                    "type": "string",
+                    "description": "Git image tag (immutable tags are recommended)",
+                    "default": "2.41.0-debian-11-r16"
+                },
+                "digest": {
+                    "type": "string",
+                    "description": "Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                    "default": ""
+                },
+                "pullPolicy": {
+                    "type": "string",
+                    "description": "Git image pull policy",
+                    "default": "IfNotPresent"
+                },
+                "pullSecrets": {
+                    "type": "array",
+                    "description": "Specify docker-registry secret names as an array",
+                    "default": [],
+                    "items": {}
+                }
+            }
+        },
+        "volumePermissions": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable init container that changes volume permissions in the data directory",
+                    "default": false
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "Init container volume-permissions image registry",
+                            "default": "docker.io"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "Init container volume-permissions image repository",
+                            "default": "bitnami/os-shell"
+                        },
+                        "tag": {
+                            "type": "string",
+                            "description": "Init container volume-permissions image tag (immutable tags are recommended)",
+                            "default": "11-debian-11-r16"
+                        },
+                        "digest": {
+                            "type": "string",
+                            "description": "Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                            "default": ""
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "Init container volume-permissions image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "Specify docker-registry secret names as an array",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the container",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the container",
+                            "default": {}
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

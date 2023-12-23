@@ -1,0 +1,68 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.exposeManagementConsole .Values.mgmtIngress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ printf "%s-management" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if or .Values.mgmtIngress.annotations .Values.commonAnnotations .Values.mgmtIngress.certManager }}
+  annotations:
+    {{- if .Values.mgmtIngress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- if or .Values.mgmtIngress.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  {{- if and .Values.mgmtIngress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.mgmtIngress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.mgmtIngress.hostname }}
+    - host: {{ .Values.mgmtIngress.hostname | quote }}
+      http:
+        paths:
+          {{- if .Values.mgmtIngress.extraPaths }}
+          {{- toYaml .Values.mgmtIngress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.mgmtIngress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.mgmtIngress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "mgmt" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.mgmtIngress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "mgmt" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.mgmtIngress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.mgmtIngress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.mgmtIngress.tls .Values.mgmtIngress.extraTls }}
+  tls:
+    {{- if .Values.mgmtIngress.tls }}
+    - hosts:
+        - {{ .Values.mgmtIngress.hostname | quote }}
+        {{- range .Values.mgmtIngress.extraHosts }}
+        - {{ .name | quote }}
+        {{- end }}
+      secretName: {{ printf "%s-tls" .Values.mgmtIngress.hostname | trunc 63 | trimSuffix "-" }}
+    {{- end }}
+    {{- if .Values.mgmtIngress.extraTls }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.mgmtIngress.extraTls "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

@@ -1,0 +1,197 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.promtail.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: DaemonSet
+metadata:
+  name: {{ template "grafana-loki.promtail.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.promtail.image "chart" .Chart ) ) }}  
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-loki
+    app.kubernetes.io/component: promtail
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.promtail.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.promtail.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.promtail.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: grafana-loki
+      app.kubernetes.io/component: promtail
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/loki-configmap.yaml") . | sha256sum }}
+        {{- if .Values.promtail.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.promtail.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: grafana-loki
+        app.kubernetes.io/component: promtail
+        loki-gossip-member: "true"
+    spec:
+      serviceAccountName: {{ template "grafana-loki.promtail.serviceAccountName" . }}
+      {{- include "grafana-loki.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.promtail.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.promtail.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.promtail.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.promtail.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.promtail.podAffinityPreset "component" "promtail" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.promtail.podAntiAffinityPreset "component" "promtail" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.promtail.nodeAffinityPreset.type "key" .Values.promtail.nodeAffinityPreset.key "values" .Values.promtail.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.promtail.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.promtail.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.promtail.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.promtail.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.promtail.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.promtail.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.promtail.priorityClassName }}
+      priorityClassName: {{ .Values.promtail.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.promtail.schedulerName }}
+      schedulerName: {{ .Values.promtail.schedulerName }}
+      {{- end }}
+      {{- if .Values.promtail.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.promtail.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.promtail.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.promtail.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: promtail
+          image: {{ template "grafana-loki.promtail.image" . }}
+          imagePullPolicy: {{ .Values.loki.image.pullPolicy }}
+          {{- if .Values.promtail.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.promtail.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.promtail.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.promtail.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.promtail.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.promtail.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -config.file=/bitnami/promtail/conf/promtail.yaml
+          {{- if .Values.promtail.extraArgs }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.promtail.extraArgs "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          env:
+            - name: HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            {{- if .Values.promtail.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.promtail.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.promtail.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.promtail.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.promtail.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.promtail.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          ports:
+            - containerPort: {{ .Values.promtail.containerPorts.http }}
+              name: http
+          {{- if .Values.promtail.resources }}
+          resources: {{- toYaml .Values.promtail.resources | nindent 12 }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.promtail.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.promtail.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.promtail.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.promtail.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /ready
+              port: http
+          {{- end }}
+          {{- if .Values.promtail.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.promtail.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.promtail.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.promtail.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /ready
+              port: http
+          {{- end }}
+          {{- if .Values.promtail.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.promtail.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.promtail.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.promtail.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /ready
+              port: http
+          {{- end }}
+          {{- end }}
+          {{- if .Values.promtail.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.promtail.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: loki-config
+              mountPath: /bitnami/promtail/conf/promtail.yaml
+              subPath: promtail.yaml
+            - name: containers
+              mountPath: /var/lib/docker/containers
+              readOnly: true
+            - name: pods
+              mountPath: /var/log/pods
+              readOnly: true
+            - name: run
+              mountPath: /run/promtail
+          {{- if .Values.gateway.auth.enabled }}
+            - name: gateway-password
+              mountPath: /bitnami/promtail/conf/secrets
+          {{- end }}
+          {{- if .Values.promtail.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.promtail.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.promtail.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.promtail.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: loki-config
+          secret:
+            secretName: {{ template "grafana-loki.promtail.secretName" . }}
+        - name: containers
+          hostPath:
+            path: /var/lib/docker/containers
+        - name: pods
+          hostPath:
+            path: /var/log/pods
+        - name: run
+          hostPath:
+            path: /run/promtail
+      {{- if .Values.gateway.auth.enabled }}
+        - name: gateway-password
+          secret:
+            secretName: {{ include "grafana-loki.gateway.secretName" . }}
+            items:
+              - key: password
+                path: password
+      {{- end }}
+        {{- if .Values.promtail.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.promtail.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

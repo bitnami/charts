@@ -1,0 +1,50 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.imageAutomationController.metrics.enabled .Values.imageAutomationController.metrics.serviceMonitor.enabled  }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "flux.image-automation-controller.fullname" . }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.imageAutomationController.metrics.serviceMonitor.namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.imageAutomationController.image "chart" .Chart ) ) }}  
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.imageAutomationController.metrics.serviceMonitor.labels .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: flux
+    app.kubernetes.io/component: helm-controller
+  {{- if or .Values.imageAutomationController.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.imageAutomationController.metrics.serviceMonitor.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  jobLabel: {{ .Values.imageAutomationController.metrics.serviceMonitor.jobLabel | quote }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: image-automation-controller
+      {{- if .Values.imageAutomationController.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.imageAutomationController.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
+  endpoints:
+    - port: http-metrics
+      path: "/metrics"
+      {{- if .Values.imageAutomationController.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.imageAutomationController.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.imageAutomationController.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.imageAutomationController.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.imageAutomationController.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.imageAutomationController.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.imageAutomationController.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.imageAutomationController.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.imageAutomationController.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.imageAutomationController.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+    - {{ include "common.names.namespace" . | quote }}
+{{- end }}

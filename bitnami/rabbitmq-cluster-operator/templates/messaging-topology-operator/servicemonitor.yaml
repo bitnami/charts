@@ -1,0 +1,53 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.msgTopologyOperator.enabled .Values.msgTopologyOperator.metrics.serviceMonitor.enabled .Values.msgTopologyOperator.metrics.service.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "rmqco.msgTopologyOperator.fullname" . }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.msgTopologyOperator.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.msgTopologyOperator.metrics.serviceMonitor.labels .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: messaging-topology-operator
+    app.kubernetes.io/part-of: rabbitmq
+    {{- if .Values.msgTopologyOperator.metrics.serviceMonitor.additionalLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.metrics.serviceMonitor.additionalLabels "context" $) | nindent 4 }}
+    {{- end }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.msgTopologyOperator.metrics.serviceMonitor.namespace | quote }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  jobLabel: {{ .Values.msgTopologyOperator.metrics.serviceMonitor.jobLabel }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: messaging-topology-operator
+      # We need an extra label for the ServiceMonitor to scrape it correctly
+      type: metrics
+      {{- if .Values.msgTopologyOperator.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.msgTopologyOperator.metrics.serviceMonitor.selector "context" $ ) | nindent 6 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ include "common.names.namespace" . | quote }}
+  endpoints:
+    - port: http
+      {{- if .Values.msgTopologyOperator.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.msgTopologyOperator.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.msgTopologyOperator.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.msgTopologyOperator.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.msgTopologyOperator.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.msgTopologyOperator.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.msgTopologyOperator.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{ toYaml .Values.msgTopologyOperator.metrics.serviceMonitor.metricRelabelings | nindent 8 }}
+      {{- end }}
+      {{- if .Values.msgTopologyOperator.metrics.serviceMonitor.relabelings }}
+      relabelings: {{ toYaml .Values.msgTopologyOperator.metrics.serviceMonitor.relabelings | nindent 8 }}
+      {{- end }}
+{{- end }}

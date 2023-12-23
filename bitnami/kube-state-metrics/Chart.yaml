@@ -1,26 +1,31 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Analytics
+  licenses: Apache-2.0
+  images: |
+    - name: kube-state-metrics
+      image: docker.io/bitnami/kube-state-metrics:2.10.1-debian-11-r1
 apiVersion: v2
-appVersion: 1.9.7
+appVersion: 2.10.1
 dependencies:
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
-    version: 1.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: kube-state-metrics is a simple service that listens to the Kubernetes API server and generates metrics about the state of the objects.
-engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/kube-state-metrics
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/kube-state-metrics/img/kube-state-metrics-stack-220x234.png
 keywords:
-  - prometheus
-  - kube-state-metrics
-  - monitoring
+- prometheus
+- kube-state-metrics
+- monitoring
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
 name: kube-state-metrics
 sources:
-  - https://github.com/bitnami/bitnami-docker-kube-state-metrics
-  - https://github.com/kubernetes/kube-state-metrics
-version: 1.2.0
+- https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics
+version: 3.8.6

@@ -1,0 +1,48 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+http:
+  http://localhost:{{ .Vars.containerPorts.http }}:
+    status: 302
+    no-follow-redirects: true
+  https://localhost:{{ .Vars.containerPorts.https }}:
+    status: 302
+    allow-insecure: true
+    no-follow-redirects: true
+command:
+  prestashop-cli-list-commands:
+    exec: /opt/bitnami/php/bin/php /opt/bitnami/prestashop/bin/console prestashop:config get PS_COOKIE_CHECKIP
+    exit-status: 0
+    stdout:
+      - /PS_COOKIE_CHECKIP={{ (eq .Vars.prestashopCookieCheckIP "yes") | int }}/
+  {{- $uid := .Vars.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+file:
+  /etc/hosts:
+    exists: true
+    filetype: file
+    contents:
+    {{ range .Vars.hostAliases }}
+    {{ $ip := .ip }}
+    {{ range $host := .hostnames }}
+      - /{{ $ip }}.*{{ $host }}/
+    {{ end }}
+    {{ end }}
+  /bitnami/prestashop:
+    exists: true
+    filetype: directory
+    mode: '2775'
+    owner: root
+  /opt/bitnami/prestashop/app/config/parameters.php:
+    mode: "0644"
+    filetype: file
+    exists: true
+    contents:
+      - /database_name.*{{ .Vars.mariadb.auth.database }}/
+      - /database_user.*{{ .Vars.mariadb.auth.username }}/
+      - /database_password.*{{ .Vars.mariadb.auth.password }}/

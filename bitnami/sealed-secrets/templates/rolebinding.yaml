@@ -1,0 +1,74 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{ if .Values.rbac.create }}
+kind: RoleBinding
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+metadata:
+  name: {{ printf "%s-key-admin" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.rbac.labels }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.labels "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ printf "%s-key-admin" (include "common.names.fullname" .) }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "sealed-secrets.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+---
+kind: RoleBinding
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+metadata:
+  name: {{ printf "%s-service-proxier" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.rbac.labels }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.labels "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ printf "%s-service-proxier" (include "common.names.fullname" .) }}
+subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: Group
+    name: system:authenticated
+{{ end }}
+{{ if and (and .Values.rbac.create .Values.rbac.namespacedRoles) (not .Values.rbac.clusterRole) }}
+---
+  {{- range $additionalNamespace := $.Values.additionalNamespaces }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ printf "%s" (include "sealed-secrets.namespacedRoleName" .) }}
+  namespace: {{ $additionalNamespace }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if $.Values.rbac.labels }}
+  {{- include "common.tplvalues.render" ( dict "value" $.Values.rbac.labels "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ printf "%s" (include "sealed-secrets.namespacedRoleName" .) }}
+subjects:
+  - apiGroup: ""
+    kind: ServiceAccount
+    name: {{ include "sealed-secrets.serviceAccountName" $ }}
+    namespace: {{ include "sealed-secrets.namespace" $ }}
+  {{ end }}
+{{ end }}

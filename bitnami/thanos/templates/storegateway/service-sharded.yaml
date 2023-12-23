@@ -1,0 +1,79 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.storegateway.enabled .Values.storegateway.sharded.enabled }}
+
+{{- $shards := int 0 }}
+{{- if .Values.storegateway.sharded.hashPartitioning.shards }}
+  {{- $shards = int .Values.storegateway.sharded.hashPartitioning.shards }}
+{{- else }}
+  {{- $shards = len .Values.storegateway.sharded.timePartitioning }}
+{{- end }}
+
+{{- range $index, $_ := until $shards }}
+apiVersion: v1
+kind: Service
+metadata:
+  {{- $svcNamePrefix := printf "%s-storegateway" (include "common.names.fullname" $) | trunc 61 | trimSuffix "-" }}
+  name: {{ printf "%s-%s" $svcNamePrefix (toString $index) }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: storegateway
+    shard: {{ $index | quote }}
+    {{- if and $.Values.metrics.enabled $.Values.metrics.serviceMonitor.enabled }}
+    prometheus-operator/monitor: 'true'
+    {{- end }}
+  {{- if or $.Values.storegateway.service.annotations $.Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list $.Values.storegateway.service.annotations $.Values.commonAnnotations ) "context" $ ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ $.Values.storegateway.service.type }}
+  {{- if ne "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.clusterIPs "context" $) ) }}
+  clusterIP: {{ index $.Values.storegateway.sharded.service.clusterIPs $index }}
+  {{- end }}
+  {{- if ne $.Values.storegateway.service.type "ClusterIP" }}
+  externalTrafficPolicy: {{ $.Values.storegateway.service.externalTrafficPolicy }}
+  {{- end }}
+  {{- if ne "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.loadBalancerIPs "context" $) ) }}
+  loadBalancerIP: {{ $.Values.storegateway.sharded.service.loadBalancerIPs }}
+  {{- end }}
+  {{- if and (eq $.Values.storegateway.service.type "LoadBalancer") $.Values.storegateway.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml $.Values.storegateway.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  ports:
+    - port: {{ if $.Values.storegateway.service.http }}{{ coalesce $.Values.storegateway.service.ports.http $.Values.storegateway.service.http.port }}{{ else }}{{ $.Values.storegateway.service.ports.http }}{{ end }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      {{- if ne "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.http.nodePorts "context" $) ) }}
+      nodePort: {{ index $.Values.storegateway.sharded.service.http.nodePorts $index }}
+      {{- else if eq $.Values.storegateway.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - port: {{ if $.Values.storegateway.service.grpc }}{{ coalesce $.Values.storegateway.service.ports.grpc $.Values.storegateway.service.grpc.port }}{{ else }}{{ $.Values.storegateway.service.ports.grpc }}{{ end }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+      {{- if ne "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.grpc.nodePorts "context" $) ) }}
+      nodePort: {{ index $.Values.storegateway.sharded.service.grpc.nodePorts $index }}
+      {{- else if eq $.Values.storegateway.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if $.Values.storegateway.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector:
+    {{- if $.Values.storegateway.service.labelSelectorsOverride }}
+    {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.service.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- else }}
+    {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.storegateway.podLabels $.Values.commonLabels ) "context" $ ) }}
+    {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: storegateway
+    shard: {{ $index | quote }}
+    {{- end }}
+---
+{{- end }}
+{{- end }}

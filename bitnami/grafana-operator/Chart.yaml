@@ -1,28 +1,33 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Analytics
+  licenses: Apache-2.0
+  images: |
+    - name: grafana-operator
+      image: docker.io/bitnami/grafana-operator:5.6.0-debian-11-r0
+    - name: grafana
+      image: docker.io/bitnami/grafana:10.2.2-debian-11-r3
 apiVersion: v2
-appVersion: 3.8.1
+appVersion: 5.6.0
 dependencies:
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
-    version: 1.x.x
-description: Kubernetes Operator based on the Operator SDK for creating and managing Grafana instances and dashboards.
-engine: gotpl
-home: https://github.com/integr8ly/grafana-operator
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: Grafana Operator is a Kubernetes operator that enables the installation and management of Grafana instances, dashboards and plugins.
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/grafana/img/grafana-stack-220x234.png
 keywords:
-  - grafana
-  - operator
-  - monitoring
+- grafana
+- operator
+- monitoring
 maintainers:
-  - name: cellebyte
-    url: cellebyte@gmail.com
-  - email: containers@bitnami.com
-    name: Bitnami
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
 name: grafana-operator
 sources:
-  - https://github.com/integr8ly/grafana-operator
-  - https://github.com/bitnami/bitnami-docker-grafana-operator
-version: 0.2.0
+- https://github.com/bitnami/charts/tree/main/bitnami/grafana-operator
+version: 3.5.11

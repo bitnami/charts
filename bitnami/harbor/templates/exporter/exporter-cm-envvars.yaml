@@ -1,0 +1,34 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.metrics.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "harbor.exporter" . }}-envvars
+  namespace: {{ .Release.Namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.exporter.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: exporter
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  LOG_LEVEL: {{ .Values.logLevel | quote }}
+  HARBOR_EXPORTER_PORT: {{ .Values.exporter.containerPorts.metrics | quote }}
+  HARBOR_EXPORTER_METRICS_PATH: {{ .Values.metrics.path | quote }}
+  HARBOR_METRIC_NAMESPACE: harbor
+  HARBOR_METRIC_SUBSYSTEM: exporter
+  HARBOR_REDIS_NAMESPACE: {{ .Values.jobservice.redisNamespace | quote }}
+  HARBOR_SERVICE_SCHEME: {{ ternary "https" "http" .Values.internalTLS.enabled | quote }}
+  HARBOR_SERVICE_HOST: {{ include "harbor.core" . | quote }}
+  HARBOR_SERVICE_PORT: {{ ternary .Values.core.service.ports.https .Values.core.service.ports.http .Values.internalTLS.enabled | quote }}
+  HARBOR_DATABASE_HOST: {{ include "harbor.database.host" . | quote }}
+  HARBOR_DATABASE_PORT: {{ include "harbor.database.port" . | quote  }}
+  HARBOR_DATABASE_USERNAME: {{ include "harbor.database.username" . | quote }}
+  HARBOR_DATABASE_DBNAME: {{ include "harbor.database.coreDatabase" . | quote }}
+  HARBOR_DATABASE_SSLMODE: {{ include "harbor.database.sslmode" . | quote }}
+{{- end }}

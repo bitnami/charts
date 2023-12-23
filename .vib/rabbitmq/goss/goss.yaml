@@ -1,0 +1,55 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+addr:
+  tcp://rabbitmq:{{ .Vars.service.ports.amqp }}:
+    reachable: true
+  tcp://rabbitmq:{{ .Vars.service.ports.epmd }}:
+    reachable: true
+  tcp://rabbitmq:{{ .Vars.service.ports.dist }}:
+    reachable: true
+file:
+  {{ .Vars.persistence.mountPath }}:
+    exists: true
+    filetype: symlink
+    mode: "0777"
+    owner: root
+  /bitnami/rabbitmq/conf:
+    exists: true
+    filetype: directory
+    mode: "3777"
+    owner: root
+command:
+  {{- $nodes := .Vars.replicaCount }}
+  rabbitmqctl-cluster-status:
+    exec: rabbitmqctl cluster_status
+    exit-status: 0
+    stdout:
+    {{ range $e, $i := until $nodes }}
+      - /rabbitmq-{{ $i }}.rabbitmq-headless/
+    {{ end }}
+  rabbitmqctl-replication-check:
+    {{- $vhost := printf "vhost_%s" (randAlpha 5) }}
+    exec: rabbitmqctl add_vhost {{ $vhost }} && sleep 2 {{ range $e, $i := until $nodes }} && rabbitmqctl --node rabbit@rabbitmq-{{ $i }} list_vhosts | grep -q {{ $vhost }} {{ end }}
+    exit-status: 0
+  rabbitmq-plugins-enabled:
+    exec: rabbitmq-plugins list --enabled
+    exit-status: 0
+    stdout:
+    {{ range $plugin := (split " " .Vars.extraPlugins) }}
+      - "{{ $plugin }}"
+    {{ end }}
+  {{- $uid := .Vars.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+  {{ if .Vars.serviceAccount.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}

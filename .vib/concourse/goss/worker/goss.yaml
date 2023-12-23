@@ -1,0 +1,36 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+file:
+  /bitnami/concourse/workdir:
+    exists: true
+    filetype: directory
+    mode: "2777"
+    owner: root
+command:
+  {{- $user := (split ":" .Vars.secrets.localUsers)._0 }}
+  {{- $pwd := (split ":" .Vars.secrets.localUsers)._1 }}
+  {{- $target := printf "target_%s" (randAlphaNum 5 | toLower) }}
+  {{- $port := .Vars.service.web.ports.http }}
+  check-running-workers:
+    exec: fly -t {{ $target }} login -c http://concourse-web:{{ $port }} -u {{ $user }} -p '{{ $pwd }}' && fly -t {{ $target }} workers | grep 'running' | wc -l
+    exit-status: 0
+    stdout:
+      - "{{ .Vars.worker.replicaCount }}"
+  check-ports-config:
+    exec: $(echo $CONCOURSE_BIND_PORT | grep -q {{ .Vars.worker.containerPorts.garden }}) && $(echo $CONCOURSE_HEALTHCHECK_BIND_PORT | grep -q {{ .Vars.worker.containerPorts.health }}) && $(echo $CONCOURSE_BAGGAGECLAIM_BIND_PORT | grep -q {{ .Vars.worker.containerPorts.baggageclaim }}) && $(echo $CONCOURSE_BAGGAGECLAIM_DEBUG_BIND_PORT | grep -q {{ .Vars.worker.containerPorts.pprof }})
+    exit-status: 0
+  {{- $uid := .Vars.worker.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.worker.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+  {{ if .Vars.worker.serviceAccount.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}

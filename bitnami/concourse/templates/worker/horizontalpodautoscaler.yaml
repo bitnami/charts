@@ -1,0 +1,28 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.worker.autoscaling.enabled .Values.worker.autoscaling.maxReplicas }}
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: worker
+spec:
+  minReplicas: {{ .Values.worker.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.worker.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.worker.autoscaling.builtInMetrics }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.worker.autoscaling.builtInMetrics "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.worker.autoscaling.customMetrics }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.worker.autoscaling.customMetrics "context" $) | nindent 4 }}
+    {{- end }}
+  scaleTargetRef:
+    apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
+    kind: {{ .Values.worker.mode }}
+    name: {{ include "common.names.fullname" . }}
+{{- end }}

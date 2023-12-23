@@ -1,0 +1,61 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/aspnet-core"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/aspnet-core"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "aspnet-core/goss/goss.yaml",
+            "vars_file": "aspnet-core/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-aspnet-core"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/aspnet-core/cypress"
+            },
+            "endpoint": "lb-aspnet-core-http",
+            "app_protocol": "HTTP"
+          }
+        }
+      ]
+    }
+  }
+}

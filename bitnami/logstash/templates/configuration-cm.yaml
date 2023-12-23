@@ -1,9 +1,18 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{ if and (or .Values.input .Values.filter .Values.output) (not .Values.existingConfiguration) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "common.names.fullname" . }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
 {{- if (or .Values.input .Values.filter .Values.output) }}
   logstash.conf: |-
@@ -22,5 +31,5 @@ data:
     {{- include "common.tplvalues.render" (dict "value" .Values.output "context" $) | nindent 6 }}
     }
 {{- end }}
-{{ end }}
-{{ end }}
+{{- end }}
+{{- end }}

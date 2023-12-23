@@ -1,0 +1,7 @@
+{
+  "baseUrl": "http://localhost/",
+  "env": {
+    "user": "test_user",
+    "password": "ComplicatedPassword123!4"
+  }
+}

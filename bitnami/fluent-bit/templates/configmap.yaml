@@ -1,0 +1,31 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if (empty .Values.existingConfigMap) -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "fluent-bit.configuration.configMap" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: fluent-bit
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  custom_parsers.conf: |
+    {{- include "common.tplvalues.render" ( dict "value" .Values.config.customParsers "context" $ ) | nindent 4 }}
+  fluent-bit.conf: |
+    {{- include "common.tplvalues.render" ( dict "value" .Values.config.service "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.config.inputs "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.config.filters "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.config.outputs "context" $ ) | nindent 4 }}
+  {{- if  .Values.config.upstream }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.config.upstream "context" $ ) | nindent 2 }}
+  {{- end -}}
+  {{- if  .Values.config.extraFiles }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.config.extraFiles "context" $ ) | nindent 2 }}
+  {{- end -}}
+{{- end -}}

@@ -1,0 +1,129 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.gateway.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "grafana-mimir.gateway.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.gateway.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: gateway
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  nginx.conf: |+
+      worker_processes  5;  ## Default: 1
+      error_log  /dev/stderr;
+      pid        /tmp/nginx.pid;
+      worker_rlimit_nofile 8192;
+
+      events {
+        worker_connections  4096;  ## Default: 1024
+      }
+
+      http {
+        client_body_temp_path /tmp/client_temp;
+        proxy_temp_path       /tmp/proxy_temp_path;
+        fastcgi_temp_path     /tmp/fastcgi_temp;
+        uwsgi_temp_path       /tmp/uwsgi_temp;
+        scgi_temp_path        /tmp/scgi_temp;
+
+        default_type application/octet-stream;
+        log_format  main '$remote_addr - $remote_user [$time_local]  $status ' '"$request" $body_bytes_sent "$http_referer" ' '"$http_user_agent" "$http_x_forwarded_for"';
+
+        include /opt/bitnami/nginx/conf/resolvers.conf;
+
+        {{- if .Values.gateway.verboseLogging }}
+        access_log   /dev/stderr  main;
+        {{- else }}
+
+        map $status $loggable {
+          ~^[23]  0;
+          default 1;
+        }
+        access_log   /dev/stderr  main  if=$loggable;
+        {{- end }}
+
+        sendfile     on;
+        tcp_nopush   on;
+
+        # Ensure that X-Scope-OrgID is always present, default to the no_auth_tenant for backwards compatibility when multi-tenancy was turned off.
+        map $http_x_scope_orgid $ensured_x_scope_orgid {
+          default $http_x_scope_orgid;
+          "" "anonymous";
+        }
+
+        server {
+          listen             8080;
+
+          {{- if .Values.gateway.auth.enabled }}
+          auth_basic           "Mimir";
+          auth_basic_user_file /bitnami/nginx/secrets/.htpasswd;
+          {{- end }}
+
+          location = / {
+            return 200 'OK';
+            auth_basic off;
+          }
+
+          proxy_set_header X-Scope-OrgID $ensured_x_scope_orgid;
+
+          # Distributor endpoints
+          location /distributor {
+            proxy_pass      http://{{ template "grafana-mimir.distributor.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.distributor.service.ports.http }}$request_uri;
+          }
+          location = /api/v1/push {
+            proxy_pass      http://{{ template "grafana-mimir.distributor.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.distributor.service.ports.http }}$request_uri;
+          }
+          location /otlp/v1/metrics {
+            proxy_pass      http://{{ template "grafana-mimir.distributor.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.distributor.service.ports.http }}$request_uri;
+          }
+          {{- if .Values.alertmanager.enabled }}
+          # Alertmanager endpoints
+          location {{ .Values.mimir.httpPrefix.alertmanager }} {
+            proxy_pass      http://{{ template "grafana-mimir.alertmanager.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.alertmanager.service.ports.http }}$request_uri;
+          }
+          location = /multitenant_alertmanager/status {
+            proxy_pass      http://{{ template "grafana-mimir.alertmanager.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.alertmanager.service.ports.http }}$request_uri;
+          }
+          location = /api/v1/alerts {
+            proxy_pass      http://{{ template "grafana-mimir.alertmanager.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.alertmanager.service.ports.http }}$request_uri;
+          }
+          {{- end }}
+          {{- if .Values.ruler.enabled }}
+          # Ruler endpoints
+          location {{ .Values.mimir.httpPrefix.prometheus }}/config/v1/rules {
+            proxy_pass      http://{{ template "grafana-mimir.ruler.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.ruler.service.ports.http }}$request_uri;
+          }
+          location {{ .Values.mimir.httpPrefix.prometheus }}/api/v1/rules {
+            proxy_pass      http://{{ template "grafana-mimir.ruler.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.ruler.service.ports.http }}$request_uri;
+          }
+          location {{ .Values.mimir.httpPrefix.prometheus }}/api/v1/alerts {
+            proxy_pass      http://{{ template "grafana-mimir.ruler.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.ruler.service.ports.http }}$request_uri;
+          }
+          location = /ruler/ring {
+            proxy_pass      http://{{ template "grafana-mimir.ruler.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.ruler.service.ports.http }}$request_uri;
+          }
+          {{- end }}
+          # Rest of {{ .Values.mimir.httpPrefix.prometheus }} goes to the query frontend
+          location {{ .Values.mimir.httpPrefix.prometheus }} {
+            proxy_pass      http://{{ template "grafana-mimir.query-frontend.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.queryFrontend.service.ports.http }}$request_uri;
+          }
+          # Buildinfo endpoint can go to any component
+          location = /api/v1/status/buildinfo {
+            proxy_pass      http://{{ template "grafana-mimir.query-frontend.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.queryFrontend.service.ports.http }}$request_uri;
+          }
+          # Compactor endpoint for uploading blocks
+          location /api/v1/upload/block/ {
+            proxy_pass      http://{{ template "grafana-mimir.compactor.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.compactor.service.ports.http }}$request_uri;
+          }
+        }
+      }
+{{- end }}

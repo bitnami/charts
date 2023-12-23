@@ -1,0 +1,33 @@
+master:
+  replicaCount: 1
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+coordinating:
+  replicaCount: 1
+data:
+  replicaCount: 2
+ingest:
+  enabled: true
+  replicaCount: 1
+service:
+  type: LoadBalancer
+  ports:
+    restAPI: 80
+    transport: 9300
+sysctlImage:
+  enabled: true
+containerPorts:
+  transport: 9300
+dashboards:
+  enabled: true
+  service:
+    ports:
+      http: 5605
+extraConfig:
+  node:
+    store:
+      allow_mmap: false

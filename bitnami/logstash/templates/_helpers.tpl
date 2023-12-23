@@ -1,3 +1,8 @@
+{{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
@@ -7,18 +12,12 @@ Return the proper Logstash image name
 {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
-{{/*
-Return the proper Prometheus metrics image name
-*/}}
-{{- define "logstash.metrics.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
-{{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "logstash.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image) "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -33,11 +32,22 @@ Return the Logstash configuration configmap.
 {{- end -}}
 
 {{/*
+Create the name of the service account to use
+*/}}
+{{- define "logstash.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Check if there are rolling tags in the images
 */}}
 {{- define "logstash.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
-{{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}
 
 {{/*
@@ -45,7 +55,6 @@ Compile all warnings into a single message, and call fail.
 */}}
 {{- define "logstash.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "logstash.validateValues.metrics" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -54,11 +63,10 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Logstash - Monitoring API must be enabled when metrics are enabled */}}
-{{- define "logstash.validateValues.metrics" -}}
-{{- if and .Values.metrics.enabled (not .Values.enableMonitoringAPI) -}}
-logstash: metrics
-    The Logstash Monitoring API must be enabled when metrics are enabled (metrics.enabled=true).
-    Please enable the Montoring API (--set enableMonitoringAPI="true")
-{{- end -}}
+
+{{/*
+Return the proper image name (for the init container volume-permissions image)
+*/}}
+{{- define "logstash.volumePermissions.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
 {{- end -}}

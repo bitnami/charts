@@ -1,0 +1,54 @@
+{
+  "metadata": {
+    "name": "vib-testing-template-7t1b6",
+    "namespace": "default",
+    "labels": {
+      "vib": "testing"
+    }
+  },
+  "spec": {
+    "workflowMetadata": {
+      "labels": {
+        "vib": "testing"
+      }
+    },
+    "entrypoint": "echo",
+    "arguments": {
+      "parameters": [
+        {
+          "name": "message",
+          "value": "hello world"
+        }
+      ]
+    },
+    "templates": [
+      {
+        "name": "echo",
+        "inputs": {
+          "parameters": [
+            {
+              "name": "message",
+              "value": "{{workflow.parameters.message}}"
+            }
+          ]
+        },
+        "container": {
+          "name": "main",
+          "image": "bitnami/minideb",
+          "command": [
+            "echo"
+          ],
+          "args": [
+            "{{inputs.parameters.message}}"
+          ]
+        }
+      }
+    ],
+    "ttlStrategy": {
+      "secondsAfterCompletion": 300
+    },
+    "podGC": {
+      "strategy": "OnPodCompletion"
+    }
+  }
+}

@@ -1,0 +1,45 @@
+hub:
+  baseUrl: /
+  adminUser: test_user
+  password: ComplicatedPassword123!4
+  containerPorts:
+    http: 8082
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  serviceAccount:
+    create: true
+    automountServiceAccountToken: true
+  rbac:
+    create: true
+  # The label is needed for GOSS tests
+  podLabels:
+    hub.jupyter.org/network-access-hub: "true"
+  service:
+    ports:
+      http: 8082
+proxy:
+  service:
+    api:
+      ports:
+        http: 8000
+    public:
+      type: LoadBalancer
+      ports:
+        http: 80
+imagePuller:
+  enabled: true
+singleuser:
+  persistence:
+    enabled: true
+postgresql:
+  enabled: true
+  auth:
+    username: bn_vib_jupyterhub
+    database: bitnami_vib_jupyterhub
+  service:
+    ports:
+      postgresql: 5432

@@ -1,0 +1,57 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+name: 🐞 Bug
+description: Create a report to help us improve
+labels: ["tech-issues"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue. Before you open the bug report please review the following troubleshooting guide:
+          - [Troubleshoot Bitnami Helm Chart Issues](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues)
+
+        Please fill in as much of the following form as you're able.
+  - type: input
+    attributes:
+      label: Name and Version
+      description: Name and version of the affected chart
+      placeholder: bitnami/wordpress 1.2.3
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: What architecture are you using?
+      description: Choose the architecture of the host where the containers are executed
+      options:
+        - amd64
+        - arm64
+  - type: textarea
+    attributes:
+      label: What steps will reproduce the bug?
+      description: Enter details about your bug.
+      placeholder: |
+        1. In this environment...
+        2. With this config...
+        3. Run '...'
+        4. See error...
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Are you using any custom parameters or values?
+      description: Add any parameter used via `--set` or as a `values.yaml` customization.
+  - type: textarea
+    attributes:
+      label: What is the expected behavior?
+      description: If possible please provide textual output instead of screenshots.
+  - type: textarea
+    attributes:
+      label: What do you see instead?
+      description: If possible please provide textual output instead of screenshots.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: Tell us anything else you think we should know.

@@ -1,0 +1,30 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.web.enabled (not .Values.web.existingConfigmap) -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "concourse.web.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: web
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  {{- if .Values.web.auth.mainTeam.config }}
+  main-team.yml: |-
+    {{- include "common.tplvalues.render" ( dict "value" .Values.web.auth.mainTeam.config "context" $ ) | nindent 4 }}
+  {{- end -}}
+  {{- if .Values.web.configRBAC }}
+  config-rbac.yml: |-
+    {{- include "common.tplvalues.render" ( dict "value" .Values.web.configRBAC "context" $ ) | nindent 4 }}
+  {{- end -}}
+  {{- if .Values.web.baseResourceTypeDefaults }}
+  brt-defaults.yml: |-
+    {{- include "common.tplvalues.render" ( dict "value" .Values.web.baseResourceTypeDefaults "context" $ ) | nindent 4 }}
+  {{- end }}
+{{- end }}

@@ -1,0 +1,60 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
+1. Access your Argo CD installation:
+
+{{- if .Values.server.ingress.enabled }}
+  Connect to one of the following hosts:
+  {{ if .Values.server.ingress.tls }}
+    https://{{ .Values.server.ingress.hostname }}
+  {{- else }}
+    http://{{ .Values.server.ingress.hostname }}
+  {{- end }}
+{{- else }}
+  Execute the following commands:
+{{- if contains "NodePort" .Values.server.service.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "argocd.server" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  export URL="http://${NODE_IP}:${NODE_PORT}/"
+  echo "Argo CD URL: http://$NODE_IP:$NODE_PORT/"
+
+{{- else if contains "LoadBalancer" .Values.server.service.type }}
+
+** Please ensure an external IP is associated to the {{ include "argocd.server" . }} service before proceeding **
+** Watch the status using: kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "argocd.server" . }} **
+
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "argocd.server" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+
+{{- $port:=.Values.server.service.ports.http | toString }}
+  export URL="http://${SERVICE_IP}{{- if ne $port "80" }}:{{ .Values.server.service.ports.http }}{{ end }}"
+  echo "Argo CD URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.server.service.ports.http }}{{ end }}/"
+
+{{- else if contains "ClusterIP" .Values.server.service.type }}
+
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "argocd.server" . }} 8080:{{ .Values.server.service.ports.http }} &
+  export URL=http://127.0.0.1:8080/
+  echo "Argo CD URL: http://127.0.0.1:8080/"
+{{- end }}
+{{- end }}
+
+2. Execute the following commands to obtain the Argo CD credentials:
+
+  echo "Username: \"admin\""
+  echo "Password: $(kubectl -n {{ .Release.Namespace }} get secret argocd-secret -o jsonpath="{.data.clearPassword}" | base64 -d)"
+
+{{- if not .Values.server.configEnabled -}}
+WARNING: server.configEnabled is disabled, a config map called "argocd-cm" must exist in your namespace
+{{- end -}}
+{{- if not .Values.config.createExtraKnownHosts -}}
+WARNING: config.createExtraKnownHosts is disabled, a secret called "argocd-ssh-known-hosts-cm" must exist in your namespace
+{{- end -}}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.dex.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.rollingTag" .Values.redis.image }}
+
+{{- include "argocd.validateValues" . }}

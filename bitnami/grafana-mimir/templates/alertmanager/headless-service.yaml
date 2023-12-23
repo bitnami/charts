@@ -1,0 +1,49 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.alertmanager.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name:  {{ template "grafana-mimir.alertmanager.fullname" . }}-headless
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: alertmanager
+  {{- if or .Values.commonAnnotations .Values.alertmanager.service.headless.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.service.headless.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  publishNotReadyAddresses: true
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: http
+      port: {{ .Values.alertmanager.service.ports.http }}
+      targetPort: http
+      protocol: TCP
+      {{- if and (or (eq .Values.alertmanager.service.type "NodePort") (eq .Values.alertmanager.service.type "LoadBalancer")) (not (empty .Values.alertmanager.service.nodePorts.http)) }}
+      nodePort: {{ .Values.alertmanager.service.nodePorts.http }}
+      {{- else if eq .Values.alertmanager.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: grpc
+      port: {{ .Values.alertmanager.service.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      {{- if and (or (eq .Values.alertmanager.service.type "NodePort") (eq .Values.alertmanager.service.type "LoadBalancer")) (not (empty .Values.alertmanager.service.nodePorts.grpc)) }}
+      nodePort: {{ .Values.alertmanager.service.nodePorts.grpc }}
+      {{- else if eq .Values.alertmanager.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.alertmanager.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: alertmanager
+{{- end }}

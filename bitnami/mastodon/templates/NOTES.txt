@@ -1,0 +1,105 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+{{- if empty (include "mastodon.web.domain" .) }}
+###############################################################################
+### ERROR: You did not provide an external host in your 'helm install' call ###
+###############################################################################
+
+This deployment will be incomplete until you configure Mastodon with a resolvable
+host. To configure Mastodon with the URL of your service:
+
+1. Get the Mastodon URL by running:
+
+  {{- if eq .Values.apache.service.type "NodePort" }}
+
+  export APP_PORT=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "mastodon.apache.fullname" . }} -o jsonpath="{.spec.ports[0].nodePort}")
+  export APP_HOST=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+
+  {{- else if eq .Values.apache.service.type "LoadBalancer" }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "mastodon.apache.fullname" . }}'
+
+  export APP_HOST=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "mastodon.apache.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+
+  {{- end }}
+2. Complete your Mastodon deployment by running:
+
+  helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/{{ .Chart.Name }} \
+    --set webDomain=$APP_HOST{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
+
+{{- else if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/mastodon/entrypoint.sh /opt/bitnami/scripts/mastodon/run.sh
+
+{{- else }}
+
+Your Mastodon site can be accessed through the following DNS name from within your cluster:
+
+    {{ include "mastodon.apache.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.apache.service.ports.http }})
+
+To access your Mastodon site from outside the cluster follow the steps below:
+
+{{- if .Values.apache.ingress.enabled }}
+
+1. Get the Mastodon URL and associate Mastodon hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "Mastodon URL: http{{ if .Values.apache.ingress.tls }}s{{ end }}://{{ .Values.apache.ingress.hostname }}/"
+   echo "$CLUSTER_IP  {{ .Values.apache.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else }}
+{{- $port := .Values.apache.service.ports.http | toString }}
+
+1. Get the Mastodon URL by running these commands:
+
+{{- if contains "NodePort" .Values.apache.service.type }}
+
+   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "mastodon.apache.fullname" . }})
+   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+   echo "Mastodon URL: http://$NODE_IP:$NODE_PORT/"
+
+{{- else if contains "LoadBalancer" .Values.apache.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "mastodon.apache.fullname" . }}'
+
+   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "mastodon.apache.fullname" . }} --include "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+   echo "Mastodon URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.apache.service.ports.http }}{{ end }}/"
+
+{{- else if contains "ClusterIP"  .Values.apache.service.type }}
+
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "mastodon.apache.fullname" . }} {{ .Values.apache.service.ports.http }}:{{ .Values.apache.service.ports.http }} &
+   echo "Mastodon URL: http://127.0.0.1{{- if ne $port "80" }}:{{ .Values.apache.service.ports.http }}{{ end }}//"
+
+{{- end }}
+{{- end }}
+
+2. Open a browser and access Mastodon using the obtained URL.
+
+3. Login with the following credentials below to see your blog:
+
+  echo Username: {{ .Values.adminEmail }}
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ printf "%s-default" (include "common.names.fullname" .) }} -o jsonpath="{.data.MASTODON_ADMIN_PASSWORD}" | base64 -d)
+{{- end }}
+
+{{- include "mastodon.validateValues" . }}
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}

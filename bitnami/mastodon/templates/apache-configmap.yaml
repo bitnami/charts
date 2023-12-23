@@ -1,0 +1,50 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.apache.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "mastodon.apache.vhostconfigmap" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mastodon
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  mastodon-vhost.conf: |-
+    <VirtualHost 127.0.0.1:{{ .Values.apache.containerPorts.http }} _default_:{{ .Values.apache.containerPorts.http }}>
+      ServerName {{ include "mastodon.web.domain" . }}
+      ServerAlias *
+      <Location "/">
+        ProxyPass http://{{ include "mastodon.web.fullname" . }}:{{ .Values.web.service.ports.http }}/
+        ProxyPassReverse {{ include "mastodon.web.domain" . }}
+        ProxyPreserveHost on
+        Order allow,deny
+        Allow from all
+      </Location>
+      <Location "/api/v1/streaming">
+        # Streaming uses normal API calls and websockets. We used this configuration
+        # based on https://stackoverflow.com/questions/27526281/websockets-and-apache-proxy-how-to-configure-mod-proxy-wstunnel
+        RewriteEngine On
+        RewriteCond %{HTTP:Upgrade} =websocket [NC]
+        RewriteRule /api/(.*)           ws://{{ include "mastodon.streaming.fullname" . }}:{{ .Values.streaming.service.ports.http }}/api/$1 [P,L]
+        RewriteCond %{HTTP:Upgrade} !=websocket [NC]
+        RewriteRule /api/(.*)           http://{{ include "mastodon.streaming.fullname" . }}:{{ .Values.streaming.service.ports.http }}/api/$1 [P,L]
+        ProxyPassReverse {{ include "mastodon.web.domain" . }}
+        Order allow,deny
+        Allow from all
+      </Location>
+      {{- if .Values.minio.enabled }}
+      <Location "/{{ include "mastodon.s3.bucket" . }}">
+        ProxyPass http://{{ include "mastodon.s3.host" . }}:{{ include "mastodon.s3.port" . }}/{{ include "mastodon.s3.bucket" . }}/
+        ProxyPassReverse {{ include "mastodon.web.domain" . }}
+        Order allow,deny
+        Allow from all
+      </Location>
+      {{- end }}
+    </VirtualHost>
+{{- end }}

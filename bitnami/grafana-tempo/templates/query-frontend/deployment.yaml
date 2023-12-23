@@ -1,0 +1,243 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "grafana-tempo.query-frontend.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.queryFrontend.query.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: query-frontend
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.queryFrontend.replicaCount }}
+  {{- if .Values.queryFrontend.updateStrategy }}
+  strategy: {{- toYaml .Values.queryFrontend.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.queryFrontend.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: query-frontend
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/tempo-configmap.yaml") . | sha256sum }}
+        {{- if .Values.queryFrontend.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: query-frontend
+        tempo-gossip-member: "true"
+    spec:
+      serviceAccountName: {{ template "grafana-tempo.serviceAccountName" . }}
+      {{- include "grafana-tempo.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.queryFrontend.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryFrontend.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.queryFrontend.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryFrontend.podAffinityPreset "component" "query-frontend" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryFrontend.podAntiAffinityPreset "component" "query-frontend" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.queryFrontend.nodeAffinityPreset.type "key" .Values.queryFrontend.nodeAffinityPreset.key "values" .Values.queryFrontend.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.queryFrontend.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.queryFrontend.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryFrontend.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryFrontend.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryFrontend.priorityClassName }}
+      priorityClassName: {{ .Values.queryFrontend.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.queryFrontend.schedulerName }}
+      schedulerName: {{ .Values.queryFrontend.schedulerName }}
+      {{- end }}
+      {{- if .Values.queryFrontend.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.queryFrontend.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.queryFrontend.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: grafana-tempo-query-frontend
+          image: {{ template "grafana-tempo.image" . }}
+          imagePullPolicy: {{ .Values.tempo.image.pullPolicy }}
+          {{- if .Values.queryFrontend.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.queryFrontend.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.queryFrontend.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.queryFrontend.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -target=query-frontend
+            - -config.file=/bitnami/grafana-tempo/conf/tempo.yaml
+            - -mem-ballast-size-mbs={{ .Values.tempo.memBallastSizeMbs }}
+          {{- end }}
+          {{- if .Values.queryFrontend.extraEnvVars }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          envFrom:
+            {{- if .Values.queryFrontend.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.queryFrontend.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          ports:
+            - containerPort: {{ .Values.tempo.containerPorts.web }}
+              name: http
+            - containerPort: {{ .Values.tempo.containerPorts.gossipRing }}
+              name: http-memberlist
+            - containerPort: {{ .Values.tempo.containerPorts.grpc }}
+              name: grpc
+          {{- if .Values.queryFrontend.resources }}
+          resources: {{- toYaml .Values.queryFrontend.resources | nindent 12 }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.queryFrontend.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.queryFrontend.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /ready
+              port: {{ .Values.tempo.containerPorts.web }}
+          {{- end }}
+          {{- if .Values.queryFrontend.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.queryFrontend.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /ready
+              port: {{ .Values.tempo.containerPorts.web }}
+          {{- end }}
+          {{- if .Values.queryFrontend.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.queryFrontend.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- end }}
+          {{- if .Values.queryFrontend.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: tempo-config
+              mountPath: /bitnami/grafana-tempo/conf/tempo.yaml
+              subPath: tempo.yaml
+            - name: overrides-config
+              mountPath: /bitnami/grafana-tempo/conf/overrides.yaml
+              subPath: overrides.yaml
+          {{- if .Values.queryFrontend.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        - name: grafana-tempo-query
+          image: {{ template "grafana-tempo.queryImage" . }}
+          imagePullPolicy: {{ .Values.queryFrontend.query.image.pullPolicy }}
+          {{- if .Values.queryFrontend.query.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.queryFrontend.query.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.queryFrontend.query.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.queryFrontend.query.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - --query.base-path=/
+            - --grpc-storage-plugin.configuration-file=/bitnami/grafana-tempo/conf/tempo-query.yaml
+            - --query.bearer-token-propagation=true
+          {{- end }}
+          {{- if .Values.queryFrontend.query.extraEnvVars }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          envFrom:
+            {{- if .Values.queryFrontend.query.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.queryFrontend.query.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          ports:
+            - containerPort: {{ .Values.queryFrontend.query.containerPorts.jaegerUI }}
+              name: jaeger-ui
+            - containerPort: {{ .Values.queryFrontend.query.containerPorts.jaegerMetrics }}
+              name: jaeger-metrics
+          {{- if .Values.queryFrontend.query.resources }}
+          resources: {{- toYaml .Values.queryFrontend.query.resources | nindent 12 }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.queryFrontend.query.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.queryFrontend.query.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.query.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: jaeger-ui
+          {{- end }}
+          {{- if .Values.queryFrontend.query.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.queryFrontend.query.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.query.readinessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: jaeger-ui
+          {{- end }}
+          {{- if .Values.queryFrontend.query.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.queryFrontend.query.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.query.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: jaeger-ui
+          {{- end }}
+          {{- end }}
+          {{- if .Values.queryFrontend.query.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: tempo-query-config
+              mountPath: /bitnami/grafana-tempo/conf
+          {{- if .Values.queryFrontend.query.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.queryFrontend.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.queryFrontend.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: tempo-config
+          configMap:
+            name: {{ template "grafana-tempo.tempoConfigmapName" . }}
+        - name: overrides-config
+          configMap:
+            name: {{ template "grafana-tempo.overridesConfigmapName" . }}
+        - name: tempo-query-config
+          configMap:
+            name: {{ template "grafana-tempo.queryConfigmapName" . }}
+        {{- if .Values.queryFrontend.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

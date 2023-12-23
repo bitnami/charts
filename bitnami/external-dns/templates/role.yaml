@@ -1,10 +1,18 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.rbac.create (not .Values.rbac.clusterRole) }}
 apiVersion: rbac.authorization.k8s.io/{{ .Values.rbac.apiVersion }}
 kind: Role
 metadata:
   name: {{ template "external-dns.fullname" . }}
-  namespace: {{ .Values.namespace }}
-  labels: {{ include "external-dns.labels" . | nindent 4 }}
+  namespace: {{ template "external-dns.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 rules:
   - apiGroups:
       - ""
@@ -19,8 +27,18 @@ rules:
   - apiGroups:
       - extensions
       - "networking.k8s.io"
+      - getambassador.io
     resources:
       - ingresses
+      - hosts
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - route.openshift.io
+    resources:
+      - routes
     verbs:
       - get
       - list
@@ -49,14 +67,24 @@ rules:
     verbs:
       - patch
       - update
-  - apiGroups: 
+  - apiGroups:
       - projectcontour.io
     resources:
       - httpproxies
-    verbs: 
+    verbs:
       - get
       - watch
       - list
+  - apiGroups:
+      - gloo.solo.io
+      - gateway.solo.io
+    resources:
+      - proxies
+      - virtualservices
+    verbs:
+      - get
+      - list
+      - watch
   {{- if or .Values.crd.create .Values.crd.apiversion }}
   - apiGroups:
       {{- if .Values.crd.create }}

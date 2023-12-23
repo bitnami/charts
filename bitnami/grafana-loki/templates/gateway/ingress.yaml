@@ -1,0 +1,58 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.gateway.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ include "grafana-loki.gateway.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.gateway.image "chart" .Chart ) ) }}  
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  {{- if or .Values.gateway.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.gateway.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.gateway.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.gateway.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.gateway.ingress.hostname }}
+    - host: {{ .Values.gateway.ingress.hostname | quote }}
+      http:
+        paths:
+          {{- if .Values.gateway.ingress.extraPaths }}
+          {{- toYaml .Values.gateway.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.gateway.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.gateway.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "grafana-loki.gateway.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.gateway.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "grafana-loki.gateway.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+  {{- if or (and .Values.gateway.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.gateway.ingress.annotations )) .Values.gateway.ingress.selfSigned)) .Values.gateway.ingress.extraTls }}
+  tls:
+    {{- if and .Values.gateway.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.gateway.ingress.annotations )) .Values.gateway.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.gateway.ingress.hostname | quote }}
+      secretName: {{ printf "%s-tls" .Values.gateway.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.gateway.ingress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.gateway.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

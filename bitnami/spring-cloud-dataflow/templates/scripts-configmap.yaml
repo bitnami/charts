@@ -1,12 +1,15 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.waitForBackends.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "scdf.fullname" . }}-scripts
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  namespace: {{ .Release.Namespace }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -17,6 +20,10 @@ data:
   {{- $releaseNamespace := .Release.Namespace }}
   wait-for-backends.sh: |-
     #!/bin/bash
+
+    set -o errexit
+    set -o pipefail
+    set -o nounset
 
     # Auxiliary functions
     k8s_wait_for_statefulset() {
@@ -36,7 +43,12 @@ data:
     {{- if .Values.rabbitmq.enabled }}
     k8s_wait_for_statefulset {{ $releaseNamespace }} {{ $rabbitmqFullname }}
     {{- else if .Values.kafka.enabled }}
-    k8s_wait_for_statefulset {{ $releaseNamespace }} {{ $kafkaFullname }}
+    {{- if gt (int .Values.kafka.controller.replicaCount) 0 }}
+    k8s_wait_for_statefulset {{ $releaseNamespace }} {{ $kafkaFullname }}-controller
+    {{- end }}
+    {{- if gt (int .Values.kafka.broker.replicaCount) 0 }}
+    k8s_wait_for_statefulset {{ $releaseNamespace }} {{ $kafkaFullname }}-broker
+    {{- end }}
     {{- end }}
     {{- end }}
 {{- end }}

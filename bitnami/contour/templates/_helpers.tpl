@@ -1,3 +1,8 @@
+{{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
@@ -68,5 +73,50 @@ Create the name of the settings ConfigMap to use.
     {{ include "common.names.fullname" . }}
 {{- else -}}
     {{ .Values.existingConfigMap }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "contour.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "contour.validateValues.envoy.kind" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Contour - must provide a valid Envoy kind */}}
+{{- define "contour.validateValues.envoy.kind" -}}
+{{- if and .Values.envoy.enabled (ne .Values.envoy.kind "deployment") (ne .Values.envoy.kind "daemonset") -}}
+contour: envoy.kind
+    Invalid envoy.kind selected. Valid values are "daemonset" and
+    "deployment". Please set a valid kind (--set envoy.kind="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/* Create the name of the IngressClass to use. */}}
+{{- define "contour.ingressClassName" -}}
+{{- $ingressClass := .Values.contour.ingressClass }}
+{{- if kindIs "string" $ingressClass -}}
+    {{ default "contour" $ingressClass }}
+{{- else if kindIs "map" $ingressClass -}}
+    {{ default "contour" $ingressClass.name }}
+{{- else -}}
+    contour
+{{- end -}}
+{{- end -}}
+
+{{/* Whether the name of the ingress class is defined or not */}}
+{{- define "contour.isIngressClassNameDefined" -}}
+{{- $ingressClass := .Values.contour.ingressClass -}}
+{{- if kindIs "string" $ingressClass -}}
+    true
+{{- else if and (kindIs "map" $ingressClass) ($ingressClass.name) -}}
+    true
 {{- end -}}
 {{- end -}}

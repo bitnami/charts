@@ -1,0 +1,51 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  licenses: Apache-2.0
+  images: |
+    - name: attu
+      image: docker.io/bitnami/attu:2.3.2-debian-11-r1
+    - name: milvus
+      image: docker.io/bitnami/milvus:2.2.14-debian-11-r37
+    - name: os-shell
+      image: docker.io/bitnami/os-shell:11-debian-11-r90
+    - name: pymilvus
+      image: docker.io/bitnami/pymilvus:2.3.2-debian-11-r0
+apiVersion: v2
+appVersion: 2.2.14
+dependencies:
+- name: etcd
+  repository: oci://registry-1.docker.io/bitnamicharts
+  condition: etcd.enabled
+  version: 9.x.x
+- condition: kafka.enabled
+  name: kafka
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 26.x.x
+- condition: minio.enabled
+  name: minio
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 12.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: Milvus is a cloud-native, open-source vector database solution for AI applications and similarity search. Features high scalability, hibrid search and unified lambda structure.
+home: https://bitnami.com
+icon: https://bitnami.com/assets/stacks/milvus/img/milvus-stack-220x234.png
+keywords:
+- milvus
+- ai
+- database
+- infrastructure
+- attu
+maintainers:
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
+name: milvus
+sources:
+- https://github.com/bitnami/charts/tree/main/bitnami/milvus
+version: 5.1.5

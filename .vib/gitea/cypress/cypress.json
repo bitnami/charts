@@ -1,0 +1,8 @@
+{
+  "env": {
+    "username": "vib-user@example.com",
+    "password": "bitnami!1234"
+  },
+  "baseUrl": "http://localhost",
+  "defaultCommandTimeout": 30000
+}

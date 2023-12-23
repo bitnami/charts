@@ -1,0 +1,28 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+command:
+  create-table-root-test:
+    exec: mysql -h mysql-primary -u root -P {{ .Vars.primary.service.ports.mysql }} -p'{{ .Vars.auth.rootPassword }}' {{ .Vars.auth.database }} -e 'DROP TABLE IF EXISTS TEST; create table TEST(test_id int auto_increment, test_value int, primary key(test_id)); INSERT INTO TEST (TEST_VALUE) VALUES (1993);SELECT * FROM TEST'
+    exit-status: 0
+    stdout:
+    - "1993"
+  replication-test:
+    exec: mysql -h mysql-primary -u {{ .Vars.auth.username }} -P {{ .Vars.primary.service.ports.mysql }} -p'{{ .Vars.auth.password }}' {{ .Vars.auth.database }} -e 'DROP TABLE IF EXISTS TEST_REP; create table TEST_REP(test_id int auto_increment, test_value varchar(4), primary key(test_id)); INSERT INTO TEST_REP (TEST_VALUE) VALUES (2022)' && sleep 2 && mysql -h mysql-secondary -u {{ .Vars.auth.username }} -P {{ .Vars.secondary.service.ports.mysql }} -p'{{ .Vars.auth.password }}' {{ .Vars.auth.database }} -e 'SELECT * FROM TEST_REP'
+    exit-status: 0
+    stdout:
+    - "2022"
+    timeout: 9000
+file:
+  /bitnami/mysql/data/{{ .Vars.auth.database }}:
+    mode: "2750"
+    filetype: directory
+    exists: true
+  /opt/bitnami/mysql/conf/my.cnf:
+    mode: "0644"
+    filetype: file
+    contents:
+    - "[mysqld]"
+    - "datadir=/bitnami/mysql/data"
+    - "socket=/opt/bitnami/mysql/tmp/mysql.sock"
+    exists: true

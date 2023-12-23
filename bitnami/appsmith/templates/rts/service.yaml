@@ -1,0 +1,52 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "appsmith.rts.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: rts
+  {{- if or .Values.rts.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.rts.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.rts.service.type }}
+  {{- if and .Values.rts.service.clusterIP (eq .Values.rts.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.rts.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.rts.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.rts.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.rts.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.rts.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.rts.service.type "LoadBalancer") (eq .Values.rts.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.rts.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.rts.service.type "LoadBalancer") (not (empty .Values.rts.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.rts.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.rts.service.type "LoadBalancer") (not (empty .Values.rts.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.rts.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.rts.service.ports.http }}
+      targetPort: http
+      protocol: TCP
+      {{- if and (or (eq .Values.rts.service.type "NodePort") (eq .Values.rts.service.type "LoadBalancer")) (not (empty .Values.rts.service.nodePorts.http)) }}
+      nodePort: {{ .Values.rts.service.nodePorts.http }}
+      {{- else if eq .Values.rts.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.rts.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.rts.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.rts.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: rts

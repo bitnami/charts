@@ -1,0 +1,73 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.rootCoord.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "milvus.root-coordinator.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: milvus
+    app.kubernetes.io/component: root-coordinator
+  {{- if or .Values.commonAnnotations .Values.rootCoord.service.annotations (and .Values.rootCoord.metrics.enabled .Values.rootCoord.metrics.annotations) }}
+  annotations:
+    {{- if or .Values.rootCoord.service.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.rootCoord.service.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if and .Values.rootCoord.metrics.enabled .Values.rootCoord.metrics.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.rootCoord.metrics.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.rootCoord.service.type }}
+  {{- if .Values.rootCoord.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.rootCoord.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.rootCoord.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.rootCoord.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.rootCoord.service.clusterIP }}
+  clusterIP: {{ .Values.rootCoord.service.clusterIP }}
+  {{- end }}
+  {{- if (or (eq .Values.rootCoord.service.type "LoadBalancer") (eq .Values.rootCoord.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.rootCoord.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{ if eq .Values.rootCoord.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.rootCoord.service.loadBalancerSourceRanges }}
+  {{ end }}
+  {{- if (and (eq .Values.rootCoord.service.type "LoadBalancer") (not (empty .Values.rootCoord.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.rootCoord.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: grpc
+      port: {{ .Values.rootCoord.service.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      {{- if (and (or (eq .Values.rootCoord.service.type "NodePort") (eq .Values.rootCoord.service.type "LoadBalancer")) (not (empty .Values.rootCoord.service.nodePorts.grpc))) }}
+      nodePort: {{ .Values.rootCoord.service.nodePorts.grpc }}
+      {{- else if eq .Values.rootCoord.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.rootCoord.metrics.enabled }}
+    - name: http-metrics
+      port: {{ .Values.rootCoord.service.ports.metrics }}
+      targetPort: http-metrics
+      protocol: TCP
+      {{- if (and (or (eq .Values.rootCoord.service.type "NodePort") (eq .Values.rootCoord.service.type "LoadBalancer")) (not (empty .Values.rootCoord.service.nodePorts.metrics))) }}
+      nodePort: {{ .Values.rootCoord.service.nodePorts.metrics }}
+      {{- else if eq .Values.rootCoord.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- end }}
+    {{- if .Values.rootCoord.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.rootCoord.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.rootCoord.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: milvus
+    app.kubernetes.io/component: root-coordinator
+{{- end }}

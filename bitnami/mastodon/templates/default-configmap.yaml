@@ -1,0 +1,59 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if not .Values.existingConfigmap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-default" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mastodon
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  {{- if .Values.adminUser }}
+  MASTODON_ADMIN_USERNAME: {{ .Values.adminUser | quote }}
+  {{- end }}
+  {{- if .Values.adminEmail }}
+  MASTODON_ADMIN_EMAIL: {{ .Values.adminEmail | quote }}
+  {{- end }}
+  DB_HOST: {{ include "mastodon.database.host" . | quote }}
+  DB_PORT: {{ include "mastodon.database.port" . | quote }}
+  DB_NAME: {{ include "mastodon.database.name" . | quote }}
+  DB_USER: {{ include "mastodon.database.user" . | quote }}
+  ES_ENABLED: {{ .Values.enableSearches | quote }}
+  ES_HOST: {{ include "mastodon.elasticsearch.host" . | quote }}
+  ES_PORT: {{ include "mastodon.elasticsearch.port" . | quote }}
+  WEB_DOMAIN: {{ include "mastodon.web.domain" . | quote }}
+  LOCAL_DOMAIN: {{ .Values.localDomain | quote }}
+  LOCAL_HTTPS: {{ .Values.local_https | quote }}
+  DEFAULT_LOCALE: {{ .Values.defaultLocale | quote }}
+  STREAMING_API_BASE_URL: {{ include "mastodon.streaming.url" . | quote }}
+  REDIS_HOST: {{ include "mastodon.redis.host" . | quote }}
+  REDIS_PORT: {{ include "mastodon.redis.port" . | quote }}
+  SMTP_PORT: {{ .Values.smtp.port | quote }}
+  SMTP_FROM_ADDRESS: {{ .Values.smtp.from_address | quote }}
+  SMTP_DOMAIN: {{ .Values.smtp.domain | quote }}
+  SMTP_REPLY_TO: {{ .Values.smtp.reply_to | quote }}
+  SMTP_DELIVERY_METHOD: {{ .Values.smtp.delivery_method | quote }}
+  SMTP_CA_FILE: {{ .Values.smtp.ca_file | quote }}
+  SMTP_OPENSSL_VERIFY_MODE: {{ .Values.smtp.openssl_verify_mode | quote }}
+  SMTP_ENABLE_STARTTLS_AUTO: {{ .Values.smtp.enable_starttls_auto | quote }}
+  SMTP_TLS: {{ .Values.smtp.tls | quote }}
+  SMTP_AUTH_METHOD: {{ .Values.smtp.auth_method | quote }}
+  RAILS_ENV: {{ .Values.environment | quote }}
+  NODE_ENV: {{ .Values.environment | quote }}
+  {{- if .Values.enableS3 }}
+  S3_ENABLED: "true"
+  S3_BUCKET: {{ include "mastodon.s3.bucket" . | quote }}
+  S3_ENDPOINT: {{ include "mastodon.s3.endpoint" . | quote }}
+  S3_HOSTNAME: {{ include "mastodon.s3.host" . | quote }}
+  S3_REGION: {{ include "mastodon.s3.region" . | quote }}
+  S3_ALIAS_HOST: {{ include "mastodon.s3.aliasHost" . | quote }}
+  S3_PROTOCOL: {{ include "mastodon.s3.protocol.setting" . | quote }}
+  {{- end }}
+{{- end }}

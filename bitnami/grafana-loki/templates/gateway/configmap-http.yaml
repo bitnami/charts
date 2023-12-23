@@ -1,0 +1,113 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.gateway.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "grafana-loki.gateway.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.gateway.image "chart" .Chart ) ) }}  
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-loki
+    app.kubernetes.io/component: gateway
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  nginx.conf: |+
+      worker_processes  5;  ## Default: 1
+      error_log  /dev/stderr;
+      pid        /tmp/nginx.pid;
+      worker_rlimit_nofile 8192;
+
+      events {
+        worker_connections  4096;  ## Default: 1024
+      }
+
+      http {
+        client_body_temp_path /tmp/client_temp;
+        proxy_temp_path       /tmp/proxy_temp_path;
+        fastcgi_temp_path     /tmp/fastcgi_temp;
+        uwsgi_temp_path       /tmp/uwsgi_temp;
+        scgi_temp_path        /tmp/scgi_temp;
+
+        default_type application/octet-stream;
+        log_format  main '$remote_addr - $remote_user [$time_local]  $status ' '"$request" $body_bytes_sent "$http_referer" ' '"$http_user_agent" "$http_x_forwarded_for"';
+
+        include /opt/bitnami/nginx/conf/resolvers.conf;
+
+        {{- if .Values.gateway.verboseLogging }}
+        access_log   /dev/stderr  main;
+        {{- else }}
+
+        map $status $loggable {
+          ~^[23]  0;
+          default 1;
+        }
+        access_log   /dev/stderr  main  if=$loggable;
+        {{- end }}
+
+        sendfile     on;
+        tcp_nopush   on;
+
+        server {
+          listen             8080;
+
+          {{- if .Values.gateway.auth.enabled }}
+          auth_basic           "Loki";
+          auth_basic_user_file /bitnami/nginx/secrets/.htpasswd;
+          {{- end }}
+
+          location = / {
+            return 200 'OK';
+            auth_basic off;
+          }
+
+          location = /api/prom/push {
+            proxy_pass       http://{{ include "grafana-loki.distributor.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:3100$request_uri;
+          }
+
+          location = /api/prom/tail {
+            proxy_pass       http://{{ include "grafana-loki.querier.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:3100$request_uri;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+          }
+
+          # Ruler
+          location ~ /prometheus/api/v1/alerts.* {
+            proxy_pass       http://{{ include "grafana-loki.ruler.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:3100$request_uri;
+          }
+          location ~ /prometheus/api/v1/rules.* {
+            proxy_pass       http://{{ include "grafana-loki.ruler.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:3100$request_uri;
+          }
+          location ~ /api/prom/rules.* {
+            proxy_pass       http://{{ include "grafana-loki.ruler.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:3100$request_uri;
+          }
+          location ~ /api/prom/alerts.* {
+            proxy_pass       http://{{ include "grafana-loki.ruler.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:3100$request_uri;
+          }
+
+          location ~ /api/prom/.* {
+            proxy_pass       http://{{ include "grafana-loki.query-frontend.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:3100$request_uri;
+          }
+
+          location = /loki/api/v1/push {
+            proxy_pass       http://{{ include "grafana-loki.distributor.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:3100$request_uri;
+          }
+
+          location = /loki/api/v1/tail {
+            proxy_pass       http://{{ include "grafana-loki.querier.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:3100$request_uri;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+          }
+
+          location ~ /loki/api/.* {
+            proxy_pass       http://{{ include "grafana-loki.query-frontend.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:3100$request_uri;
+          }
+        }
+      }
+{{- end }}

@@ -1,0 +1,63 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.attu.enabled .Values.attu.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ template "milvus.attu.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.attu.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: milvus
+    app.kubernetes.io/component: attu
+  {{- if or .Values.attu.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.attu.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.attu.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.attu.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.attu.ingress.hostname }}
+    - host: {{ .Values.attu.ingress.hostname }}
+      http:
+        paths:
+          {{- if .Values.attu.ingress.extraPaths }}
+          {{- toYaml .Values.attu.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.attu.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.attu.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "milvus.attu.fullname" . | trunc 63 | trimSuffix "-") "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.attu.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "milvus.attu.fullname" $ | trunc 63 | trimSuffix "-") "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.attu.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.attu.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.attu.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.attu.ingress.annotations )) .Values.attu.ingress.selfSigned)) .Values.attu.ingress.extraTls }}
+  tls:
+    {{- if and .Values.attu.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.attu.ingress.annotations )) .Values.attu.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.attu.ingress.hostname | quote }}
+      secretName: {{ printf "%s-tls" .Values.attu.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.attu.ingress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.attu.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

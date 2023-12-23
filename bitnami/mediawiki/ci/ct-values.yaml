@@ -1,8 +1,0 @@
-service:
-  type: ClusterIP
-livenessProbe:
-  httpGet:
-    httpHeaders: []
-readinessProbe:
-  httpGet:
-    httpHeaders: []

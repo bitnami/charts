@@ -1,0 +1,13 @@
+{
+  "shopper": {
+    "firstName": "Tom",
+    "lastName": "Chat",
+    "email": "lechat@example.com",
+    "address": {
+      "street": "3401 Hillview Ave",
+      "city": "Palo Alto",
+      "state": "California",
+      "zipcode": "94304"
+    }
+  }
+}

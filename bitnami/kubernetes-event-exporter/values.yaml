@@ -1,33 +1,110 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry, imagePullSecrets
-##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
 
-## String to partially override kubernetes-event-exporter.fullname include (will maintain the release name)
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
-# nameOverride:
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
 
-## String to fully override kubernetes-event-exporter.fullname template
+## @section Common parameters
+
+## @param kubeVersion Override Kubernetes version
 ##
-# fullnameOverride:
-
-## Common annotations to add to all resources. Evaluated as a template
+kubeVersion: ""
+## @param nameOverride String to partially override kubernetes-event-exporter.fullname include (will maintain the release name)
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override kubernetes-event-exporter.fullname template
+##
+fullnameOverride: ""
+## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
-
-## Common labels to add to all resources. Evaluated as a template
+## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
+##
+extraDeploy: []
 
-## Deployment pod host aliases
+## @section Kubernetes Event Exporter parameters
+
+## @param replicaCount Desired number of pod replicas
+replicaCount: 1
+##
+## @param revisionHistoryLimit Desired number of old ReplicaSets to retain
+## Defaults to 10, if set to 0 old ReplicaSets will be garbage-collected
+revisionHistoryLimit: 10
+##
+## @param containerPorts.http HTTP container port
+##
+containerPorts:
+  http: 2112
+## @param extraContainerPorts Optionally specify extra list of additional port-mappings for the container
+##
+extraContainerPorts: []
+
+image:
+  ## @param image.registry [default: REGISTRY_NAME] Container image registry
+  ## @param image.repository [default: REPOSITORY_NAME/kubernetes-event-exporter] Container image name
+  ## @skip image.tag Container image tag
+  ## @param image.digest Container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param image.pullPolicy Container image pull policy
+  ## @param image.pullSecrets Specify docker-registry secret names as an array
+  ##
+  registry: docker.io
+  repository: bitnami/kubernetes-event-exporter
+  tag: 1.6.1-debian-11-r1
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## Example:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
+## Kubernetes event exporter configuration, rendered as a template
+## ref: https://github.com/resmoio/kubernetes-event-exporter#configuration
+## @param config.logLevel Verbosity of the logs (options: `fatal`, `error`, `warn`, `info` or `debug`)
+## @param config.logFormat How the logs are formatted. Allowed values: `pretty` or `json`
+## @param config.receivers [array] Array containing event receivers
+## @param config.route.routes [array] Array containing event route configuration
+##
 config:
   logLevel: debug
   logFormat: pretty
@@ -35,165 +112,249 @@ config:
     - name: "dump"
       file:
         path: "/dev/stdout"
-        # layout:
-        #   message: "{{ .Message }}"
-        #   reason: "{{ .Reason }}"
-        #   type: "{{ .Type }}"
-        #   count: "{{ .Count }}"
-        #   kind: "{{ .InvolvedObject.Kind }}"
-        #   name: "{{ .InvolvedObject.Name }}"
-        #   namespace: "{{ .Namespace }}"
-        #   component: "{{ .Source.Component }}"
-        #   host: "{{ .Source.Host }}"
+        ## Example:
+        ## layout:
+        ##   message: "{{ .Message }}"
+        ##   reason: "{{ .Reason }}"
+        ##   type: "{{ .Type }}"
+        ##   count: "{{ .Count }}"
+        ##   kind: "{{ .InvolvedObject.Kind }}"
+        ##   name: "{{ .InvolvedObject.Name }}"
+        ##   namespace: "{{ .Namespace }}"
+        ##   component: "{{ .Source.Component }}"
+        ##   host: "{{ .Source.Host }}"
+        ##
+        layout: {}
   route:
     routes:
       - match:
           - receiver: "dump"
-
 rbac:
-  # create specifies whether to install and use RBAC rules.
+  ## @param rbac.create Create the RBAC roles for API accessibility
+  ##
   create: true
-
+  ## @param rbac.rules [array] List of rules for the cluster role
+  ##
+  rules:
+    - apiGroups: ["*"]
+      resources: ["*"]
+      verbs: ["get", "watch", "list"]
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+## @param serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+##
 serviceAccount:
-  # Specifies whether a ServiceAccount should be created
   create: true
-  # The name of the ServiceAccount to use.  If not set and create is
-  # true, a name is generated using the fullname template
   name: ""
-
-image:
-  registry: docker.io
-  repository: bitnami/kubernetes-event-exporter
-  tag: 0.9.0-debian-10-r60
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
-## Pod annotations
+  automountServiceAccountToken: true
+  annotations: {}
+## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
+## @param podLabels Pod labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
 ## SecurityContext holds pod-level security attributes and common container settings.
+## @param podSecurityContext.enabled Enable security context
+## @param podSecurityContext.fsGroup Group ID for the container
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+##
 containerSecurityContext:
   enabled: true
-  capabilities:
-    add: []
-    drop:
-      - ALL
-  readOnlyRootFilesystem: true
-  runAsNonRoot: true
   runAsUser: 1001
-
+  runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
+## @param command Override default container command (useful when using custom images)
+##
+command: []
+## @param args Override default container args (useful when using custom images)
+##
+args: []
+## @param lifecycleHooks Lifecycle for the container to automate configuration before or after startup
+##
+lifecycleHooks: {}
 ## Container resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resources.limits Specify resource limits which the container is not allowed to succeed.
+## @param resources.requests Specify resource requests which the container needs to spawn.
 ##
 resources:
-  ## We usually recommend not to specify default resources and to leave this as a conscious
-  ## choice for the user. This also increases chances charts run on environments with little
-  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ##
+  ## Example:
+  ## limits:
+  ##    cpu: 400m
+  ##    memory: 250Mi
   limits: {}
-  #   cpu: 400m
-  #   memory: 250Mi
+  ## Examples:
+  ## requests:
+  ##    cpu: 100m
+  ##    memory: 25Mi
   requests: {}
-  #   cpu: 100m
-  #   memory: 25Mi
 
-## Node labels for pod assignment
+## Configure extra options for Kubernetes event exporter container's liveness, readiness and startup probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe on Kubernetes event exporter container
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 2
+  failureThreshold: 5
+  successThreshold: 1
+## @param readinessProbe.enabled Enable readinessProbe on Kubernetes event exporter container
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 2
+  failureThreshold: 1
+  successThreshold: 1
+## @param startupProbe.enabled Enable startupProbe on Kubernetes event exporter container
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 40
+  periodSeconds: 10
+  timeoutSeconds: 15
+  failureThreshold: 15
+  successThreshold: 1
+## Configure extra custom startup, liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param customStartupProbe Configure startup probe for Kubernetes event exporter pod
+##
+customStartupProbe: {}
+## @param customLivenessProbe Configure liveness probe for Kubernetes event exporter pod
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Configure readiness probe for Kubernetes event exporter pod
+##
+customReadinessProbe: {}
+## @param nodeSelector Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
-## Set Priority Class Name to allow priority control over other pods
+## @param priorityClassName Set Priority Class Name to allow priority control over other pods
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName: ""
-
-## Tolerations for pod assignment
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
+## @param tolerations Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
-## Pod affinity preset
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAffinityPreset: ""
-
-## Pod anti-affinity preset
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
 ##
 nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ##
   type: ""
-  ## Node label key to match
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set.
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
   key: ""
-  ## Node label values to match
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
   ## E.g.
   ## values:
   ##   - e2e-az1
   ##   - e2e-az2
   ##
   values: []
-
-## Affinity for pod assignment
+## @param affinity Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
-## An array to add extra env vars
+## @param updateStrategy.type Deployment strategy type.
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## e.g:
+## updateStrategy:
+##  type: RollingUpdate
+##  rollingUpdate:
+##    maxSurge: 25%
+##    maxUnavailable: 25%
+##
+updateStrategy:
+  type: RollingUpdate
+## @param extraEnvVars Array containing extra env vars to be added to all containers
 ## For example:
 ## extraEnvVars:
 ##  - name: MY_ENV_VAR
 ##    value: env_var_value
 ##
 extraEnvVars: []
-
-## Name of a ConfigMap containing extra env vars
+## @param extraEnvVarsCM ConfigMap containing extra env vars to be added to all containers
 ##
-extraEnvVarsConfigMap: ""
-
-## Name of a Secret containing extra env vars
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Secret containing extra env vars to be added to all containers
 ##
 extraEnvVarsSecret: ""
-
-## Array to add extra mounts (normally used with extraVolumes)
+## @param extraVolumeMounts Array to add extra mounts (normally used with extraVolumes)
 ##
 extraVolumeMounts: []
-
-## Array to add extra volumes
+## @param extraVolumes Array to add extra volumes
 ##
 extraVolumes: []
-
-## Add init containers to the pod
+## @param initContainers Attach additional init containers to pods
 ## For example:
 ## initContainers:
 ##   - name: your-image-name
@@ -201,7 +362,143 @@ extraVolumes: []
 ##     imagePullPolicy: Always
 ##
 initContainers: []
-
-## Array with extra yaml to deploy with the chart. Evaluated as a template
+## @param sidecars Add additional sidecar containers to pods
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
 ##
-extraDeploy: []
+sidecars: []
+
+## Metrics configuration
+##
+metrics:
+  ## @param metrics.enabled Enable exposing  statistics
+  ## ref: https://github.com/resmoio/kubernetes-event-exporter/blob/858089f2dc42243c0939a7f13a76fdd22e70be0f/main.go#L25
+  ##
+  enabled: false
+  ##  metrics service parameters
+  ##
+  service:
+    ## @param metrics.service.ports.http Metrics service HTTP port
+    ##
+    ports:
+      http: 2112
+    ## @param metrics.service.annotations [object] Annotations for enabling prometheus to access the metrics endpoints
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.ports.http }}"
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.port Metrics service HTTP port
+    ##
+    port: http
+    ## @param metrics.serviceMonitor.endpoints [array] The endpoint configuration of the ServiceMonitor. Path is mandatory. Interval, timeout and labellings can be overwritten.
+    ##
+    endpoints:
+      - path: /metrics
+    ## @param metrics.serviceMonitor.path Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead
+    ##
+    path: ""
+    ## @param metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
+    ##
+    interval: 30s
+    ## @param metrics.serviceMonitor.scrapeTimeout Specify the timeout after which the scrape is ended
+    ## e.g:
+    ##   scrapeTimeout: 30s
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.labels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    selector: {}
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
+  ## Prometheus Operator alert rules configuration
+  ##
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled Create PrometheusRule Resource for scraping metrics using PrometheusOperator
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.namespace Namespace which Prometheus is running in
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.labels Additional labels that can be used so PrometheusRule will be discovered by Prometheus
+    ##
+    labels: {}
+    ## @param metrics.prometheusRule.groups Groups, containing the alert rules.
+    ## Example:
+    ##   groups:
+    ##     - name: KubernetesEventExporter
+    ##       rules:
+    ##         - alert: KubernetesEventExporterTooManyWatchErrors
+    ##           annotations:
+    ##             message: "Kubernetes Event Exporter instance in namespace {{ `{{` }} $labels.namespace {{ `}}` }} has reported too many watch errors in 5 minutes."
+    ##           expr: |
+    ##             sum(watch_errors{namespace="{{ include "common.names.namespace" . }}"})
+    ##           for: 5m
+    ##           labels:
+    ##             severity: critical
+    groups: []
+
+## @section Autoscaling
+##
+autoscaling:
+  vpa:
+    ## @param autoscaling.vpa.enabled Enable VPA
+    ##
+    enabled: false
+    ## @param autoscaling.vpa.annotations Annotations for VPA resource
+    ##
+    annotations: {}
+    ## @param autoscaling.vpa.recommenders Recommender responsible for generating recommendation for the object.
+    ## List should be empty (then the default recommender will generate the recommendation) or contain exactly one recommender.
+    ## For example:
+    ## recommenders:
+    ## - name: custom-recommender-performance
+    recommenders: []
+    ## @param autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ##
+    controlledResources: []
+    ## @param autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## cpu: 200m
+    ## memory: 100Mi
+    maxAllowed: {}
+    ## @param autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ## cpu: 200m
+    ## memory: 100Mi
+    minAllowed: {}
+    ## @section VPA update policy
+    ##
+    updatePolicy:
+      ## @param autoscaling.vpa.updatePolicy.minReplicas Specifies minimal number of replicas which need to be alive for VPA Updater to attempt pod eviction
+      minReplicas: 1
+      ## @param autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updateMode: Auto

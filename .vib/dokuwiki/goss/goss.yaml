@@ -1,0 +1,15 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+file:
+  /bitnami/dokuwiki:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+  /bitnami/dokuwiki/conf/local.php:
+    exists: true
+    filetype: file
+    mode: "0644"
+    contents:
+      - /title.*{{ .Vars.dokuwikiWikiName }}/

@@ -1,0 +1,73 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.clusterOperator.metrics.podMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: rabbitmq-operator
+    app.kubernetes.io/part-of: rabbitmq
+    {{- if .Values.clusterOperator.metrics.podMonitor.additionalLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.metrics.podMonitor.additionalLabels "context" $) | nindent 4 }}
+    {{- end }}
+  name: {{ printf "%s-metrics" (include "rmqco.clusterOperator.fullname" .) }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.msgTopologyOperator.metrics.podMonitor.namespace | quote }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  jobLabel: {{ .Values.clusterOperator.metrics.podMonitor.jobLabel }}
+  selector:
+    matchLabels:
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.clusterOperator.podLabels .Values.commonLabels ) "context" . ) }}
+      {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      {{- if .Values.clusterOperator.metrics.podMonitor.selector }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.clusterOperator.metrics.podMonitor.selector "context" $ ) | nindent 6 }}
+      {{- end }}
+      app.kubernetes.io/component: rabbitmq-operator
+  namespaceSelector:
+    matchNames:
+      - {{ include "common.names.namespace" . | quote }}
+  podMetricsEndpoints:
+    - port: http
+      {{- if .Values.clusterOperator.metrics.podMonitor.interval }}
+      interval: {{ .Values.clusterOperator.metrics.podMonitor.interval }}
+      {{- end }}
+      {{- if .Values.clusterOperator.metrics.podMonitor.honorLabels }}
+      honorLabels: {{ .Values.clusterOperator.metrics.podMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.clusterOperator.metrics.podMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.clusterOperator.metrics.podMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.clusterOperator.metrics.podMonitor.relabelings }}
+      relabelings: {{ toYaml .Values.clusterOperator.metrics.podMonitor.relabelings | nindent 8 }}
+      {{- end }}
+      {{- if .Values.clusterOperator.metrics.podMonitor.metricRelabelings }}
+      metricRelabelings: {{ toYaml .Values.clusterOperator.metrics.podMonitor.metricRelabelings | nindent 8 }}
+      {{- end }}
+    - port: metrics
+      {{- if .Values.clusterOperator.metrics.podMonitor.path }}
+      path: {{ .Values.clusterOperator.metrics.podMonitor.path }}
+      {{- end }}
+      {{- if .Values.clusterOperator.metrics.podMonitor.params }}
+      params: {{ toYaml .Values.clusterOperator.metrics.podMonitor.params | nindent 8 }}
+      {{- end }}
+      {{- if .Values.clusterOperator.metrics.podMonitor.interval }}
+      interval: {{ .Values.clusterOperator.metrics.podMonitor.interval }}
+      {{- end }}
+      {{- if .Values.clusterOperator.metrics.podMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.clusterOperator.metrics.podMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.clusterOperator.metrics.podMonitor.honorLabels }}
+      honorLabels: {{ .Values.clusterOperator.metrics.podMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.clusterOperator.metrics.podMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.clusterOperator.metrics.podMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.clusterOperator.metrics.podMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.clusterOperator.metrics.podMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+{{- end }}

@@ -1,0 +1,10 @@
+{
+  "baseUrl": "http://localhost",
+  "viewportWidth": 1920,
+  "viewportHeight": 1080,
+  "env": {
+    "username": "vib-user",
+    "password": "ComplicatedPassword123!4"
+  },
+  "defaultCommandTimeout": 30000
+}

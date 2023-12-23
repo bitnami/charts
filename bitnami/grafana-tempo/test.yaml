@@ -1,0 +1,1318 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+---
+# Source: grafana-tempo/templates/overrides-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-tempo-overrides
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: grafana-tempo
+    helm.sh/chart: grafana-tempo-2.0.1
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: tempo
+data:
+  overrides.yaml: |-
+    overrides: {}
+---
+# Source: grafana-tempo/templates/query-frontend/query-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-tempo-query-frontend
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: grafana-tempo
+    helm.sh/chart: grafana-tempo-2.0.1
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: query
+data:
+  tempo-query.yaml: |-
+    backend: 127.0.0.1:3200
+---
+# Source: grafana-tempo/templates/tempo-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-tempo-tempo
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: grafana-tempo
+    helm.sh/chart: grafana-tempo-2.0.1
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: tempo
+data:
+  tempo.yaml: |-
+    multitenancy_enabled: false
+    compactor:
+      compaction:
+        block_retention: 48h
+      ring:
+        kvstore:
+          store: memberlist
+    distributor:
+      ring:
+        kvstore:
+          store: memberlist
+      receivers:
+        jaeger:
+          protocols:
+            thrift_http:
+              endpoint: 0.0.0.0:14268
+            grpc:
+              endpoint: 0.0.0.0:14250
+    querier:
+      frontend_worker:
+        frontend_address: grafana-tempo-query-frontend-headless:9095
+    ingester:
+      lifecycler:
+        ring:
+          replication_factor: 1
+          kvstore:
+            store: memberlist
+        tokens_file_path: /bitnami/grafana-tempo/data/tokens.json
+    metrics_generator:
+      ring:
+        kvstore:
+          store: memberlist
+      storage:
+        path: /bitnami/grafana-tempo/data/wal
+        remote_write: 
+          []
+    memberlist:
+      abort_if_cluster_join_fails: false
+      join_members:
+        - grafana-tempo-gossip-ring
+    overrides:
+      per_tenant_override_config: /bitnami/grafana-tempo/conf/overrides.yaml
+    server:
+      http_listen_port: 3200
+    storage:
+      trace:
+        backend: local
+        blocklist_poll: 5m
+        local:
+          path: /bitnami/grafana-tempo/data/traces
+        wal:
+          path: /bitnami/grafana-tempo/data/wal
+        cache: memcached
+        memcached:
+          consistent_hash: true
+          host: grafana-tempo-memcached
+          service: memcache
+          timeout: 500ms
+---
+# Source: grafana-tempo/charts/memcached/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-tempo-memcached
+  namespace: default
+  labels:
+    app.kubernetes.io/name: memcached
+    helm.sh/chart: memcached-6.3.6
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: memcache
+      port: 11211
+      targetPort: memcache
+      nodePort: null
+  selector:
+    app.kubernetes.io/name: memcached
+    app.kubernetes.io/instance: grafana-tempo
+---
+# Source: grafana-tempo/templates/compactor/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-tempo-compactor
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: grafana-tempo
+    helm.sh/chart: grafana-tempo-2.0.1
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: compactor
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 3200
+      targetPort: http
+      protocol: TCP
+      nodePort: null
+  selector:
+    app.kubernetes.io/name: grafana-tempo
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/component: compactor
+---
+# Source: grafana-tempo/templates/distributor/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-tempo-distributor
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: grafana-tempo
+    helm.sh/chart: grafana-tempo-2.0.1
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: distributor
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 3200
+      targetPort: http
+      protocol: TCP
+      nodePort: null
+    - name: grpc
+      port: 9095
+      protocol: TCP
+      targetPort: grpc
+      nodePort: null
+    ## From here we use non-configurable, standard ports
+    - name: distributor-jaeger-thrift-http
+      port: 14268
+      protocol: TCP
+      targetPort: jaeger-http
+    - name: distributor-jaeger-grpc
+      port: 14250
+      protocol: TCP
+      targetPort: jaeger-grpc
+  selector:
+    app.kubernetes.io/name: grafana-tempo
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/component: distributor
+---
+# Source: grafana-tempo/templates/gossip-ring-headless-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-tempo-gossip-ring
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: grafana-tempo
+    helm.sh/chart: grafana-tempo-2.0.1
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: tempo
+spec:
+  type: ClusterIP
+  publishNotReadyAddresses: true
+  clusterIP: None
+  ports:
+    - name: http
+      port: 7946
+      targetPort: http-memberlist
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: grafana-tempo
+    app.kubernetes.io/instance: grafana-tempo
+    tempo-gossip-member: "true"
+---
+# Source: grafana-tempo/templates/ingester/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-tempo-ingester
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: grafana-tempo
+    helm.sh/chart: grafana-tempo-2.0.1
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: ingester
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 3200
+      targetPort: http
+      protocol: TCP
+      nodePort: null
+    - name: grpc
+      port: 9095
+      targetPort: grpc
+      protocol: TCP
+      nodePort: null
+  selector:
+    app.kubernetes.io/name: grafana-tempo
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/component: ingester
+---
+# Source: grafana-tempo/templates/metrics-generator/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-tempo-metrics-generator
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: grafana-tempo
+    helm.sh/chart: grafana-tempo-2.0.1
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: metrics-generator
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  
+  ports:
+    - name: http
+      port: 3200
+      targetPort: http
+      protocol: TCP
+      nodePort: null
+    - name: grpc
+      port: 9095
+      targetPort: grpc
+      protocol: TCP
+      nodePort: null
+  selector:
+    app.kubernetes.io/name: grafana-tempo
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/component: metrics-generator
+---
+# Source: grafana-tempo/templates/querier/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-tempo-querier
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: grafana-tempo
+    helm.sh/chart: grafana-tempo-2.0.1
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: querier
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 3200
+      targetPort: http
+      protocol: TCP
+      nodePort: null
+    - name: grpc
+      port: 9095
+      targetPort: grpc
+      protocol: TCP
+      nodePort: null
+  selector:
+    app.kubernetes.io/name: grafana-tempo
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/component: querier
+---
+# Source: grafana-tempo/templates/query-frontend/headless-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-tempo-query-frontend-headless
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: grafana-tempo
+    helm.sh/chart: grafana-tempo-2.0.1
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: query-frontend
+spec:
+  # NOTE: this is based on this https://github.com/grafana/helm-charts/pull/451. Should be reviewed if it is actually necessary in the future
+  publishNotReadyAddresses: true
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: http
+      port: 3200
+      targetPort: http
+      protocol: TCP
+    - name: grpc
+      port: 9095
+      targetPort: grpc
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: grafana-tempo
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/component: query-frontend
+---
+# Source: grafana-tempo/templates/query-frontend/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-tempo-query-frontend
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: grafana-tempo
+    helm.sh/chart: grafana-tempo-2.0.1
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: query-frontend
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: http
+      port: 3200
+      targetPort: http
+      protocol: TCP
+      nodePort: null
+    - name: grpc
+      port: 9095
+      targetPort: grpc
+      protocol: TCP
+      nodePort: null
+  selector:
+    app.kubernetes.io/name: grafana-tempo
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/component: query-frontend
+---
+# Source: grafana-tempo/templates/vulture/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-tempo-vulture
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: grafana-tempo
+    helm.sh/chart: grafana-tempo-2.0.1
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: vulture
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 3200
+      targetPort: http
+      protocol: TCP
+      nodePort: null
+  selector:
+    app.kubernetes.io/name: grafana-tempo
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/component: vulture
+---
+# Source: grafana-tempo/charts/memcached/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-tempo-memcached
+  namespace: default
+  labels:
+    app.kubernetes.io/name: memcached
+    helm.sh/chart: memcached-6.3.6
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: memcached
+      app.kubernetes.io/instance: grafana-tempo
+  replicas: 1
+  strategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: memcached
+        helm.sh/chart: memcached-6.3.6
+        app.kubernetes.io/instance: grafana-tempo
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+    spec:
+      
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: memcached
+                    app.kubernetes.io/instance: grafana-tempo
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+      serviceAccountName: default
+      containers:
+        - name: memcached
+          image: docker.io/bitnami/memcached:1.6.18-debian-11-r11
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: MEMCACHED_PORT_NUMBER
+              value: "11211"
+          ports:
+            - name: memcache
+              containerPort: 11211
+          livenessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            tcpSocket:
+              port: memcache
+          readinessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+            tcpSocket:
+              port: memcache
+          resources:
+            limits: {}
+            requests:
+              cpu: 250m
+              memory: 256Mi
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+# Source: grafana-tempo/templates/compactor/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-tempo-compactor
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: grafana-tempo
+    helm.sh/chart: grafana-tempo-2.0.1
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: compactor
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: grafana-tempo
+      app.kubernetes.io/instance: grafana-tempo
+      app.kubernetes.io/component: compactor
+  template:
+    metadata:
+      annotations:
+        checksum/config: 8d7bbdb5fa0b1e20559752158ab164d21aeba3c312856ae0df7895e55beb1e7a
+      labels:
+        app.kubernetes.io/name: grafana-tempo
+        helm.sh/chart: grafana-tempo-2.0.1
+        app.kubernetes.io/instance: grafana-tempo
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: compactor
+        tempo-gossip-member: "true"
+    spec:
+      serviceAccountName: default
+      
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: grafana-tempo
+                    app.kubernetes.io/instance: grafana-tempo
+                    app.kubernetes.io/component: compactor
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+      initContainers:
+      containers:
+        - name: grafana-tempo-compactor
+          image: docker.io/bitnami/grafana-tempo:1.5.0-debian-11-r62
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          args:
+            - -target=compactor
+            - -config.file=/bitnami/grafana-tempo/conf/tempo.yaml
+            - -mem-ballast-size-mbs=1024
+          envFrom:
+          ports:
+            - containerPort: 3200
+              name: http
+            - containerPort: 7946
+              name: http-memberlist
+          resources:
+            limits: {}
+            requests: {}
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            httpGet:
+              path: /ready
+              port: 3200
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            httpGet:
+              path: /ready
+              port: 3200
+          volumeMounts:
+            - name: tempo-config
+              mountPath: /bitnami/grafana-tempo/conf/tempo.yaml
+              subPath: tempo.yaml
+            - name: overrides-config
+              mountPath: /bitnami/grafana-tempo/conf/overrides.yaml
+              subPath: overrides.yaml
+            - name: data
+              mountPath: /bitnami/grafana-tempo/data
+      volumes:
+        # NOTE: The upstream chart does not create a PVC for this, we assume that it is just for tmp data
+        - name: data
+          emptyDir: {}
+        - name: tempo-config
+          configMap:
+            name: grafana-tempo-tempo
+        - name: overrides-config
+          configMap:
+            name: grafana-tempo-overrides
+---
+# Source: grafana-tempo/templates/distributor/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-tempo-distributor
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: grafana-tempo
+    helm.sh/chart: grafana-tempo-2.0.1
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: distributor
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: grafana-tempo
+      app.kubernetes.io/instance: grafana-tempo
+      app.kubernetes.io/component: distributor
+  template:
+    metadata:
+      annotations:
+        checksum/config: 8d7bbdb5fa0b1e20559752158ab164d21aeba3c312856ae0df7895e55beb1e7a
+      labels:
+        app.kubernetes.io/name: grafana-tempo
+        helm.sh/chart: grafana-tempo-2.0.1
+        app.kubernetes.io/instance: grafana-tempo
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: distributor
+        tempo-gossip-member: "true"
+    spec:
+      serviceAccountName: default
+      
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: grafana-tempo
+                    app.kubernetes.io/instance: grafana-tempo
+                    app.kubernetes.io/component: distributor
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+      initContainers:
+      containers:
+        - name: grafana-tempo-distributor
+          image: docker.io/bitnami/grafana-tempo:1.5.0-debian-11-r62
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          args:
+            - -target=distributor
+            - -config.file=/bitnami/grafana-tempo/conf/tempo.yaml
+            - -mem-ballast-size-mbs=1024
+          envFrom:
+          ports:
+            - containerPort: 3200
+              name: http
+            - containerPort: 7946
+              name: http-memberlist
+            - containerPort: 9095
+              name: grpc
+            - containerPort: 14268
+              name: jaeger-http
+              protocol: TCP
+            - containerPort: 14250
+              name: jaeger-grpc
+              protocol: TCP
+          resources:
+            limits: {}
+            requests: {}
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            httpGet:
+              path: /ready
+              port: 3200
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            httpGet:
+              path: /ready
+              port: 3200
+          volumeMounts:
+            - name: tempo-config
+              mountPath: /bitnami/grafana-tempo/conf/tempo.yaml
+              subPath: tempo.yaml
+            - name: overrides-config
+              mountPath: /bitnami/grafana-tempo/conf/overrides.yaml
+              subPath: overrides.yaml
+      volumes:
+        - name: tempo-config
+          configMap:
+            name: grafana-tempo-tempo
+        - name: overrides-config
+          configMap:
+            name: grafana-tempo-overrides
+---
+# Source: grafana-tempo/templates/metrics-generator/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-tempo-metrics-generator
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: grafana-tempo
+    helm.sh/chart: grafana-tempo-2.0.1
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: metrics-generator
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: grafana-tempo
+      app.kubernetes.io/instance: grafana-tempo
+      app.kubernetes.io/component: metrics-generator
+  template:
+    metadata:
+      annotations:
+        checksum/config: 8d7bbdb5fa0b1e20559752158ab164d21aeba3c312856ae0df7895e55beb1e7a
+      labels:
+        app.kubernetes.io/name: grafana-tempo
+        helm.sh/chart: grafana-tempo-2.0.1
+        app.kubernetes.io/instance: grafana-tempo
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: metrics-generator
+        tempo-gossip-member: "true"
+    spec:
+      serviceAccountName: default
+      
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: grafana-tempo
+                    app.kubernetes.io/instance: grafana-tempo
+                    app.kubernetes.io/component: metrics-generator
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+      initContainers:
+      containers:
+        - name: grafana-tempo-metrics-generator
+          image: docker.io/bitnami/grafana-tempo:1.5.0-debian-11-r62
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          args:
+            - -target=metrics-generator
+            - -config.file=/bitnami/grafana-tempo/conf/tempo.yaml
+            - -mem-ballast-size-mbs=1024
+          envFrom:
+          ports:
+            - containerPort: 
+              name: http
+            - containerPort: 7946
+              name: http-memberlist
+            - containerPort: 9095
+              name: grpc
+          resources:
+            limits: {}
+            requests: {}
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            httpGet:
+              path: /ready
+              port: 
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            httpGet:
+              path: /ready
+              port: 
+          volumeMounts:
+            - name: tempo-config
+              mountPath: /bitnami/grafana-tempo/conf/tempo.yaml
+              subPath: tempo.yaml
+            - name: overrides-config
+              mountPath: /bitnami/grafana-tempo/conf/overrides.yaml
+              subPath: overrides.yaml
+            - name: data
+              mountPath: /bitnami/grafana-tempo/data
+      volumes:
+        - name: data
+          emptyDir: {}
+        - name: tempo-config
+          configMap:
+            name: grafana-tempo-tempo
+        - name: overrides-config
+          configMap:
+            name: grafana-tempo-overrides
+---
+# Source: grafana-tempo/templates/querier/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-tempo-querier
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: grafana-tempo
+    helm.sh/chart: grafana-tempo-2.0.1
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: querier
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: grafana-tempo
+      app.kubernetes.io/instance: grafana-tempo
+      app.kubernetes.io/component: querier
+  template:
+    metadata:
+      annotations:
+        checksum/config: 8d7bbdb5fa0b1e20559752158ab164d21aeba3c312856ae0df7895e55beb1e7a
+      labels:
+        app.kubernetes.io/name: grafana-tempo
+        helm.sh/chart: grafana-tempo-2.0.1
+        app.kubernetes.io/instance: grafana-tempo
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: querier
+        tempo-gossip-member: "true"
+    spec:
+      serviceAccountName: default
+      
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: grafana-tempo
+                    app.kubernetes.io/instance: grafana-tempo
+                    app.kubernetes.io/component: querier
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+      initContainers:
+      containers:
+        - name: grafana-tempo-querier
+          image: docker.io/bitnami/grafana-tempo:1.5.0-debian-11-r62
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          args:
+            - -target=querier
+            - -config.file=/bitnami/grafana-tempo/conf/tempo.yaml
+            - -mem-ballast-size-mbs=1024
+          envFrom:
+          ports:
+            - containerPort: 3200
+              name: http
+            - containerPort: 7946
+              name: http-memberlist
+            - containerPort: 9095
+              name: grpc
+          resources:
+            limits: {}
+            requests: {}
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            httpGet:
+              path: /ready
+              port: 3200
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            httpGet:
+              path: /ready
+              port: 3200
+          volumeMounts:
+            - name: tempo-config
+              mountPath: /bitnami/grafana-tempo/conf/tempo.yaml
+              subPath: tempo.yaml
+            - name: overrides-config
+              mountPath: /bitnami/grafana-tempo/conf/overrides.yaml
+              subPath: overrides.yaml
+            - name: data
+              mountPath: /bitnami/grafana-tempo/data
+      volumes:
+        # NOTE: The upstream chart does not create a PVC for this, we assume that it is just for tmp data
+        - name: data
+          emptyDir: {}
+        - name: tempo-config
+          configMap:
+            name: grafana-tempo-tempo
+        - name: overrides-config
+          configMap:
+            name: grafana-tempo-overrides
+---
+# Source: grafana-tempo/templates/query-frontend/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-tempo-query-frontend
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: grafana-tempo
+    helm.sh/chart: grafana-tempo-2.0.1
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: query-frontend
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: grafana-tempo
+      app.kubernetes.io/instance: grafana-tempo
+      app.kubernetes.io/component: query-frontend
+  template:
+    metadata:
+      annotations:
+        checksum/config: 8d7bbdb5fa0b1e20559752158ab164d21aeba3c312856ae0df7895e55beb1e7a
+      labels:
+        app.kubernetes.io/name: grafana-tempo
+        helm.sh/chart: grafana-tempo-2.0.1
+        app.kubernetes.io/instance: grafana-tempo
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: query-frontend
+        tempo-gossip-member: "true"
+    spec:
+      serviceAccountName: default
+      
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: grafana-tempo
+                    app.kubernetes.io/instance: grafana-tempo
+                    app.kubernetes.io/component: query-frontend
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+      initContainers:
+      containers:
+        - name: grafana-tempo-query-frontend
+          image: docker.io/bitnami/grafana-tempo:1.5.0-debian-11-r62
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          args:
+            - -target=query-frontend
+            - -config.file=/bitnami/grafana-tempo/conf/tempo.yaml
+            - -mem-ballast-size-mbs=1024
+          envFrom:
+          ports:
+            - containerPort: 3200
+              name: http
+            - containerPort: 7946
+              name: http-memberlist
+            - containerPort: 9095
+              name: grpc
+          resources:
+            limits: {}
+            requests: {}
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            httpGet:
+              path: /ready
+              port: 3200
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            httpGet:
+              path: /ready
+              port: 3200
+          volumeMounts:
+            - name: tempo-config
+              mountPath: /bitnami/grafana-tempo/conf/tempo.yaml
+              subPath: tempo.yaml
+            - name: overrides-config
+              mountPath: /bitnami/grafana-tempo/conf/overrides.yaml
+              subPath: overrides.yaml
+        - name: grafana-tempo-query
+          image: docker.io/bitnami/grafana-tempo-query:1.5.0-debian-11-r59
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          args:
+            - --query.base-path=/
+            - --grpc-storage-plugin.configuration-file=/bitnami/grafana-tempo/conf/tempo-query.yaml
+            - --query.bearer-token-propagation=true
+          envFrom:
+          ports:
+            - containerPort: 16686
+              name: jaeger-ui
+            - containerPort: 16687
+              name: jaeger-metrics
+          resources:
+            limits: {}
+            requests: {}
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            tcpSocket:
+              port: jaeger-ui
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            tcpSocket:
+              port: jaeger-ui
+          volumeMounts:
+            - name: tempo-query-config
+              mountPath: /bitnami/grafana-tempo/conf
+      volumes:
+        - name: tempo-config
+          configMap:
+            name: grafana-tempo-tempo
+        - name: overrides-config
+          configMap:
+            name: grafana-tempo-overrides
+        - name: tempo-query-config
+          configMap:
+            name: grafana-tempo-query-frontend
+---
+# Source: grafana-tempo/templates/vulture/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-tempo-vulture
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: grafana-tempo
+    helm.sh/chart: grafana-tempo-2.0.1
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: vulture
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: grafana-tempo
+      app.kubernetes.io/instance: grafana-tempo
+      app.kubernetes.io/component: vulture
+  template:
+    metadata:
+      annotations:
+        checksum/config: 8d7bbdb5fa0b1e20559752158ab164d21aeba3c312856ae0df7895e55beb1e7a
+      labels:
+        app.kubernetes.io/name: grafana-tempo
+        helm.sh/chart: grafana-tempo-2.0.1
+        app.kubernetes.io/instance: grafana-tempo
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: vulture
+    spec:
+      serviceAccountName: default
+      
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: grafana-tempo
+                    app.kubernetes.io/instance: grafana-tempo
+                    app.kubernetes.io/component: vulture
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+      initContainers:
+      containers:
+        - name: grafana-tempo-vulture
+          image: docker.io/bitnami/grafana-tempo-vulture:1.5.0-debian-11-r60
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          args:
+            - -prometheus-listen-address=0.0.0.0:8080
+            - -tempo-push-url=http://grafana-tempo-distributor
+            - -tempo-query-url=http://grafana-tempo-query-frontend:3200
+          envFrom:
+          ports:
+            - containerPort: 8080
+              name: http
+          resources:
+            limits: {}
+            requests: {}
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            httpGet:
+              path: /metrics
+              port: 8080
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            httpGet:
+              path: /metrics
+              port: 8080
+          volumeMounts:
+            - name: tempo-config
+              mountPath: /bitnami/grafana-tempo/conf
+      volumes:
+        - name: tempo-config
+          configMap:
+            name: grafana-tempo-tempo
+---
+# Source: grafana-tempo/templates/ingester/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: grafana-tempo-ingester
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: grafana-tempo
+    helm.sh/chart: grafana-tempo-2.0.1
+    app.kubernetes.io/instance: grafana-tempo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: ingester
+spec:
+  replicas: 1
+  updateStrategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: grafana-tempo
+      app.kubernetes.io/instance: grafana-tempo
+      app.kubernetes.io/component: ingester
+  serviceName: grafana-tempo-ingester
+  template:
+    metadata:
+      annotations:
+        checksum/config: 8d7bbdb5fa0b1e20559752158ab164d21aeba3c312856ae0df7895e55beb1e7a
+      labels:
+        app.kubernetes.io/name: grafana-tempo
+        helm.sh/chart: grafana-tempo-2.0.1
+        app.kubernetes.io/instance: grafana-tempo
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: ingester
+        tempo-gossip-member: "true"
+    spec:
+      serviceAccountName: default
+      
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: grafana-tempo
+                    app.kubernetes.io/instance: grafana-tempo
+                    app.kubernetes.io/component: ingester
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+      initContainers:
+      containers:
+        - name: grafana-tempo-ingester
+          image: docker.io/bitnami/grafana-tempo:1.5.0-debian-11-r62
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          args:
+            - -target=ingester
+            - -config.file=/bitnami/grafana-tempo/conf/tempo.yaml
+            - -mem-ballast-size-mbs=1024
+          envFrom:
+          ports:
+            - containerPort: 3200
+              name: http
+            - containerPort: 7946
+              name: http-memberlist
+            - containerPort: 9095
+              name: grpc
+          resources:
+            limits: {}
+            requests: {}
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            tcpSocket:
+              port: http
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            tcpSocket:
+              port: http
+          volumeMounts:
+            - name: tempo-config
+              mountPath: /bitnami/grafana-tempo/conf/tempo.yaml
+              subPath: tempo.yaml
+            - name: overrides-config
+              mountPath: /bitnami/grafana-tempo/conf/overrides.yaml
+              subPath: overrides.yaml
+            - name: data
+              mountPath: /bitnami/grafana-tempo/data
+      volumes:
+        - name: tempo-config
+          configMap:
+            name: grafana-tempo-tempo
+        - name: overrides-config
+          configMap:
+            name: grafana-tempo-overrides
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        annotations:
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"

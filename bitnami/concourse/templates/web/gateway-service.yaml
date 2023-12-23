@@ -1,0 +1,54 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.web.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "%s-gateway" (include "concourse.web.fullname" .) }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: web
+  {{- if or .Values.service.workerGateway.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.service.workerGateway.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.workerGateway.type }}
+  {{- if .Values.service.workerGateway.sessionAffinity }}
+  sessionAffinity: {{ .Values.service.workerGateway.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.service.workerGateway.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.service.workerGateway.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if and .Values.service.workerGateway.clusterIP (eq .Values.service.workerGateway.type "ClusterIP") }}
+  clusterIP: {{ .Values.service.workerGateway.clusterIP }}
+  {{- end }}
+  {{- if or (eq .Values.service.workerGateway.type "LoadBalancer") (eq .Values.service.workerGateway.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.service.workerGateway.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.service.workerGateway.type "LoadBalancer") (not (empty .Values.service.workerGateway.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.service.workerGateway.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.service.workerGateway.type "LoadBalancer") (not (empty .Values.service.workerGateway.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.service.workerGateway.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http-worker-gateway
+      port: {{ .Values.service.workerGateway.ports.tsa }}
+      protocol: TCP
+      targetPort: tsa
+      {{- if (and (or (eq .Values.service.workerGateway.type "NodePort") (eq .Values.service.workerGateway.type "LoadBalancer")) (not (empty .Values.service.workerGateway.nodePorts.tsa))) }}
+      nodePort: {{ .Values.service.workerGateway.nodePorts.tsa }}
+      {{- else if eq .Values.service.workerGateway.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.service.workerGateway.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.workerGateway.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.web.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: web
+{{- end }}

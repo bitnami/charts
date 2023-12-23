@@ -1,20 +1,27 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.bucketweb.ingress.enabled -}}
-apiVersion: extensions/v1beta1
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "common.names.fullname" . }}-bucketweb
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-  annotations:
-    {{- if .Values.bucketweb.ingress.certManager }}
-    kubernetes.io/tls-acme: "true"
-    {{- end }}
-    {{- range $key, $value := .Values.bucketweb.ingress.annotations }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: bucketweb
+  {{- if or .Values.bucketweb.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.bucketweb.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
+  {{- if and .Values.bucketweb.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  ingressClassName: {{ .Values.bucketweb.ingress.ingressClassName | quote }}
+  {{- end }}
   rules:
     {{- if .Values.bucketweb.ingress.hostname }}
-    - host: {{ .Values.bucketweb.ingress.hostname }}
+    - host: {{ include "common.tplvalues.render" ( dict "value" .Values.bucketweb.ingress.hostname "context" $ ) }}
       http:
         paths:
           - path: {{ .Values.bucketweb.ingress.path }}
@@ -31,17 +38,20 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" .) "bucketweb") "servicePort" "http" "context" $) | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" $) "bucketweb") "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
-  {{- if or .Values.bucketweb.ingress.tls .Values.bucketweb.ingress.extraTls .Values.bucketweb.ingress.hosts }}
+    {{- if .Values.bucketweb.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.bucketweb.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.bucketweb.ingress.annotations )) .Values.bucketweb.ingress.selfSigned)) .Values.bucketweb.ingress.extraTls }}
   tls:
-    {{- if or .Values.bucketweb.ingress.secrets .Values.bucketweb.ingress.tls }}
+    {{- if and .Values.bucketweb.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.bucketweb.ingress.annotations )) .Values.bucketweb.ingress.selfSigned) }}
     - hosts:
         - {{ .Values.bucketweb.ingress.hostname }}
       secretName: {{ printf "%s-tls" .Values.bucketweb.ingress.hostname }}
     {{- end }}
     {{- if .Values.bucketweb.ingress.extraTls }}
-    {{- toYaml .Values.bucketweb.ingress.extraTls | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.ingress.extraTls "context" $) | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}

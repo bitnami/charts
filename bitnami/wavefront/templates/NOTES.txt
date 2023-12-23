@@ -1,9 +1,0 @@
-Wavefront is setup and configured to collect metrics from your Kubernetes cluster. You should see metrics flowing within a few minutes.
-
-You can visit this dashboard in Wavefront to see your Kubernetes metrics:
-
-{{ .Values.wavefront.url }}/dashboard/integration-kubernetes-summary
-
-{{ include "common.warnings.rollingTag" .Values.collector.image }}
-{{ include "common.warnings.rollingTag" .Values.proxy.image }}
-{{- include "wavefront.validateValues" . }}

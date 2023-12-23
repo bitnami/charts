@@ -1,0 +1,55 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.clusterOperator.metrics.service.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: rabbitmq-operator
+    app.kubernetes.io/part-of: rabbitmq
+  name: {{ printf "%s-metrics" (include "rmqco.clusterOperator.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- if or .Values.commonAnnotations .Values.clusterOperator.metrics.service.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.clusterOperator.metrics.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.clusterOperator.metrics.service.type }}
+  {{- if (or (eq .Values.clusterOperator.metrics.service.type "LoadBalancer") (eq .Values.clusterOperator.metrics.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.clusterOperator.metrics.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if .Values.clusterOperator.metrics.service.clusterIP }}
+  clusterIP: {{ .Values.clusterOperator.metrics.service.clusterIP }}
+  {{- end }}
+  {{- if eq .Values.clusterOperator.metrics.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.clusterOperator.metrics.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if (and (eq .Values.clusterOperator.metrics.service.type "LoadBalancer") (not (empty .Values.clusterOperator.metrics.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.clusterOperator.metrics.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.clusterOperator.metrics.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.clusterOperator.metrics.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.clusterOperator.metrics.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.metrics.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.clusterOperator.metrics.service.ports.http }}
+      targetPort: http
+      protocol: TCP
+      {{- if (and (or (eq .Values.clusterOperator.metrics.service.type "NodePort") (eq .Values.clusterOperator.metrics.service.type "LoadBalancer")) (not (empty .Values.clusterOperator.metrics.service.nodePorts.http))) }}
+      nodePort: {{ .Values.clusterOperator.metrics.service.nodePorts.http }}
+      {{- else if eq .Values.clusterOperator.metrics.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.clusterOperator.metrics.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.metrics.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.clusterOperator.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: rabbitmq-operator
+{{- end }}

@@ -1,0 +1,14 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+command:
+  jenkins-cli-user:
+    exec: java -jar /bitnami/jenkins/home/war/WEB-INF/lib/cli-${APP_VERSION}.jar -s http://localhost:{{ .Vars.containerPorts.http }} -auth {{ .Vars.jenkinsUser }}:{{ .Vars.jenkinsPassword }} who-am-i
+    exit-status: 0
+    timeout: 20000
+file:
+  /bitnami/jenkins:
+    exists: true
+    mode: "2775"
+    owner: root
+    filetype: directory

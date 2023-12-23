@@ -1,8 +1,0 @@
-serviceDiscovery:
-  enabled: true
-cache:
-  ownersCount: 2
-  authOwnersCount: 2
-replicaCount: 2
-rbac:
-  create: true

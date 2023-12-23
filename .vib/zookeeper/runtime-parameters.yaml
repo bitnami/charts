@@ -1,0 +1,7 @@
+service:
+  ports:
+    client: 80
+  type: LoadBalancer
+preAllocSize: 65536
+containerPorts:
+  client: 2181

@@ -1,0 +1,40 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+---
+header:
+  # License format for Helm templates
+  - comment: on-failure
+    license:
+      spdx-id: Apache-2.0
+      copyright-owner: VMware, Inc.
+
+      content: |
+        {{- /*
+        Copyright VMware, Inc.
+        SPDX-License-Identifier: APACHE-2.0
+        */}}
+
+    paths:
+      - "bitnami/**/templates/**/*.yml"
+      - "bitnami/**/templates/**/*.yaml"
+    paths-ignore:
+      - "bitnami/**/templates/crds/**/*.yml"
+      - "bitnami/**/templates/crds/**/*.yaml"
+
+  # License format for all other YAML files
+  - comment: on-failure
+    license:
+      spdx-id: Apache-2.0
+      copyright-owner: VMware, Inc.
+
+      content: |
+        # Copyright VMware, Inc.
+        # SPDX-License-Identifier: APACHE-2.0
+
+    paths:
+      - "bitnami/**/*.yml"
+      - "bitnami/**/*.yaml"
+    paths-ignore:
+      - "bitnami/**/templates/**/*.yml"
+      - "bitnami/**/templates/**/*.yaml"

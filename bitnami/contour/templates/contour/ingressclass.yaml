@@ -1,0 +1,25 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{ $ingressClass := .Values.contour.ingressClass }}
+{{- if kindIs "map" $ingressClass }}
+{{- if $ingressClass.create }}
+---
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: {{ include "contour.ingressClassName" . }}
+  annotations:
+{{- if $ingressClass.default }}
+    ingressclass.kubernetes.io/is-default-class: "true"
+{{- end }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.contour.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: contour
+spec:
+  controller: {{ printf "projectcontour.io/%s/%s-contour" (include "common.names.namespace" .) (include "common.names.fullname" .) }}
+{{- end }}
+{{- end }}

@@ -1,30 +1,37 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: CRM
+  licenses: Apache-2.0
+  images: |
+    - name: odoo
+      image: docker.io/bitnami/odoo:17.0.20231205-debian-11-r1
 apiVersion: v2
-appVersion: 14.0.20210110
+appVersion: 17.0.20231205
 dependencies:
-  - condition: postgresql.enabled
-    name: postgresql
-    repository: https://charts.bitnami.com/bitnami
-    version: 10.x.x
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    version: 1.x.x
-description: A suite of web based open source business apps.
-engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/odoo
+- condition: postgresql.enabled
+  name: postgresql
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 13.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: Odoo is an open source ERP and CRM platform, formerly known as OpenERP, that can connect a wide variety of business operations such as sales, supply chain, finance, and project management.
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/odoo/img/odoo-stack-220x234.png
 keywords:
-  - odoo
-  - crm
-  - www
-  - http
-  - web
+- odoo
+- crm
+- www
+- http
+- web
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
 name: odoo
 sources:
-  - https://github.com/bitnami/bitnami-docker-odoo
-  - https://www.odoo.com/
-version: 18.2.0
+- https://github.com/bitnami/charts/tree/main/bitnami/odoo
+version: 25.0.4

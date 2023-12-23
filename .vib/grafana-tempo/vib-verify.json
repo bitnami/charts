@@ -1,0 +1,69 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/grafana-tempo"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/grafana-tempo"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "M4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "grafana-tempo/goss/goss.yaml",
+            "vars_file": "grafana-tempo/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-grafana-tempo-compactor"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/grafana-tempo/cypress"
+            },
+            "endpoint": "lb-grafana-tempo-compactor-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "compactorReplicaCount": "2",
+              "distributorReplicaCount": "1",
+              "ingesterReplicaCount": "1",
+              "querierReplicaCount": "1",
+              "metricsReplicaCount": "1",
+              "gossipRingPort": "7946"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,26 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+command:
+  check-pool-nodes:
+    {{- $pgpool_host := "localhost" }}
+    {{- $pgpool_port := "9898" }}
+    {{- $pgpool_user := .Vars.pgpool.adminUsername }}
+    {{- $pgpool_password := .Vars.pgpool.adminPassword }}
+    {{- $pcppass_filepath := printf "/tmp/pcppass-%s" (randAlpha 5) }}
+    {{- $nodes := .Vars.postgresql.replicaCount }}
+    # The only way to avoid being prompted for the password is to use a password file
+    # Ref: https://www.pgpool.net/docs/42/en/html/pcp-commands.html
+    exec: echo "{{ $pgpool_host }}:{{ $pgpool_port }}:{{ $pgpool_user }}:{{ $pgpool_password }}" > {{ $pcppass_filepath }} && chmod 600 {{ $pcppass_filepath }} && PCPPASSFILE={{ $pcppass_filepath }} pcp_node_info -h {{ $pgpool_host }} -U {{ $pgpool_user }} -w
+    exit-status: 0
+    stdout:
+    {{ range $e, $i := until $nodes }}
+      - /postgresql-ha-postgresql-{{ $i }}/
+    {{ end }}
+  {{- $uid := .Vars.pgpool.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.pgpool.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0

@@ -1,0 +1,44 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.imageReflectorController.enabled .Values.imageReflectorController.persistence.enabled (not .Values.imageReflectorController.persistence.existingClaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "flux.image-reflector-controller.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.imageReflectorController.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: flux
+    app.kubernetes.io/component: image-reflector-controller
+  annotations:
+    {{- if .Values.imageReflectorController.persistence.resourcePolicy }}
+    helm.sh/resource-policy: {{ .Values.imageReflectorController.persistence.resourcePolicy | quote }}
+    {{- end }}
+    {{- if or .Values.imageReflectorController.serviceAccount.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.imageReflectorController.serviceAccount.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  accessModes:
+  {{- if not (empty .Values.imageReflectorController.persistence.accessModes) }}
+  {{- range .Values.imageReflectorController.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  {{- else }}
+    - {{ .Values.imageReflectorController.persistence.accessMode | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.imageReflectorController.persistence.size | quote }}
+  {{- if .Values.imageReflectorController.persistence.selector }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.persistence.selector "context" $) | nindent 4 }}
+  {{- end -}}
+  {{- if .Values.imageReflectorController.persistence.dataSource }}
+  dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.persistence.dataSource "context" $) | nindent 4 }}
+  {{- end }}
+  {{- include "common.storage.class" (dict "persistence" .Values.imageReflectorController.persistence "global" .Values.global) | nindent 2 }}
+{{- end }}

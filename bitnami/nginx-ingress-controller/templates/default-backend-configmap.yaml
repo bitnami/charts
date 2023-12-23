@@ -1,0 +1,22 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and (.Values.defaultBackend.enabled) (.Values.defaultBackend.serverBlockConfig) -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "nginx-ingress-controller.defaultBackend.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.defaultBackend.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: default-backend
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  defaultBackend.conf: |-
+    {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.serverBlockConfig "context" $) | nindent 4 }}
+{{- end }}

@@ -1,0 +1,56 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "supabase.realtime.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.realtime.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: supabase
+    app.kubernetes.io/component: realtime
+  {{- if or .Values.realtime.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.realtime.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.realtime.service.type }}
+  {{- if and .Values.realtime.service.clusterIP (eq .Values.realtime.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.realtime.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.realtime.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.realtime.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.realtime.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.realtime.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.realtime.service.type "LoadBalancer") (eq .Values.realtime.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.realtime.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.realtime.service.type "LoadBalancer") (not (empty .Values.realtime.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.realtime.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.realtime.service.type "LoadBalancer") (not (empty .Values.realtime.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.realtime.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.realtime.service.ports.http }}
+      protocol: TCP
+      {{- if and (or (eq .Values.realtime.service.type "NodePort") (eq .Values.realtime.service.type "LoadBalancer")) (not (empty .Values.realtime.service.nodePorts.http)) }}
+      nodePort: {{ .Values.realtime.service.nodePorts.http }}
+      targetPort: http
+      {{- else if eq .Values.realtime.service.type "ClusterIP" }}
+      nodePort: null
+      targetPort: {{ .Values.realtime.containerPorts.http }}
+      {{- end }}
+    {{- if .Values.realtime.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.realtime.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.realtime.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: realtime

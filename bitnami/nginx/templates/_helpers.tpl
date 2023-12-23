@@ -1,3 +1,8 @@
+{{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 {{/*
 Return the proper NGINX image name
@@ -14,13 +19,6 @@ Return the proper GIT image name
 {{- end -}}
 
 {{/*
-Return the proper DAP Auth Daemon image name
-*/}}
-{{- define "nginx.ldapDaemon.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.ldapDaemon.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
 Return the proper Prometheus metrics image name
 */}}
 {{- define "nginx.metrics.image" -}}
@@ -31,7 +29,7 @@ Return the proper Prometheus metrics image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "nginx.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.cloneStaticSiteFromGit.image .Values.ldapDaemon.image .Values.metrics.image) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.cloneStaticSiteFromGit.image .Values.metrics.image) "context" $) }}
 {{- end -}}
 
 {{/*
@@ -51,10 +49,10 @@ Return the volume to use to mount the static site in the NGINX container
 emptyDir: {}
 {{- else if .Values.staticSiteConfigmap }}
 configMap:
-  name: {{ .Values.staticSiteConfigmap }}
+  name: {{ printf "%s" (tpl .Values.staticSiteConfigmap $) -}}
 {{- else if .Values.staticSitePVC }}
 persistentVolumeClaim:
-  claimName: {{ .Values.staticSitePVC }}
+  claimName: {{ printf "%s" (tpl .Values.staticSitePVC $) -}}
 {{- end }}
 {{- end -}}
 
@@ -66,17 +64,6 @@ Return the custom NGINX server block configmap.
     {{- printf "%s" (tpl .Values.existingServerBlockConfigmap $) -}}
 {{- else -}}
     {{- printf "%s-server-block" (include "common.names.fullname" .) -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the custom NGINX server block secret for LDAP.
-*/}}
-{{- define "ldap.nginxServerBlockSecret" -}}
-{{- if .Values.ldapDaemon.existingNginxServerBlockSecret -}}
-    {{- printf "%s" (tpl .Values.ldapDaemon.existingNginxServerBlockSecret $) -}}
-{{- else -}}
-    {{- printf "%s-ldap-daemon" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -106,9 +93,20 @@ nginx: cloneStaticSiteFromGit
 
 {{/* Validate values of NGINX - Incorrect extra volume settings */}}
 {{- define "nginx.validateValues.extraVolumes" -}}
-{{- if and (.Values.extraVolumes) (not .Values.extraVolumeMounts) -}}
+{{- if and (.Values.extraVolumes) (not (or .Values.extraVolumeMounts .Values.cloneStaticSiteFromGit.extraVolumeMounts)) -}}
 nginx: missing-extra-volume-mounts
     You specified extra volumes but not mount points for them. Please set
     the extraVolumeMounts value
+{{- end -}}
+{{- end -}}
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "nginx.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}

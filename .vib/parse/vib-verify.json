@@ -1,0 +1,80 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/parse"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/parse"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "parse/goss/server/goss.yaml",
+            "vars_file": "parse/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-parse-server"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "parse/goss/dashboard/goss.yaml",
+            "vars_file": "parse/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-parse-dashboard"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/parse/cypress"
+            },
+            "endpoint": "lb-parse-http-server",
+            "app_protocol": "HTTP",
+            "env": {
+              "appId": "testApp",
+              "masterKey": "M4ster#K3y"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

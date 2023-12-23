@@ -1,0 +1,26 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.config.createExtraKnownHosts }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  # Mandatory hardcoded name.
+  # Ref: https://argoproj.github.io/argo-cd/operator-manual/declarative-setup/#ssh-known-host-public-keys
+  name: argocd-ssh-known-hosts-cm
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    # Mandatory label
+    # Ref: https://argoproj.github.io/argo-cd/operator-manual/declarative-setup/#atomic-configuration
+    app.kubernetes.io/part-of: argocd
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  ssh_known_hosts: |
+    {{- include "common.tplvalues.render" (dict "value" .Values.config.knownHosts "context" $) | nindent 4 }}
+    {{- if .Values.config.extraKnownHosts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.config.extraKnownHosts "context" $) | nindent 4 }}
+    {{- end }}
+{{- end }}

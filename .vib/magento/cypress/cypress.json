@@ -1,0 +1,11 @@
+{
+  "env": {
+    "username": "user",
+    "password": "ComplicatedPassword123!4"
+  },
+  "hosts": {
+    "magento.my": "{{ TARGET_IP }}"
+  },
+  "defaultCommandTimeout": 50000,
+  "pageLoadTimeout": 500000
+}

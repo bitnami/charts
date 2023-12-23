@@ -1,0 +1,63 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.alertmanager.enabled .Values.alertmanager.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ include "prometheus.alertmanager.fullname" . | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.alertmanager.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: prometheus
+    app.kubernetes.io/component: alertmanager
+  {{- if or .Values.alertmanager.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.alertmanager.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.alertmanager.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.alertmanager.ingress.hostname }}
+    - host: {{ .Values.alertmanager.ingress.hostname }}
+      http:
+        paths:
+          {{- if .Values.alertmanager.ingress.extraPaths }}
+          {{- toYaml .Values.alertmanager.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.alertmanager.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.alertmanager.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "prometheus.alertmanager.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.alertmanager.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "prometheus.alertmanager.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.alertmanager.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.alertmanager.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.alertmanager.ingress.annotations )) .Values.alertmanager.ingress.selfSigned)) .Values.alertmanager.ingress.extraTls }}
+  tls:
+    {{- if and .Values.alertmanager.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.alertmanager.ingress.annotations )) .Values.alertmanager.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.alertmanager.ingress.hostname | quote }}
+      secretName: {{ printf "%s-tls" .Values.alertmanager.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.alertmanager.ingress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

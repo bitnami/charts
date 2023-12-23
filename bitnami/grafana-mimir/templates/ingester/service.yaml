@@ -1,0 +1,63 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "grafana-mimir.ingester.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: ingester
+  {{- if or .Values.commonAnnotations .Values.ingester.service.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingester.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.ingester.service.type }}
+  {{- if and .Values.ingester.service.clusterIP (eq .Values.ingester.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.ingester.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.ingester.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.ingester.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.ingester.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.ingester.service.type "LoadBalancer") (eq .Values.ingester.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.ingester.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.ingester.service.type "LoadBalancer") (not (empty .Values.ingester.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.ingester.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.ingester.service.type "LoadBalancer") (not (empty .Values.ingester.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.ingester.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.ingester.service.ports.http }}
+      targetPort: http
+      protocol: TCP
+      {{- if and (or (eq .Values.ingester.service.type "NodePort") (eq .Values.ingester.service.type "LoadBalancer")) (not (empty .Values.ingester.service.nodePorts.http)) }}
+      nodePort: {{ .Values.ingester.service.nodePorts.http }}
+      {{- else if eq .Values.ingester.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: grpc
+      port: {{ .Values.ingester.service.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      {{- if and (or (eq .Values.ingester.service.type "NodePort") (eq .Values.ingester.service.type "LoadBalancer")) (not (empty .Values.ingester.service.nodePorts.grpc)) }}
+      nodePort: {{ .Values.ingester.service.nodePorts.grpc }}
+      {{- else if eq .Values.ingester.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.ingester.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.ingester.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingester.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: ingester

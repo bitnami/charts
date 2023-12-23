@@ -1,0 +1,58 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.promtail.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "grafana-loki.promtail.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.promtail.image "chart" .Chart ) ) }}  
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-loki
+    app.kubernetes.io/component: promtail
+  {{- if or .Values.commonAnnotations .Values.promtail.service.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.promtail.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.promtail.service.type }}
+  {{- if .Values.promtail.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.promtail.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.promtail.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.promtail.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.promtail.service.clusterIP }}
+  clusterIP: {{ .Values.promtail.service.clusterIP }}
+  {{- end }}
+  {{- if (or (eq .Values.promtail.service.type "LoadBalancer") (eq .Values.promtail.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.promtail.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{ if eq .Values.promtail.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.promtail.service.loadBalancerSourceRanges }}
+  {{ end }}
+  {{- if (and (eq .Values.promtail.service.type "LoadBalancer") (not (empty .Values.promtail.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.promtail.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.promtail.service.ports.http }}
+      targetPort: http
+      protocol: TCP
+      {{- if (and (or (eq .Values.promtail.service.type "NodePort") (eq .Values.promtail.service.type "LoadBalancer")) (not (empty .Values.promtail.service.nodePorts.http))) }}
+      nodePort: {{ .Values.promtail.service.nodePorts.http }}
+      {{- else if eq .Values.promtail.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.promtail.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.promtail.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.promtail.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-loki
+    app.kubernetes.io/component: promtail
+{{- end }}

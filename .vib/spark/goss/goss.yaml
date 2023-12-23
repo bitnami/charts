@@ -1,0 +1,8 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+command:
+  spark-submit-app:
+    exec: spark-submit --class org.apache.spark.examples.SparkPi --master spark://spark-master-svc:{{ .Vars.master.containerPorts.cluster }} --deploy-mode cluster /opt/bitnami/spark/examples/jars/spark*.jar
+    exit-status: 0
+    timeout: 20000

@@ -1,0 +1,56 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "supabase.meta.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.meta.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: supabase
+    app.kubernetes.io/component: meta
+  {{- if or .Values.meta.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.meta.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.meta.service.type }}
+  {{- if and .Values.meta.service.clusterIP (eq .Values.meta.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.meta.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.meta.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.meta.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.meta.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.meta.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.meta.service.type "LoadBalancer") (eq .Values.meta.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.meta.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.meta.service.type "LoadBalancer") (not (empty .Values.meta.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.meta.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.meta.service.type "LoadBalancer") (not (empty .Values.meta.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.meta.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.meta.service.ports.http }}
+      protocol: TCP
+      {{- if and (or (eq .Values.meta.service.type "NodePort") (eq .Values.meta.service.type "LoadBalancer")) (not (empty .Values.meta.service.nodePorts.http)) }}
+      nodePort: {{ .Values.meta.service.nodePorts.http }}
+      targetPort: http
+      {{- else if eq .Values.meta.service.type "ClusterIP" }}
+      nodePort: null
+      targetPort: {{ .Values.meta.containerPorts.http }}
+      {{- end }}
+    {{- if .Values.meta.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.meta.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.meta.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: meta

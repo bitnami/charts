@@ -1,0 +1,14 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+file:
+  /bitnami:
+    exists: true
+    filetype: directory
+    mode: "2775"
+  /bitnami/joomla/configuration.php:
+    exists: true
+    filetype: file
+    mode: "0664"
+    contents:
+      - /db.*{{ .Vars.mariadb.auth.database }}/

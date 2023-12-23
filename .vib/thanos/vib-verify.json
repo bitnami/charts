@@ -1,0 +1,50 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/thanos"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/thanos"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "M4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/thanos/cypress"
+            },
+            "endpoint": "lb-thanos-query-frontend-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "storePort": "10903",
+              "receivePort": "10904"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "baseUrl": "http://localhost/",
+  "env": {
+    "username": "root",
+    "password": "rootPassword"
+  },
+  "defaultCommandTimeout": 30000,
+  "pageLoadTimeout": 240000
+}

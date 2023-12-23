@@ -1,0 +1,311 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.msgTopologyOperator.enabled }}
+{{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.msgTopologyOperator.image "chart" .Chart ) ) }}
+{{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+{{/*
+    If the user does not have cert-manager and is not providing a secret with the certificates, the chart needs to generate the secret
+  */}}
+{{- $secretName := printf "%s" (include "rmqco.msgTopologyOperator.webhook.fullname" .) }}
+{{- $ca := genCA "rmq-msg-topology-ca" 365 }}
+{{- $cert := genSignedCert (include "rmqco.msgTopologyOperator.fullname" .) nil (list (printf "%s.%s.svc" (include "rmqco.msgTopologyOperator.webhook.fullname" .) (include "common.names.namespace" .)) (printf "%s.%s.svc.%s" (include "rmqco.msgTopologyOperator.webhook.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain)) 365 $ca }}
+{{- if and (not .Values.useCertManager) (not .Values.msgTopologyOperator.existingWebhookCertSecret) }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ $secretName }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+type: kubernetes.io/tls
+data:
+  tls.crt: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "tls.crt" "defaultValue" $cert.Cert "context" $) }}
+  tls.key: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "tls.key" "defaultValue" $cert.Key "context" $) }}
+  ca.crt: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" $ca.Cert "context" $) }}
+{{- end }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: messaging-topology-operator
+    app.kubernetes.io/part-of: rabbitmq
+  annotations:
+    {{- if .Values.useCertManager }}
+    cert-manager.io/inject-ca-from: {{ printf "%s/%s" (include "common.names.namespace" .) ( include "rmqco.msgTopologyOperator.webhook.secretName" . ) }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  name: {{ template "rmqco.msgTopologyOperator.webhook.fullname.namespace" . }}
+webhooks:
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      {{- if not .Values.useCertManager }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
+      {{- end }}
+      service:
+        name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
+        namespace: {{ include "common.names.namespace" . | quote }}
+        path: /validate-rabbitmq-com-v1beta1-binding
+        port: {{ .Values.msgTopologyOperator.service.ports.webhook }}
+    failurePolicy: Fail
+    name: vbinding.kb.io
+    rules:
+      - apiGroups:
+          - rabbitmq.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - bindings
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      {{- if not .Values.useCertManager }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
+      {{- end }}
+      service:
+        name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
+        namespace: {{ include "common.names.namespace" . | quote }}
+        path: /validate-rabbitmq-com-v1beta1-exchange
+        port: {{ .Values.msgTopologyOperator.service.ports.webhook }}
+    failurePolicy: Fail
+    name: vexchange.kb.io
+    rules:
+      - apiGroups:
+          - rabbitmq.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - exchanges
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      {{- if not .Values.useCertManager }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
+      {{- end }}
+      service:
+        name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
+        namespace: {{ include "common.names.namespace" . | quote }}
+        path: /validate-rabbitmq-com-v1beta1-federation
+        port: {{ .Values.msgTopologyOperator.service.ports.webhook }}
+    failurePolicy: Fail
+    name: vfederation.kb.io
+    rules:
+      - apiGroups:
+          - rabbitmq.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - federations
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      {{- if not .Values.useCertManager }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
+      {{- end }}
+      service:
+        name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
+        namespace: {{ include "common.names.namespace" . | quote }}
+        path: /validate-rabbitmq-com-v1alpha1-superstream
+        port: {{ .Values.msgTopologyOperator.service.ports.webhook }}
+    failurePolicy: Fail
+    name: vsuperstream.kb.io
+    rules:
+      - apiGroups:
+          - rabbitmq.com
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - superstreams
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      {{- if not .Values.useCertManager }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
+      {{- end }}
+      service:
+        name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
+        namespace: {{ include "common.names.namespace" . | quote }}
+        path: /validate-rabbitmq-com-v1beta1-permission
+        port: {{ .Values.msgTopologyOperator.service.ports.webhook }}
+    failurePolicy: Fail
+    name: vpermission.kb.io
+    rules:
+      - apiGroups:
+          - rabbitmq.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - permissions
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      {{- if not .Values.useCertManager }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
+      {{- end }}
+      service:
+        name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
+        namespace: {{ include "common.names.namespace" . | quote }}
+        path: /validate-rabbitmq-com-v1beta1-policy
+        port: {{ .Values.msgTopologyOperator.service.ports.webhook }}
+    failurePolicy: Fail
+    name: vpolicy.kb.io
+    rules:
+      - apiGroups:
+          - rabbitmq.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - policies
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      {{- if not .Values.useCertManager }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
+      {{- end }}
+      service:
+        name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
+        namespace: {{ include "common.names.namespace" . | quote }}
+        path: /validate-rabbitmq-com-v1beta1-queue
+        port: {{ .Values.msgTopologyOperator.service.ports.webhook }}
+    failurePolicy: Fail
+    name: vqueue.kb.io
+    rules:
+      - apiGroups:
+          - rabbitmq.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - queues
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      {{- if not .Values.useCertManager }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
+      {{- end }}
+      service:
+        name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
+        namespace: {{ include "common.names.namespace" . | quote }}
+        path: /validate-rabbitmq-com-v1beta1-schemareplication
+        port: {{ .Values.msgTopologyOperator.service.ports.webhook }}
+    failurePolicy: Fail
+    name: vschemareplication.kb.io
+    rules:
+      - apiGroups:
+          - rabbitmq.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - schemareplications
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      {{- if not .Values.useCertManager }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
+      {{- end }}
+      service:
+        name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
+        namespace: {{ include "common.names.namespace" . | quote }}
+        path: /validate-rabbitmq-com-v1beta1-shovel
+        port: {{ .Values.msgTopologyOperator.service.ports.webhook }}
+    failurePolicy: Fail
+    name: vshovel.kb.io
+    rules:
+      - apiGroups:
+          - rabbitmq.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - shovels
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      {{- if not .Values.useCertManager }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
+      {{- end }}
+      service:
+        name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
+        namespace: {{ include "common.names.namespace" . | quote }}
+        path: /validate-rabbitmq-com-v1beta1-user
+        port: {{ .Values.msgTopologyOperator.service.ports.webhook }}
+    failurePolicy: Fail
+    name: vuser.kb.io
+    rules:
+      - apiGroups:
+          - rabbitmq.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - users
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      {{- if not .Values.useCertManager }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
+      {{- end }}
+      service:
+        name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
+        namespace: {{ include "common.names.namespace" . | quote }}
+        path: /validate-rabbitmq-com-v1beta1-vhost
+        port: {{ .Values.msgTopologyOperator.service.ports.webhook }}
+    failurePolicy: Fail
+    name: vvhost.kb.io
+    rules:
+      - apiGroups:
+          - rabbitmq.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vhosts
+    sideEffects: None
+{{- end }}

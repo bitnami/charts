@@ -1,0 +1,14 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+command:
+  magento-store-list:
+    exec: magento store:list
+    exit-status: 0
+    timeout: 10000
+file:
+  /bitnami/magento:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root

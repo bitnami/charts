@@ -1,0 +1,155 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if $.Values.externalAccess.enabled }}
+{{- $shards := $.Values.shards | int }}
+{{- $replicas := $.Values.replicaCount | int }}
+{{- $totalNodes := mul $shards $replicas }}
+{{- range $shard, $e := until $shards }}
+{{- range $i, $_e := until $replicas }}
+{{- $loadBalancerAnnotationPosOffset := mul $shard $replicas }}
+{{- $loadBalancerAnnotationPosition := add $loadBalancerAnnotationPosOffset $i }}
+{{- $targetPod := printf "%s-shard%d-%d" (include "common.names.fullname" $) $shard $i }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "%s-external" $targetPod | trunc 63 | trimSuffix "-" }}
+  namespace: {{ $.Release.Namespace | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.externalAccess.service.labels $.Values.commonLabels ) "context" $ ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: clickhouse
+    pod: {{ $targetPod }}
+  {{- if or $.Values.externalAccess.service.annotations $.Values.commonAnnotations $.Values.externalAccess.service.loadBalancerAnnotations }}
+  annotations:
+    {{- if and (not (empty $.Values.externalAccess.service.loadBalancerAnnotations)) (eq (len $.Values.externalAccess.service.loadBalancerAnnotations) $totalNodes) }}
+    {{ include "common.tplvalues.render" ( dict "value" (index $.Values.externalAccess.service.loadBalancerAnnotations $loadBalancerAnnotationPosition) "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if $.Values.externalAccess.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.externalAccess.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if $.Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ $.Values.externalAccess.service.type }}
+  {{- if eq $.Values.externalAccess.service.type "LoadBalancer" }}
+  {{- if and (not (empty $.Values.externalAccess.service.loadBalancerIPs)) (eq (len $.Values.externalAccess.service.loadBalancerIPs) $totalNodes) }}
+  loadBalancerIP: {{ index $.Values.externalAccess.service.loadBalancerIPs $i }}
+  {{- end }}
+  {{- if $.Values.externalAccess.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml $.Values.externalAccess.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ $.Values.externalAccess.service.ports.http }}
+      targetPort: http
+      {{- if not (empty $.Values.externalAccess.service.nodePorts.http) }}
+      nodePort: {{ index $.Values.externalAccess.service.nodePorts.http $i }}
+      {{- else }}
+      nodePort: null
+      {{- end }}
+    {{- if $.Values.tls.enabled }}
+    - name: https
+      port: {{ $.Values.externalAccess.service.ports.https }}
+      targetPort: https
+      {{- if not (empty $.Values.externalAccess.service.nodePorts.https) }}
+      nodePort: {{ index $.Values.externalAccess.service.nodePorts.https $i }}
+      {{- else }}
+      nodePort: null
+      {{- end }}
+    {{- end }}
+    {{- if $.Values.metrics.enabled }}
+    - name: http-metrics
+      port: {{ $.Values.externalAccess.service.ports.metrics }}
+      targetPort: http-metrics
+      {{- if not (empty $.Values.externalAccess.service.nodePorts.metrics) }}
+      nodePort: {{ index $.Values.externalAccess.service.nodePorts.metrics $i }}
+      {{- else }}
+      nodePort: null
+      {{- end }}
+    {{- end }}
+    - name: tcp
+      port: {{ $.Values.externalAccess.service.ports.tcp }}
+      targetPort: tcp
+      {{- if not (empty $.Values.externalAccess.service.nodePorts.tcp) }}
+      nodePort: {{ index $.Values.externalAccess.service.nodePorts.tcp $i }}
+      {{- else }}
+      nodePort: null
+      {{- end }}
+    {{- if $.Values.tls.enabled }}
+    - name: tcp-secure
+      port: {{ $.Values.externalAccess.service.ports.tcpSecure }}
+      targetPort: tcp-secure
+      {{- if not (empty $.Values.externalAccess.service.nodePorts.tcpSecure) }}
+      nodePort: {{ index $.Values.externalAccess.service.nodePorts.tcpSecure $i }}
+      {{- else }}
+      nodePort: null
+      {{- end }}
+    {{- end }}
+    {{- if $.Values.keeper.enabled }}
+    - name: tcp-keeper
+      port: {{ $.Values.externalAccess.service.ports.keeper }}
+      targetPort: tcp-keeper
+      {{- if not (empty $.Values.externalAccess.service.nodePorts.keeper) }}
+      nodePort: {{ index $.Values.externalAccess.service.nodePorts.keeper $i }}
+      {{- else }}
+      nodePort: null
+      {{- end }}
+    - name: tcp-keeperinter
+      port: {{ $.Values.externalAccess.service.ports.keeperInter }}
+      targetPort: tcp-keeperinter
+      {{- if not (empty $.Values.externalAccess.service.nodePorts.keeperInter) }}
+      nodePort: {{ index $.Values.externalAccess.service.nodePorts.keeperInter $i }}
+      {{- else }}
+      nodePort: null
+      {{- end }}
+    {{- if $.Values.tls.enabled }}
+    - name: tcp-keepertls
+      port: {{ $.Values.externalAccess.service.ports.keeperSecure }}
+      targetPort: tcp-keepertls
+      {{- if not (empty $.Values.externalAccess.service.nodePorts.keeperSecure) }}
+      nodePort: {{ index $.Values.externalAccess.service.nodePorts.keeperSecure $i }}
+      {{- else }}
+      nodePort: null
+      {{- end }}
+    {{- end }}
+    {{- end }}
+    - name: tcp-mysql
+      port: {{ $.Values.externalAccess.service.ports.mysql }}
+      targetPort: tcp-mysql
+      {{- if not (empty $.Values.externalAccess.service.nodePorts.mysql) }}
+      nodePort: {{ index $.Values.externalAccess.service.nodePorts.mysql $i }}
+      {{- else }}
+      nodePort: null
+      {{- end }}
+    - name: tcp-postgresql
+      port: {{ $.Values.externalAccess.service.ports.postgresql }}
+      targetPort: tcp-postgresql
+      {{- if not (empty $.Values.externalAccess.service.nodePorts.postgresql) }}
+      nodePort: {{ index $.Values.externalAccess.service.nodePorts.postgresql $i }}
+      {{- else }}
+      nodePort: null
+      {{- end }}
+    - name: tcp-intersrv
+      port: {{ $.Values.externalAccess.service.ports.interserver }}
+      targetPort: tcp-intersrv
+      {{- if not (empty $.Values.externalAccess.service.nodePorts.interserver) }}
+      nodePort: {{ index $.Values.externalAccess.service.nodePorts.interserver $i }}
+      {{- else }}
+      nodePort: null
+      {{- end }}
+    {{- if $.Values.externalAccess.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" $.Values.externalAccess.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.podLabels $.Values.commonLabels ) "context" $ ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: clickhouse
+    statefulset.kubernetes.io/pod-name: {{ $targetPod }}
+---
+{{- end }}
+{{- end }}
+{{- end }}

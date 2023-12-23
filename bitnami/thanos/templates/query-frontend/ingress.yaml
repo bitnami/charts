@@ -1,20 +1,27 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.queryFrontend.ingress.enabled -}}
-apiVersion: extensions/v1beta1
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "common.names.fullname" . }}-query-frontend
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-  annotations:
-    {{- if .Values.queryFrontend.ingress.certManager }}
-    kubernetes.io/tls-acme: "true"
-    {{- end }}
-    {{- range $key, $value := .Values.queryFrontend.ingress.annotations }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: query-frontend
+  {{- if or .Values.queryFrontend.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.queryFrontend.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
+  {{- if and .Values.queryFrontend.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  ingressClassName: {{ .Values.queryFrontend.ingress.ingressClassName | quote }}
+  {{- end }}
   rules:
     {{- if .Values.queryFrontend.ingress.hostname }}
-    - host: {{ .Values.queryFrontend.ingress.hostname }}
+    - host: {{ include "common.tplvalues.render" ( dict "value" .Values.queryFrontend.ingress.hostname "context" $ ) }}
       http:
         paths:
           - path: {{ .Values.queryFrontend.ingress.path }}
@@ -31,17 +38,20 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" .) "query-frontend") "servicePort" "http" "context" $) | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" $) "query-frontend") "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
-  {{- if or .Values.queryFrontend.ingress.tls .Values.queryFrontend.ingress.extraTls .Values.queryFrontend.ingress.hosts }}
+    {{- if .Values.queryFrontend.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.queryFrontend.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.queryFrontend.ingress.annotations )) .Values.queryFrontend.ingress.selfSigned)) .Values.queryFrontend.ingress.extraTls }}
   tls:
-    {{- if .Values.queryFrontend.ingress.secrets }}
+    {{- if and .Values.queryFrontend.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.queryFrontend.ingress.annotations )) .Values.queryFrontend.ingress.selfSigned) }}
     - hosts:
         - {{ .Values.queryFrontend.ingress.hostname }}
-      secretName: {{ printf "%s-tls" .Values.queryFrontend.ingress.hostname }}
+      secretName: {{ printf "%s-query-frontend" (include "common.names.fullname" .) }}
     {{- end }}
     {{- if .Values.queryFrontend.ingress.extraTls }}
-    {{- toYaml .Values.queryFrontend.ingress.extraTls | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.ingress.extraTls "context" $) | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}

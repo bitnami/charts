@@ -1,0 +1,23 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.ingressClassResource.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: {{ .Values.ingressClassResource.name }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: controller
+  {{- if .Values.ingressClassResource.default }}
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: "true"
+  {{- end }}
+spec:
+  controller: {{ .Values.ingressClassResource.controllerClass }}
+  {{- if .Values.ingressClassResource.parameters }}
+  parameters:
+    {{- include "common.tplvalues.render" (dict "value" .Values.ingressClassResource.parameters "context" $) | nindent 4 }}
+  {{ end }}
+{{- end }}

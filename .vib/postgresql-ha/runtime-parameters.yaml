@@ -1,0 +1,33 @@
+pgpool:
+  adminUsername: adminUser
+  adminPassword: adminPassword123!4
+  replicaCount: 1
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  containerPorts:
+    postgresql: 5432
+postgresql:
+  repmgrUsername: repmgr
+  repmgrPassword: repmgrPassword123!4
+  repmgrDatabase: repmgr
+  repmgrConnectTimeout: 7
+  replicaCount: 4
+  password: psqlPassword123!4
+  containerPorts:
+    postgresql: 5431
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+persistence:
+  mountPath: /bitnami/postgresql
+service:
+  ports:
+    postgresql: 80
+  type: LoadBalancer

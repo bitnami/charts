@@ -1,0 +1,62 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.controlPlane.enabled .Values.controlPlane.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ template "apisix.control-plane.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: apisix
+    app.kubernetes.io/component: control-plane
+  {{- if or .Values.controlPlane.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.controlPlane.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.controlPlane.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.controlPlane.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- $servicePort := (printf "%s-%s" (ternary "https" "http" .Values.controlPlane.tls.enabled) "admin") }}
+    {{- if .Values.controlPlane.ingress.hostname }}
+    - host: {{ .Values.controlPlane.ingress.hostname }}
+      http:
+        paths:
+          {{- if .Values.controlPlane.ingress.extraPaths }}
+          {{- toYaml .Values.controlPlane.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.controlPlane.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.controlPlane.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "apisix.control-plane.fullname" . | trunc 63 | trimSuffix "-") "servicePort" $servicePort "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.controlPlane.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "apisix.control-plane.fullname" $ | trunc 63 | trimSuffix "-") "servicePort" $servicePort "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.controlPlane.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.controlPlane.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.controlPlane.ingress.annotations )) .Values.controlPlane.ingress.selfSigned)) .Values.controlPlane.ingress.extraTls }}
+  tls:
+    {{- if and .Values.controlPlane.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.controlPlane.ingress.annotations )) .Values.controlPlane.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.controlPlane.ingress.hostname | quote }}
+      secretName: {{ printf "%s-tls" .Values.controlPlane.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.controlPlane.ingress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

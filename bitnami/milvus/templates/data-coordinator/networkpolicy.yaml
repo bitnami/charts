@@ -1,0 +1,86 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.dataCoord.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "milvus.data-coordinator.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: milvus
+    app.kubernetes.io/component: data-coordinator
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.dataCoord.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: milvus
+      app.kubernetes.io/component: data-coordinator
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Allow outbound connections to other cluster pods
+    - ports:
+        - port: {{ .Values.queryCoord.service.ports.grpc }}
+        - port: {{ .Values.dataCoord.service.ports.grpc }}
+        - port: {{ .Values.indexCoord.service.ports.grpc }}
+        - port: {{ .Values.rootCoord.service.ports.grpc }}
+        - port: {{ .Values.queryNode.service.ports.grpc }}
+        - port: {{ .Values.dataNode.service.ports.grpc }}
+        - port: {{ .Values.indexNode.service.ports.grpc }}
+        - port: {{ .Values.proxy.service.ports.grpc }}
+        - port: {{ include "milvus.etcd.port" . }}
+        - port: {{ include "milvus.s3.port" . }}
+        - port: {{ include "milvus.kafka.port" . }}
+        - port: {{ include "milvus.etcd.port" . }}
+        - port: {{ include "milvus.s3.port" . }}
+        - port: {{ include "milvus.kafka.port" . }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+    {{- if .Values.dataCoord.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.dataCoord.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.dataCoord.service.ports.grpc }}
+      {{- if not .Values.dataCoord.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels:
+              {{ template "common.names.fullname" . }}-client: "true"
+      {{- end }}
+        {{- if .Values.dataCoord.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.dataCoord.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.dataCoord.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.dataCoord.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+    {{- if .Values.dataCoord.metrics.enabled }}
+    - ports:
+        - port: {{ .Values.dataCoord.service.ports.metrics }}
+    {{- end }}
+    {{- if .Values.dataCoord.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.dataCoord.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

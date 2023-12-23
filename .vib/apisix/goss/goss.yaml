@@ -1,0 +1,104 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+http:
+  http://apisix-data-plane:{{ .Vars.dataPlane.service.ports.http }}:
+    # The proxy does respond but the route is not registered
+    status: 404
+  http://apisix-data-plane:{{ .Vars.dataPlane.service.ports.metrics }}/apisix/prometheus/metrics:
+    status: 200
+    body:
+      - /apisix_nginx_.*/
+  http://127.0.0.1:{{ .Vars.dataPlane.containerPorts.metrics }}/apisix/prometheus/metrics:
+    status: 200
+    body:
+      - /apisix_nginx_.*/
+  http://127.0.0.1:{{ .Vars.dataPlane.containerPorts.http }}:
+    # The proxy does respond but the route is not registered
+    status: 404
+  http://127.0.0.1:{{ .Vars.dataPlane.containerPorts.control }}/v1/healthcheck:
+    status: 200
+  https://apisix-control-plane:{{ .Vars.controlPlane.service.ports.adminAPI }}/apisix/admin/routes:
+    status: 401
+    allow-insecure: true
+  https://apisix-control-plane:{{ .Vars.controlPlane.service.ports.adminAPI }}/apisix/admin/routes:
+    status: 200
+    request-headers:
+      - "X-API-KEY: {{ .Vars.controlPlane.apiTokenAdmin }}"
+    allow-insecure: true
+  http://apisix-control-plane:{{ .Vars.controlPlane.service.ports.metrics }}/apisix/prometheus/metrics:
+    status: 200
+    body:
+      - /apisix_nginx_.*/
+  http://apisix-dashboard:{{ .Vars.dashboard.service.ports.http }}:
+    status: 200
+  https://apisix-dashboard:{{ .Vars.dashboard.service.ports.https }}:
+    status: 200
+    allow-insecure: true
+  http://apisix-ingress-controller:{{ .Vars.ingressController.service.ports.http }}/metrics:
+    status: 200
+    body:
+      - /apisix_ingress_controller.*/
+addr:
+  # The user needs to add objects of type SSL using the API in order for the radixtree SSL provider to work
+  tcp://apisix-data-plane:{{ .Vars.dataPlane.service.ports.https }}:
+    reachable: true
+    timeout: 500
+  tcp://127.0.0.1:{{ .Vars.dataPlane.containerPorts.https }}:
+    reachable: true
+    timeout: 500
+file:
+  /usr/local/apisix/conf/config.yaml:
+    exists: true
+    filetype: file
+    mode: '0644'
+    contents:
+      - /max_running_timers.*{{ .Vars.dataPlane.extraConfig.nginx_config.max_running_timers }}/
+      - /apisix-control-plane.*{{ .Vars.controlPlane.service.ports.configServer }}/
+      - /node_listen.*{{ .Vars.dataPlane.containerPorts.http }}/
+      - /role.*data_plane/
+  /usr/local/apisix/conf/nginx.conf:
+    exists: true
+    filetype: file
+    mode: '0644'
+    contents:
+      - /listen.*{{ .Vars.dataPlane.containerPorts.http }}/
+      - /listen.*{{ .Vars.dataPlane.containerPorts.https }}.*ssl/
+      - /listen.*{{ .Vars.dataPlane.containerPorts.control }}/
+      - /listen.*{{ .Vars.dataPlane.containerPorts.metrics }}/
+  /etc/hosts:
+    exists: true
+    filetype: file
+    contents:
+    {{ range .Vars.dataPlane.hostAliases }}
+    {{ $ip := .ip }}
+    {{ range $host := .hostnames }}
+      - /{{ $ip }}.*{{$host}}/
+    {{ end }}
+    {{ end }}
+command:
+  {{- $uid := .Vars.dataPlane.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.dataPlane.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the def<ault)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+  {{- if .Vars.dataPlane.containerSecurityContext.enabled }}
+  check-no-capabilities:
+    exec: cat /proc/1/status
+    exit-status: 0
+    stdout:
+    - "CapInh:	0000000000000000"
+    - "CapPrm:	0000000000000000"
+    - "CapEff:	0000000000000000"
+    - "CapBnd:	0000000000000000"
+    - "CapAmb:	0000000000000000"
+  {{- end }}
+  {{ if .Vars.dataPlane.serviceAccount.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*apisix-data-plane/
+  {{ end }}

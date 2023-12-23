@@ -1,0 +1,54 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/flux"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/flux"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "tests_file": "flux/goss/goss.yaml",
+            "vars_file": "flux/runtime-parameters.yaml",
+            "resources": {
+              "path": "/.vib"
+            },
+            "remote": {
+              "pod": {
+                "workload": "deploy-flux-source-controller"
+              }
+            },
+            "wait": {
+              "file": "flux/goss/goss-wait.yaml"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

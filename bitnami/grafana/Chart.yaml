@@ -1,27 +1,34 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Analytics
+  licenses: Apache-2.0
+  images: |
+    - name: grafana
+      image: docker.io/bitnami/grafana:10.2.2-debian-11-r3
+    - name: os-shell
+      image: docker.io/bitnami/os-shell:11-debian-11-r91
 apiVersion: v2
-appVersion: 7.3.7
+appVersion: 10.2.2
 dependencies:
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
-    version: 1.x.x
-description: Grafana is an open source, feature rich metrics dashboard and graph editor for Graphite, Elasticsearch, OpenTSDB, Prometheus and InfluxDB(TM).
-engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/grafana
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: Grafana is an open source metric analytics and visualization suite for visualizing time series data that supports various types of data sources.
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/grafana/img/grafana-stack-220x234.png
 keywords:
-  - analytics
-  - monitoring
-  - metrics
-  - logs
+- analytics
+- monitoring
+- metrics
+- logs
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
 name: grafana
 sources:
-  - https://github.com/bitnami/bitnami-docker-grafana
-  - https://grafana.com/
-version: 5.1.1
+- https://github.com/bitnami/charts/tree/main/bitnami/grafana
+version: 9.6.5

@@ -1,0 +1,49 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+{{- $auth := printf "REDISCLI_AUTH=%s" .Vars.password }}
+{{- $redis_port := .Vars.redis.containerPorts.redis }}
+{{- $lb_endpoint := printf "-h redis-cluster -p %d" .Vars.service.ports.redis }}
+{{- $nodes := .Vars.cluster.nodes }}
+command:
+  {{- $key := printf "key_%s" (randAlpha 5) }}
+  {{- $value := printf "value_%s" (randAlpha 5) }}
+  redis-set-key-value-pairs:
+    exec: |
+      export {{ $auth }} && \
+      redis-cli {{ $lb_endpoint }} CLUSTER NODES | grep master -m 1 | cut -d' ' -f 2 | cut -d':' -f 1 | \
+      xargs -I '{}' redis-cli -c -h '{}' -p {{ $redis_port }} SET {{ $key }} {{ $value }} && sleep 1 \
+      {{ range $e, $i := until $nodes }} && redis-cli -c -h redis-cluster-{{ $i }}.redis-cluster-headless -p {{ $redis_port }} GET {{ $key }} | grep -q {{ $value }}{{ end }}
+    exit-status: 0
+  redis-cluster-info:
+    exec: {{ $auth }} redis-cli {{ $lb_endpoint }} CLUSTER INFO
+    exit-status: 0
+    stdout:
+      - "cluster_state:ok"
+      - "cluster_known_nodes:{{ $nodes }}"
+  redis-node-info:
+    exec: |
+      export {{ $auth }} && \
+      redis-cli {{ $lb_endpoint }} CLUSTER SLOTS | sed -n '3p' | \
+      xargs -I '{}' redis-cli -h '{}' -p {{ $redis_port }} INFO
+    exit-status: 0
+    stdout:
+      - "role:master"
+      - "connected_slaves:{{ .Vars.cluster.replicas }}"
+  {{- $uid := .Vars.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+file:
+  {{ .Vars.persistence.path }}:
+    filetype: directory
+    exists: true
+    mode: "2775"
+    owner: root
+  /opt/bitnami/redis/etc/redis.conf:
+    filetype: file
+    exists: true
+    mode: "0644"

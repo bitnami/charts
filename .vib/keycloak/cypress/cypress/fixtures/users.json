@@ -1,0 +1,15 @@
+{
+  "newUser": {
+    "firstName": "Theodore",
+    "lastName": "Ronclaw",
+    "username": "thea",
+    "email": "thea@mail.com",
+    "password": "someComplicatedPass12345!",
+    "role": "User"
+  },
+  "importedUser": {
+    "lastName": "Ranvenclaw",
+    "username": "theo",
+    "email": "theo@mail.com"
+  }
+}

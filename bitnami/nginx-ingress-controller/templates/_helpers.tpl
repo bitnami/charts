@@ -1,3 +1,8 @@
+{{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
@@ -64,12 +69,21 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
-Return the appropriate apiVersion for PodSecurityPolicy
+Return the appropriate apiGroup for PodSecurityPolicy.
 */}}
-{{- define "nginx-ingress-controller.podSecurityPolicy.apiVersion" -}}
+{{- define "nginx-ingress-controller.podSecurityPolicy.apiGroup" -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "policy/v1beta1" -}}
+{{- print "policy" -}}
 {{- else -}}
-{{- print "extensions/v1beta1" -}}
+{{- print "extensions" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Require extensions API group based on Kubernetes version
+*/}}
+{{- define "nginx-ingress-controller.role.extensions.apiGroup" -}}
+{{- if semverCompare "<1.16-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "- extensions" -}}
 {{- end -}}
 {{- end -}}

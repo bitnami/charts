@@ -1,0 +1,84 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.dataPlane.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "apisix.data-plane.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: apisix
+    app.kubernetes.io/component: data-plane
+  {{- if or .Values.dataPlane.service.annotations .Values.commonAnnotations (and .Values.dataPlane.metrics.enabled .Values.dataPlane.metrics.annotations) }}
+  annotations:
+    {{- if or .Values.dataPlane.service.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.dataPlane.service.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if and .Values.dataPlane.metrics.enabled .Values.dataPlane.metrics.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.dataPlane.metrics.annotations "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.dataPlane.service.type }}
+  {{- if and .Values.dataPlane.service.clusterIP (eq .Values.dataPlane.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.dataPlane.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.dataPlane.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.dataPlane.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.dataPlane.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.dataPlane.service.type "LoadBalancer") (eq .Values.dataPlane.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.dataPlane.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.dataPlane.service.type "LoadBalancer") (not (empty .Values.dataPlane.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.dataPlane.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.dataPlane.service.type "LoadBalancer") (not (empty .Values.dataPlane.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.dataPlane.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.dataPlane.service.ports.http }}
+      protocol: TCP
+      {{- if and (or (eq .Values.dataPlane.service.type "NodePort") (eq .Values.dataPlane.service.type "LoadBalancer")) (not (empty .Values.dataPlane.service.nodePorts.http)) }}
+      nodePort: {{ .Values.dataPlane.service.nodePorts.http }}
+      {{- else if eq .Values.dataPlane.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+      targetPort: http
+    {{- if .Values.dataPlane.tls.enabled }}
+    - name: https
+      port: {{ .Values.dataPlane.service.ports.https }}
+      protocol: TCP
+      {{- if and (or (eq .Values.dataPlane.service.type "NodePort") (eq .Values.dataPlane.service.type "LoadBalancer")) (not (empty .Values.dataPlane.service.nodePorts.https)) }}
+      nodePort: {{ .Values.dataPlane.service.nodePorts.https }}
+      {{- else if eq .Values.dataPlane.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+      targetPort: https
+    {{- end }}
+    {{- if .Values.dataPlane.metrics.enabled }}
+    - name: http-metrics
+      port: {{ .Values.dataPlane.service.ports.metrics }}
+      protocol: TCP
+      {{- if and (or (eq .Values.dataPlane.service.type "NodePort") (eq .Values.dataPlane.service.type "LoadBalancer")) (not (empty .Values.dataPlane.service.nodePorts.metrics)) }}
+      nodePort: {{ .Values.dataPlane.service.nodePorts.metrics }}
+      {{- else if eq .Values.dataPlane.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+      targetPort: http-metrics
+    {{- end }}
+    {{- if .Values.dataPlane.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.dataPlane.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: apisix
+    app.kubernetes.io/component: data-plane
+{{- end }}

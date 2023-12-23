@@ -1,0 +1,45 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+addr:
+  # Querying /ready in HTTP too early results in error 503 and makes the test flaky
+  tcp://grafana-tempo-ingester:{{ .Vars.ingester.service.ports.http }}:
+    reachable: true
+http:
+  http://grafana-tempo-distributor:{{ .Vars.distributor.service.ports.http }}/ready:
+    status: 200
+  http://grafana-tempo-querier:{{ .Vars.querier.service.ports.http }}/ready:
+    status: 200
+file:
+  {{ .Vars.tempo.dataDir }}:
+    exists: true
+    filetype: directory
+    mode: "2777"
+    owner: root
+  /bitnami/grafana-tempo/conf/tempo.yaml:
+    exists: true
+    filetype: file
+    mode: "0644"
+    owner: root
+    contents:
+      - /http_listen_port.*{{ .Vars.tempo.containerPorts.web }}/
+      - /override_config.*\/bitnami\/grafana-tempo\/conf\/overrides.yaml/
+      - /cache.*memcached/
+  /bitnami/grafana-tempo/conf/overrides.yaml:
+    exists: true
+    filetype: file
+    mode: "0644"
+    owner: root
+command:
+  vulture-registered-traces:
+    exec: tempo-cli query api search-tags http://grafana-tempo-query-frontend:{{ .Vars.queryFrontend.service.ports.http }}
+    exit-status: 0
+    stdout:
+      - "vulture"
+  {{- $uid := .Vars.compactor.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.compactor.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0

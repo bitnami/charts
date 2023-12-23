@@ -1,0 +1,48 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.repoServer.metrics.enabled .Values.repoServer.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "argocd.repo-server" . }}
+  namespace: {{ default .Release.Namespace .Values.repoServer.metrics.serviceMonitor.namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- if .Values.repoServer.metrics.serviceMonitor.selector }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.metrics.serviceMonitor.selector "context" $) | nindent 4 }}
+    {{- end }}
+    app.kubernetes.io/component: repo-server
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  jobLabel: {{ .Values.repoServer.metrics.serviceMonitor.jobLabel | quote }}
+  endpoints:
+    - port: http-metrics
+      path: /metrics
+      {{- if .Values.repoServer.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.repoServer.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.repoServer.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.repoServer.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.repoServer.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.repoServer.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.repoServer.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.repoServer.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.repoServer.metrics.serviceMonitor.relabelings }}
+      relabelings: {- include "common.tplvalues.render" ( dict "value" .Values.repoServer.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: metrics
+      app.kubernetes.io/part-of: repo-server
+{{- end }}
+

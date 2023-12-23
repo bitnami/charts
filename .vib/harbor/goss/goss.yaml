@@ -1,0 +1,23 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+file:
+  /etc/registry/config.yml:
+    exists: true
+    filetype: file
+    mode: "0644"
+    owner: root
+    contents:
+      - "level: {{ .Vars.logLevel }}"
+      - "rootdirectory: {{ .Vars.persistence.imageChartStorage.filesystem.rootdirectory }}"
+      - "addr: localhost:{{ .Vars.registry.server.containerPorts.debug }}"
+  {{ .Vars.persistence.imageChartStorage.filesystem.rootdirectory }}:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+  /etc/registry/root.crt:
+    exists: true
+    filetype: file
+    mode: "0644"
+    owner: root

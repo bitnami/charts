@@ -1,0 +1,67 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/kong"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/kong"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "kong/goss/goss.yaml",
+            "vars_file": "kong/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-kong"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/kong/cypress"
+            },
+            "endpoint": "lb-kong-http-proxy",
+            "app_protocol": "HTTP",
+            "env": {
+              "apikey": "ComplicatedPassword123!4",
+              "ingressHost": "www.example.com",
+              "ingressPath": "/nginx",
+              "adminHttpPort": "443"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

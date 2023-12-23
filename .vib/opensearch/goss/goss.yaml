@@ -1,0 +1,32 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+file:
+/opt/bitnami/opensearch/config/opensearch.yml:
+  mode: "0644"
+  filetype: file
+  contents:
+   - /port.*{{ .Vars.containerPorts.transport }}/
+   - /allow_nmap:.*false/
+  exists: true
+/bitnami/opensearch/data:
+    mode: "0644"
+    filetype: directory
+    exists: true
+addr:
+  # Container ports
+  tcp://opensearch-dashboards:{{ .Vars.dashboards.service.ports.http }}:
+    reachable: true
+    timeout: 180000
+{{- if .Vars.master.containerSecurityContext.enabled }}
+command:
+  check-no-capabilities:
+    exec: cat /proc/1/status
+    exit-status: 0
+    stdout:
+      - "CapInh:	0000000000000000"
+      - "CapPrm:	0000000000000000"
+      - "CapEff:	0000000000000000"
+      - "CapBnd:	0000000000000000"
+      - "CapAmb:	0000000000000000"
+{{- end }}

@@ -1,9 +1,17 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.rbac.create .Values.rbac.clusterRole }}
 apiVersion: rbac.authorization.k8s.io/{{ .Values.rbac.apiVersion }}
 kind: ClusterRole
 metadata:
-  name: {{ template "external-dns.fullname" . }}
-  labels: {{ include "external-dns.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 rules:
   - apiGroups:
       - ""
@@ -12,6 +20,7 @@ rules:
       - pods
       - nodes
       - endpoints
+      - namespaces
     verbs:
       - get
       - list
@@ -19,8 +28,18 @@ rules:
   - apiGroups:
       - extensions
       - "networking.k8s.io"
+      - getambassador.io
     resources:
       - ingresses
+      - hosts
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - route.openshift.io
+    resources:
+      - routes
     verbs:
       - get
       - list
@@ -57,6 +76,58 @@ rules:
       - get
       - watch
       - list
+  - apiGroups:
+      - gloo.solo.io
+      - gateway.solo.io
+    resources:
+      - proxies
+      - virtualservices
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - configuration.konghq.com
+    resources:
+      - tcpingresses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - gateway.networking.k8s.io
+    resources:
+      - gateways
+      - httproutes
+      - tlsroutes
+      - tcproutes
+      - udproutes
+      - grpcroutes
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - cis.f5.com
+    resources:
+      - virtualservers
+    verbs:
+      - get
+      - watch
+      - list
+  {{- if has "traefik-proxy" .Values.sources }}
+  - apiGroups: 
+      - traefik.containo.us
+      - traefik.io
+    resources: 
+      - ingressroutes
+      - ingressroutetcps
+      - ingressrouteudps
+    verbs: 
+      - get
+      - watch
+      - list
+  {{- end }}
   {{- if or .Values.crd.create .Values.crd.apiversion }}
   - apiGroups:
       {{- if .Values.crd.create }}

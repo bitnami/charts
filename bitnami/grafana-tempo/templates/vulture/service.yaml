@@ -1,0 +1,56 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.vulture.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "grafana-tempo.vulture.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.vulture.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: vulture
+  {{- if or .Values.commonAnnotations .Values.vulture.service.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.vulture.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.vulture.service.type }}
+  {{- if .Values.vulture.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.vulture.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.vulture.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if and .Values.vulture.service.clusterIP (eq .Values.vulture.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.vulture.service.clusterIP }}
+  {{- end }}
+  {{- if or (eq .Values.vulture.service.type "LoadBalancer") (eq .Values.vulture.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.vulture.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.vulture.service.type "LoadBalancer") (not (empty .Values.vulture.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.vulture.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.vulture.service.type "LoadBalancer") (not (empty .Values.vulture.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.vulture.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.vulture.service.ports.http }}
+      targetPort: http
+      protocol: TCP
+      {{- if (and (or (eq .Values.vulture.service.type "NodePort") (eq .Values.vulture.service.type "LoadBalancer")) (not (empty .Values.vulture.service.nodePorts.http))) }}
+      nodePort: {{ .Values.vulture.service.nodePorts.http }}
+      {{- else if eq .Values.vulture.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.vulture.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.vulture.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.vulture.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: vulture
+{{- end }}

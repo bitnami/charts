@@ -1,0 +1,3768 @@
+{
+    "title": "Chart Values",
+    "type": "object",
+    "properties": {
+        "global": {
+            "type": "object",
+            "properties": {
+                "imageRegistry": {
+                    "type": "string",
+                    "description": "Global Docker image registry",
+                    "default": ""
+                },
+                "imagePullSecrets": {
+                    "type": "array",
+                    "description": "Global Docker registry secret names as an array",
+                    "default": [],
+                    "items": {}
+                },
+                "storageClass": {
+                    "type": "string",
+                    "description": "Global StorageClass for Persistent Volume(s)",
+                    "default": ""
+                }
+            }
+        },
+        "kubeVersion": {
+            "type": "string",
+            "description": "Override Kubernetes version",
+            "default": ""
+        },
+        "nameOverride": {
+            "type": "string",
+            "description": "String to partially override common.names.name",
+            "default": ""
+        },
+        "fullnameOverride": {
+            "type": "string",
+            "description": "String to fully override common.names.fullname",
+            "default": ""
+        },
+        "namespaceOverride": {
+            "type": "string",
+            "description": "String to fully override common.names.namespace",
+            "default": ""
+        },
+        "commonLabels": {
+            "type": "object",
+            "description": "Labels to add to all deployed objects",
+            "default": {}
+        },
+        "commonAnnotations": {
+            "type": "object",
+            "description": "Annotations to add to all deployed objects",
+            "default": {}
+        },
+        "clusterDomain": {
+            "type": "string",
+            "description": "Kubernetes cluster domain name",
+            "default": "cluster.local"
+        },
+        "extraDeploy": {
+            "type": "array",
+            "description": "Array of extra objects to deploy with the release",
+            "default": [],
+            "items": {}
+        },
+        "diagnosticMode": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable diagnostic mode (all probes will be disabled and the command will be overridden)",
+                    "default": false
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Command to override all containers in the deployment",
+                    "default": [
+                        "sleep"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Args to override all containers in the deployment",
+                    "default": [
+                        "infinity"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "registry": {
+                    "type": "string",
+                    "description": "APISIX image registry",
+                    "default": "docker.io"
+                },
+                "repository": {
+                    "type": "string",
+                    "description": "APISIX image repository",
+                    "default": "bitnami/apisix"
+                },
+                "tag": {
+                    "type": "string",
+                    "description": "APISIX image tag (immutable tags are recommended)",
+                    "default": "3.3.0-debian-11-r3"
+                },
+                "digest": {
+                    "type": "string",
+                    "description": "APISIX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)",
+                    "default": ""
+                },
+                "pullPolicy": {
+                    "type": "string",
+                    "description": "APISIX image pull policy",
+                    "default": "IfNotPresent"
+                },
+                "pullSecrets": {
+                    "type": "array",
+                    "description": "APISIX image pull secrets",
+                    "default": [],
+                    "items": {}
+                },
+                "debug": {
+                    "type": "boolean",
+                    "description": "Enable APISIX image debug mode",
+                    "default": false
+                }
+            }
+        },
+        "dataPlane": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable APISIX",
+                    "default": true
+                },
+                "useDaemonSet": {
+                    "type": "boolean",
+                    "description": "Deploy as DaemonSet",
+                    "default": false
+                },
+                "replicaCount": {
+                    "type": "number",
+                    "description": "Number of APISIX replicas to deploy",
+                    "default": 1
+                },
+                "hostNetwork": {
+                    "type": "boolean",
+                    "description": "Use hostNetwork",
+                    "default": false
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "http": {
+                            "type": "number",
+                            "description": "APISIX HTTP container port",
+                            "default": 9080
+                        },
+                        "https": {
+                            "type": "number",
+                            "description": "APISIX HTTPS container port",
+                            "default": 9443
+                        },
+                        "control": {
+                            "type": "number",
+                            "description": "APISIX control container port",
+                            "default": 9090
+                        },
+                        "metrics": {
+                            "type": "number",
+                            "description": "APISIX metrics container port",
+                            "default": 9099
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe on APISIX containers",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe on APISIX containers",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe on APISIX containers",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Custom startupProbe that overrides the default one",
+                    "default": {}
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the APISIX containers",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the APISIX containers",
+                            "default": {}
+                        }
+                    }
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled APISIX pods' Security Context",
+                            "default": true
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Set APISIX pod's Security Context fsGroup",
+                            "default": 1001
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set APISIX container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled APISIX containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set APISIX containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set APISIX containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set APISIX containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set APISIX container's privilege escalation",
+                            "default": false
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "Set APISIX container's Security Context runAsNonRoot",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "APISIX pods host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "defaultConfig": {
+                    "type": "string",
+                    "description": "Apisix apisix configuration (evaluated as a template)",
+                    "default": "{{- if .Values.dataPlane.metrics.enabled }}\nplugin_attr:\n  prometheus:\n    export_uri: /apisix/prometheus/metrics\n    metric_prefix: apisix_\n    enable_export_server: true\n    export_addr:\n      ip: 0.0.0.0\n      port: {{ .Values.dataPlane.containerPorts.metrics }}\n{{- end }}\napisix:\n  node_listen: {{ .Values.dataPlane.containerPorts.http }}\n  enable_admin: false\n  {{- if .Values.dataPlane.tls.enabled }}\n  ssl:\n    enable: true\n    listen:\n      - port: {{ .Values.dataPlane.containerPorts.https }}\n        enable_http2: true\n    ssl_trusted_certificate: /bitnami/certs/{{ .Values.dataPlane.tls.certCAFilename }}\n  {{- end }}\n  control:\n    ip: 0.0.0.0\n    port: {{ .Values.dataPlane.containerPorts.control }}\nnginx_config:\n  error_log: /dev/stderr\n  stream:\n    access_log: /dev/stdout\n  http:\n    access_log: /dev/stdout\n  http_configuration_snippet: |\n    proxy_buffering off;\ndeployment:\n  role: data_plane\n  role_data_plane:\n    config_provider: etcd\n    {{- if .Values.controlPlane.enabled }}\n    control_plane:\n      host:\n        - {{ ternary \"https\" \"http\" .Values.controlPlane.tls.enabled }}://{{ include \"apisix.control-plane.fullname\" . }}:{{ .Values.controlPlane.service.ports.configServer }}\n      prefix: /apisix\n      timeout: 30\n    {{- end }}\n  {{- if .Values.dataPlane.tls.enabled }}\n  certs:\n    {{- if .Values.dataPlane.tls.enabled }}\n    cert: /bitnami/certs/{{ .Values.dataPlane.tls.certFilename }}\n    cert_key: /bitnami/certs/{{ .Values.dataPlane.tls.certKeyFilename }}\n    {{- if .Values.dataPlane.tls.certCAFilename }}\n    client_ca_cert: /bitnami/certs/{{ .Values.dataPlane.tls.certCAFilename }}\n    {{- end }}\n    {{- end }}\n  {{- end }}\ndiscovery:\n  kubernetes:\n    service:\n      # apiserver schema, options [http, https]\n      schema: https #default https\n\n      # apiserver host, options [ipv4, ipv6, domain, environment variable]\n      host: ${KUBERNETES_SERVICE_HOST} #default ${KUBERNETES_SERVICE_HOST}\n\n      # apiserver port, options [port number, environment variable]\n      port: ${KUBERNETES_SERVICE_PORT}  #default ${KUBERNETES_SERVICE_PORT}\n\n    client:\n      # serviceaccount token or token_file\n      token_file: /var/run/secrets/kubernetes.io/serviceaccount/token\n\n    default_weight: 50 # weight assigned to each discovered endpoint. default 50, minimum 0\n"
+                },
+                "existingConfigMap": {
+                    "type": "string",
+                    "description": "name of a ConfigMap with existing configuration for the apisix",
+                    "default": ""
+                },
+                "extraConfigExistingConfigMap": {
+                    "type": "string",
+                    "description": "name of a ConfigMap with existing configuration for the data plane",
+                    "default": ""
+                },
+                "tls": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable TLS transport in Data Plane",
+                            "default": true
+                        },
+                        "autoGenerated": {
+                            "type": "boolean",
+                            "description": "Auto-generate self-signed certificates",
+                            "default": true
+                        },
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Name of a secret containing the certificates",
+                            "default": ""
+                        },
+                        "certFilename": {
+                            "type": "string",
+                            "description": "Path of the certificate file when mounted as a secret",
+                            "default": "tls.crt"
+                        },
+                        "certKeyFilename": {
+                            "type": "string",
+                            "description": "Path of the certificate key file when mounted as a secret",
+                            "default": "tls.key"
+                        },
+                        "certCAFilename": {
+                            "type": "string",
+                            "description": "Path of the certificate CA file when mounted as a secret",
+                            "default": "ca.crt"
+                        },
+                        "cert": {
+                            "type": "string",
+                            "description": "Content of the certificate to be added to the secret",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Content of the certificate key to be added to the secret",
+                            "default": ""
+                        },
+                        "ca": {
+                            "type": "string",
+                            "description": "Content of the certificate CA to be added to the secret",
+                            "default": ""
+                        }
+                    }
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for APISIX pods",
+                    "default": {}
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Annotations for APISIX pods",
+                    "default": {}
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod affinity preset. Ignored if `apisix.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod anti-affinity preset. Ignored if `apisix.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "pdb": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Enable/disable a Pod Disruption Budget creation",
+                            "default": false
+                        },
+                        "minAvailable": {
+                            "type": "number",
+                            "description": "Minimum number/percentage of pods that should remain scheduled",
+                            "default": 1
+                        },
+                        "maxUnavailable": {
+                            "type": "string",
+                            "description": "Maximum number/percentage of pods that may be made unavailable",
+                            "default": ""
+                        }
+                    }
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Node affinity preset type. Ignored if `apisix.affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Node label key to match. Ignored if `apisix.affinity` is set",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "Node label values to match. Ignored if `apisix.affinity` is set",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Affinity for APISIX pods assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Node labels for APISIX pods assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Tolerations for APISIX pods assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "APISIX statefulset strategy type",
+                            "default": "RollingUpdate"
+                        }
+                    }
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "APISIX pods' priorityClassName",
+                    "default": ""
+                },
+                "topologySpreadConstraints": {
+                    "type": "array",
+                    "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template",
+                    "default": [],
+                    "items": {}
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Name of the k8s scheduler (other than default) for APISIX pods",
+                    "default": ""
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "string",
+                    "description": "Seconds Redmine pod needs to terminate gracefully",
+                    "default": ""
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "for the APISIX container(s) to automate configuration before or after startup",
+                    "default": {}
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array with extra environment variables to add to APISIX nodes",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap containing extra env vars for APISIX nodes",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Name of existing Secret containing extra env vars for APISIX nodes",
+                    "default": ""
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the APISIX pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the APISIX container(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Add additional sidecar containers to the APISIX pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Add additional init containers to the APISIX pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "APISIX service type",
+                            "default": "LoadBalancer"
+                        },
+                        "ports": {
+                            "type": "object",
+                            "properties": {
+                                "http": {
+                                    "type": "number",
+                                    "description": "APISIX service HTTP port",
+                                    "default": 80
+                                },
+                                "https": {
+                                    "type": "number",
+                                    "description": "APISIX service HTTPS port",
+                                    "default": 443
+                                },
+                                "metrics": {
+                                    "type": "number",
+                                    "description": "APISIX service HTTPS port",
+                                    "default": 8080
+                                }
+                            }
+                        },
+                        "nodePorts": {
+                            "type": "object",
+                            "properties": {
+                                "http": {
+                                    "type": "string",
+                                    "description": "Node port for HTTP",
+                                    "default": ""
+                                },
+                                "https": {
+                                    "type": "string",
+                                    "description": "Node port for HTTPS",
+                                    "default": ""
+                                },
+                                "metrics": {
+                                    "type": "string",
+                                    "description": "Node port for metrics",
+                                    "default": ""
+                                }
+                            }
+                        },
+                        "clusterIP": {
+                            "type": "string",
+                            "description": "APISIX service Cluster IP",
+                            "default": ""
+                        },
+                        "loadBalancerIP": {
+                            "type": "string",
+                            "description": "APISIX service Load Balancer IP",
+                            "default": ""
+                        },
+                        "loadBalancerSourceRanges": {
+                            "type": "array",
+                            "description": "APISIX service Load Balancer sources",
+                            "default": [],
+                            "items": {}
+                        },
+                        "externalTrafficPolicy": {
+                            "type": "string",
+                            "description": "APISIX service external traffic policy",
+                            "default": "Cluster"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for APISIX service",
+                            "default": {}
+                        },
+                        "extraPorts": {
+                            "type": "array",
+                            "description": "Extra ports to expose in APISIX service (normally used with the `sidecars` value)",
+                            "default": [],
+                            "items": {}
+                        },
+                        "sessionAffinity": {
+                            "type": "string",
+                            "description": "Control where web requests go, to the same pod or round-robin",
+                            "default": "None"
+                        },
+                        "sessionAffinityConfig": {
+                            "type": "object",
+                            "description": "Additional settings for the sessionAffinity",
+                            "default": {}
+                        }
+                    }
+                },
+                "ingress": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable ingress record generation for Apisix",
+                            "default": false
+                        },
+                        "pathType": {
+                            "type": "string",
+                            "description": "Ingress path type",
+                            "default": "ImplementationSpecific"
+                        },
+                        "apiVersion": {
+                            "type": "string",
+                            "description": "Force Ingress API version (automatically detected if not set)",
+                            "default": ""
+                        },
+                        "hostname": {
+                            "type": "string",
+                            "description": "Default host for the ingress record",
+                            "default": "apisix-data-plane.local"
+                        },
+                        "ingressClassName": {
+                            "type": "string",
+                            "description": "IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)",
+                            "default": ""
+                        },
+                        "path": {
+                            "type": "string",
+                            "description": "Default path for the ingress record",
+                            "default": "/"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.",
+                            "default": {}
+                        },
+                        "tls": {
+                            "type": "boolean",
+                            "description": "Enable TLS configuration for the host defined at `dataPlane.ingress.hostname` parameter",
+                            "default": false
+                        },
+                        "selfSigned": {
+                            "type": "boolean",
+                            "description": "Create a TLS secret for this ingress record using self-signed certificates generated by Helm",
+                            "default": false
+                        },
+                        "extraHosts": {
+                            "type": "array",
+                            "description": "An array with additional hostname(s) to be covered with the ingress record",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraPaths": {
+                            "type": "array",
+                            "description": "An array with additional arbitrary paths that may need to be added to the ingress under the main host",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraTls": {
+                            "type": "array",
+                            "description": "TLS configuration for additional hostname(s) to be covered with this ingress record",
+                            "default": [],
+                            "items": {}
+                        },
+                        "secrets": {
+                            "type": "array",
+                            "description": "Custom TLS certificates as secrets",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraRules": {
+                            "type": "array",
+                            "description": "Additional rules to be covered with this ingress record",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "autoscaling": {
+                    "type": "object",
+                    "properties": {
+                        "vpa": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "description": "Enable VPA",
+                                    "default": false
+                                },
+                                "annotations": {
+                                    "type": "object",
+                                    "description": "Annotations for VPA resource",
+                                    "default": {}
+                                },
+                                "controlledResources": {
+                                    "type": "array",
+                                    "description": "VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "maxAllowed": {
+                                    "type": "object",
+                                    "description": "VPA Max allowed resources for the pod",
+                                    "default": {}
+                                },
+                                "minAllowed": {
+                                    "type": "object",
+                                    "description": "VPA Min allowed resources for the pod",
+                                    "default": {}
+                                },
+                                "updatePolicy": {
+                                    "type": "object",
+                                    "properties": {
+                                        "updateMode": {
+                                            "type": "string",
+                                            "description": "Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod",
+                                            "default": "Auto"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "hpa": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "description": "Enable HPA for APISIX Data Plane",
+                                    "default": false
+                                },
+                                "minReplicas": {
+                                    "type": "string",
+                                    "description": "Minimum number of APISIX Data Plane replicas",
+                                    "default": ""
+                                },
+                                "maxReplicas": {
+                                    "type": "string",
+                                    "description": "Maximum number of APISIX Data Plane replicas",
+                                    "default": ""
+                                },
+                                "targetCPU": {
+                                    "type": "string",
+                                    "description": "Target CPU utilization percentage",
+                                    "default": ""
+                                },
+                                "targetMemory": {
+                                    "type": "string",
+                                    "description": "Target Memory utilization percentage",
+                                    "default": ""
+                                }
+                            }
+                        }
+                    }
+                },
+                "rbac": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Specifies whether RBAC resources should be created",
+                            "default": true
+                        },
+                        "rules": {
+                            "type": "array",
+                            "description": "Custom RBAC rules to set",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "serviceAccount": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Specifies whether a ServiceAccount should be created",
+                            "default": true
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "The name of the ServiceAccount to use.",
+                            "default": ""
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional Service Account annotations (evaluated as a template)",
+                            "default": {}
+                        },
+                        "automountServiceAccountToken": {
+                            "type": "boolean",
+                            "description": "Automount service account token for the apisix service account",
+                            "default": true
+                        }
+                    }
+                },
+                "metrics": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable the export of Prometheus metrics",
+                            "default": false
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "properties": {
+                                "prometheus": {
+                                    "type": "object",
+                                    "properties": {
+                                        "io/scrape": {
+                                            "type": "string",
+                                            "description": "",
+                                            "default": "true"
+                                        },
+                                        "io/port": {
+                                            "type": "string",
+                                            "description": "",
+                                            "default": "{{ .Values.dataPlane.service.ports.metrics }}"
+                                        },
+                                        "io/path": {
+                                            "type": "string",
+                                            "description": "",
+                                            "default": "/apisix/prometheus/metrics"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "serviceMonitor": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "description": "if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)",
+                                    "default": false
+                                },
+                                "namespace": {
+                                    "type": "string",
+                                    "description": "Namespace in which Prometheus is running",
+                                    "default": ""
+                                },
+                                "annotations": {
+                                    "type": "object",
+                                    "description": "Additional custom annotations for the ServiceMonitor",
+                                    "default": {}
+                                },
+                                "labels": {
+                                    "type": "object",
+                                    "description": "Extra labels for the ServiceMonitor",
+                                    "default": {}
+                                },
+                                "jobLabel": {
+                                    "type": "string",
+                                    "description": "The name of the label on the target service to use as the job name in Prometheus",
+                                    "default": ""
+                                },
+                                "honorLabels": {
+                                    "type": "boolean",
+                                    "description": "honorLabels chooses the metric's labels on collisions with target labels",
+                                    "default": false
+                                },
+                                "interval": {
+                                    "type": "string",
+                                    "description": "Interval at which metrics should be scraped.",
+                                    "default": ""
+                                },
+                                "scrapeTimeout": {
+                                    "type": "string",
+                                    "description": "Timeout after which the scrape is ended",
+                                    "default": ""
+                                },
+                                "metricRelabelings": {
+                                    "type": "array",
+                                    "description": "Specify additional relabeling of metrics",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "relabelings": {
+                                    "type": "array",
+                                    "description": "Specify general relabeling",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "selector": {
+                                    "type": "object",
+                                    "description": "Prometheus instance selector labels",
+                                    "default": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "controlPlane": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable APISIX",
+                    "default": true
+                },
+                "replicaCount": {
+                    "type": "number",
+                    "description": "Number of APISIX replicas to deploy",
+                    "default": 1
+                },
+                "hostNetwork": {
+                    "type": "boolean",
+                    "description": "Use hostNetwork",
+                    "default": false
+                },
+                "useDaemonSet": {
+                    "type": "boolean",
+                    "description": "Deploy as DaemonSet",
+                    "default": false
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "adminAPI": {
+                            "type": "number",
+                            "description": "APISIX Admin API port",
+                            "default": 9180
+                        },
+                        "configServer": {
+                            "type": "number",
+                            "description": "APISIX config port",
+                            "default": 9280
+                        },
+                        "control": {
+                            "type": "number",
+                            "description": "APISIX control port",
+                            "default": 9090
+                        },
+                        "metrics": {
+                            "type": "number",
+                            "description": "APISIX metrics port",
+                            "default": 9099
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe on APISIX containers",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe on APISIX containers",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe on APISIX containers",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Custom startupProbe that overrides the default one",
+                    "default": {}
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the APISIX containers",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the APISIX containers",
+                            "default": {}
+                        }
+                    }
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled APISIX pods' Security Context",
+                            "default": true
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Set APISIX pod's Security Context fsGroup",
+                            "default": 1001
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set APISIX container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled APISIX containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set APISIX containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set APISIX containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set APISIX containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set APISIX container's privilege escalation",
+                            "default": false
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "Set APISIX container's Security Context runAsNonRoot",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "APISIX pods host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "apiTokenAdmin": {
+                    "type": "string",
+                    "description": "Admin API Token for APISIX control plane",
+                    "default": ""
+                },
+                "apiTokenViewer": {
+                    "type": "string",
+                    "description": "Viewer API Token for APISIX control plane",
+                    "default": ""
+                },
+                "existingSecret": {
+                    "type": "string",
+                    "description": "Name of a secret containing API Tokens for APISIX control plane",
+                    "default": ""
+                },
+                "existingSecretAdminTokenKey": {
+                    "type": "string",
+                    "description": "Key inside the secret containing the Admin API Tokens for APISIX control plane",
+                    "default": ""
+                },
+                "existingSecretViewerTokenKey": {
+                    "type": "string",
+                    "description": "Key inside the secret containing the Viewer API Tokens for APISIX control plane",
+                    "default": ""
+                },
+                "defaultConfig": {
+                    "type": "string",
+                    "description": "Apisix apisix configuration (evaluated as a template)",
+                    "default": "{{- if .Values.controlPlane.metrics.enabled }}\nplugin_attr:\n  prometheus:\n    export_uri: /apisix/prometheus/metrics\n    metric_prefix: apisix_\n    enable_export_server: true\n    export_addr:\n      ip: 0.0.0.0\n      port: {{ .Values.controlPlane.containerPorts.metrics }}\n{{- end }}\nnginx_config:\n  error_log: /dev/stderr\n  stream:\n    access_log: /dev/stdout\n  http:\n    access_log: /dev/stdout\n  http_configuration_snippet: |\n    proxy_buffering off;\napisix:\n  control:\n    ip: 0.0.0.0\n    port: {{ .Values.controlPlane.containerPorts.control }}\ndeployment:\n  role: control_plane\n  role_control_plane:\n      config_provider: etcd\n      conf_server:\n        listen: 0.0.0.0:{{ .Values.controlPlane.containerPorts.configServer }}\n        cert: /bitnami/certs/{{ .Values.controlPlane.tls.certFilename }}\n        cert_key: /bitnami/certs/{{ .Values.controlPlane.tls.certKeyFilename }}\n  etcd:\n    host:\n      {{- if .Values.etcd.enabled  }}\n        {{- $replicas := $.Values.etcd.replicaCount | int }}\n        {{- range $i, $_e := until $replicas }}\n      - {{ printf \"%s://%s-%d.%s:%v\" (ternary \"https\" \"http\" $.Values.etcd.auth.client.secureTransport) (include \"apisix.etcd.fullname\" $ ) $i (include \"apisix.etcd.headlessServiceName\" $) ( include \"apisix.etcd.port\" $ ) }}          {{- end }}\n      {{- else }}\n      {{- range $node := .Values.externalEtcd.servers }}\n      - {{ ternary \"https\" \"http\" $.Values.externalEtcd.secureTransport }}://{{ printf \"%s:%v\" $node (include \"apisix.etcd.port\" $) }}\n      {{- end }}\n      {{- end }}\n    prefix: /apisix\n    timeout: 30\n    use_grpc: false\n    startup_retry: 60\n    {{- if (include \"apisix.etcd.authEnabled\" .) }}\n    user: \"{{ print \"{{APISIX_ETCD_USER}}\" }}\"\n    password: \"{{ print \"{{APISIX_ETCD_PASSWORD}}\" }}\"\n    {{- end }}\n  {{- if .Values.controlPlane.tls.enabled }}\n  certs:\n    {{- if .Values.controlPlane.tls.enabled }}\n    cert: /bitnami/certs/{{ .Values.controlPlane.tls.certFilename }}\n    cert_key: /bitnami/certs/{{ .Values.controlPlane.tls.certKeyFilename }}\n    {{- if .Values.controlPlane.tls.certCAFilename }}\n    client_ca_cert: /bitnami/certs/{{ .Values.controlPlane.tls.certCAFilename }}\n    {{- end }}\n    {{- end }}\n  {{- end }}\n  admin:\n    {{- if .Values.controlPlane.tls.enabled }}\n    https_admin: true\n    admin_api_mtls:\n      admin_ssl_cert: /bitnami/certs/{{ .Values.controlPlane.tls.certFilename }}\n      admin_ssl_cert_key: /bitnami/certs/{{ .Values.controlPlane.tls.certKeyFilename }}\n    {{- end }}\n\n    allow_admin:\n      - 0.0.0.0/0\n\n    admin_key:\n      - name: admin\n        key: \"{{ print \"{{APISIX_ADMIN_API_TOKEN}}\" }}\"\n        role: admin\n      - name: viewer\n        key: \"{{ print \"{{APISIX_VIEWER_API_TOKEN}}\" }}\"\n        role: viewer\n    admin_listen:\n        port: {{ .Values.controlPlane.containerPorts.adminAPI }}\n    enable_admin_cors: true         # Admin API support CORS response headers.\ndiscovery:\n  kubernetes:\n    service:\n      schema: https #default https\n\n      # apiserver host, options [ipv4, ipv6, domain, environment variable]\n      host: ${KUBERNETES_SERVICE_HOST}\n\n      # apiserver port, options [port number, environment variable]\n      port: ${KUBERNETES_SERVICE_PORT}\n\n    client:\n      # serviceaccount token or token_file\n      token_file: /var/run/secrets/kubernetes.io/serviceaccount/token\n\n    default_weight: 50 # weight assigned to each discovered endpoint. default 50, minimum 0\n"
+                },
+                "existingConfigMap": {
+                    "type": "string",
+                    "description": "name of a ConfigMap with existing configuration for the apisix",
+                    "default": ""
+                },
+                "extraConfigExistingConfigMap": {
+                    "type": "string",
+                    "description": "name of a ConfigMap with existing configuration for the conrol plane",
+                    "default": ""
+                },
+                "tls": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable TLS transport in Control Plane",
+                            "default": true
+                        },
+                        "autoGenerated": {
+                            "type": "boolean",
+                            "description": "Auto-generate self-signed certificates",
+                            "default": true
+                        },
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Name of a secret containing the certificates",
+                            "default": ""
+                        },
+                        "certFilename": {
+                            "type": "string",
+                            "description": "Path of the certificate file when mounted as a secret",
+                            "default": "tls.crt"
+                        },
+                        "certKeyFilename": {
+                            "type": "string",
+                            "description": "Path of the certificate key file when mounted as a secret",
+                            "default": "tls.key"
+                        },
+                        "certCAFilename": {
+                            "type": "string",
+                            "description": "Path of the certificate CA file when mounted as a secret",
+                            "default": "ca.crt"
+                        },
+                        "cert": {
+                            "type": "string",
+                            "description": "Content of the certificate to be added to the secret",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Content of the certificate key to be added to the secret",
+                            "default": ""
+                        },
+                        "ca": {
+                            "type": "string",
+                            "description": "Content of the certificate CA to be added to the secret",
+                            "default": ""
+                        }
+                    }
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for APISIX pods",
+                    "default": {}
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Annotations for APISIX pods",
+                    "default": {}
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod affinity preset. Ignored if `apisix.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod anti-affinity preset. Ignored if `apisix.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "pdb": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Enable/disable a Pod Disruption Budget creation",
+                            "default": false
+                        },
+                        "minAvailable": {
+                            "type": "number",
+                            "description": "Minimum number/percentage of pods that should remain scheduled",
+                            "default": 1
+                        },
+                        "maxUnavailable": {
+                            "type": "string",
+                            "description": "Maximum number/percentage of pods that may be made unavailable",
+                            "default": ""
+                        }
+                    }
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Node affinity preset type. Ignored if `apisix.affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Node label key to match. Ignored if `apisix.affinity` is set",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "Node label values to match. Ignored if `apisix.affinity` is set",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Affinity for APISIX pods assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Node labels for APISIX pods assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Tolerations for APISIX pods assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "APISIX statefulset strategy type",
+                            "default": "RollingUpdate"
+                        }
+                    }
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "APISIX pods' priorityClassName",
+                    "default": ""
+                },
+                "topologySpreadConstraints": {
+                    "type": "array",
+                    "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template",
+                    "default": [],
+                    "items": {}
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Name of the k8s scheduler (other than default) for APISIX pods",
+                    "default": ""
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "string",
+                    "description": "Seconds Redmine pod needs to terminate gracefully",
+                    "default": ""
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "for the APISIX container(s) to automate configuration before or after startup",
+                    "default": {}
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array with extra environment variables to add to APISIX nodes",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap containing extra env vars for APISIX nodes",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Name of existing Secret containing extra env vars for APISIX nodes",
+                    "default": ""
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the APISIX pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the APISIX container(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Add additional sidecar containers to the APISIX pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Add additional init containers to the APISIX pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "APISIX service type",
+                            "default": "ClusterIP"
+                        },
+                        "ports": {
+                            "type": "object",
+                            "properties": {
+                                "adminAPI": {
+                                    "type": "number",
+                                    "description": "APISIX service Admin API port",
+                                    "default": 9180
+                                },
+                                "configServer": {
+                                    "type": "number",
+                                    "description": "APISIX service Config Server port",
+                                    "default": 9280
+                                },
+                                "metrics": {
+                                    "type": "number",
+                                    "description": "APISIX service metrics port",
+                                    "default": 8080
+                                }
+                            }
+                        },
+                        "nodePorts": {
+                            "type": "object",
+                            "properties": {
+                                "adminAPI": {
+                                    "type": "string",
+                                    "description": "Node port for Admin API",
+                                    "default": ""
+                                },
+                                "configServer": {
+                                    "type": "string",
+                                    "description": "Node port for Config Server",
+                                    "default": ""
+                                },
+                                "metrics": {
+                                    "type": "string",
+                                    "description": "Node port for Metrics",
+                                    "default": ""
+                                }
+                            }
+                        },
+                        "clusterIP": {
+                            "type": "string",
+                            "description": "APISIX service Cluster IP",
+                            "default": ""
+                        },
+                        "loadBalancerIP": {
+                            "type": "string",
+                            "description": "APISIX service Load Balancer IP",
+                            "default": ""
+                        },
+                        "loadBalancerSourceRanges": {
+                            "type": "array",
+                            "description": "APISIX service Load Balancer sources",
+                            "default": [],
+                            "items": {}
+                        },
+                        "externalTrafficPolicy": {
+                            "type": "string",
+                            "description": "APISIX service external traffic policy",
+                            "default": "Cluster"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for APISIX service",
+                            "default": {}
+                        },
+                        "extraPorts": {
+                            "type": "array",
+                            "description": "Extra ports to expose in APISIX service (normally used with the `sidecars` value)",
+                            "default": [],
+                            "items": {}
+                        },
+                        "sessionAffinity": {
+                            "type": "string",
+                            "description": "Control where web requests go, to the same pod or round-robin",
+                            "default": "None"
+                        },
+                        "sessionAffinityConfig": {
+                            "type": "object",
+                            "description": "Additional settings for the sessionAffinity",
+                            "default": {}
+                        }
+                    }
+                },
+                "ingress": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable ingress record generation for Apisix",
+                            "default": false
+                        },
+                        "pathType": {
+                            "type": "string",
+                            "description": "Ingress path type",
+                            "default": "ImplementationSpecific"
+                        },
+                        "apiVersion": {
+                            "type": "string",
+                            "description": "Force Ingress API version (automatically detected if not set)",
+                            "default": ""
+                        },
+                        "hostname": {
+                            "type": "string",
+                            "description": "Default host for the ingress record",
+                            "default": "apisix-control-plane.local"
+                        },
+                        "ingressClassName": {
+                            "type": "string",
+                            "description": "IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)",
+                            "default": ""
+                        },
+                        "path": {
+                            "type": "string",
+                            "description": "Default path for the ingress record",
+                            "default": "/"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.",
+                            "default": {}
+                        },
+                        "tls": {
+                            "type": "boolean",
+                            "description": "Enable TLS configuration for the host defined at `controlPlane.ingress.hostname` parameter",
+                            "default": false
+                        },
+                        "selfSigned": {
+                            "type": "boolean",
+                            "description": "Create a TLS secret for this ingress record using self-signed certificates generated by Helm",
+                            "default": false
+                        },
+                        "extraHosts": {
+                            "type": "array",
+                            "description": "An array with additional hostname(s) to be covered with the ingress record",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraPaths": {
+                            "type": "array",
+                            "description": "An array with additional arbitrary paths that may need to be added to the ingress under the main host",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraTls": {
+                            "type": "array",
+                            "description": "TLS configuration for additional hostname(s) to be covered with this ingress record",
+                            "default": [],
+                            "items": {}
+                        },
+                        "secrets": {
+                            "type": "array",
+                            "description": "Custom TLS certificates as secrets",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraRules": {
+                            "type": "array",
+                            "description": "Additional rules to be covered with this ingress record",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "autoscaling": {
+                    "type": "object",
+                    "properties": {
+                        "vpa": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "description": "Enable VPA",
+                                    "default": false
+                                },
+                                "annotations": {
+                                    "type": "object",
+                                    "description": "Annotations for VPA resource",
+                                    "default": {}
+                                },
+                                "controlledResources": {
+                                    "type": "array",
+                                    "description": "VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "maxAllowed": {
+                                    "type": "object",
+                                    "description": "VPA Max allowed resources for the pod",
+                                    "default": {}
+                                },
+                                "minAllowed": {
+                                    "type": "object",
+                                    "description": "VPA Min allowed resources for the pod",
+                                    "default": {}
+                                },
+                                "updatePolicy": {
+                                    "type": "object",
+                                    "properties": {
+                                        "updateMode": {
+                                            "type": "string",
+                                            "description": "Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod",
+                                            "default": "Auto"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "hpa": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "description": "Enable HPA for APISIX Data Plane",
+                                    "default": false
+                                },
+                                "minReplicas": {
+                                    "type": "string",
+                                    "description": "Minimum number of APISIX Data Plane replicas",
+                                    "default": ""
+                                },
+                                "maxReplicas": {
+                                    "type": "string",
+                                    "description": "Maximum number of APISIX Data Plane replicas",
+                                    "default": ""
+                                },
+                                "targetCPU": {
+                                    "type": "string",
+                                    "description": "Target CPU utilization percentage",
+                                    "default": ""
+                                },
+                                "targetMemory": {
+                                    "type": "string",
+                                    "description": "Target Memory utilization percentage",
+                                    "default": ""
+                                }
+                            }
+                        }
+                    }
+                },
+                "rbac": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Specifies whether RBAC resources should be created",
+                            "default": true
+                        },
+                        "rules": {
+                            "type": "array",
+                            "description": "Custom RBAC rules to set",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "serviceAccount": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Specifies whether a ServiceAccount should be created",
+                            "default": true
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "The name of the ServiceAccount to use.",
+                            "default": ""
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional Service Account annotations (evaluated as a template)",
+                            "default": {}
+                        },
+                        "automountServiceAccountToken": {
+                            "type": "boolean",
+                            "description": "Automount service account token for the apisix service account",
+                            "default": true
+                        }
+                    }
+                },
+                "metrics": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable the export of Prometheus metrics",
+                            "default": false
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "properties": {
+                                "prometheus": {
+                                    "type": "object",
+                                    "properties": {
+                                        "io/scrape": {
+                                            "type": "string",
+                                            "description": "",
+                                            "default": "true"
+                                        },
+                                        "io/port": {
+                                            "type": "string",
+                                            "description": "",
+                                            "default": "{{ .Values.controlPlane.service.ports.metrics }}"
+                                        },
+                                        "io/path": {
+                                            "type": "string",
+                                            "description": "",
+                                            "default": "/apisix/prometheus/metrics"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "serviceMonitor": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "description": "if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)",
+                                    "default": false
+                                },
+                                "namespace": {
+                                    "type": "string",
+                                    "description": "Namespace in which Prometheus is running",
+                                    "default": ""
+                                },
+                                "annotations": {
+                                    "type": "object",
+                                    "description": "Additional custom annotations for the ServiceMonitor",
+                                    "default": {}
+                                },
+                                "labels": {
+                                    "type": "object",
+                                    "description": "Extra labels for the ServiceMonitor",
+                                    "default": {}
+                                },
+                                "jobLabel": {
+                                    "type": "string",
+                                    "description": "The name of the label on the target service to use as the job name in Prometheus",
+                                    "default": ""
+                                },
+                                "honorLabels": {
+                                    "type": "boolean",
+                                    "description": "honorLabels chooses the metric's labels on collisions with target labels",
+                                    "default": false
+                                },
+                                "interval": {
+                                    "type": "string",
+                                    "description": "Interval at which metrics should be scraped.",
+                                    "default": ""
+                                },
+                                "scrapeTimeout": {
+                                    "type": "string",
+                                    "description": "Timeout after which the scrape is ended",
+                                    "default": ""
+                                },
+                                "metricRelabelings": {
+                                    "type": "array",
+                                    "description": "Specify additional relabeling of metrics",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "relabelings": {
+                                    "type": "array",
+                                    "description": "Specify general relabeling",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "selector": {
+                                    "type": "object",
+                                    "description": "Prometheus instance selector labels",
+                                    "default": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "dashboard": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable APISIX Dashboard",
+                    "default": true
+                },
+                "replicaCount": {
+                    "type": "number",
+                    "description": "Number of APISIX Dashboard replicas to deploy",
+                    "default": 1
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "APISIX Dashboard image registry",
+                            "default": "docker.io"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "APISIX Dashboard image repository",
+                            "default": "bitnami/apisix-dashboard"
+                        },
+                        "tag": {
+                            "type": "string",
+                            "description": "APISIX Dashboard image tag (immutable tags are recommended)",
+                            "default": "3.0.1-debian-11-r2"
+                        },
+                        "digest": {
+                            "type": "string",
+                            "description": "APISIX Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)",
+                            "default": ""
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "APISIX Dashboard image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "APISIX Dashboard image pull secrets",
+                            "default": [],
+                            "items": {}
+                        },
+                        "debug": {
+                            "type": "boolean",
+                            "description": "Enable APISIX Dashboard image debug mode",
+                            "default": false
+                        }
+                    }
+                },
+                "username": {
+                    "type": "string",
+                    "description": "APISIX Dashboard username",
+                    "default": "user"
+                },
+                "password": {
+                    "type": "string",
+                    "description": "APISIX Dashboard password",
+                    "default": ""
+                },
+                "existingSecret": {
+                    "type": "string",
+                    "description": "Name of a existing secret containing the password for APISIX Dashboard",
+                    "default": ""
+                },
+                "existingSecretPasswordKey": {
+                    "type": "string",
+                    "description": "Key inside the secret containing the password for APISIX Dashboard",
+                    "default": ""
+                },
+                "defaultConfig": {
+                    "type": "string",
+                    "description": "APISIX Dashboard configuration (evaluated as a template)",
+                    "default": "conf:\n  listen:\n    host: 0.0.0.0\n    port: {{ .Values.dashboard.containerPorts.http }}\n  {{- if .Values.dashboard.tls.enabled }}\n  ssl:\n    host: 0.0.0.0\n    port: {{ .Values.dashboard.containerPorts.https }}\n    cert: /bitnami/certs/{{ .Values.dashboard.tls.certFilename }}\n    key: /bitnami/certs/{{ .Values.dashboard.tls.certKeyFilename }}\n  {{- end }}\n  etcd:\n    prefix: \"/apisix\"\n    endpoints:\n      {{- if .Values.etcd.enabled  }}\n        {{- $replicas := $.Values.etcd.replicaCount | int }}\n        {{- range $i, $_e := until $replicas }}\n      - {{ printf \"%s://%s-%d.%s:%v\" (ternary \"https\" \"http\" $.Values.etcd.auth.client.secureTransport) (include \"apisix.etcd.fullname\" $ ) $i (include \"apisix.etcd.headlessServiceName\" $) ( include \"apisix.etcd.port\" $ ) }}          {{- end }}\n      {{- else }}\n      {{- range $node :=.Values.externalEtcd.servers }}\n      - {{ printf \"%s:%v\" $node (include \"apisix.etcd.port\" $) }}\n      {{- end }}\n      {{- end }}\n    {{- if (include \"apisix.etcd.authEnabled\" .) }}\n    username: \"{{ print \"{{ APISIX_ETCD_USER }}\" }}\"\n    password: \"{{ print \"{{ APISIX_ETCD_PASSWORD }}\" }}\"\n    {{- end }}\n  log:\n    error_log:\n      level: warn\n      file_path: /dev/stderr\n    access_log:\n      file_path: /dev/stdout\nauthentication:\n  secret: secret\n  expire_time: 3600\n  users:\n    - username: \"{{ print \"{{ APISIX_DASHBOARD_USER }}\" }}\"\n      password: \"{{ print \"{{ APISIX_DASHBOARD_PASSWORD }}\" }}\"\n"
+                },
+                "extraConfig": {
+                    "type": "object",
+                    "description": "extra configuration settings for APISIX Dashboard",
+                    "default": {}
+                },
+                "existingConfigMap": {
+                    "type": "string",
+                    "description": "name of a ConfigMap with existing configuration for the Dashboard",
+                    "default": ""
+                },
+                "extraConfigExistingConfigMap": {
+                    "type": "string",
+                    "description": "name of a ConfigMap with existing configuration for the Dashboard",
+                    "default": ""
+                },
+                "tls": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable TLS transport in Dashboard",
+                            "default": true
+                        },
+                        "autoGenerated": {
+                            "type": "boolean",
+                            "description": "Auto-generate self-signed certificates",
+                            "default": true
+                        },
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Name of a secret containing the certificates",
+                            "default": ""
+                        },
+                        "certFilename": {
+                            "type": "string",
+                            "description": "Path of the certificate file when mounted as a secret",
+                            "default": "tls.crt"
+                        },
+                        "certKeyFilename": {
+                            "type": "string",
+                            "description": "Path of the certificate key file when mounted as a secret",
+                            "default": "tls.key"
+                        },
+                        "certCAFilename": {
+                            "type": "string",
+                            "description": "Path of the certificate CA file when mounted as a secret",
+                            "default": "ca.crt"
+                        },
+                        "cert": {
+                            "type": "string",
+                            "description": "Content of the certificate to be added to the secret",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Content of the certificate key to be added to the secret",
+                            "default": ""
+                        },
+                        "ca": {
+                            "type": "string",
+                            "description": "Content of the certificate CA to be added to the secret",
+                            "default": ""
+                        }
+                    }
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "APISIX Dashboard pods host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for APISIX Dashboard pods",
+                    "default": {}
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Annotations for APISIX Dashboard pods",
+                    "default": {}
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod affinity preset. Ignored if `dashboard.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod anti-affinity preset. Ignored if `dashboard.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Node affinity preset type. Ignored if `dashboard.affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Node label key to match. Ignored if `dashboard.affinity` is set",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "Node label values to match. Ignored if `dashboard.affinity` is set",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Affinity for APISIX Dashboard pods assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Node labels for APISIX Dashboard pods assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Tolerations for APISIX Dashboard pods assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "APISIX Dashboard statefulset strategy type",
+                            "default": "RollingUpdate"
+                        }
+                    }
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "APISIX Dashboard pods' priorityClassName",
+                    "default": ""
+                },
+                "topologySpreadConstraints": {
+                    "type": "array",
+                    "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template",
+                    "default": [],
+                    "items": {}
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Name of the k8s scheduler (other than default) for APISIX Dashboard pods",
+                    "default": ""
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "string",
+                    "description": "Seconds Redmine pod needs to terminate gracefully",
+                    "default": ""
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the APISIX Dashboard pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Add additional sidecar containers to the APISIX Dashboard pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Add additional init containers to the APISIX Dashboard pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Dashboard pods' Security Context",
+                            "default": true
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Set Dashboard pod's Security Context fsGroup",
+                            "default": 1001
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set Dashboard pod's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "http": {
+                            "type": "number",
+                            "description": "Dashboard http container port",
+                            "default": 8080
+                        },
+                        "https": {
+                            "type": "number",
+                            "description": "Dashboard https container port",
+                            "default": 8443
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe on Dashboard container",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe on Dashboard container",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe on Dashboard container",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Custom startupProbe that overrides the default one",
+                    "default": {}
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the Dashboard container",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the Dashboard container",
+                            "default": {}
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled Dashboard container' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set Dashboard container' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set Dashboard container' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set Dashboard container' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set Dashboard container's privilege escalation",
+                            "default": false
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "Set Dashboard container's Security Context runAsNonRoot",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "for the Dashboard container(s) to automate configuration before or after startup",
+                    "default": {}
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array with extra environment variables to add to Dashboard nodes",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap containing extra env vars for Dashboard nodes",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Name of existing Secret containing extra env vars for Dashboard nodes",
+                    "default": ""
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the APISIX Dashboard container",
+                    "default": [],
+                    "items": {}
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "APISIX Dashboard service type",
+                            "default": "LoadBalancer"
+                        },
+                        "ports": {
+                            "type": "object",
+                            "properties": {
+                                "http": {
+                                    "type": "number",
+                                    "description": "APISIX Dashboard service HTTP",
+                                    "default": 80
+                                },
+                                "https": {
+                                    "type": "number",
+                                    "description": "APISIX Dashboard service HTTPS",
+                                    "default": 443
+                                }
+                            }
+                        },
+                        "nodePorts": {
+                            "type": "object",
+                            "properties": {
+                                "http": {
+                                    "type": "string",
+                                    "description": "Node port for HTTP",
+                                    "default": ""
+                                },
+                                "https": {
+                                    "type": "string",
+                                    "description": "Node port for HTTPS",
+                                    "default": ""
+                                }
+                            }
+                        },
+                        "clusterIP": {
+                            "type": "string",
+                            "description": "APISIX Dashboard service Cluster IP",
+                            "default": ""
+                        },
+                        "loadBalancerIP": {
+                            "type": "string",
+                            "description": "APISIX Dashboard service Load Balancer IP",
+                            "default": ""
+                        },
+                        "loadBalancerSourceRanges": {
+                            "type": "array",
+                            "description": "APISIX Dashboard service Load Balancer sources",
+                            "default": [],
+                            "items": {}
+                        },
+                        "externalTrafficPolicy": {
+                            "type": "string",
+                            "description": "APISIX Dashboard service external traffic policy",
+                            "default": "Cluster"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for APISIX Dashboard service",
+                            "default": {}
+                        },
+                        "extraPorts": {
+                            "type": "array",
+                            "description": "Extra ports to expose in APISIX Dashboard service (normally used with the `sidecars` value)",
+                            "default": [],
+                            "items": {}
+                        },
+                        "sessionAffinity": {
+                            "type": "string",
+                            "description": "Control where web requests go, to the same pod or round-robin",
+                            "default": "None"
+                        },
+                        "sessionAffinityConfig": {
+                            "type": "object",
+                            "description": "Additional settings for the sessionAffinity",
+                            "default": {}
+                        }
+                    }
+                },
+                "ingress": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable ingress record generation for Apisix",
+                            "default": false
+                        },
+                        "pathType": {
+                            "type": "string",
+                            "description": "Ingress path type",
+                            "default": "ImplementationSpecific"
+                        },
+                        "apiVersion": {
+                            "type": "string",
+                            "description": "Force Ingress API version (automatically detected if not set)",
+                            "default": ""
+                        },
+                        "hostname": {
+                            "type": "string",
+                            "description": "Default host for the ingress record",
+                            "default": "apisix-dashboard.local"
+                        },
+                        "ingressClassName": {
+                            "type": "string",
+                            "description": "IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)",
+                            "default": ""
+                        },
+                        "path": {
+                            "type": "string",
+                            "description": "Default path for the ingress record",
+                            "default": "/"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.",
+                            "default": {}
+                        },
+                        "tls": {
+                            "type": "boolean",
+                            "description": "Enable TLS configuration for the host defined at `dashboard.ingress.hostname` parameter",
+                            "default": false
+                        },
+                        "selfSigned": {
+                            "type": "boolean",
+                            "description": "Create a TLS secret for this ingress record using self-signed certificates generated by Helm",
+                            "default": false
+                        },
+                        "extraHosts": {
+                            "type": "array",
+                            "description": "An array with additional hostname(s) to be covered with the ingress record",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraPaths": {
+                            "type": "array",
+                            "description": "An array with additional arbitrary paths that may need to be added to the ingress under the main host",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraTls": {
+                            "type": "array",
+                            "description": "TLS configuration for additional hostname(s) to be covered with this ingress record",
+                            "default": [],
+                            "items": {}
+                        },
+                        "secrets": {
+                            "type": "array",
+                            "description": "Custom TLS certificates as secrets",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraRules": {
+                            "type": "array",
+                            "description": "Additional rules to be covered with this ingress record",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "autoscaling": {
+                    "type": "object",
+                    "properties": {
+                        "vpa": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "description": "Enable VPA",
+                                    "default": false
+                                },
+                                "annotations": {
+                                    "type": "object",
+                                    "description": "Annotations for VPA resource",
+                                    "default": {}
+                                },
+                                "controlledResources": {
+                                    "type": "array",
+                                    "description": "VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "maxAllowed": {
+                                    "type": "object",
+                                    "description": "VPA Max allowed resources for the pod",
+                                    "default": {}
+                                },
+                                "minAllowed": {
+                                    "type": "object",
+                                    "description": "VPA Min allowed resources for the pod",
+                                    "default": {}
+                                },
+                                "updatePolicy": {
+                                    "type": "object",
+                                    "properties": {
+                                        "updateMode": {
+                                            "type": "string",
+                                            "description": "Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod",
+                                            "default": "Auto"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "hpa": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "description": "Enable HPA for APISIX Dashboard",
+                                    "default": false
+                                },
+                                "minReplicas": {
+                                    "type": "string",
+                                    "description": "Minimum number of APISIX Dashboard replicas",
+                                    "default": ""
+                                },
+                                "maxReplicas": {
+                                    "type": "string",
+                                    "description": "Maximum number of APISIX Dashboard replicas",
+                                    "default": ""
+                                },
+                                "targetCPU": {
+                                    "type": "string",
+                                    "description": "Target CPU utilization percentage",
+                                    "default": ""
+                                },
+                                "targetMemory": {
+                                    "type": "string",
+                                    "description": "Target Memory utilization percentage",
+                                    "default": ""
+                                }
+                            }
+                        }
+                    }
+                },
+                "serviceAccount": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Specifies whether a ServiceAccount should be created",
+                            "default": true
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "The name of the ServiceAccount to use.",
+                            "default": ""
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional Service Account annotations (evaluated as a template)",
+                            "default": {}
+                        },
+                        "automountServiceAccountToken": {
+                            "type": "boolean",
+                            "description": "Automount service account token for the server service account",
+                            "default": true
+                        }
+                    }
+                }
+            }
+        },
+        "ingressController": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable APISIX Ingress Controller",
+                    "default": true
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "APISIX Ingress Controller image registry",
+                            "default": "docker.io"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "APISIX Ingress Controller image repository",
+                            "default": "bitnami/apisix-ingress-controller"
+                        },
+                        "tag": {
+                            "type": "string",
+                            "description": "APISIX Ingress Controller image tag (immutable tags are recommended)",
+                            "default": "1.6.1-debian-11-r3"
+                        },
+                        "digest": {
+                            "type": "string",
+                            "description": "APISIX Ingress Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)",
+                            "default": ""
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "APISIX Ingress Controller image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "APISIX Ingress Controller image pull secrets",
+                            "default": [],
+                            "items": {}
+                        },
+                        "debug": {
+                            "type": "boolean",
+                            "description": "Enable APISIX Ingress Controller image debug mode",
+                            "default": false
+                        }
+                    }
+                },
+                "replicaCount": {
+                    "type": "number",
+                    "description": "Number of APISIX Ingress Controller replicas to deploy",
+                    "default": 1
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "http": {
+                            "type": "number",
+                            "description": "APISIX Ingress Controller http container port",
+                            "default": 8080
+                        },
+                        "https": {
+                            "type": "number",
+                            "description": "APISIX Ingress Controller https container port",
+                            "default": 8443
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe on APISIX Ingress Controller containers",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe on APISIX Ingress Controller containers",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe on APISIX Ingress Controller containers",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Custom startupProbe that overrides the default one",
+                    "default": {}
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the APISIX Ingress Controller containers",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the APISIX Ingress Controller containers",
+                            "default": {}
+                        }
+                    }
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled APISIX Ingress Controller pods' Security Context",
+                            "default": true
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Set APISIX Ingress Controller pod's Security Context fsGroup",
+                            "default": 1001
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set APISIX Ingress Controller container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled APISIX Ingress Controller containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set APISIX Ingress Controller containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set APISIX Ingress Controller containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set APISIX Ingress Controller containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set APISIX Ingress Controller container's privilege escalation",
+                            "default": false
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "Set APISIX Ingress Controller container's Security Context runAsNonRoot",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "APISIX Ingress Controller pods host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for APISIX Ingress Controller pods",
+                    "default": {}
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Annotations for APISIX Ingress Controller pods",
+                    "default": {}
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod affinity preset. Ignored if `injector.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "Pod anti-affinity preset. Ignored if `injector.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "pdb": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Enable/disable a Pod Disruption Budget creation",
+                            "default": false
+                        },
+                        "minAvailable": {
+                            "type": "number",
+                            "description": "Minimum number/percentage of pods that should remain scheduled",
+                            "default": 1
+                        },
+                        "maxUnavailable": {
+                            "type": "string",
+                            "description": "Maximum number/percentage of pods that may be made unavailable",
+                            "default": ""
+                        }
+                    }
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Node affinity preset type. Ignored if `injector.affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Node label key to match. Ignored if `injector.affinity` is set",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "Node label values to match. Ignored if `injector.affinity` is set",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Affinity for APISIX Ingress Controller pods assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Node labels for APISIX Ingress Controller pods assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Tolerations for APISIX Ingress Controller pods assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "APISIX Ingress Controller statefulset strategy type",
+                            "default": "RollingUpdate"
+                        }
+                    }
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "APISIX Ingress Controller pods' priorityClassName",
+                    "default": ""
+                },
+                "topologySpreadConstraints": {
+                    "type": "array",
+                    "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template",
+                    "default": [],
+                    "items": {}
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Name of the k8s scheduler (other than default) for APISIX Ingress Controller pods",
+                    "default": ""
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "string",
+                    "description": "Seconds Redmine pod needs to terminate gracefully",
+                    "default": ""
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "for the APISIX Ingress Controller container(s) to automate configuration before or after startup",
+                    "default": {}
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array with extra environment variables to add to APISIX Ingress Controller nodes",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap containing extra env vars for APISIX Ingress Controller nodes",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Name of existing Secret containing extra env vars for APISIX Ingress Controller nodes",
+                    "default": ""
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the APISIX Ingress Controller pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the APISIX Ingress Controller container(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Add additional sidecar containers to the APISIX Ingress Controller pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Add additional init containers to the APISIX Ingress Controller pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "defaultConfig": {
+                    "type": "string",
+                    "description": "APISIX Dashboard configuration (evaluated as a template)",
+                    "default": "# log options\nlog_level: \"info\"\nlog_output: \"stderr\"\n{{- if .Values.ingressController.tls.enabled }}\nhttps_listen: \":{{ .Values.ingressController.containerPorts.https }}\"\ncert_file: \"/bitnami/certs/{{ .Values.ingressController.tls.certFilename }}\"\nkey_file: \"/bitnami/certs/{{ .Values.ingressController.tls.certKeyFilename }}\"\n{{- end }}\nhttp_listen: \":{{ .Values.ingressController.containerPorts.http }}\"\ningress_publish_service: \"{{ include \"common.names.namespace\" . }}/{{ ternary (include \"apisix.data-plane.fullname\" .) (include \"apisix.control-plane.fullname\" .) .Values.dataPlane.enabled }}\"\nenable_profiling: true\napisix-resource-sync-interval: 1h\nkubernetes:\n  kubeconfig: \"\"\n  resync_interval: \"6h\"\n  election_id: \"{{ include \"apisix.ingress-controller.fullname\" . }}-leader\"\n  ingress_class: \"apisix\"\n  ingress_version: \"networking/v1\"\n  watch_endpointslices: false\n  apisix_route_version: \"apisix.apache.org/v2\"\n  enable_gateway_api: false\n  apisix_version: \"apisix.apache.org/v2\"\n  plugin_metadata_cm: \"\"\napisix:\n  admin_api_version: \"v3\"\n  default_cluster_base_url: {{ ternary \"https\" \"http\" .Values.controlPlane.tls.enabled }}://{{ include \"apisix.control-plane.fullname\" . }}:{{ .Values.controlPlane.service.ports.adminAPI }}/apisix/admin\n  default_cluster_admin_key: \"{{ print \"{{APISIX_ADMIN_API_TOKEN}}\" }}\"\n  default_cluster_name: \"default\"\n"
+                },
+                "extraConfig": {
+                    "type": "object",
+                    "description": "Extra configuration parameters for APISIX Ingress Controller",
+                    "default": {}
+                },
+                "existingConfigMap": {
+                    "type": "string",
+                    "description": "name of a ConfigMap with existing configuration for the Dashboard",
+                    "default": ""
+                },
+                "extraConfigExistingConfigMap": {
+                    "type": "string",
+                    "description": "name of a ConfigMap with existing configuration for the Dashboard",
+                    "default": ""
+                },
+                "tls": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable TLS transport in Ingress Controller",
+                            "default": true
+                        },
+                        "autoGenerated": {
+                            "type": "boolean",
+                            "description": "Auto-generate self-signed certificates",
+                            "default": true
+                        },
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Name of a secret containing the certificates",
+                            "default": ""
+                        },
+                        "certFilename": {
+                            "type": "string",
+                            "description": "Path of the certificate file when mounted as a secret",
+                            "default": "tls.crt"
+                        },
+                        "certKeyFilename": {
+                            "type": "string",
+                            "description": "Path of the certificate key file when mounted as a secret",
+                            "default": "tls.key"
+                        },
+                        "certCAFilename": {
+                            "type": "string",
+                            "description": "Path of the certificate CA file when mounted as a secret",
+                            "default": "ca.crt"
+                        },
+                        "cert": {
+                            "type": "string",
+                            "description": "Content of the certificate to be added to the secret",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Content of the certificate key to be added to the secret",
+                            "default": ""
+                        },
+                        "ca": {
+                            "type": "string",
+                            "description": "Content of the certificate CA to be added to the secret",
+                            "default": ""
+                        }
+                    }
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "APISIX Ingress Controller service type",
+                            "default": "ClusterIP"
+                        },
+                        "ports": {
+                            "type": "object",
+                            "properties": {
+                                "http": {
+                                    "type": "number",
+                                    "description": "APISIX Ingress Controller service HTTP port",
+                                    "default": 80
+                                },
+                                "https": {
+                                    "type": "number",
+                                    "description": "APISIX Ingress Controller service HTTPS port",
+                                    "default": 443
+                                }
+                            }
+                        },
+                        "nodePorts": {
+                            "type": "object",
+                            "properties": {
+                                "http": {
+                                    "type": "string",
+                                    "description": "Node port for HTTP",
+                                    "default": ""
+                                },
+                                "https": {
+                                    "type": "string",
+                                    "description": "Node port for HTTPS",
+                                    "default": ""
+                                }
+                            }
+                        },
+                        "clusterIP": {
+                            "type": "string",
+                            "description": "APISIX Ingress Controller service Cluster IP",
+                            "default": ""
+                        },
+                        "loadBalancerIP": {
+                            "type": "string",
+                            "description": "APISIX Ingress Controller service Load Balancer IP",
+                            "default": ""
+                        },
+                        "loadBalancerSourceRanges": {
+                            "type": "array",
+                            "description": "APISIX Ingress Controller service Load Balancer sources",
+                            "default": [],
+                            "items": {}
+                        },
+                        "externalTrafficPolicy": {
+                            "type": "string",
+                            "description": "APISIX Ingress Controller service external traffic policy",
+                            "default": "Cluster"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional custom annotations for APISIX Ingress Controller service",
+                            "default": {}
+                        },
+                        "extraPorts": {
+                            "type": "array",
+                            "description": "Extra ports to expose in APISIX Ingress Controller service (normally used with the `sidecars` value)",
+                            "default": [],
+                            "items": {}
+                        },
+                        "sessionAffinity": {
+                            "type": "string",
+                            "description": "Control where web requests go, to the same pod or round-robin",
+                            "default": "None"
+                        },
+                        "sessionAffinityConfig": {
+                            "type": "object",
+                            "description": "Additional settings for the sessionAffinity",
+                            "default": {}
+                        }
+                    }
+                },
+                "ingress": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable ingress record generation for Apisix",
+                            "default": false
+                        },
+                        "pathType": {
+                            "type": "string",
+                            "description": "Ingress path type",
+                            "default": "ImplementationSpecific"
+                        },
+                        "apiVersion": {
+                            "type": "string",
+                            "description": "Force Ingress API version (automatically detected if not set)",
+                            "default": ""
+                        },
+                        "hostname": {
+                            "type": "string",
+                            "description": "Default host for the ingress record",
+                            "default": "apisix-ingress-controller.local"
+                        },
+                        "ingressClassName": {
+                            "type": "string",
+                            "description": "IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)",
+                            "default": ""
+                        },
+                        "path": {
+                            "type": "string",
+                            "description": "Default path for the ingress record",
+                            "default": "/"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.",
+                            "default": {}
+                        },
+                        "tls": {
+                            "type": "boolean",
+                            "description": "Enable TLS configuration for the host defined at `ingressController.ingress.hostname` parameter",
+                            "default": false
+                        },
+                        "selfSigned": {
+                            "type": "boolean",
+                            "description": "Create a TLS secret for this ingress record using self-signed certificates generated by Helm",
+                            "default": false
+                        },
+                        "extraHosts": {
+                            "type": "array",
+                            "description": "An array with additional hostname(s) to be covered with the ingress record",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraPaths": {
+                            "type": "array",
+                            "description": "An array with additional arbitrary paths that may need to be added to the ingress under the main host",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraTls": {
+                            "type": "array",
+                            "description": "TLS configuration for additional hostname(s) to be covered with this ingress record",
+                            "default": [],
+                            "items": {}
+                        },
+                        "secrets": {
+                            "type": "array",
+                            "description": "Custom TLS certificates as secrets",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraRules": {
+                            "type": "array",
+                            "description": "Additional rules to be covered with this ingress record",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "autoscaling": {
+                    "type": "object",
+                    "properties": {
+                        "vpa": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "description": "Enable VPA",
+                                    "default": false
+                                },
+                                "annotations": {
+                                    "type": "object",
+                                    "description": "Annotations for VPA resource",
+                                    "default": {}
+                                },
+                                "controlledResources": {
+                                    "type": "array",
+                                    "description": "VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "maxAllowed": {
+                                    "type": "object",
+                                    "description": "VPA Max allowed resources for the pod",
+                                    "default": {}
+                                },
+                                "minAllowed": {
+                                    "type": "object",
+                                    "description": "VPA Min allowed resources for the pod",
+                                    "default": {}
+                                },
+                                "updatePolicy": {
+                                    "type": "object",
+                                    "properties": {
+                                        "updateMode": {
+                                            "type": "string",
+                                            "description": "Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod",
+                                            "default": "Auto"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "hpa": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "description": "Enable HPA for APISIX Ingress Controller",
+                                    "default": false
+                                },
+                                "minReplicas": {
+                                    "type": "string",
+                                    "description": "Minimum number of APISIX Ingress Controller replicas",
+                                    "default": ""
+                                },
+                                "maxReplicas": {
+                                    "type": "string",
+                                    "description": "Maximum number of APISIX Ingress Controller replicas",
+                                    "default": ""
+                                },
+                                "targetCPU": {
+                                    "type": "string",
+                                    "description": "Target CPU utilization percentage",
+                                    "default": ""
+                                },
+                                "targetMemory": {
+                                    "type": "string",
+                                    "description": "Target Memory utilization percentage",
+                                    "default": ""
+                                }
+                            }
+                        }
+                    }
+                },
+                "rbac": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Specifies whether RBAC resources should be created",
+                            "default": true
+                        },
+                        "rules": {
+                            "type": "array",
+                            "description": "Custom RBAC rules to set",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "serviceAccount": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Specifies whether a ServiceAccount should be created",
+                            "default": true
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "The name of the ServiceAccount to use.",
+                            "default": ""
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional Service Account annotations (evaluated as a template)",
+                            "default": {}
+                        },
+                        "automountServiceAccountToken": {
+                            "type": "boolean",
+                            "description": "Automount service account token for the server service account",
+                            "default": true
+                        }
+                    }
+                },
+                "metrics": {
+                    "type": "object",
+                    "properties": {
+                        "annotations": {
+                            "type": "object",
+                            "properties": {
+                                "prometheus": {
+                                    "type": "object",
+                                    "properties": {
+                                        "io/scrape": {
+                                            "type": "string",
+                                            "description": "",
+                                            "default": "true"
+                                        },
+                                        "io/port": {
+                                            "type": "string",
+                                            "description": "",
+                                            "default": "{{ .Values.ingressController.service.ports.http }}"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable the export of Prometheus metrics",
+                            "default": false
+                        },
+                        "serviceMonitor": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "description": "if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)",
+                                    "default": false
+                                },
+                                "namespace": {
+                                    "type": "string",
+                                    "description": "Namespace in which Prometheus is running",
+                                    "default": ""
+                                },
+                                "annotations": {
+                                    "type": "object",
+                                    "description": "Additional custom annotations for the ServiceMonitor",
+                                    "default": {}
+                                },
+                                "labels": {
+                                    "type": "object",
+                                    "description": "Extra labels for the ServiceMonitor",
+                                    "default": {}
+                                },
+                                "jobLabel": {
+                                    "type": "string",
+                                    "description": "The name of the label on the target service to use as the job name in Prometheus",
+                                    "default": ""
+                                },
+                                "honorLabels": {
+                                    "type": "boolean",
+                                    "description": "honorLabels chooses the metric's labels on collisions with target labels",
+                                    "default": false
+                                },
+                                "interval": {
+                                    "type": "string",
+                                    "description": "Interval at which metrics should be scraped.",
+                                    "default": ""
+                                },
+                                "scrapeTimeout": {
+                                    "type": "string",
+                                    "description": "Timeout after which the scrape is ended",
+                                    "default": ""
+                                },
+                                "metricRelabelings": {
+                                    "type": "array",
+                                    "description": "Specify additional relabeling of metrics",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "relabelings": {
+                                    "type": "array",
+                                    "description": "Specify general relabeling",
+                                    "default": [],
+                                    "items": {}
+                                },
+                                "selector": {
+                                    "type": "object",
+                                    "description": "Prometheus instance selector labels",
+                                    "default": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "waitContainer": {
+            "type": "object",
+            "properties": {
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "Init container wait-container image registry",
+                            "default": "docker.io"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "Init container wait-container image name",
+                            "default": "bitnami/os-shell"
+                        },
+                        "tag": {
+                            "type": "string",
+                            "description": "Init container wait-container image tag",
+                            "default": "11-debian-11-r2"
+                        },
+                        "digest": {
+                            "type": "string",
+                            "description": "Init container wait-container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                            "default": ""
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "Init container wait-container image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "Specify docker-registry secret names as an array",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled APISIX containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set APISIX containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set APISIX containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set APISIX containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set APISIX container's privilege escalation",
+                            "default": false
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "Set APISIX container's Security Context runAsNonRoot",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "externalEtcd": {
+            "type": "object",
+            "properties": {
+                "servers": {
+                    "type": "array",
+                    "description": "List of hostnames of the external etcd",
+                    "default": [],
+                    "items": {}
+                },
+                "port": {
+                    "type": "number",
+                    "description": "Port of the external etcd instance",
+                    "default": 2379
+                },
+                "user": {
+                    "type": "string",
+                    "description": "User of the external etcd instance",
+                    "default": "root"
+                },
+                "password": {
+                    "type": "string",
+                    "description": "Password of the external etcd instance",
+                    "default": ""
+                },
+                "existingSecret": {
+                    "type": "string",
+                    "description": "Name of a secret containing the external etcd password",
+                    "default": ""
+                },
+                "existingSecretPasswordKey": {
+                    "type": "string",
+                    "description": "Key inside the secret containing the external etcd password",
+                    "default": "etcd-root-password"
+                },
+                "secureTransport": {
+                    "type": "boolean",
+                    "description": "Use TLS for client-to-server communications",
+                    "default": false
+                }
+            }
+        },
+        "etcd": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Deploy etcd sub-chart",
+                    "default": true
+                },
+                "replicaCount": {
+                    "type": "number",
+                    "description": "Number of etcd replicas",
+                    "default": 3
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "client": {
+                            "type": "number",
+                            "description": "Container port for etcd",
+                            "default": 2379
+                        }
+                    }
+                },
+                "auth": {
+                    "type": "object",
+                    "properties": {
+                        "rbac": {
+                            "type": "object",
+                            "properties": {
+                                "create": {
+                                    "type": "boolean",
+                                    "description": "Switch to enable RBAC authentication",
+                                    "default": false
+                                },
+                                "rootPassword": {
+                                    "type": "string",
+                                    "description": "etcd root password",
+                                    "default": ""
+                                }
+                            }
+                        },
+                        "client": {
+                            "type": "object",
+                            "properties": {
+                                "secureTransport": {
+                                    "type": "boolean",
+                                    "description": "use TLS for client-to-server communications",
+                                    "default": false
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

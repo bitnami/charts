@@ -1,0 +1,122 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.tootctlMediaManagement.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  annotations:
+  name: {{ template "mastodon.tootctlMediaManagement.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mastodon
+    app.kubernetes.io/component: tootctlMediaManagement
+spec:
+  concurrencyPolicy: {{ .Values.tootctlMediaManagement.concurrencyPolicy }}
+  failedJobsHistoryLimit: {{ .Values.tootctlMediaManagement.failedJobsHistoryLimit }}
+  successfulJobsHistoryLimit: {{ .Values.tootctlMediaManagement.successfulJobsHistoryLimit }}
+  schedule: {{ .Values.tootctlMediaManagement.cronSchedule }}
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+    spec:
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          containers:
+          - name: tootctl-media-management
+            image: {{ template "mastodon.image" . }}
+            imagePullPolicy: {{ .Values.image.pullPolicy }}                      
+            command:
+              - /bin/bash
+              - -ec
+              - /media-management/media-cache-manage.sh
+            env:
+              - name: BITNAMI_DEBUG
+                value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+              - name: MASTODON_MODE
+                value: "web"
+              - name: MASTODON_WEB_PORT_NUMBER
+                value: {{ .Values.web.containerPorts.http | quote }}
+              - name: MASTODON_DATABASE_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ include "mastodon.database.secretName" . }}
+                    key: {{ include "mastodon.database.passwordKey" . | quote }}
+              {{- if (include "mastodon.redis.auth.enabled" .) }}
+              - name: MASTODON_REDIS_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ include "mastodon.redis.secretName" . }}
+                    key: {{ include "mastodon.redis.passwordKey" . | quote }}
+              {{- end }}
+              {{- if .Values.enableS3 }}
+              - name: MASTODON_AWS_ACCESS_KEY_ID
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ include "mastodon.s3.secretName" . }}
+                    key: {{ include "mastodon.s3.accessKeyIDKey" . | quote }}
+              - name: MASTODON_AWS_SECRET_ACCESS_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ include "mastodon.s3.secretName" . }}
+                    key: {{ include "mastodon.s3.secretAccessKeyKey" . | quote }}
+              {{- end }}
+              {{- if and .Values.enableSearches (include "mastodon.elasticsearch.auth.enabled" .) }}
+              - name: MASTODON_ELASTICSEARCH_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ include "mastodon.elasticsearch.secretName" . }}
+                    key: {{ include "mastodon.elasticsearch.passwordKey" . | quote }}
+              {{- end }}
+              {{- if ne .Values.smtp.auth_method "none" }}
+              - name: SMTP_LOGIN
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ include "mastodon.smtp.secretName" . }}
+                    key: {{ include "mastodon.smtp.loginKey" . | quote }}
+              - name: SMTP_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ include "mastodon.smtp.secretName" . }}
+                    key: {{ include "mastodon.smtp.passwordKey" . | quote }}
+              {{- end }}
+              {{- if .Values.web.extraEnvVars }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVars "context" $) | nindent 12 }}
+              {{- end }}
+            envFrom:
+              - configMapRef:
+                  name: {{ include "mastodon.defaultConfigmapName" . }}
+              - secretRef:
+                  name: {{ include "mastodon.defaultSecretName" . }}
+              {{- if or .Values.extraConfig .Values.extraConfigExistingConfigmap }}
+              - configMapRef:
+                  name: {{ include "mastodon.extraConfigmapName" . }}
+              {{- end }}
+              {{- if or .Values.extraSecretConfig .Values.extraConfigExistingSecret }}
+              - secretRef:
+                  name: {{ include "mastodon.extraSecretName" . }}
+              {{- end }}
+              {{- if .Values.web.extraEnvVarsCM }}
+              - configMapRef:
+                  name: {{ include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVarsCM "context" $) }}
+              {{- end }}
+              {{- if .Values.web.extraEnvVarsSecret }}
+              - secretRef:
+                  name: {{ include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVarsSecret "context" $) }}
+              {{- end }}
+            volumeMounts:
+            - name: media-management
+              mountPath: /media-management
+          restartPolicy: OnFailure
+          schedulerName: default-scheduler
+          terminationGracePeriodSeconds: 30
+          volumes:
+          - name: media-management
+            configMap:
+              name: {{ template "mastodon.tootctlMediaManagement.fullname" . }}
+              defaultMode: 0555
+{{- end }}

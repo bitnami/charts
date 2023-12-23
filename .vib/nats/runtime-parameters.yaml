@@ -1,0 +1,32 @@
+natsFilename: nats-testing-server
+auth:
+  enabled: true
+  user: test_nats_client
+  password: ComplicatedPassword123!4
+cluster:
+  auth:
+    enabled: true
+    user: test_nats_cluster
+    password: ClusterPassword123!4
+jetstream:
+  enabled: true
+persistence:
+  enabled: true
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+containerPorts:
+  client: 4224
+  cluster: 6226
+  monitoring: 8228
+service:
+  ports:
+    monitoring: 80
+    client: 4224
+    cluster: 6226
+  type: LoadBalancer
+resourceType: statefulset
+replicaCount: 2

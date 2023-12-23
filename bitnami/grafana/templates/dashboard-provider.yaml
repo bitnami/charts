@@ -1,11 +1,19 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.dashboardsProvider.enabled (not .Values.dashboardsProvider.configMapName) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "common.names.fullname" . }}-provider
-  namespace: {{ .Release.Namespace }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: grafana
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   default-provider.yaml: |-
     apiVersion: 1
@@ -30,4 +38,6 @@ data:
       options:
         # <string, required> path to dashboard files on disk. Required
         path: /opt/bitnami/grafana/dashboards
+        # <bool> enable folders creation for dashboards
+        #foldersFromFilesStructure: true
 {{- end }}

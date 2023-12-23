@@ -1,22 +1,28 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "postgresql-ha.pgpool" . }}
-  labels: {{ include "common.labels.standard" . | nindent 4 }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.pgpool.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.pgpool.labels .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: pgpool
-    {{- if .Values.pgpool.labels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.labels "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- if and (not .Values.pgpool.customUsersSecret) .Values.pgpool.customUsers.usernames }}
+    checksum/custom-users-secrets: {{ include (print $.Template.BasePath "/pgpool/custom-users-secrets.yaml") . | sha256sum }}
+    {{- end }}
   {{- end }}
 spec:
   replicas: {{ .Values.pgpool.replicaCount }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.pgpool.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
-    matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: pgpool
   {{- if .Values.pgpool.updateStrategy }}
   strategy: {{- toYaml .Values.pgpool.updateStrategy | nindent 4 }}
@@ -26,16 +32,13 @@ spec:
   {{- end }}
   template:
     metadata:
-      labels: {{ include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: pgpool
-        {{- if .Values.pgpool.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.podLabels "context" $) | nindent 8 }}
-        {{- end }}
       {{- if .Values.pgpool.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
-      {{- include "postgresql-ha.imagePullSecrets" . | nindent 6 }}
+      {{- include "postgresql-ha.image.pullSecrets" . | nindent 6 }}
       {{- if .Values.pgpool.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -43,8 +46,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.pgpool.podAffinityPreset "component" "pgpool" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.pgpool.podAntiAffinityPreset "component" "pgpool" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.pgpool.podAffinityPreset "component" "pgpool" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.pgpool.podAntiAffinityPreset "component" "pgpool" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.pgpool.nodeAffinityPreset.type "key" .Values.pgpool.nodeAffinityPreset.key "values" .Values.pgpool.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.pgpool.nodeSelector }}
@@ -56,29 +59,45 @@ spec:
       {{- if .Values.pgpool.priorityClassName }}
       priorityClassName: {{ .Values.pgpool.priorityClassName }}
       {{- end }}
-      {{- if .Values.pgpool.securityContext.enabled }}
-      securityContext: {{- omit .Values.pgpool.securityContext "enabled" | toYaml | nindent 8 }}
+      {{- if .Values.pgpool.schedulerName }}
+      schedulerName: {{ .Values.pgpool.schedulerName | quote }}
       {{- end }}
+      {{- if .Values.pgpool.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.pgpool.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.pgpool.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.pgpool.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.pgpool.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.serviceAccount.create }}
+      serviceAccountName: {{ include "postgresql-ha.serviceAccountName" . }}
+      {{- end }}
+      {{- if or .Values.pgpool.tls.enabled .Values.pgpool.initContainers }}
       initContainers:
       {{- if .Values.pgpool.tls.enabled }}
         - name: init-chmod-data
-          image: {{ template "postgresql-ha.volumePermissionsImage" . }}
-          imagePullPolicy: {{ .Values.volumePermissionsImage.pullPolicy | quote }}
+          image: {{ template "postgresql-ha.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command:
             - /bin/sh
             - -cx
             - |
               cp /tmp/certs/* /opt/bitnami/pgpool/certs/
-              {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
+              {{- if eq ( toString ( .Values.volumePermissions.podSecurityContext.runAsUser )) "auto" }}
               chown -R `id -u`:`id -G | cut -d " " -f2` /opt/bitnami/pgpool/certs/
               {{- else }}
-              chown -R {{ .Values.pgpool.containerSecurityContext.runAsUser }}:{{ .Values.pgpool.securityContext.fsGroup }} /opt/bitnami/pgpool/certs/
+              chown -R {{ .Values.pgpool.containerSecurityContext.runAsUser }}:{{ .Values.pgpool.podSecurityContext.fsGroup }} /opt/bitnami/pgpool/certs/
               {{- end }}
               chmod 600 {{ template "postgresql-ha.pgpool.tlsCertKey" . }}
-          {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
-          securityContext: {{- omit .Values.volumePermissions.securityContext "runAsUser" | toYaml | nindent 12 }}
+          {{- if eq ( toString ( .Values.volumePermissions.podSecurityContext.runAsUser )) "auto" }}
+          securityContext: {{- omit .Values.volumePermissions.podSecurityContext "runAsUser" | toYaml | nindent 12 }}
           {{- else }}
-          securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
+          securityContext: {{- .Values.volumePermissions.podSecurityContext | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: raw-certificates
@@ -89,31 +108,38 @@ spec:
       {{- if .Values.pgpool.initContainers }}
       {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.initContainers "context" $) | nindent 8 }}
       {{- end }}
+      {{- end }}
       # Auxiliary vars to populate environment variables
       {{- $postgresqlReplicaCount := int .Values.postgresql.replicaCount }}
       {{- $postgresqlFullname := include "postgresql-ha.postgresql" . }}
+      {{- $postgresalContainerPort := int .Values.postgresql.containerPorts.postgresql }}
       {{- $postgresqlHeadlessServiceName := printf "%s-headless" (include "postgresql-ha.postgresql" .) }}
-      {{- $clusterDomain:= .Values.clusterDomain }}
       containers:
         - name: pgpool
-          image: {{ include "postgresql-ha.pgpoolImage" . }}
-          imagePullPolicy: {{ .Values.pgpoolImage.pullPolicy | quote }}
-          {{- if .Values.pgpool.securityContext.enabled }}
+          image: {{ include "postgresql-ha.pgpool.image" . }}
+          imagePullPolicy: {{ .Values.pgpool.image.pullPolicy | quote }}
+          {{- if .Values.pgpool.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.pgpool.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.pgpool.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.pgpool.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.pgpool.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.pgpool.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.args "context" $) | nindent 12 }}
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.pgpool.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.pgpoolImage.debug | quote }}
-            {{- if or .Values.pgpool.customUsersSecret .Values.pgpool.customUsers }}
+              value: {{ ternary "true" "false" (or .Values.pgpool.image.debug .Values.diagnosticMode.enabled) | quote }}
+            {{- if or .Values.pgpool.customUsersSecret .Values.pgpool.customUsers.usernames }}
             - name: PGPOOL_POSTGRES_CUSTOM_USERS
               valueFrom:
                 secretKeyRef:
@@ -125,12 +151,8 @@ spec:
                   name: {{ include "postgresql-ha.pgpoolCustomUsersSecretName" . }}
                   key: passwords
             {{- end }}
-            - name: PGPOOL_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
             - name: PGPOOL_BACKEND_NODES
-              value: {{range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.$(PGPOOL_NAMESPACE).svc.{{ $clusterDomain }}:5432,{{ end }}
+              value: {{ range $e, $i := until $postgresqlReplicaCount }}{{ $i }}:{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}:{{ $postgresalContainerPort }},{{ end }}
             - name: PGPOOL_SR_CHECK_USER
               value: {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) | quote }}
             {{- if .Values.postgresql.usePasswordFile }}
@@ -151,7 +173,7 @@ spec:
             - name: LDAP_URI
               value: {{ .Values.ldap.uri | quote }}
             - name: LDAP_BASE
-              value: {{ .Values.ldap.base | quote }}
+              value: {{ coalesce .Values.ldap.base .Values.ldap.basedn | quote }}
             - name: LDAP_BIND_DN
               value: {{ .Values.ldap.binddn | quote }}
             - name: LDAP_BIND_PASSWORD
@@ -184,7 +206,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql-ha.postgresqlSecretName" . }}
-                  key: postgresql-password
+                  key: password
             {{- end }}
             - name: PGPOOL_ADMIN_USERNAME
               value: {{ (include "postgresql-ha.pgpoolAdminUsername" .) | quote }}
@@ -198,8 +220,14 @@ spec:
                   name: {{ include "postgresql-ha.pgpoolSecretName" . }}
                   key: admin-password
             {{- end }}
+            - name: PGPOOL_AUTHENTICATION_METHOD
+              value: {{ .Values.pgpool.authenticationMethod | quote }}
             - name: PGPOOL_ENABLE_LOAD_BALANCING
               value: {{ ternary "yes" "no" .Values.pgpool.useLoadBalancing | quote }}
+            {{- if .Values.pgpool.useLoadBalancing }}
+            - name: PGPOOL_DISABLE_LOAD_BALANCE_ON_WRITE
+              value: {{ .Values.pgpool.disableLoadBalancingOnWrite | quote }}
+            {{- end }}
             - name: PGPOOL_ENABLE_LOG_CONNECTIONS
               value: {{ ternary "yes" "no" .Values.pgpool.logConnections | quote }}
             - name: PGPOOL_ENABLE_LOG_HOSTNAME
@@ -213,6 +241,10 @@ spec:
             {{- if .Values.pgpool.numInitChildren }}
             - name: PGPOOL_NUM_INIT_CHILDREN
               value: {{ .Values.pgpool.numInitChildren | quote }}
+            {{- end }}
+            {{- if .Values.pgpool.reservedConnections }}
+            - name: PGPOOL_RESERVED_CONNECTIONS
+              value: '{{ .Values.pgpool.reservedConnections }}'
             {{- end }}
             {{- if .Values.pgpool.maxPool }}
             - name: PGPOOL_MAX_POOL
@@ -253,6 +285,12 @@ spec:
               value: {{ template "postgresql-ha.pgpool.tlsCACert" . }}
             {{- end }}
             {{- end }}
+            - name: PGPOOL_HEALTH_CHECK_PSQL_TIMEOUT
+            {{- if .Values.pgpool.customLivenessProbe }}
+              value: {{ add 1 (default 1 .Values.pgpool.customLivenessProbe.timeoutSeconds) | quote }}
+            {{- else }}
+              value: {{ add 1 (default 1 .Values.pgpool.livenessProbe.timeoutSeconds) | quote }}
+            {{- end }}
             {{- if .Values.pgpool.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -267,39 +305,40 @@ spec:
             {{- end }}
           ports:
             - name: postgresql
-              containerPort: 5432
+              containerPort: {{ .Values.pgpool.containerPorts.postgresql }}
               protocol: TCP
-          {{- if and .Values.pgpool.livenessProbe.enabled (not .Values.ldap.enabled) }}
-          livenessProbe:
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.pgpool.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.pgpool.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.pgpool.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /opt/bitnami/scripts/pgpool/healthcheck.sh
-            initialDelaySeconds: {{ .Values.pgpool.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.pgpool.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.pgpool.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.pgpool.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.pgpool.livenessProbe.failureThreshold }}
-          {{- else if .Values.pgpool.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if and .Values.pgpool.readinessProbe.enabled (not .Values.ldap.enabled) }}
-          readinessProbe:
+          {{- if .Values.pgpool.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.pgpool.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.pgpool.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - bash
                 - -ec
                 - PGPASSWORD=${PGPOOL_POSTGRES_PASSWORD} psql -U {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}{{- end }} -h /opt/bitnami/pgpool/tmp -tA -c "SELECT 1" >/dev/null
-            initialDelaySeconds: {{ .Values.pgpool.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.pgpool.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.pgpool.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.pgpool.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.pgpool.readinessProbe.failureThreshold }}
-          {{- else if .Values.pgpool.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.pgpool.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.pgpool.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.pgpool.startupProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - /opt/bitnami/scripts/pgpool/healthcheck.sh
+          {{- end }}
           {{- end }}
           {{- if .Values.pgpool.resources }}
           resources: {{- toYaml .Values.pgpool.resources | nindent 12 }}
           {{- end }}
+          {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM .Values.pgpool.initdbScriptsSecret .Values.postgresql.usePasswordFile .Values.pgpool.usePasswordFile .Values.pgpool.tls.enabled .Values.pgpool.extraVolumeMounts }}
           volumeMounts:
             {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM }}
             - name: pgpool-config
@@ -333,9 +372,11 @@ spec:
             {{- if .Values.pgpool.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+          {{- end }}
         {{- if .Values.pgpool.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.sidecars "context" $) | nindent 8 }}
         {{- end }}
+      {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM .Values.pgpool.initdbScriptsSecret .Values.pgpool.usePasswordFile .Values.postgresql.usePasswordFile .Values.pgpool.tls.enabled .Values.pgpool.extraVolumes }}
       volumes:
         {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM }}
         - name: pgpool-config
@@ -373,10 +414,11 @@ spec:
         {{- if .Values.pgpool.tls.enabled }}
         - name: raw-certificates
           secret:
-            secretName: {{ required "A secret containing TLS certificates is required when TLS is enabled" .Values.pgpool.tls.certificatesSecret }}
+            secretName: {{ include "postgresql-ha.tlsSecretName" . }}
         - name: pgpool-certificates
           emptyDir: {}
         {{- end }}
       {{- if .Values.pgpool.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}
       {{- end }}

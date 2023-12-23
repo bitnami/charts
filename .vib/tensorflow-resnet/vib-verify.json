@@ -1,0 +1,61 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/tensorflow-resnet"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/tensorflow-resnet"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "tensorflow-resnet/goss/goss.yaml",
+            "vars_file": "tensorflow-resnet/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-tensorflow-resnet"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/tensorflow-resnet/cypress"
+            },
+            "endpoint": "lb-tensorflow-resnet-tf-serving-api",
+            "app_protocol": "HTTP"
+          }
+        }
+      ]
+    }
+  }
+}

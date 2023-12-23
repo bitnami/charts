@@ -1,0 +1,61 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/spring-cloud-dataflow"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/spring-cloud-dataflow"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "spring-cloud-dataflow/goss/goss.yaml",
+            "vars_file": "spring-cloud-dataflow/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-spring-cloud-dataflow-server"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/spring-cloud-dataflow/cypress"
+            },
+            "endpoint": "lb-spring-cloud-dataflow-server-http",
+            "app_protocol": "HTTP"
+          }
+        }
+      ]
+    }
+  }
+}

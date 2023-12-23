@@ -1,0 +1,58 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.supervisor.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "pinniped.supervisor.api.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.supervisor.service.api.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: pinniped
+    app.kubernetes.io/component: supervisor
+  {{- if or .Values.supervisor.service.api.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.supervisor.service.api.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- with .Values.supervisor.service.api }}
+  type: {{ .type }}
+  {{- if and .clusterIP (eq .type "ClusterIP") }}
+  clusterIP: {{ .clusterIP }}
+  {{- end }}
+  {{- if .sessionAffinity }}
+  sessionAffinity: {{ .sessionAffinity }}
+  {{- end }}
+  {{- if .sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .type "LoadBalancer") (eq .type "NodePort") }}
+  externalTrafficPolicy: {{ .externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .type "LoadBalancer") (not (empty .loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .loadBalancerSourceRanges | toJson }}
+  {{- end }}
+  {{- if and (eq .type "LoadBalancer") (not (empty .loadBalancerIP)) }}
+  loadBalancerIP: {{ .loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: https
+      port: {{ .ports.https }}
+      protocol: TCP
+      targetPort: {{ .ports.aggregatedAPIServer }}
+      {{- if and (or (eq .type "NodePort") (eq .type "LoadBalancer")) (not (empty .nodePorts.https)) }}
+      nodePort: {{ .nodePorts.https }}
+      {{- else if eq .type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.supervisor.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: supervisor
+{{- end }}

@@ -1,0 +1,118 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ include "common.names.namespace" . }} -ti <NAME OF THE POD> -- bash
+
+{{- else }}
+
+Installed components:
+
+  {{- if .Values.proxy.enabled }}
+  * proxy
+  {{- end }}
+  {{- if .Values.dataCoord.enabled }}
+  * data-coordinator
+  {{- end }}
+  {{- if .Values.indexCoord.enabled }}
+  * index-coordinator
+  {{- end }}
+  {{- if .Values.queryCoord.enabled }}
+  * query-coordinator
+  {{- end }}
+  {{- if .Values.rootCoord.enabled }}
+  * root-coordinator
+  {{- end }}
+  {{- if .Values.dataNode.enabled }}
+  * data-node
+  {{- end }}
+  {{- if .Values.indexNode.enabled }}
+  * index-node
+  {{- end }}
+  {{- if .Values.queryNode.enabled }}
+  * query-node
+  {{- end }}
+  {{- if .Values.attu.enabled }}
+  * attu
+  {{- end }}
+
+{{- if .Values.attu.enabled }}
+Attu:
+{{- if .Values.attu.ingress.enabled }}
+
+1. Get the Attu URL and associate the gateway hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "Attu URL: http{{ if .Values.attu.ingress.tls }}s{{ end }}://{{ .Values.attu.ingress.hostname }}/"
+   echo "$CLUSTER_IP  {{ .Values.attu.ingress.hostname }}" | sudo tee -a /etc/hosts
+{{- else }}
+
+1. Get the Attu URL by running these commands:
+
+{{- if contains "NodePort" .Values.attu.service.type }}
+    export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "milvus.attu.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.attu.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ include "common.names.namespace" . }} svc -w {{ template "milvus.attu.fullname" . }}
+    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ template "milvus.attu.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    echo http://$SERVICE_IP:{{ .Values.attu.service.ports.http }}
+{{- else if contains "ClusterIP" .Values.attu.service.type }}
+    echo "Attu is available at http://127.0.0.1:{{ .Values.attu.service.ports.http }}"
+    kubectl port-forward svc/{{ template "milvus.attu.fullname" . }} {{ .Values.attu.service.ports.http }}:{{ .Values.attu.service.ports.http }} &
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if .Values.proxy.enabled }}
+Proxy:
+
+1. Get the Proxy URL by running these commands:
+
+{{- if contains "NodePort" .Values.proxy.service.type }}
+    export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "milvus.proxy.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    echo grpc://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.proxy.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ include "common.names.namespace" . }} svc -w {{ template "milvus.proxy.fullname" . }}
+    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ template "milvus.proxy.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    echo grpc://$SERVICE_IP:{{ .Values.proxy.service.ports.grpc }}
+{{- else if contains "ClusterIP" .Values.proxy.service.type }}
+    echo "Proxy is available at grpc://127.0.0.1:{{ .Values.proxy.service.ports.grpc }}"
+    kubectl port-forward svc/{{ template "milvus.proxy.fullname" . }} {{ .Values.proxy.service.ports.grpc }}:{{ .Values.proxy.service.ports.grpc }} &
+{{- end }}
+{{- end }}
+
+{{- if .Values.milvus.auth.enabled }}
+2. Access Milvus with the following credentials:
+
+  echo Username: {{ .Values.milvus.auth.username }}
+  echo Password: $(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ include "milvus.secretName" . }} -o jsonpath="{.data.password}" | base64 -d)
+{{- end }}
+
+Check the status of the pods by running this command:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Check the upstream Milvus documentation: https://milvus.io/docs
+
+{{- include "milvus.checkRollingTags" . }}
+{{- include "milvus.validateValues" . }}
+
+{{- end }}

@@ -1,0 +1,61 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name:  {{ include "jaeger.query.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: jaeger
+    app.kubernetes.io/component: query
+  {{- if or .Values.query.service.annotations .Values.query.service.metrics.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.service.annotations .Values.query.service.metrics.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.query.service.type }}
+  {{- if and (eq .Values.query.service.type "LoadBalancer") (not (empty .Values.query.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.query.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.query.service.type "LoadBalancer") (not (empty .Values.query.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.query.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and .Values.query.service.clusterIP (eq .Values.query.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.query.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.query.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.query.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.query.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.query.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.query.service.type "LoadBalancer") (eq .Values.query.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.query.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  ports:
+    - name: api
+      port: {{ .Values.query.service.ports.api }}
+      targetPort: {{ .Values.query.containerPorts.api }}
+      {{- if and (or (eq .Values.query.service.type "NodePort") (eq .Values.query.service.type "LoadBalancer")) (not (empty .Values.query.service.nodePorts.api)) }}
+      nodePort: {{ .Values.query.service.nodePorts.api }}
+      {{- else if eq .Values.query.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: admin
+      port: {{ .Values.query.service.ports.admin }}
+      targetPort: {{ .Values.query.containerPorts.admin }}
+      {{- if and (or (eq .Values.query.service.type "NodePort") (eq .Values.query.service.type "LoadBalancer")) (not (empty .Values.query.service.nodePorts.admin)) }}
+      nodePort: {{ .Values.query.service.nodePorts.admin }}
+      {{- else if eq .Values.query.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.query.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.query.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: jaeger
+    app.kubernetes.io/component: query

@@ -1,0 +1,63 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.dashboard.enabled .Values.dashboard.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ template "apisix.dashboard.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.dashboard.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: apisix
+    app.kubernetes.io/component: dashboard
+  {{- if or .Values.dashboard.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.dashboard.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.dashboard.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.dashboard.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.dashboard.ingress.hostname }}
+    - host: {{ .Values.dashboard.ingress.hostname }}
+      http:
+        paths:
+          {{- if .Values.dashboard.ingress.extraPaths }}
+          {{- toYaml .Values.dashboard.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.dashboard.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.dashboard.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "apisix.dashboard.fullname" . | trunc 63 | trimSuffix "-") "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.dashboard.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "apisix.dashboard.fullname" $ | trunc 63 | trimSuffix "-") "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.dashboard.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.dashboard.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.dashboard.ingress.annotations )) .Values.dashboard.ingress.selfSigned)) .Values.dashboard.ingress.extraTls }}
+  tls:
+    {{- if and .Values.dashboard.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.dashboard.ingress.annotations )) .Values.dashboard.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.dashboard.ingress.hostname | quote }}
+      secretName: {{ printf "%s-tls" .Values.dashboard.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.dashboard.ingress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

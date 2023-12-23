@@ -1,0 +1,38 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.query.enabled .Values.query.service.additionalHeadless }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" . }}-query-headless
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: query
+    {{- include "thanos.servicemonitor.matchLabels" . | nindent 4 -}}
+  {{- if or .Values.query.service.headless.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.service.headless.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - port: {{ if .Values.query.service.http }}{{ coalesce .Values.query.service.ports.http .Values.query.service.http.port }}{{ else }}{{ .Values.query.service.ports.http }}{{ end }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    {{- if .Values.query.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.query.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector:
+    {{- if .Values.query.service.labelSelectorsOverride }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.query.service.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- else }}
+    {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.podLabels .Values.commonLabels ) "context" . ) }}
+    {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: query
+    {{- end }}
+{{- end }}

@@ -1,0 +1,65 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/gitea"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/gitea"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "gitea/goss/goss.yaml",
+            "vars_file": "gitea/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-gitea"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/gitea/cypress"
+            },
+            "endpoint": "lb-gitea-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "user": "vib-user@example.com",
+              "password": "bitnami!1234"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

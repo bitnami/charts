@@ -1,0 +1,7 @@
+{
+  "baseUrl": "http://localhost/",
+  "env": {
+    "registryName": "bitnamicharts"
+  },
+  "defaultCommandTimeout": 30000
+}

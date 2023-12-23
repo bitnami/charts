@@ -1,25 +1,34 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: DeveloperTools
+  licenses: Apache-2.0
+  images: |
+    - name: aspnet-core
+      image: docker.io/bitnami/aspnet-core:8.0.0-debian-11-r1
+    - name: dotnet-sdk
+      image: docker.io/bitnami/dotnet-sdk:8.0.100-debian-11-r0
+    - name: git
+      image: docker.io/bitnami/git:2.43.0-debian-11-r0
 apiVersion: v2
-appVersion: 3.1.9
+appVersion: 8.0.0
 dependencies:
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
-    version: 1.x.x
-description: ASP.NET Core is an open-source framework created by Microsoft for building cloud-enabled, modern applications.
-engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/aspnet-core
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: ASP.NET Core is an open-source framework for web application development created by Microsoft. It runs on both the full .NET Framework, on Windows, and the cross-platform .NET Core.
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/aspnet-core/img/aspnet-core-stack-220x234.png
 keywords:
-  - asp.net
-  - dotnet
+- asp.net
+- dotnet
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
 name: aspnet-core
 sources:
-  - https://github.com/bitnami/bitnami-docker-aspnet-core
-  - https://dotnet.microsoft.com/apps/aspnet
-version: 1.2.2
+- https://github.com/bitnami/charts/tree/main/bitnami/aspnet-core
+version: 5.0.1

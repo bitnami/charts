@@ -1,27 +1,38 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.persistence.enabled }}
 {{- if and (not .Values.persistence.persistentVolumeClaim.registry.existingClaim) (eq .Values.persistence.imageChartStorage.type "filesystem") }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "harbor.registry" . }}
-  {{- if eq .Values.persistence.resourcePolicy "keep" }}
-  annotations:
-    helm.sh/resource-policy: keep
-  {{- end }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.registry.server.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: registry
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
+  annotations:
+    {{- if eq .Values.persistence.resourcePolicy "keep" }}
+    helm.sh/resource-policy: keep
+    {{- end }}
+    {{- if or .Values.persistence.persistentVolumeClaim.registry.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.persistence.persistentVolumeClaim.registry.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+    {{- end }}
 spec:
   accessModes:
-    - {{ .Values.persistence.persistentVolumeClaim.registry.accessMode }}
+  {{- range .Values.persistence.persistentVolumeClaim.registry.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
   resources:
     requests:
       storage: {{ .Values.persistence.persistentVolumeClaim.registry.size }}
-  {{- include "harbor.registry.storageClass" . | nindent 2 }}
+  {{- if .Values.persistence.persistentVolumeClaim.registry.selector }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.persistentVolumeClaim.registry.selector "context" $) | nindent 2 }}
+  {{- end }}
+  {{- include "common.storage.class" ( dict "persistence" .Values.persistence.persistentVolumeClaim.registry "global" .Values.global ) | nindent 2 }}
 {{- end }}
 {{- end }}

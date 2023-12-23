@@ -1,0 +1,4 @@
+aggregator:
+  enabled: true
+forwarder:
+  enabled: true

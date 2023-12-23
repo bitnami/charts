@@ -1,0 +1,65 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/sonarqube"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/sonarqube"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/sonarqube/cypress"
+            },
+            "endpoint": "lb-sonarqube-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "user": "test_user",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "sonarqube/goss/goss.yaml",
+            "vars_file": "sonarqube/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-sonarqube"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,166 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.server.enabled .Values.server.rbac.create }}
+{{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.server.image "chart" .Chart ) ) }}
+{{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+apiVersion: rbac.authorization.k8s.io/v1
+{{- if .Values.rbac.singleNamespace }}
+kind: Role
+{{- else }}
+kind: ClusterRole
+{{- end }}
+metadata:
+  name: {{ include "argo-workflows.server.fullname.namespace" . }}
+  {{- if .Values.rbac.singleNamespace }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: argo-workflows
+    app.kubernetes.io/component: server
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - events
+    verbs:
+      - get
+      - watch
+      - list
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+      - pods/exec
+      - pods/log
+    verbs:
+      - get
+      - list
+      - watch
+      - delete
+  {{- if and .Values.server.auth.enabled .Values.server.auth.sso.enabled }}
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    resourceNames:
+      - sso
+    verbs:
+      - get
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - create
+  {{- if .Values.server.auth.sso.rbac }}
+  - apiGroups:
+      - ""
+    resources:
+    - serviceaccounts
+    verbs:
+      - get
+      - list
+      - watch
+  {{- end }}
+  {{- end }}
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+  {{- if and .Values.server.auth.enabled .Values.server.auth.sso.enabled }}
+    {{- if .Values.server.auth.sso.rbac }}
+      {{- with .Values.server.auth.sso.rbac.secretWhitelist }}
+    resourceNames: {{- toYaml . | nindent 6 }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - watch
+      - create
+      - patch
+  {{- if (include "argo-workflows.controller.persistence.enabled" .) }}
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    resourceNames:
+      - {{ include "argo-workflows.controller.database.username.secret" . }}
+      - {{ include "argo-workflows.controller.database.password.secret" . }}
+    verbs:
+      - get
+  {{- end }}
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - eventsources
+      - sensors
+      - workflows
+      - workfloweventbindings
+      - workflowtemplates
+      - cronworkflows
+    verbs:
+      - create
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - dataflow.argoproj.io
+    resources:
+      - pipelines
+    verbs:
+      - create
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - delete
+
+{{- if .Values.server.clusterWorkflowTemplates.enabled }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "argo-workflows.server.fullname.namespace" . }}-cluster-template
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: argo-workflows
+    app.kubernetes.io/component: server
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - clusterworkflowtemplates
+    verbs:
+      - get
+      - list
+      - watch
+      {{- if .Values.server.clusterWorkflowTemplates.enableEditing }}
+      - create
+      - update
+      - patch
+      - delete
+      {{- end }}
+{{- end }}
+{{- end }}

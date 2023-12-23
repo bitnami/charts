@@ -1,6 +1,0 @@
-{{ if .Values.contour.manageCRDs }}
-{{ range $path, $_ := .Files.Glob "resources/*.yaml" }}
-{{ $.Files.Get $path }}
----
-{{ end }}
-{{ end }}

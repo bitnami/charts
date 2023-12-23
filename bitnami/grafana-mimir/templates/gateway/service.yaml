@@ -1,0 +1,59 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.gateway.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "grafana-mimir.gateway.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.gateway.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: gateway
+  {{- if or .Values.commonAnnotations .Values.gateway.service.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.gateway.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.gateway.service.type }}
+  {{- if .Values.gateway.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.gateway.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.gateway.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.gateway.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if and .Values.gateway.service.clusterIP (eq .Values.gateway.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.gateway.service.clusterIP }}
+  {{- end }}
+  {{- if (or (eq .Values.gateway.service.type "LoadBalancer") (eq .Values.gateway.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.gateway.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if (and (eq .Values.gateway.service.type "LoadBalancer") .Values.gateway.service.loadBalancerSourceRanges) }}
+  {{- with .Values.gateway.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  {{- if (and (eq .Values.gateway.service.type "LoadBalancer") (not (empty .Values.gateway.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.gateway.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.gateway.service.ports.http }}
+      targetPort: http
+      {{- if and (or (eq .Values.gateway.service.type "NodePort") (eq .Values.gateway.service.type "LoadBalancer")) (not (empty .Values.gateway.service.nodePorts.http)) }}
+      nodePort: {{ .Values.gateway.service.nodePorts.http }}
+      {{- else if eq .Values.gateway.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.gateway.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.gateway.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.gateway.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: gateway
+{{- end }}

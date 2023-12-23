@@ -1,0 +1,66 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/ghost"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/ghost"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "ghost/goss/goss.yaml",
+            "vars_file": "ghost/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-ghost"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/ghost/cypress"
+            },
+            "endpoint": "lb-ghost-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "email": "vim-tests@example.com",
+              "username": "bitnamiTest",
+              "password": "Complicated123!4"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/wordpress"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/wordpress"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "wordpress/goss/goss.yaml",
+            "vars_file": "wordpress/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-wordpress"
+              }
+            },
+            "wait": {
+              "file": "wordpress/goss/goss-wait.yaml"
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/wordpress/cypress"
+            },
+            "endpoint": "lb-wordpress-https",
+            "app_protocol": "HTTPS",
+            "env": {
+              "username": "test_user",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        },
+        {
+          "action_id": "jmeter",
+          "params": {
+            "resources": {
+              "path": "/.vib/wordpress/jmeter"
+            },
+            "test_plan_file": "wordpress.jmx",
+            "endpoint": "lb-wordpress-https",
+            "app_protocol": "HTTPS",
+            "env": {
+              "wordpress.username": "test_user",
+              "wordpress.password": "ComplicatedPassword123!4"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

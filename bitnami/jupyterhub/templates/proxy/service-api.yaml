@@ -1,0 +1,54 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "%s-proxy-api" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.proxy.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: proxy
+  {{- if or .Values.proxy.service.api.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.proxy.service.api.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.proxy.service.api.type }}
+  {{- if and .Values.proxy.service.api.clusterIP (eq .Values.proxy.service.api.type "ClusterIP") }}
+  clusterIP: {{ .Values.proxy.service.api.clusterIP }}
+  {{- end }}
+  {{- if or (eq .Values.proxy.service.api.type "LoadBalancer") (eq .Values.proxy.service.api.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.proxy.service.api.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.proxy.service.api.type "LoadBalancer") (not (empty .Values.proxy.service.api.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.proxy.service.api.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.proxy.service.api.type "LoadBalancer") (not (empty .Values.proxy.service.api.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.proxy.service.api.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.proxy.service.api.sessionAffinity }}
+  sessionAffinity: {{ .Values.proxy.service.api.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.proxy.service.api.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.service.api.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ coalesce .Values.proxy.service.api.ports.http .Values.proxy.service.api.port }}
+      targetPort: api
+      protocol: TCP
+      {{- if (and (or (eq .Values.proxy.service.api.type "NodePort") (eq .Values.proxy.service.api.type "LoadBalancer")) (not (empty .Values.proxy.service.api.nodePorts.http))) }}
+      nodePort: {{ .Values.proxy.service.api.nodePorts.http }}
+      {{- else if eq .Values.proxy.service.api.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.proxy.service.api.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.proxy.service.api.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.proxy.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: proxy

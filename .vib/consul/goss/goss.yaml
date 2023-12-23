@@ -1,0 +1,27 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+file:   
+  /opt/bitnami/consul/conf/consul.json:
+    exists: true
+    filetype: file
+    mode: "0644"
+    contents: 
+    - /bootstrap_expect.*{{ .Vars.replicaCount }}/
+    - /http.*{{ .Vars.containerPorts.http }}/
+  /bitnami/consul:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+command:
+  consul-kv-put:
+    exec: consul kv put test test
+    exit-status: 0
+  consul-cli:
+    exec: consul members
+    exit-status: 0
+    stdout:
+    {{ range $e, $i := until .Vars.replicaCount }}
+      - "consul-{{ $i }}"
+    {{ end }}

@@ -1,0 +1,13 @@
+magentoUsername: user
+magentoPassword: ComplicatedPassword123!4
+magentoHost: magento.my
+magentoAdminUri: admin
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+mariadb:
+  enabled: true
+  auth:
+    password: test_magento_password
+    rootPassword: ComplicatedmariaPassword123!4

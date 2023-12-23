@@ -1,0 +1,25 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+http:
+  {{ if .Vars.msgTopologyOperator.enabled }}
+  http://rmq-op-webhook:{{ .Vars.msgTopologyOperator.service.ports.webhook }}:
+    status: 400
+  {{ end }}
+  {{- $manager_port := (index (index .Vars.extraDeploy 2).spec.ports 0).targetPort }}
+  http://ve-testing:{{ $manager_port }}:
+    status: 200
+command:
+  rabbitmqctl-cluster-status:
+    exec: rabbitmqctl cluster_status
+    exit-status: 0
+    stdout:
+    {{- $nodes := (index .Vars.extraDeploy 1).spec.replicas }}
+    {{ range $e, $i := until $nodes }}
+      - /ve-testing-server-{{ $i }}.ve-testing-nodes/
+    {{ end }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*ve-testing-server/

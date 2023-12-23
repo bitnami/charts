@@ -1,0 +1,9 @@
+{
+  "dbQuery": {
+    "query": "SHOW DATABASES;",
+    "output": {
+      "header": "name",
+      "return": "information_schema"
+    }
+  }
+}

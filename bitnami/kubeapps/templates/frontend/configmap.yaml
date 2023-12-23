@@ -1,0 +1,139 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "kubeapps.frontend-config.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.frontend.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: frontend
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  k8s-api-proxy.conf: |-
+    # Deactivate buffering for log streaming
+    proxy_buffering off;
+    # Hide Www-Authenticate to prevent it triggering a basic auth prompt in
+    # the browser with some clusters
+    proxy_hide_header Www-Authenticate;
+
+    # Keep the connection open with the API server even if idle (the default is 60 seconds)
+    # Setting it to 1 hour which should be enough for our current use case of deploying/upgrading apps
+    # If we enable other use-cases in the future we might need to bump this value
+    # More info here https://github.com/vmware-tanzu/kubeapps/issues/766
+    proxy_read_timeout 1h;
+
+    {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
+    # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
+    proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
+    {{- end }}
+{{- range .Values.clusters }}
+  {{- if .certificateAuthorityData }}
+  {{ printf "%s-ca.pem" .name }}: {{ .certificateAuthorityData }}
+  {{- end }}
+{{- end }}
+  vhost.conf: |-
+    # Retain the default nginx handling of requests without a "Connection" header
+    map $http_upgrade $connection_upgrade {
+      default upgrade;
+      ''      close;
+    }
+
+    # Allow websocket connections
+    proxy_set_header Upgrade    $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+
+    server {
+      listen {{ .Values.frontend.containerPorts.http }};
+    {{- if .Values.frontend.largeClientHeaderBuffers }}
+      large_client_header_buffers {{ .Values.frontend.largeClientHeaderBuffers }};
+    {{- end }}
+    {{- if .Values.enableIPv6 }}
+      listen [::]:{{ .Values.frontend.containerPorts.http }};
+    {{- end }}
+      server_name _;
+
+      location /healthz {
+        access_log off;
+        default_type text/plain;
+        return 200 "healthy\n";
+      }
+
+      # Only proxy to k8s API endpoints if operators are enabled.
+    {{- if $.Values.featureFlags.operators }}
+
+      # Ensure each cluster can be reached (should only be
+      # used with an auth-proxy where k8s credentials never leave
+      # the cluster). See clusters option.
+    {{- range .Values.clusters }}
+
+      location ~* /api/clusters/{{ .name }} {
+    {{/* We need to split the API service URL(s) into the base url and the path segment so
+           those configurations using a path can be appropriately rewritten below while
+           ensuring the proxy_pass statement is given the base URL only. */}}
+    {{- $parsed := urlParse (default "https://kubernetes.default" .apiServiceURL) }}
+    {{- $apiServiceBaseURL := urlJoin (pick $parsed "scheme" "host") }}
+    {{- $apiServiceURLPath := $parsed.path }}
+        rewrite /api/clusters/{{ .name }}/(.*) {{ $apiServiceURLPath }}/$1 break;
+        rewrite /api/clusters/{{ .name }} {{ $apiServiceURLPath }}/ break;
+
+    {{/* Helm returns a nil pointer error when accessing foo.bar if foo doesn't
+           exist, even with the `default` function.
+           See https://github.com/helm/helm/issues/8026#issuecomment-756538254 */}}
+    {{- $pinnipedConfig := .pinnipedConfig | default dict }}
+    {{- if and $.Values.pinnipedProxy.enabled (or $pinnipedConfig.enabled $pinnipedConfig.enable) }}
+        # If pinniped proxy is enabled *and* the current cluster is configured
+        # to exchange credentials then we route via pinnipedProxy to exchange
+        # credentials for client certificates. Note, we are currently still supporting
+        # the deprecated `pinnipedConfig.enable` until the next feature release.
+        # All documentation should now reference the cluster-specific `pinnipedConfig.enabled`.
+    {{- if .apiServiceURL }}
+        proxy_set_header PINNIPED_PROXY_API_SERVER_URL {{ .apiServiceURL }};
+    {{- end }}
+    {{- if .certificateAuthorityData }}
+        proxy_set_header PINNIPED_PROXY_API_SERVER_CERT {{ .certificateAuthorityData }};
+    {{- end }}
+        proxy_pass {{ printf "http://%s.%s:%d" (include "kubeapps.pinniped-proxy.fullname" $) $.Release.Namespace (int $.Values.pinnipedProxy.service.ports.pinnipedProxy) }};
+    {{- else }}
+        # Otherwise we route directly through to the clusters with existing credentials.
+        proxy_pass {{ $apiServiceBaseURL }};
+    {{- if .certificateAuthorityData }}
+        proxy_ssl_trusted_certificate {{ printf "./server_blocks/%s-ca.pem" .name | quote }};
+    {{- end }}
+    {{- end }}
+        include "./server_blocks/k8s-api-proxy.conf";
+      }
+    {{- end }}
+    {{- end }}
+
+      location ~* /apis {
+        rewrite ^ $request_uri; # pass the encoded url downstream as is,
+        rewrite /apis/([^?]*) /$1 break;
+        rewrite /apis / break;
+
+    {{- if .Values.frontend.proxypassExtraSetHeader }}
+        proxy_set_header {{ .Values.frontend.proxypassExtraSetHeader }};
+    {{- end }}
+
+    {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
+        # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
+        proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
+    {{- end }}
+
+        proxy_pass {{ include "kubeapps.kubeappsapis.proxy_pass" . -}};
+      }
+
+    {{- if .Values.dashboard.enabled }}
+      location / {
+        # Add the Authorization header if exists
+        add_header Authorization $http_authorization;
+        proxy_pass {{ printf "http://%s:%d" (include "kubeapps.dashboard.fullname" .) (int .Values.dashboard.service.ports.http) }};
+      }
+    {{- end }}
+    }

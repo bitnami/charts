@@ -1,0 +1,35 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+file:
+  /bitnami/influxdb:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+command:
+  {{- $org := .Vars.auth.user.org }}
+  {{- $bucket := .Vars.auth.user.bucket }}
+  {{- $port := .Vars.influxdb.service.ports.http }}
+  {{- $adminToken := .Vars.auth.admin.token }}
+  {{- $user := .Vars.auth.user.username }}
+  {{- $msg := printf "error_%s" (randAlpha 5) }}
+  influx-write-read:
+    exec: export INFLUX_TOKEN='{{ $adminToken }}' && influx write --host http://influxdb:{{ $port }} --org {{ $org }} --bucket {{ $bucket }} 'cpu_error,host=bitnami-server value="{{ $msg }}"' && export INFLUX_TOKEN=$(influx auth list | grep {{ $user }} | awk '{print $2}') && influx query --host http://influxdb:{{ $port }} --org {{ $org }} 'from(bucket:"{{ $bucket }}") |> range(start:-2m)'
+    exit-status: 0
+    stdout:
+      - "{{ $msg }}"
+  {{- $uid := .Vars.influxdb.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.influxdb.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+  {{ if .Vars.serviceAccount.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}

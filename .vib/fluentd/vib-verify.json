@@ -1,0 +1,54 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/fluentd"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/fluentd"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4",
+            "worker_nodes_instance_count": 1
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "wait": {
+              "file": "fluentd/goss/goss-wait.yaml"
+            },
+            "tests_file": "fluentd/goss/goss.yaml",
+            "remote": {
+              "pod": {
+                "workload": "ds-fluentd"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

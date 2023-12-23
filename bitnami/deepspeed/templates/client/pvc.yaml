@@ -1,0 +1,36 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.client.persistence.enabled (not .Values.client.persistence.existingClaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "deepspeed.v0.client.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.client.persistence.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: deepspeed
+    app.kubernetes.io/component: client
+  {{- if or .Values.client.persistence.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.client.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  accessModes:
+  {{- if not (empty .Values.client.persistence.accessModes) }}
+  {{- range .Values.client.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  {{- else }}
+    - {{ .Values.client.persistence.accessMode | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.client.persistence.size | quote }}
+  {{- include "common.storage.class" (dict "persistence" .Values.client.persistence "global" .Values.global) | nindent 2 }}
+  {{- if .Values.client.persistence.dataSource }}
+  dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.client.persistence.dataSource "context" $) | nindent 4 }}
+  {{- end }}
+{{- end }}

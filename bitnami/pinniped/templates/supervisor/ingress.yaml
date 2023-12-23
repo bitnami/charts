@@ -1,0 +1,59 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.supervisor.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ include "pinniped.supervisor.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if or .Values.supervisor.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.supervisor.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.supervisor.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.supervisor.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.supervisor.ingress.hostname }}
+    - host: {{ .Values.supervisor.ingress.hostname | quote }}
+      http:
+        paths:
+          {{- if .Values.supervisor.ingress.extraPaths }}
+          {{- toYaml .Values.supervisor.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.supervisor.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.supervisor.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "pinniped.supervisor.fullname" .) "servicePort" "https" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.supervisor.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "pinniped.supervisor.fullname" $) "servicePort" "https" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.supervisor.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.supervisor.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.supervisor.ingress.annotations )) .Values.supervisor.ingress.selfSigned)) .Values.supervisor.ingress.extraTls }}
+  tls:
+    {{- if and .Values.supervisor.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.supervisor.ingress.annotations )) .Values.supervisor.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.supervisor.ingress.hostname | quote }}
+      secretName: {{ printf "%s-tls" .Values.supervisor.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.supervisor.ingress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

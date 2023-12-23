@@ -1,38 +1,44 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Forum
+  licenses: Apache-2.0
+  images: |
+    - name: discourse
+      image: docker.io/bitnami/discourse:3.1.3-debian-11-r0
+    - name: os-shell
+      image: docker.io/bitnami/os-shell:11-debian-11-r91
 apiVersion: v2
-appVersion: 2.6.1
+appVersion: 3.1.3
 dependencies:
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
-    version: 1.x.x
-  - condition: postgresql.enabled
-    name: postgresql
-    repository: https://charts.bitnami.com/bitnami
-    version: 10.X.X
-  - condition: redis.enabled
-    name: redis
-    repository: https://charts.bitnami.com/bitnami
-    version: 12.X.X
-description: A Helm chart for deploying Discourse to Kubernetes
-engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/discourse
+- condition: redis.enabled
+  name: redis
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 18.X.X
+- condition: postgresql.enabled
+  name: postgresql
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 13.X.X
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: Discourse is an open source discussion platform with built-in moderation and governance systems that let discussion communities protect themselves from bad actors even without official moderators.
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/discourse/img/discourse-stack-220x234.png
 keywords:
-  - community
-  - forum
+- community
+- forum
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
-  - email: username.taken@gmail.com
-    name: paulczar
-  - email: preteluca@gmail.com
-    name: lucaprete
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
+- email: username.taken@gmail.com
+  name: paulczar
+- email: preteluca@gmail.com
+  name: lucaprete
 name: discourse
 sources:
-  - https://github.com/bitnami/bitnami-docker-discourse
-  - https://github.com/spinnaker
-  - https://www.discourse.org/
-version: 2.2.1
+- https://github.com/bitnami/charts/tree/main/bitnami/discourse
+version: 12.1.0

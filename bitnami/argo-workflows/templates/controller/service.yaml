@@ -1,0 +1,65 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if or .Values.controller.metrics.enabled .Values.controller.telemetry.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "argo-workflows.controller.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.controller.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: argo-workflows
+    app.kubernetes.io/component: controller
+  {{- if or .Values.controller.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.controller.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.controller.service.type }}
+  {{- if and .Values.controller.service.clusterIP (eq .Values.controller.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.controller.service.clusterIP }}
+  {{- end }}
+  {{- if (or (eq .Values.controller.service.type "LoadBalancer") (eq .Values.controller.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.controller.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{ if eq .Values.controller.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.controller.service.loadBalancerSourceRanges }}
+  {{ end }}
+  {{- if (and (eq .Values.controller.service.type "LoadBalancer") (not (empty .Values.controller.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.controller.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+  {{- if .Values.controller.metrics.enabled }}
+    - name: tcp-metrics
+      port: {{ .Values.controller.service.ports.metrics }}
+      protocol: TCP
+      targetPort: {{ .Values.controller.containerPorts.metrics }}
+      {{- if (and (or (eq .Values.controller.service.type "NodePort") (eq .Values.controller.service.type "LoadBalancer")) (not (empty .Values.controller.service.nodePorts.metrics))) }}
+      nodePort: {{ .Values.controller.service.nodePorts.metrics }}
+      {{- else if eq .Values.controller.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  {{- end }}
+  {{- if .Values.controller.telemetry.enabled }}
+    - name: tcp-telemetry
+      port: {{ .Values.controller.service.ports.telemetry }}
+      protocol: TCP
+      targetPort: {{ .Values.controller.containerPorts.telemetry }}
+      {{- if (and (or (eq .Values.controller.service.type "NodePort") (eq .Values.controller.service.type "LoadBalancer")) (not (empty .Values.controller.service.nodePorts.telemetry))) }}
+      nodePort: {{ .Values.controller.service.nodePorts.telemetry }}
+      {{- else if eq .Values.controller.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  {{- end }}
+    {{- if .Values.controller.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.controller.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.controller.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: controller
+  sessionAffinity: None
+{{- end -}}

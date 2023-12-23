@@ -1,0 +1,17 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE jasperReport PUBLIC "-//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+
+<jasperReport name="report" topMargin="20" bottomMargin="20" whenNoDataType="NoDataSection">
+    <noData>
+        <band height="15">
+            <staticText>
+                <reportElement x="0" y="0" width="200" height="15"/>
+                <box>
+                    <bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+                </box>
+                <textElement />
+                <text><![CDATA[Cherries From Barn with ID]]></text>
+            </staticText>
+        </band>
+    </noData>
+</jasperReport>

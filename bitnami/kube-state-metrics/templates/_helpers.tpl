@@ -1,15 +1,9 @@
-{{/* vim: set filetype=mustache: */}}
-
 {{/*
-Return the appropriate apiVersion for PodSecurityPolicy.
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
 */}}
-{{- define "podSecurityPolicy.apiVersion" -}}
-{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "policy/v1beta1" -}}
-{{- else -}}
-{{- print "extensions/v1beta1" -}}
-{{- end -}}
-{{- end -}}
+
+{{/* vim: set filetype=mustache: */}}
 
 {{/*
 Create the name of the service account to use
@@ -33,7 +27,7 @@ Return the proper kube-state-metrics image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "kube-state-metrics.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image) "context" $) -}}
 {{- end -}}
 
 {{/*

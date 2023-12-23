@@ -1,0 +1,27 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+file:
+  /opt/bitnami/grafana/data:
+    filetype: directory
+    exists: true
+    mode: "2775"
+  /opt/bitnami/grafana/data/plugins/{{ .Vars.plugins }}:
+    filetype: directory
+    exists: true
+    mode: "2755"
+command:
+  grafana-cli-data-migration:
+    # The 'grafana-cli admin data-migration encrypt-datasource-passwords' command is not working. In the meantime it is fixed,
+    # the test checks the 'encrypt-datasource-passwords' option appears.
+    exec: cd /opt/bitnami/grafana && grafana-cli admin data-migration -h
+    exit-status: 0
+    stdout:
+      - /encrypt-datasource-passwords/
+  {{- $uid := .Vars.grafana.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.grafana.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0

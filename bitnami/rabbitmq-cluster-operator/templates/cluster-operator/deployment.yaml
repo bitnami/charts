@@ -1,0 +1,161 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "rmqco.clusterOperator.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: rabbitmq-operator
+    app.kubernetes.io/part-of: rabbitmq
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.clusterOperator.replicaCount }}
+  {{- if .Values.clusterOperator.updateStrategy }}
+  strategy: {{- toYaml .Values.clusterOperator.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.clusterOperator.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: rabbitmq-operator
+  template:
+    metadata:
+      {{- if .Values.clusterOperator.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: rabbitmq-operator
+        app.kubernetes.io/part-of: rabbitmq
+    spec:
+      serviceAccountName: {{ template "rmqco.clusterOperator.serviceAccountName" . }}
+      {{- include "rmqco.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.clusterOperator.schedulerName }}
+      schedulerName: {{ .Values.clusterOperator.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.clusterOperator.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.clusterOperator.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.clusterOperator.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.clusterOperator.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.clusterOperator.podAffinityPreset "component" "rabbitmq-operator" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.clusterOperator.podAntiAffinityPreset "component" "rabbitmq-operator" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.clusterOperator.nodeAffinityPreset.type "key" .Values.clusterOperator.nodeAffinityPreset.key "values" .Values.clusterOperator.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.clusterOperator.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.clusterOperator.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.clusterOperator.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.clusterOperator.priorityClassName }}
+      priorityClassName: {{ .Values.clusterOperator.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.clusterOperator.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.clusterOperator.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.clusterOperator.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.clusterOperator.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.clusterOperator.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: rabbitmq-cluster-operator
+          image: {{ template "rmqco.clusterOperator.image" . }}
+          imagePullPolicy: {{ .Values.clusterOperator.image.pullPolicy }}
+          {{- if .Values.clusterOperator.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.clusterOperator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.clusterOperator.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /manager
+          {{- end }}
+          {{- if .Values.clusterOperator.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - --metrics-bind-address=:{{ .Values.clusterOperator.containerPorts.metrics }}
+          {{- end }}
+          env:
+            - name: OPERATOR_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: DEFAULT_RABBITMQ_IMAGE
+              value: {{ include "rmqco.rabbitmq.image" . }}
+            - name: DEFAULT_USER_UPDATER_IMAGE
+              value: {{ include "rmqco.defaultCredentialUpdater.image" . }}
+            {{- if (include "rmqco.imagePullSecrets.string" .) }}
+            - name: DEFAULT_IMAGE_PULL_SECRETS
+              value: {{ include "rmqco.imagePullSecrets.string" . | quote }}
+            {{- end }}
+            {{- if .Values.clusterOperator.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.clusterOperator.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.clusterOperator.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.clusterOperator.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.clusterOperator.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.clusterOperator.resources }}
+          resources: {{- toYaml .Values.clusterOperator.resources | nindent 12 }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.clusterOperator.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.clusterOperator.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.clusterOperator.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /metrics
+              port: http
+          {{- end }}
+          {{- if .Values.clusterOperator.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.clusterOperator.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.clusterOperator.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /metrics
+              port: http
+          {{- end }}
+          {{- if .Values.clusterOperator.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.clusterOperator.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.clusterOperator.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /metrics
+              port: http
+          {{- end }}
+          {{- end }}
+          {{- if .Values.clusterOperator.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.clusterOperator.extraVolumeMounts }}
+          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.clusterOperator.containerPorts.metrics }}
+              protocol: TCP
+        {{- if .Values.clusterOperator.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.clusterOperator.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if .Values.clusterOperator.extraVolumes }}
+      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}

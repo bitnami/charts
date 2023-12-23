@@ -1,27 +1,38 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Wiki
+  licenses: Apache-2.0
+  images: |
+    - name: apache-exporter
+      image: docker.io/bitnami/apache-exporter:1.0.3-debian-11-r1
+    - name: dokuwiki
+      image: docker.io/bitnami/dokuwiki:20230404.1.0-debian-11-r102
+    - name: os-shell
+      image: docker.io/bitnami/os-shell:11-debian-11-r91
 apiVersion: v2
-appVersion: 20200729.0.0
+appVersion: 20230404.1.0
 dependencies:
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    version: 1.x.x
-description: DokuWiki is a standards-compliant, simple to use wiki optimized for creating documentation. It is targeted at developer teams, workgroups, and small companies. All data is stored in plain text files, so no database is required.
-engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/dokuwiki
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: DokuWiki is a standards-compliant wiki optimized for creating documentation. Designed to be simple to use for small organizations, it stores all data in plain text files so no database is required.
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/dokuwiki/img/dokuwiki-stack-220x234.png
 keywords:
-  - dokuwiki
-  - wiki
-  - http
-  - web
-  - application
-  - php
+- dokuwiki
+- wiki
+- http
+- web
+- application
+- php
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
 name: dokuwiki
 sources:
-  - https://github.com/bitnami/bitnami-docker-dokuwiki
-  - http://www.dokuwiki.org/
-version: 11.1.0
+- https://github.com/bitnami/charts/tree/main/bitnami/dokuwiki
+version: 14.3.2

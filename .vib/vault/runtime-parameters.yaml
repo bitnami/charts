@@ -1,0 +1,116 @@
+server:
+  command:
+    - /bin/bash
+  args:
+    - -ec
+    - |
+      #!/bin/bash
+
+      # Perform an initialization of the vault server
+      vault server -config=/bitnami/vault/config/config.hcl &
+      # Leave some seconds for the initialization to take place
+      sleep 10
+      # We need to manually initialize the Vault and perform the unseal operations.
+      # https://developer.hashicorp.com/vault/docs/platform/k8s/helm/run#initialize-and-unseal-vault
+      INIT_OUTPUT="$(vault operator init)"
+      export VAULT_TOKEN=$(echo "$INIT_OUTPUT" | awk -F: '/Initial Root Token/ {print $2}' | tr -d " ")
+      KEY1=$(echo "$INIT_OUTPUT" | awk -F: '/Unseal Key 1/ {print $2}' | tr -d " ")
+      KEY2=$(echo "$INIT_OUTPUT" | awk -F: '/Unseal Key 2/ {print $2}' | tr -d " ")
+      KEY3=$(echo "$INIT_OUTPUT" | awk -F: '/Unseal Key 3/ {print $2}' | tr -d " ")
+      vault operator unseal "$KEY1"
+      vault operator unseal "$KEY2"
+      vault operator unseal "$KEY3"
+      # Adding the VAULT_TOKEN as a file in order to execute goss tests
+      echo "export VAULT_TOKEN=$VAULT_TOKEN" > /vib-vault/test/vault-token
+      # Creating a user/password in order to launch Cypress tests
+      # https://developer.hashicorp.com/vault/docs/auth/userpass#configuration
+      vault auth enable userpass
+      vault policy write rootpolicy - << EOF
+      # Read the configuration secret example
+      path "secret/config" {
+          capabilities = ["read"]
+      }
+
+      # Read the host information example
+      path "sys/host-info" {
+          capabilities = ["read"]
+      }
+
+      # List secrets engines
+      path "sys/mounts" {
+          capabilities = ["read"]
+      }
+
+      # Enable cubbyhole secrets engine
+      path "sys/mounts/cubbyhole" {
+          capabilities = ["create", "update"]
+      }
+
+      # Manage Cubbyhole secrets engine keys
+      path "cubbyhole/keys" {
+          capabilities = ["list"]
+      }
+      path "cubbyhole/keys/*" {
+          capabilities = ["create", "list", "read", "update"]
+      }
+      path "cubbyhole/keys/+/config" {
+          capabilities = ["create", "update"]
+      }
+
+      # Encrypt with any Cubbyhole secrets engine key
+      path "cubbyhole/encrypt/*" {
+          capabilities = ["create", "update"]
+      }
+
+      # Decrypt with any Cubbyhole secrets engine key
+      path "cubbyhole/decrypt/*" {
+          capabilities = ["create", "update"]
+      }
+      EOF
+
+      vault write auth/userpass/users/vib-user password='ComplicatedPassword123!4' policies=admins,rootpolicy
+      sleep infinity
+  containerPorts:
+    http: 8100
+    internal: 8300
+  service:
+    active:
+      type: LoadBalancer
+      ports:
+        http: 80
+        internal: 8600
+    general:
+      type: ClusterIP
+      ports:
+        http: 8081
+        internal: 8700
+  serviceAccount:
+    create: true
+    automountServiceAccountToken: true
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+    seccompProfile:
+      type: RuntimeDefault
+  persistence:
+    enabled: true
+    mountPath: /vib-vault/test
+  # We need to add /tmp for GOSS tests
+  extraVolumes:
+    - name: tmp
+      emptyDir: {}
+  extraVolumeMounts:
+    - name: tmp
+      mountPath: /tmp
+injector:
+  service:
+    ports:
+      https: 8443

@@ -1,26 +1,33 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: LogManagement
+  licenses: Apache-2.0
+  images: |
+    - name: logstash
+      image: docker.io/bitnami/logstash:8.11.3-debian-11-r0
+    - name: os-shell
+      image: docker.io/bitnami/os-shell:11-debian-11-r92
 apiVersion: v2
-appVersion: 7.10.2
+appVersion: 8.11.3
 dependencies:
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
-    version: 1.x.x
-description: Logstash is an open source, server-side data processing pipeline that ingests data from a multitude of sources simultaneously, transforms it, and then sends it to your favorite "stash".
-engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/logstash
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: Logstash is an open source data processing engine. It ingests data from multiple sources, processes it, and sends the output to final destination in real-time. It is a core component of the ELK stack.
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/logstash/img/logstash-stack-220x234.png
 keywords:
-  - logstash
-  - logging
-  - elk
+- logstash
+- logging
+- elk
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
 name: logstash
 sources:
-  - https://github.com/bitnami/bitnami-docker-logstash
-  - https://www.elastic.co/products/logstash
-version: 3.1.0
+- https://github.com/bitnami/charts/tree/main/bitnami/logstash
+version: 5.6.9

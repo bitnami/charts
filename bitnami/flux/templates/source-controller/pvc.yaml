@@ -1,0 +1,44 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.sourceController.enabled .Values.sourceController.persistence.enabled (not .Values.sourceController.persistence.existingClaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "flux.source-controller.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.sourceController.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: flux
+    app.kubernetes.io/component: source-controller
+  annotations:
+    {{- if .Values.sourceController.persistence.resourcePolicy }}
+    helm.sh/resource-policy: {{ .Values.sourceController.persistence.resourcePolicy | quote }}
+    {{- end }}
+    {{- if or .Values.sourceController.serviceAccount.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.sourceController.serviceAccount.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  accessModes:
+  {{- if not (empty .Values.sourceController.persistence.accessModes) }}
+  {{- range .Values.sourceController.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  {{- else }}
+    - {{ .Values.sourceController.persistence.accessMode | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.sourceController.persistence.size | quote }}
+  {{- if .Values.sourceController.persistence.selector }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.sourceController.persistence.selector "context" $) | nindent 4 }}
+  {{- end -}}
+  {{- if .Values.sourceController.persistence.dataSource }}
+  dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.sourceController.persistence.dataSource "context" $) | nindent 4 }}
+  {{- end }}
+  {{- include "common.storage.class" (dict "persistence" .Values.sourceController.persistence "global" .Values.global) | nindent 2 }}
+{{- end }}

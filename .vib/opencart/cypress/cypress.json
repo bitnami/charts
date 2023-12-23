@@ -1,0 +1,10 @@
+{
+  "env": {
+    "username": "opencartUser",
+    "password": "Password123!4"
+  },
+  "hosts": {
+    "vmware-opencart.my": "{{ TARGET_IP }}"
+  },
+  "defaultCommandTimeout": 30000
+}

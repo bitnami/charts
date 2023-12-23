@@ -1,0 +1,52 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.client.enabled .Values.client.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "deepspeed.v0.client.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: deepspeed
+    app.kubernetes.io/component: client
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $clientPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.client.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $clientPodLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: deepspeed
+      app.kubernetes.io/component: client
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Allow outbound connections to other cluster pods
+    - ports:
+        - port: {{ .Values.worker.containerPorts.ssh }}
+        - port: {{ .Values.worker.externalAccess.service.ports.ssh }}
+      to:
+        {{- $workerPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels ) "context" . ) }}
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $workerPodLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: deepspeed
+              app.kubernetes.io/component: worker
+    {{- if .Values.client.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.client.networkPolicy.extraEgress "context" $) | nindent 4 }}
+    {{- end }}
+  ingress:
+    # By default, the client is not setting any port
+    {{- if .Values.client.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.client.networkPolicy.extraIngress "context" $) | nindent 4 }}
+    {{- end }}
+{{- end }}

@@ -1,0 +1,50 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.controlPlane.metrics.enabled .Values.controlPlane.metrics.serviceMonitor.enabled  }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "apisix.control-plane.fullname" . }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.controlPlane.metrics.serviceMonitor.namespace | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.controlPlane.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: apisix
+    app.kubernetes.io/component: control-plane
+  {{- if or .Values.controlPlane.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.controlPlane.metrics.serviceMonitor.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  jobLabel: {{ .Values.controlPlane.metrics.serviceMonitor.jobLabel | quote }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: apisix
+      app.kubernetes.io/component: control-plane
+      {{- if .Values.controlPlane.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
+  endpoints:
+    - port: http-metrics
+      path: "/apisix/prometheus/metrics"
+      {{- if .Values.controlPlane.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.controlPlane.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.controlPlane.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.controlPlane.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.controlPlane.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.controlPlane.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.controlPlane.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.controlPlane.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.controlPlane.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.controlPlane.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+    - {{ include "common.names.namespace" . | quote }}
+{{- end }}

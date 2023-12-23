@@ -1,0 +1,51 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+
+{{- if .Values.proxy.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ printf "%s-proxy-api" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ default .Release.Namespace .Values.proxy.metrics.serviceMonitor.namespace | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.proxy.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.proxy.metrics.serviceMonitor.labels .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: proxy
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.proxy.metrics.serviceMonitor.jobLabel }}
+  jobLabel: {{ .Values.proxy.metrics.serviceMonitor.jobLabel }}
+  {{- end }}
+  endpoints:
+    - port: metrics
+      path: {{ .Values.proxy.metrics.serviceMonitor.path }}
+      {{- if .Values.proxy.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.proxy.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.proxy.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.proxy.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.proxy.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.proxy.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.proxy.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.metrics.serviceMonitor.relabelings "context" $) | nindent 6 }}
+      {{- end }}
+      {{- if .Values.proxy.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- toYaml .Values.proxy.metrics.serviceMonitor.metricRelabelings | nindent 6 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      {{- if .Values.proxy.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.proxy.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
+      app.kubernetes.io/component: proxy
+{{- end }}

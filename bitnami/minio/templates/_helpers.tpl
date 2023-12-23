@@ -1,7 +1,12 @@
+{{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
-Return the proper MinIO(TM) image name
+Return the proper MinIO&reg; image name
 */}}
 {{- define "minio.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
@@ -9,7 +14,7 @@ Return the proper MinIO(TM) image name
 {{- end -}}
 
 {{/*
-Return the proper MinIO(TM) Client image name
+Return the proper MinIO&reg; Client image name
 */}}
 {{- define "minio.clientImage" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.clientImage "global" .Values.global) }}
@@ -26,34 +31,46 @@ Return the proper image name (for the init container volume-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "minio.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.clientImage .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.clientImage .Values.volumePermissions.image) "context" $) -}}
 {{- end -}}
 
 {{/*
-Return MinIO(TM) accessKey
+Returns the available value for certain key in an existing secret (if it exists),
+otherwise it generates a random value.
 */}}
-{{- define "minio.accessKey" -}}
-{{- $accessKey := coalesce .Values.global.minio.accessKey .Values.accessKey.password -}}
-{{- if $accessKey }}
-    {{- $accessKey -}}
-{{- else if (not .Values.accessKey.forcePassword) }}
-    {{- randAlphaNum 10 -}}
+{{- define "getValueFromSecret" }}
+{{- $len := (default 16 .Length) | int -}}
+{{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
+{{- if $obj }}
+{{- index $obj .Key | b64dec -}}
 {{- else -}}
-    {{ required "An Access Key is required!" .Values.accessKey.password }}
+{{- randAlphaNum $len -}}
+{{- end -}}
+{{- end }}
+
+{{/*
+Get the user to use to access MinIO&reg;
+*/}}
+{{- define "minio.secret.userValue" -}}
+{{- if .Values.auth.rootUser }}
+    {{- .Values.auth.rootUser -}}
+{{- else if (not .Values.auth.forcePassword) }}
+    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-user")  -}}
+{{- else -}}
+    {{ required "A root username is required!" .Values.auth.rootUser }}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return MinIO(TM) secretKey
+Get the password to use to access MinIO&reg;
 */}}
-{{- define "minio.secretKey" -}}
-{{- $secretKey := coalesce .Values.global.minio.secretKey .Values.secretKey.password -}}
-{{- if $secretKey }}
-    {{- $secretKey -}}
-{{- else if (not .Values.secretKey.forcePassword) }}
-    {{- randAlphaNum 40 -}}
+{{- define "minio.secret.passwordValue" -}}
+{{- if .Values.auth.rootPassword }}
+    {{- .Values.auth.rootPassword -}}
+{{- else if (not .Values.auth.forcePassword) }}
+    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-password")  -}}
 {{- else -}}
-    {{ required "A Secret Key is required!" .Values.secretKey.password }}
+    {{ required "A root password is required!" .Values.auth.rootPassword }}
 {{- end -}}
 {{- end -}}
 
@@ -61,10 +78,8 @@ Return MinIO(TM) secretKey
 Get the credentials secret.
 */}}
 {{- define "minio.secretName" -}}
-{{- if .Values.global.minio.existingSecret }}
-    {{- printf "%s" .Values.global.minio.existingSecret -}}
-{{- else if .Values.existingSecret -}}
-    {{- printf "%s" .Values.existingSecret -}}
+{{- if .Values.auth.existingSecret -}}
+    {{- printf "%s" (tpl .Values.auth.existingSecret $) -}}
 {{- else -}}
     {{- printf "%s" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -74,10 +89,29 @@ Get the credentials secret.
 Return true if a secret object should be created
 */}}
 {{- define "minio.createSecret" -}}
-{{- if .Values.global.minio.existingSecret }}
-{{- else if .Values.existingSecret -}}
+{{- if .Values.auth.existingSecret -}}
 {{- else -}}
     {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a PVC object should be created (only in standalone mode)
+*/}}
+{{- define "minio.createPVC" -}}
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) (eq .Values.mode "standalone") }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the PVC name (only in standalone mode)
+*/}}
+{{- define "minio.claimName" -}}
+{{- if and .Values.persistence.existingClaim }}
+    {{- printf "%s" (tpl .Values.persistence.existingClaim $) -}}
+{{- else -}}
+    {{- printf "%s" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -100,7 +134,8 @@ Compile all warnings into a single message, and call fail.
 {{- define "minio.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "minio.validateValues.mode" .) -}}
-{{- $messages := append $messages (include "minio.validateValues.replicaCount" .) -}}
+{{- $messages := append $messages (include "minio.validateValues.totalDrives" .) -}}
+{{- $messages := append $messages (include "minio.validateValues.tls" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -109,27 +144,101 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of MinIO(TM) - must provide a valid mode ("distributed" or "standalone") */}}
+{{/*
+Validate values of MinIO&reg; - must provide a valid mode ("distributed" or "standalone")
+*/}}
 {{- define "minio.validateValues.mode" -}}
-{{- if and (ne .Values.mode "distributed") (ne .Values.mode "standalone") -}}
+{{- $allowedValues := list "distributed" "standalone" }}
+{{- if not (has .Values.mode $allowedValues) -}}
 minio: mode
     Invalid mode selected. Valid values are "distributed" and
     "standalone". Please set a valid mode (--set mode="xxxx")
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of MinIO(TM) - number of replicas must be even, greater than 4 and lower than 32 */}}
-{{- define "minio.validateValues.replicaCount" -}}
+{{/*
+Validate values of MinIO&reg; - total number of drives should be greater than 4
+*/}}
+{{- define "minio.validateValues.totalDrives" -}}
 {{- $replicaCount := int .Values.statefulset.replicaCount }}
-{{- if and (eq .Values.mode "distributed") (or (eq (mod $replicaCount 2) 1) (lt $replicaCount 4) (gt $replicaCount 32)) -}}
-minio: replicaCount
-    Number of replicas must be even, greater than 4 and lower than 32!!
-    Please set a valid number of replicas (--set statefulset.replicaCount=X)
+{{- $drivesPerNode := int .Values.statefulset.drivesPerNode }}
+{{- $totalDrives := mul $replicaCount $drivesPerNode }}
+{{- if and (eq .Values.mode "distributed") (lt $totalDrives 4) -}}
+minio: total drives
+    The total number of drives should be greater than 4 to guarantee erasure coding!
+    Please set a combination of nodes, and drives per node that match this condition.
+    For instance (--set statefulset.replicaCount=2 --set statefulset.drivesPerNode=2)
 {{- end -}}
 {{- end -}}
 
-{{/* Check if there are rolling tags in the images */}}
-{{- define "minio.checkRollingTags" -}}
-{{- include "common.warnings.rollingTag" .Values.image }}
-{{- include "common.warnings.rollingTag" .Values.clientImage }}
+{{/*
+Validate values of MinIO&reg; - TLS secret must provided if TLS is enabled
+*/}}
+{{- define "minio.validateValues.tls" -}}
+{{- if and .Values.tls.enabled (not .Values.tls.existingSecret) (not .Values.tls.autoGenerated) }}
+minio: tls.existingSecret, tls.autoGenerated
+    In order to enable TLS, you also need to provide
+    an existing secret containing the TLS certificates or
+    enable auto-generated certificates.
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret containing MinIO TLS certificates
+*/}}
+{{- define "minio.tlsSecretName" -}}
+{{- if .Values.tls.existingSecret -}}
+    {{- printf "%s" (tpl .Values.tls.existingSecret $) -}}
+{{- else -}}
+    {{- printf "%s-crt" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a TLS secret object should be created
+*/}}
+{{- define "minio.createTlsSecret" -}}
+{{- if and .Values.tls.enabled .Values.tls.autoGenerated (not .Values.tls.existingSecret) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Provisioning job labels (exclude matchLabels from standard labels)
+*/}}
+{{- define "minio.labels.provisioning" -}}
+{{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.provisioning.podLabels .Values.commonLabels ) "context" . ) }}
+{{- $provisioningLabels := (include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | fromYaml ) -}}
+{{- range (include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | fromYaml | keys ) -}}
+{{- $_ := unset $provisioningLabels . -}}
+{{- end -}}
+{{- print ($provisioningLabels | toYaml) -}}
+{{- end -}}
+
+{{/*
+Return the ingress anotation
+*/}}
+{{- define "minio.ingress.annotations" -}}
+{{ .Values.ingress.annotations | toYaml }}
+{{- end -}}
+
+{{/*
+Return the api ingress anotation
+*/}}
+{{- define "minio.apiIngress.annotations" -}}
+{{ .Values.apiIngress.annotations | toYaml }}
+{{- end -}}
+
+{{/*
+Return the ingress hostname
+*/}}
+{{- define "minio.ingress.hostname" -}}
+{{- tpl .Values.ingress.hostname $ -}}
+{{- end -}}
+
+{{/*
+Return the api ingress hostname
+*/}}
+{{- define "minio.apiIngress.hostname" -}}
+{{- tpl .Values.apiIngress.hostname $ -}}
 {{- end -}}

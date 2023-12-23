@@ -1,9 +1,0 @@
-{{- if .Files.Glob "files/*" }}
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ include "common.names.fullname" . }}-files
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-data:
-{{ (.Files.Glob "files/*").AsConfig | indent 2 }}
-{{- end }}

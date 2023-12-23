@@ -1,0 +1,35 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+# This application performs modifications at host-level, injecting new configuration files. Therefore the
+# container has root user and is privileged. In order to properly test multus-cni, we would need to access the host and
+# change the default host networking configuration, which is something we cannot do. Therefore the test suite is simpler
+command:
+  {{- $uid := .Vars.containerSecurityContext.runAsUser }}
+  check-user-info:
+    # The UID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ]; then exit 1; fi
+    exit-status: 0
+  {{ if .Vars.serviceAccount.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}
+# The multus-cni init containers create the CNI configuration
+# in the host folder. This test ensures that the configuration is created
+file:
+  {{ .Vars.CNIMountPath }}/etc/cni/net.d/00-multus.conf:
+    exists: true
+    filetype: file
+    mode: '0600'
+    contents:
+     - /multus.kubeconfig/
+  {{ .Vars.CNIMountPath }}/etc/cni/net.d/multus.d/multus.kubeconfig:
+    exists: true
+    filetype: file
+    mode: '0600'
+    contents:
+     - /multus-context/

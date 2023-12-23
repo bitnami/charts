@@ -1,0 +1,211 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+name: '[CI/CD] CI Pipeline'
+on: # rebuild any PRs and main branch changes
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - labeled
+    branches:
+      - main
+      - bitnami:main
+# Remove all permissions by default
+permissions: {}
+# Avoid concurrency over the same PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+jobs:
+  get-chart:
+    runs-on: ubuntu-latest
+    name: Get modified charts
+    permissions:
+      pull-requests: read
+    outputs:
+      chart: ${{ steps.get-chart.outputs.chart }}
+      result: ${{ steps.get-chart.outputs.result }}
+    steps:
+      - id: get-chart
+        name: Get modified charts
+        env:
+          PULL_REQUEST_NUMBER: "${{ github.event.pull_request.number }}"
+          PULL_REQUEST_URL: "${{ github.event.pull_request.url }}"
+          GITHUB_TOKEN: "${{ github.token }}"
+        run: |
+          # Using the Github API to detect the files changed as git merge-base stops working when the branch is behind
+          files_changed_data="$(gh api --paginate /repos/${GITHUB_REPOSITORY}/pulls/${PULL_REQUEST_NUMBER}/files)"
+          files_changed="$(echo "$files_changed_data" | jq -r '.[] | .filename')"
+          # Adding || true to avoid "Process exited with code 1" errors
+          charts_dirs_changed="$(echo "$files_changed" | xargs dirname | grep -o "bitnami/[^/]*" | sort | uniq || true)"
+          # Using grep -c as a better alternative to wc -l when dealing with empty strings."
+          num_charts_changed="$(echo "$charts_dirs_changed" | grep -c "bitnami" || true)"
+          num_version_bumps="$(echo "$files_changed_data" | jq -r '[.[] | select(.filename|endswith("Chart.yaml")) | select(.patch|contains("+version")) ] | length' )"
+          non_readme_files=$(echo "$files_changed" | grep -vc "\.md" || true)
+
+          if [[ $(curl -Lks "${PULL_REQUEST_URL}" | jq '.state | index("closed")') != *null* ]]; then
+            # The PR for which this workflow run was launched is now closed -> SKIP
+            echo "error=The PR for which this workflow run was launched is now closed. The tests will be skipped." >> $GITHUB_OUTPUT
+            echo "result=skip" >> $GITHUB_OUTPUT
+          elif [[ "$non_readme_files" -le "0" ]]; then
+            # The only changes are .md files -> SKIP
+            echo "result=skip" >> $GITHUB_OUTPUT
+          elif [[ "$num_charts_changed" -ne "$num_version_bumps" ]]; then
+            # Changes done in charts but version not bumped -> ERROR
+            echo "error=Detected changes in charts without version bump in Chart.yaml. Charts changed: ${num_charts_changed}. Version bumps detected: ${num_version_bumps}" >> $GITHUB_OUTPUT
+            echo "result=fail" >> $GITHUB_OUTPUT
+          elif [[ "$num_charts_changed" -eq "1" ]]; then
+            # Changes done in only one chart -> OK
+            chart_name=$(echo "$charts_dirs_changed" | sed "s|bitnami/||g")
+            echo "chart=${chart_name}" >> $GITHUB_OUTPUT
+            echo "result=ok" >> $GITHUB_OUTPUT
+          elif [[ "$num_charts_changed" -le "0" ]]; then
+            # Changes done in the bitnami/ folder but not inside a chart subfolder -> SKIP
+            echo "error=No changes detected in charts. The rest of the tests will be skipped." >> $GITHUB_OUTPUT
+            echo "result=skip" >> $GITHUB_OUTPUT
+          else
+            # Changes done in more than chart -> SKIP
+            echo "error=Changes detected in more than one chart directory. It is strongly advised to change only one chart in a PR. The rest of the tests will be skipped." >> $GITHUB_OUTPUT
+            echo "result=skip" >> $GITHUB_OUTPUT
+          fi
+      # Using actions/github-scripts because using exit 1 in the script above would not provide any output
+      # Source: https://github.community/t/no-output-on-process-completed-with-exit-code-1/123821/3
+      - id: show-error
+        name: Show error
+        if: ${{ steps.get-chart.outputs.result != 'ok' }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          script: |
+            let message='${{ steps.get-chart.outputs.error }}';
+            if ('${{ steps.get-chart.outputs.result }}' === 'fail' ) {
+              core.setFailed(message);
+            } else {
+              core.warning(message);
+            }
+  vib-verify:
+    runs-on: ubuntu-latest
+    needs: get-chart
+    permissions:
+      contents: read
+    # Given performance issues of the action feature on GH's side, we need to be very restrictive in the job's triggers:
+    # -> The 'Get modified charts' job suceededs AND
+    #  ( ---> The pipeline was triggered due to a label addition and said label was the 'verify' one OR
+    #    ---> the PR already contains the 'verify' label )
+    if: |
+      needs.get-chart.outputs.result == 'ok' &&
+      (
+        contains(github.event.pull_request.labels.*.name, 'verify') || (github.event.action == 'labeled' && github.event.label.name == 'verify')
+      )
+    name: VIB Verify
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        name: Checkout Repository
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+      - id: log-chart-info
+        name: Get chart version and app version
+        env:
+          CHART: ${{ needs.get-chart.outputs.chart }}
+        run: |
+          # Log chart info
+          chart_version="$(yq e '.version' bitnami/${CHART}/Chart.yaml)"
+          app_version="$(yq e '.appVersion' bitnami/${CHART}/Chart.yaml)"
+          echo "Chart: ${CHART} ChartVersion: ${chart_version} AppVersion: ${app_version}"
+      - id: get-asset-vib-config
+        name: Get asset-specific configuration for VIB action
+        run: |
+          config_file=".vib/${{ needs.get-chart.outputs.chart }}/vib-action.config"
+
+          # Supported configuration customizations and default values
+          verification_mode="PARALLEL"
+
+          if [[ -f $config_file ]]; then
+            verification_mode="$(cat $config_file | grep 'verification-mode' | cut -d'=' -f2)"
+          fi
+          runtime_parameters_file=""
+          if [[ -f ".vib/${{ needs.get-chart.outputs.chart }}/runtime-parameters.yaml" ]]; then
+            # The path is relative to the .vib folder
+            runtime_parameters_file="${{ needs.get-chart.outputs.chart }}/runtime-parameters.yaml"
+          fi
+          echo "verification_mode=${verification_mode}" >> $GITHUB_OUTPUT
+          echo "runtime_parameters_file=${runtime_parameters_file}" >> $GITHUB_OUTPUT
+      - uses: vmware-labs/vmware-image-builder-action@v0
+        name: Verify ${{ needs.get-chart.outputs.chart }}
+        with:
+          pipeline: ${{ needs.get-chart.outputs.chart }}/vib-verify.json
+          verification-mode: ${{ steps.get-asset-vib-config.outputs.verification_mode }}
+          runtime-parameters-file: ${{ steps.get-asset-vib-config.outputs.runtime_parameters_file }}
+        env:
+          CSP_API_URL: https://console.cloud.vmware.com
+          CSP_API_TOKEN: ${{ secrets.CSP_API_TESTING_TOKEN }}
+          VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
+          # Target-Platform used by default
+          VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
+          # Alternative Target-Platform to be used in case of incompatibilities
+          VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: ${{ secrets.VIB_ENV_ALTERNATIVE_TARGET_PLATFORM }}
+  auto-pr-review:
+    runs-on: ubuntu-latest
+    needs: vib-verify
+    name: Reviewal for automated PRs
+    permissions:
+      pull-requests: write
+    # Job to be run only when the triage for automated PRs did as well,
+    # not taking into account whether 'VIB Verify' succeeded
+    if: |
+      always() &&
+      contains(github.event.pull_request.labels.*.name, 'auto-merge') &&
+      github.event.pull_request.user.login == 'bitnami-bot'
+    steps:
+      # Approve the CI's PR if the 'VIB Verify' job succeeded
+      # Approved by the 'github-actions' user; a PR can't be approved by its author
+      - name: PR approval
+        if: ${{ needs.vib-verify.result == 'success' }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          result-encoding: string
+          retries: 3
+          script: |
+            github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              event: 'APPROVE',
+            });
+      - name: Merge
+        id: merge
+        if: ${{ needs.vib-verify.result == 'success' }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          result-encoding: string
+          retries: 3
+          github-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+          script: |
+            github.rest.pulls.merge({
+              pull_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              merge_method: 'squash'
+            })
+      # If the CI did not succeed ('VIB Verify' failed or skipped),
+      # post a comment on the PR and assign a maintainer agent to review it
+      - name: Manual review required
+        if: ${{ always() && (needs.vib-verify.result != 'success' || steps.merge.outcome != 'success' ) }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        env:
+          BODY: |
+            There has been an error during the automated release process. Manual revision is now required.
+            Please check the related [action_run#${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for more information.
+        with:
+          retries: 3
+          # Necessary to trigger support workflows
+          github-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+          script: |
+            const {BODY} = process.env
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `${BODY}`
+            })

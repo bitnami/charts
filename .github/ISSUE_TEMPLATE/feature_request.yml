@@ -1,0 +1,33 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+name: "\U0001F680 Feature request"
+description: Suggest an idea for this project
+labels: ["feature-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting an idea to improve Bitnami Helm charts.
+        Please fill in as much of the following form as you're able.
+  - type: input
+    attributes:
+      label: Name and Version
+      description: Name and version of the affected chart
+      placeholder: bitnami/wordpress 1.2.3
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What is the problem this feature will solve?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What is the feature you are proposing to solve the problem?
+      description: Describe the requests. If you already have something in mind... PRs are welcome!
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What alternatives have you considered?

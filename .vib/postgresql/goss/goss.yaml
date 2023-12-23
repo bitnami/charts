@@ -1,0 +1,53 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+command:
+  {{- $dbUser := .Vars.auth.username }}
+  {{- $dbPassword := .Vars.auth.password }}
+  {{- $dbName := .Vars.auth.database }}
+  {{- $lb_port := .Vars.primary.service.ports.postgresql }}
+  {{- $hl_svc_bn := printf "postgresql-%s" .Vars.readReplicas.name }}
+  {{- $port := .Vars.containerPorts.postgresql }}
+  {{- $replica_nodes := .Vars.readReplicas.replicaCount }}
+  {{- $table := printf "test_%s" (randAlpha 5) }}
+  postgresql-check-replication:
+    exec: export PGPASSWORD='{{ $dbPassword }}' && psql -U '{{ $dbUser }}' -d '{{ $dbName }}' -p {{ $lb_port }} -h postgresql-{{ .Vars.primary.name }} -c "CREATE TABLE {{ $table }} (id int, first_name VARCHAR(50));" && sleep 1 {{ range $e, $i := until $replica_nodes }} && psql -U '{{ $dbUser }}' -d '{{ $dbName }}' -p {{ $port }} -h {{ $hl_svc_bn }}-{{ $i }}.{{ $hl_svc_bn }}-hl -c "SELECT * FROM {{ $table }};"{{ end }}
+    exit-status: 0
+  {{ range $e, $i := until $replica_nodes }}
+  postgresql-only-read-node-{{ $i }}:
+    exec: PGPASSWORD='{{ $dbPassword }}' psql -U '{{ $dbUser }}' -d '{{ $dbName }}' -p {{ $port }} -h {{ $hl_svc_bn }}-{{ $i }}.{{ $hl_svc_bn }}-hl -c "CREATE TABLE rep_table_test (id int);"
+    exit-status: 1
+    stderr:
+      - /.*read-only transaction.*/
+  {{ end }}
+  cluster-size:
+    exec: PGPASSWORD='{{ .Vars.auth.postgresPassword }}' psql -tA -U postgres -p {{ $port }} -h postgresql-{{ .Vars.primary.name }} -c "SELECT COUNT(*) FROM pg_stat_replication WHERE usename='{{ .Vars.auth.replicationUsername }}';"
+    exit-status: 0
+    stdout:
+      - "2"
+  {{- $uid := .Vars.primary.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.primary.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+file:
+  {{ .Vars.primary.persistence.mountPath }}:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+  /dev/shm:
+    exists: true
+    filetype: directory
+    mode: "3777"
+    owner: root
+  /opt/bitnami/postgresql/conf/postgresql.conf:
+    exists: true
+    filetype: file
+    mode: "0664"
+    group: root
+    contents:
+      - /shared_preload_libraries.*{{ .Vars.postgresqlSharedPreloadLibraries }}/
+      - /port.*{{ $port }}/

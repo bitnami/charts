@@ -1,0 +1,47 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name:  {{ template "grafana-mimir.store-gateway.fullname" . }}-headless
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: store-gateway
+  {{- if or .Values.commonAnnotations .Values.storeGateway.service.headless.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.storeGateway.service.headless.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  publishNotReadyAddresses: true
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: http
+      port: {{ .Values.storeGateway.service.ports.http }}
+      targetPort: http
+      protocol: TCP
+      {{- if and (or (eq .Values.storeGateway.service.type "NodePort") (eq .Values.storeGateway.service.type "LoadBalancer")) (not (empty .Values.storeGateway.service.nodePorts.http)) }}
+      nodePort: {{ .Values.storeGateway.service.nodePorts.http }}
+      {{- else if eq .Values.storeGateway.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: grpc
+      port: {{ .Values.storeGateway.service.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      {{- if and (or (eq .Values.storeGateway.service.type "NodePort") (eq .Values.storeGateway.service.type "LoadBalancer")) (not (empty .Values.storeGateway.service.nodePorts.grpc)) }}
+      nodePort: {{ .Values.storeGateway.service.nodePorts.grpc }}
+      {{- else if eq .Values.storeGateway.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.storeGateway.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.storeGateway.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: store-gateway

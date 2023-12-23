@@ -1,0 +1,67 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.mongos.useStatefulSet .Values.mongos.servicePerReplica.enabled }}
+{{- range $i := until (.Values.mongos.replicaCount | int) }}
+{{- $context := deepCopy $ | merge (dict "index" $i) }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "%s-%d" (include "mongodb-sharded.serviceName" $) $i }}
+  namespace: {{ include "common.names.namespace" $ | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: mongos
+  {{- if or $.Values.commonAnnotations $.Values.mongos.servicePerReplica.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list $.Values.mongos.servicePerReplica.annotations $.Values.commonAnnotations ) "context" $ ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ $.Values.mongos.servicePerReplica.type }}
+  sessionAffinity: {{ default "None" $.Values.mongos.servicePerReplica.sessionAffinity }}
+  {{- if $.Values.mongos.servicePerReplica.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.servicePerReplica.sessionAffinityConfig "context" $context) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq $.Values.mongos.servicePerReplica.type "LoadBalancer") (eq $.Values.mongos.servicePerReplica.type "NodePort") }}
+  externalTrafficPolicy: {{ $.Values.mongos.servicePerReplica.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if $.Values.mongos.servicePerReplica.externalIPs }}
+  externalIPs: {{- toYaml $.Values.mongos.servicePerReplica.externalIPs | nindent 4 }}
+  {{- end }}
+  {{- if and $.Values.mongos.servicePerReplica.loadBalancerIPs (eq $.Values.mongos.servicePerReplica.type "LoadBalancer") }}
+  loadBalancerIP: {{ index $.Values.mongos.servicePerReplica.loadBalancerIPs $i }}
+  {{- end }}
+  {{- if and (eq $.Values.mongos.servicePerReplica.type "LoadBalancer") $.Values.mongos.servicePerReplica.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+  {{ with $.Values.mongos.servicePerReplica.loadBalancerSourceRanges }}
+  {{ include "common.tplvalues.render" . | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  {{- if and (eq $.Values.mongos.servicePerReplica.type "ClusterIP") $.Values.mongos.servicePerReplica.clusterIPs }}
+  clusterIP: {{ index $.Values.mongos.servicePerReplica.clusterIPs $i }}
+  {{- end }}
+  ports:
+    - name: mongodb
+      port: {{ $.Values.mongos.servicePerReplica.port }}
+      targetPort: mongodb
+      {{- if $.Values.mongos.servicePerReplica.nodePorts }}
+      nodePort: {{ index $.Values.mongos.servicePerReplica.nodePorts $i }}
+      {{- else if eq $.Values.mongos.servicePerReplica.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if $.Values.metrics.enabled }}
+    - name: metrics
+      port: 9216
+      targetPort: metrics
+    {{- end }}
+    {{- if $.Values.mongos.servicePerReplica.extraPorts }}
+      {{- include "common.tplvalues.render" (dict "value" $.Values.mongos.servicePerReplica.extraPorts "context" $context) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.mongos.podLabels $.Values.common.podLabels $.Values.commonLabels ) "context" $ ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: mongos
+    statefulset.kubernetes.io/pod-name: {{ printf "%s-mongos-%d" (include "common.names.fullname" $) $i }}
+---
+{{- end }}
+{{- end }}

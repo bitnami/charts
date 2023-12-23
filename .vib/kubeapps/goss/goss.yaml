@@ -1,0 +1,41 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+http:
+  http://kubeapps-internal-kubeappsapis:{{ .Vars.kubeappsapis.service.ports.http }}/core/plugins/v1alpha1/configured-plugins:
+    status: 200
+  http://kubeapps-internal-dashboard:{{ .Vars.dashboard.service.ports.http }}:
+    status: 200
+file:
+  /config/kubeapps-apis/plugins.conf:
+    filetype: symlink
+    exists: true
+    mode: "0777"
+    contents:
+      - /timeoutSeconds.*{{ .Vars.kubeappsapis.pluginConfig.core.packages.v1alpha1.timeoutSeconds }}/
+  /config/clusters.conf:
+    filetype: symlink
+    exists: true
+    mode: "0777"
+    contents:
+    {{ range .Vars.clusters }}
+      - /domain.*{{ .domain }}/
+      - /name.*{{ .name }}/
+    {{ end }}
+command:
+  {{- $uid := .Vars.kubeappsapis.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.kubeappsapis.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+  {{ if .Vars.kubeappsapis.serviceAccount.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    # The kubeapps-apis service-account is named 'kubeappsapis', therefore not matching the app_name env var
+    # - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+    - /serviceaccount.*name.*kubeappsapis/
+  {{ end }}

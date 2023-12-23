@@ -1,0 +1,10 @@
+{
+  "env": {
+    "username": "test_user",
+    "password": "bitnami1234"
+  },
+  "hosts": {
+    "vmware-clickhouse.my": "{{ TARGET_IP }}"
+  },
+  "defaultCommandTimeout": 30000
+}

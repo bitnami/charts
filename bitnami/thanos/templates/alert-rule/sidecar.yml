@@ -1,0 +1,64 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- /*
+Generated from https://github.com/thanos-io/thanos/blob/main/examples/alerts/alerts.md
+*/ -}}
+{{- if and .Values.metrics.enabled (or .Values.metrics.prometheusRule.default.create .Values.metrics.prometheusRule.default.sidecar ) }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ template "common.names.fullname" . }}-sidecar
+  namespace: {{ default .Release.Namespace .Values.metrics.prometheusRule.namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- if .Values.metrics.prometheusRule.additionalLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  groups:
+  - name: thanos-sidecar
+    rules:
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosSidecarBucketOperationsFailed | default false) }}
+    - alert: ThanosSidecarBucketOperationsFailed
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        description: Thanos Sidecar {{`{{`}} $labels.instance {{`}}`}} bucket operations are failing
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanossidecarbucketoperationsfailed
+        summary: Thanos Sidecar bucket operations are failing
+      expr: |
+        sum by (job, instance) (rate(thanos_objstore_bucket_operation_failures_total{job=~"{{ .Values.metrics.prometheusRule.default.sidecarJobRegex }}"}[5m])) > 0
+      for: 5m
+      labels:
+        severity: critical
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if not (.Values.metrics.prometheusRule.default.disabled.ThanosSidecarNoConnectionToStartedPrometheus | default false) }}
+    - alert: ThanosSidecarNoConnectionToStartedPrometheus
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        description: Thanos Sidecar {{`{{`}} $labels.instance {{`}}`}} is unhealthy.
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanossidecarnoconnectiontostartedprometheus
+        summary: Thanos Sidecar cannot access Prometheus, even though Prometheus seems healthy and has reloaded WAL.
+      expr: |
+        thanos_sidecar_prometheus_up{job=~"{{ .Values.metrics.prometheusRule.default.sidecarJobRegex }}"} == 0
+        AND on (namespace, pod)
+        prometheus_tsdb_data_replay_duration_seconds != 0
+      for: 5m
+      labels:
+        severity: critical
+        {{- if .Values.metrics.prometheusRule.additionalLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 8 }}
+        {{- end }}
+    {{- end }}
+{{- end }}

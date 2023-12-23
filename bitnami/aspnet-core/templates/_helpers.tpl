@@ -1,3 +1,8 @@
+{{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 {{/*
 Create a default fully qualified app name.
@@ -92,7 +97,7 @@ aspnet-core: appFromExistingPVC
 
 {{/* Validate values of ASP.NET Core - Incorrect extra volume settings */}}
 {{- define "aspnet-core.validateValues.extraVolumes" -}}
-{{- if and .Values.extraVolumes (not .Values.extraVolumeMounts) -}}
+{{- if and .Values.extraVolumes (not (or .Values.extraVolumeMounts .Values.appFromExternalRepo.clone.extraVolumeMounts)) -}}
 aspnet-core: missing-extra-volume-mounts
     You specified extra volumes but not mount points for them.
     Please also set the extraVolumeMounts parameter.

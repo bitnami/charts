@@ -1,0 +1,56 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "supabase.auth.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.auth.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: supabase
+    app.kubernetes.io/component: auth
+  {{- if or .Values.auth.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.auth.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.auth.service.type }}
+  {{- if and .Values.auth.service.clusterIP (eq .Values.auth.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.auth.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.auth.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.auth.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.auth.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.auth.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.auth.service.type "LoadBalancer") (eq .Values.auth.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.auth.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.auth.service.type "LoadBalancer") (not (empty .Values.auth.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.auth.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.auth.service.type "LoadBalancer") (not (empty .Values.auth.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.auth.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.auth.service.ports.http }}
+      protocol: TCP
+      {{- if and (or (eq .Values.auth.service.type "NodePort") (eq .Values.auth.service.type "LoadBalancer")) (not (empty .Values.auth.service.nodePorts.http)) }}
+      nodePort: {{ .Values.auth.service.nodePorts.http }}
+      targetPort: http
+      {{- else if eq .Values.auth.service.type "ClusterIP" }}
+      nodePort: null
+      targetPort: {{ .Values.auth.containerPorts.http }}
+      {{- end }}
+    {{- if .Values.auth.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.auth.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.auth.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: auth

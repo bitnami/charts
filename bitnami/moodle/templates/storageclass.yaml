@@ -1,0 +1,12 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and (.Values.persistence.enabled) (.Values.persistence.customStorageClass) -}}
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: {{ required ".Values.persistence.storageClass is required when using customStorageClass!" .Values.persistence.storageClass }}
+{{- toYaml .Values.persistence.customStorageClass | nindent 0 }}
+{{- end -}}

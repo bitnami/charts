@@ -1,0 +1,198 @@
+CHART NAME: {{ .Chart.Name  }}
+CHART VERSION: {{ .Chart.Version  }}
+APP VERSION: {{ .Chart.AppVersion  }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ include "common.names.namespace" . | quote }} -ti <NAME OF THE POD> -- bash
+
+{{- else }}
+
+The following controllers have been deployed:
+
+  {{- if .Values.dataPlane.enabled }}
+  - data-plane
+  {{- end }}
+  {{- if .Values.controlPlane.enabled }}
+  - control-plane
+  {{- end }}
+  {{- if .Values.dashboard.enabled }}
+  - dashboard
+  {{- end }}
+  {{- if .Values.ingressController.enabled }}
+  - ingress-controller
+  {{- end }}
+
+{{- end }}
+
+Check the status of the pods by running this command:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+{{- if .Values.dashboard.enabled }}
+
+APISIX Dashboard:
+
+    Your APISIX Dashboard site can be accessed through the following DNS name from within your cluster:
+
+        {{ include "apisix.dashboard.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.dashboard.service.ports.http }})
+
+    To access your Apisix site from outside the cluster follow the steps below:
+
+    {{- if .Values.dashboard.ingress.enabled }}
+
+    1. Get the Apisix URL and associate Apisix hostname to your cluster external IP:
+
+       export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+       echo "Apisix URL: http{{ if .Values.dashboard.ingress.tls }}s{{ end }}://{{ .Values.dashboard.ingress.hostname }}/"
+       echo "$CLUSTER_IP  {{ .Values.dashboard.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+    {{- else }}
+    {{- $port := .Values.dashboard.service.ports.http | toString }}
+
+    1. Get the Apisix URL by running these commands:
+
+    {{- if contains "NodePort" .Values.dashboard.service.type }}
+
+       export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "apisix.dashboard.fullname" . }})
+       export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+       echo "Apisix Dashboard URL: http://$NODE_IP:$NODE_PORT/"
+
+    {{- else if contains "LoadBalancer" .Values.dashboard.service.type }}
+
+      NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+            Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "apisix.dashboard.fullname" . }}'
+
+       export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "apisix.dashboard.fullname" . }} --include "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+       echo "Apisix URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.dashboard.service.ports.http }}{{ end }}/"
+
+    {{- else if contains "ClusterIP"  .Values.dashboard.service.type }}
+
+       kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "apisix.dashboard.fullname" . }} {{ .Values.dashboard.service.ports.http }}:{{ .Values.dashboard.service.ports.http }} &
+       echo "Apisix Dashboard URL: http://127.0.0.1{{- if ne $port "80" }}:{{ .Values.dashboard.service.ports.http }}{{ end }}//"
+
+    {{- end }}
+    {{- end }}
+
+    2. Open a browser and access APISIX Dashboard using the obtained URL.
+
+    3. Login with the following credentials below:
+
+      echo Username: {{ .Values.dashboard.username }}
+      echo Password: $(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ include "apisix.dashboard.secretName" . }} -o jsonpath="{.data.{{ include "apisix.dashboard.secretPasswordKey" . }}}" | base64 -d)
+
+{{- end }}
+
+{{- if .Values.controlPlane.enabled }}
+
+APISIX Control Plane:
+
+    Your APISIX Control Plane Admin API site can be accessed through the following DNS name from within your cluster:
+
+        {{ include "apisix.control-plane.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.controlPlane.service.ports.adminAPI }})
+
+    To access your Apisix site from outside the cluster follow the steps below:
+
+    {{- if .Values.controlPlane.ingress.enabled }}
+
+    1. Get the Apisix Control Plane URL and associate Apisix hostname to your cluster external IP:
+
+       export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+       echo "Apisix URL: http{{ if .Values.controlPlane.ingress.tls }}s{{ end }}://{{ .Values.controlPlane.ingress.hostname }}/"
+       echo "$CLUSTER_IP  {{ .Values.controlPlane.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+    {{- else }}
+    {{- $port := .Values.controlPlane.service.ports.adminAPI | toString }}
+
+    1. Get the Apisix URL by running these commands:
+
+    {{- if contains "NodePort" .Values.controlPlane.service.type }}
+
+       export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "apisix.control-plane.fullname" . }})
+       export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+       echo "APISIX Control Plane Admin API URL: http://$NODE_IP:$NODE_PORT/"
+
+    {{- else if contains "LoadBalancer" .Values.controlPlane.service.type }}
+
+      NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+            Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "apisix.control-plane.fullname" . }}'
+
+       export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "apisix.control-plane.fullname" . }} --include "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+       echo "Apisix URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.controlPlane.service.ports.adminAPI }}{{ end }}/"
+
+    {{- else if contains "ClusterIP"  .Values.controlPlane.service.type }}
+
+       kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "apisix.control-plane.fullname" . }} {{ .Values.controlPlane.service.ports.adminAPI }}:{{ .Values.controlPlane.service.ports.adminAPI }} &
+       echo "APISIX Control Plane Admin API URL: http://127.0.0.1{{- if ne $port "80" }}:{{ .Values.controlPlane.service.ports.adminAPI }}{{ end }}//"
+
+    {{- end }}
+    {{- end }}
+
+    2. Access the API using the API Token below:
+
+      echo API Token: $(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ include "apisix.control-plane.secretName" . }} -o jsonpath="{.data.{{ include "apisix.control-plane.adminTokenKey" . }}}" | base64 -d)
+
+{{- end }}
+
+{{- if .Values.dataPlane.enabled }}
+
+APISIX Data Plane:
+
+    Your APISIX Data Plane Admin API site can be accessed through the following DNS name from within your cluster:
+
+        {{ include "apisix.data-plane.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.dataPlane.service.ports.http }})
+
+    To access your Apisix site from outside the cluster follow the steps below:
+
+    {{- if .Values.dataPlane.ingress.enabled }}
+
+    1. Get the Apisix Data Plane URL and associate Apisix hostname to your cluster external IP:
+
+       export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+       echo "Apisix URL: http{{ if .Values.dataPlane.ingress.tls }}s{{ end }}://{{ .Values.dataPlane.ingress.hostname }}/"
+       echo "$CLUSTER_IP  {{ .Values.dataPlane.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+    {{- else }}
+    {{- $port := .Values.dataPlane.service.ports.http | toString }}
+
+    1. Get the Apisix URL by running these commands:
+
+    {{- if contains "NodePort" .Values.dataPlane.service.type }}
+
+       export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "apisix.data-plane.fullname" . }})
+       export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+       echo "APISIX Data Plane Admin API URL: http://$NODE_IP:$NODE_PORT/"
+
+    {{- else if contains "LoadBalancer" .Values.dataPlane.service.type }}
+
+      NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+            Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "apisix.data-plane.fullname" . }}'
+
+       export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "apisix.data-plane.fullname" . }} --include "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+       echo "Apisix URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.dataPlane.service.ports.http }}{{ end }}/"
+
+    {{- else if contains "ClusterIP"  .Values.dataPlane.service.type }}
+
+       kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "apisix.data-plane.fullname" . }} {{ .Values.dataPlane.service.ports.http }}:{{ .Values.dataPlane.service.ports.http }} &
+       echo "APISIX Data Plane Admin API URL: http://127.0.0.1{{- if ne $port "80" }}:{{ .Values.dataPlane.service.ports.http }}{{ end }}//"
+
+    {{- end }}
+    {{- end }}
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.dashboard.image }}
+{{- include "common.warnings.rollingTag" .Values.ingressController.image }}
+{{- include "apisix.validateValues" . }}

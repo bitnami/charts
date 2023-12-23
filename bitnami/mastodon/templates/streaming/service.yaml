@@ -1,0 +1,53 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "mastodon.streaming.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mastodon
+    app.kubernetes.io/component: streaming
+  {{- if or .Values.streaming.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.streaming.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.streaming.service.type }}
+  {{- if and .Values.streaming.service.clusterIP (eq .Values.streaming.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.streaming.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.streaming.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.streaming.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.streaming.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.streaming.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.streaming.service.type "LoadBalancer") (eq .Values.streaming.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.streaming.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.streaming.service.type "LoadBalancer") (not (empty .Values.streaming.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.streaming.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.streaming.service.type "LoadBalancer") (not (empty .Values.streaming.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.streaming.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.streaming.service.ports.http }}
+      targetPort: http
+      protocol: TCP
+      {{- if and (or (eq .Values.streaming.service.type "NodePort") (eq .Values.streaming.service.type "LoadBalancer")) (not (empty .Values.streaming.service.nodePorts.http)) }}
+      nodePort: {{ .Values.streaming.service.nodePorts.http }}
+      {{- else if eq .Values.streaming.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.streaming.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.streaming.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.streaming.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: streaming

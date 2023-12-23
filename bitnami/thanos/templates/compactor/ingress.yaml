@@ -1,0 +1,57 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.compactor.ingress.enabled -}}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ include "common.names.fullname" . }}-compactor
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: compactor
+  {{- if or .Values.compactor.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.compactor.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  ingressClassName: {{ .Values.compactor.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.compactor.ingress.hostname }}
+    - host: {{ include "common.tplvalues.render" ( dict "value" .Values.compactor.ingress.hostname "context" $ ) }}
+      http:
+        paths:
+          - path: {{ .Values.compactor.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.compactor.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" .) "compactor") "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.compactor.ingress.extraHosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" $) "compactor") "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- if .Values.compactor.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.compactor.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.compactor.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.compactor.ingress.annotations )) .Values.compactor.ingress.selfSigned)) .Values.compactor.ingress.extraTls }}
+  tls:
+    {{- if and .Values.compactor.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.compactor.ingress.annotations )) .Values.compactor.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.compactor.ingress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.compactor.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.compactor.ingress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.compactor.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

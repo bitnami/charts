@@ -1,3 +1,8 @@
+{{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 {{/*
 Validate PostgreSQL required passwords are not empty.
@@ -13,10 +18,8 @@ Params:
   {{- $enabled := include "common.postgresql.values.enabled" . -}}
   {{- $valueKeyPostgresqlPassword := include "common.postgresql.values.key.postgressPassword" . -}}
   {{- $valueKeyPostgresqlReplicationEnabled := include "common.postgresql.values.key.replicationPassword" . -}}
-
-  {{- if and (not $existingSecret) (eq $enabled "true") -}}
+  {{- if and (or (not $existingSecret) (eq $existingSecret "\"\"")) (eq $enabled "true") -}}
     {{- $requiredPasswords := list -}}
-
     {{- $requiredPostgresqlPassword := dict "valueKey" $valueKeyPostgresqlPassword "secret" .secret "field" "postgresql-password" -}}
     {{- $requiredPasswords = append $requiredPasswords $requiredPostgresqlPassword -}}
 

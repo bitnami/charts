@@ -1,35 +1,50 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: WorkFlow
+  licenses: Apache-2.0
+  images: |
+    - name: airflow-exporter
+      image: docker.io/bitnami/airflow-exporter:0.20220314.0-debian-11-r441
+    - name: airflow-scheduler
+      image: docker.io/bitnami/airflow-scheduler:2.7.3-debian-11-r3
+    - name: airflow-worker
+      image: docker.io/bitnami/airflow-worker:2.7.3-debian-11-r4
+    - name: airflow
+      image: docker.io/bitnami/airflow:2.7.3-debian-11-r5
+    - name: git
+      image: docker.io/bitnami/git:2.43.0-debian-11-r1
+    - name: os-shell
+      image: docker.io/bitnami/os-shell:11-debian-11-r92
 apiVersion: v2
-appVersion: 2.0.0
+appVersion: 2.7.3
 dependencies:
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
-    version: 1.x.x
-  - condition: postgresql.enabled
-    name: postgresql
-    repository: https://charts.bitnami.com/bitnami
-    version: 10.x.x
-  - condition: redis.enabled
-    name: redis
-    repository: https://charts.bitnami.com/bitnami
-    version: 12.x.x
-description: Apache Airflow is a platform to programmatically author, schedule and monitor workflows.
-engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/airflow
+- condition: redis.enabled
+  name: redis
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 18.x.x
+- condition: postgresql.enabled
+  name: postgresql
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 13.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: Apache Airflow is a tool to express and execute workflows as directed acyclic graphs (DAGs). It includes utilities to schedule tasks, monitor task progress and handle task dependencies.
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/airflow/img/airflow-stack-220x234.png
 keywords:
-  - apache
-  - airflow
-  - workflow
-  - dag
+- apache
+- airflow
+- workflow
+- dag
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
 name: airflow
 sources:
-  - https://github.com/bitnami/bitnami-docker-airflow
-  - https://airflow.apache.org/
-version: 8.0.1
+- https://github.com/bitnami/charts/tree/main/bitnami/airflow
+version: 16.1.7

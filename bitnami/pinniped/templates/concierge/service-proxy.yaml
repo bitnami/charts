@@ -1,0 +1,56 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.concierge.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "pinniped.concierge.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.concierge.service.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: pinniped
+    app.kubernetes.io/component: concierge
+  {{- if or .Values.concierge.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.concierge.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.concierge.service.type }}
+  {{- if and .Values.concierge.service.clusterIP (eq .Values.concierge.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.concierge.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.concierge.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.concierge.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.concierge.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.concierge.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.concierge.service.type "LoadBalancer") (eq .Values.concierge.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.concierge.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.concierge.service.type "LoadBalancer") (not (empty .Values.concierge.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.concierge.service.loadBalancerSourceRanges | toJson }}
+  {{- end }}
+  {{- if and (eq .Values.concierge.service.type "LoadBalancer") (not (empty .Values.concierge.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.concierge.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: https
+      port: {{ .Values.concierge.service.ports.https }}
+      protocol: TCP
+      targetPort: https-proxy
+      {{- if and (or (eq .Values.concierge.service.type "NodePort") (eq .Values.concierge.service.type "LoadBalancer")) (not (empty .Values.concierge.service.nodePorts.https)) }}
+      nodePort: {{ .Values.concierge.service.nodePorts.https }}
+      {{- else if eq .Values.concierge.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.concierge.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.concierge.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.concierge.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: concierge
+{{- end }}

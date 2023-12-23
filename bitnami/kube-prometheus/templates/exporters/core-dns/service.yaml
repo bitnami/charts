@@ -1,22 +1,32 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.coreDns.enabled .Values.coreDns.service.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "kube-prometheus.fullname" . }}-coredns
   namespace: {{ .Values.coreDns.namespace }}
-  labels: {{- include "kube-prometheus.labels" . | nindent 4 }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.coreDns.service.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: {{ template "kube-prometheus.fullname" . }}-coredns
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
+  type: ClusterIP
   clusterIP: None
   ports:
     - name: http-metrics
-      port: {{ .Values.coreDns.service.port }}
+      port: {{ .Values.coreDns.service.ports.http }}
       protocol: TCP
-      targetPort: {{ .Values.coreDns.service.targetPort }}
+      targetPort: {{ .Values.coreDns.service.targetPorts.http }}
   selector:
     {{- if .Values.coreDns.service.selector }}
-{{ toYaml .Values.coreDns.service.selector | indent 4 }}
-    {{- else}}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.coreDns.service.selector "context" $ ) | nindent 4 }}
+    {{- else }}
     k8s-app: kube-dns
-    {{- end}}
+    {{- end }}
 {{- end }}

@@ -1,0 +1,52 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "argocd.repo-server" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: repo-server
+  {{- if or .Values.commonAnnotations .Values.repoServer.service.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.repoServer.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.repoServer.service.type }}
+  {{- if and .Values.repoServer.service.clusterIP (eq .Values.repoServer.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.repoServer.service.clusterIP }}
+  {{- end }}
+  {{- if (or (eq .Values.repoServer.service.type "LoadBalancer") (eq .Values.repoServer.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.repoServer.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if eq .Values.repoServer.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.repoServer.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if (and (eq .Values.repoServer.service.type "LoadBalancer") (not (empty .Values.repoServer.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.repoServer.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.repoServer.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.repoServer.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.repoServer.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  ports:
+    - name: tcp-repo-server
+      port: {{ .Values.repoServer.service.port }}
+      targetPort: repo-server
+      protocol: TCP
+      {{- if (and (or (eq .Values.repoServer.service.type "NodePort") (eq .Values.repoServer.service.type "LoadBalancer")) (not (empty .Values.repoServer.service.nodePort))) }}
+      nodePort: {{ .Values.repoServer.service.nodePort }}
+      {{- else if eq .Values.repoServer.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.repoServer.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.repoServer.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: repo-server

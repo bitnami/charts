@@ -1,0 +1,75 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+{{- if or .Values.postgresql.enabled .Values.externalDatabase.host }}
+
+** Please be patient while the chart is being deployed **
+
+1. Get the Gitea URL:
+
+{{- if .Values.ingress.enabled }}
+
+  You should be able to access your new Gitea installation through
+
+  http://{{- .Values.ingress.hostname }}/
+
+{{- else if eq .Values.service.type "LoadBalancer" }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "common.names.fullname" . }}'
+
+  export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+
+{{- $port:= .Values.service.ports.http | toString }}
+  echo "Gitea URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.ports.http }}{{ end }}/"
+
+{{- if not (include "gitea.rootURL" .)}}
+
+WARNING: You did not specify a Root URL for Gitea. The rendered URLs in Gitea may not show correctly. In order to set a root URL use the rootURL value.
+{{- end }}
+
+{{- else if eq .Values.service.type "ClusterIP" }}
+
+  echo "Gitea URL: http://127.0.0.1:8080/"
+  kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "common.names.fullname" . }} 8080:{{ .Values.service.ports.http }}
+
+{{- end }}
+
+{{- if eq .Values.service.type "NodePort" }}
+
+  Or running:
+
+  export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo "Gitea URL: http://$NODE_IP:$NODE_PORT/"
+
+{{- end }}
+
+2. Get your Gitea login credentials by running:
+
+  echo Username: {{ .Values.adminUsername }}
+  echo Password: $(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "gitea.secretName" . }} -o jsonpath="{.data.admin-password}" | base64 -d)
+
+{{- else -}}
+
+########################################################################################
+### ERROR: You did not provide an external database host in your 'helm install' call ###
+########################################################################################
+
+This deployment will be incomplete until you configure Gitea with a resolvable database
+host. To configure Gitea to use and external database host:
+
+1. Complete your Gitea deployment by running:
+
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "gitea.secretName" . }} -o jsonpath="{.data.admin-password}" | base64 -d)
+
+  ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
+
+  helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/{{ .Chart.Name }} \
+    --set giteaPassword=$APP_PASSWORD,service.type={{ .Values.service.type }},postgresql.enabled=false{{- if not (empty .Values.externalDatabase.user) }},externalDatabase.user={{ .Values.externalDatabase.user }}{{- end }}{{- if not (empty .Values.externalDatabase.password) }},externalDatabase.password={{ .Values.externalDatabase.password }}{{- end }}{{- if not (empty .Values.externalDatabase.database) }},externalDatabase.database={{ .Values.externalDatabase.database }}{{- end }},externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
+
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}

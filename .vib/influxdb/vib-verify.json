@@ -1,0 +1,83 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/influxdb"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/influxdb"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "influxdb/goss/goss.yaml",
+            "vars_file": "influxdb/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-influxdb"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/influxdb/cypress"
+            },
+            "endpoint": "lb-influxdb-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "influxAdmin",
+              "password": "RootP4ssw0rd",
+              "bucket": "primary",
+              "org": "primary"
+            }
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/influxdb/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "influxdb",
+              "token": "4dm1nT0k3n",
+              "org": "testOrganization",
+              "bucket": "testBucket"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

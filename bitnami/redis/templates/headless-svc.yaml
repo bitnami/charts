@@ -1,13 +1,20 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "redis.fullname" . }}-headless
-  namespace: {{ .Release.Namespace | quote }}
-  labels:
-    app: {{ template "redis.name" . }}
-    chart: {{ template "redis.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+  name: {{ printf "%s-headless" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  annotations:
+    {{- if or .Values.sentinel.service.headless.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.sentinel.service.headless.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- include "redis.externalDNS.annotations" . | nindent 4 }}
 spec:
   type: ClusterIP
   clusterIP: None
@@ -15,14 +22,12 @@ spec:
   publishNotReadyAddresses: true
   {{- end }}
   ports:
-    - name: redis
-      port: {{ .Values.redisPort }}
+    - name: tcp-redis
+      port: {{ if .Values.sentinel.enabled }}{{ .Values.sentinel.service.ports.redis }}{{ else }}{{ .Values.master.service.ports.redis }}{{ end }}
       targetPort: redis
-  {{- if .Values.sentinel.enabled }}
-    - name: redis-sentinel
-      port: {{ .Values.sentinel.port }}
+    {{- if .Values.sentinel.enabled }}
+    - name: tcp-sentinel
+      port: {{ .Values.sentinel.service.ports.sentinel }}
       targetPort: redis-sentinel
-  {{- end }}
-  selector:
-    app: {{ template "redis.name" . }}
-    release: {{ .Release.Name }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}

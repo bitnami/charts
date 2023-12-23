@@ -1,0 +1,10 @@
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+  runAsUser: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+persistence:
+  enabled: true
+  mountPath: /bitnami/pytorch

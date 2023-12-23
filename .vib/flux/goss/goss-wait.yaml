@@ -1,0 +1,16 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+addr:
+  {{ if not ( has "air-gapped" .Vars.target_platform_properties ) }}
+  {{- $chartReleaseName := (index .Vars.extraDeploy 3).metadata.name }}
+  tcp://{{ $chartReleaseName }}:80:
+    reachable: true
+    timeout: 2000
+  tcp://podinfo:9898:
+    reachable: true
+    timeout: 2000
+  {{ end }}
+  tcp://127.0.0.1:{{ .Vars.sourceController.containerPorts.http }}:
+    reachable: true
+    timeout: 2000

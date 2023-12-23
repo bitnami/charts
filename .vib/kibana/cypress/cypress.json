@@ -1,0 +1,6 @@
+{
+  "baseUrl": "http://localhost/",
+  "pageLoadTimeout": 150000,
+  "defaultCommandTimeout": 90000,
+  "chromeWebSecurity": false
+}

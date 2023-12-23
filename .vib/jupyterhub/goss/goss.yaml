@@ -1,0 +1,46 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+http:
+  # For this test to work, the pod should have the proper label to allow ingress
+  # traffic as per the NetworkPolicy
+  http://jupyterhub-hub:{{ .Vars.hub.service.ports.http }}/hub/health:
+    status: 200
+  http://jupyterhub-proxy-api:{{ .Vars.proxy.service.api.ports.http }}:
+    status: 404
+file:
+  /etc/jupyterhub:
+    exists: true
+    filetype: directory
+    mode: "0755"
+    owner: root
+  /etc/jupyterhub/jupyterhub_config.py:
+    exists: true
+    filetype: file
+    mode: "0644"
+    owner: root
+    contents:
+    - /hub_container_port.*{{ .Vars.hub.containerPorts.http }}/
+  /usr/local/etc/jupyterhub/secret/values.yaml:
+    exists: true
+    filetype: symlink
+    mode: "0777"
+    owner: root
+    contents:
+    - "postgresql://{{ .Vars.postgresql.auth.username }}@jupyterhub-postgresql:{{ .Vars.postgresql.service.ports.postgresql }}/{{ .Vars.postgresql.auth.database }}"
+    - /type.*dynamic/
+command:
+  {{- $uid := .Vars.hub.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.hub.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+  {{ if .Vars.hub.serviceAccount.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}

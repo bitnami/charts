@@ -1,0 +1,50 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+
+{{- if .Values.hub.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "jupyterhub.hub.name" . }}
+  namespace: {{ default .Release.Namespace .Values.hub.metrics.serviceMonitor.namespace | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.hub.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: hub
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.hub.metrics.serviceMonitor.jobLabel }}
+  jobLabel: {{ .Values.hub.metrics.serviceMonitor.jobLabel }}
+  {{- end }}
+  endpoints:
+    - port: http
+      path: {{ .Values.hub.metrics.serviceMonitor.path }}
+      {{- if .Values.hub.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.hub.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.hub.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.hub.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.hub.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.hub.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.hub.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.hub.metrics.serviceMonitor.relabelings "context" $) | nindent 6 }}
+      {{- end }}
+      {{- if .Values.hub.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- toYaml .Values.hub.metrics.serviceMonitor.metricRelabelings | nindent 6 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      {{- if .Values.hub.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.hub.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
+      app.kubernetes.io/component: hub
+{{- end }}

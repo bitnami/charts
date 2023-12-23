@@ -1,0 +1,30 @@
+config:
+  kubeQPS: 60
+  kubeBurst: 60
+  logLevel: debug
+  logFormat: pretty
+  receivers:
+    - name: dump
+      file:
+        path: /dev/stdout
+        layout: {}
+  route:
+    routes:
+      - match:
+          - receiver: dump
+rbac:
+  create: true
+serviceAccount:
+  create: true
+  automountServiceAccountToken: true
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  readOnlyRootFilesystem: false
+  capabilities:
+    add: []
+    drop:
+      - ALL
+  runAsUser: 1002

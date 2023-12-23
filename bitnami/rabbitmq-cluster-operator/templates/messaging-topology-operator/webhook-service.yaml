@@ -1,0 +1,57 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.msgTopologyOperator.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.msgTopologyOperator.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: messaging-topology-operator
+    app.kubernetes.io/part-of: rabbitmq
+  name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- if or .Values.commonAnnotations .Values.msgTopologyOperator.service.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.msgTopologyOperator.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.msgTopologyOperator.service.type }}
+  {{- if (or (eq .Values.msgTopologyOperator.service.type "LoadBalancer") (eq .Values.msgTopologyOperator.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.msgTopologyOperator.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if .Values.msgTopologyOperator.service.clusterIP }}
+  clusterIP: {{ .Values.msgTopologyOperator.service.clusterIP }}
+  {{- end }}
+  {{- if eq .Values.msgTopologyOperator.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.msgTopologyOperator.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if (and (eq .Values.msgTopologyOperator.service.type "LoadBalancer") (not (empty .Values.msgTopologyOperator.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.msgTopologyOperator.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.msgTopologyOperator.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.msgTopologyOperator.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.msgTopologyOperator.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.msgTopologyOperator.service.ports.webhook }}
+      targetPort: http-webhook
+      protocol: TCP
+      {{- if (and (or (eq .Values.msgTopologyOperator.service.type "NodePort") (eq .Values.msgTopologyOperator.service.type "LoadBalancer")) (not (empty .Values.msgTopologyOperator.service.nodePorts.http))) }}
+      nodePort: {{ .Values.msgTopologyOperator.service.nodePorts.http }}
+      {{- else if eq .Values.msgTopologyOperator.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.msgTopologyOperator.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.msgTopologyOperator.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: messaging-topology-operator
+{{- end }}

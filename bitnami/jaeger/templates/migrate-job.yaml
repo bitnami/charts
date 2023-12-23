@@ -1,0 +1,122 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "common.names.fullname" . }}-migrate
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: migration
+  {{- if or .Values.migration.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.migration.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  ttlSecondsAfterFinished: 30
+  template:
+    metadata:
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.migration.podLabels .Values.commonLabels ) "context" . ) }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: migration
+      {{- if .Values.migration.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.migration.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- include "jaeger.imagePullSecrets" . | nindent 6 }}
+      restartPolicy: OnFailure
+      {{- if .Values.migration.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.migration.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        - name: jaeger-cassandra-schema-grabber
+          image: {{ include "jaeger.image" . }}
+          command: [ "cp", "-T", "-r", "/opt/bitnami/jaeger/cassandra-schema", "/cassandra-schema/" ]
+          volumeMounts:
+            - name: cassandra-schema
+              mountPath: "/cassandra-schema"
+          {{- if .Values.migration.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.migration.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+      containers:
+        - name: jaeger-cassandra-migrator
+          image: {{ include "jaeger.cqlshImage" . }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+
+              set -o errexit
+              set -o nounset
+              set -o pipefail
+
+              . /opt/bitnami/scripts/libos.sh
+
+              check_cassandra_connection() {
+                  echo "SELECT 1" | cqlsh -u $CASSANDRA_USERNAME -p $CASSANDRA_PASSWORD -e "QUIT"
+              }
+
+
+              info "Connecting to the Cassandra instance $CQLSH_HOST:$CQLSH_PORT"
+              if ! retry_while "check_cassandra_connection" 12 30; then
+                error "Could not connect to the database server"
+                exit 1
+              else
+                info "Connection check success"
+                sed -i 's/cqlsh -e "show version"/cqlsh -e "show version" -u $CASSANDRA_USERNAME -p $CASSANDRA_PASSWORD /' /cassandra-schema/create.sh
+                /cassandra-schema/docker.sh
+              fi
+          {{- if .Values.migration.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.migration.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          env:
+            - name: CQLSH
+              value: /opt/bitnami/cassandra/bin/cqlsh
+            - name: CQLSH_HOST
+              value: {{ include "jaeger.cassandra.host" . }}
+            - name: CQLSH_PORT
+              value: {{ include "jaeger.cassandra.port" . }}
+            - name: CASSANDRA_USERNAME
+              value: {{ include "jaeger.cassandra.user" . }}
+            - name: DATACENTER
+              value: {{ include "jaeger.cassandra.datacenter" . }}
+            - name: KEYSPACE
+              value: {{ include "jaeger.cassandra.keyspace" . }}
+            - name: CASSANDRA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "jaeger.cassandra.secretName" . }}
+                  key: {{ include "jaeger.cassandra.secretKey" . }}
+          {{- if or .Values.migration.extraEnvVarsCM .Values.migration.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.migration.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.migration.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.migration.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.migration.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.migration.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.migration.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: cassandra-schema
+              mountPath: "/cassandra-schema"
+          {{- if .Values.migration.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.migration.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.migration.resources }}
+          resources: {{- toYaml .Values.migration.resources | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: cassandra-schema
+          emptyDir: {}
+      {{- if .Values.migration.extraVolumes }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.migration.extraVolumes "context" $) | nindent 6 }}
+      {{- end }}

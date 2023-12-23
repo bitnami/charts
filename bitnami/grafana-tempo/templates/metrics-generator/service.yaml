@@ -1,0 +1,53 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "grafana-tempo.metrics-generator.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: metrics-generator
+  {{- if or .Values.commonAnnotations .Values.metricsGenerator.service.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.metricsGenerator.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.metricsGenerator.service.type }}
+  sessionAffinity: {{ .Values.metricsGenerator.service.sessionAffinity }}
+  {{- if .Values.metricsGenerator.service.clusterIP }}
+  clusterIP: {{ .Values.metricsGenerator.service.clusterIP }}
+  {{- end }}
+  {{- if (or (eq .Values.metricsGenerator.service.type "LoadBalancer") (eq .Values.metricsGenerator.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.metricsGenerator.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{ if eq .Values.metricsGenerator.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.metricsGenerator.service.loadBalancerSourceRanges }}
+  {{ end }}
+  {{- if (and (eq .Values.metricsGenerator.service.type "LoadBalancer") (not (empty .Values.metricsGenerator.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.metricsGenerator.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.metricsGenerator.service.ports.http }}
+      targetPort: http
+      protocol: TCP
+      {{- if (and (or (eq .Values.metricsGenerator.service.type "NodePort") (eq .Values.metricsGenerator.service.type "LoadBalancer")) (not (empty .Values.metricsGenerator.service.nodePorts.http))) }}
+      nodePort: {{ .Values.metricsGenerator.service.nodePorts.http }}
+      {{- else if eq .Values.metricsGenerator.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: grpc
+      port: {{ .Values.metricsGenerator.service.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      {{- if (and (or (eq .Values.metricsGenerator.service.type "NodePort") (eq .Values.metricsGenerator.service.type "LoadBalancer")) (not (empty .Values.metricsGenerator.service.nodePorts.grpc))) }}
+      nodePort: {{ .Values.metricsGenerator.service.nodePorts.grpc }}
+      {{- else if eq .Values.metricsGenerator.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metricsGenerator.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: metrics-generator

@@ -1,0 +1,25 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.client.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-hosts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: deepspeed
+    app.kubernetes.io/component: client
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
+data:
+  hostfile: |
+    {{- if .Values.config.overrideHostFile }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.config.overrideHostFile "context" $) | nindent 4 }}
+    {{- else }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.config.defaultHostFile "context" $) | nindent 4 }}
+    {{- end }}
+{{- end }}

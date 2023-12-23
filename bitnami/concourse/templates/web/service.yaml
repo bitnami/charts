@@ -1,0 +1,63 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.web.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "concourse.web.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: web
+  {{- if or .Values.service.web.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.service.web.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.web.type }}
+  {{- if .Values.service.web.sessionAffinity }}
+  sessionAffinity: {{ .Values.service.web.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.service.web.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.service.web.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if and .Values.service.web.clusterIP (eq .Values.service.web.type "ClusterIP") }}
+  clusterIP: {{ .Values.service.web.clusterIP }}
+  {{- end }}
+  {{- if or (eq .Values.service.web.type "LoadBalancer") (eq .Values.service.web.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.service.web.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.service.web.type "LoadBalancer") (not (empty .Values.service.web.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.service.web.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.service.web.type "LoadBalancer") (not (empty .Values.service.web.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.service.web.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.service.web.ports.http }}
+      protocol: TCP
+      targetPort: http
+      {{- if (and (or (eq .Values.service.web.type "NodePort") (eq .Values.service.web.type "LoadBalancer")) (not (empty .Values.service.web.nodePorts.http))) }}
+      nodePort: {{ .Values.service.web.nodePorts.http }}
+      {{- else if eq .Values.service.web.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: https
+      port: {{ .Values.service.web.ports.https }}
+      protocol: TCP
+      targetPort: https
+      {{- if (and (or (eq .Values.service.web.type "NodePort") (eq .Values.service.web.type "LoadBalancer")) (not (empty .Values.service.web.nodePorts.https))) }}
+      nodePort: {{ .Values.service.web.nodePorts.https }}
+      {{- else if eq .Values.service.web.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.service.web.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.web.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.web.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: web
+{{- end }}

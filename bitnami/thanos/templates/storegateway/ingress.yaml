@@ -1,0 +1,57 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.storegateway.ingress.enabled -}}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ include "common.names.fullname" . }}-storegateway
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: storegateway
+  {{- if or .Values.storegateway.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.storegateway.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.storegateway.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  ingressClassName: {{ .Values.storegateway.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.storegateway.ingress.hostname }}
+    - host: {{ include "common.tplvalues.render" ( dict "value" .Values.storegateway.ingress.hostname "context" $ ) }}
+      http:
+        paths:
+          - path: {{ .Values.storegateway.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.storegateway.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" .) "storegateway") "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.storegateway.ingress.extraHosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" $) "storegateway") "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- if .Values.storegateway.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.storegateway.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.storegateway.ingress.annotations )) .Values.storegateway.ingress.selfSigned)) .Values.storegateway.ingress.extraTls }}
+  tls:
+    {{- if and .Values.storegateway.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.storegateway.ingress.annotations )) .Values.storegateway.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.storegateway.ingress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.storegateway.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.storegateway.ingress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

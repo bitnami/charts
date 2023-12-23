@@ -1,0 +1,66 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/oauth2-proxy"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/oauth2-proxy"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "oauth2-proxy/goss/goss.yaml",
+            "vars_file": "oauth2-proxy/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-oauth2-proxy"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/oauth2-proxy/cypress"
+            },
+            "endpoint": "lb-oauth2-proxy-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "upstreamURL": "/bitnami/oauth2-proxy/conf/",
+              "upstreamContent": "oauth2_proxy.cfg",
+              "dexPort": "5556"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,3 +1,8 @@
+{{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* Templates for certificates injection */}}
 
 {{/*
@@ -20,18 +25,18 @@ Return the proper Redmine image name
   {{- if .Values.certificates.customCertificate.certificateSecret }}
   - sh
   - -c
-  - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
-    else apt-get update && apt-get install -y ca-certificates openssl; fi
+  - install_packages ca-certificates openssl
   {{- else }}
   - sh
   - -c
-  - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
-    else apt-get update && apt-get install -y ca-certificates openssl; fi
+  - install_packages ca-certificates openssl
     && openssl req -new -x509 -days 3650 -nodes -sha256
        -subj "/CN=$(hostname)" -addext "subjectAltName = DNS:$(hostname)"
        -out  /etc/ssl/certs/ssl-cert-snakeoil.pem
        -keyout /etc/ssl/private/ssl-cert-snakeoil.key -extensions v3_req
   {{- end }}
+  securityContext:
+    runAsUser: 0
   {{- if .Values.certificates.extraEnvVars }}
   env:
   {{- tpl (toYaml .Values.certificates.extraEnvVars) $ | nindent 2 }}

@@ -1,0 +1,66 @@
+query:
+  service:
+    type: LoadBalancer
+    ports:
+      admin: 16688
+      api: 80
+collector:
+  service:
+    ports:
+      admin: 14270
+agent:
+  service:
+    ports:
+      admin: 14272
+  containerPorts:
+    config: 5779
+    admin: 14272
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  serviceAccount:
+    create: true
+    automountServiceAccountToken: true
+  sidecars:
+    - name: hotrod-example
+      image: jaegertracing/example-hotrod:1.39
+      args:
+        - all
+      securityContext:
+        runAsNonRoot: true
+        privileged: false
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop: ["ALL"]
+        seccompProfile:
+          type: "RuntimeDefault"
+    - name: trace-generator
+      image: bitnami/os-shell:11-debian-11-r2
+      command:
+        - /bin/bash
+        - -ec
+        - |
+          #!/bin/bash
+          while true; do
+            # Sample taken from inspecting hotrod code
+            curl 'http://127.0.0.1:8080/dispatch?customer=392&nonse=0.45838884710501726'
+            sleep 5
+          done
+      securityContext:
+        runAsNonRoot: true
+        privileged: false
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop: ["ALL"]
+        seccompProfile:
+          type: "RuntimeDefault"
+
+cassandra:
+  enabled: true
+  keyspace: bitnami_test_jaeger
+  dbUser:
+    user: bn_test_jaeger
+    password: bn_test_jaeger

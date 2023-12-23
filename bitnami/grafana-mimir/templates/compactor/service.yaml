@@ -1,0 +1,63 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "grafana-mimir.compactor.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: compactor
+  {{- if or .Values.compactor.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.compactor.service.type }}
+  {{- if and .Values.compactor.service.clusterIP (eq .Values.compactor.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.compactor.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.compactor.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.compactor.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.compactor.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.compactor.service.type "LoadBalancer") (eq .Values.compactor.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.compactor.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.compactor.service.type "LoadBalancer") (not (empty .Values.compactor.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.compactor.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.compactor.service.type "LoadBalancer") (not (empty .Values.compactor.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.compactor.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.compactor.service.ports.http }}
+      targetPort: http
+      protocol: TCP
+      {{- if and (or (eq .Values.compactor.service.type "NodePort") (eq .Values.compactor.service.type "LoadBalancer")) (not (empty .Values.compactor.service.nodePorts.http)) }}
+      nodePort: {{ .Values.compactor.service.nodePorts.http }}
+      {{- else if eq .Values.compactor.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: grpc
+      port: {{ .Values.compactor.service.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      {{- if and (or (eq .Values.compactor.service.type "NodePort") (eq .Values.compactor.service.type "LoadBalancer")) (not (empty .Values.compactor.service.nodePorts.grpc)) }}
+      nodePort: {{ .Values.compactor.service.nodePorts.grpc }}
+      {{- else if eq .Values.compactor.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.compactor.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.compactor.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: compactor

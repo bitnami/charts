@@ -1,0 +1,26 @@
+ejbcaAdminUsername: bitnamiTest
+ejbcaAdminPassword: ComplicatedPassword123!4
+ejbcaCA:
+  name: ManagementTestCA
+  baseDN: UID=c-1CCXmPAsNWmZuDtQQ8FHl7tcVdjCiNTH,O=ExampleCA,C=SE
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+containerPorts:
+  http: 8081
+  https: 8443
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+    https: 443
+  advertisedHttpsPort: 443
+mariadb:
+  enabled: true
+  auth:
+    database: bitnami_ejbca_test
+    username: bn_ejbca_test
+    password: bn_ejbca_pass_test

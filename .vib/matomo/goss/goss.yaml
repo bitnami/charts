@@ -1,0 +1,9 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+file:
+  /bitnami/matomo:
+    exists: true
+    mode: "2775"
+    owner: root
+    filetype: directory

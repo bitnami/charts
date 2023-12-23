@@ -1,17 +1,29 @@
-{{- if .Values.compactor.enabled -}}
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.compactor.enabled (not .Values.compactor.cronJob.enabled) }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "common.names.fullname" . }}-compactor
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.service.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: compactor
-  {{- if .Values.compactor.service.annotations }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.service.annotations "context" $) | nindent 4 }}
+    {{- include "thanos.servicemonitor.matchLabels" . | nindent 4 -}}
+  {{- if or .Values.compactor.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.compactor.service.type }}
   {{- if and .Values.compactor.service.clusterIP (eq .Values.compactor.service.type "ClusterIP") }}
   clusterIP: {{ .Values.compactor.service.clusterIP }}
+  {{- end }}
+  {{- if ne .Values.compactor.service.type "ClusterIP" }}
+  externalTrafficPolicy: {{ .Values.compactor.service.externalTrafficPolicy }}
   {{- end }}
   {{- if and .Values.compactor.service.loadBalancerIP (eq .Values.compactor.service.type "LoadBalancer") }}
   loadBalancerIP: {{ .Values.compactor.service.loadBalancerIP }}
@@ -20,19 +32,24 @@ spec:
   loadBalancerSourceRanges: {{- toYaml .Values.compactor.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - port: {{ .Values.compactor.service.http.port }}
+    - port: {{ if .Values.compactor.service.http }}{{ coalesce .Values.compactor.service.ports.http .Values.compactor.service.http.port }}{{ else }}{{ .Values.compactor.service.ports.http }}{{ end }}
       targetPort: http
       protocol: TCP
       name: http
-      {{- if (and (or (eq .Values.compactor.service.type "NodePort") (eq .Values.compactor.service.type "LoadBalancer")) .Values.compactor.service.http.nodePort) }}
+      {{- if and (or (eq .Values.compactor.service.type "NodePort") (eq .Values.compactor.service.type "LoadBalancer")) .Values.compactor.service.nodePorts.http }}
+      nodePort: {{ .Values.compactor.service.nodePorts.http }}
       {{- else if eq .Values.compactor.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.compactor.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.compactor.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector:
     {{- if .Values.compactor.service.labelSelectorsOverride }}
     {{- include "common.tplvalues.render" (dict "value" .Values.compactor.service.labelSelectorsOverride "context" $) | nindent 4 }}
     {{- else }}
-    {{- include "common.labels.matchLabels" . | nindent 4 }}
+    {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.podLabels .Values.commonLabels ) "context" . ) }}
+    {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: compactor
     {{- end }}
 {{- end }}

@@ -1,0 +1,49 @@
+{{ if .Values.createController -}}
+
+** Please be patient while the chart is being deployed **
+
+Watch the SealedSecret controller status using the command:
+
+    kubectl get deploy -w --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }}
+
+Once the controller is up and ready, you should be able to create sealed secrets.
+
+1. Install the client-side tool (kubeseal) as explained in the docs below:
+
+    https://github.com/bitnami-labs/sealed-secrets#installation-from-source
+
+2. Create a sealed secret file running the command below:
+
+    kubectl create secret generic secret-name --dry-run=client --from-literal=foo=bar -o yaml | \
+    kubeseal \
+      --controller-name={{ include "common.names.fullname" . }} \
+      --controller-namespace={{ include "common.names.namespace" . }} \
+      --format yaml > mysealedsecret.yaml
+
+The file mysealedsecret.yaml is a commitable file.
+
+If you would rather not need access to the cluster to generate the sealed secret you can run:
+
+    kubeseal \
+      --controller-name={{ include "common.names.fullname" . }} \
+      --controller-namespace={{ include "common.names.namespace" . }} \
+      --format yaml > mysealedsecret.yaml
+
+to retrieve the public cert used for encryption and store it locally. You can then run 'kubeseal --cert mycert.pem' instead to use the local cert e.g.
+
+    kubectl create secret generic secret-name --dry-run=client --from-literal=foo=bar -o yaml | \
+    kubeseal \
+      --controller-name={{ include "common.names.fullname" . }} \
+      --controller-namespace={{ include "common.names.namespace" . }} \
+      --format yaml --cert mycert.pem > mysealedsecret.yaml
+
+3. Apply the sealed secret:
+
+    kubectl create -f mysealedsecret.yaml
+
+Running 'kubectl get secret secret-name -o yaml' will show the decrypted secret that was generated from the sealed secret.
+
+Both the SealedSecret and generated Secret must have the same name and namespace.
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- end }}

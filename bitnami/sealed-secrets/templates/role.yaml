@@ -1,0 +1,124 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.rbac.create -}}
+kind: Role
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+metadata:
+  name: {{ printf "%s-key-admin" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.rbac.labels }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.labels "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups:
+      - ""
+    resourceNames:
+      - {{ printf "%s" (include "sealed-secrets.secretName" .) }}
+    resources:
+      - secrets
+    verbs:
+      - get
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - create
+      - list
+  {{- if .Values.rbac.keyAdmin.rules }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.keyAdmin.rules "context" $ ) | nindent 2 }}
+  {{- end }}
+---
+kind: Role
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+metadata:
+  name: {{ printf "%s-service-proxier" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.rbac.labels }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.labels "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups:
+      - ""
+    resourceNames:
+      - '{{ printf "http:%s:" (include "common.names.fullname" .) }}'
+      - '{{ printf "http:%s:http" (include "common.names.fullname" .) }}'
+      - {{ template "common.names.fullname" . }}
+    resources:
+      - services/proxy
+    verbs:
+      - create
+      - get
+  {{- if .Values.rbac.serviceProxier.rules }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.serviceProxier.rules "context" $ ) | nindent 2 }}
+  {{- end }}
+{{- end }}
+{{ if and (and .Values.rbac.create .Values.rbac.namespacedRoles) (not .Values.rbac.clusterRole) }}
+---
+  {{- range $additionalNamespace := $.Values.additionalNamespaces }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ printf "%s" (include "sealed-secrets.namespacedRoleName" .) }}
+  namespace: {{ $additionalNamespace }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if $.Values.rbac.labels }}
+  {{- include "common.tplvalues.render" ( dict "value" $.Values.rbac.labels "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups:
+      - bitnami.com
+    resources:
+      - sealedsecrets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - bitnami.com
+    resources:
+      - sealedsecrets/status
+    verbs:
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+      - list
+      - create
+      - update
+      - delete
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    resourceNames:
+      {{- include "common.tplvalues.render" (dict "value" $.Values.additionalNamespaces "context" $) | nindent 6 }}
+    verbs:
+      - get
+  {{- end }}
+{{ end }}

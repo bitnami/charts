@@ -1,0 +1,38 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  licenses: Apache-2.0
+  images: |
+    - name: oauth2-proxy
+      image: docker.io/bitnami/oauth2-proxy:7.5.1-debian-11-r12
+apiVersion: v2
+appVersion: 7.5.1
+dependencies:
+- condition: redis.enabled
+  name: redis
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 18.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: A reverse proxy and static file server that provides authentication using Providers (Google, GitHub, and others) to validate accounts by email, domain or group.
+home: https://bitnami.com
+icon: https://bitnami.com/assets/stacks/oauth2-proxy/img/oauth2-proxy-stack-220x234.png
+keywords:
+- kubernetes
+- oauth
+- oauth2
+- authentication
+- google
+- github
+maintainers:
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
+name: oauth2-proxy
+sources:
+- https://github.com/bitnami/charts/tree/main/bitnami/oauth2-proxy
+version: 4.3.6

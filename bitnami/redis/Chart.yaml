@@ -1,28 +1,37 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Database
+  licenses: Apache-2.0
+  images: |
+    - name: os-shell
+      image: docker.io/bitnami/os-shell:11-debian-11-r92
+    - name: redis-exporter
+      image: docker.io/bitnami/redis-exporter:1.55.0-debian-11-r3
+    - name: redis-sentinel
+      image: docker.io/bitnami/redis-sentinel:7.2.3-debian-11-r2
+    - name: redis
+      image: docker.io/bitnami/redis:7.2.3-debian-11-r2
 apiVersion: v2
-appVersion: 6.0.10
+appVersion: 7.2.3
 dependencies:
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
-    version: 1.x.x
-description: Open source, advanced key-value store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets and sorted sets.
-engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/redis
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: Redis(R) is an open source, advanced key-value store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets and sorted sets.
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/redis/img/redis-stack-220x234.png
 keywords:
-  - redis
-  - keyvalue
-  - database
+- redis
+- keyvalue
+- database
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
-  - email: cedric@desaintmartin.fr
-    name: desaintmartin
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
 name: redis
 sources:
-  - https://github.com/bitnami/bitnami-docker-redis
-  - http://redis.io/
-version: 12.7.0
+- https://github.com/bitnami/charts/tree/main/bitnami/redis
+version: 18.6.1

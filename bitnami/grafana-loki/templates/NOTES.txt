@@ -1,0 +1,104 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup execute this command:
+
+    loki -config.file=/bitnami/grafana-loki/conf/loki.yaml
+
+{{- else }}
+
+Installed components:
+
+  * ingester
+  * distributor
+  * querier
+  * query-frontend
+  {{- if .Values.promtail.enabled }}
+  * promtail
+  {{- end }}
+  {{- if .Values.compactor.enabled }}
+  * compactor
+  {{- end }}
+  {{- if .Values.indexGateway.enabled }}
+  * index-gateway
+  {{- end }}
+  {{- if .Values.gateway.enabled }}
+  * gateway
+  {{- end }}
+  {{- if .Values.ruler.enabled }}
+  * ruler
+  {{- end }}
+  {{- if .Values.tableManager.enabled }}
+  * table-manager
+  {{- end }}
+
+{{- if .Values.gateway.enabled }}
+{{- if .Values.gateway.ingress.enabled }}
+
+1. Get the gateway URL and associate the gateway hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "Gateway URL: http{{ if .Values.gateway.ingress.tls }}s{{ end }}://{{ .Values.gateway.ingress.hostname }}/"
+   echo "$CLUSTER_IP  {{ .Values.gateway.ingress.hostname }}" | sudo tee -a /etc/hosts
+{{- else }}
+
+1. Get the gateway URL by running these commands:
+
+{{- if contains "NodePort" .Values.gateway.service.type }}
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "grafana-loki.gateway.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.gateway.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ template "common.names.fullname" . }}
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    echo http://$SERVICE_IP:{{ .Values.gateway.service.ports.http }}
+{{- else if contains "ClusterIP" .Values.gateway.service.type }}
+    echo "The Gateway is available at http://127.0.0.1:{{ .Values.gateway.service.ports.http }}"
+    kubectl port-forward svc/{{ template "grafana-loki.gateway.fullname" . }} {{ .Values.gateway.service.ports.http }}:{{ .Values.gateway.service.ports.http }} &
+{{- end }}
+{{- end }}
+{{- if .Values.gateway.auth.enabled }}
+2. Login with the following credentials below to see your blog:
+
+  echo Username: {{ .Values.gateway.auth.username }}
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "grafana-loki.gateway.secretName" . }} -o jsonpath="{.data.password}" | base64 -d)
+{{- end }}
+{{- else }}
+1. Get the query-frontend URL by running these commands:
+
+{{- if contains "NodePort" .Values.queryFrontend.service.type }}
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "grafana-loki.query-frontend.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.queryFrontend.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ template "common.names.fullname" . }}
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    echo http://$SERVICE_IP:{{ .Values.queryFrontend.service.ports.http }}
+{{- else if contains "ClusterIP" .Values.queryFrontend.service.type }}
+    echo "The Query Frontend is available at http://127.0.0.1:{{ .Values.queryFrontend.service.ports.http }}"
+    kubectl port-forward svc/{{ template "grafana-loki.query-frontend.fullname" . }} {{ .Values.queryFrontend.service.ports.http }}:{{ .Values.queryFrontend.service.ports.http }} &
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- include "grafana-loki.checkRollingTags" . }}
+{{- include "grafana-loki.validateValues" . }}

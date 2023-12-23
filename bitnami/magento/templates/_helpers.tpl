@@ -1,3 +1,8 @@
+{{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
@@ -29,7 +34,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "magento.elasticsearch.fullname" -}}
-{{- printf "%s-%s-coordinating-only" .Release.Name "elasticsearch" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" .Release.Name "elasticsearch" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -52,6 +57,9 @@ When using Ingress, it will be set to the Ingress hostname.
 {{- define "magento.host" -}}
 {{- if .Values.ingress.enabled }}
 {{- $host := .Values.ingress.hostname | default "" -}}
+{{- default (include "magento.serviceIP" .) $host -}}
+{{- else if .Values.magentoHost -}}
+{{- $host := .Values.magentoHost | default "" -}}
 {{- default (include "magento.serviceIP" .) $host -}}
 {{- else -}}
 {{- $host := index .Values (printf "%sHost" .Chart.Name) | default "" -}}

@@ -1,0 +1,57 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.sourceController.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "flux.source-controller.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.sourceController.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: flux
+    app.kubernetes.io/component: source-controller
+  {{- if or .Values.sourceController.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.sourceController.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.sourceController.service.type }}
+  {{- if and .Values.sourceController.service.clusterIP (eq .Values.sourceController.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.sourceController.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.sourceController.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.sourceController.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.sourceController.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.sourceController.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.sourceController.service.type "LoadBalancer") (eq .Values.sourceController.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.sourceController.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.sourceController.service.type "LoadBalancer") (not (empty .Values.sourceController.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.sourceController.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.sourceController.service.type "LoadBalancer") (not (empty .Values.sourceController.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.sourceController.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.sourceController.service.ports.http }}
+      protocol: TCP
+      {{- if and (or (eq .Values.sourceController.service.type "NodePort") (eq .Values.sourceController.service.type "LoadBalancer")) (not (empty .Values.sourceController.service.nodePorts.http)) }}
+      nodePort: {{ .Values.sourceController.service.nodePorts.http }}
+      {{- else if eq .Values.sourceController.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+      targetPort: http
+    {{- if .Values.sourceController.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.sourceController.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.sourceController.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: source-controller
+{{- end }}
