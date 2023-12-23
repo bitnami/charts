@@ -52,7 +52,7 @@ host. To configure OpenCart with the URL of your service:
 {{- if eq .Values.service.type "ClusterIP" }}
 
   echo "Store URL: http://127.0.0.1:8080/"
-  echo "Admin URL: http://127.0.0.1:8080/admin"
+  echo "Admin URL: http://127.0.0.1:8080/administration"
   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} 8080:{{ .Values.service.port }}
 
 {{- else }}
