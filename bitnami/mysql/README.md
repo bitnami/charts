@@ -125,6 +125,7 @@ The following table lists the configurable parameters of the MySQL chart and the
 | `primary.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for MySQL primary containers                               | `nil`                          |
 | `primary.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for MySQL primary containers                                  | `nil`                          |
 | `primary.extraFlags`                         | MySQL primary additional command line flags                                                                     | `nil`                          |
+| `primary.extraPodSpec`                       | Extra PodSpec for the MySQL Primary pod(s)                                                                      | `{}`                           |
 | `primary.persistence.enabled`                | Enable persistence on MySQL primary replicas using a `PersistentVolumeClaim`                                    | `true`                         |
 | `primary.persistence.existingClaim`          | Name of an existing `PersistentVolumeClaim` for MySQL primary replicas                                          | `nil`                          |
 | `primary.persistence.annotations`            | MySQL primary persistent volume claim annotations                                                               | `{}` (evaluated as a template) |
@@ -181,6 +182,7 @@ The following table lists the configurable parameters of the MySQL chart and the
 | `secondary.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for MySQL secondary containers                                 | `nil`                          |
 | `secondary.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for MySQL secondary containers                                    | `nil`                          |
 | `secondary.extraFlags`                         | MySQL secondary additional command line flags                                                                       | `nil`                          |
+| `secondary.extraPodSpec`                       | Extra PodSpec for the MySQL Secondary pod(s)                                                                        | `{}`                           |
 | `secondary.persistence.enabled`                | Enable persistence on MySQL secondary replicas using a `PersistentVolumeClaim`                                      | `true`                         |
 | `secondary.persistence.annotations`            | MySQL secondary persistent volume claim annotations                                                                 | `{}` (evaluated as a template) |
 | `secondary.persistence.storageClass`           | MySQL secondary persistent volume storage Class                                                                     | `nil`                          |

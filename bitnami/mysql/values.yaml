@@ -307,6 +307,10 @@ primary:
   ##
   extraEnvVarsSecret: ""
 
+  ## Extra PodSpec for the MySQL Primary pod(s)
+  ##
+  extraPodSpec: {}
+
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -597,6 +601,10 @@ secondary:
   ## Secret with extra env vars for MySQL secondary containers:
   ##
   extraEnvVarsSecret: ""
+
+  ## Extra PodSpec for the MySQL Secondary pod(s)
+  ##
+  extraPodSpec: {}
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
