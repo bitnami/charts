@@ -565,11 +565,33 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `persistence.labels`        | Persistent Volume Claim labels                                                          | `{}`                  |
 | `persistence.selector`      | Selector to match an existing Persistent Volume (this value is evaluated as a template) | `{}`                  |
 
+### Traffic Exposure parameters
+
+| Name                               | Description                                                                | Value        |
+| ---------------------------------- | -------------------------------------------------------------------------- | ------------ |
+| `service.type`                                        | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                           | `ClusterIP`  |
+| `service.ports.postgresql`                            | PostgreSQL port                                                                               | `5432`       |
+| `service.portName`                                    | PostgreSQL service port name                                                                  | `postgresql` |
+| `service.nodePorts.postgresql`                        | Kubernetes service nodePort                                                                   | `""`         |
+| `service.loadBalancerIP`                              | Load balancer IP if service type is `LoadBalancer`                                            | `""`         |
+| `service.loadBalancerSourceRanges`                    | Addresses that are allowed when service is LoadBalancer                                       | `[]`         |
+| `service.clusterIP`                                   | Set the Cluster IP to use                                                                     | `""`         |
+| `service.externalTrafficPolicy`                       | Enable client source IP preservation                                                          | `Cluster`    |
+| `service.extraPorts`                                  | Extra ports to expose (normally used with the `sidecar` value)                                | `[]`         |
+| `service.sessionAffinity`                             | Control where client requests go, to the same pod or round-robin                              | `None`       |
+| `service.sessionAffinityConfig`                       | Additional settings for the sessionAffinity                                                   | `{}`         |
+| `service.annotations`                                 | Provide any additional annotations both for PostgreSQL and Pgpool services                    | `{}`         |
+| `service.serviceLabels`                               | Labels for PostgreSQL service                                                                 | `{}`         |
+| `service.headless.annotations`                        | Annotations for the headless service.                                                         | `{}`         |
+| `networkPolicy.enabled`                               | Enable NetworkPolicy                                                                          | `false`      |
+| `networkPolicy.allowExternal`                         | Don't require client label for connections                                                    | `true`       |
+| `networkPolicy.egressRules.denyConnectionsToExternal` | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53) | `false`      |
+| `networkPolicy.egressRules.customRules`               | Custom network policy rule                                                                    | `{}`         |
 
 ### Backup parameters
 
-| Name                                                               | Description                                                                                                                           | Value                                                                                                                                                                                |
-| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Name                               | Description                                                                | Value        |
+| ---------------------------------- | -------------------------------------------------------------------------- | ------------ |
 | `backup.enabled`                                                   | Enable the logical dump of the database "regularly"                                                                                   | `false`                                                                                                                                                                              |
 | `backup.cronjob.schedule`                                          | Set the cronjob parameter schedule                                                                                                    | `@daily`                                                                                                                                                                             |
 | `backup.cronjob.timeZone`                                          | Set the cronjob parameter timeZone                                                                                                    | `""`                                                                                                                                                                                 |
@@ -603,29 +625,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `backup.cronjob.storage.subPath`                                   | Subdirectory of the volume to mount at                                                                                                | `""`                                                                                                                                                                                 |
 | `backup.cronjob.storage.volumeClaimTemplates.selector`             | A label query over volumes to consider for binding (e.g. when using local volumes)                                                    | `{}`                                                                                                                                                                                 |
 
-
-### Traffic Exposure parameters
-
-| Name                                                  | Description                                                                                   | Value        |
-| ----------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------ |
-| `service.type`                                        | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                           | `ClusterIP`  |
-| `service.ports.postgresql`                            | PostgreSQL port                                                                               | `5432`       |
-| `service.portName`                                    | PostgreSQL service port name                                                                  | `postgresql` |
-| `service.nodePorts.postgresql`                        | Kubernetes service nodePort                                                                   | `""`         |
-| `service.loadBalancerIP`                              | Load balancer IP if service type is `LoadBalancer`                                            | `""`         |
-| `service.loadBalancerSourceRanges`                    | Addresses that are allowed when service is LoadBalancer                                       | `[]`         |
-| `service.clusterIP`                                   | Set the Cluster IP to use                                                                     | `""`         |
-| `service.externalTrafficPolicy`                       | Enable client source IP preservation                                                          | `Cluster`    |
-| `service.extraPorts`                                  | Extra ports to expose (normally used with the `sidecar` value)                                | `[]`         |
-| `service.sessionAffinity`                             | Control where client requests go, to the same pod or round-robin                              | `None`       |
-| `service.sessionAffinityConfig`                       | Additional settings for the sessionAffinity                                                   | `{}`         |
-| `service.annotations`                                 | Provide any additional annotations both for PostgreSQL and Pgpool services                    | `{}`         |
-| `service.serviceLabels`                               | Labels for PostgreSQL service                                                                 | `{}`         |
-| `service.headless.annotations`                        | Annotations for the headless service.                                                         | `{}`         |
-| `networkPolicy.enabled`                               | Enable NetworkPolicy                                                                          | `false`      |
-| `networkPolicy.allowExternal`                         | Don't require client label for connections                                                    | `true`       |
-| `networkPolicy.egressRules.denyConnectionsToExternal` | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53) | `false`      |
-| `networkPolicy.egressRules.customRules`               | Custom network policy rule                                                                    | `{}`         |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
