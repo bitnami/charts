@@ -625,7 +625,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `networkPolicy.egressRules.denyConnectionsToExternal`              | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53)                                         | `false`                                                                                                                                                                              |
 | `networkPolicy.egressRules.customRules`                            | Custom network policy rule                                                                                                            | `{}`                                                                                                                                                                                 |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
