@@ -75,21 +75,28 @@ Return the MLflow Tracking Secret key for the user
 {{- end -}}
 
 {{/*
-Return the MLFlow Trakcing Port
+Return the MLFlow Tracking Port
 */}}
 {{- define "mlflow.v0.tracking.port" -}}
-{{ ternary .Values.tracking.service.ports.https .Values.tracking.service.ports.http .Values.tracking.tls.enabled }}
+{{- int ( ternary .Values.tracking.service.ports.https .Values.tracking.service.ports.http .Values.tracking.tls.enabled ) -}}
 {{- end -}}
 
 {{/*
-Return the MLFlow Trakcing Protocol
+Return the MLFlow Tracking Port Name
+*/}}
+{{- define "mlflow.v0.tracking.portName" -}}
+{{- ternary "https" "http" .Values.tracking.tls.enabled -}}
+{{- end -}}
+
+{{/*
+Return the MLFlow Tracking Protocol
 */}}
 {{- define "mlflow.v0.tracking.protocol" -}}
 {{- ternary "https" "http" .Values.tracking.tls.enabled -}}
 {{- end -}}
 
 {{/*
-Return the MLFlow Trakcing URI
+Return the MLFlow Tracking URI
 */}}
 {{- define "mlflow.v0.tracking.uri" -}}
 {{ printf "%s://%s:%v" (include "mlflow.v0.tracking.protocol" .) (include "mlflow.v0.tracking.fullname" .) (include "mlflow.v0.tracking.port" .) }}
@@ -226,7 +233,7 @@ Init container definition for upgrading the database
 - name: upgrade-db
   image: {{ include "mlflow.v0.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
-  {{- if .Values.containerSecurityContext.enabled }}
+  {{- if .Values.tracking.containerSecurityContext.enabled }}
   securityContext: {{- omit .Values.tracking.containerSecurityContext "enabled" | toYaml | nindent 4 }}
   {{- end }}
   command:
@@ -509,8 +516,8 @@ Return the volume-permissions init container
     - |
       #!/bin/bash
       mkdir -p {{ .Values.persistence.mountPath }}
-      chown {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
-      find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
+      chown {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
+      find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
   {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
   securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 4 }}
   {{- end }}
@@ -532,12 +539,21 @@ Return MinIO(TM) fullname
 {{- end -}}
 
 {{/*
-Return the PostgreSQL Hostname
+Return whether S3 is enabled
 */}}
 {{- define "mlflow.v0.s3.enabled" -}}
 {{- if or .Values.minio.enabled .Values.externalS3.host -}}
 {{- true }}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Return whether artifacts should be served from S3
+*/}}
+{{- define "mlflow.v0.s3.serveArtifacts" -}}
+    {{- if and (or .Values.minio.enabled .Values.externalS3.host) .Values.externalS3.serveArtifacts  -}}
+        {{- true }}
+    {{- end -}}
 {{- end -}}
 
 {{/*

@@ -1,6 +1,6 @@
 <!--- app-name: Apache Cassandra -->
 
-# Apache Cassandra packaged by Bitnami
+# Bitnami package for Apache Cassandra
 
 Apache Cassandra is an open source distributed database management system designed to handle large amounts of data across many servers, providing high availability with no single point of failure.
 
@@ -11,18 +11,16 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/cassandra
+helm install my-release oci://registry-1.docker.io/bitnamicharts/cassandra
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Apache Cassandra in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps an [Apache Cassandra](https://github.com/bitnami/containers/tree/main/bitnami/cassandra) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Apache Cassandra in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -117,71 +115,76 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Statefulset parameters
 
-| Name                                    | Description                                                                               | Value           |
-| --------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
-| `replicaCount`                          | Number of Cassandra replicas                                                              | `1`             |
-| `updateStrategy.type`                   | updateStrategy for Cassandra statefulset                                                  | `RollingUpdate` |
-| `hostAliases`                           | Add deployment host aliases                                                               | `[]`            |
-| `podManagementPolicy`                   | StatefulSet pod management policy                                                         | `OrderedReady`  |
-| `priorityClassName`                     | Cassandra pods' priority.                                                                 | `""`            |
-| `podAnnotations`                        | Additional pod annotations                                                                | `{}`            |
-| `podLabels`                             | Additional pod labels                                                                     | `{}`            |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set                                     | `""`            |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                  | `[]`            |
-| `affinity`                              | Affinity for pod assignment                                                               | `{}`            |
-| `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`            |
-| `tolerations`                           | Tolerations for pod assignment                                                            | `[]`            |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`            |
-| `podSecurityContext.enabled`            | Enabled Cassandra pods' Security Context                                                  | `true`          |
-| `podSecurityContext.fsGroup`            | Set Cassandra pod's Security Context fsGroup                                              | `1001`          |
-| `containerSecurityContext.enabled`      | Enabled Cassandra containers' Security Context                                            | `true`          |
-| `containerSecurityContext.runAsUser`    | Set Cassandra container's Security Context runAsUser                                      | `1001`          |
-| `containerSecurityContext.runAsNonRoot` | Force the container to be run as non root                                                 | `true`          |
-| `resources.limits`                      | The resources limits for Cassandra containers                                             | `{}`            |
-| `resources.requests`                    | The requested resources for Cassandra containers                                          | `{}`            |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`          |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `60`            |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `30`            |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `30`            |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `5`             |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`             |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`          |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `60`            |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `10`            |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `30`            |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `5`             |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`             |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`         |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `0`             |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`            |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `5`             |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `60`            |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`             |
-| `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`            |
-| `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`            |
-| `customStartupProbe`                    | Override default startup probe                                                            | `{}`            |
-| `lifecycleHooks`                        | Override default etcd container hooks                                                     | `{}`            |
-| `schedulerName`                         | Alternative scheduler                                                                     | `""`            |
-| `terminationGracePeriodSeconds`         | In seconds, time the given to the Cassandra pod needs to terminate gracefully             | `""`            |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes for cassandra container               | `[]`            |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for cassandra container          | `[]`            |
-| `initContainers`                        | Add additional init containers to the cassandra pods                                      | `[]`            |
-| `sidecars`                              | Add additional sidecar containers to the cassandra pods                                   | `[]`            |
-| `pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                           | `false`         |
-| `pdb.minAvailable`                      | Mininimum number of pods that must still be available after the eviction                  | `1`             |
-| `pdb.maxUnavailable`                    | Max number of pods that can be unavailable after the eviction                             | `""`            |
-| `hostNetwork`                           | Enable HOST Network                                                                       | `false`         |
-| `containerPorts.intra`                  | Intra Port on the Host and Container                                                      | `7000`          |
-| `containerPorts.tls`                    | TLS Port on the Host and Container                                                        | `7001`          |
-| `containerPorts.jmx`                    | JMX Port on the Host and Container                                                        | `7199`          |
-| `containerPorts.cql`                    | CQL Port on the Host and Container                                                        | `9042`          |
-| `hostPorts.intra`                       | Intra Port on the Host                                                                    | `""`            |
-| `hostPorts.tls`                         | TLS Port on the Host                                                                      | `""`            |
-| `hostPorts.jmx`                         | JMX Port on the Host                                                                      | `""`            |
-| `hostPorts.cql`                         | CQL Port on the Host                                                                      | `""`            |
+| Name                                                | Description                                                                               | Value            |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------- |
+| `replicaCount`                                      | Number of Cassandra replicas                                                              | `1`              |
+| `updateStrategy.type`                               | updateStrategy for Cassandra statefulset                                                  | `RollingUpdate`  |
+| `hostAliases`                                       | Add deployment host aliases                                                               | `[]`             |
+| `podManagementPolicy`                               | StatefulSet pod management policy                                                         | `OrderedReady`   |
+| `priorityClassName`                                 | Cassandra pods' priority.                                                                 | `""`             |
+| `podAnnotations`                                    | Additional pod annotations                                                                | `{}`             |
+| `podLabels`                                         | Additional pod labels                                                                     | `{}`             |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`             |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`           |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`             |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set                                     | `""`             |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set                                  | `[]`             |
+| `affinity`                                          | Affinity for pod assignment                                                               | `{}`             |
+| `nodeSelector`                                      | Node labels for pod assignment                                                            | `{}`             |
+| `tolerations`                                       | Tolerations for pod assignment                                                            | `[]`             |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`             |
+| `podSecurityContext.enabled`                        | Enabled Cassandra pods' Security Context                                                  | `true`           |
+| `podSecurityContext.fsGroup`                        | Set Cassandra pod's Security Context fsGroup                                              | `1001`           |
+| `containerSecurityContext.enabled`                  | Enabled Cassandra containers' Security Context                                            | `true`           |
+| `containerSecurityContext.runAsUser`                | Set Cassandra containers' Security Context runAsUser                                      | `1001`           |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set Cassandra containers' Security Context allowPrivilegeEscalation                       | `false`          |
+| `containerSecurityContext.capabilities.drop`        | Set Cassandra containers' Security Context capabilities to be dropped                     | `["ALL"]`        |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set Cassandra containers' Security Context readOnlyRootFilesystem                         | `false`          |
+| `containerSecurityContext.runAsNonRoot`             | Set Cassandra containers' Security Context runAsNonRoot                                   | `true`           |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`          |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                          | `RuntimeDefault` |
+| `resources.limits`                                  | The resources limits for Cassandra containers                                             | `{}`             |
+| `resources.requests`                                | The requested resources for Cassandra containers                                          | `{}`             |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                      | `true`           |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                   | `60`             |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                          | `30`             |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                         | `30`             |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                       | `5`              |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                       | `1`              |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                     | `true`           |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                  | `60`             |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                         | `10`             |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                        | `30`             |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                      | `5`              |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                      | `1`              |
+| `startupProbe.enabled`                              | Enable startupProbe                                                                       | `false`          |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                    | `0`              |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                           | `10`             |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                          | `5`              |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                        | `60`             |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                        | `1`              |
+| `customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                       | `{}`             |
+| `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                      | `{}`             |
+| `customStartupProbe`                                | Override default startup probe                                                            | `{}`             |
+| `lifecycleHooks`                                    | Override default etcd container hooks                                                     | `{}`             |
+| `schedulerName`                                     | Alternative scheduler                                                                     | `""`             |
+| `terminationGracePeriodSeconds`                     | In seconds, time the given to the Cassandra pod needs to terminate gracefully             | `""`             |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for cassandra container               | `[]`             |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for cassandra container          | `[]`             |
+| `initContainers`                                    | Add additional init containers to the cassandra pods                                      | `[]`             |
+| `sidecars`                                          | Add additional sidecar containers to the cassandra pods                                   | `[]`             |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                           | `false`          |
+| `pdb.minAvailable`                                  | Mininimum number of pods that must still be available after the eviction                  | `1`              |
+| `pdb.maxUnavailable`                                | Max number of pods that can be unavailable after the eviction                             | `""`             |
+| `hostNetwork`                                       | Enable HOST Network                                                                       | `false`          |
+| `containerPorts.intra`                              | Intra Port on the Host and Container                                                      | `7000`           |
+| `containerPorts.tls`                                | TLS Port on the Host and Container                                                        | `7001`           |
+| `containerPorts.jmx`                                | JMX Port on the Host and Container                                                        | `7199`           |
+| `containerPorts.cql`                                | CQL Port on the Host and Container                                                        | `9042`           |
+| `hostPorts.intra`                                   | Intra Port on the Host                                                                    | `""`             |
+| `hostPorts.tls`                                     | TLS Port on the Host                                                                      | `""`             |
+| `hostPorts.jmx`                                     | JMX Port on the Host                                                                      | `""`             |
+| `hostPorts.cql`                                     | CQL Port on the Host                                                                      | `""`             |
 
 ### RBAC parameters
 
@@ -312,7 +315,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/cassa
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/cassandra/values.yaml)
 
 ## Configuration and installation details
 

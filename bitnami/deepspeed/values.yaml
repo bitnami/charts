@@ -74,7 +74,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/deepspeed
-  tag: 0.11.1-debian-11-r0
+  tag: 0.12.3-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -283,13 +283,10 @@ client:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param client.podSecurityContext.enabled Enabled Client pods' Security Context
   ## @param client.podSecurityContext.fsGroup Set Client pod's Security Context fsGroup
-  ## @param client.podSecurityContext.seccompProfile.type Set Client container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param client.containerSecurityContext.enabled Enabled Client containers' Security Context
@@ -297,18 +294,23 @@ client:
   ## @param client.containerSecurityContext.runAsGroup Set Client containers' Security Context runAsGroup
   ## @param client.containerSecurityContext.runAsNonRoot Set Client containers' Security Context runAsNonRoot
   ## @param client.containerSecurityContext.readOnlyRootFilesystem Set Client containers' Security Context runAsNonRoot
+  ## @param client.containerSecurityContext.privileged Set Client containers' Security Context privileged
   ## @param client.containerSecurityContext.allowPrivilegeEscalation Set Client container's privilege escalation
   ## @param client.containerSecurityContext.capabilities.drop Set Client container's Security Context runAsNonRoot
+  ## @param client.containerSecurityContext.seccompProfile.type Set Client container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param client.lifecycleHooks for the client container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -628,13 +630,10 @@ worker:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param worker.podSecurityContext.enabled Enabled Worker pods' Security Context
   ## @param worker.podSecurityContext.fsGroup Set Worker pod's Security Context fsGroup
-  ## @param worker.podSecurityContext.seccompProfile.type Set Worker container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param worker.containerSecurityContext.enabled Enabled Worker containers' Security Context
@@ -644,16 +643,21 @@ worker:
   ## @param worker.containerSecurityContext.readOnlyRootFilesystem Set Worker containers' Security Context runAsNonRoot
   ## @param worker.containerSecurityContext.allowPrivilegeEscalation Set Worker container's privilege escalation
   ## @param worker.containerSecurityContext.capabilities.drop Set Worker container's Security Context runAsNonRoot
+  ## @param worker.containerSecurityContext.seccompProfile.type Set Worker container's Security Context seccomp profile
+  ## @param worker.containerSecurityContext.privileged Set Worker container's Security Context privileged
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param worker.lifecycleHooks for the client container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -977,7 +981,7 @@ worker:
 gitImage:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.42.0-debian-11-r45
+  tag: 2.43.0-debian-11-r0
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1005,7 +1009,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r91
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

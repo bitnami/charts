@@ -1,6 +1,6 @@
 <!--- app-name: Apache APISIX -->
 
-# Apache APISIX packaged by Bitnami
+# Bitnami package for Apache APISIX
 
 Apache APISIX is high-performance, real-time API Gateway. Features load balancing, dynamic upstream, canary release, circuit breaking, authentication, observability, amongst others.
 
@@ -11,18 +11,16 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/apisix
+helm install my-release oci://registry-1.docker.io/bitnamicharts/apisix
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Apache APISIX in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [Apache APISIX](https://github.com/bitnami/containers/tree/main/bitnami/apisix) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Apache APISIX in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -120,13 +118,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataPlane.resources.requests`                                | The requested resources for the APISIX containers                                                                        | `{}`             |
 | `dataPlane.podSecurityContext.enabled`                        | Enabled APISIX pods' Security Context                                                                                    | `true`           |
 | `dataPlane.podSecurityContext.fsGroup`                        | Set APISIX pod's Security Context fsGroup                                                                                | `1001`           |
-| `dataPlane.podSecurityContext.seccompProfile.type`            | Set APISIX container's Security Context seccomp profile                                                                  | `RuntimeDefault` |
 | `dataPlane.containerSecurityContext.enabled`                  | Enabled APISIX containers' Security Context                                                                              | `true`           |
 | `dataPlane.containerSecurityContext.runAsUser`                | Set APISIX containers' Security Context runAsUser                                                                        | `1001`           |
 | `dataPlane.containerSecurityContext.runAsNonRoot`             | Set APISIX containers' Security Context runAsNonRoot                                                                     | `true`           |
 | `dataPlane.containerSecurityContext.readOnlyRootFilesystem`   | Set APISIX containers' Security Context runAsNonRoot                                                                     | `true`           |
 | `dataPlane.containerSecurityContext.allowPrivilegeEscalation` | Set APISIX container's privilege escalation                                                                              | `false`          |
 | `dataPlane.containerSecurityContext.capabilities.drop`        | Set APISIX container's Security Context runAsNonRoot                                                                     | `["ALL"]`        |
+| `dataPlane.containerSecurityContext.seccompProfile.type`      | Set APISIX container's Security Context seccomp profile                                                                  | `RuntimeDefault` |
 | `dataPlane.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `dataPlane.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
 | `dataPlane.hostAliases`                                       | APISIX pods host aliases                                                                                                 | `[]`             |
@@ -286,13 +284,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controlPlane.resources.requests`                                | The requested resources for the APISIX containers                                                                        | `{}`             |
 | `controlPlane.podSecurityContext.enabled`                        | Enabled APISIX pods' Security Context                                                                                    | `true`           |
 | `controlPlane.podSecurityContext.fsGroup`                        | Set APISIX pod's Security Context fsGroup                                                                                | `1001`           |
-| `controlPlane.podSecurityContext.seccompProfile.type`            | Set APISIX container's Security Context seccomp profile                                                                  | `RuntimeDefault` |
 | `controlPlane.containerSecurityContext.enabled`                  | Enabled APISIX containers' Security Context                                                                              | `true`           |
 | `controlPlane.containerSecurityContext.runAsUser`                | Set APISIX containers' Security Context runAsUser                                                                        | `1001`           |
 | `controlPlane.containerSecurityContext.runAsNonRoot`             | Set APISIX containers' Security Context runAsNonRoot                                                                     | `true`           |
 | `controlPlane.containerSecurityContext.readOnlyRootFilesystem`   | Set APISIX containers' Security Context runAsNonRoot                                                                     | `true`           |
 | `controlPlane.containerSecurityContext.allowPrivilegeEscalation` | Set APISIX container's privilege escalation                                                                              | `false`          |
 | `controlPlane.containerSecurityContext.capabilities.drop`        | Set APISIX container's Security Context runAsNonRoot                                                                     | `["ALL"]`        |
+| `controlPlane.containerSecurityContext.seccompProfile.type`      | Set APISIX container's Security Context seccomp profile                                                                  | `RuntimeDefault` |
 | `controlPlane.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `controlPlane.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
 | `controlPlane.hostAliases`                                       | APISIX pods host aliases                                                                                                 | `[]`             |
@@ -473,7 +471,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.initContainers`                                    | Add additional init containers to the APISIX Dashboard pod(s)                                                                                               | `[]`                               |
 | `dashboard.podSecurityContext.enabled`                        | Enabled Dashboard pods' Security Context                                                                                                                    | `true`                             |
 | `dashboard.podSecurityContext.fsGroup`                        | Set Dashboard pod's Security Context fsGroup                                                                                                                | `1001`                             |
-| `dashboard.podSecurityContext.seccompProfile.type`            | Set Dashboard pod's Security Context seccomp profile                                                                                                        | `RuntimeDefault`                   |
 | `dashboard.containerPorts.http`                               | Dashboard http container port                                                                                                                               | `8080`                             |
 | `dashboard.containerPorts.https`                              | Dashboard https container port                                                                                                                              | `8443`                             |
 | `dashboard.livenessProbe.enabled`                             | Enable livenessProbe on Dashboard container                                                                                                                 | `true`                             |
@@ -502,9 +499,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.containerSecurityContext.enabled`                  | Enabled Dashboard container' Security Context                                                                                                               | `true`                             |
 | `dashboard.containerSecurityContext.runAsUser`                | Set Dashboard container' Security Context runAsUser                                                                                                         | `1001`                             |
 | `dashboard.containerSecurityContext.runAsNonRoot`             | Set Dashboard container' Security Context runAsNonRoot                                                                                                      | `true`                             |
+| `dashboard.containerSecurityContext.privileged`               | Set Dashboard container' Security Context privileged                                                                                                        | `false`                            |
 | `dashboard.containerSecurityContext.readOnlyRootFilesystem`   | Set Dashboard container' Security Context runAsNonRoot                                                                                                      | `true`                             |
 | `dashboard.containerSecurityContext.allowPrivilegeEscalation` | Set Dashboard container's privilege escalation                                                                                                              | `false`                            |
 | `dashboard.containerSecurityContext.capabilities.drop`        | Set Dashboard container's Security Context runAsNonRoot                                                                                                     | `["ALL"]`                          |
+| `dashboard.containerSecurityContext.seccompProfile.type`      | Set Dashboard container's Security Context seccomp profile                                                                                                  | `RuntimeDefault`                   |
 | `dashboard.command`                                           | Override default container command (useful when using custom images)                                                                                        | `[]`                               |
 | `dashboard.args`                                              | Override default container args (useful when using custom images)                                                                                           | `[]`                               |
 | `dashboard.lifecycleHooks`                                    | for the Dashboard container(s) to automate configuration before or after startup                                                                            | `{}`                               |
@@ -609,13 +608,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingressController.resources.requests`                                | The requested resources for the APISIX Ingress Controller containers                                                                                                 | `{}`                                        |
 | `ingressController.podSecurityContext.enabled`                        | Enabled APISIX Ingress Controller pods' Security Context                                                                                                             | `true`                                      |
 | `ingressController.podSecurityContext.fsGroup`                        | Set APISIX Ingress Controller pod's Security Context fsGroup                                                                                                         | `1001`                                      |
-| `ingressController.podSecurityContext.seccompProfile.type`            | Set APISIX Ingress Controller container's Security Context seccomp profile                                                                                           | `RuntimeDefault`                            |
 | `ingressController.containerSecurityContext.enabled`                  | Enabled APISIX Ingress Controller containers' Security Context                                                                                                       | `true`                                      |
 | `ingressController.containerSecurityContext.runAsUser`                | Set APISIX Ingress Controller containers' Security Context runAsUser                                                                                                 | `1001`                                      |
 | `ingressController.containerSecurityContext.runAsNonRoot`             | Set APISIX Ingress Controller containers' Security Context runAsNonRoot                                                                                              | `true`                                      |
+| `ingressController.containerSecurityContext.privileged`               | Set APISIX Ingress Controller containers' Security Context privileged                                                                                                | `false`                                     |
 | `ingressController.containerSecurityContext.readOnlyRootFilesystem`   | Set APISIX Ingress Controller containers' Security Context runAsNonRoot                                                                                              | `true`                                      |
 | `ingressController.containerSecurityContext.allowPrivilegeEscalation` | Set APISIX Ingress Controller container's privilege escalation                                                                                                       | `false`                                     |
 | `ingressController.containerSecurityContext.capabilities.drop`        | Set APISIX Ingress Controller container's Security Context runAsNonRoot                                                                                              | `["ALL"]`                                   |
+| `ingressController.containerSecurityContext.seccompProfile.type`      | Set APISIX Ingress Controller container's Security Context seccomp profile                                                                                           | `RuntimeDefault`                            |
 | `ingressController.command`                                           | Override default container command (useful when using custom images)                                                                                                 | `[]`                                        |
 | `ingressController.args`                                              | Override default container args (useful when using custom images)                                                                                                    | `[]`                                        |
 | `ingressController.hostAliases`                                       | APISIX Ingress Controller pods host aliases                                                                                                                          | `[]`                                        |
@@ -745,7 +745,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `waitContainer.containerSecurityContext.runAsNonRoot`             | Set APISIX containers' Security Context runAsNonRoot                                                                          | `true`                     |
 | `waitContainer.containerSecurityContext.readOnlyRootFilesystem`   | Set APISIX containers' Security Context runAsNonRoot                                                                          | `true`                     |
 | `waitContainer.containerSecurityContext.allowPrivilegeEscalation` | Set APISIX container's privilege escalation                                                                                   | `false`                    |
+| `waitContainer.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                   | `false`                    |
 | `waitContainer.containerSecurityContext.capabilities.drop`        | Set APISIX container's Security Context runAsNonRoot                                                                          | `["ALL"]`                  |
+| `waitContainer.containerSecurityContext.seccompProfile.type`      | Set APISIX container's Security Context seccomp profile                                                                       | `RuntimeDefault`           |
 
 ### External etcd settings
 
@@ -790,7 +792,7 @@ Alternatively, a YAML file that specifies the values for the above parameters ca
 helm install my-release -f values.yaml my-repo/apisix
 ```
 
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/apisix/values.yaml)
 
 ## Configuration and installation details
 

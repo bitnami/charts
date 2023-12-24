@@ -1,9 +1,10 @@
-# CRDs source: https://github.com/Kong/charts/blob/main/charts/kong/crds/custom-resource-definitions.yaml (version 2.26.2)
+# CRDs source: https://github.com/Kong/charts/blob/main/charts/kong/crds/custom-resource-definitions.yaml (version 2.31.0)
+# generated using: kubectl kustomize 'github.com/kong/kubernetes-ingress-controller/config/crd?ref=v3.0.0'
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.1
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: ingressclassparameterses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -55,7 +56,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.1
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: kongclusterplugins.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -306,7 +307,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.1
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: kongconsumergroups.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -441,7 +442,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.1
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: kongconsumers.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -599,7 +600,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.1
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: kongingresses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -773,11 +774,14 @@ spec:
               `Services` can be a target, OR `Endpoints` can be targets).
             properties:
               algorithm:
-                description: Algorithm is the load balancing algorithm to use.
+                description: 'Algorithm is the load balancing algorithm to use. Accepted
+                  values are: "round-robin", "consistent-hashing", "least-connections",
+                  "latency".'
                 enum:
                 - round-robin
                 - consistent-hashing
                 - least-connections
+                - latency
                 type: string
               hash_fallback:
                 description: 'HashFallback defines What to use as hashing input if
@@ -944,6 +948,13 @@ spec:
                 type: integer
             type: object
         type: object
+        x-kubernetes-validations:
+        - message: '''proxy'' field is no longer supported, use Service''s annotations
+            instead'
+          rule: '!has(self.proxy)'
+        - message: '''route'' field is no longer supported, use Ingress'' annotations
+            instead'
+          rule: '!has(self.route)'
     served: true
     storage: true
     subresources:
@@ -953,7 +964,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.1
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: kongplugins.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -1199,7 +1210,388 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.1
+    controller-gen.kubebuilder.io/version: v0.13.0
+  labels:
+    gateway.networking.k8s.io/policy: direct
+  name: kongupstreampolicies.configuration.konghq.com
+spec:
+  group: configuration.konghq.com
+  names:
+    categories:
+    - kong-ingress-controller
+    kind: KongUpstreamPolicy
+    listKind: KongUpstreamPolicyList
+    plural: kongupstreampolicies
+    shortNames:
+    - kup
+    singular: kongupstreampolicy
+  scope: Namespaced
+  versions:
+  - name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: "KongUpstreamPolicy allows configuring algorithm that should
+          be used for load balancing traffic between Kong Upstream's Targets. It also
+          allows configuring health checks for Kong Upstream's Targets. \n Its configuration
+          is similar to Kong Upstream object (https://docs.konghq.com/gateway/latest/admin-api/#upstream-object),
+          and it is applied to Kong Upstream objects created by the controller. \n
+          It can be attached to Services. To attach it to a Service, it has to be
+          annotated with `konghq.com/upstream-policy: <name>`, where `<name>` is the
+          name of the KongUpstreamPolicy object in the same namespace as the Service.
+          \n When attached to a Service, it will affect all Kong Upstreams created
+          for the Service. \n When attached to a Service used in a Gateway API *Route
+          rule with multiple BackendRefs, all of its Services MUST be configured with
+          the same KongUpstreamPolicy. Otherwise, the controller will *ignore* the
+          KongUpstreamPolicy. \n Note: KongUpstreamPolicy doesn't implement Gateway
+          API's GEP-713 strictly. In particular, it doesn't use the TargetRef for
+          attaching to Services and Gateway API *Routes - annotations are used instead.
+          This is to allow reusing the same KongUpstreamPolicy for multiple Services
+          and Gateway API *Routes."
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: Spec contains the configuration of the Kong upstream.
+            properties:
+              algorithm:
+                description: 'Algorithm is the load balancing algorithm to use. Accepted
+                  values are: "round-robin", "consistent-hashing", "least-connections",
+                  "latency".'
+                enum:
+                - round-robin
+                - consistent-hashing
+                - least-connections
+                - latency
+                type: string
+              hashOn:
+                description: HashOn defines how to calculate hash for consistent-hashing
+                  load balancing algorithm. Algorithm must be set to "consistent-hashing"
+                  for this field to have effect.
+                properties:
+                  cookie:
+                    description: Cookie is the name of the cookie to use as hash input.
+                    type: string
+                  cookiePath:
+                    description: CookiePath is cookie path to set in the response
+                      headers.
+                    type: string
+                  header:
+                    description: Header is the name of the header to use as hash input.
+                    type: string
+                  input:
+                    description: Input allows using one of the predefined inputs (ip,
+                      consumer, path). For other parametrized inputs, use one of the
+                      fields below.
+                    enum:
+                    - ip
+                    - consumer
+                    - path
+                    type: string
+                  queryArg:
+                    description: QueryArg is the name of the query argument to use
+                      as hash input.
+                    type: string
+                  uriCapture:
+                    description: URICapture is the name of the URI capture group to
+                      use as hash input.
+                    type: string
+                type: object
+              hashOnFallback:
+                description: HashOnFallback defines how to calculate hash for consistent-hashing
+                  load balancing algorithm if the primary hash function fails. Algorithm
+                  must be set to "consistent-hashing" for this field to have effect.
+                properties:
+                  cookie:
+                    description: Cookie is the name of the cookie to use as hash input.
+                    type: string
+                  cookiePath:
+                    description: CookiePath is cookie path to set in the response
+                      headers.
+                    type: string
+                  header:
+                    description: Header is the name of the header to use as hash input.
+                    type: string
+                  input:
+                    description: Input allows using one of the predefined inputs (ip,
+                      consumer, path). For other parametrized inputs, use one of the
+                      fields below.
+                    enum:
+                    - ip
+                    - consumer
+                    - path
+                    type: string
+                  queryArg:
+                    description: QueryArg is the name of the query argument to use
+                      as hash input.
+                    type: string
+                  uriCapture:
+                    description: URICapture is the name of the URI capture group to
+                      use as hash input.
+                    type: string
+                type: object
+              healthchecks:
+                description: Healthchecks defines the health check configurations
+                  in Kong.
+                properties:
+                  active:
+                    description: Active configures active health check probing.
+                    properties:
+                      concurrency:
+                        description: Concurrency is the number of targets to check
+                          concurrently.
+                        minimum: 1
+                        type: integer
+                      headers:
+                        additionalProperties:
+                          items:
+                            type: string
+                          type: array
+                        description: Headers is a list of HTTP headers to add to the
+                          probe request.
+                        type: object
+                      healthy:
+                        description: Healthy configures thresholds and HTTP status
+                          codes to mark targets healthy for an upstream.
+                        properties:
+                          httpStatuses:
+                            description: HTTPStatuses is a list of HTTP status codes
+                              that Kong considers a success.
+                            items:
+                              description: HTTPStatus is an HTTP status code.
+                              maximum: 599
+                              minimum: 100
+                              type: integer
+                            type: array
+                          interval:
+                            description: Interval is the interval between active health
+                              checks for an upstream in seconds when in a healthy
+                              state.
+                            minimum: 0
+                            type: integer
+                          successes:
+                            description: Successes is the number of successes to consider
+                              a target healthy.
+                            minimum: 0
+                            type: integer
+                        type: object
+                      httpPath:
+                        description: HTTPPath is the path to use in GET HTTP request
+                          to run as a probe.
+                        pattern: ^/.*$
+                        type: string
+                      httpsSni:
+                        description: HTTPSSNI is the SNI to use in GET HTTPS request
+                          to run as a probe.
+                        type: string
+                      httpsVerifyCertificate:
+                        description: HTTPSVerifyCertificate is a boolean value that
+                          indicates if the certificate should be verified.
+                        type: boolean
+                      timeout:
+                        description: Timeout is the probe timeout in seconds.
+                        minimum: 0
+                        type: integer
+                      type:
+                        description: Type determines whether to perform active health
+                          checks using HTTP or HTTPS, or just attempt a TCP connection.
+                          Accepted values are "http", "https", "tcp", "grpc", "grpcs".
+                        enum:
+                        - http
+                        - https
+                        - tcp
+                        - grpc
+                        - grpcs
+                        type: string
+                      unhealthy:
+                        description: Unhealthy configures thresholds and HTTP status
+                          codes to mark targets unhealthy for an upstream.
+                        properties:
+                          httpFailures:
+                            description: HTTPFailures is the number of failures to
+                              consider a target unhealthy.
+                            minimum: 0
+                            type: integer
+                          httpStatuses:
+                            description: HTTPStatuses is a list of HTTP status codes
+                              that Kong considers a failure.
+                            items:
+                              description: HTTPStatus is an HTTP status code.
+                              maximum: 599
+                              minimum: 100
+                              type: integer
+                            type: array
+                          interval:
+                            description: Interval is the interval between active health
+                              checks for an upstream in seconds when in an unhealthy
+                              state.
+                            minimum: 0
+                            type: integer
+                          tcpFailures:
+                            description: TCPFailures is the number of TCP failures
+                              in a row to consider a target unhealthy.
+                            minimum: 0
+                            type: integer
+                          timeouts:
+                            description: Timeouts is the number of timeouts in a row
+                              to consider a target unhealthy.
+                            minimum: 0
+                            type: integer
+                        type: object
+                    type: object
+                  passive:
+                    description: Passive configures passive health check probing.
+                    properties:
+                      healthy:
+                        description: Healthy configures thresholds and HTTP status
+                          codes to mark targets healthy for an upstream.
+                        properties:
+                          httpStatuses:
+                            description: HTTPStatuses is a list of HTTP status codes
+                              that Kong considers a success.
+                            items:
+                              description: HTTPStatus is an HTTP status code.
+                              maximum: 599
+                              minimum: 100
+                              type: integer
+                            type: array
+                          interval:
+                            description: Interval is the interval between active health
+                              checks for an upstream in seconds when in a healthy
+                              state.
+                            minimum: 0
+                            type: integer
+                          successes:
+                            description: Successes is the number of successes to consider
+                              a target healthy.
+                            minimum: 0
+                            type: integer
+                        type: object
+                      type:
+                        description: Type determines whether to perform passive health
+                          checks interpreting HTTP/HTTPS statuses, or just check for
+                          TCP connection success. Accepted values are "http", "https",
+                          "tcp", "grpc", "grpcs".
+                        enum:
+                        - http
+                        - https
+                        - tcp
+                        - grpc
+                        - grpcs
+                        type: string
+                      unhealthy:
+                        description: Unhealthy configures thresholds and HTTP status
+                          codes to mark targets unhealthy.
+                        properties:
+                          httpFailures:
+                            description: HTTPFailures is the number of failures to
+                              consider a target unhealthy.
+                            minimum: 0
+                            type: integer
+                          httpStatuses:
+                            description: HTTPStatuses is a list of HTTP status codes
+                              that Kong considers a failure.
+                            items:
+                              description: HTTPStatus is an HTTP status code.
+                              maximum: 599
+                              minimum: 100
+                              type: integer
+                            type: array
+                          interval:
+                            description: Interval is the interval between active health
+                              checks for an upstream in seconds when in an unhealthy
+                              state.
+                            minimum: 0
+                            type: integer
+                          tcpFailures:
+                            description: TCPFailures is the number of TCP failures
+                              in a row to consider a target unhealthy.
+                            minimum: 0
+                            type: integer
+                          timeouts:
+                            description: Timeouts is the number of timeouts in a row
+                              to consider a target unhealthy.
+                            minimum: 0
+                            type: integer
+                        type: object
+                    type: object
+                  threshold:
+                    description: Threshold is the minimum percentage of the upstream’s
+                      targets’ weight that must be available for the whole upstream
+                      to be considered healthy.
+                    type: integer
+                type: object
+              slots:
+                description: Slots is the number of slots in the load balancer algorithm.
+                  If not set, the default value in Kong for the algorithm is used.
+                maximum: 65536
+                minimum: 10
+                type: integer
+            type: object
+        type: object
+        x-kubernetes-validations:
+        - message: Only one of spec.hashOn.(input|cookie|header|uriCapture|queryArg)
+            can be set.
+          rule: 'has(self.spec.hashOn) ? [has(self.spec.hashOn.input), has(self.spec.hashOn.cookie),
+            has(self.spec.hashOn.header), has(self.spec.hashOn.uriCapture), has(self.spec.hashOn.queryArg)].filter(fieldSet,
+            fieldSet == true).size() <= 1 : true'
+        - message: When spec.hashOn.cookie is set, spec.hashOn.cookiePath is required.
+          rule: 'has(self.spec.hashOn) && has(self.spec.hashOn.cookie) ? has(self.spec.hashOn.cookiePath)
+            : true'
+        - message: When spec.hashOn.cookiePath is set, spec.hashOn.cookie is required.
+          rule: 'has(self.spec.hashOn) && has(self.spec.hashOn.cookiePath) ? has(self.spec.hashOn.cookie)
+            : true'
+        - message: spec.algorithm must be set to "consistent-hashing" when spec.hashOn
+            is set.
+          rule: 'has(self.spec.hashOn) ? has(self.spec.algorithm) && self.spec.algorithm
+            == "consistent-hashing" : true'
+        - message: Only one of spec.hashOnFallback.(input|header|uriCapture|queryArg)
+            can be set.
+          rule: 'has(self.spec.hashOnFallback) ? [has(self.spec.hashOnFallback.input),
+            has(self.spec.hashOnFallback.header), has(self.spec.hashOnFallback.uriCapture),
+            has(self.spec.hashOnFallback.queryArg)].filter(fieldSet, fieldSet == true).size()
+            <= 1 : true'
+        - message: spec.algorithm must be set to "consistent-hashing" when spec.hashOnFallback
+            is set.
+          rule: 'has(self.spec.hashOnFallback) ? has(self.spec.algorithm) && self.spec.algorithm
+            == "consistent-hashing" : true'
+        - message: spec.hashOnFallback.cookie must not be set.
+          rule: 'has(self.spec.hashOnFallback) ? !has(self.spec.hashOnFallback.cookie)
+            : true'
+        - message: spec.hashOnFallback.cookiePath must not be set.
+          rule: 'has(self.spec.hashOnFallback) ? !has(self.spec.hashOnFallback.cookiePath)
+            : true'
+        - message: spec.healthchecks.passive.healthy.interval must not be set.
+          rule: 'has(self.spec.healthchecks) && has(self.spec.healthchecks.passive)
+            && has(self.spec.healthchecks.passive.healthy) ? !has(self.spec.healthchecks.passive.healthy.interval)
+            : true'
+        - message: spec.healthchecks.passive.unhealthy.interval must not be set.
+          rule: 'has(self.spec.healthchecks) && has(self.spec.healthchecks.passive)
+            && has(self.spec.healthchecks.passive.unhealthy) ? !has(self.spec.healthchecks.passive.unhealthy.interval)
+            : true'
+        - message: spec.hashOnFallback must not be set when spec.hashOn.cookie is
+            set.
+          rule: 'has(self.spec.hashOn) && has(self.spec.hashOn.cookie) ? !has(self.spec.hashOnFallback)
+            : true'
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: tcpingresses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -1385,7 +1777,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.1
+    controller-gen.kubebuilder.io/version: v0.13.0
   name: udpingresses.configuration.konghq.com
 spec:
   group: configuration.konghq.com

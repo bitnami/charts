@@ -31,6 +31,7 @@ spec:
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.query.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
+      {{- include "jaeger.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.query.schedulerName }}
       schedulerName: {{ .Values.query.schedulerName }}
       {{- end }}
@@ -56,7 +57,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.query.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
-      {{- include "jaeger.waitForDBInitContainer" . | nindent 8 }}
+      {{- include "jaeger.waitForDBInitContainer" (dict "component" "query" "context" $) | nindent 8 }}
       {{- if .Values.query.initContainers }}
       {{- include "common.tplvalues.render" (dict "value" .Values.query.initContainers "context" $) | nindent 8 }}
       {{- end }}

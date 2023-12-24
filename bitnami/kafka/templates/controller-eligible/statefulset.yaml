@@ -26,6 +26,9 @@ spec:
       app.kubernetes.io/part-of: kafka
   serviceName: {{ printf "%s-controller-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.controller.updateStrategy "context" $ ) | nindent 4 }}
+  {{- if and .Values.controller.minReadySeconds (semverCompare ">= 1.23-0" (include "common.capabilities.kubeVersion" .)) }}
+  minReadySeconds: {{ .Values.controller.minReadySeconds }}
+  {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
@@ -88,6 +91,12 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "kafka.serviceAccountName" . }}
       enableServiceLinks: {{ .Values.controller.enableServiceLinks }}
+      {{- if .Values.dnsPolicy  }}
+      dnsPolicy: {{ .Values.dnsPolicy }}
+      {{- end }}
+      {{- if .Values.dnsConfig }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dnsConfig "context" $) | nindent 8 }}
+      {{- end }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.controller.persistence.enabled }}
         - name: volume-permissions
@@ -364,7 +373,7 @@ spec:
         - name: scripts
           configMap:
             name: {{ include "common.names.fullname" . }}-scripts
-            defaultMode: 0755
+            defaultMode: 493
         {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled }}
         - name: kafka-autodiscovery-shared
           emptyDir: {}

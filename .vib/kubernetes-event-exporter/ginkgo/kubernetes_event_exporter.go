@@ -32,8 +32,8 @@ var _ = Describe("Kubernetes Event Exporter:", func() {
 		var createdPod *v1.Pod
 
 		BeforeEach(func() {
-			resourceName = "kuard-" + *namespace
-			createdPod = createPodOrDie(ctx, coreclient, resourceName, "gcr.io/kuar-demo/kuard-amd64:1")
+			resourceName = "nginx-" + *namespace
+			createdPod = createPodOrDie(ctx, coreclient, resourceName, "bitnami/nginx")
 		})
 
 		AfterEach(func() {
@@ -43,11 +43,11 @@ var _ = Describe("Kubernetes Event Exporter:", func() {
 
 		Describe("the exporter logs", func() {
 			It("shows its kubernetes events", func() {
-				pattern := "msg=.*Created container kuard-" + *namespace
+				pattern := "event=.*Created container nginx-" + *namespace + ".*sink=.*dump"
 				podLabel := "app.kubernetes.io/name=kubernetes-event-exporter"
 				containerName := "event-exporter"
 
-				containsPattern, _ := retry("containerLogsContainPattern", 5, 2*time.Second, func() (bool, error) {
+				containsPattern, _ := retry("containerLogsContainPattern", 12, 5*time.Second, func() (bool, error) {
 					return containerLogsContainPattern(ctx, coreclient, podLabel, containerName, pattern)
 				})
 				Expect(containsPattern).To(BeTrue())

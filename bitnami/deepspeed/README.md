@@ -1,6 +1,6 @@
 <!--- app-name: DeepSpeed -->
 
-# DeepSpeed packaged by Bitnami
+# Bitnami package for DeepSpeed
 
 DeepSpeed is deep learning software suite for empowering ChatGPT-like model training. Features dense or sparse model inference, high throughput and high compression.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/deepspeed
+helm install my-release oci://registry-1.docker.io/bitnamicharts/deepspeed
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use DeepSpeed in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -23,8 +23,6 @@ This chart bootstraps a [DeepSpeed](https://github.com/bitnami/containers/tree/m
 Python is built for full integration into Python that enables you to use it with its libraries and main packages.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use DeepSpeed in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -148,14 +146,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.resources.requests`                                | The requested resources for the client containers                                                | `{}`             |
 | `client.podSecurityContext.enabled`                        | Enabled Client pods' Security Context                                                            | `true`           |
 | `client.podSecurityContext.fsGroup`                        | Set Client pod's Security Context fsGroup                                                        | `1001`           |
-| `client.podSecurityContext.seccompProfile.type`            | Set Client container's Security Context seccomp profile                                          | `RuntimeDefault` |
 | `client.containerSecurityContext.enabled`                  | Enabled Client containers' Security Context                                                      | `true`           |
 | `client.containerSecurityContext.runAsUser`                | Set Client containers' Security Context runAsUser                                                | `1001`           |
 | `client.containerSecurityContext.runAsGroup`               | Set Client containers' Security Context runAsGroup                                               | `1001`           |
 | `client.containerSecurityContext.runAsNonRoot`             | Set Client containers' Security Context runAsNonRoot                                             | `true`           |
 | `client.containerSecurityContext.readOnlyRootFilesystem`   | Set Client containers' Security Context runAsNonRoot                                             | `true`           |
+| `client.containerSecurityContext.privileged`               | Set Client containers' Security Context privileged                                               | `false`          |
 | `client.containerSecurityContext.allowPrivilegeEscalation` | Set Client container's privilege escalation                                                      | `false`          |
 | `client.containerSecurityContext.capabilities.drop`        | Set Client container's Security Context runAsNonRoot                                             | `["ALL"]`        |
+| `client.containerSecurityContext.seccompProfile.type`      | Set Client container's Security Context seccomp profile                                          | `RuntimeDefault` |
 | `client.lifecycleHooks`                                    | for the client container(s) to automate configuration before or after startup                    | `{}`             |
 | `client.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                   | `""`             |
 | `client.hostAliases`                                       | client pods host aliases                                                                         | `[]`             |
@@ -242,7 +241,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.resources.requests`                                | The requested resources for the client containers                                                  | `{}`             |
 | `worker.podSecurityContext.enabled`                        | Enabled Worker pods' Security Context                                                              | `true`           |
 | `worker.podSecurityContext.fsGroup`                        | Set Worker pod's Security Context fsGroup                                                          | `1001`           |
-| `worker.podSecurityContext.seccompProfile.type`            | Set Worker container's Security Context seccomp profile                                            | `RuntimeDefault` |
 | `worker.containerSecurityContext.enabled`                  | Enabled Worker containers' Security Context                                                        | `true`           |
 | `worker.containerSecurityContext.runAsUser`                | Set Worker containers' Security Context runAsUser                                                  | `1001`           |
 | `worker.containerSecurityContext.runAsGroup`               | Set Worker containers' Security Context runAsGroup                                                 | `1001`           |
@@ -250,6 +248,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.containerSecurityContext.readOnlyRootFilesystem`   | Set Worker containers' Security Context runAsNonRoot                                               | `true`           |
 | `worker.containerSecurityContext.allowPrivilegeEscalation` | Set Worker container's privilege escalation                                                        | `false`          |
 | `worker.containerSecurityContext.capabilities.drop`        | Set Worker container's Security Context runAsNonRoot                                               | `["ALL"]`        |
+| `worker.containerSecurityContext.seccompProfile.type`      | Set Worker container's Security Context seccomp profile                                            | `RuntimeDefault` |
+| `worker.containerSecurityContext.privileged`               | Set Worker container's Security Context privileged                                                 | `false`          |
 | `worker.lifecycleHooks`                                    | for the client container(s) to automate configuration before or after startup                      | `{}`             |
 | `worker.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                     | `""`             |
 | `worker.hostAliases`                                       | client pods host aliases                                                                           | `[]`             |
@@ -355,7 +355,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/deeps
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/deepspeed/values.yaml)
 
 ## Configuration and installation details
 

@@ -11,18 +11,16 @@ InfluxDB(TM) is a trademark owned by InfluxData, which is not affiliated with, a
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/influxdb
+helm install my-release oci://registry-1.docker.io/bitnamicharts/influxdb
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use InfluxDB&trade; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [influxdb](https://github.com/bitnami/containers/tree/main/bitnami/influxdb) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use InfluxDB## Prerequisitestrade; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -131,13 +129,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `influxdb.podManagementPolicy`                               | podManagementPolicy to manage scaling operation of InfluxDB&trade; pods                                                                                                                                                                                              | `OrderedReady`             |
 | `influxdb.podSecurityContext.enabled`                        | Enabled InfluxDB&trade; pods' Security Context                                                                                                                                                                                                                       | `true`                     |
 | `influxdb.podSecurityContext.fsGroup`                        | Set InfluxDB&trade; pod's Security Context fsGroup                                                                                                                                                                                                                   | `1001`                     |
-| `influxdb.containerSecurityContext.enabled`                  | Enabled InfluxDB&trade; containers' Security Context                                                                                                                                                                                                                 | `true`                     |
-| `influxdb.containerSecurityContext.runAsUser`                | Set InfluxDB&trade; containers' Security Context runAsUser                                                                                                                                                                                                           | `1001`                     |
-| `influxdb.containerSecurityContext.runAsGroup`               | Set InfluxDB&trade; containers' Security Context runAsGroup                                                                                                                                                                                                          | `0`                        |
-| `influxdb.containerSecurityContext.runAsNonRoot`             | Set Controller container's Security Context runAsNonRoot                                                                                                                                                                                                             | `true`                     |
-| `influxdb.containerSecurityContext.allowPrivilegeEscalation` | Set Controller container's Security Context allowPrivilegeEscalation                                                                                                                                                                                                 | `false`                    |
-| `influxdb.containerSecurityContext.seccompProfile.type`      | Set Controller container's Security Context seccompProfile                                                                                                                                                                                                           | `RuntimeDefault`           |
-| `influxdb.containerSecurityContext.capabilities.drop`        | Set Controller container's Security Context capabilities to drop                                                                                                                                                                                                     | `["ALL"]`                  |
+| `influxdb.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                                                 | `true`                     |
+| `influxdb.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                                           | `1001`                     |
+| `influxdb.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                                                        | `true`                     |
+| `influxdb.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                                                          | `false`                    |
+| `influxdb.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                                              | `false`                    |
+| `influxdb.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                                                            | `false`                    |
+| `influxdb.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                                                                   | `["ALL"]`                  |
+| `influxdb.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                                                     | `RuntimeDefault`           |
 | `influxdb.resources.limits`                                  | The resources limits for the container                                                                                                                                                                                                                               | `{}`                       |
 | `influxdb.resources.requests`                                | The requested resources for the container                                                                                                                                                                                                                            | `{}`                       |
 | `influxdb.command`                                           | Override default container command (useful when using custom images)                                                                                                                                                                                                 | `[]`                       |
@@ -282,16 +281,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.cronjob.schedule`                                          | Schedule in Cron format to save snapshots                                                                        | `0 2 * * *`                        |
 | `backup.cronjob.historyLimit`                                      | Number of successful finished jobs to retain                                                                     | `1`                                |
 | `backup.cronjob.podAnnotations`                                    | Pod annotations                                                                                                  | `{}`                               |
-| `backup.cronjob.securityContext.enabled`                           | Enable security context for InfluxDB&trade; backup pods                                                          | `true`                             |
-| `backup.cronjob.securityContext.fsGroup`                           | Group ID for the InfluxDB&trade; filesystem                                                                      | `1001`                             |
-| `backup.cronjob.securityContext.runAsUser`                         | User ID for the InfluxDB&trade; filesystem                                                                       | `1001`                             |
-| `backup.cronjob.securityContext.runAsGroup`                        | Group ID for the InfluxDB&trade; runAsGroup                                                                      | `0`                                |
-| `backup.cronjob.securityContext.runAsNonRoot`                      | Setting for the InfluxDB&trade; runAsNonRoot                                                                     | `true`                             |
-| `backup.cronjob.securityContext.seccompProfile.type`               | Setting for the InfluxDB&trade; seccompProfile.type                                                              | `RuntimeDefault`                   |
-| `backup.cronjob.containerSecurityContext.enabled`                  | Enable security context for InfluxDB&trade; backup containers                                                    | `true`                             |
-| `backup.cronjob.containerSecurityContext.readOnlyRootFilesystem`   | readOnlyRootFilesystem for InfluxDB&trade;                                                                       | `true`                             |
-| `backup.cronjob.containerSecurityContext.allowPrivilegeEscalation` | allowPrivilegeEscalation for InfluxDB&trade;                                                                     | `false`                            |
-| `backup.cronjob.containerSecurityContext.capabilities.drop`        | Capabilities to drop for InfluxDB&trade;                                                                         | `["ALL"]`                          |
+| `backup.cronjob.podSecurityContext.enabled`                        | Enable security context for InfluxDB&trade; backup pods                                                          | `true`                             |
+| `backup.cronjob.podSecurityContext.fsGroup`                        | Group ID for the InfluxDB&trade; filesystem                                                                      | `1001`                             |
+| `backup.cronjob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                             | `true`                             |
+| `backup.cronjob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                       | `1001`                             |
+| `backup.cronjob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                    | `true`                             |
+| `backup.cronjob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                      | `false`                            |
+| `backup.cronjob.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                          | `true`                             |
+| `backup.cronjob.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                        | `false`                            |
+| `backup.cronjob.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                               | `["ALL"]`                          |
+| `backup.cronjob.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                 | `RuntimeDefault`                   |
 | `backup.podAffinityPreset`                                         | Backup &trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `""`                               |
 | `backup.podAntiAffinityPreset`                                     | Backup&trade; Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`           | `soft`                             |
 | `backup.nodeAffinityPreset.type`                                   | Backup&trade; Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`          | `""`                               |
@@ -326,6 +325,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.aws.region`                                | Region of aws s3 bucket                                                                                          | `us-east-1`                        |
 | `backup.uploadProviders.aws.existingSecret`                        | Name of existing secret object                                                                                   | `""`                               |
 | `backup.uploadProviders.aws.bucketName`                            | aws s3 bucket name                                                                                               | `s3://bucket/influxdb`             |
+| `backup.uploadProviders.aws.endpoint`                              | aws s3 endpoint, no value default public endpoint aws s3 endpoint                                                | `""`                               |
 | `backup.uploadProviders.aws.image.registry`                        | AWS CLI image registry                                                                                           | `REGISTRY_NAME`                    |
 | `backup.uploadProviders.aws.image.repository`                      | AWS CLI image repository                                                                                         | `REPOSITORY_NAME/aws-cli`          |
 | `backup.uploadProviders.aws.image.digest`                          | AWS CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag          | `""`                               |
@@ -362,7 +362,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/influ
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/influxdb/values.yaml)
 
 ## Configuration and installation details
 

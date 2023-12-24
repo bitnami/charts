@@ -1,0 +1,17 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+name: '[Support] Cards migration'
+on: [ workflow_dispatch ]
+permissions: {}
+jobs:
+  call-migration-workflow:
+    uses: bitnami/support/.github/workflows/migrate-reusable.yml@main
+    with:
+      organization: bitnami
+      legacy_project_board_name: Support
+      new_project_number: 4
+      repo: ${{ github.event.repository.name }}
+    secrets:
+      # This token should have access to both projects and at least read:project permissions
+      token: ${{ secrets.MIGRATION_TOKEN }}

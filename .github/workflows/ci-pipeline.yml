@@ -14,10 +14,6 @@ on: # rebuild any PRs and main branch changes
       - bitnami:main
 # Remove all permissions by default
 permissions: {}
-env:
-  CSP_API_URL: https://console.cloud.vmware.com
-  CSP_API_TOKEN: ${{ secrets.CSP_API_TESTING_TOKEN }}
-  VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
 # Avoid concurrency over the same PR
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
@@ -26,30 +22,29 @@ jobs:
     runs-on: ubuntu-latest
     name: Get modified charts
     permissions:
-      contents: read
+      pull-requests: read
     outputs:
       chart: ${{ steps.get-chart.outputs.chart }}
       result: ${{ steps.get-chart.outputs.result }}
     steps:
-      - name: Install dependencies
-        run: sudo apt-get install -y patchutils
       - id: get-chart
         name: Get modified charts
         env:
-          DIFF_URL: "${{github.event.pull_request.diff_url}}"
-          TEMP_FILE: "${{runner.temp}}/pr-${{github.event.number}}.diff"
+          PULL_REQUEST_NUMBER: "${{ github.event.pull_request.number }}"
+          PULL_REQUEST_URL: "${{ github.event.pull_request.url }}"
+          GITHUB_TOKEN: "${{ github.token }}"
         run: |
-          # This request doesn't consume API calls.
-          curl -Lkso $TEMP_FILE $DIFF_URL
-          files_changed="$(sed -nr 's/[\-\+]{3} [ab]\/(.*)/\1/p' $TEMP_FILE | sort | uniq)"
+          # Using the Github API to detect the files changed as git merge-base stops working when the branch is behind
+          files_changed_data="$(gh api --paginate /repos/${GITHUB_REPOSITORY}/pulls/${PULL_REQUEST_NUMBER}/files)"
+          files_changed="$(echo "$files_changed_data" | jq -r '.[] | .filename')"
           # Adding || true to avoid "Process exited with code 1" errors
           charts_dirs_changed="$(echo "$files_changed" | xargs dirname | grep -o "bitnami/[^/]*" | sort | uniq || true)"
           # Using grep -c as a better alternative to wc -l when dealing with empty strings."
           num_charts_changed="$(echo "$charts_dirs_changed" | grep -c "bitnami" || true)"
-          num_version_bumps="$(filterdiff -s -i "*Chart.yaml" $TEMP_FILE | grep -c "+version" || true)"
+          num_version_bumps="$(echo "$files_changed_data" | jq -r '[.[] | select(.filename|endswith("Chart.yaml")) | select(.patch|contains("+version")) ] | length' )"
           non_readme_files=$(echo "$files_changed" | grep -vc "\.md" || true)
 
-          if [[ $(curl -Lks ${{ github.event.pull_request.url }} | jq '.state | index("closed")') != *null* ]]; then
+          if [[ $(curl -Lks "${PULL_REQUEST_URL}" | jq '.state | index("closed")') != *null* ]]; then
             # The PR for which this workflow run was launched is now closed -> SKIP
             echo "error=The PR for which this workflow run was launched is now closed. The tests will be skipped." >> $GITHUB_OUTPUT
             echo "result=skip" >> $GITHUB_OUTPUT
@@ -58,8 +53,7 @@ jobs:
             echo "result=skip" >> $GITHUB_OUTPUT
           elif [[ "$num_charts_changed" -ne "$num_version_bumps" ]]; then
             # Changes done in charts but version not bumped -> ERROR
-            charts_changed_str="$(echo ${charts_dirs_changed[@]})"
-            echo "error=Detected changes in charts without version bump in Chart.yaml. Charts changed: ${num_charts_changed} ${charts_changed_str}. Version bumps detected: ${num_version_bumps}" >> $GITHUB_OUTPUT
+            echo "error=Detected changes in charts without version bump in Chart.yaml. Charts changed: ${num_charts_changed}. Version bumps detected: ${num_version_bumps}" >> $GITHUB_OUTPUT
             echo "result=fail" >> $GITHUB_OUTPUT
           elif [[ "$num_charts_changed" -eq "1" ]]; then
             # Changes done in only one chart -> OK
@@ -72,8 +66,7 @@ jobs:
             echo "result=skip" >> $GITHUB_OUTPUT
           else
             # Changes done in more than chart -> SKIP
-            charts_changed_str="$(echo ${charts_dirs_changed[@]})"
-            echo "error=Changes detected in more than one chart directory: ${charts_changed_str}. It is strongly advised to change only one chart in a PR. The rest of the tests will be skipped." >> $GITHUB_OUTPUT
+            echo "error=Changes detected in more than one chart directory. It is strongly advised to change only one chart in a PR. The rest of the tests will be skipped." >> $GITHUB_OUTPUT
             echo "result=skip" >> $GITHUB_OUTPUT
           fi
       # Using actions/github-scripts because using exit 1 in the script above would not provide any output
@@ -81,7 +74,7 @@ jobs:
       - id: show-error
         name: Show error
         if: ${{ steps.get-chart.outputs.result != 'ok' }}
-        uses: actions/github-script@v6
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
           script: |
             let message='${{ steps.get-chart.outputs.error }}';
@@ -106,11 +99,20 @@ jobs:
       )
     name: VIB Verify
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         name: Checkout Repository
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
+      - id: log-chart-info
+        name: Get chart version and app version
+        env:
+          CHART: ${{ needs.get-chart.outputs.chart }}
+        run: |
+          # Log chart info
+          chart_version="$(yq e '.version' bitnami/${CHART}/Chart.yaml)"
+          app_version="$(yq e '.appVersion' bitnami/${CHART}/Chart.yaml)"
+          echo "Chart: ${CHART} ChartVersion: ${chart_version} AppVersion: ${app_version}"
       - id: get-asset-vib-config
         name: Get asset-specific configuration for VIB action
         run: |
@@ -136,6 +138,9 @@ jobs:
           verification-mode: ${{ steps.get-asset-vib-config.outputs.verification_mode }}
           runtime-parameters-file: ${{ steps.get-asset-vib-config.outputs.runtime_parameters_file }}
         env:
+          CSP_API_URL: https://console.cloud.vmware.com
+          CSP_API_TOKEN: ${{ secrets.CSP_API_TESTING_TOKEN }}
+          VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
           # Target-Platform used by default
           VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
           # Alternative Target-Platform to be used in case of incompatibilities
@@ -157,13 +162,21 @@ jobs:
       # Approved by the 'github-actions' user; a PR can't be approved by its author
       - name: PR approval
         if: ${{ needs.vib-verify.result == 'success' }}
-        uses: hmarr/auto-approve-action@v3.0.0
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
-          pull-request-number: ${{ github.event.number }}
+          result-encoding: string
+          retries: 3
+          script: |
+            github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              event: 'APPROVE',
+            });
       - name: Merge
         id: merge
         if: ${{ needs.vib-verify.result == 'success' }}
-        uses: actions/github-script@v6
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
           result-encoding: string
           retries: 3
@@ -179,11 +192,20 @@ jobs:
       # post a comment on the PR and assign a maintainer agent to review it
       - name: Manual review required
         if: ${{ always() && (needs.vib-verify.result != 'success' || steps.merge.outcome != 'success' ) }}
-        uses: peter-evans/create-or-update-comment@v3.0.0
-        with:
-          issue-number: ${{ github.event.number }}
-          # Necessary to trigger support workflows
-          token: ${{ secrets.BITNAMI_BOT_TOKEN }}
-          body: |
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        env:
+          BODY: |
             There has been an error during the automated release process. Manual revision is now required.
             Please check the related [action_run#${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for more information.
+        with:
+          retries: 3
+          # Necessary to trigger support workflows
+          github-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+          script: |
+            const {BODY} = process.env
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `${BODY}`
+            })

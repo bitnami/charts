@@ -368,6 +368,13 @@ spec:
                   key: {{ .Values.aws.credentials.secretAccessKeySecretRef.key }}
             {{- end }}
             {{- end }}
+            {{- if eq .Values.provider "civo" }}
+            - name: CIVO_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: apiToken
+            {{- end }}
             {{- if eq .Values.provider "cloudflare" }}
             # Cloudflare environment variables
             - name: CF_API_TOKEN
@@ -692,7 +699,7 @@ spec:
             successThreshold: {{ .Values.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.startupProbe.failureThreshold }}
           {{- end }}
-          {{- if .Values.containerSecurityContext }}
+          {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.lifecycleHooks }}

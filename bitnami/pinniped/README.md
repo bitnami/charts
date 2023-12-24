@@ -1,6 +1,6 @@
 <!--- app-name: Pinniped -->
 
-# Pinniped packaged by Bitnami
+# Bitnami package for Pinniped
 
 Pinniped is an identity service provider for Kubernetes. It supplies a consistent and unified login experience across all your clusters. Pinniped is securely integrated with enterprise IDP protocols.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/pinniped
+helm install my-release oci://registry-1.docker.io/bitnamicharts/pinniped
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Pinniped in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -25,8 +25,6 @@ This chart bootstraps a [Pinniped](https://pinniped.dev/) Deployment in a [Kuber
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/pinniped/get-started/).
-
-Looking to use Pinniped in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -87,75 +85,79 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Concierge Parameters
 
-| Name                                                        | Description                                                                                                              | Value           |
-| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------- |
-| `concierge.enabled`                                         | Deploy Concierge                                                                                                         | `true`          |
-| `concierge.replicaCount`                                    | Number of Concierge replicas to deploy                                                                                   | `1`             |
-| `concierge.containerPorts.api`                              | Concierge API container port                                                                                             | `10250`         |
-| `concierge.containerPorts.proxy`                            | Concierge Proxy container port                                                                                           | `8444`          |
-| `concierge.configurationPorts.aggregatedAPIServerPort`      | Concierge API configuration port                                                                                         | `10250`         |
-| `concierge.configurationPorts.impersonationProxyServerPort` | Concierge Proxy configuration port                                                                                       | `8444`          |
-| `concierge.hostNetwork`                                     | Concierge API and Proxy container hostNetwork                                                                            | `false`         |
-| `concierge.dnsPolicy`                                       | Concierge API and Proxy container dnsPolicy                                                                              | `""`            |
-| `concierge.configuration`                                   | Concierge pinniped.yaml configuration file                                                                               | `""`            |
-| `concierge.credentialIssuerConfig`                          | Configuration for the credential issuer                                                                                  | `""`            |
-| `concierge.livenessProbe.enabled`                           | Enable livenessProbe on Concierge containers                                                                             | `true`          |
-| `concierge.livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                                  | `10`            |
-| `concierge.livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                                                         | `10`            |
-| `concierge.livenessProbe.timeoutSeconds`                    | Timeout seconds for livenessProbe                                                                                        | `1`             |
-| `concierge.livenessProbe.failureThreshold`                  | Failure threshold for livenessProbe                                                                                      | `3`             |
-| `concierge.livenessProbe.successThreshold`                  | Success threshold for livenessProbe                                                                                      | `1`             |
-| `concierge.readinessProbe.enabled`                          | Enable readinessProbe on Concierge containers                                                                            | `true`          |
-| `concierge.readinessProbe.initialDelaySeconds`              | Initial delay seconds for readinessProbe                                                                                 | `10`            |
-| `concierge.readinessProbe.periodSeconds`                    | Period seconds for readinessProbe                                                                                        | `10`            |
-| `concierge.readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                                                       | `1`             |
-| `concierge.readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                                                                     | `3`             |
-| `concierge.readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                                                                     | `1`             |
-| `concierge.startupProbe.enabled`                            | Enable startupProbe on Concierge containers                                                                              | `false`         |
-| `concierge.startupProbe.initialDelaySeconds`                | Initial delay seconds for startupProbe                                                                                   | `10`            |
-| `concierge.startupProbe.periodSeconds`                      | Period seconds for startupProbe                                                                                          | `10`            |
-| `concierge.startupProbe.timeoutSeconds`                     | Timeout seconds for startupProbe                                                                                         | `1`             |
-| `concierge.startupProbe.failureThreshold`                   | Failure threshold for startupProbe                                                                                       | `3`             |
-| `concierge.startupProbe.successThreshold`                   | Success threshold for startupProbe                                                                                       | `1`             |
-| `concierge.customLivenessProbe`                             | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
-| `concierge.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
-| `concierge.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                       | `{}`            |
-| `concierge.resources.limits`                                | The resources limits for the Concierge containers                                                                        | `{}`            |
-| `concierge.resources.requests`                              | The requested resources for the Concierge containers                                                                     | `{}`            |
-| `concierge.podSecurityContext.enabled`                      | Enabled Concierge pods' Security Context                                                                                 | `true`          |
-| `concierge.podSecurityContext.fsGroup`                      | Set Concierge pod's Security Context fsGroup                                                                             | `1001`          |
-| `concierge.containerSecurityContext.enabled`                | Enabled Concierge containers' Security Context                                                                           | `true`          |
-| `concierge.containerSecurityContext.runAsUser`              | Set Concierge containers' Security Context runAsUser                                                                     | `1001`          |
-| `concierge.containerSecurityContext.runAsNonRoot`           | Set Concierge containers' Security Context runAsNonRoot                                                                  | `true`          |
-| `concierge.containerSecurityContext.readOnlyRootFilesystem` | Enable readOnlyRootFilesystem                                                                                            | `false`         |
-| `concierge.existingConfigmap`                               | The name of an existing ConfigMap with your custom configuration for Concierge                                           | `""`            |
-| `concierge.command`                                         | Override default container command (useful when using custom images)                                                     | `[]`            |
-| `concierge.args`                                            | Override default container args (useful when using custom images)                                                        | `[]`            |
-| `concierge.deployAPIService`                                | Deploy the APIService objects                                                                                            | `true`          |
-| `concierge.hostAliases`                                     | Concierge pods host aliases                                                                                              | `[]`            |
-| `concierge.podLabels`                                       | Extra labels for Concierge pods                                                                                          | `{}`            |
-| `concierge.podAnnotations`                                  | Annotations for Concierge pods                                                                                           | `{}`            |
-| `concierge.podAffinityPreset`                               | Pod affinity preset. Ignored if `concierge.affinity` is set. Allowed values: `soft` or `hard`                            | `""`            |
-| `concierge.podAntiAffinityPreset`                           | Pod anti-affinity preset. Ignored if `concierge.affinity` is set. Allowed values: `soft` or `hard`                       | `soft`          |
-| `concierge.nodeAffinityPreset.type`                         | Node affinity preset type. Ignored if `concierge.affinity` is set. Allowed values: `soft` or `hard`                      | `""`            |
-| `concierge.nodeAffinityPreset.key`                          | Node label key to match. Ignored if `concierge.affinity` is set                                                          | `""`            |
-| `concierge.nodeAffinityPreset.values`                       | Node label values to match. Ignored if `concierge.affinity` is set                                                       | `[]`            |
-| `concierge.affinity`                                        | Affinity for Concierge pods assignment                                                                                   | `{}`            |
-| `concierge.nodeSelector`                                    | Node labels for Concierge pods assignment                                                                                | `{}`            |
-| `concierge.tolerations`                                     | Tolerations for Concierge pods assignment                                                                                | `[]`            |
-| `concierge.updateStrategy.type`                             | Concierge statefulset strategy type                                                                                      | `RollingUpdate` |
-| `concierge.priorityClassName`                               | Concierge pods' priorityClassName                                                                                        | `""`            |
-| `concierge.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
-| `concierge.schedulerName`                                   | Name of the k8s scheduler (other than default) for Concierge pods                                                        | `""`            |
-| `concierge.terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`            |
-| `concierge.lifecycleHooks`                                  | for the Concierge container(s) to automate configuration before or after startup                                         | `{}`            |
-| `concierge.extraEnvVars`                                    | Array with extra environment variables to add to Concierge nodes                                                         | `[]`            |
-| `concierge.extraEnvVarsCM`                                  | Name of existing ConfigMap containing extra env vars for Concierge nodes                                                 | `""`            |
-| `concierge.extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars for Concierge nodes                                                    | `""`            |
-| `concierge.extraVolumes`                                    | Optionally specify extra list of additional volumes for the Concierge pod(s)                                             | `[]`            |
-| `concierge.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the Concierge container(s)                                  | `[]`            |
-| `concierge.sidecars`                                        | Add additional sidecar containers to the Concierge pod(s)                                                                | `[]`            |
-| `concierge.initContainers`                                  | Add additional init containers to the Concierge pod(s)                                                                   | `[]`            |
+| Name                                                          | Description                                                                                                              | Value            |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------- |
+| `concierge.enabled`                                           | Deploy Concierge                                                                                                         | `true`           |
+| `concierge.replicaCount`                                      | Number of Concierge replicas to deploy                                                                                   | `1`              |
+| `concierge.containerPorts.api`                                | Concierge API container port                                                                                             | `10250`          |
+| `concierge.containerPorts.proxy`                              | Concierge Proxy container port                                                                                           | `8444`           |
+| `concierge.configurationPorts.aggregatedAPIServerPort`        | Concierge API configuration port                                                                                         | `10250`          |
+| `concierge.configurationPorts.impersonationProxyServerPort`   | Concierge Proxy configuration port                                                                                       | `8444`           |
+| `concierge.hostNetwork`                                       | Concierge API and Proxy container hostNetwork                                                                            | `false`          |
+| `concierge.dnsPolicy`                                         | Concierge API and Proxy container dnsPolicy                                                                              | `""`             |
+| `concierge.configuration`                                     | Concierge pinniped.yaml configuration file                                                                               | `""`             |
+| `concierge.credentialIssuerConfig`                            | Configuration for the credential issuer                                                                                  | `""`             |
+| `concierge.livenessProbe.enabled`                             | Enable livenessProbe on Concierge containers                                                                             | `true`           |
+| `concierge.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `10`             |
+| `concierge.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `10`             |
+| `concierge.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `1`              |
+| `concierge.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                      | `3`              |
+| `concierge.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                      | `1`              |
+| `concierge.readinessProbe.enabled`                            | Enable readinessProbe on Concierge containers                                                                            | `true`           |
+| `concierge.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                 | `10`             |
+| `concierge.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                        | `10`             |
+| `concierge.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                       | `1`              |
+| `concierge.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                     | `3`              |
+| `concierge.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                     | `1`              |
+| `concierge.startupProbe.enabled`                              | Enable startupProbe on Concierge containers                                                                              | `false`          |
+| `concierge.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                   | `10`             |
+| `concierge.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                          | `10`             |
+| `concierge.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                         | `1`              |
+| `concierge.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                       | `3`              |
+| `concierge.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                       | `1`              |
+| `concierge.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                      | `{}`             |
+| `concierge.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`             |
+| `concierge.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`             |
+| `concierge.resources.limits`                                  | The resources limits for the Concierge containers                                                                        | `{}`             |
+| `concierge.resources.requests`                                | The requested resources for the Concierge containers                                                                     | `{}`             |
+| `concierge.podSecurityContext.enabled`                        | Enabled Concierge pods' Security Context                                                                                 | `true`           |
+| `concierge.podSecurityContext.fsGroup`                        | Set Concierge pod's Security Context fsGroup                                                                             | `1001`           |
+| `concierge.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `concierge.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
+| `concierge.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
+| `concierge.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
+| `concierge.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                  | `false`          |
+| `concierge.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                | `false`          |
+| `concierge.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`        |
+| `concierge.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
+| `concierge.existingConfigmap`                                 | The name of an existing ConfigMap with your custom configuration for Concierge                                           | `""`             |
+| `concierge.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
+| `concierge.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `concierge.deployAPIService`                                  | Deploy the APIService objects                                                                                            | `true`           |
+| `concierge.hostAliases`                                       | Concierge pods host aliases                                                                                              | `[]`             |
+| `concierge.podLabels`                                         | Extra labels for Concierge pods                                                                                          | `{}`             |
+| `concierge.podAnnotations`                                    | Annotations for Concierge pods                                                                                           | `{}`             |
+| `concierge.podAffinityPreset`                                 | Pod affinity preset. Ignored if `concierge.affinity` is set. Allowed values: `soft` or `hard`                            | `""`             |
+| `concierge.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `concierge.affinity` is set. Allowed values: `soft` or `hard`                       | `soft`           |
+| `concierge.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `concierge.affinity` is set. Allowed values: `soft` or `hard`                      | `""`             |
+| `concierge.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `concierge.affinity` is set                                                          | `""`             |
+| `concierge.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `concierge.affinity` is set                                                       | `[]`             |
+| `concierge.affinity`                                          | Affinity for Concierge pods assignment                                                                                   | `{}`             |
+| `concierge.nodeSelector`                                      | Node labels for Concierge pods assignment                                                                                | `{}`             |
+| `concierge.tolerations`                                       | Tolerations for Concierge pods assignment                                                                                | `[]`             |
+| `concierge.updateStrategy.type`                               | Concierge statefulset strategy type                                                                                      | `RollingUpdate`  |
+| `concierge.priorityClassName`                                 | Concierge pods' priorityClassName                                                                                        | `""`             |
+| `concierge.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`             |
+| `concierge.schedulerName`                                     | Name of the k8s scheduler (other than default) for Concierge pods                                                        | `""`             |
+| `concierge.terminationGracePeriodSeconds`                     | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`             |
+| `concierge.lifecycleHooks`                                    | for the Concierge container(s) to automate configuration before or after startup                                         | `{}`             |
+| `concierge.extraEnvVars`                                      | Array with extra environment variables to add to Concierge nodes                                                         | `[]`             |
+| `concierge.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Concierge nodes                                                 | `""`             |
+| `concierge.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Concierge nodes                                                    | `""`             |
+| `concierge.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Concierge pod(s)                                             | `[]`             |
+| `concierge.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Concierge container(s)                                  | `[]`             |
+| `concierge.sidecars`                                          | Add additional sidecar containers to the Concierge pod(s)                                                                | `[]`             |
+| `concierge.initContainers`                                    | Add additional init containers to the Concierge pod(s)                                                                   | `[]`             |
 
 ### Concierge RBAC settings
 
@@ -194,69 +196,73 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Supervisor Parameters
 
-| Name                                                         | Description                                                                                                              | Value           |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | --------------- |
-| `supervisor.enabled`                                         | Deploy Supervisor                                                                                                        | `true`          |
-| `supervisor.replicaCount`                                    | Number of Supervisor replicas to deploy                                                                                  | `1`             |
-| `supervisor.containerPorts.https`                            | Supervisor HTTP container port                                                                                           | `8443`          |
-| `supervisor.deployAPIService`                                | Deploy the APIService objects                                                                                            | `true`          |
-| `supervisor.configuration`                                   | Supervisor pinniped.yaml configuration file                                                                              | `""`            |
-| `supervisor.livenessProbe.enabled`                           | Enable livenessProbe on Supervisor containers                                                                            | `true`          |
-| `supervisor.livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                                  | `10`            |
-| `supervisor.livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                                                         | `10`            |
-| `supervisor.livenessProbe.timeoutSeconds`                    | Timeout seconds for livenessProbe                                                                                        | `1`             |
-| `supervisor.livenessProbe.failureThreshold`                  | Failure threshold for livenessProbe                                                                                      | `3`             |
-| `supervisor.livenessProbe.successThreshold`                  | Success threshold for livenessProbe                                                                                      | `1`             |
-| `supervisor.readinessProbe.enabled`                          | Enable readinessProbe on Supervisor containers                                                                           | `true`          |
-| `supervisor.readinessProbe.initialDelaySeconds`              | Initial delay seconds for readinessProbe                                                                                 | `10`            |
-| `supervisor.readinessProbe.periodSeconds`                    | Period seconds for readinessProbe                                                                                        | `10`            |
-| `supervisor.readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                                                       | `1`             |
-| `supervisor.readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                                                                     | `3`             |
-| `supervisor.readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                                                                     | `1`             |
-| `supervisor.startupProbe.enabled`                            | Enable startupProbe on Supervisor containers                                                                             | `false`         |
-| `supervisor.startupProbe.initialDelaySeconds`                | Initial delay seconds for startupProbe                                                                                   | `10`            |
-| `supervisor.startupProbe.periodSeconds`                      | Period seconds for startupProbe                                                                                          | `10`            |
-| `supervisor.startupProbe.timeoutSeconds`                     | Timeout seconds for startupProbe                                                                                         | `1`             |
-| `supervisor.startupProbe.failureThreshold`                   | Failure threshold for startupProbe                                                                                       | `3`             |
-| `supervisor.startupProbe.successThreshold`                   | Success threshold for startupProbe                                                                                       | `1`             |
-| `supervisor.customLivenessProbe`                             | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
-| `supervisor.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
-| `supervisor.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                       | `{}`            |
-| `supervisor.resources.limits`                                | The resources limits for the Supervisor containers                                                                       | `{}`            |
-| `supervisor.resources.requests`                              | The requested resources for the Supervisor containers                                                                    | `{}`            |
-| `supervisor.podSecurityContext.enabled`                      | Enabled Supervisor pods' Security Context                                                                                | `true`          |
-| `supervisor.podSecurityContext.fsGroup`                      | Set Supervisor pod's Security Context fsGroup                                                                            | `1001`          |
-| `supervisor.containerSecurityContext.enabled`                | Enabled Supervisor containers' Security Context                                                                          | `true`          |
-| `supervisor.containerSecurityContext.runAsUser`              | Set Supervisor containers' Security Context runAsUser                                                                    | `1001`          |
-| `supervisor.containerSecurityContext.runAsNonRoot`           | Set Supervisor containers' Security Context runAsNonRoot                                                                 | `true`          |
-| `supervisor.containerSecurityContext.readOnlyRootFilesystem` | Enable readOnlyRootFilesystem                                                                                            | `false`         |
-| `supervisor.existingConfigmap`                               | The name of an existing ConfigMap with your custom configuration for Supervisor                                          | `""`            |
-| `supervisor.command`                                         | Override default container command (useful when using custom images)                                                     | `[]`            |
-| `supervisor.args`                                            | Override default container args (useful when using custom images)                                                        | `[]`            |
-| `supervisor.hostAliases`                                     | Supervisor pods host aliases                                                                                             | `[]`            |
-| `supervisor.podLabels`                                       | Extra labels for Supervisor pods                                                                                         | `{}`            |
-| `supervisor.podAnnotations`                                  | Annotations for Supervisor pods                                                                                          | `{}`            |
-| `supervisor.podAffinityPreset`                               | Pod affinity preset. Ignored if `supervisor.affinity` is set. Allowed values: `soft` or `hard`                           | `""`            |
-| `supervisor.podAntiAffinityPreset`                           | Pod anti-affinity preset. Ignored if `supervisor.affinity` is set. Allowed values: `soft` or `hard`                      | `soft`          |
-| `supervisor.nodeAffinityPreset.type`                         | Node affinity preset type. Ignored if `supervisor.affinity` is set. Allowed values: `soft` or `hard`                     | `""`            |
-| `supervisor.nodeAffinityPreset.key`                          | Node label key to match. Ignored if `supervisor.affinity` is set                                                         | `""`            |
-| `supervisor.nodeAffinityPreset.values`                       | Node label values to match. Ignored if `supervisor.affinity` is set                                                      | `[]`            |
-| `supervisor.affinity`                                        | Affinity for Supervisor pods assignment                                                                                  | `{}`            |
-| `supervisor.nodeSelector`                                    | Node labels for Supervisor pods assignment                                                                               | `{}`            |
-| `supervisor.tolerations`                                     | Tolerations for Supervisor pods assignment                                                                               | `[]`            |
-| `supervisor.updateStrategy.type`                             | Supervisor statefulset strategy type                                                                                     | `RollingUpdate` |
-| `supervisor.priorityClassName`                               | Supervisor pods' priorityClassName                                                                                       | `""`            |
-| `supervisor.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
-| `supervisor.schedulerName`                                   | Name of the k8s scheduler (other than default) for Supervisor pods                                                       | `""`            |
-| `supervisor.terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`            |
-| `supervisor.lifecycleHooks`                                  | for the Supervisor container(s) to automate configuration before or after startup                                        | `{}`            |
-| `supervisor.extraEnvVars`                                    | Array with extra environment variables to add to Supervisor nodes                                                        | `[]`            |
-| `supervisor.extraEnvVarsCM`                                  | Name of existing ConfigMap containing extra env vars for Supervisor nodes                                                | `""`            |
-| `supervisor.extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars for Supervisor nodes                                                   | `""`            |
-| `supervisor.extraVolumes`                                    | Optionally specify extra list of additional volumes for the Supervisor pod(s)                                            | `[]`            |
-| `supervisor.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the Supervisor container(s)                                 | `[]`            |
-| `supervisor.sidecars`                                        | Add additional sidecar containers to the Supervisor pod(s)                                                               | `[]`            |
-| `supervisor.initContainers`                                  | Add additional init containers to the Supervisor pod(s)                                                                  | `[]`            |
+| Name                                                           | Description                                                                                                              | Value            |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------- |
+| `supervisor.enabled`                                           | Deploy Supervisor                                                                                                        | `true`           |
+| `supervisor.replicaCount`                                      | Number of Supervisor replicas to deploy                                                                                  | `1`              |
+| `supervisor.containerPorts.https`                              | Supervisor HTTP container port                                                                                           | `8443`           |
+| `supervisor.deployAPIService`                                  | Deploy the APIService objects                                                                                            | `true`           |
+| `supervisor.configuration`                                     | Supervisor pinniped.yaml configuration file                                                                              | `""`             |
+| `supervisor.livenessProbe.enabled`                             | Enable livenessProbe on Supervisor containers                                                                            | `true`           |
+| `supervisor.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `10`             |
+| `supervisor.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `10`             |
+| `supervisor.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `1`              |
+| `supervisor.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                      | `3`              |
+| `supervisor.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                      | `1`              |
+| `supervisor.readinessProbe.enabled`                            | Enable readinessProbe on Supervisor containers                                                                           | `true`           |
+| `supervisor.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                 | `10`             |
+| `supervisor.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                        | `10`             |
+| `supervisor.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                       | `1`              |
+| `supervisor.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                     | `3`              |
+| `supervisor.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                     | `1`              |
+| `supervisor.startupProbe.enabled`                              | Enable startupProbe on Supervisor containers                                                                             | `false`          |
+| `supervisor.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                   | `10`             |
+| `supervisor.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                          | `10`             |
+| `supervisor.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                         | `1`              |
+| `supervisor.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                       | `3`              |
+| `supervisor.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                       | `1`              |
+| `supervisor.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                      | `{}`             |
+| `supervisor.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`             |
+| `supervisor.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`             |
+| `supervisor.resources.limits`                                  | The resources limits for the Supervisor containers                                                                       | `{}`             |
+| `supervisor.resources.requests`                                | The requested resources for the Supervisor containers                                                                    | `{}`             |
+| `supervisor.podSecurityContext.enabled`                        | Enabled Supervisor pods' Security Context                                                                                | `true`           |
+| `supervisor.podSecurityContext.fsGroup`                        | Set Supervisor pod's Security Context fsGroup                                                                            | `1001`           |
+| `supervisor.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `supervisor.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
+| `supervisor.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
+| `supervisor.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
+| `supervisor.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                  | `false`          |
+| `supervisor.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                | `false`          |
+| `supervisor.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`        |
+| `supervisor.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
+| `supervisor.existingConfigmap`                                 | The name of an existing ConfigMap with your custom configuration for Supervisor                                          | `""`             |
+| `supervisor.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
+| `supervisor.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `supervisor.hostAliases`                                       | Supervisor pods host aliases                                                                                             | `[]`             |
+| `supervisor.podLabels`                                         | Extra labels for Supervisor pods                                                                                         | `{}`             |
+| `supervisor.podAnnotations`                                    | Annotations for Supervisor pods                                                                                          | `{}`             |
+| `supervisor.podAffinityPreset`                                 | Pod affinity preset. Ignored if `supervisor.affinity` is set. Allowed values: `soft` or `hard`                           | `""`             |
+| `supervisor.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `supervisor.affinity` is set. Allowed values: `soft` or `hard`                      | `soft`           |
+| `supervisor.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `supervisor.affinity` is set. Allowed values: `soft` or `hard`                     | `""`             |
+| `supervisor.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `supervisor.affinity` is set                                                         | `""`             |
+| `supervisor.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `supervisor.affinity` is set                                                      | `[]`             |
+| `supervisor.affinity`                                          | Affinity for Supervisor pods assignment                                                                                  | `{}`             |
+| `supervisor.nodeSelector`                                      | Node labels for Supervisor pods assignment                                                                               | `{}`             |
+| `supervisor.tolerations`                                       | Tolerations for Supervisor pods assignment                                                                               | `[]`             |
+| `supervisor.updateStrategy.type`                               | Supervisor statefulset strategy type                                                                                     | `RollingUpdate`  |
+| `supervisor.priorityClassName`                                 | Supervisor pods' priorityClassName                                                                                       | `""`             |
+| `supervisor.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`             |
+| `supervisor.schedulerName`                                     | Name of the k8s scheduler (other than default) for Supervisor pods                                                       | `""`             |
+| `supervisor.terminationGracePeriodSeconds`                     | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`             |
+| `supervisor.lifecycleHooks`                                    | for the Supervisor container(s) to automate configuration before or after startup                                        | `{}`             |
+| `supervisor.extraEnvVars`                                      | Array with extra environment variables to add to Supervisor nodes                                                        | `[]`             |
+| `supervisor.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Supervisor nodes                                                | `""`             |
+| `supervisor.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Supervisor nodes                                                   | `""`             |
+| `supervisor.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Supervisor pod(s)                                            | `[]`             |
+| `supervisor.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Supervisor container(s)                                 | `[]`             |
+| `supervisor.sidecars`                                          | Add additional sidecar containers to the Supervisor pod(s)                                                               | `[]`             |
+| `supervisor.initContainers`                                    | Add additional init containers to the Supervisor pod(s)                                                                  | `[]`             |
 
 ### Supervisor RBAC settings
 
@@ -312,7 +318,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.ingress.secrets`                         | Custom TLS certificates as secrets                                                                                               | `[]`                        |
 | `supervisor.ingress.extraRules`                      | Additional rules to be covered with this ingress record                                                                          | `[]`                        |
 
-See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table
+See <https://github.com/bitnami/readme-generator-for-helm> to create the table
 
 The above parameters map to the env variables defined in [bitnami/pinniped](https://github.com/bitnami/containers/tree/main/bitnami/pinniped). For more information please refer to the [bitnami/pinniped](https://github.com/bitnami/containers/tree/main/bitnami/pinniped) image documentation.
 
@@ -335,7 +341,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/pinni
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/pinniped/values.yaml)
 
 ## Configuration and installation details
 

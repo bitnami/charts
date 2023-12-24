@@ -11,10 +11,10 @@ Disclaimer: Redis is a registered trademark of Redis Ltd. Any rights therein are
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redis
+helm install my-release oci://registry-1.docker.io/bitnamicharts/redis
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Redisreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -36,8 +36,6 @@ The main features of each chart are the following:
 | Supports multiple databases                            | Supports only one database. Better if you have a big dataset           |
 | Single write point (single master)                     | Multiple write points (multiple masters)                               |
 | ![Redis&reg; Topology](img/redis-topology.png) | ![Redis&reg; Cluster Topology](img/redis-cluster-topology.png) |
-
-Looking to use Redisreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -87,6 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeVersion`             | Override Kubernetes version                                                                                    | `""`            |
 | `nameOverride`            | String to partially override common.names.fullname                                                             | `""`            |
 | `fullnameOverride`        | String to fully override common.names.fullname                                                                 | `""`            |
+| `namespaceOverride`       | String to fully override common.names.namespace                                                                | `""`            |
 | `commonLabels`            | Labels to add to all deployed objects                                                                          | `{}`            |
 | `commonAnnotations`       | Annotations to add to all deployed objects                                                                     | `{}`            |
 | `secretAnnotations`       | Annotations to add to secret                                                                                   | `{}`            |
@@ -172,7 +171,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.containerSecurityContext.allowPrivilegeEscalation` | Is it possible to escalate Redis&reg; pod(s) privileges                                               | `false`                  |
 | `master.containerSecurityContext.seccompProfile.type`      | Set Redis&reg; master containers' Security Context seccompProfile                                     | `RuntimeDefault`         |
 | `master.containerSecurityContext.capabilities.drop`        | Set Redis&reg; master containers' Security Context capabilities to drop                               | `["ALL"]`                |
-| `master.kind`                                              | Use either Deployment or StatefulSet (default)                                                        | `StatefulSet`            |
+| `master.kind`                                              | Use either Deployment, StatefulSet (default) or DaemonSet                                             | `StatefulSet`            |
 | `master.schedulerName`                                     | Alternate scheduler for Redis&reg; master pods                                                        | `""`                     |
 | `master.updateStrategy.type`                               | Redis&reg; master statefulset strategy type                                                           | `RollingUpdate`          |
 | `master.minReadySeconds`                                   | How many seconds a pod needs to be ready before killing the next, during update                       | `0`                      |
@@ -222,6 +221,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.service.internalTrafficPolicy`                     | Redis&reg; master service internal traffic policy (requires Kubernetes v1.22 or greater to be usable) | `Cluster`                |
 | `master.service.clusterIP`                                 | Redis&reg; master service Cluster IP                                                                  | `""`                     |
 | `master.service.loadBalancerIP`                            | Redis&reg; master service Load Balancer IP                                                            | `""`                     |
+| `master.service.loadBalancerClass`                         | master service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)       | `""`                     |
 | `master.service.loadBalancerSourceRanges`                  | Redis&reg; master service Load Balancer sources                                                       | `[]`                     |
 | `master.service.externalIPs`                               | Redis&reg; master service External IPs                                                                | `[]`                     |
 | `master.service.annotations`                               | Additional custom annotations for Redis&reg; master service                                           | `{}`                     |
@@ -237,6 +237,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                                        | Description                                                                                             | Value                    |
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `replica.kind`                                              | Use either DaemonSet or StatefulSet (default)                                                           | `StatefulSet`            |
 | `replica.replicaCount`                                      | Number of Redis&reg; replicas to deploy                                                                 | `3`                      |
 | `replica.configuration`                                     | Configuration for Redis&reg; replicas nodes                                                             | `""`                     |
 | `replica.disableCommands`                                   | Array with Redis&reg; commands to disable on replicas nodes                                             | `["FLUSHDB","FLUSHALL"]` |
@@ -334,6 +335,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                          | `[]`                     |
 | `replica.service.clusterIP`                                 | Redis&reg; replicas service Cluster IP                                                                  | `""`                     |
 | `replica.service.loadBalancerIP`                            | Redis&reg; replicas service Load Balancer IP                                                            | `""`                     |
+| `replica.service.loadBalancerClass`                         | replicas service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)       | `""`                     |
 | `replica.service.loadBalancerSourceRanges`                  | Redis&reg; replicas service Load Balancer sources                                                       | `[]`                     |
 | `replica.service.annotations`                               | Additional custom annotations for Redis&reg; replicas service                                           | `{}`                     |
 | `replica.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                    | `None`                   |
@@ -363,7 +365,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.annotations`                                       | Additional custom annotations for Redis&reg; Sentinel resource                                                                              | `{}`                             |
 | `sentinel.masterSet`                                         | Master set name                                                                                                                             | `mymaster`                       |
 | `sentinel.quorum`                                            | Sentinel Quorum                                                                                                                             | `2`                              |
-| `sentinel.getMasterTimeout`                                  | Amount of time to allow before get_sentinel_master_info() times out.                                                                        | `99`                             |
+| `sentinel.getMasterTimeout`                                  | Amount of time to allow before get_sentinel_master_info() times out.                                                                        | `90`                             |
 | `sentinel.automateClusterRecovery`                           | Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically failover to it. | `false`                          |
 | `sentinel.redisShutdownWaitFailover`                         | Whether the Redis&reg; master container waits for the failover at shutdown (in addition to the Redis&reg; Sentinel container).              | `true`                           |
 | `sentinel.downAfterMilliseconds`                             | Timeout for detecting a Redis&reg; node is down                                                                                             | `60000`                          |
@@ -436,6 +438,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                                                              | `[]`                             |
 | `sentinel.service.clusterIP`                                 | Redis&reg; Sentinel service Cluster IP                                                                                                      | `""`                             |
 | `sentinel.service.loadBalancerIP`                            | Redis&reg; Sentinel service Load Balancer IP                                                                                                | `""`                             |
+| `sentinel.service.loadBalancerClass`                         | sentinel service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)                                           | `""`                             |
 | `sentinel.service.loadBalancerSourceRanges`                  | Redis&reg; Sentinel service Load Balancer sources                                                                                           | `[]`                             |
 | `sentinel.service.annotations`                               | Additional custom annotations for Redis&reg; Sentinel service                                                                               | `{}`                             |
 | `sentinel.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                        | `None`                           |
@@ -531,6 +534,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.externalTrafficPolicy`                     | Redis&reg; exporter service external traffic policy                                                                 | `Cluster`                        |
 | `metrics.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                                      | `[]`                             |
 | `metrics.service.loadBalancerIP`                            | Redis&reg; exporter service Load Balancer IP                                                                        | `""`                             |
+| `metrics.service.loadBalancerClass`                         | exporter service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)                   | `""`                             |
 | `metrics.service.loadBalancerSourceRanges`                  | Redis&reg; exporter service Load Balancer sources                                                                   | `[]`                             |
 | `metrics.service.annotations`                               | Additional custom annotations for Redis&reg; exporter service                                                       | `{}`                             |
 | `metrics.service.clusterIP`                                 | Redis&reg; exporter service Cluster IP                                                                              | `""`                             |
@@ -615,7 +619,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/redis
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/redis/values.yaml)
 
 ## Configuration and installation details
 
@@ -863,7 +867,7 @@ The Redis&reg; sentinel exporter was removed in this version because the upstrea
   - `sentinel.metrics.*` parameters are deprecated in favor of `metrics.sentinel.*` ones.
 - New parameters to add custom command, environment variables, sidecars, init containers, etc. were added.
 - Chart labels were adapted to follow the [Helm charts standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
-- values.yaml metadata was adapted to follow the format supported by [Readme Generator for Helm](https://github.com/bitnami-labs/readme-generator-for-helm).
+- values.yaml metadata was adapted to follow the format supported by [Readme Generator for Helm](https://github.com/bitnami/readme-generator-for-helm).
 
 Consequences:
 

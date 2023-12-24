@@ -1,6 +1,6 @@
 <!--- app-name: Grafana Operator -->
 
-# Grafana Operator packaged by Bitnami
+# Bitnami package for Grafana Operator
 
 Grafana Operator is a Kubernetes operator that enables the installation and management of Grafana instances, dashboards and plugins.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/grafana-operator
+helm install my-release oci://registry-1.docker.io/bitnamicharts/grafana-operator
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Grafana Operator in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -23,8 +23,6 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 This chart bootstraps a [Grafana Operator](https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md) Deployment [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Grafana Operator in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -131,18 +129,15 @@ For more information, refer to the [documentation on the differences between the
 | `operator.serviceAccount.annotations`                        | Add annotations                                                                                                                           | `{}`                               |
 | `operator.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                                                                          | `true`                             |
 | `operator.podSecurityContext.enabled`                        | Enable pods security context                                                                                                              | `true`                             |
-| `operator.podSecurityContext.runAsUser`                      | User ID for the pods                                                                                                                      | `1001`                             |
-| `operator.podSecurityContext.runAsGroup`                     | User ID for the pods                                                                                                                      | `1001`                             |
-| `operator.podSecurityContext.runAsNonRoot`                   | Grafana Operator must run as nonRoot                                                                                                      | `true`                             |
 | `operator.podSecurityContext.fsGroup`                        | Group ID for the pods                                                                                                                     | `1001`                             |
-| `operator.podSecurityContext.supplementalGroups`             | Which group IDs containers add                                                                                                            | `[]`                               |
-| `operator.containerSecurityContext.enabled`                  | Enable container security context                                                                                                         | `true`                             |
-| `operator.containerSecurityContext.runAsUser`                | User ID for the operator container                                                                                                        | `1001`                             |
-| `operator.containerSecurityContext.runAsGroup`               | User ID for the operator container                                                                                                        | `1001`                             |
-| `operator.containerSecurityContext.runAsNonRoot`             | Force the container to be run as non-root                                                                                                 | `true`                             |
-| `operator.containerSecurityContext.privileged`               | Decide if the container runs privileged.                                                                                                  | `false`                            |
-| `operator.containerSecurityContext.readOnlyRootFilesystem`   | ReadOnlyRootFilesystem fot the operator container                                                                                         | `false`                            |
-| `operator.containerSecurityContext.allowPrivilegeEscalation` | Allow Privilege Escalation for the operator container                                                                                     | `false`                            |
+| `operator.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                      | `true`                             |
+| `operator.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                | `1001`                             |
+| `operator.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                             | `true`                             |
+| `operator.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                               | `false`                            |
+| `operator.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                   | `false`                            |
+| `operator.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                 | `false`                            |
+| `operator.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                        | `["ALL"]`                          |
+| `operator.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                          | `RuntimeDefault`                   |
 | `operator.resources`                                         | Container resource requests and limits                                                                                                    | `{}`                               |
 | `operator.containerPorts.metrics`                            | Grafana Operator container port (used for metrics)                                                                                        | `8080`                             |
 | `operator.hostAliases`                                       | Add deployment host aliases                                                                                                               | `[]`                               |
@@ -199,18 +194,16 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                              | `[]`                      |
 | `grafana.serviceAccount`                                    | Additional service account configuration                                                                | `{}`                      |
 | `grafana.podSecurityContext.enabled`                        | Enable pods security context                                                                            | `true`                    |
-| `grafana.podSecurityContext.runAsUser`                      | User ID for the pods                                                                                    | `1001`                    |
-| `grafana.podSecurityContext.runAsGroup`                     | User ID for the pods                                                                                    | `0`                       |
-| `grafana.podSecurityContext.runAsNonRoot`                   | Grafana Operator must run as nonRoot                                                                    | `true`                    |
 | `grafana.podSecurityContext.fsGroup`                        | Group ID for the pods                                                                                   | `1001`                    |
-| `grafana.podSecurityContext.supplementalGroups`             | Which group IDs containers add                                                                          | `[]`                      |
-| `grafana.containerSecurityContext.enabled`                  | Enable containers security context                                                                      | `true`                    |
-| `grafana.containerSecurityContext.runAsUser`                | User ID for the containers                                                                              | `1001`                    |
-| `grafana.containerSecurityContext.runAsGroup`               | Group ID for the containers                                                                             | `0`                       |
-| `grafana.containerSecurityContext.privileged`               | Decide if the container runs privileged.                                                                | `false`                   |
-| `grafana.containerSecurityContext.runAsNonRoot`             | Force the container to run as non-root                                                                  | `true`                    |
-| `grafana.containerSecurityContext.allowPrivilegeEscalation` | Don't allow privilege escalation for the containers                                                     | `false`                   |
-| `grafana.containerSecurityContext.readOnlyRootFilesystem`   | Mount / (root) as a readonly filesystem                                                                 | `false`                   |
+| `grafana.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                    | `true`                    |
+| `grafana.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                              | `1001`                    |
+| `grafana.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                             | `0`                       |
+| `grafana.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                           | `true`                    |
+| `grafana.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                             | `false`                   |
+| `grafana.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                 | `false`                   |
+| `grafana.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                               | `false`                   |
+| `grafana.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                      | `["ALL"]`                 |
+| `grafana.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                        | `RuntimeDefault`          |
 | `grafana.resources.limits`                                  | The resources limits for the container                                                                  | `{}`                      |
 | `grafana.resources.requests`                                | The requested resources for the container                                                               | `{}`                      |
 | `grafana.replicaCount`                                      | Specify the amount of replicas running                                                                  | `1`                       |

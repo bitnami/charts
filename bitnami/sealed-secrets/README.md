@@ -1,6 +1,6 @@
 <!--- app-name: Sealed Secrets -->
 
-# Sealed Secrets packaged by Bitnami
+# Bitnami package for Sealed Secrets
 
 Sealed Secrets are "one-way" encrypted K8s Secrets that can be created by anyone, but can only be decrypted by the controller running in the target cluster recovering the original object.
 
@@ -9,20 +9,18 @@ Sealed Secrets are "one-way" encrypted K8s Secrets that can be created by anyone
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/sealed-secrets
+helm install my-release oci://registry-1.docker.io/bitnamicharts/sealed-secrets
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Sealed Secrets in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [Sealed Secret controller](https://github.com/bitnami-labs/sealed-secrets) Deployment in [Kubernetes](http://kubernetes.io) using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Sealed Secret controller](https://github.com/bitnami-labs/sealed-secrets) Deployment in [Kubernetes](https://kubernetes.io) using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Sealed Secrets in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -89,6 +87,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `command`                                           | Override default container command (useful when using custom images)                                                     | `[]`                             |
 | `commandArgs`                                       | Additional args (doesn't override the default ones)                                                                      | `[]`                             |
 | `args`                                              | Override default container args (useful when using custom images)                                                        | `[]`                             |
+| `revisionHistoryLimit`                              | Number of old history to retain to allow rollback (If not set, default Kubernetes value is set to 10)                    | `""`                             |
+| `createController`                                  | Specifies whether the Sealed Secrets controller should be created                                                        | `true`                           |
+| `secretName`                                        | The name of an existing TLS secret containing the key used to encrypt secrets                                            | `""`                             |
+| `updateStatus`                                      | Specifies whether the Sealed Secrets controller should update the status subresource                                     | `true`                           |
+| `skipRecreate`                                      | Specifies whether the Sealed Secrets controller should skip recreating removed secrets                                   | `false`                          |
+| `keyRenewPeriod`                                    | Specifies key renewal period. Default 30 days. e.g keyRenewPeriod: "720h30m"                                             | `""`                             |
+| `rateLimit`                                         | Number of allowed sustained request per second for verify endpoint                                                       | `""`                             |
+| `rateLimitBurst`                                    | Number of requests allowed to exceed the rate limit per second for verify endpoint                                       | `""`                             |
+| `additionalNamespaces`                              | List of namespaces used to manage the Sealed Secrets                                                                     | `[]`                             |
+| `privateKeyAnnotations`                             | Map of annotations to be set on the sealing keypairs                                                                     | `{}`                             |
+| `privateKeyLabels`                                  | Map of labels to be set on the sealing keypairs                                                                          | `{}`                             |
+| `logInfoStdout`                                     | Specifies whether the Sealed Secrets controller will log info to stdout                                                  | `false`                          |
 | `containerPorts.http`                               | Controller HTTP container port to open                                                                                   | `8080`                           |
 | `resources.limits`                                  | The resources limits for the Sealed Secret containers                                                                    | `{}`                             |
 | `resources.requests`                                | The requested resources for the Sealed Secret containers                                                                 | `{}`                             |
@@ -181,19 +191,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                          | Description                                                      | Value   |
-| --------------------------------------------- | ---------------------------------------------------------------- | ------- |
-| `rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
-| `rbac.pspEnabled`                             | PodSecurityPolicy                                                | `false` |
-| `rbac.unsealer.rules`                         | Custom RBAC rules to set for unsealer ClusterRole                | `[]`    |
-| `rbac.keyAdmin.rules`                         | Custom RBAC rules to set for key-admin role                      | `[]`    |
-| `rbac.serviceProxier.rules`                   | Custom RBAC rules to set for service-proxier role                | `[]`    |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
-| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true`  |
-| `networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created              | `false` |
-| `networkPolicy.allowExternal`                 | Don't require client label for connections                       | `true`  |
+| Name                                          | Description                                                                                                                                                                                           | Value   |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                                                                                                    | `true`  |
+| `rbac.pspEnabled`                             | PodSecurityPolicy                                                                                                                                                                                     | `false` |
+| `rbac.clusterRole`                            | Specifies whether the Cluster Role resource should be created. If both rbac.clusterRole and rbac.namespacedRoles are set to false no RBAC will be created.                                            | `true`  |
+| `rbac.clusterRoleName`                        | Specifies the name for the Cluster Role resource                                                                                                                                                      | `""`    |
+| `rbac.namespacedRoles`                        | Specifies whether the namespaced Roles should be created (in each of the specified additionalNamespaces). If both rbac.clusterRole and rbac.namespacedRoles are set to false no RBAC will be created. | `false` |
+| `rbac.namespacedRolesName`                    | Specifies the name for the namesapced Role resource                                                                                                                                                   | `""`    |
+| `rbac.unsealer.rules`                         | Custom RBAC rules to set for unsealer ClusterRole                                                                                                                                                     | `[]`    |
+| `rbac.keyAdmin.rules`                         | Custom RBAC rules to set for key-admin role                                                                                                                                                           | `[]`    |
+| `rbac.serviceProxier.rules`                   | Custom RBAC rules to set for service-proxier role                                                                                                                                                     | `[]`    |
+| `rbac.labels`                                 | Extra labels to be added to RBAC resources                                                                                                                                                            | `{}`    |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                                                                                  | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                                                                                | `""`    |
+| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)                                                                                                                                      | `{}`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                                                                                        | `true`  |
+| `networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created                                                                                                                                                   | `false` |
+| `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                                                                                                            | `true`  |
+| `pdb.create`                                  | Enable a Pod Disruption Budget creation                                                                                                                                                               | `false` |
+| `pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                                                                                        | `""`    |
+| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                                                                                                        | `""`    |
 
 ### Metrics parameters
 
@@ -230,7 +248,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/seale
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/sealed-secrets/values.yaml)
 
 ## Configuration and installation details
 

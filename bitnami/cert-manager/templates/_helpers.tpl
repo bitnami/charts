@@ -28,7 +28,7 @@ Return the proper image name (for the init container volume-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "certmanager.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.controller.image) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.controller.image) "context" $) }}
 {{- end -}}
 
 {{/*
@@ -68,7 +68,7 @@ Return the proper certmanager.webhook image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "certmanager.webhook.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.webhook.image) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.webhook.image) "context" $) }}
 {{- end -}}
 
 {{/*
@@ -108,7 +108,7 @@ Return the proper cainjector image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "certmanager.cainjector.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.cainjector.image) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.cainjector.image) "context" $) }}
 {{- end -}}
 
 {{/*
@@ -163,4 +163,3 @@ cert-manager: CRDs
     If you want to include our CRD resources, please install the cert-manager using the crd flags (--set .Values.installCRDs=true).
 {{- end -}}
 {{- end -}}
-

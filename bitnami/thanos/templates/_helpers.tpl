@@ -158,11 +158,15 @@ Return the Thanos Ruler configuration configmap.
 Return the queryURL used by Thanos Ruler.
 */}}
 {{- define "thanos.ruler.queryURL" -}}
+{{- if and .Values.queryFrontend.enabled .Values.queryFrontend.ingress.enabled .Values.queryFrontend.ingress.hostname .Values.queryFrontend.ingress.overrideAlertQueryURL -}}
+{{- printf "http://%s" (tpl .Values.queryFrontend.ingress.hostname .) -}}
+{{- else -}}
 {{- $query := (include "thanos.query.values" . | fromYaml) -}}
 {{- if .Values.ruler.queryURL -}}
     {{- printf "%s" (tpl .Values.ruler.queryURL $) -}}
 {{- else -}}
     {{- printf "http://%s-query.%s.svc.%s:%d" (include "common.names.fullname" . ) .Release.Namespace .Values.clusterDomain (int  $query.service.ports.http) -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 

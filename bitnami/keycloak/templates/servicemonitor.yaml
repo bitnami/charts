@@ -24,7 +24,7 @@ spec:
     {{- $endpoints := ternary (.Values.metrics.serviceMonitor.endpoints) (list (dict "path" .Values.metrics.serviceMonitor.path)) (empty .Values.metrics.serviceMonitor.path) }}
     {{- range $endpoints }}
     {{- $endpoint := merge . $defaultEndpoint }}
-    - port: {{ $endpoint.port }}
+    - port: {{ $endpoint.port | quote }}
       path: {{ include "common.tplvalues.render" ( dict "value" $endpoint.path "context" $) }}
       {{- if $endpoint.interval }}
       interval: {{ $endpoint.interval }}

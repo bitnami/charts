@@ -59,6 +59,11 @@
             "default": [],
             "items": {}
         },
+        "enableServiceLinks": {
+            "type": "boolean",
+            "description": "Whether information about services should be injected into all pods' environment variable",
+            "default": true
+        },
         "diagnosticMode": {
             "type": "object",
             "properties": {
@@ -233,6 +238,36 @@
                     "type": "boolean",
                     "description": "Deploy default init containers",
                     "default": true
+                },
+                "tls": {
+                    "type": "object",
+                    "properties": {
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Name of the existing secret containing the TLS certificates for initJob",
+                            "default": ""
+                        },
+                        "cert": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'cert' key different from the default (client.pem)",
+                            "default": "tls.crt"
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'key' key different from the default (client.key)",
+                            "default": "tls.key"
+                        },
+                        "caCert": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'caCert' key different from the default (ca.pem)",
+                            "default": "ca.crt"
+                        },
+                        "keyPassword": {
+                            "type": "string",
+                            "description": "Password to access the password-protected PEM key if necessary",
+                            "default": ""
+                        }
+                    }
                 },
                 "backoffLimit": {
                     "type": "number",
@@ -5609,6 +5644,41 @@
                     "description": "Enable Proxy deployment",
                     "default": true
                 },
+                "tls": {
+                    "type": "object",
+                    "properties": {
+                        "mode": {
+                            "type": "integer",
+                            "description": "TLS mode for proxy. Allowed values: `0`, `1`, `2`",
+                            "default": false
+                        },
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Name of the existing secret containing the TLS certificates for proxy",
+                            "default": ""
+                        },
+                        "cert": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'cert' key different from the default (server.pem)",
+                            "default": "tls.crt"
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'key' key different from the default (server.key)",
+                            "default": "tls.key"
+                        },
+                        "caCert": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'caCert' key different from the default (ca.pem)",
+                            "default": "ca.crt"
+                        },
+                        "keyPassword": {
+                            "type": "string",
+                            "description": "Password to access the password-protected PEM key if necessary",
+                            "default": ""
+                        }
+                    }
+                },
                 "extraEnvVars": {
                     "type": "array",
                     "description": "Array with extra environment variables to add to proxy nodes",
@@ -7186,10 +7256,40 @@
                     "description": "Port of the external etcd instance",
                     "default": 2379
                 },
-                "secureTransport": {
-                    "type": "boolean",
-                    "description": "Use TLS for client-to-server communications",
-                    "default": false
+                "tls": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable TLS for etcd client connections",
+                            "default": false
+                        },
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Name of the existing secret containing the TLS certificates for external etcd client communications",
+                            "default": ""
+                        },
+                        "cert": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'cert' key different from the default",
+                            "default": "tls.crt"
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'key' key different from the default",
+                            "default": "tls.key"
+                        },
+                        "caCert": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'caCert' key different from the default",
+                            "default": "ca.crt"
+                        },
+                        "keyPassword": {
+                            "type": "string",
+                            "description": "Password to access the password-protected PEM key if necessary",
+                            "default": ""
+                        }
+                    }
                 }
             }
         },

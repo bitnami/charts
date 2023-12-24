@@ -1,6 +1,6 @@
 <!--- app-name: Apache Flink -->
 
-# Apache Flink packaged by Bitnami
+# Bitnami package for Apache Flink
 
 Apache Flink is a framework and distributed processing engine for stateful computations over unbounded and bounded data streams.
 
@@ -11,18 +11,16 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/flink
+helm install my-release oci://registry-1.docker.io/bitnamicharts/flink
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Apache Flink in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [flink](https://github.com/bitnami/containers/tree/main/bitnami/flink) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Apache Flink in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -149,12 +147,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jobmanager.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                          | `true`           |
 | `jobmanager.podSecurityContext.enabled`                        | Enabled Apache Flink pods' Security Context                                               | `true`           |
 | `jobmanager.podSecurityContext.fsGroup`                        | Set Apache Flink pod's Security Context fsGroup                                           | `1001`           |
-| `jobmanager.podSecurityContext.seccompProfile.type`            | Rules specifying actions to take based on the requested syscall                           | `RuntimeDefault` |
 | `jobmanager.containerSecurityContext.enabled`                  | Enabled Apache Flink containers' Security Context                                         | `true`           |
 | `jobmanager.containerSecurityContext.runAsUser`                | Set Apache Flink container's Security Context runAsUser                                   | `1001`           |
 | `jobmanager.containerSecurityContext.runAsNonRoot`             | Force the container to be run as non root                                                 | `true`           |
 | `jobmanager.containerSecurityContext.allowPrivilegeEscalation` | Allows privilege escalation                                                               | `false`          |
+| `jobmanager.containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                       | `false`          |
 | `jobmanager.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                        | `["ALL"]`        |
+| `jobmanager.containerSecurityContext.seccompProfile.type`      | Rules specifying actions to take based on the requested syscall                           | `RuntimeDefault` |
 | `jobmanager.podAnnotations`                                    | Additional pod annotations                                                                | `{}`             |
 | `jobmanager.podLabels`                                         | Additional pod labels                                                                     | `{}`             |
 | `jobmanager.podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`             |
@@ -230,12 +229,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `taskmanager.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                          | `true`           |
 | `taskmanager.podSecurityContext.enabled`                        | Enabled Apache Flink pods' Security Context                                               | `true`           |
 | `taskmanager.podSecurityContext.fsGroup`                        | Set Apache Flink pod's Security Context fsGroup                                           | `1001`           |
-| `taskmanager.podSecurityContext.seccompProfile.type`            | Rules specifying actions to take based on the requested syscall                           | `RuntimeDefault` |
 | `taskmanager.containerSecurityContext.enabled`                  | Enabled Apache Flink containers' Security Context                                         | `true`           |
 | `taskmanager.containerSecurityContext.runAsUser`                | Set Apache Flink container's Security Context runAsUser                                   | `1001`           |
 | `taskmanager.containerSecurityContext.runAsNonRoot`             | Force the container to be run as non root                                                 | `true`           |
+| `taskmanager.containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                       | `false`          |
 | `taskmanager.containerSecurityContext.allowPrivilegeEscalation` | Allows privilege escalation                                                               | `false`          |
 | `taskmanager.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                        | `["ALL"]`        |
+| `taskmanager.containerSecurityContext.seccompProfile.type`      | Rules specifying actions to take based on the requested syscall                           | `RuntimeDefault` |
 | `taskmanager.podAnnotations`                                    | Additional pod annotations                                                                | `{}`             |
 | `taskmanager.podLabels`                                         | Additional pod labels                                                                     | `{}`             |
 | `taskmanager.podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`             |
