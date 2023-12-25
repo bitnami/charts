@@ -107,6 +107,45 @@ spec:
           {{- if .Values.metrics.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.resources "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.metrics.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.metrics.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.metrics.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.metrics.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            initialDelaySeconds: {{ .Values.metrics.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.metrics.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.metrics.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.metrics.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.metrics.startupProbe.failureThreshold }}
+          {{- end }}
       {{- if .Values.metrics.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.metrics.sidecars "context" $) | trim | nindent 8 }}
       {{- end }}

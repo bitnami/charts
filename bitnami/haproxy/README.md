@@ -108,6 +108,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| `terminationGracePeriodSeconds`    | Seconds HAProxy pod needs to terminate gracefully                                                                                | `""`                     |
 
 ### HAProxy Parameters
 
