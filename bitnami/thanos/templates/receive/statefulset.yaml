@@ -26,6 +26,7 @@ spec:
   {{- if .Values.receive.updateStrategy }}
   updateStrategy: {{- toYaml .Values.receive.updateStrategy | nindent 4 }}
   {{- end }}
+  minReadySeconds: {{ .Values.receive.minReadySeconds }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.receive.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}

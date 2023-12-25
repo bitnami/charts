@@ -37,6 +37,17 @@ func TestElasticsearch(t *testing.T) {
 }
 
 func createJob(ctx context.Context, c kubernetes.Interface, name string, port string, image string, op string, index string) error {
+	securityContext := &v1.SecurityContext{
+		Privileged:               &[]bool{false}[0],
+		AllowPrivilegeEscalation: &[]bool{false}[0],
+		RunAsNonRoot:             &[]bool{true}[0],
+		Capabilities: &v1.Capabilities{
+			Drop: []v1.Capability{"ALL"},
+		},
+		SeccompProfile: &v1.SeccompProfile{
+			Type: "RuntimeDefault",
+		},
+	}
 	job := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
@@ -50,9 +61,10 @@ func createJob(ctx context.Context, c kubernetes.Interface, name string, port st
 					RestartPolicy: "Never",
 					Containers: []v1.Container{
 						{
-							Name:    "elasticsearch",
-							Image:   image,
-							Command: []string{"curl", "-X", op, fmt.Sprintf("http://%s/%s", releaseName, index)},
+							Name:            "elasticsearch",
+							Image:           image,
+							Command:         []string{"curl", "-X", op, fmt.Sprintf("http://%s/%s", releaseName, index)},
+							SecurityContext: securityContext,
 						},
 					},
 				},

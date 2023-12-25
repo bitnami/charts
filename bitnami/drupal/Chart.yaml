@@ -8,16 +8,16 @@ annotations:
     - name: apache-exporter
       image: docker.io/bitnami/apache-exporter:1.0.3-debian-11-r2
     - name: drupal
-      image: docker.io/bitnami/drupal:10.1.7-debian-11-r0
+      image: docker.io/bitnami/drupal:10.2.0-debian-11-r0
     - name: os-shell
       image: docker.io/bitnami/os-shell:11-debian-11-r92
 apiVersion: v2
-appVersion: 10.1.7
+appVersion: 10.2.0
 dependencies:
 - condition: mariadb.enabled
   name: mariadb
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 14.x.x
+  version: 15.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -40,4 +40,4 @@ maintainers:
 name: drupal
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/drupal
-version: 16.1.6
+version: 17.0.0
