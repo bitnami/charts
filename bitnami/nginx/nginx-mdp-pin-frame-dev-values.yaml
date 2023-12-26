@@ -508,10 +508,7 @@ serverBlock: |-
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            
-            sub_filter_types text/html text/css application/javascript;
-            sub_filter 'href="/pin-management/' 'href="/mdp-pin-frame-dev-nginx/pin-management/';
-            sub_filter 'src="/pin-management/' 'src="/mdp-pin-frame-dev-nginx/pin-management/';
+            proxy_set_header X-Forwarded-Proto $scheme;
         
         
       }
