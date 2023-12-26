@@ -525,6 +525,10 @@ To enable the new features, it is not possible to do it by upgrading an existing
 
 ## Upgrading
 
+### To 19.0.0
+
+This major release bumps the MariaDB version to 11.2. No major issues are expected during the upgrade.
+
 ### To 18.0.0
 
 This major release bumps the MariaDB version to 11.1. No major issues are expected during the upgrade.

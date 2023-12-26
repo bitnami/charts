@@ -1,0 +1,63 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.apiserver.enabled .Values.apiserver.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ template "kuberay.apiserver.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.apiserver.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: kuberay
+    app.kubernetes.io/component: apiserver
+  {{- if or .Values.apiserver.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.apiserver.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.apiserver.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.apiserver.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.apiserver.ingress.hostname }}
+    - host: {{ .Values.apiserver.ingress.hostname }}
+      http:
+        paths:
+          {{- if .Values.apiserver.ingress.extraPaths }}
+          {{- toYaml .Values.apiserver.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.apiserver.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.apiserver.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "kuberay.apiserver.fullname" . | trunc 63 | trimSuffix "-") "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.apiserver.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "kuberay.apiserver.fullname" $ | trunc 63 | trimSuffix "-") "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.apiserver.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.apiserver.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.apiserver.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.apiserver.ingress.annotations )) .Values.apiserver.ingress.selfSigned)) .Values.apiserver.ingress.extraTls }}
+  tls:
+    {{- if and .Values.apiserver.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.apiserver.ingress.annotations )) .Values.apiserver.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.apiserver.ingress.hostname | quote }}
+      secretName: {{ printf "%s-tls" .Values.apiserver.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.apiserver.ingress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.apiserver.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

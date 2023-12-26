@@ -966,6 +966,14 @@ Init container definition for waiting for the database to be ready
       # HACK: In order to enable Kafka we need to remove all Pulsar settings from the configuration file
       # https://github.com/milvus-io/milvus/blob/master/configs/milvus.yaml#L110
       yq 'del(.pulsar)' /bitnami/milvus/rendered-conf/pre-render-config_00.yaml > /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
+      yq e -i '.common.security.tlsMode = {{ .context.Values.proxy.tls.mode }}' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
+      {{- if ne (int .context.Values.proxy.tls.mode) 0 }}
+      yq e -i '.tls.serverPemPath = "/opt/bitnami/milvus/configs/cert/milvus/{{ .context.Values.proxy.tls.cert }}"' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
+      yq e -i '.tls.serverKeyPath = "/opt/bitnami/milvus/configs/cert/milvus/{{ .context.Values.proxy.tls.key }}"' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
+      {{- if eq (int .context.Values.proxy.tls.mode) 2 }}
+      yq e -i '.tls.caPemPath = "/opt/bitnami/milvus/configs/cert/milvus/{{ .context.Values.proxy.tls.caCert }}"' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
+      {{- end }}
+      {{- end }}
       {{- end }}
       render-template /bitnami/milvus/rendered-conf/pre-render-config_01.yaml > /bitnami/milvus/rendered-conf/milvus.yaml
       rm /bitnami/milvus/rendered-conf/pre-render-config*
@@ -1050,11 +1058,13 @@ Compile all warnings into a single message.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "milvus.validateValues.controllers" .) -}}
 {{- $messages := append $messages (include "milvus.validateValues.attu" .) -}}
+{{- $messages := append $messages (include "milvus.validateValues.proxy.tls" .) -}}
+{{- $messages := append $messages (include "milvus.validateValues.initJob.tls" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
 {{- if $message -}}
-{{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail  -}}
 {{- end -}}
 {{- end -}}
 
@@ -1073,5 +1083,45 @@ Function to validate the controller deployment
 {{- define "milvus.validateValues.attu" -}}
 {{- if and .Values.attu.enabled (not .Values.proxy.enabled) -}}
 attu: Attu requires the Milvus proxy to be enabled
+{{- end -}}
+{{- end -}}
+
+{{/*
+Function to validate the proxy tls configurations
+*/}}
+{{- define "milvus.validateValues.proxy.tls" -}}
+{{- if .Values.proxy.enabled -}}
+{{- $modeList := list 0 1 2 -}}
+{{- if not (has (int .Values.proxy.tls.mode) $modeList) -}}
+proxy: tls mode must be in [0, 1, 2]
+{{- end -}}
+{{- if ne (int .Values.proxy.tls.mode) 0 -}}
+{{- if empty .Values.proxy.tls.existingSecret -}}
+proxy: existingSecret can not be empty when tls mode is not 0
+{{- end -}}
+{{- if and (eq (int .Values.proxy.tls.mode) 1) (or (empty .Values.proxy.tls.cert) (empty .Values.proxy.tls.key)) -}}
+proxy: cert and key can not be empty when tls mode is 1
+{{- end -}}
+{{- if and (eq (int .Values.proxy.tls.mode) 2) (or (empty .Values.proxy.tls.cert) (empty .Values.proxy.tls.key) (empty .Values.proxy.tls.caCert)) -}}
+proxy: cert, key and caCert can not be empty when tls mode is 2
+{{- end -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Function to validate the initJob tls configurations
+*/}}
+{{- define "milvus.validateValues.initJob.tls" -}}
+{{- if and .Values.proxy.enabled (ne (int .Values.proxy.tls.mode) 0) -}}
+{{- if empty .Values.initJob.tls.existingSecret -}}
+initJob: existingSecret can not be empty when proxy tls mode is not 0
+{{- end -}}
+{{- if and (eq (int .Values.proxy.tls.mode) 1) (empty .Values.initJob.tls.cert) -}}
+initJob: cert can not be empty when proxy tls mode is 1
+{{- end -}}
+{{- if and (eq (int .Values.proxy.tls.mode) 2) (or (empty .Values.initJob.tls.cert) (empty .Values.initJob.tls.key) (empty .Values.initJob.tls.caCert)) -}}
+initJob: cert, key and caCert can not be empty when proxy tls mode is 2
+{{- end -}}
 {{- end -}}
 {{- end -}}

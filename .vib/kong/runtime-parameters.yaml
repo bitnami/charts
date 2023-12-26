@@ -46,7 +46,17 @@ extraDeploy:
         - name: nginx
           image: bitnami/nginx
           ports:
-          - containerPort: 8080
+            - containerPort: 8080
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
 - apiVersion: v1
   kind: Service
   metadata:
@@ -64,8 +74,9 @@ extraDeploy:
   kind: Secret
   metadata:
     name: apikey-vib-tests
+    labels:
+      konghq.com/credential: key-auth
   data:
-    kongCredType: a2V5LWF1dGg=
     key: Q29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0
 - apiVersion: configuration.konghq.com/v1
   kind: KongConsumer

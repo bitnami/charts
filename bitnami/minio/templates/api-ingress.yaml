@@ -8,7 +8,7 @@ apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "common.names.fullname" . }}-api
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list (include "minio.apiIngress.annotations" . | fromYaml) .Values.commonAnnotations ) "context" . ) }}
   {{- if $annotations }}
