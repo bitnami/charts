@@ -80,6 +80,9 @@ spec:
           imagePullPolicy: {{ .Values.waitForBackends.image.pullPolicy | quote }}
           command:
             - /scripts/wait-for-backends.sh
+          {{- if .Values.waitForBackends.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.waitForBackends.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           {{- if .Values.waitForBackends.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.waitForBackends.resources "context" $) | nindent 12 }}
           {{- end }}

@@ -1511,6 +1511,28 @@ waitForBackends:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## waitForBackends containers' Security Context (init container).
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param waitForBackends.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param waitForBackends.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param waitForBackends.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param waitForBackends.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param waitForBackends.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param waitForBackends.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param waitForBackends.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param waitForBackends.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Init container resource requests and limits.
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
