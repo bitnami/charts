@@ -107,6 +107,38 @@ metadata:
   {{- end }}
 rules:
 - apiGroups:
+  - configuration.konghq.com
+  resources:
+  - kongupstreampolicies
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - configuration.konghq.com
+  resources:
+  - kongupstreampolicies/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - configuration.konghq.com
+  resources:
+  - kongconsumergroups
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - configuration.konghq.com
+  resources:
+  - kongconsumergroups/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
   - ""
   resources:
   - endpoints
@@ -178,22 +210,6 @@ rules:
   - configuration.konghq.com
   resources:
   - kongconsumers/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - configuration.konghq.com
-  resources:
-  - kongconsumergroups
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - configuration.konghq.com
-  resources:
-  - kongconsumergroups/status
   verbs:
   - get
   - patch
@@ -278,7 +294,7 @@ rules:
   - get
   - patch
   - update
-{{- if or (.Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1alpha2") (.Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1beta1") }}
+{{- if or (.Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1alpha2") (.Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1beta1") (.Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1")}}
 - apiGroups:
   - gateway.networking.k8s.io
   resources:
@@ -451,7 +467,7 @@ rules:
   verbs:
   - list
   - watch
-{{- if or (.Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1alpha2") (.Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1beta1") }}
+{{- if or (.Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1alpha2") (.Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1beta1") (.Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1")}}
 - apiGroups:
   - gateway.networking.k8s.io
   resources:
