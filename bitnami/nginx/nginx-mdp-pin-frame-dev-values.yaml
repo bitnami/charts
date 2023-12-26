@@ -499,14 +499,17 @@ serverBlock: |-
    server {
      listen 0.0.0.0:8180;
      proxy_ssl_verify off;
-     sub_filter_types *;
+     
   
      location / {
         if ($request_uri ~ ^/mdp-pin-frame-dev-nginx(/.*)$) {
              # Remove the first path segment
              set $new_uri $1;
              proxy_pass https://10.10.116.106$new_uri;
-             sub_filter '/pin-management/' '/mdp-pin-frame-dev-nginx/pin-management/';
+  
+             sub_filter_types text/html text/css application/javascript;
+             sub_filter 'href="/pin-management/' 'href="/mdp-pin-frame-dev-nginx/pin-management/';
+             sub_filter 'src="/pin-management/' 'src="/mdp-pin-frame-dev-nginx/pin-management/';
         }
         proxy_pass https://10.10.116.106$request_uri;
       }
