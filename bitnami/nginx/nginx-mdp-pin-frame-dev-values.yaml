@@ -504,7 +504,7 @@ serverBlock: |-
      location /mdp-pin-frame-dev {
         
             
-            proxy_pass https://10.10.116.106       
+            proxy_pass https://10.10.116.106;  
       }
       
    }
