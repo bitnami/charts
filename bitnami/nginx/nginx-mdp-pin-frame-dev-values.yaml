@@ -501,8 +501,8 @@ serverBlock: |-
      proxy_ssl_verify off;
   
      location / {
-            set $new_uri $1;
-            proxy_pass https://10.10.116.106$new_uri;
+            
+            proxy_pass https://10.10.116.106;
      }
       
    }
