@@ -501,7 +501,7 @@ serverBlock: |-
      proxy_ssl_verify off;
      
   
-     location /mdp-pin-frame-dev {
+     location /mdp-pin-frame-dev-nginx {
         
              # Remove the first path segment
              set $new_uri $1;
