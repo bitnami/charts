@@ -505,6 +505,7 @@ serverBlock: |-
              # Remove the first path segment
              set $new_uri $1;
              proxy_pass https://10.10.116.106$new_uri;
+             sub_filter '/pin-management/' '/mdp-pin-frame-dev-nginx/pin-management/';
         }
         proxy_pass https://10.10.116.106$request_uri;
       }
