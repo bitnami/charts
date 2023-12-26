@@ -499,6 +499,7 @@ serverBlock: |-
    server {
      listen 0.0.0.0:8180;
      proxy_ssl_verify off;
+     sub_filter_types *;
   
      location / {
         if ($request_uri ~ ^/mdp-pin-frame-dev-nginx(/.*)$) {
