@@ -10,11 +10,6 @@ supervisor:
     type: LoadBalancer
     ports:
       https: 443
-  hostAliases:
-    - ip: 127.0.0.1
-      hostnames:
-        - pinniped-supervisor
-  hostname: pinniped-supervisor
 concierge:
   enabled: true
   rbac:
@@ -22,12 +17,12 @@ concierge:
 extraDeploy:
 - |
   {{- $ca := genCA "pinniped-ca" 365 }}
-  {{- $pinniped_hostname := "pinniped-supervisor" }}
+  {{- $pinniped_hostname := include "pinniped.supervisor.fullname" . }}
   {{- $pinniped_cert := genSignedCert $pinniped_hostname nil (list $pinniped_hostname) 365 $ca }}
   apiVersion: v1
   kind: Secret
   metadata:
-    name: pinniped-supervisor-default-tls-certificate
+    name: {{ printf "%s-%s" (include "pinniped.supervisor.fullname" .) "default-tls-certificate" | trunc 63 | trimSuffix "-" }}
     namespace: {{ include "common.names.namespace" $ | quote }}
   type: kubernetes.io/tls
   data:
@@ -107,7 +102,7 @@ extraDeploy:
               - name: LDAP_ADMIN_PASSWORD
                 value: "admin123"
               - name: LDAP_ROOT
-                value: "dc=pinniped-supervisor"
+                value: {{ printf "dc=%s" (include "pinniped.supervisor.fullname" . ) }}
               - name: LDAP_USER_DC
                 value: "users"
               - name: LDAP_USERS
@@ -188,7 +183,7 @@ extraDeploy:
     name: supervisor-jwt-authenticator
     namespace: {{ include "common.names.namespace" $ | quote }}
   spec:
-    issuer: "https://pinniped-supervisor/demo-issuer"
+    issuer: {{ printf "https://%s/demo-issuer" ( include "pinniped.supervisor.fullname" . ) }}
     audience: vib-ed9de33c370981f61e9c
     tls:
       certificateAuthorityData: {{ $ca.Cert | b64enc | quote }}
