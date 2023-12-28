@@ -14,6 +14,13 @@ concierge:
   enabled: true
   rbac:
     create: true
+  credentialIssuerConfig: |
+    impersonationProxy:
+      mode: enabled
+      service:
+        type: LoadBalancer
+        annotations:
+          service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "4000"
 extraDeploy:
 - |
   {{- $ca := genCA "pinniped-ca" 365 }}
