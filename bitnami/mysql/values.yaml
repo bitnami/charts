@@ -431,6 +431,9 @@ primary:
   ## @param primary.extraEnvVarsSecret Name of existing Secret containing extra env vars for MySQL primary containers
   ##
   extraEnvVarsSecret: ""
+  ## @param primary.extraPodSpec Optionally specify extra PodSpec for the MySQL Primary pod(s)
+  ##
+  extraPodSpec: {}
   ## @param primary.extraPorts Extra ports to expose
   ##
   extraPorts: []
@@ -830,6 +833,9 @@ secondary:
   ## @param secondary.extraEnvVarsSecret Name of existing Secret containing extra env vars for MySQL secondary containers
   ##
   extraEnvVarsSecret: ""
+  ## @param secondary.extraPodSpec Optionally specify extra PodSpec for the MySQL Secondary pod(s)
+  ##
+  extraPodSpec: {}
   ## @param secondary.extraPorts Extra ports to expose
   ##
   extraPorts: []
