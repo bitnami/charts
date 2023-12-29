@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### MySQL common parameters
 
 | Name                               | Description                                                                                                                                                                         | Value                   |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+|------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------|
 | `image.registry`                   | MySQL image registry                                                                                                                                                                | `REGISTRY_NAME`         |
 | `image.repository`                 | MySQL image repository                                                                                                                                                              | `REPOSITORY_NAME/mysql` |
 | `image.digest`                     | MySQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                               | `""`                    |
@@ -105,6 +105,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initdbScriptsConfigMap`           | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                 | `""`                    |
 | `startdbScripts`                   | Dictionary of startdb scripts                                                                                                                                                       | `{}`                    |
 | `startdbScriptsConfigMap`          | ConfigMap with the startdb scripts (Note: Overrides `startdbScripts`)                                                                                                               | `""`                    |
+| `createSecret`                     | Create secrets for passwords according configuration. Set to false if you use secret injection like vault-injector.                                                                 | `true`                  |
 
 ### MySQL Primary parameters
 
