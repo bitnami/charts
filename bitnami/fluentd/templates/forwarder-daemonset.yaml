@@ -201,15 +201,12 @@ spec:
               mountPath: /var/lib/docker/containers
               readOnly: true
             {{- if .Values.forwarder.extraVolumeMounts }}
-            {{- toYaml .Values.forwarder.extraVolumeMounts | nindent 12 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
         {{- if .Values.forwarder.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.sidecars "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if .Values.forwarder.extraVolumes }}
-            {{- toYaml .Values.forwarder.extraVolumes | nindent 8 }}
-        {{- end }}
         {{- if .Values.tls.enabled }}
         - name: fluentd-forwarder-certificates
           secret:
@@ -250,4 +247,7 @@ spec:
         - name: varlibdockercontainers
           hostPath:
             path: /var/lib/docker/containers
+        {{- if .Values.forwarder.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
 {{- end }}

@@ -60,7 +60,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/pinniped
-  tag: 0.27.0-debian-11-r2
+  tag: 0.28.0-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -137,6 +137,8 @@ concierge:
       impersonationTLSCertificateSecret: {{ printf "%s-%s" (include "pinniped.concierge.impersonation-proxy.fullname" .) "tls-serving-certificate" | trunc 63 | trimSuffix "-" }}
       impersonationCACertificateSecret: {{ printf "%s-%s" (include "pinniped.concierge.impersonation-proxy.fullname" .) "ca-certificate" | trunc 63 | trimSuffix "-" }}
       impersonationSignerSecret: {{ printf "%s-%s" (include "pinniped.concierge.impersonation-proxy.fullname" .) "signer-ca-certificate" | trunc 63 | trimSuffix "-" }}
+      impersonationProxyServiceAccount: {{ template "pinniped.concierge.impersonation-proxy.serviceAccountName" . }}
+      impersonationProxyLegacySecret: {{ template "pinniped.concierge.impersonation-proxy.serviceAccountName" . }}
       agentServiceAccount: {{ template "pinniped.concierge.kube-cert-agent.fullname" . }}
     labels: {"app":"pinniped-concierge","app.kubernetes.io/part-of":"pinniped", "app.kubernetes.io/component": "concierge", "app.kubernetes.io/instance": "{{ .Release.Name }}"}
     kubeCertAgent:

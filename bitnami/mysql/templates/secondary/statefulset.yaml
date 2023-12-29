@@ -37,6 +37,9 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: secondary
     spec:
+      {{- if .Values.secondary.extraPodSpec }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.secondary.extraPodSpec "context" $) | nindent 6 }}
+      {{- end }}
       serviceAccountName: {{ include "mysql.serviceAccountName" . }}
       {{- include "mysql.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.secondary.hostAliases }}

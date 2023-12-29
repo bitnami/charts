@@ -422,16 +422,24 @@ helm uninstall my-release
 
 ### Init Container parameters
 
-| Name                                 | Description                                                                                                                     | Value                     |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `waitForBackends.enabled`            | Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming                               | `true`                    |
-| `waitForBackends.image.registry`     | Init container wait-for-backend image registry                                                                                  | `REGISTRY_NAME`           |
-| `waitForBackends.image.repository`   | Init container wait-for-backend image name                                                                                      | `REPOSITORY_NAME/kubectl` |
-| `waitForBackends.image.digest`       | Init container wait-for-backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
-| `waitForBackends.image.pullPolicy`   | Init container wait-for-backend image pull policy                                                                               | `IfNotPresent`            |
-| `waitForBackends.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                | `[]`                      |
-| `waitForBackends.resources.limits`   | Init container wait-for-backend resource limits                                                                                 | `{}`                      |
-| `waitForBackends.resources.requests` | Init container wait-for-backend resource requests                                                                               | `{}`                      |
+| Name                                                                | Description                                                                                                                     | Value                     |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `waitForBackends.enabled`                                           | Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming                               | `true`                    |
+| `waitForBackends.image.registry`                                    | Init container wait-for-backend image registry                                                                                  | `REGISTRY_NAME`           |
+| `waitForBackends.image.repository`                                  | Init container wait-for-backend image name                                                                                      | `REPOSITORY_NAME/kubectl` |
+| `waitForBackends.image.digest`                                      | Init container wait-for-backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
+| `waitForBackends.image.pullPolicy`                                  | Init container wait-for-backend image pull policy                                                                               | `IfNotPresent`            |
+| `waitForBackends.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                | `[]`                      |
+| `waitForBackends.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                            | `true`                    |
+| `waitForBackends.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                      | `1001`                    |
+| `waitForBackends.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                   | `true`                    |
+| `waitForBackends.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                     | `false`                   |
+| `waitForBackends.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                         | `false`                   |
+| `waitForBackends.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                       | `false`                   |
+| `waitForBackends.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                              | `["ALL"]`                 |
+| `waitForBackends.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                | `RuntimeDefault`          |
+| `waitForBackends.resources.limits`                                  | Init container wait-for-backend resource limits                                                                                 | `{}`                      |
+| `waitForBackends.resources.requests`                                | Init container wait-for-backend resource requests                                                                               | `{}`                      |
 
 ### Database parameters
 
