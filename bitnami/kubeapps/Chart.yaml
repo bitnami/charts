@@ -6,21 +6,21 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kubeapps-apis
-      image: docker.io/bitnami/kubeapps-apis:2.9.0-debian-11-r13
+      image: docker.io/bitnami/kubeapps-apis:2.9.0-debian-11-r14
     - name: kubeapps-apprepository-controller
-      image: docker.io/bitnami/kubeapps-apprepository-controller:2.9.0-debian-11-r12
+      image: docker.io/bitnami/kubeapps-apprepository-controller:2.9.0-debian-11-r13
     - name: kubeapps-asset-syncer
-      image: docker.io/bitnami/kubeapps-asset-syncer:2.9.0-debian-11-r13
+      image: docker.io/bitnami/kubeapps-asset-syncer:2.9.0-debian-11-r14
     - name: kubeapps-oci-catalog
-      image: docker.io/bitnami/kubeapps-oci-catalog:2.9.0-debian-11-r6
+      image: docker.io/bitnami/kubeapps-oci-catalog:2.9.0-debian-11-r8
     - name: kubeapps-pinniped-proxy
-      image: docker.io/bitnami/kubeapps-pinniped-proxy:2.9.0-debian-11-r10
+      image: docker.io/bitnami/kubeapps-pinniped-proxy:2.9.0-debian-11-r12
     - name: kubeapps-dashboard
-      image: docker.io/bitnami/kubeapps-dashboard:2.9.0-debian-11-r16
+      image: docker.io/bitnami/kubeapps-dashboard:2.9.0-debian-11-r19
     - name: nginx
-      image: docker.io/bitnami/nginx:1.25.3-debian-11-r1
+      image: docker.io/bitnami/nginx:1.25.3-debian-11-r3
     - name: oauth2-proxy
-      image: docker.io/bitnami/oauth2-proxy:7.5.1-debian-11-r11
+      image: docker.io/bitnami/oauth2-proxy:7.5.1-debian-11-r12
 apiVersion: v2
 appVersion: 2.9.0
 dependencies:
@@ -52,4 +52,4 @@ maintainers:
 name: kubeapps
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kubeapps
-version: 14.1.2
+version: 14.1.3
