@@ -646,7 +646,7 @@ spec:
               {{- if .Values.extraEnvVars }}
               {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
               {{- end }}
-            {{- if .Values.pihole.password }}
+            {{- if .Values.pihole.secretName }}
             - name: EXTERNAL_DNS_PIHOLE_PASSWORD
               valueFrom:
                 secretKeyRef:
