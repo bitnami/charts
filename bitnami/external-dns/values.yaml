@@ -542,13 +542,13 @@ ns1:
   ##
   secretName: ""
 
-## NS1 configuration to be set via arguments/env. variables
+## Pi-hole configuration to be set via arguments/env. variables
 ##
 pihole:
-  ## @param pihole.server When using the pihole provider, specify The address of the Pi-hole web server
+  ## @param pihole.server When using the Pi-hole provider, specify The address of the Pi-hole web server
   ##
   server: ""
-  ## @param pihole.tlsSkipVerify When using the pihole provider, specify wheter to skip verification of any TLS certificates served by the Pi-hole web server
+  ## @param pihole.tlsSkipVerify When using the Pi-hole provider, specify wheter to skip verification of any TLS certificates served by the Pi-hole web server
   ##
   tlsSkipVerify: ""
   ## @param pihole.secretName Use an existing secret with key "pihole_password" defined.
