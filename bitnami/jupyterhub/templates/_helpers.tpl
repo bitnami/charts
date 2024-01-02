@@ -72,17 +72,18 @@ Return the CryptKeeper value
 {{- end }}
 
 {{/*
-Return a service API token
+Return the API token for a hub service
+Usage:
+{{ include "jupyterhub.hub.services.get_api_token" ( dict "serviceKey" "my-service" "context" $) }}
 */}}
 {{- define "jupyterhub.hub.services.get_api_token" -}}
-    {{- $_ := index . 0 }}
-    {{- $service_key := index . 1 }}
-    {{- $explicitly_set_api_token := or ($_.Values.hub.services | dig $service_key "api_token" "") ($_.Values.hub.services | dig $service_key "apiToken" "") }}
+    {{- $services := .context.hub.services }}
+    {{- $explicitly_set_api_token := or (dig .serviceKey "api_token" "" $services) (dig .serviceKey "apiToken" "" $services) }}
     {{- if $explicitly_set_api_token }}
         {{- $explicitly_set_api_token }}
     {{- else }}
-        {{- $k8s_state := lookup "v1" "Secret" $_.Release.Namespace (include "jupyterhub.hub.name" $_) | default (dict "data" (dict)) }}
-        {{- $k8s_secret_key := print "hub.services." $service_key ".apiToken" }}
+        {{- $k8s_state := lookup "v1" "Secret" .context.Release.Namespace (include "jupyterhub.hub.name" .context) | default (dict "data" (dict)) }}
+        {{- $k8s_secret_key := printf "hub.services.%s.apiToken" .serviceKey }}
         {{- if hasKey $k8s_state.data $k8s_secret_key }}
             {{- index $k8s_state.data $k8s_secret_key | b64dec }}
         {{- else }}
