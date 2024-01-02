@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kubectl
-      image: docker.io/bitnami/kubectl:1.28.4-debian-11-r2
+      image: docker.io/bitnami/kubectl:1.29.0-debian-11-r0
     - name: mariadb
       image: docker.io/bitnami/mariadb:10.11.6-debian-11-r2
     - name: prometheus-rsocket-proxy
@@ -53,4 +53,4 @@ maintainers:
 name: spring-cloud-dataflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
-version: 26.0.0
+version: 26.2.0

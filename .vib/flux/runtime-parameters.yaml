@@ -90,7 +90,7 @@ extraDeploy:
         "helm.sh/hook": post-install
     spec:
       interval: 5m
-      url: https://github.com/javsalgar/podinfo
+      url: https://github.com/mdhont/podinfo
       ref:
         branch: master
   - apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -122,7 +122,7 @@ extraDeploy:
       url: https://github.com/bitnami/charts
       ref:
         branch: main
-  - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  - apiVersion: helm.toolkit.fluxcd.io/v2beta2
     kind: HelmRelease
     metadata:
       name: vib-dokuwiki

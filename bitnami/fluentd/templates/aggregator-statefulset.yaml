@@ -200,15 +200,12 @@ spec:
               mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
             {{- end }}
             {{- if .Values.aggregator.extraVolumeMounts }}
-            {{- toYaml .Values.aggregator.extraVolumeMounts | nindent 12 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
         {{- if .Values.aggregator.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.sidecars "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if .Values.aggregator.extraVolumes }}
-          {{- toYaml .Values.aggregator.extraVolumes | nindent 8 }}
-        {{- end }}
         {{- if .Values.tls.enabled }}
         - name: fluentd-aggregator-certificates
           secret:
@@ -237,6 +234,9 @@ spec:
           secret:
             secretName: {{ template "fluentd.aggregator.initScriptsSecret" . }}
             defaultMode: 0755
+        {{- end }}
+        {{- if .Values.aggregator.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
 
   {{- if or .Values.aggregator.persistence.enabled .Values.aggregator.extraVolumeClaimTemplates }}

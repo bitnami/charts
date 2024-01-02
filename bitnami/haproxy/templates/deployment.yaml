@@ -36,6 +36,9 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: haproxy
     spec:
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
       serviceAccountName: {{ template "haproxy.serviceAccountName" . }}
       {{- include "haproxy.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.hostAliases }}
