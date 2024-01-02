@@ -1140,7 +1140,7 @@ backup:
     ## @param backup.cronjob.annotations Set the cronjob annotations
     annotations: {}
     ## @param backup.cronjob.nodeSelector Node labels for PostgreSQL backup CronJob pod assignment
-    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/
     ##
     nodeSelector: {}
     storage:

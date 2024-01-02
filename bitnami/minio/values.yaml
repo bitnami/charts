@@ -225,7 +225,7 @@ provisioning:
   ##
   schedulerName: ""
   ## @param provisioning.nodeSelector Node labels for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/
   ##
   nodeSelector: {}
   ## @param provisioning.podLabels Extra labels for provisioning pods

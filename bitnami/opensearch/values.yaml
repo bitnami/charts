@@ -2401,7 +2401,7 @@ dashboards:
     ##
     sessionAffinityConfig: {}
   ## OpenSearch Dashboards ingress parameters
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param dashboards.ingress.enabled Enable ingress record generation for OpenSearch Dashboards
