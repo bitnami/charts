@@ -611,7 +611,7 @@ grafana:
     labels: {}
     ## @param grafana.ingress.annotations Additional Annotations for the ingress resource
     ## For a full list of possible ingress annotations, please see
-    ## Ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ##
     ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
     ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
