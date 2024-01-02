@@ -95,6 +95,14 @@ hub:
   ## @param hub.password Hub Dummy authenticator password
   ##
   password: ""
+  ## @param hub.services JupyterHub services interacting with the JupyterHub API
+  ## ref: https://z2jh.jupyter.org/en/latest/administrator/services.html
+  ## e.g:
+  ## services:
+  ##   service-admin:
+  ##     apiToken: XXXXXXXXXXXXXXXXXXX
+  ##     admin: true
+  services: {}
   ## Configuration file passed to the hub. This will be used by the jupyterhub_config.py file
   ## This configuration uses the values for the `singleuser` section. In the upstream chart the
   ## values.yaml file is mounted in the hub container. This is chart, we tried to separate both
@@ -130,7 +138,7 @@ hub:
       db:
         type: postgres
         url: postgresql://{{ ternary .Values.postgresql.auth.username .Values.externalDatabase.user .Values.postgresql.enabled }}@{{ ternary (include "jupyterhub.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled }}:{{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled }}/{{ ternary .Values.postgresql.auth.database .Values.externalDatabase.database .Values.postgresql.enabled }}
-      services: {}
+      services: {{- include "common.tplvalues.render" ( dict "value" .Values.hub.services "context" $ ) | nindent 8 }}
       allowNamedServers: false
       namedServerLimitPerUser:
       {{- if .Values.hub.metrics.serviceMonitor.enabled }}
