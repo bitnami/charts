@@ -116,7 +116,7 @@ auth:
   ## @param auth.forceNewKeys Force root credentials (user and password) to be reconfigured every time they change in the secrets
   ##
   forceNewKeys: false
-## @param defaultBuckets Comma, semi-colon or space separated list of buckets to create at initialization (only in standalone mode)
+## @param defaultBuckets Comma, semi-colon or space separated list of buckets to create at initialization (only in standalone mode). Do not set this value in distributed mode, as it will cause MinIO&reg; to crash.
 ## e.g:
 ## defaultBuckets: "my-bucket, my-second-bucket"
 ##
