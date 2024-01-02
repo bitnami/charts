@@ -77,7 +77,7 @@ Usage:
 {{ include "jupyterhub.hub.services.get_api_token" ( dict "serviceKey" "my-service" "context" $) }}
 */}}
 {{- define "jupyterhub.hub.services.get_api_token" -}}
-    {{- $services := .context.hub.services }}
+    {{- $services := .context.Values.hub.services }}
     {{- $explicitly_set_api_token := or (dig .serviceKey "api_token" "" $services) (dig .serviceKey "apiToken" "" $services) }}
     {{- if $explicitly_set_api_token }}
         {{- $explicitly_set_api_token }}
