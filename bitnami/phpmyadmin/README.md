@@ -400,6 +400,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 14.0.0
+
+This major release bumps the MariaDB version to 11.2. No major issues are expected during the upgrade.
+
 ### To 13.0.0
 
 This major release bumps the MariaDB version to 11.1. No major issues are expected during the upgrade.
@@ -548,7 +552,7 @@ kubectl patch deployment phpmyadmin-phpmyadmin --type=json -p='[{"op": "remove",
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

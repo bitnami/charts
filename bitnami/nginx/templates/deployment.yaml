@@ -132,7 +132,7 @@ spec:
             - |
               [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
               while true; do
-                  cd /app && git pull origin {{ .Values.cloneStaticSiteFromGit.branch }}
+                  cd /app && git -c safe.directory=/app pull origin {{ .Values.cloneStaticSiteFromGit.branch }}
                   sleep {{ .Values.cloneStaticSiteFromGit.interval }}
               done
           {{- end }}

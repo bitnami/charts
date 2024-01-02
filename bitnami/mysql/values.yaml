@@ -85,7 +85,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 8.0.35-debian-11-r0
+  tag: 8.0.35-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -431,6 +431,9 @@ primary:
   ## @param primary.extraEnvVarsSecret Name of existing Secret containing extra env vars for MySQL primary containers
   ##
   extraEnvVarsSecret: ""
+  ## @param primary.extraPodSpec Optionally specify extra PodSpec for the MySQL Primary pod(s)
+  ##
+  extraPodSpec: {}
   ## @param primary.extraPorts Extra ports to expose
   ##
   extraPorts: []
@@ -830,6 +833,9 @@ secondary:
   ## @param secondary.extraEnvVarsSecret Name of existing Secret containing extra env vars for MySQL secondary containers
   ##
   extraEnvVarsSecret: ""
+  ## @param secondary.extraPodSpec Optionally specify extra PodSpec for the MySQL Secondary pod(s)
+  ##
+  extraPodSpec: {}
   ## @param secondary.extraPorts Extra ports to expose
   ##
   extraPorts: []
@@ -1065,7 +1071,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r91
+    tag: 11-debian-11-r93
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1099,7 +1105,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.15.0-debian-11-r71
+    tag: 0.15.1-debian-11-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

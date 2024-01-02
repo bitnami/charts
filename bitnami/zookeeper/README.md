@@ -195,6 +195,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.minAvailable`                                  | Minimum available ZooKeeper replicas                                                                                                                                                              | `""`             |
 | `pdb.maxUnavailable`                                | Maximum unavailable ZooKeeper replicas                                                                                                                                                            | `1`              |
 | `enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                             | `true`           |
+| `dnsPolicy`                                         | Specifies the DNS policy for the zookeeper pods                                                                                                                                                   | `""`             |
+| `dnsConfig`                                         | allows users more control on the DNS settings for a Pod. Required if `dnsPolicy` is set to `None`                                                                                                 | `{}`             |
 
 ### Traffic Exposure parameters
 
@@ -521,7 +523,7 @@ kubectl delete statefulset zookeeper-zookeeper --cascade=false
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

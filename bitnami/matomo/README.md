@@ -308,6 +308,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cronjobs.taskScheduler.enabled`                                           | Whether to enable scheduled mail-to-task CronJob                     | `true`           |
 | `cronjobs.taskScheduler.schedule`                                          | Kubernetes CronJob schedule                                          | `*/5 * * * *`    |
 | `cronjobs.taskScheduler.suspend`                                           | Whether to create suspended CronJob                                  | `false`          |
+| `cronjobs.taskScheduler.affinity`                                          | Affinity for CronJob pod assignment                                  | `{}`             |
 | `cronjobs.taskScheduler.command`                                           | Override default container command (useful when using custom images) | `[]`             |
 | `cronjobs.taskScheduler.args`                                              | Override default container args (useful when using custom images)    | `[]`             |
 | `cronjobs.taskScheduler.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                 | `true`           |
@@ -323,6 +324,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cronjobs.archive.enabled`                                                 | Whether to enable scheduled mail-to-task CronJob                     | `true`           |
 | `cronjobs.archive.schedule`                                                | Kubernetes CronJob schedule                                          | `*/5 * * * *`    |
 | `cronjobs.archive.suspend`                                                 | Whether to create suspended CronJob                                  | `false`          |
+| `cronjobs.archive.affinity`                                                | Affinity for CronJob pod assignment                                  | `{}`             |
 | `cronjobs.archive.command`                                                 | Override default container command (useful when using custom images) | `[]`             |
 | `cronjobs.archive.args`                                                    | Override default container args (useful when using custom images)    | `[]`             |
 | `cronjobs.archive.containerSecurityContext.enabled`                        | Enabled containers' Security Context                                 | `true`           |
@@ -437,6 +439,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 4.0.0
+
+This major release bumps the MariaDB version to 11.2. No major issues are expected during the upgrade.
+
 ### To 3.2.0
 
 This version deprecates `cronjobs.enabled` value in favor of `cronjobs.taskScheduler.enabled` and `cronjobs.archive.enabled` values.
@@ -455,7 +461,7 @@ This major release bumps the MariaDB version to 10.11. Follow the [upstream inst
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

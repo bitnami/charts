@@ -267,9 +267,11 @@ spec:
             defaultMode: 256
             sources:
               - secret:
-                  name: {{ include "opensearch.coordinating.tlsSecretName" . }}
+                  name: {{ include "opensearch.node.tlsSecretName" (dict "nodeRole" "coordinating" "context" $) }}
+                  items: {{- include "opensearch.node.tlsSecretItems" (dict "nodeRole" "coordinating" "context" $) | nindent 20 }}
               - secret:
-                  name: {{ include "opensearch.admin.tlsSecretName" . }}
+                  name: {{ include "opensearch.admin.tlsSecretName" (dict "context" $) }}
+                  items: {{- include "opensearch.admin.tlsSecretItems" (dict "context" $) | nindent 20 }}
         {{- end }}
         {{- if .Values.initScripts }}
         - name: custom-init-scripts

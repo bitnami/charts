@@ -39,6 +39,10 @@ data:
     inter.broker.protocol.version={{ default (regexFind "^[0-9].[0-9]+" .Chart.AppVersion) .Values.interBrokerProtocolVersion }}
     {{- include "kafka.zookeeperConfig" . | nindent 4 }}
     {{- end }}
+    # Kafka data logs directory
+    log.dir={{ printf "%s/data" .Values.controller.persistence.mountPath }}
+    # Kafka application logs directory
+    logs.dir={{ .Values.controller.logPersistence.mountPath }}
     {{- include "kafka.commonConfig" . | nindent 4 }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.extraConfig "context" $ ) | nindent 4 }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.controller.extraConfig "context" $ ) | nindent 4 }}

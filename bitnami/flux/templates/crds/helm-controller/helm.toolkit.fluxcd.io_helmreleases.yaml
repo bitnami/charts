@@ -27,7 +27,7 @@ spec:
     - jsonPath: .status.conditions[?(@.type=="Ready")].message
       name: Status
       type: string
-    name: v2beta1
+    name: v2beta2
     schema:
       openAPIV3Schema:
         description: HelmRelease is the Schema for the helmreleases API

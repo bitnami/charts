@@ -6,18 +6,18 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.3-debian-11-r1
+      image: docker.io/bitnami/apache-exporter:1.0.3-debian-11-r2
     - name: opencart
-      image: docker.io/bitnami/opencart:4.0.2-3-debian-11-r21
+      image: docker.io/bitnami/opencart:4.0.2-3-debian-11-r24
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r91
+      image: docker.io/bitnami/os-shell:11-debian-11-r92
 apiVersion: v2
 appVersion: 4.0.2-3
 dependencies:
 - condition: mariadb.enabled
   name: mariadb
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 14.x.x
+  version: 15.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -38,4 +38,4 @@ maintainers:
 name: opencart
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/opencart
-version: 16.1.2
+version: 17.0.0
