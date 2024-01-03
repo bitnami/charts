@@ -3,7 +3,6 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if or .Values.config (or (or .Values.proxySetHeaders .Values.headers) .Values.addHeaders) .Values.dhParam }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -15,6 +14,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
+  allow-snippet-annotations: {{ .Values.allowSnippetAnnotations | quote }}
   {{- if .Values.addHeaders }}
   add-headers: {{ include "common.names.namespace" . }}/{{ printf "%s-custom-add-headers" (include "common.names.fullname" .) }}
   {{- end }}
@@ -27,4 +27,3 @@ data:
   {{- if .Values.config }}
   {{- include "common.tplvalues.render" (dict "value" .Values.config "context" $) | nindent 2 }}
   {{- end }}
-{{- end }}
