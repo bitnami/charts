@@ -121,7 +121,6 @@ mimir:
     # This configures how the store-gateway synchronizes blocks stored in the bucket. It uses Minio by default for getting started (configured via flags) but this should be changed for production deployments.
     blocks_storage:
       bucket_store:
-        max_chunk_pool_bytes: 12884901888 # 12GiB
         sync_dir: {{ .Values.mimir.dataDir }}/tsdb-sync
         {{- if .Values.memcachedchunks.enabled }}
         chunks_cache:
