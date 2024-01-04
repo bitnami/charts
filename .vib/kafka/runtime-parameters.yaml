@@ -2,6 +2,9 @@ externalAccess:
   enabled: true
   autoDiscovery:
     enabled: true
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1002
   controller:
     service:
       ports:
