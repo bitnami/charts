@@ -10,24 +10,26 @@ supervisor:
     type: LoadBalancer
     ports:
       https: 443
-  hostAliases:
-    - ip: 127.0.0.1
-      hostnames:
-        - pinniped-supervisor
-  hostname: pinniped-supervisor
 concierge:
   enabled: true
   rbac:
     create: true
+  credentialIssuerConfig: |
+    impersonationProxy:
+      mode: enabled
+      service:
+        type: LoadBalancer
+        annotations:
+          service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "4000"
 extraDeploy:
 - |
   {{- $ca := genCA "pinniped-ca" 365 }}
-  {{- $pinniped_hostname := "pinniped-supervisor" }}
+  {{- $pinniped_hostname := include "pinniped.supervisor.fullname" . }}
   {{- $pinniped_cert := genSignedCert $pinniped_hostname nil (list $pinniped_hostname) 365 $ca }}
   apiVersion: v1
   kind: Secret
   metadata:
-    name: pinniped-supervisor-default-tls-certificate
+    name: {{ printf "%s-%s" (include "pinniped.supervisor.fullname" .) "default-tls-certificate" | trunc 63 | trimSuffix "-" }}
     namespace: {{ include "common.names.namespace" $ | quote }}
   type: kubernetes.io/tls
   data:
@@ -56,7 +58,7 @@ extraDeploy:
     name: my-provider
     namespace: {{ include "common.names.namespace" $ | quote }}
   spec:
-    issuer: https://pinniped-supervisor/demo-issuer
+    issuer: {{ printf "https://%s/demo-issuer" ( include "pinniped.supervisor.fullname" . ) }}
   ---
   ## Ref: https://pinniped.dev/docs/howto/configure-supervisor-with-openldap/
   ##
@@ -98,6 +100,7 @@ extraDeploy:
               allowPrivilegeEscalation: false
               capabilities:
                 drop: ["ALL"]
+                add: ["NET_BIND_SERVICE"]
               seccompProfile:
                 type: "RuntimeDefault"
             env:
@@ -106,7 +109,7 @@ extraDeploy:
               - name: LDAP_ADMIN_PASSWORD
                 value: "admin123"
               - name: LDAP_ROOT
-                value: "dc=pinniped-supervisor"
+                value: {{ printf "dc=%s" (include "pinniped.supervisor.fullname" . ) }}
               - name: LDAP_USER_DC
                 value: "users"
               - name: LDAP_USERS
@@ -187,7 +190,7 @@ extraDeploy:
     name: supervisor-jwt-authenticator
     namespace: {{ include "common.names.namespace" $ | quote }}
   spec:
-    issuer: "https://pinniped-supervisor/demo-issuer"
+    issuer: {{ printf "https://%s/demo-issuer" ( include "pinniped.supervisor.fullname" . ) }}
     audience: vib-ed9de33c370981f61e9c
     tls:
       certificateAuthorityData: {{ $ca.Cert | b64enc | quote }}

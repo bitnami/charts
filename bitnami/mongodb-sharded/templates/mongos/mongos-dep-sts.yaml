@@ -99,8 +99,10 @@ spec:
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: MONGODB_SHARDING_MODE
               value: "mongos"
-            - name: MONGODB_MAX_TIMEOUT
-              value: {{ .Values.common.mongodbMaxWaitTimeout | quote }}
+            - name: MONGODB_INIT_RETRY_ATTEMPTS
+              value: {{ .Values.common.mongodbInitRetryAttempts | quote }}
+            - name: MONGODB_INIT_RETRY_DELAY
+              value: {{ .Values.common.mongodbInitRetryDelay | quote }}
             {{- if $.Values.auth.enabled }}
             - name: MONGODB_ROOT_USER
               value: {{ .Values.auth.rootUser | quote }}

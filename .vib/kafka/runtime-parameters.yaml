@@ -2,6 +2,9 @@ externalAccess:
   enabled: true
   autoDiscovery:
     enabled: true
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1002
   controller:
     service:
       ports:
@@ -26,6 +29,7 @@ service:
     interbroker: 19094
 controller:
   logPersistence:
+    enabled: true
     mountPath: /opt/bitnami/kafka/logs
   persistence:
     mountPath: /bitnami/kafka

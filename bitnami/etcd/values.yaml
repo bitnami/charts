@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.11-debian-11-r1
+  tag: 3.5.11-debian-11-r2
   digest: ""
   ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
@@ -884,6 +884,9 @@ disasterRecovery:
     ## @param disasterRecovery.cronjob.podLabels [object] Labels that will be added to pods created by cronjob
     ##
     podLabels: {}
+    ## @param disasterRecovery.cronjob.serviceAccountName Specifies the service account to use for disaster recovery cronjob
+    ##
+    serviceAccountName: ""
 
   pvc:
     ## @param disasterRecovery.pvc.existingClaim A manually managed Persistent Volume and Claim

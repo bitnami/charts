@@ -71,7 +71,7 @@ hub:
   image:
     registry: docker.io
     repository: bitnami/jupyterhub
-    tag: 4.0.2-debian-11-r65
+    tag: 4.0.2-debian-11-r68
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -95,6 +95,14 @@ hub:
   ## @param hub.password Hub Dummy authenticator password
   ##
   password: ""
+  ## @param hub.services JupyterHub services interacting with the JupyterHub API
+  ## ref: https://z2jh.jupyter.org/en/latest/administrator/services.html
+  ## e.g:
+  ## services:
+  ##   service-admin:
+  ##     apiToken: XXXXXXXXXXXXXXXXXXX
+  ##     admin: true
+  services: {}
   ## Configuration file passed to the hub. This will be used by the jupyterhub_config.py file
   ## This configuration uses the values for the `singleuser` section. In the upstream chart the
   ## values.yaml file is mounted in the hub container. This is chart, we tried to separate both
@@ -130,7 +138,7 @@ hub:
       db:
         type: postgres
         url: postgresql://{{ ternary .Values.postgresql.auth.username .Values.externalDatabase.user .Values.postgresql.enabled }}@{{ ternary (include "jupyterhub.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled }}:{{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled }}/{{ ternary .Values.postgresql.auth.database .Values.externalDatabase.database .Values.postgresql.enabled }}
-      services: {}
+      services: {{- include "common.tplvalues.render" ( dict "value" .Values.hub.services "context" $ ) | nindent 8 }}
       allowNamedServers: false
       namedServerLimitPerUser:
       {{- if .Values.hub.metrics.serviceMonitor.enabled }}
@@ -651,7 +659,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/configurable-http-proxy
-    tag: 4.6.0-debian-11-r18
+    tag: 4.6.1-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1452,7 +1460,7 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 4.0.2-debian-11-r66
+    tag: 4.0.2-debian-11-r69
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1660,7 +1668,7 @@ singleuser:
 auxiliaryImage:
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 11-debian-11-r91
+  tag: 11-debian-11-r93
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

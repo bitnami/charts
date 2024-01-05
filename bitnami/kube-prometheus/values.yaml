@@ -2107,7 +2107,15 @@ alertmanager:
   ## @param alertmanager.configuration EXPERIMENTAL: alertmanagerConfiguration specifies the global Alertmanager configuration. If defined, it takes precedence over the `configSecret` field. This field may change in future releases. The specified global alertmanager config will not force add a namespace label in routes and inhibitRules
   ##
   configuration: {}
-
+  ## @param alertmanager.configMatcherStrategy alertmanagerConfigMatcherStrategy defines how AlertmanagerConfig objects match the alerts.
+  ## E.g.
+  ## configMatcherStrategy:
+  ##   type: OnNamespace
+  ## If type set to `OnNamespace`, the operator injects a label matcher matching the
+  ## namespace of the AlertmanagerConfig object for all its routes and inhibition
+  ## rules. `None` will not add any additional matchers other than the ones
+  ## specified in the AlertmanagerConfig. Default is `OnNamespace`.
+  configMatcherStrategy: {}
 ## @section Exporters
 ##
 

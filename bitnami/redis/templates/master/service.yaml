@@ -26,6 +26,9 @@ spec:
   {{- if and (eq .Values.master.service.type "LoadBalancer") (not (empty .Values.master.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.master.service.loadBalancerIP }}
   {{- end }}
+  {{- if and (eq .Values.master.service.type "LoadBalancer")  .Values.master.service.loadBalancerClass }}
+  loadBalancerClass: {{ .Values.master.service.loadBalancerClass }}
+  {{- end }}
   {{- if and (eq .Values.master.service.type "LoadBalancer") (not (empty .Values.master.service.loadBalancerSourceRanges)) }}
   loadBalancerSourceRanges: {{ toYaml .Values.master.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
