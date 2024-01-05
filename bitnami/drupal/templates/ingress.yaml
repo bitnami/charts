@@ -54,6 +54,9 @@ spec:
      {{- if .Values.ingress.tls }}
     - hosts:
         - {{ .Values.ingress.hostname | quote }}
+        {{- if or (.Values.ingress.tlsWwwPrefix) (eq (index .Values.ingress.annotations "nginx.ingress.kubernetes.io/from-to-www-redirect") "true" ) }}
+        - {{ printf "www.%s" (tpl .Values.ingress.hostname $) | quote }}
+        {{- end }}
       secretName: {{ printf "%s-tls" .Values.ingress.hostname }}
     {{- end }}
     {{- if .Values.ingress.extraTls }}
