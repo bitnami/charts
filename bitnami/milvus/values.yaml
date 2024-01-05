@@ -110,15 +110,24 @@ milvus:
     ## @param milvus.auth.password Milvus username password
     ##
     password: ""
-    ## @param milvus.auth.rootPassword Milvus root password
+    ## @param milvus.auth.rootOldPassword Milvus old root password, default is Milvus
     ##
-    rootPassword: ""
+    rootOldPassword: "Milvus"
+    ## @param milvus.auth.rootNewPassword Milvus new root password, used for initJob to change root password
+    ##
+    rootNewPassword: ""
     ## @param milvus.auth.existingSecret Name of a secret containing the Milvus password
     ##
     existingSecret: ""
     ## @param milvus.auth.existingSecretPasswordKey Name of the secret key containing the Milvus password
     ##
     existingSecretPasswordKey: ""
+    ## @param milvus.auth.existingSecretRootOldPasswordKey Name of the secret key containing the Milvus root old password
+    ##
+    existingSecretRootOldPasswordKey: ""
+    ## @param milvus.auth.existingSecretRootNewPasswordKey Name of the secret key containing the Milvus root new password
+    ##
+    existingSecretRootNewPasswordKey: ""
   ## @param milvus.defaultConfig [string] Milvus components default configuration
   ##
   defaultConfig: |

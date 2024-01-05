@@ -400,13 +400,24 @@ Get the secret password key
 {{- end -}}
 
 {{/*
-Get the secret password key
+Get the secret root old password key
 */}}
-{{- define "milvus.secretRootPasswordKey" -}}
-{{- if and .Values.milvus.auth.existingSecret .Values.milvus.auth.existingSecretPasswordKey -}}
-    {{- print .Values.milvus.auth.existingSecretPasswordKey -}}
+{{- define "milvus.secretRootOldPasswordKey" -}}
+{{- if and .Values.milvus.auth.existingSecret .Values.milvus.auth.existingSecretRootOldPasswordKey -}}
+    {{- print .Values.milvus.auth.existingSecretRootOldPasswordKey -}}
 {{- else }}
-    {{- print "root-password" -}}
+    {{- print "root-old-password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the secret root new password key
+*/}}
+{{- define "milvus.secretRootNewPasswordKey" -}}
+{{- if and .Values.milvus.auth.existingSecret .Values.milvus.auth.existingSecretRootNewPasswordKey -}}
+    {{- print .Values.milvus.auth.existingSecretRootNewPasswordKey -}}
+{{- else }}
+    {{- print "root-new-password" -}}
 {{- end -}}
 {{- end -}}
 

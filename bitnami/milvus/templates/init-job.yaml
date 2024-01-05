@@ -65,7 +65,7 @@ spec:
                   alias='default',
                   host='{{ include "milvus.proxy.fullname" . }}',
                   port='{{ .Values.proxy.service.ports.grpc }}',
-                  password='Milvus',
+                  password=os.environ['MILVUS_ROOT_OLD_PASSWORD'],
                   user='root',
                   server_name='localhost')
               {{- else if eq (int .Values.proxy.tls.mode) 1}}
@@ -75,7 +75,7 @@ spec:
                   port='{{ .Values.proxy.service.ports.grpc }}',
                   secure=True,
                   server_pem_path='/opt/bitnami/milvus/configs/cert/milvus/client/{{ .Values.initJob.tls.cert }}',
-                  password='Milvus',
+                  password=os.environ['MILVUS_ROOT_OLD_PASSWORD'],
                   user='root',
                   server_name='localhost')
               {{- else }}
@@ -87,12 +87,12 @@ spec:
                   client_pem_path='/opt/bitnami/milvus/configs/cert/milvus/client/{{ .Values.initJob.tls.cert }}',
                   client_key_path='/opt/bitnami/milvus/configs/cert/milvus/client/{{ .Values.initJob.tls.key }}',
                   ca_pem_path='/opt/bitnami/milvus/configs/cert/milvus/client/{{ .Values.initJob.tls.caCert }}',
-                  password='Milvus',
+                  password=os.environ['MILVUS_ROOT_OLD_PASSWORD'],
                   user='root',
                   server_name='localhost')
               {{- end }}
               # Reset root password
-              utility.reset_password('root', 'Milvus', os.environ['MILVUS_ROOT_PASSWORD'], using='default')
+              utility.reset_password('root', os.environ['MILVUS_ROOT_OLD_PASSWORD'], os.environ['MILVUS_ROOT_NEW_PASSWORD'], using='default')
               utility.create_user('{{ .Values.milvus.auth.username }}', os.environ['MILVUS_PASSWORD'], using='default')
               EOF
               echo "Credentials updated"
@@ -102,11 +102,16 @@ spec:
               {{- end }}
           env:
             {{- if .Values.milvus.auth.enabled }}
-            - name: MILVUS_ROOT_PASSWORD
+            - name: MILVUS_ROOT_OLD_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "milvus.secretName" . }}
-                  key: {{ include "milvus.secretRootPasswordKey" . }}
+                  key: {{ include "milvus.secretRootOldPasswordKey" . }}
+            - name: MILVUS_ROOT_NEW_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "milvus.secretName" . }}
+                  key: {{ include "milvus.secretRootNewPasswordKey" . }}
             - name: MILVUS_PASSWORD
               valueFrom:
                 secretKeyRef:
