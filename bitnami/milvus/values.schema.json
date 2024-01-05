@@ -156,14 +156,34 @@
                             "description": "Milvus username password",
                             "default": ""
                         },
-                        "rootPassword": {
+                        "rootOldPassword": {
                             "type": "string",
-                            "description": "Milvus root password",
+                            "description": "Milvus root old password",
+                            "default": "Milvus"
+                        },
+                        "rootNewPassword": {
+                            "type": "string",
+                            "description": "Milvus root new password",
                             "default": ""
                         },
                         "existingSecret": {
                             "type": "string",
                             "description": "Name of a secret containing the Milvus password",
+                            "default": ""
+                        },
+                        "existingSecretPasswordKey": {
+                            "type": "string",
+                            "description": "Name of the secret key containing the Milvus password",
+                            "default": ""
+                        },
+                        "existingSecretRootOldPasswordKey": {
+                            "type": "string",
+                            "description": "Name of the secret key containing the Milvus root old password",
+                            "default": ""
+                        },
+                        "existingSecretRootNewPasswordKey": {
+                            "type": "string",
+                            "description": "Name of the secret key containing the Milvus root new password",
                             "default": ""
                         }
                     }
