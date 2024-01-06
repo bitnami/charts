@@ -571,6 +571,13 @@ Adding the TLS parameter (where available) will cause the chart to generate HTTP
 
 [Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
+### Configure admin Ingress
+
+In addition to the Ingress resource described above, this chart also provides the ability to define an Ingress for the
+admin area of Keycloak, for example the `master` realm.  
+
+For this scenario, set the environment variable `KC_HOSTNAME_ADMIN` to the appropriate value (e.g. `keycloak-admin.example.com`) and the `frontendUrl` property of the realm accordingly (e.g. `https://keycloak-admin.example.com`).
+
 ### Configure TLS Secrets for use with Ingress
 
 This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
