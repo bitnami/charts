@@ -250,6 +250,10 @@ spec:
           volumeMounts:
             - name: start-scripts
               mountPath: /opt/bitnami/scripts/start-scripts
+            {{- if .Values.sentinel.service.createMaster}}
+            - name: kubectl
+              mountPath: /opt/bitnami/common/bin/kubectl
+            {{- end }}
             - name: health
               mountPath: /health
             {{- if .Values.auth.usePasswordFiles }}

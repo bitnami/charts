@@ -13,6 +13,9 @@ annotations:
       image: docker.io/bitnami/redis-sentinel:7.2.4-debian-11-r5
     - name: redis
       image: docker.io/bitnami/redis:7.2.4-debian-11-r4
+      image: docker.io/bitnami/redis:7.2.3-debian-11-r2
+    - name: kubectl
+      image: docker.io/bitnami/kubectl:1.29.0
 apiVersion: v2
 appVersion: 7.2.4
 dependencies:

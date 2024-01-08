@@ -1358,6 +1358,12 @@ sentinel:
     ## @param sentinel.service.clusterIP Redis&reg; Sentinel service Cluster IP
     ##
     clusterIP: ""
+
+    ## @param sentinel.persistence.createMaster Enable master service pointing to the current master. This is useful when
+    ## Redis(TM) clients are not able to use sentinel, such as clients outside of
+    ##
+    createMaster: false
+
     ## @param sentinel.service.loadBalancerIP Redis&reg; Sentinel service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
@@ -1958,6 +1964,22 @@ volumePermissions:
   containerSecurityContext:
     seLinuxOptions: null
     runAsUser: 0
+
+## Kubectl InitContainer
+## used by Sentinel to update the isMaster label on the Redis(TM) pods
+##
+kubectlImage:
+  command: ["cp", "/opt/bitnami/kubectl/bin/kubectl", "/kubectl"]
+  registry: docker.io
+  repository: bitnami/kubectl
+  tag: "1.29"
+  pullPolicy: Always
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
 
 ## init-sysctl container parameters
 ## used to perform sysctl operation to modify Kernel settings (needed sometimes to avoid warnings)

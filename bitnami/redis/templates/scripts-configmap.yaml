@@ -366,6 +366,13 @@ data:
         REDIS_MASTER_PORT_NUMBER=${REDIS_SENTINEL_INFO[1]}
     fi
 
+    {{- if .Values.sentinel.service.createMaster }}
+    if [[ "${REDIS_REPLICATION_MODE}" == "master" ]]; then
+     # Add isMaster label to master node for master service.
+     /opt/bitnami/common/bin/kubectl/kubectl label pod --field-selector status.podIP=${REDIS_MASTER_HOST} isMaster="true" --overwrite
+    fi
+    {{- end }}
+
     if [[ -n "$REDIS_EXTERNAL_MASTER_HOST" ]]; then
       REDIS_MASTER_HOST="$REDIS_EXTERNAL_MASTER_HOST"
       REDIS_MASTER_PORT_NUMBER="${REDIS_EXTERNAL_MASTER_PORT}"
@@ -596,6 +603,40 @@ data:
         exit 0
     fi
 
+  {{- if .Values.sentinel.service.createMaster}}
+  update-master-label.sh: |
+    #!/bin/sh
+    # The following arguments are passed to the script:
+    #
+    # <master-name> <role> <state> <from-ip> <from-port> <to-ip> <to-port>
+    # $1            $2     $3      $4        $5          $6      $7
+
+    /opt/bitnami/common/bin/kubectl/kubectl label pod --field-selector status.podIP=$6 isMaster="true" --overwrite
+    /opt/bitnami/common/bin/kubectl/kubectl label pod --field-selector status.podIP=$4 isMaster="false" --overwrite
+  {{- end }}
+  prestop-sentinel.sh: |
+    #!/bin/bash
+
+    . /opt/bitnami/scripts/libvalidations.sh
+
+    REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+    [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
+
+    if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
+      sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a ${REDIS_PASSWORD} {{- end }} -h ${REDIS_SERVICE} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+    else
+      sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a ${REDIS_PASSWORD} {{- end }} -h ${REDIS_SERVICE} -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+    fi
+    REDIS_SENTINEL_INFO=($($sentinel_info_command))
+    REDIS_MASTER_HOST="${REDIS_SENTINEL_INFO[0]}"
+
+    if [[ "$REDIS_MASTER_HOST" == "$(hostname -i)" ]]; then
+      if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
+        redis-cli {{- if .Values.usePassword }} -a "${REDIS_PASSWORD}" {{- end }} -h "${REDIS_SERVICE}" -p {{ .Values.sentinel.port }} --tls --cert "${REDIS_SENTINEL_TLS_CERT_FILE}" --key "${REDIS_SENTINEL_TLS_KEY_FILE}" --cacert "${REDIS_SENTINEL_TLS_CA_FILE}" sentinel failover mymaster
+      else
+        redis-cli {{- if .Values.usePassword }} -a "${REDIS_PASSWORD}" {{- end }} -h "${REDIS_SERVICE}" -p {{ .Values.sentinel.port }} sentinel failover mymaster
+      fi
+    fi
 {{- else }}
   start-master.sh: |
     #!/bin/bash
