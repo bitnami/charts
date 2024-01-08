@@ -542,6 +542,19 @@ ns1:
   ##
   secretName: ""
 
+## Pi-hole configuration to be set via arguments/env. variables
+##
+pihole:
+  ## @param pihole.server When using the Pi-hole provider, specify The address of the Pi-hole web server
+  ##
+  server: ""
+  ## @param pihole.tlsSkipVerify When using the Pi-hole provider, specify wheter to skip verification of any TLS certificates served by the Pi-hole web server
+  ##
+  tlsSkipVerify: ""
+  ## @param pihole.secretName Use an existing secret with key "pihole_password" defined.
+  ##
+  secretName: ""
+
 ## oci configuration to be set via arguments/env. variables
 ##
 oci:
@@ -1142,4 +1155,3 @@ metrics:
     ## @param  metrics.googlePodMonitor.endpoint The endpoint for Google Managed Prometheus scraping the metrics
     ##
     endpoint: /metrics
-
