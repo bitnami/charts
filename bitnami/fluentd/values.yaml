@@ -151,6 +151,9 @@ forwarder:
   ## https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
   ##
   terminationGracePeriodSeconds: 30
+  ## @param forwarder.extraGems List of extra gems to be installed. Can be used to install additional fluentd plugins.
+  ##
+  extraGems: []
   ## @param forwarder.configFile Name of the config file that will be used by Fluentd at launch under the `/opt/bitnami/fluentd/conf` directory
   ##
   configFile: fluentd.conf
@@ -689,6 +692,9 @@ aggregator:
   ## https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
   ##
   terminationGracePeriodSeconds: 30
+  ## @param aggregator.extraGems List of extra gems to be installed. Can be used to install additional fluentd plugins.
+  ##
+  extraGems: []
   ## @param aggregator.configFile Name of the config file that will be used by Fluentd at launch under the `/opt/bitnami/fluentd/conf` directory
   ##
   configFile: fluentd.conf
