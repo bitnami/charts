@@ -508,6 +508,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.customLivenessProbe`                    | Override default liveness probe                                                                                                                           | `{}`                                |
 | `metrics.customReadinessProbe`                   | Override default readiness probe                                                                                                                          | `{}`                                |
 | `metrics.customStartupProbe`                     | Override default startup probe                                                                                                                            | `{}`                                |
+| `metrics.service.enabled`                        | PostgreSQL Prometheus exporter metrics service enabled                                                                                                    | `true`                              |
 | `metrics.service.type`                           | PostgreSQL Prometheus exporter metrics service type                                                                                                       | `ClusterIP`                         |
 | `metrics.service.ports.metrics`                  | PostgreSQL Prometheus exporter metrics service port                                                                                                       | `9187`                              |
 | `metrics.service.nodePorts.metrics`              | PostgreSQL Prometheus exporter Node Port                                                                                                                  | `""`                                |
@@ -1018,7 +1019,7 @@ Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](htt
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

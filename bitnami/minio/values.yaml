@@ -61,7 +61,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2023.12.20-debian-11-r0
+  tag: 2023.12.23-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -89,7 +89,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2023.12.14-debian-11-r0
+  tag: 2023.12.23-debian-11-r1
   digest: ""
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
@@ -357,8 +357,12 @@ provisioning:
   ##   - name: test-bucket
   ##     region: us-east-1
   ##     # Only when mode is 'distributed'
+  ##     # Allowed values: "Versioned" | "Suspended" | "Unchanged"
+  ##     # Defaults to "Suspended" if not specified.
+  ##     # For compatibility, accepts boolean values as well, where true maps
+  ##     # to "Versioned" and false to "Suspended".
   ##     # ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
-  ##     versioning: false
+  ##     versioning: Suspended
   ##     # Versioning is automatically enabled if withLock is true
   ##     # ref: https://docs.min.io/docs/minio-bucket-versioning-guide.html
   ##     withLock: true
@@ -979,7 +983,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r93
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

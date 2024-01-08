@@ -79,7 +79,7 @@ mimir:
   image:
     registry: docker.io
     repository: bitnami/grafana-mimir
-    tag: 2.10.5-debian-11-r0
+    tag: 2.11.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -121,7 +121,6 @@ mimir:
     # This configures how the store-gateway synchronizes blocks stored in the bucket. It uses Minio by default for getting started (configured via flags) but this should be changed for production deployments.
     blocks_storage:
       bucket_store:
-        max_chunk_pool_bytes: 12884901888 # 12GiB
         sync_dir: {{ .Values.mimir.dataDir }}/tsdb-sync
         {{- if .Values.memcachedchunks.enabled }}
         chunks_cache:
@@ -1352,7 +1351,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r2
+    tag: 1.25.3-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4040,7 +4039,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r93
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -4235,7 +4234,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.22-debian-11-r1
+    tag: 1.6.22-debian-11-r2
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -4276,7 +4275,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.22-debian-11-r1
+    tag: 1.6.22-debian-11-r2
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -4318,7 +4317,7 @@ memcachedindex:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.22-debian-11-r1
+    tag: 1.6.22-debian-11-r2
     digest: ""
   ## @param memcachedindex.architecture Memcached architecture
   ##
@@ -4359,7 +4358,7 @@ memcachedmetadata:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.22-debian-11-r1
+    tag: 1.6.22-debian-11-r2
     digest: ""
   ## @param memcachedmetadata.architecture Memcached architecture
   ##

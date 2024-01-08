@@ -9,7 +9,8 @@ kind: Grafana
 metadata:
   name: {{ printf "%s-grafana" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- $grafanaLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.grafana.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $grafanaLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -38,10 +39,16 @@ spec:
       {{- include "common.storage.class" (dict "persistence" .Values.grafana.persistence "global" .Values.global) | nindent 6 }}
   {{- end }}
   service:
+    {{- if or .Values.commonAnnotations .Values.grafana.service.annotations .Values.grafana.labels .Values.commonLabels }}
+    metadata:
     {{- if or .Values.commonAnnotations .Values.grafana.service.annotations }}
     {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.grafana.service.annotations .Values.commonAnnotations ) "context" . ) }}
-    metadata:
       annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 8 }}
+    {{- end }}
+    {{- if or .Values.grafana.labels .Values.commonLabels }}
+      {{- $serviceLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.grafana.labels .Values.commonLabels ) "context" . ) }}
+      labels: {{ $serviceLabels | nindent 8 }}
+    {{- end }}
     {{- end }}
     spec:
       type: {{ .Values.grafana.service.type }}
@@ -54,7 +61,8 @@ spec:
   {{- end }}
   deployment:
     metadata:
-      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 8 }}
+      {{- $deploymentLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.grafana.labels .Values.commonLabels ) "context" . ) }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $deploymentLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: grafana
       {{- if .Values.commonAnnotations }}
       annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
@@ -186,8 +194,8 @@ spec:
           secretName: {{ .Values.grafana.ingress.tlsSecret }}
       {{- end }}
     metadata:
-      {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.grafana.ingress.labels .Values.grafana.labels .Values.commonLabels ) "context" . ) }}
-      labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 8 }}
+      {{- $ingressLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.grafana.ingress.labels .Values.grafana.labels .Values.commonLabels ) "context" . ) }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $ingressLabels "context" $ ) | nindent 8 }}
       {{- if or .Values.commonAnnotations .Values.grafana.ingress.annotations }}
       {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.grafana.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
       annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 8 }}

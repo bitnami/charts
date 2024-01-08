@@ -158,10 +158,6 @@ spec:
             - name: podinfo
               mountPath: /etc/podinfo
               readOnly: true
-            - name: impersonation-proxy
-              # This mount path is hardcoded in the pinniped source code
-              mountPath: /var/run/secrets/impersonation-proxy.concierge.pinniped.dev/serviceaccount
-              readOnly: true
           {{- if .Values.concierge.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.concierge.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -176,12 +172,6 @@ spec:
         - name: config-volume
           configMap:
             name: {{ template "pinniped.concierge.configmapName" . }}
-        - name: impersonation-proxy
-          secret:
-            secretName: {{ template "pinniped.concierge.impersonation-proxy.fullname" . }}
-            items:
-              - key: token
-                path: token
         - name: podinfo
           downwardAPI:
             items:
