@@ -75,21 +75,28 @@ Return the MLflow Tracking Secret key for the user
 {{- end -}}
 
 {{/*
-Return the MLFlow Trakcing Port
+Return the MLFlow Tracking Port
 */}}
 {{- define "mlflow.v0.tracking.port" -}}
 {{- int ( ternary .Values.tracking.service.ports.https .Values.tracking.service.ports.http .Values.tracking.tls.enabled ) -}}
 {{- end -}}
 
 {{/*
-Return the MLFlow Trakcing Protocol
+Return the MLFlow Tracking Port Name
+*/}}
+{{- define "mlflow.v0.tracking.portName" -}}
+{{- ternary "https" "http" .Values.tracking.tls.enabled -}}
+{{- end -}}
+
+{{/*
+Return the MLFlow Tracking Protocol
 */}}
 {{- define "mlflow.v0.tracking.protocol" -}}
 {{- ternary "https" "http" .Values.tracking.tls.enabled -}}
 {{- end -}}
 
 {{/*
-Return the MLFlow Trakcing URI
+Return the MLFlow Tracking URI
 */}}
 {{- define "mlflow.v0.tracking.uri" -}}
 {{ printf "%s://%s:%v" (include "mlflow.v0.tracking.protocol" .) (include "mlflow.v0.tracking.fullname" .) (include "mlflow.v0.tracking.port" .) }}

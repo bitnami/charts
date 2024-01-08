@@ -67,7 +67,7 @@ useDaemonset: false
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.14.0-debian-11-r1
+  tag: 0.14.0-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -539,6 +539,19 @@ ns1:
   apiKey: ""
   ## @param ns1.secretName Use an existing secret with key "ns1-api-key" defined.
   ## This ignores ns1.apiToken
+  ##
+  secretName: ""
+
+## Pi-hole configuration to be set via arguments/env. variables
+##
+pihole:
+  ## @param pihole.server When using the Pi-hole provider, specify The address of the Pi-hole web server
+  ##
+  server: ""
+  ## @param pihole.tlsSkipVerify When using the Pi-hole provider, specify wheter to skip verification of any TLS certificates served by the Pi-hole web server
+  ##
+  tlsSkipVerify: ""
+  ## @param pihole.secretName Use an existing secret with key "pihole_password" defined.
   ##
   secretName: ""
 
@@ -1142,4 +1155,3 @@ metrics:
     ## @param  metrics.googlePodMonitor.endpoint The endpoint for Google Managed Prometheus scraping the metrics
     ##
     endpoint: /metrics
-

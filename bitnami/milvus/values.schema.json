@@ -239,6 +239,36 @@
                     "description": "Deploy default init containers",
                     "default": true
                 },
+                "tls": {
+                    "type": "object",
+                    "properties": {
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Name of the existing secret containing the TLS certificates for initJob",
+                            "default": ""
+                        },
+                        "cert": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'cert' key different from the default (client.pem)",
+                            "default": "tls.crt"
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'key' key different from the default (client.key)",
+                            "default": "tls.key"
+                        },
+                        "caCert": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'caCert' key different from the default (ca.pem)",
+                            "default": "ca.crt"
+                        },
+                        "keyPassword": {
+                            "type": "string",
+                            "description": "Password to access the password-protected PEM key if necessary",
+                            "default": ""
+                        }
+                    }
+                },
                 "backoffLimit": {
                     "type": "number",
                     "description": "set backoff limit of the job",
@@ -5613,6 +5643,41 @@
                     "type": "boolean",
                     "description": "Enable Proxy deployment",
                     "default": true
+                },
+                "tls": {
+                    "type": "object",
+                    "properties": {
+                        "mode": {
+                            "type": "integer",
+                            "description": "TLS mode for proxy. Allowed values: `0`, `1`, `2`",
+                            "default": false
+                        },
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Name of the existing secret containing the TLS certificates for proxy",
+                            "default": ""
+                        },
+                        "cert": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'cert' key different from the default (server.pem)",
+                            "default": "tls.crt"
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'key' key different from the default (server.key)",
+                            "default": "tls.key"
+                        },
+                        "caCert": {
+                            "type": "string",
+                            "description": "The secret key from the existingSecret if 'caCert' key different from the default (ca.pem)",
+                            "default": "ca.crt"
+                        },
+                        "keyPassword": {
+                            "type": "string",
+                            "description": "Password to access the password-protected PEM key if necessary",
+                            "default": ""
+                        }
+                    }
                 },
                 "extraEnvVars": {
                     "type": "array",

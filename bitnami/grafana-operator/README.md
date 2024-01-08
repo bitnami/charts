@@ -104,7 +104,7 @@ For more information, refer to the [documentation on the differences between the
 | `operator.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Grafana Operator container(s)                                                | `[]`                               |
 | `operator.initContainers`                                    | Add additional init containers to the Grafana Operator pods                                                                               | `[]`                               |
 | `operator.sidecars`                                          | Add additional sidecar containers to the Grafana Operator pods                                                                            | `[]`                               |
-| `operator.namespaceScope`                                    | If the operator should run in namespace-scope mode or not,                                                                                | `false`                            |
+| `operator.namespaceScope`                                    | If the operator should run in namespace-scope mode or not - cannot be used in conjunction with `operator.watchNamespace` when `true`      | `false`                            |
 | `operator.watchNamespace`                                    | Override the namespace to watch                                                                                                           | `""`                               |
 | `operator.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                                            | `[]`                               |
 | `operator.priorityClassName`                                 | %%MAIN_CONTAINER_NAME%% pods' priorityClassName                                                                                           | `""`                               |
@@ -360,7 +360,7 @@ See [PR#7114](https://github.com/bitnami/charts/pull/7114) for more info about t
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

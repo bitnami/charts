@@ -168,6 +168,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.extraEnvVars`                                      | Extra environment variables to be set on MySQL primary containers                                               | `[]`                |
 | `primary.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for MySQL primary containers                               | `""`                |
 | `primary.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for MySQL primary containers                                  | `""`                |
+| `primary.extraPodSpec`                                      | Optionally specify extra PodSpec for the MySQL Primary pod(s)                                                   | `{}`                |
 | `primary.extraPorts`                                        | Extra ports to expose                                                                                           | `[]`                |
 | `primary.persistence.enabled`                               | Enable persistence on MySQL primary replicas using a `PersistentVolumeClaim`. If false, use emptyDir            | `true`              |
 | `primary.persistence.existingClaim`                         | Name of an existing `PersistentVolumeClaim` for MySQL primary replicas                                          | `""`                |
@@ -177,6 +178,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.persistence.accessModes`                           | MySQL primary persistent volume access Modes                                                                    | `["ReadWriteOnce"]` |
 | `primary.persistence.size`                                  | MySQL primary persistent volume size                                                                            | `8Gi`               |
 | `primary.persistence.selector`                              | Selector to match an existing Persistent Volume                                                                 | `{}`                |
+| `primary.persistentVolumeClaimRetentionPolicy.enabled`      | Enable Persistent volume retention policy for Primary StatefulSet                                               | `false`             |
+| `primary.persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced                                  | `Retain`            |
+| `primary.persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                                          | `Retain`            |
 | `primary.extraVolumes`                                      | Optionally specify extra list of additional volumes to the MySQL Primary pod(s)                                 | `[]`                |
 | `primary.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the MySQL Primary container(s)                     | `[]`                |
 | `primary.initContainers`                                    | Add additional init containers for the MySQL Primary pod(s)                                                     | `[]`                |
@@ -261,6 +265,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.extraEnvVars`                                      | An array to add extra environment variables on MySQL secondary containers                                           | `[]`                |
 | `secondary.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for MySQL secondary containers                                 | `""`                |
 | `secondary.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for MySQL secondary containers                                    | `""`                |
+| `secondary.extraPodSpec`                                      | Optionally specify extra PodSpec for the MySQL Secondary pod(s)                                                     | `{}`                |
 | `secondary.extraPorts`                                        | Extra ports to expose                                                                                               | `[]`                |
 | `secondary.persistence.enabled`                               | Enable persistence on MySQL secondary replicas using a `PersistentVolumeClaim`                                      | `true`              |
 | `secondary.persistence.existingClaim`                         | Name of an existing `PersistentVolumeClaim` for MySQL secondary replicas                                            | `""`                |
@@ -270,6 +275,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.persistence.accessModes`                           | MySQL secondary persistent volume access Modes                                                                      | `["ReadWriteOnce"]` |
 | `secondary.persistence.size`                                  | MySQL secondary persistent volume size                                                                              | `8Gi`               |
 | `secondary.persistence.selector`                              | Selector to match an existing Persistent Volume                                                                     | `{}`                |
+| `secondary.persistentVolumeClaimRetentionPolicy.enabled`      | Enable Persistent volume retention policy for read only StatefulSet                                                 | `false`             |
+| `secondary.persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced                                      | `Retain`            |
+| `secondary.persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                                              | `Retain`            |
 | `secondary.extraVolumes`                                      | Optionally specify extra list of additional volumes to the MySQL secondary pod(s)                                   | `[]`                |
 | `secondary.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the MySQL secondary container(s)                       | `[]`                |
 | `secondary.initContainers`                                    | Add additional init containers for the MySQL secondary pod(s)                                                       | `[]`                |
@@ -552,7 +560,7 @@ kubectl delete statefulset mysql-slave --cascade=false
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

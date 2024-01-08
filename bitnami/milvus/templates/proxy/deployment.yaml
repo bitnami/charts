@@ -176,6 +176,11 @@ spec:
               mountPath: /opt/bitnami/milvus/configs/cert/etcd/client
               readOnly: true
             {{- end }}
+            {{- if and (ne (int .Values.proxy.tls.mode) 0) (not (empty .Values.proxy.tls.existingSecret)) }}
+            - name: milvus-certs
+              mountPath: /opt/bitnami/milvus/configs/cert/milvus
+              readOnly: true
+            {{- end }}
           {{- if .Values.proxy.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.proxy.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -209,6 +214,12 @@ spec:
         - name: etcd-client-certs
           secret:
             secretName: {{ .Values.externalEtcd.tls.existingSecret }}
+            defaultMode: 256
+        {{- end }}
+        {{- if and (ne (int .Values.proxy.tls.mode) 0) (not (empty .Values.proxy.tls.existingSecret)) }}
+        - name: milvus-certs
+          secret:
+            secretName: {{ .Values.proxy.tls.existingSecret }}
             defaultMode: 256
         {{- end }}
         - name: rendered-config

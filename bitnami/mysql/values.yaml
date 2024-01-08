@@ -85,7 +85,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 8.0.35-debian-11-r0
+  tag: 8.0.35-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -431,6 +431,9 @@ primary:
   ## @param primary.extraEnvVarsSecret Name of existing Secret containing extra env vars for MySQL primary containers
   ##
   extraEnvVarsSecret: ""
+  ## @param primary.extraPodSpec Optionally specify extra PodSpec for the MySQL Primary pod(s)
+  ##
+  extraPodSpec: {}
   ## @param primary.extraPorts Extra ports to expose
   ##
   extraPorts: []
@@ -472,6 +475,19 @@ primary:
     ##     app: my-app
     ##
     selector: {}
+  ## Primary Persistent Volume Claim Retention Policy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    ## @param primary.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Primary StatefulSet
+    ##
+    enabled: false
+    ## @param primary.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+    ##
+    whenScaled: Retain
+    ## @param primary.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+    ##
+    whenDeleted: Retain
   ## @param primary.extraVolumes Optionally specify extra list of additional volumes to the MySQL Primary pod(s)
   ##
   extraVolumes: []
@@ -817,6 +833,9 @@ secondary:
   ## @param secondary.extraEnvVarsSecret Name of existing Secret containing extra env vars for MySQL secondary containers
   ##
   extraEnvVarsSecret: ""
+  ## @param secondary.extraPodSpec Optionally specify extra PodSpec for the MySQL Secondary pod(s)
+  ##
+  extraPodSpec: {}
   ## @param secondary.extraPorts Extra ports to expose
   ##
   extraPorts: []
@@ -858,6 +877,19 @@ secondary:
     ##     app: my-app
     ##
     selector: {}
+  ## Secondary Persistent Volume Claim Retention Policy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    ## @param secondary.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for read only StatefulSet
+    ##
+    enabled: false
+    ## @param secondary.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+    ##
+    whenScaled: Retain
+    ## @param secondary.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+    ##
+    whenDeleted: Retain
   ## @param secondary.extraVolumes Optionally specify extra list of additional volumes to the MySQL secondary pod(s)
   ##
   extraVolumes: []
@@ -1039,7 +1071,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r91
+    tag: 11-debian-11-r93
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1073,7 +1105,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.15.0-debian-11-r71
+    tag: 0.15.1-debian-11-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

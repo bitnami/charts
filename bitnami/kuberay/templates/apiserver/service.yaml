@@ -1,0 +1,73 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.apiserver.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "kuberay.apiserver.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.apiserver.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: kuberay
+    app.kubernetes.io/component: apiserver
+  {{- if or .Values.apiserver.service.annotations .Values.commonAnnotations (and .Values.apiserver.metrics.enabled .Values.apiserver.metrics.annotations) }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.apiserver.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: 
+    {{- if or .Values.apiserver.service.annotations .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if and .Values.apiserver.metrics.enabled .Values.apiserver.metrics.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.apiserver.metrics.annotations "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.apiserver.service.type }}
+  {{- if and .Values.apiserver.service.clusterIP (eq .Values.apiserver.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.apiserver.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.apiserver.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.apiserver.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.apiserver.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.apiserver.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.apiserver.service.type "LoadBalancer") (eq .Values.apiserver.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.apiserver.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.apiserver.service.type "LoadBalancer") (not (empty .Values.apiserver.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.apiserver.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.apiserver.service.type "LoadBalancer") (not (empty .Values.apiserver.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.apiserver.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.apiserver.service.ports.http }}
+      protocol: TCP
+      {{- if and (or (eq .Values.apiserver.service.type "NodePort") (eq .Values.apiserver.service.type "LoadBalancer")) (not (empty .Values.apiserver.service.nodePorts.http)) }}
+      nodePort: {{ .Values.apiserver.service.nodePorts.http }}
+      {{- else if eq .Values.apiserver.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+      targetPort: http
+    - name: grpc
+      port: {{ .Values.apiserver.service.ports.grpc }}
+      protocol: TCP
+      {{- if and (or (eq .Values.apiserver.service.type "NodePort") (eq .Values.apiserver.service.type "LoadBalancer")) (not (empty .Values.apiserver.service.nodePorts.grpc)) }}
+      nodePort: {{ .Values.apiserver.service.nodePorts.grpc }}
+      {{- else if eq .Values.apiserver.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+      targetPort: grpc
+    {{- if .Values.apiserver.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.apiserver.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.apiserver.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: kuberay
+    app.kubernetes.io/component: apiserver
+{{- end }}

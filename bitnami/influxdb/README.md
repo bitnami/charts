@@ -325,6 +325,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.aws.region`                                | Region of aws s3 bucket                                                                                          | `us-east-1`                        |
 | `backup.uploadProviders.aws.existingSecret`                        | Name of existing secret object                                                                                   | `""`                               |
 | `backup.uploadProviders.aws.bucketName`                            | aws s3 bucket name                                                                                               | `s3://bucket/influxdb`             |
+| `backup.uploadProviders.aws.endpoint`                              | aws s3 endpoint, no value default public endpoint aws s3 endpoint                                                | `""`                               |
 | `backup.uploadProviders.aws.image.registry`                        | AWS CLI image registry                                                                                           | `REGISTRY_NAME`                    |
 | `backup.uploadProviders.aws.image.repository`                      | AWS CLI image repository                                                                                         | `REPOSITORY_NAME/aws-cli`          |
 | `backup.uploadProviders.aws.image.digest`                          | AWS CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag          | `""`                               |
@@ -592,7 +593,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

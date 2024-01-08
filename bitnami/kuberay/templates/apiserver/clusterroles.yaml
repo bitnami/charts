@@ -1,0 +1,62 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.apiserver.enabled .Values.apiserver.rbac.create .Values.apiserver.watchAllNamespaces }}
+kind: ClusterRole
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+metadata:
+  name: {{ include "kuberay.apiserver.fullname.namespace" . | trunc 63 | trimSuffix "-" }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.apiserver.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: kuberay
+    app.kubernetes.io/component: apiserver
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups:
+      - ray.io
+    resources:
+      - rayclusters
+      - rayjobs
+      - rayservices
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    verbs:
+      - list
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - get
+      - list
+  {{- if .Values.apiserver.rbac.rules }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.apiserver.rbac.rules "context" $ ) | nindent 2 }}
+  {{- end }}
+{{- end }}

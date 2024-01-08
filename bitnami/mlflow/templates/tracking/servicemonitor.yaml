@@ -27,7 +27,7 @@ spec:
       {{- include "common.tplvalues.render" (dict "value" .Values.tracking.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
   endpoints:
-    - port: {{ include "mlflow.v0.tracking.port" . }}
+    - port: {{ include "mlflow.v0.tracking.portName" . }}
       {{- if .Values.tracking.auth.enabled }}
       basicAuth:
         password:
