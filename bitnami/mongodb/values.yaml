@@ -1075,6 +1075,9 @@ persistence:
   ## @param persistence.enabled Enable MongoDB(&reg;) data persistence using PVC
   ##
   enabled: true
+  ## @param persistence.name Name of the PVC and mounted volume
+  ##
+  name: "datadir"
   ## @param persistence.medium Provide a medium for `emptyDir` volumes.
   ## Requires persistence.enabled: false
   ##
