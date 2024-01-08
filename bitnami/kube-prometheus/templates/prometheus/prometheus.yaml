@@ -167,6 +167,7 @@ spec:
   {{- else if .Values.prometheus.persistence.enabled }}
   storage:
     volumeClaimTemplate:
+      {{- if or .Values.prometheus.persistence.annotations .Values.commonAnnotations .Values.commonLabels }}
       metadata:
         {{- if or .Values.prometheus.persistence.annotations .Values.commonAnnotations }}
         {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.prometheus.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
@@ -175,6 +176,7 @@ spec:
         {{- if .Values.commonLabels }}
         labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
         {{- end }}
+      {{- end }}
       spec:
         accessModes:
           {{- range .Values.prometheus.persistence.accessModes }}
