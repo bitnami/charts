@@ -1359,7 +1359,7 @@ sentinel:
     ##
     clusterIP: ""
 
-    ## @param sentinel.persistence.createMaster Enable master service pointing to the current master. This is useful when
+    ## @param sentinel.service.createMaster Enable master service pointing to the current master. This is useful when
     ## Redis(TM) clients are not able to use sentinel, such as clients outside of
     ##
     createMaster: false

@@ -37,7 +37,7 @@ Return the proper image name (for the init container volume-permissions image)
 Return kubectl image
 */}}
 {{- define "redis.kubectl.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.kubectl.image "global" .Values.global) }}
+{{ include "common.images.image" (dict "imageRoot" .Values.kubectlImage "global" .Values.global) }}
 {{- end -}}
 
 {{/*

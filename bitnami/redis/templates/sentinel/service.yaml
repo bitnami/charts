@@ -102,10 +102,11 @@ spec:
     app.kubernetes.io/component: node
 
 {{- if and .Values.sentinel.enabled .Values.sentinel.service.createMaster}}
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "common.names.fullname" . }}-master
+  name: "{{ template "common.names.fullname" . }}-master"
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: node

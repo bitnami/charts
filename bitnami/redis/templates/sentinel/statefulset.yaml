@@ -455,6 +455,10 @@ spec:
               mountPath: /opt/bitnami/scripts/start-scripts
             - name: health
               mountPath: /health
+            {{- if .Values.sentinel.service.createMaster}}
+            - name: kubectl
+              mountPath: /opt/bitnami/common/bin/kubectl
+            {{- end }}
             - name: sentinel-data
               mountPath: /opt/bitnami/redis-sentinel/etc
             {{- if .Values.auth.usePasswordFiles }}
