@@ -192,6 +192,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsSecret`            | Name of existing Secret containing extra env vars for ClickHouse nodes                                                   | `""`                    |
 | `extraVolumes`                  | Optionally specify extra list of additional volumes for the ClickHouse pod(s)                                            | `[]`                    |
 | `extraVolumeMounts`             | Optionally specify extra list of additional volumeMounts for the ClickHouse container(s)                                 | `[]`                    |
+| `extraVolumeClaimTemplates`     | Optionally specify extra list of additional volumeClaimTemplates for the ClickHouse container(s)                         | `[]`                    |
 | `sidecars`                      | Add additional sidecar containers to the ClickHouse pod(s)                                                               | `[]`                    |
 | `initContainers`                | Add additional init containers to the ClickHouse pod(s)                                                                  | `[]`                    |
 | `tls.enabled`                   | Enable TLS traffic support                                                                                               | `false`                 |
