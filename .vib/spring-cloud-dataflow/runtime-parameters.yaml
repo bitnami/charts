@@ -1,3 +1,7 @@
+waitForBackends:
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
 server:
   containerPort: 8081
   configuration:
