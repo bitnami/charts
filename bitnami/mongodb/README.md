@@ -309,6 +309,7 @@ Refer to the [chart documentation for more information on each of these architec
 | Name                                               | Description                                                                                                                           | Value               |
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | `persistence.enabled`                              | Enable MongoDB(&reg;) data persistence using PVC                                                                                      | `true`              |
+| `persistence.name`                                 | Name of the PVC and mounted volume                                                                                                    | `datadir`           |
 | `persistence.medium`                               | Provide a medium for `emptyDir` volumes.                                                                                              | `""`                |
 | `persistence.existingClaim`                        | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)                                                     | `""`                |
 | `persistence.resourcePolicy`                       | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`                |
