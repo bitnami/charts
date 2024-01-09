@@ -457,10 +457,13 @@ web:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param web.containerSecurityContext.enabled Enabled web containers' Security Context
   ## @param web.containerSecurityContext.runAsUser Set web containers' Security Context runAsUser
+  ## @param web.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param web.hostAliases Concourse web pod host aliases
   ##
   hostAliases: []
@@ -743,11 +746,14 @@ worker:
   ## @param worker.containerSecurityContext.enabled Enabled worker containers' Security Context
   ## @param worker.containerSecurityContext.privileged Set worker containers' Security Context with privileged or not
   ## @param worker.containerSecurityContext.runAsUser Set worker containers' Security Context user
+  ## @param worker.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     privileged: true
     runAsUser: 0
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param worker.hostAliases Concourse worker pod host aliases
   ##
   hostAliases: []
@@ -1234,10 +1240,13 @@ volumePermissions:
   ## Init container' Security Context
   ## @param volumePermissions.containerSecurityContext.enabled Enabled init container Security Context
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
+  ## @param volumePermissions.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 0
+    seccompProfile:
+      type: "RuntimeDefault"
 
 ## @section Concourse database parameters
 
