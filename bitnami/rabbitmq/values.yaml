@@ -147,10 +147,17 @@ auth:
   ##
   securePassword: true
   ## @param auth.existingPasswordSecret Existing secret with RabbitMQ credentials (must contain a value for `rabbitmq-password` key)
-  ## e.g:
-  ## existingPasswordSecret: name-of-existing-secret
+  ## DEPRECATED. Use auth.existingSecret instead
   ##
   existingPasswordSecret: ""
+  ## @param auth.existingSecret The name of an existing secret with RabbitMQ credentials
+  ## NOTE: When it's set, the previous `auth.password` parameter is ignored
+  ##
+  existingSecret: ""
+  ## @param auth.existingSecretPasswordKey Password key to be retrieved from existing secret
+  ## NOTE: ignored unless `auth.existingSecret` parameter is set
+  ##
+  existingSecretPasswordKey: ""
   ## @param auth.enableLoopbackUser If enabled, the user `auth.username` can only connect from localhost
   ##
   enableLoopbackUser: false
