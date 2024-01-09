@@ -96,7 +96,9 @@ spec:
             - name: specifications
               mountPath: /specifications
         {{- end }}
+        {{- if .Values.forwarder.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.initContainers "context" $ ) | nindent 8 }}
+        {{- end }}
       terminationGracePeriodSeconds: {{ .Values.forwarder.terminationGracePeriodSeconds }}
       hostNetwork: {{ .Values.forwarder.hostNetwork }}
       {{- if .Values.forwarder.dnsPolicy }}
