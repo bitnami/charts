@@ -130,6 +130,7 @@ forwarder:
   ## @param forwarder.containerSecurityContext.allowPrivilegeEscalation Allow Privilege Escalation
   ## @param forwarder.containerSecurityContext.readOnlyRootFilesystem Require the use of a read only root file system
   ## @param forwarder.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
+  ## @param forwarder.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -141,6 +142,8 @@ forwarder:
     capabilities:
       drop:
         - ALL
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param forwarder.hostNetwork Enable use of host network
   ##
   hostNetwork: false
@@ -677,6 +680,7 @@ aggregator:
   ## @param aggregator.containerSecurityContext.allowPrivilegeEscalation Allow Privilege Escalation
   ## @param aggregator.containerSecurityContext.readOnlyRootFilesystem Require the use of a read only root file system
   ## @param aggregator.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
+  ## @param aggregator.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -688,6 +692,8 @@ aggregator:
     capabilities:
       drop:
         - ALL
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param aggregator.terminationGracePeriodSeconds Duration in seconds the pod needs to terminate gracefully
   ## https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
   ##
