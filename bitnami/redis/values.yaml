@@ -1969,17 +1969,31 @@ volumePermissions:
 ## used by Sentinel to update the isMaster label on the Redis(TM) pods
 ##
 kubectlImage:
+  ## @param kubectlImage.command Override default command to inject command (useful when using custom images)
+  ##
   command: ["cp", "/opt/bitnami/kubectl/bin/kubectl", "/kubectl"]
+  ## @param kubectlImage.registry kubectl image registry
+  ##
   registry: docker.io
+  ## @param kubectlImage.repository kubectl image repository
+  ##
   repository: bitnami/kubectl
+  ## @param kubectlImage.tag kubectl image tag
+  ##
   tag: "1.29"
+  ## @param kubectlImage.pullPolicy kubectl image pull policysysctl.enabled Enable init container to modify Kernel settings
+  ##
   pullPolicy: Always
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
+  ## @param kubectlImage.pullSecrets kubectl image pull secrets
+  ##
+  pullSecrets: []
 
 ## init-sysctl container parameters
 ## used to perform sysctl operation to modify Kernel settings (needed sometimes to avoid warnings)
