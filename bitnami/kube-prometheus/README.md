@@ -569,6 +569,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.configNamespaceSelector`                           | Namespaces to be selected for AlertmanagerConfig discovery. If nil, only check own namespace. This defaults to {}                                                                                                                                                                                          | `{}`                           |
 | `alertmanager.configSelector`                                    | AlertmanagerConfigs to be selected for to merge and configure Alertmanager with. This defaults to {}                                                                                                                                                                                                       | `{}`                           |
 | `alertmanager.configuration`                                     | EXPERIMENTAL: alertmanagerConfiguration specifies the global Alertmanager configuration. If defined, it takes precedence over the `configSecret` field. This field may change in future releases. The specified global alertmanager config will not force add a namespace label in routes and inhibitRules | `{}`                           |
+| `alertmanager.configMatcherStrategy`                             | alertmanagerConfigMatcherStrategy defines how AlertmanagerConfig objects match the alerts.                                                                                                                                                                                                                 | `{}`                           |
 
 ### Exporters
 
@@ -985,7 +986,7 @@ helm upgrade my-release --set prometheus.thanos.create=true oci://REGISTRY_NAME/
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -91,6 +91,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `addHeaders`                           | Custom headers before sending response traffic to the client                                                                                       | `{}`                                       |
 | `defaultBackendService`                | Default 404 backend service; required only if `defaultBackend.enabled = false`                                                                     | `""`                                       |
 | `electionID`                           | Election ID to use for status update                                                                                                               | `ingress-controller-leader`                |
+| `allowSnippetAnnotations`              | Allow users to set snippet annotations                                                                                                             | `false`                                    |
 | `reportNodeInternalIp`                 | If using `hostNetwork=true`, setting `reportNodeInternalIp=true`, will pass the flag `report-node-internal-ip-address` to Nginx Ingress Controller | `false`                                    |
 | `watchIngressWithoutClass`             | Process Ingress objects without ingressClass annotation/ingressClassName field                                                                     | `false`                                    |
 | `ingressClassResource.name`            | Name of the IngressClass resource                                                                                                                  | `nginx`                                    |
@@ -466,7 +467,7 @@ $ kubectl patch daemonset nginx-ingress-controller --type=json -p='[{"op": "remo
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

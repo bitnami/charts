@@ -15,7 +15,7 @@ it('allows creating a new user', () => {
     cy.get('[data-testid="firstName-input"]').type(`${user.newUser.firstName}.${random}`);
     cy.get('[data-testid="lastName-input"]').type(`${user.newUser.lastName}.${random}`);
   });
-  cy.get('[data-testid="create-user"]').click();
+  cy.get('[data-testid="create-user"]').click({ force: true });
   cy.contains('The user has been created');
 });
 

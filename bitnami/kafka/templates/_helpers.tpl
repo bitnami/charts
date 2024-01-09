@@ -598,7 +598,6 @@ Returns the controller quorum voters based on the number of controller-eligible 
 Section of the server.properties configmap shared by both controller-eligible and broker nodes
 */}}
 {{- define "kafka.commonConfig" -}}
-log.dir={{ printf "%s/data" .Values.controller.persistence.mountPath }}
 {{- if or (include "kafka.saslEnabled" .) }}
 sasl.enabled.mechanisms={{ upper .Values.sasl.enabledMechanisms }}
 {{- end }}

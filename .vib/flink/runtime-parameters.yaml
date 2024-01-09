@@ -87,6 +87,16 @@ extraDeploy:
                 timeoutSeconds: 1
                 failureThreshold: 15
                 successThreshold: 1
+              securityContext:
+                runAsUser: 1001
+                runAsNonRoot: true
+                privileged: false
+                readOnlyRootFilesystem: false
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: ["ALL"]
+                seccompProfile:
+                  type: "RuntimeDefault"
               volumeMounts:
                 - name: flink-config-volume
                   mountPath: /opt/bitnami/flink/conf

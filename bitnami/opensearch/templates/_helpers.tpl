@@ -395,10 +395,10 @@ Return the opensearch TLS credentials secret key of the given type.
 */}}
 {{- define "opensearch.tlsSecretKey" -}}
 {{- $secretConfig := index .context.Values.security.tls .type -}}
-{{- if $secretConfig.externalSecret }}
-{{ index $secretConfig .secretKey | default .defaultKey }}
+{{- if $secretConfig.existingSecret }}
+{{- print (index $secretConfig .secretKey | default .defaultKey) }}
 {{- else }}
-{{- printf .defaultKey }}
+{{- print .defaultKey }}
 {{- end }}
 {{- end -}}
 

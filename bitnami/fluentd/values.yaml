@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.16.3-debian-11-r1
+  tag: 1.16.3-debian-11-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -151,6 +151,9 @@ forwarder:
   ## https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
   ##
   terminationGracePeriodSeconds: 30
+  ## @param forwarder.extraGems List of extra gems to be installed. Can be used to install additional fluentd plugins.
+  ##
+  extraGems: []
   ## @param forwarder.configFile Name of the config file that will be used by Fluentd at launch under the `/opt/bitnami/fluentd/conf` directory
   ##
   configFile: fluentd.conf
@@ -689,6 +692,9 @@ aggregator:
   ## https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
   ##
   terminationGracePeriodSeconds: 30
+  ## @param aggregator.extraGems List of extra gems to be installed. Can be used to install additional fluentd plugins.
+  ##
+  extraGems: []
   ## @param aggregator.configFile Name of the config file that will be used by Fluentd at launch under the `/opt/bitnami/fluentd/conf` directory
   ##
   configFile: fluentd.conf
