@@ -373,17 +373,15 @@ spec:
               containerPort: {{ .Values.metrics.containerPort }}
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- $port := ternary .Values.containerPorts.tls .Values.containerPorts.client .Values.service.disableBaseClientPort }}
-          {{- $timeout := .Values.livenessProbe.probeCommandTimeout }}
-          {{- $useOpenssl := ternary "true" "false" .Values.service.disableBaseClientPort }}
-          {{- $certs := ternary (printf "-cert %s -key %s" .Values.service.tls.client_cert_pem_path .Values.service.tls.client_key_pem_path) "" (and .Values.service.disableBaseClientPort .Values.tls.client.enabled)}}
           {{- if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled" "probeCommandTimeout") "context" $) | nindent 12 }}
             exec:
               command:
-                - /opt/bitnami/scripts/zookeeper/healthcheck.sh "{{$port}}" "{{$timeout}}" "{{$useOpenssl}}" "{{$certs}}"
+                - /bin/bash
+                - -ec
+                - ZOO_HC_TIMEOUT={{ .Values.livenessProbe.probeCommandTimeout }} /opt/bitnami/scripts/zookeeper/healthcheck.sh
           {{- end }}
           {{- if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
@@ -391,7 +389,9 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled" "probeCommandTimeout") "context" $) | nindent 12 }}
             exec:
               command:
-                - /opt/bitnami/scripts/zookeeper/healthcheck.sh "{{$port}}" "{{$timeout}}" "{{$useOpenssl}}" "{{$certs}}"
+                - /bin/bash
+                - -ec
+                - ZOO_HC_TIMEOUT={{ .Values.readinessProbe.probeCommandTimeout }} /opt/bitnami/scripts/zookeeper/healthcheck.sh
           {{- end }}
           {{- if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
