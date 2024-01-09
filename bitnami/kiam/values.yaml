@@ -261,12 +261,15 @@ server:
   ## @param server.containerSecurityContext.runAsUser Set kiam server container's Security Context runAsUser
   ## @param server.containerSecurityContext.runAsNonRoot Set kiam server container's Security Context runAsNonRoot
   ## @param server.containerSecurityContext.seLinuxOptions Set kiam server container's Security Context SE Linux options
+  ## @param server.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
     seLinuxOptions: {}
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param server.podSecurityContext.enabled Enabled kiam server pods' Security Context
   ## @param server.podSecurityContext.fsGroup Set kiam server pod's Security Context fsGroup
   ##
@@ -683,6 +686,7 @@ agent:
   ## @param agent.containerSecurityContext.runAsNonRoot Set agent container's Security Context runAsNonRoot
   ## @param agent.containerSecurityContext.seLinuxOptions [object] Set agent container's Security Context SE Linux options
   ## @param agent.containerSecurityContext.capabilities.add Add capabilities for the securityContext
+  ## @param agent.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -692,6 +696,8 @@ agent:
     capabilities:
       add:
         - NET_ADMIN
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param agent.podSecurityContext.enabled Enabled agent pods' Security Context
   ## @param agent.podSecurityContext.fsGroup Set agent pod's Security Context fsGroup
   ##
