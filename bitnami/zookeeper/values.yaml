@@ -187,7 +187,7 @@ autopurge:
   ##
   snapRetainCount: 10
   ## @param autopurge.purgeInterval The time interval (in hours) for which the purge task has to be triggered
-  ## Set to a positive integer to enable the auto purging
+  ## Set to a positive integer to enable the auto purging. Set to 0 to disable auto purging.
   ##
   purgeInterval: 1
 ## @param logLevel Log level for the ZooKeeper server. ERROR by default
