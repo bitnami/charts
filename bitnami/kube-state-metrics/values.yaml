@@ -183,6 +183,7 @@ namespaces: ""
 ## @param kubeResources.horizontalpodautoscalers Enable the `horizontalpodautoscalers` resource
 ## @param kubeResources.ingresses Enable the `ingresses` resource
 ## @param kubeResources.jobs Enable the `jobs` resource
+## @param kubeResources.leases Enable the `leases` resource
 ## @param kubeResources.limitranges Enable the `limitranges` resource
 ## @param kubeResources.mutatingwebhookconfigurations Enable the `mutatingwebhookconfigurations` resource
 ## @param kubeResources.namespaces Enable the `namespaces` resource
@@ -213,6 +214,7 @@ kubeResources:
   horizontalpodautoscalers: true
   ingresses: true
   jobs: true
+  leases: true
   limitranges: true
   mutatingwebhookconfigurations: true
   namespaces: true
