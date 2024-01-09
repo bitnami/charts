@@ -1359,8 +1359,7 @@ sentinel:
     ##
     clusterIP: ""
 
-    ## @param sentinel.service.createMaster Enable master service pointing to the current master. This is useful when
-    ## Redis(TM) clients are not able to use sentinel, such as clients outside of
+    ## @param sentinel.service.createMaster Enable master service pointing to the current master.
     ##
     createMaster: false
 
@@ -1969,7 +1968,7 @@ volumePermissions:
 ## used by Sentinel to update the isMaster label on the Redis(TM) pods
 ##
 kubectlImage:
-  ## @param kubectlImage.command Override default command to inject command (useful when using custom images)
+  ## @param kubectlImage.command kubectl command to execute
   ##
   command: ["cp", "/opt/bitnami/kubectl/bin/kubectl", "/kubectl"]
   ## @param kubectlImage.registry [default: REGISTRY_NAME] kubectl image registry
