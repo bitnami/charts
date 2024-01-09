@@ -1972,10 +1972,10 @@ kubectlImage:
   ## @param kubectlImage.command Override default command to inject command (useful when using custom images)
   ##
   command: ["cp", "/opt/bitnami/kubectl/bin/kubectl", "/kubectl"]
-  ## @param kubectlImage.registry kubectl image registry
+  ## @param kubectlImage.registry [default: REGISTRY_NAME] kubectl image registry
   ##
   registry: docker.io
-  ## @param kubectlImage.repository kubectl image repository
+  ## @param kubectlImage.repository [default: REPOSITORY_NAME/os-shell] kubectl image repository
   ##
   repository: bitnami/kubectl
   ## @param kubectlImage.tag kubectl image tag
