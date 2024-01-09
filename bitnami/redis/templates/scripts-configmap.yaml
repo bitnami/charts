@@ -605,14 +605,16 @@ data:
 
   {{- if .Values.sentinel.service.createMaster}}
   update-master-label.sh: |
-    #!/bin/sh
+    #!/bin/bash
     # The following arguments are passed to the script:
     #
     # <master-name> <role> <state> <from-ip> <from-port> <to-ip> <to-port>
     # $1            $2     $3      $4        $5          $6      $7
 
-    /opt/bitnami/common/bin/kubectl/kubectl label pod --field-selector status.podIP=$6 isMaster="true" --overwrite
-    /opt/bitnami/common/bin/kubectl/kubectl label pod --field-selector status.podIP=$4 isMaster="false" --overwrite
+    PREVIOUS="${4}"
+    CURRENT="${6}"
+    /opt/bitnami/common/bin/kubectl/kubectl label pod --field-selector metadata.name=${CURRENT/.*} isMaster="true" --overwrite
+    /opt/bitnami/common/bin/kubectl/kubectl label pod --field-selector metadata.name=${PREVIOUS/.*} isMaster="false" --overwrite
   {{- end }}
 {{- else }}
   start-master.sh: |
