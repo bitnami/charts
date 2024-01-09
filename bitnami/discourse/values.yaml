@@ -145,7 +145,7 @@ replicaCount: 1
 ## @param podSecurityContext.fsGroup Set Discourse pod's Security Context fsGroup
 ##
 podSecurityContext:
-  enabled: false
+  enabled: true
   fsGroup: 0
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
@@ -353,11 +353,14 @@ discourse:
   ## @param discourse.containerSecurityContext.enabled Enabled Discourse containers' Security Context
   ## @param discourse.containerSecurityContext.runAsUser Set Discourse containers' Security Context runAsUser
   ## @param discourse.containerSecurityContext.runAsNonRoot Set Discourse containers' Security Context runAsNonRoot
+  ## @param discourse.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
-    enabled: false
+    enabled: true
     runAsUser: 0
     runAsNonRoot: false
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param discourse.lifecycleHooks for the Discourse container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -488,11 +491,14 @@ sidekiq:
   ## @param sidekiq.containerSecurityContext.enabled Enabled Sidekiq containers' Security Context
   ## @param sidekiq.containerSecurityContext.runAsUser Set Sidekiq containers' Security Context runAsUser
   ## @param sidekiq.containerSecurityContext.runAsNonRoot Set Sidekiq containers' Security Context runAsNonRoot
+  ## @param sidekiq.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
-    enabled: false
+    enabled: true
     runAsUser: 0
     runAsNonRoot: false
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param sidekiq.lifecycleHooks for the Sidekiq container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -703,9 +709,12 @@ volumePermissions:
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
+  ## @param volumePermissions.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     runAsUser: 0
+    seccompProfile:
+      type: "RuntimeDefault"
 
 ## @section Other Parameters
 
