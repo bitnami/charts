@@ -1978,7 +1978,7 @@ kubectlImage:
   ## @param kubectlImage.repository [default: REPOSITORY_NAME/os-shell] kubectl image repository
   ##
   repository: bitnami/kubectl
-  ## @param kubectlImage.tag kubectl image tag
+  ## @skip kubectlImage.tag kubectl image tag
   ##
   tag: "1.29"
   ## @param kubectlImage.pullPolicy kubectl image pull policysysctl.enabled Enable init container to modify Kernel settings
