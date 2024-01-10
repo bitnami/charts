@@ -792,9 +792,6 @@ metrics:
   ## @param metrics.enabled Start a Prometheus exporter sidecar container
   ##
   enabled: false
-  ## @param metrics.port NGINX Container Status Port scraped by Prometheus Exporter
-  ## Defaults to specified http port
-  port: ""
   ## Bitnami NGINX Prometheus Exporter image
   ## ref: https://hub.docker.com/r/bitnami/nginx-exporter/tags/
   ## @param metrics.image.registry [default: REGISTRY_NAME] NGINX Prometheus exporter image registry
@@ -818,6 +815,21 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param metrics.port NGINX Container Status Port scraped by Prometheus Exporter
+  ## Defaults to specified http port
+  ##
+  port: ""
+  ## @param metrics.extraArgs Extra arguments for Prometheus exporter
+  ## e.g:
+  ## extraArgs:
+  ##   - --nginx.timeout
+  ##   - 5s
+  ##
+  extraArgs: []
+  ## @param metrics.containerPorts.metrics Prometheus exporter container port
+  ##
+  containerPorts:
+    metrics: 9113
   ## @param metrics.podAnnotations Additional annotations for NGINX Prometheus exporter pod(s)
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##

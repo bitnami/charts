@@ -103,7 +103,9 @@ spec:
             - name: specifications
               mountPath: /specifications
         {{- end }}
+        {{- if .Values.aggregator.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.initContainers "context" $ ) | nindent 8 }}
+        {{- end }}
       terminationGracePeriodSeconds: {{ .Values.aggregator.terminationGracePeriodSeconds }}
       containers:
         - name: fluentd
