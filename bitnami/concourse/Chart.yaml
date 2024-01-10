@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: concourse
-      image: docker.io/bitnami/concourse:7.11.0-debian-11-r9
+      image: docker.io/bitnami/concourse:7.11.0-debian-11-r10
     - name: os-shell
       image: docker.io/bitnami/os-shell:11-debian-11-r93
 apiVersion: v2
