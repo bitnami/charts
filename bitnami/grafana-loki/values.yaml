@@ -374,11 +374,14 @@ compactor:
   ## @param compactor.containerSecurityContext.enabled Enabled Compactor containers' Security Context
   ## @param compactor.containerSecurityContext.runAsUser Set Compactor containers' Security Context runAsUser
   ## @param compactor.containerSecurityContext.runAsNonRoot Set Compactor containers' Security Context runAsNonRoot
+  ## @param compactor.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param compactor.lifecycleHooks for the compactor container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -728,11 +731,14 @@ gateway:
   ## @param gateway.containerSecurityContext.enabled Enabled Gateway containers' Security Context
   ## @param gateway.containerSecurityContext.runAsUser Set Gateway containers' Security Context runAsUser
   ## @param gateway.containerSecurityContext.runAsNonRoot Set Gateway containers' Security Context runAsNonRoot
+  ## @param gateway.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param gateway.lifecycleHooks for the gateway container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -1092,11 +1098,14 @@ indexGateway:
   ## @param indexGateway.containerSecurityContext.enabled Enabled index-gateway containers' Security Context
   ## @param indexGateway.containerSecurityContext.runAsUser Set index-gateway containers' Security Context runAsUser
   ## @param indexGateway.containerSecurityContext.runAsNonRoot Set index-gateway containers' Security Context runAsNonRoot
+  ## @param indexGateway.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param indexGateway.lifecycleHooks for the indexGateway container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -1359,11 +1368,14 @@ distributor:
   ## @param distributor.containerSecurityContext.enabled Enabled Distributor containers' Security Context
   ## @param distributor.containerSecurityContext.runAsUser Set Distributor containers' Security Context runAsUser
   ## @param distributor.containerSecurityContext.runAsNonRoot Set Distributor containers' Security Context runAsNonRoot
+  ## @param distributor.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param distributor.lifecycleHooks for the distributor container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -1629,11 +1641,14 @@ ingester:
   ## @param ingester.containerSecurityContext.enabled Enabled Ingester containers' Security Context
   ## @param ingester.containerSecurityContext.runAsUser Set Ingester containers' Security Context runAsUser
   ## @param ingester.containerSecurityContext.runAsNonRoot Set Ingester containers' Security Context runAsNonRoot
+  ## @param ingester.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param ingester.hostAliases ingester pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1941,11 +1956,14 @@ querier:
   ## @param querier.containerSecurityContext.enabled Enabled Querier containers' Security Context
   ## @param querier.containerSecurityContext.runAsUser Set Querier containers' Security Context runAsUser
   ## @param querier.containerSecurityContext.runAsNonRoot Set Querier containers' Security Context runAsNonRoot
+  ## @param querier.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param querier.lifecycleHooks for the Querier container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -2248,11 +2266,14 @@ queryFrontend:
   ## @param queryFrontend.containerSecurityContext.enabled Enabled queryFrontend containers' Security Context
   ## @param queryFrontend.containerSecurityContext.runAsUser Set queryFrontend containers' Security Context runAsUser
   ## @param queryFrontend.containerSecurityContext.runAsNonRoot Set queryFrontend containers' Security Context runAsNonRoot
+  ## @param queryFrontend.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param queryFrontend.lifecycleHooks for the queryFrontend container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -2525,11 +2546,14 @@ queryScheduler:
   ## @param queryScheduler.containerSecurityContext.enabled Enabled queryScheduler containers' Security Context
   ## @param queryScheduler.containerSecurityContext.runAsUser Set queryScheduler containers' Security Context runAsUser
   ## @param queryScheduler.containerSecurityContext.runAsNonRoot Set queryScheduler containers' Security Context runAsNonRoot
+  ## @param queryScheduler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param queryScheduler.lifecycleHooks for the queryScheduler container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -2802,11 +2826,14 @@ ruler:
   ## @param ruler.containerSecurityContext.enabled Enabled Ruler containers' Security Context
   ## @param ruler.containerSecurityContext.runAsUser Set Ruler containers' Security Context runAsUser
   ## @param ruler.containerSecurityContext.runAsNonRoot Set Ruler containers' Security Context runAsNonRoot
+  ## @param ruler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param ruler.hostAliases ruler pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -3109,11 +3136,14 @@ tableManager:
   ## @param tableManager.containerSecurityContext.enabled Enabled table-manager containers' Security Context
   ## @param tableManager.containerSecurityContext.runAsUser Set table-manager containers' Security Context runAsUser
   ## @param tableManager.containerSecurityContext.runAsNonRoot Set table-manager containers' Security Context runAsNonRoot
+  ## @param tableManager.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param tableManager.lifecycleHooks for the tableManager container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -3413,11 +3443,14 @@ promtail:
   ## @param promtail.containerSecurityContext.enabled Enabled Promtail containers' Security Context
   ## @param promtail.containerSecurityContext.runAsUser Set Promtail containers' Security Context runAsUser
   ## @param promtail.containerSecurityContext.runAsNonRoot Set Promtail containers' Security Context runAsNonRoot
+  ## @param promtail.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 0
     runAsNonRoot: false
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param promtail.hostAliases promtail pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -3732,12 +3765,15 @@ volumePermissions:
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+  ## @param volumePermissions.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
     runAsUser: 0
+    seccompProfile:
+      type: "RuntimeDefault"
 
 ## @section Other Parameters
 ##
