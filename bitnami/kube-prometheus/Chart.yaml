@@ -8,13 +8,13 @@ annotations:
     - name: alertmanager
       image: docker.io/bitnami/alertmanager:0.26.0-debian-11-r46
     - name: blackbox-exporter
-      image: docker.io/bitnami/blackbox-exporter:0.24.0-debian-11-r142
+      image: docker.io/bitnami/blackbox-exporter:0.24.0-debian-11-r143
     - name: prometheus-operator
-      image: docker.io/bitnami/prometheus-operator:0.70.0-debian-11-r3
+      image: docker.io/bitnami/prometheus-operator:0.70.0-debian-11-r4
     - name: prometheus
-      image: docker.io/bitnami/prometheus:2.48.1-debian-11-r0
+      image: docker.io/bitnami/prometheus:2.48.1-debian-11-r1
     - name: thanos
-      image: docker.io/bitnami/thanos:0.33.0-debian-11-r0
+      image: docker.io/bitnami/thanos:0.33.0-debian-11-r1
 apiVersion: v2
 appVersion: 0.70.0
 dependencies:
@@ -46,4 +46,4 @@ maintainers:
 name: kube-prometheus
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
-version: 8.23.1
+version: 8.23.2
