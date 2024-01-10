@@ -551,6 +551,9 @@ extraVolumes: []
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the ClickHouse container(s)
 ##
 extraVolumeMounts: []
+## @param extraVolumeClaimTemplates Optionally specify extra list of additional volumeClaimTemplates for the ClickHouse container(s)
+##
+extraVolumeClaimTemplates: []
 ## @param sidecars Add additional sidecar containers to the ClickHouse pod(s)
 ## e.g:
 ## sidecars:

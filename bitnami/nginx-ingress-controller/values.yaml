@@ -251,6 +251,7 @@ podSecurityContext:
 ## @param containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities that should be dropped
 ## @param containerSecurityContext.capabilities.add [array] Linux Kernel capabilities that should be added
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
@@ -260,6 +261,8 @@ containerSecurityContext:
     drop: ["ALL"]
     add: ["NET_BIND_SERVICE"]
   runAsNonRoot: true
+  seccompProfile:
+    type: "RuntimeDefault"
 ## @param minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
 ##
 minReadySeconds: 0
@@ -540,11 +543,14 @@ defaultBackend:
   ## @param defaultBackend.containerSecurityContext.enabled Enable Default backend containers' Security Context
   ## @param defaultBackend.containerSecurityContext.runAsUser User ID for the Default backend container
   ## @param defaultBackend.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param defaultBackend.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Default backend containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources
   ## We usually recommend not to specify default resources and to leave this as a conscious
