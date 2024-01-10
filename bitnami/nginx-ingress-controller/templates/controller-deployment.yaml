@@ -92,7 +92,6 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - /nginx-ingress-controller
             - --default-backend-service={{ ternary (printf "$(POD_NAMESPACE)/%s" (include "nginx-ingress-controller.defaultBackend.fullname" .)) .Values.defaultBackendService .Values.defaultBackend.enabled }}
           {{- if .Values.publishService.enabled }}
             - --publish-service={{ include "nginx-ingress-controller.publishServicePath" . }}
@@ -203,10 +202,10 @@ spec:
               name: nginx-template-volume
               readOnly: true
             {{- end }}
-            # Workaround for upstream issue reported at https://github.com/kubernetes/ingress-nginx/issues/10601
-            # To be removed once the controller releases a fixed version
+            {{- if .Values.maxmindLicenseKey }}
             - name: geoip
-              mountPath: /etc/nginx/geoip
+              mountPath: /etc/ingress-controller/geoip
+            {{- end }}
             - name: telemetry
               mountPath: /etc/ingress-controller/telemetry
             {{- if .Values.extraVolumeMounts }}
@@ -224,10 +223,10 @@ spec:
               - key: {{ .Values.customTemplate.configMapKey }}
                 path: nginx.tmpl
         {{- end }}
-        # Workaround for upstream issue reported at https://github.com/kubernetes/ingress-nginx/issues/10601
-        # To be removed once the controller releases a fixed version
+        {{- if .Values.maxmindLicenseKey }}
         - name: geoip
           emptyDir: {}
+        {{- end }}
         - name: telemetry
           emptyDir: {}
         {{- if .Values.extraVolumes }}
