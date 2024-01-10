@@ -5,7 +5,7 @@ file:
   /bitnami/discourse:
     exists: true
     filetype: directory
-    mode: "0775"
+    mode: "2775"
     owner: discourse
     group: root
   /opt/bitnami/discourse/config/discourse.conf:
