@@ -222,12 +222,15 @@ podSecurityContext:
 ## @param containerSecurityContext.runAsUser Whereabouts containers' Security Context
 ## @param containerSecurityContext.runAsNonRoot Set Whereabouts container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set Whereabouts container's Security Context privileged
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 0
   runAsNonRoot: false
   privileged: true
+  seccompProfile:
+    type: "RuntimeDefault"
 ## Configure extra options for startup probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param startupProbe.enabled Enable startupProbe
