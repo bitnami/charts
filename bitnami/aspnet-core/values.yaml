@@ -269,11 +269,14 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled ASP.NET Core containers' Security Context
 ## @param containerSecurityContext.runAsUser Set ASP.NET Core container's Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
-  enabled: false
+  enabled: true
   runAsUser: 0
   runAsNonRoot: false
+  seccompProfile:
+    type: "RuntimeDefault"
 ## Configure extra options for ASP.NET Core containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
