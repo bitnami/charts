@@ -1270,6 +1270,59 @@ notifications:
   ## @param notifications.extraEnvVarsSecret Name of existing Secret containing extra env vars for Argo CD notifications controller nodes
   ##
   extraEnvVarsSecret: ""
+  ## Configure extra options for Notification containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param notifications.startupProbe.enabled Enable startupProbe on Notification nodes
+  ## @param notifications.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param notifications.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param notifications.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param notifications.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param notifications.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param notifications.livenessProbe.enabled Enable livenessProbe on Notification nodes
+  ## @param notifications.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param notifications.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param notifications.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param notifications.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param notifications.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param notifications.readinessProbe.enabled Enable readinessProbe on Notification nodes
+  ## @param notifications.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param notifications.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param notifications.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param notifications.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param notifications.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param notifications.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param notifications.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param notifications.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
   ## Webhook for the Git Generator
   ## Ref: https://argocd-notifications.readthedocs.io/en/master/Generators-Git/#webhook-configuration)
   ##
@@ -1443,6 +1496,66 @@ notifications:
         ##   - e2e-az2
         ##
         values: []
+
+      ## Argo CD Slack Bot controller ports
+      ## @param notifications.bots.slack.containerPorts.metrics Slack Bot controller metrics port number
+      ##
+      containerPorts:
+        metrics: 9001
+
+      ## Configure extra options for Slack Bot containers' liveness and readiness probes
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+      ## @param notifications.bots.slack.startupProbe.enabled Enable startupProbe on Slack Bot nodes
+      ## @param notifications.bots.slack.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+      ## @param notifications.bots.slack.startupProbe.periodSeconds Period seconds for startupProbe
+      ## @param notifications.bots.slack.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+      ## @param notifications.bots.slack.startupProbe.failureThreshold Failure threshold for startupProbe
+      ## @param notifications.bots.slack.startupProbe.successThreshold Success threshold for startupProbe
+      ##
+      startupProbe:
+        enabled: false
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        timeoutSeconds: 1
+        failureThreshold: 3
+        successThreshold: 1
+      ## @param notifications.bots.slack.livenessProbe.enabled Enable livenessProbe on Slack Bot nodes
+      ## @param notifications.bots.slack.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+      ## @param notifications.bots.slack.livenessProbe.periodSeconds Period seconds for livenessProbe
+      ## @param notifications.bots.slack.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+      ## @param notifications.bots.slack.livenessProbe.failureThreshold Failure threshold for livenessProbe
+      ## @param notifications.bots.slack.livenessProbe.successThreshold Success threshold for livenessProbe
+      ##
+      livenessProbe:
+        enabled: true
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        timeoutSeconds: 1
+        failureThreshold: 3
+        successThreshold: 1
+      ## @param notifications.bots.slack.readinessProbe.enabled Enable readinessProbe on Slack Bot nodes
+      ## @param notifications.bots.slack.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+      ## @param notifications.bots.slack.readinessProbe.periodSeconds Period seconds for readinessProbe
+      ## @param notifications.bots.slack.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+      ## @param notifications.bots.slack.readinessProbe.failureThreshold Failure threshold for readinessProbe
+      ## @param notifications.bots.slack.readinessProbe.successThreshold Success threshold for readinessProbe
+      ##
+      readinessProbe:
+        enabled: true
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        timeoutSeconds: 1
+        failureThreshold: 3
+        successThreshold: 1
+      ## @param notifications.bots.slack.customStartupProbe Custom startupProbe that overrides the default one
+      ##
+      customStartupProbe: {}
+      ## @param notifications.bots.slack.customLivenessProbe Custom livenessProbe that overrides the default one
+      ##
+      customLivenessProbe: {}
+      ## @param notifications.bots.slack.customReadinessProbe Custom readinessProbe that overrides the default one
+      ##
+      customReadinessProbe: {}
       ## @param notifications.bots.slack.affinity Affinity for Argo CD Slack bot pods assignment
       ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
       ## NOTE: `notifications.bots.slack.podAffinityPreset`, `notifications.bots.slack.podAntiAffinityPreset`, and `notifications.bots.slack.nodeAffinityPreset` will be ignored when it's set
