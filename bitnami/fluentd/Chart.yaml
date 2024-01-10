@@ -30,4 +30,4 @@ maintainers:
 name: fluentd
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/fluentd
-version: 5.11.1
+version: 5.12.0
