@@ -254,6 +254,7 @@ controller:
   ## @param controller.containerSecurityContext.allowPrivilegeEscalation Enables privilege Escalation context for the pod.
   ## @param controller.containerSecurityContext.readOnlyRootFilesystem Allows the pod to mount the RootFS as ReadOnly
   ## @param controller.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
+  ## @param controller.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -264,6 +265,8 @@ controller:
     capabilities:
       drop:
         - ALL
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param controller.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -624,8 +627,8 @@ speaker:
   ## @param speaker.containerSecurityContext.readOnlyRootFilesystem Allows the pod to mount the RootFS as ReadOnly
   ## @param speaker.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
   ## @param speaker.containerSecurityContext.capabilities.add [array] Add capabilities for the securityContext
+  ## @param speaker.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
-
   containerSecurityContext:
     enabled: true
     runAsUser: 0
@@ -638,6 +641,8 @@ speaker:
         - NET_ADMIN
         - NET_RAW
         - SYS_ADMIN
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param speaker.command Override default container command (useful when using custom images)
   ##
   command: []
