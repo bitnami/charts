@@ -1155,7 +1155,7 @@ workflows:
   ## @param workflows.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   serviceAccount:
-    create: false
+    create: true
     name: ""
     automountServiceAccountToken: true
     annotations: {}
