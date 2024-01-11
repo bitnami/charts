@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/logstash
-  tag: 8.11.3-debian-11-r0
+  tag: 8.11.4-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -547,7 +547,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r93
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
