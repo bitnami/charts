@@ -278,6 +278,14 @@ spec:
             # ns1 arguments
             - --ns1-min-ttl={{ .Values.ns1.minTTL }}
             {{- end }}
+            {{- if eq .Values.provider "pihole" }}
+              {{- if .Values.pihole.server }}
+            - --pihole-server={{ .Values.pihole.server }}
+              {{- end }}
+              {{- if .Values.pihole.tlsSkipVerify }}
+            - --pihole-tls-skip-verify={{ .Values.pihole.tlsSkipVerify }}
+              {{- end }}
+            {{- end }}
             {{- if eq .Values.provider "rfc2136" }}
             # RFC 2136 arguments
             - --rfc2136-host={{ required "rfc2136.host must be supplied for provider 'rfc2136'" .Values.rfc2136.host }}
@@ -638,6 +646,13 @@ spec:
               {{- if .Values.extraEnvVars }}
               {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
               {{- end }}
+            {{- if .Values.pihole.secretName }}
+            - name: EXTERNAL_DNS_PIHOLE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: pihole_password
+            {{- end }}  
             {{- if eq .Values.provider "ns1" }}
             # NS1 environment variables
             {{- if or (.Values.ns1.apiKey) (.Values.ns1.secretName) }}

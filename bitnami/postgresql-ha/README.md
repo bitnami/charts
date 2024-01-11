@@ -508,6 +508,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.customLivenessProbe`                    | Override default liveness probe                                                                                                                           | `{}`                                |
 | `metrics.customReadinessProbe`                   | Override default readiness probe                                                                                                                          | `{}`                                |
 | `metrics.customStartupProbe`                     | Override default startup probe                                                                                                                            | `{}`                                |
+| `metrics.service.enabled`                        | PostgreSQL Prometheus exporter metrics service enabled                                                                                                    | `true`                              |
 | `metrics.service.type`                           | PostgreSQL Prometheus exporter metrics service type                                                                                                       | `ClusterIP`                         |
 | `metrics.service.ports.metrics`                  | PostgreSQL Prometheus exporter metrics service port                                                                                                       | `9187`                              |
 | `metrics.service.nodePorts.metrics`              | PostgreSQL Prometheus exporter Node Port                                                                                                                  | `""`                                |
@@ -613,7 +614,7 @@ helm install my-release \
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
