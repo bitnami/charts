@@ -183,7 +183,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -398,7 +398,7 @@ service:
   sessionAffinityConfig: {}
 
 ## OpenSearch ingress parameters
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for OpenSearch
@@ -545,7 +545,7 @@ master:
   updateStrategy:
     type: RollingUpdate
   ## OpenSearch resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -644,7 +644,7 @@ master:
   ##
   affinity: {}
   ## @param master.nodeSelector Node labels for master-eligible pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param master.tolerations Tolerations for master-eligible pods assignment
@@ -773,7 +773,7 @@ master:
   ##
   initContainers: []
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param master.persistence.enabled Enable persistence using a `PersistentVolumeClaim`
@@ -851,7 +851,7 @@ master:
     ##                 values:
     ##                   - frontend
     ##
-    extraIngress: [ ]
+    extraIngress: []
     ## @param master.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraEgress:
@@ -868,12 +868,12 @@ master:
     ##                 values:
     ##                   - frontend
     ##
-    extraEgress: [ ]
+    extraEgress: []
     ## @param master.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
     ## @param master.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
     ##
-    ingressNSMatchLabels: { }
-    ingressNSPodMatchLabels: { }
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   autoscaling:
     vpa:
       ## @param master.autoscaling.vpa.enabled Enable VPA
@@ -881,18 +881,18 @@ master:
       enabled: false
       ## @param master.autoscaling.vpa.annotations Annotations for VPA resource
       ##
-      annotations: { }
+      annotations: {}
       ## @param master.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
       ##
-      controlledResources: [ ]
+      controlledResources: []
       ## @param master.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
       ## cpu: 200m
       ## memory: 100Mi
-      maxAllowed: { }
+      maxAllowed: {}
       ## @param master.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
       ## cpu: 200m
       ## memory: 100Mi
-      minAllowed: { }
+      minAllowed: {}
       updatePolicy:
         ## @param master.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
         ## Possible values are "Off", "Initial", "Recreate", and "Auto".
@@ -955,7 +955,7 @@ data:
   updateStrategy:
     type: RollingUpdate
   ## OpenSearch resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param data.resources.limits The resources limits for the data containers
   ## @param data.resources.requests [object] The requested resources for the data containers
   ##
@@ -1044,7 +1044,7 @@ data:
   ##
   affinity: {}
   ## @param data.nodeSelector Node labels for data pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param data.tolerations Tolerations for data pods assignment
@@ -1173,7 +1173,7 @@ data:
   ##
   initContainers: []
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param data.persistence.enabled Enable persistence using a `PersistentVolumeClaim`
@@ -1251,7 +1251,7 @@ data:
     ##                 values:
     ##                   - frontend
     ##
-    extraIngress: [ ]
+    extraIngress: []
     ## @param data.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraEgress:
@@ -1268,12 +1268,12 @@ data:
     ##                 values:
     ##                   - frontend
     ##
-    extraEgress: [ ]
+    extraEgress: []
     ## @param data.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
     ## @param data.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
     ##
-    ingressNSMatchLabels: { }
-    ingressNSPodMatchLabels: { }
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   autoscaling:
     vpa:
       ## @param data.autoscaling.vpa.enabled Enable VPA
@@ -1281,18 +1281,18 @@ data:
       enabled: false
       ## @param data.autoscaling.vpa.annotations Annotations for VPA resource
       ##
-      annotations: { }
+      annotations: {}
       ## @param data.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
       ##
-      controlledResources: [ ]
+      controlledResources: []
       ## @param data.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
       ## cpu: 200m
       ## memory: 100Mi
-      maxAllowed: { }
+      maxAllowed: {}
       ## @param data.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
       ## cpu: 200m
       ## memory: 100Mi
-      minAllowed: { }
+      minAllowed: {}
       updatePolicy:
         ## @param data.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
         ## Possible values are "Off", "Initial", "Recreate", and "Auto".
@@ -1356,7 +1356,7 @@ coordinating:
   updateStrategy:
     type: RollingUpdate
   ## OpenSearch resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param coordinating.resources.limits The resources limits for the coordinating-only containers
   ## @param coordinating.resources.requests [object] The requested resources for the coordinating-only containers
   ##
@@ -1445,7 +1445,7 @@ coordinating:
   ##
   affinity: {}
   ## @param coordinating.nodeSelector Node labels for coordinating-only pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param coordinating.tolerations Tolerations for coordinating-only pods assignment
@@ -1613,7 +1613,7 @@ coordinating:
     ##                 values:
     ##                   - frontend
     ##
-    extraIngress: [ ]
+    extraIngress: []
     ## @param coordinating.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraEgress:
@@ -1630,12 +1630,12 @@ coordinating:
     ##                 values:
     ##                   - frontend
     ##
-    extraEgress: [ ]
+    extraEgress: []
     ## @param coordinating.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
     ## @param coordinating.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
     ##
-    ingressNSMatchLabels: { }
-    ingressNSPodMatchLabels: { }
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   autoscaling:
     vpa:
       ## @param coordinating.autoscaling.vpa.enabled Enable VPA
@@ -1643,18 +1643,18 @@ coordinating:
       enabled: false
       ## @param coordinating.autoscaling.vpa.annotations Annotations for VPA resource
       ##
-      annotations: { }
+      annotations: {}
       ## @param coordinating.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
       ##
-      controlledResources: [ ]
+      controlledResources: []
       ## @param coordinating.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
       ## cpu: 200m
       ## memory: 100Mi
-      maxAllowed: { }
+      maxAllowed: {}
       ## @param coordinating.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
       ## cpu: 200m
       ## memory: 100Mi
-      minAllowed: { }
+      minAllowed: {}
       updatePolicy:
         ## @param coordinating.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
         ## Possible values are "Off", "Initial", "Recreate", and "Auto".
@@ -1720,7 +1720,7 @@ ingest:
   updateStrategy:
     type: RollingUpdate
   ## OpenSearch resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param ingest.resources.limits The resources limits for the ingest-only containers
   ## @param ingest.resources.requests [object] The requested resources for the ingest-only containers
   ##
@@ -1809,7 +1809,7 @@ ingest:
   ##
   affinity: {}
   ## @param ingest.nodeSelector Node labels for ingest-only pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param ingest.tolerations Tolerations for ingest-only pods assignment
@@ -1977,7 +1977,7 @@ ingest:
     ##                 values:
     ##                   - frontend
     ##
-    extraIngress: [ ]
+    extraIngress: []
     ## @param ingest.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraEgress:
@@ -1994,12 +1994,12 @@ ingest:
     ##                 values:
     ##                   - frontend
     ##
-    extraEgress: [ ]
+    extraEgress: []
     ## @param ingest.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
     ## @param ingest.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
     ##
-    ingressNSMatchLabels: { }
-    ingressNSPodMatchLabels: { }
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   autoscaling:
     vpa:
       ## @param ingest.autoscaling.vpa.enabled Enable VPA
@@ -2007,18 +2007,18 @@ ingest:
       enabled: false
       ## @param ingest.autoscaling.vpa.annotations Annotations for VPA resource
       ##
-      annotations: { }
+      annotations: {}
       ## @param ingest.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
       ##
-      controlledResources: [ ]
+      controlledResources: []
       ## @param ingest.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
       ## cpu: 200m
       ## memory: 100Mi
-      maxAllowed: { }
+      maxAllowed: {}
       ## @param ingest.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
       ## cpu: 200m
       ## memory: 100Mi
-      minAllowed: { }
+      minAllowed: {}
       updatePolicy:
         ## @param ingest.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
         ## Possible values are "Off", "Initial", "Recreate", and "Auto".
@@ -2104,7 +2104,7 @@ ingest:
     ##
     sessionAffinityConfig: {}
   ## OpenSearch Ingest-only ingress parameters
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param ingest.ingress.enabled Enable ingress record generation for OpenSearch
@@ -2208,7 +2208,6 @@ ingest:
     ##
     extraRules: []
 
-
 ## @section Init Container Parameters
 
 ## 'volumePermissions' init container parameters
@@ -2241,7 +2240,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -2280,7 +2279,7 @@ sysctlImage:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -2292,7 +2291,7 @@ sysctlImage:
   ##
   pullSecrets: []
   ## Init container' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -2334,7 +2333,7 @@ dashboards:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2344,7 +2343,7 @@ dashboards:
     ## pullSecrets:
     ##   - myRegistryKeySecretName
     ##
-    pullSecrets: [ ]
+    pullSecrets: []
     ## Enable debug mode
     ##
     debug: false
@@ -2379,17 +2378,17 @@ dashboards:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
-    loadBalancerSourceRanges: [ ]
+    loadBalancerSourceRanges: []
     ## @param dashboards.service.externalTrafficPolicy OpenSearch Dashboards service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param dashboards.service.annotations Additional custom annotations for OpenSearch Dashboards service
     ##
-    annotations: { }
+    annotations: {}
     ## @param dashboards.service.extraPorts Extra ports to expose in OpenSearch Dashboards service (normally used with the `sidecars` value)
     ##
-    extraPorts: [ ]
+    extraPorts: []
     ## @param dashboards.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
     ## If "ClientIP", consecutive client requests will be directed to the same Pod
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
@@ -2400,9 +2399,9 @@ dashboards:
     ##   clientIP:
     ##     timeoutSeconds: 300
     ##
-    sessionAffinityConfig: { }
+    sessionAffinityConfig: {}
   ## OpenSearch Dashboards ingress parameters
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param dashboards.ingress.enabled Enable ingress record generation for OpenSearch Dashboards
@@ -2540,7 +2539,7 @@ dashboards:
   updateStrategy:
     type: RollingUpdate
   ## OpenSearch resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dashboards.resources.limits The resources limits for the data containers
   ## @param dashboards.resources.requests [object] The requested resources for the data containers
   ##
@@ -2629,7 +2628,7 @@ dashboards:
   ##
   affinity: {}
   ## @param dashboards.nodeSelector Node labels for data pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dashboards.tolerations Tolerations for data pods assignment
@@ -2823,18 +2822,18 @@ dashboards:
       enabled: false
       ## @param dashboards.autoscaling.vpa.annotations Annotations for VPA resource
       ##
-      annotations: { }
+      annotations: {}
       ## @param dashboards.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
       ##
-      controlledResources: [ ]
+      controlledResources: []
       ## @param dashboards.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
       ## cpu: 200m
       ## memory: 100Mi
-      maxAllowed: { }
+      maxAllowed: {}
       ## @param dashboards.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
       ## cpu: 200m
       ## memory: 100Mi
-      minAllowed: { }
+      minAllowed: {}
       updatePolicy:
         ## @param dashboards.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
         ## Possible values are "Off", "Initial", "Recreate", and "Auto".

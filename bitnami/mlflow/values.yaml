@@ -83,7 +83,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -189,7 +189,7 @@ tracking:
   ##
   customStartupProbe: {}
   ## mlflow resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
   ## @param tracking.resources.limits The resources limits for the mlflow containers
   ## @param tracking.resources.requests The requested resources for the mlflow containers
   ##
@@ -379,7 +379,7 @@ tracking:
   ##
   affinity: {}
   ## @param tracking.nodeSelector Node labels for mlflow pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/
   ##
   nodeSelector: {}
   ## @param tracking.tolerations Tolerations for mlflow pods assignment
@@ -511,7 +511,7 @@ tracking:
     extraPorts: []
     ## @param tracking.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param tracking.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -521,7 +521,7 @@ tracking:
     ##
     sessionAffinityConfig: {}
   ## mlflow ingress parameters
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param tracking.ingress.enabled Enable ingress record generation for mlflow
@@ -678,7 +678,7 @@ tracking:
   ##
 
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param tracking.persistence.enabled Enable persistence using Persistent Volume Claims
@@ -893,7 +893,7 @@ run:
   ##
   customStartupProbe: {}
   ## run resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
   ## @param run.resources.limits The resources limits for the run containers
   ## @param run.resources.requests The requested resources for the run containers
   ##
@@ -986,7 +986,7 @@ run:
   ##
   affinity: {}
   ## @param run.nodeSelector Node labels for Run pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/
   ##
   nodeSelector: {}
   ## @param run.tolerations Tolerations for Run pods assignment
@@ -1092,7 +1092,7 @@ run:
     annotations: {}
   ## @section Mlflow Run persistence paramaters
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param run.persistence.enabled Use a PVC to persist data
@@ -1173,7 +1173,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##

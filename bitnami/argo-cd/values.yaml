@@ -62,7 +62,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -139,7 +139,7 @@ controller:
   ##
   customReadinessProbe: {}
   ## Argo CD resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param controller.resources.limits The resources limits for the Argo CD containers
   ## @param controller.resources.requests The requested resources for the Argo CD containers
   ##
@@ -479,7 +479,7 @@ controller:
   ##
   affinity: {}
   ## @param controller.nodeSelector Node labels for Argo CD pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param controller.tolerations Tolerations for Argo CD pods assignment
@@ -863,7 +863,7 @@ applicationSet:
   ##
   customReadinessProbe: {}
   ## Argo CD applicationSet controller resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param applicationSet.resources.limits The resources limits for the Argo CD applicationSet controller containers
   ## @param applicationSet.resources.requests The requested resources for the Argo CD applicationSet controller containers
   ##
@@ -879,7 +879,7 @@ applicationSet:
     enabled: true
     fsGroup: 1001
   ## @param applicationSet.nodeSelector Node labels for Argo CD applicationSet controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param applicationSet.tolerations Tolerations for Argo CD applicationSet controller pods assignment
@@ -1225,7 +1225,7 @@ notifications:
     seccompProfile:
       type: "RuntimeDefault"
   ## Argo CD notifications controller resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param notifications.resources.limits The resources limits for the Argo CD notifications controller containers
   ## @param notifications.resources.requests The requested resources for the Argo CD notifications controller containers
   ##
@@ -1241,7 +1241,7 @@ notifications:
     enabled: true
     fsGroup: 1001
   ## @param notifications.nodeSelector Node labels for Argo CD notifications controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param notifications.tolerations Tolerations for Argo CD notifications controller pods assignment
@@ -1592,7 +1592,7 @@ notifications:
         seccompProfile:
           type: "RuntimeDefault"
       ## Argo CD Slack bot resource requests and limits
-      ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+      ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
       ## @param notifications.bots.slack.resources.limits The resources limits for the Argo CD Slack bot containers
       ## @param notifications.bots.slack.resources.requests The requested resources for the Argo CD Slack bot containers
       ##
@@ -1608,7 +1608,7 @@ notifications:
         enabled: true
         fsGroup: 1001
       ## @param notifications.bots.slack.nodeSelector Node labels for Argo CD Slack bot pods assignment
-      ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+      ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
       ##
       nodeSelector: {}
       ## @param notifications.bots.slack.tolerations Tolerations for Argo CD Slack bot pods assignment
@@ -1701,7 +1701,7 @@ server:
   ##
   customReadinessProbe: {}
   ## Argo CD server resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param server.resources.limits The resources limits for the Argo CD server containers
   ## @param server.resources.requests The requested resources for the Argo CD server containers
   ##
@@ -1830,7 +1830,7 @@ server:
     dex.config: ""
 
   ## Configure the ingress for the Argo CD server
-  ## Ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ## @param server.ingress.enabled Enable the creation of an ingress for the Argo CD server
   ## @param server.ingress.pathType Path type for the Argo CD server ingress
   ## @param server.ingress.apiVersion Ingress API version for the Argo CD server ingress
@@ -1875,7 +1875,7 @@ server:
     path: /
 
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -2048,7 +2048,7 @@ server:
       honorLabels: false
 
   ## Configure the ingress resource that allows you to access the Argo CD gRPC API
-  ## Ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ## Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/
   ## @param server.ingressGrpc.enabled Enable the creation of an ingress for the Argo CD gRPC server
   ## @param server.ingressGrpc.pathType Path type for the Argo CD gRPC server ingress
@@ -2094,7 +2094,7 @@ server:
     path: /
 
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -2290,7 +2290,7 @@ server:
   ##
   affinity: {}
   ## @param server.nodeSelector Node labels for Argo CD server pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param server.tolerations Tolerations for Argo CD server pods assignment
@@ -2452,7 +2452,7 @@ repoServer:
   ##
   customReadinessProbe: {}
   ## Argo CD repo server resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param repoServer.resources.limits The resources limits for the Argo CD repo server containers
   ## @param repoServer.resources.requests The requested resources for the Argo CD repo server containers
   ##
@@ -2738,7 +2738,7 @@ repoServer:
   ##
   affinity: {}
   ## @param repoServer.nodeSelector Node labels for Argo CD repo server pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param repoServer.tolerations Tolerations for Argo CD repo server pods assignment
@@ -2843,7 +2843,7 @@ dex:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2919,7 +2919,7 @@ dex:
   ##
   customReadinessProbe: {}
   ## Dex resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dex.resources.limits The resources limits for the Dex containers
   ## @param dex.resources.requests The requested resources for the Dex containers
   ##
@@ -3191,7 +3191,7 @@ dex:
   ##
   affinity: {}
   ## @param dex.nodeSelector Node labels for Dex pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dex.tolerations Tolerations for Dex pods assignment
@@ -3482,7 +3482,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -3527,7 +3527,7 @@ redis:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

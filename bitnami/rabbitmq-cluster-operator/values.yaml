@@ -115,7 +115,7 @@ clusterOperator:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -198,7 +198,7 @@ clusterOperator:
   customStartupProbe: {}
 
   ## RabbitMQ Cluster Operator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param clusterOperator.resources.limits The resources limits for the RabbitMQ Cluster Operator containers
   ## @param clusterOperator.resources.requests The requested resources for the RabbitMQ Cluster Operator containers
   ##
@@ -287,7 +287,7 @@ clusterOperator:
   ##
   affinity: {}
   ## @param clusterOperator.nodeSelector Node labels for RabbitMQ Cluster Operator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param clusterOperator.tolerations Tolerations for RabbitMQ Cluster Operator pods assignment
@@ -563,7 +563,7 @@ msgTopologyOperator:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -660,7 +660,7 @@ msgTopologyOperator:
   existingWebhookCertCABundle: ""
 
   ## RabbitMQ Messaging Topology Operator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param msgTopologyOperator.resources.limits The resources limits for the RabbitMQ Messaging Topology Operator containers
   ## @param msgTopologyOperator.resources.requests The requested resources for the RabbitMQ Messaging Topology Operator containers
   ##
@@ -752,7 +752,7 @@ msgTopologyOperator:
   ##
   affinity: {}
   ## @param msgTopologyOperator.nodeSelector Node labels for RabbitMQ Messaging Topology Operator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param msgTopologyOperator.tolerations Tolerations for RabbitMQ Messaging Topology Operator pods assignment

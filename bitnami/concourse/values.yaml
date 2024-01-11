@@ -75,7 +75,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -438,7 +438,7 @@ web:
   ##
   customStartupProbe: {}
   ## Concourse web resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param web.resources.limits The resources limits for the Concourse web containers
   ## @param web.resources.requests The requested resources for the Concourse web containers
   ##
@@ -506,7 +506,7 @@ web:
   ##
   affinity: {}
   ## @param web.nodeSelector Node labels for web pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param web.tolerations Tolerations for web pods assignment
@@ -726,7 +726,7 @@ worker:
   ##
   customStartupProbe: {}
   ## Concourse worker resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param worker.resources.limits The resources limits for the Concourse worker containers
   ## @param worker.resources.requests The requested resources for the Concourse worker containers
   ##
@@ -804,7 +804,7 @@ worker:
   ##
   affinity: {}
   ## @param worker.nodeSelector Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param worker.tolerations Tolerations for worker pod assignment
@@ -1006,7 +1006,7 @@ service:
       https: ""
     ## @param service.web.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param service.web.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1059,7 +1059,7 @@ service:
       tsa: ""
     ## @param service.workerGateway.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param service.workerGateway.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1095,7 +1095,7 @@ service:
     ##
     extraPorts: []
 ## Concourse ingress parameters
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for Concourse
@@ -1230,7 +1230,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
   ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
   ##

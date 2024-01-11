@@ -78,7 +78,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -272,7 +272,7 @@ client:
   ##
   customStartupProbe: {}
   ## client resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param client.resources.limits The resources limits for the client containers
   ## @param client.resources.requests The requested resources for the client containers
   ##
@@ -365,7 +365,7 @@ client:
   ##
   affinity: {}
   ## @param client.nodeSelector Node labels for Client pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param client.tolerations Tolerations for Client pods assignment
@@ -481,7 +481,7 @@ client:
     annotations: {}
   ## @section Deepspeed Client persistence paramaters
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param client.persistence.enabled Use a PVC to persist data
@@ -619,7 +619,7 @@ worker:
   ##
   customStartupProbe: {}
   ## client resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param worker.resources.limits The resources limits for the client containers
   ## @param worker.resources.requests The requested resources for the client containers
   ##
@@ -715,7 +715,7 @@ worker:
   ##
   affinity: {}
   ## @param worker.nodeSelector Node labels for Worker pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param worker.tolerations Tolerations for Worker pods assignment
@@ -831,7 +831,7 @@ worker:
       sessionAffinityConfig: {}
       ## @param worker.externalAccess.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param worker.externalAccess.service.loadBalancerSourceRanges Worker service Load Balancer sources
@@ -924,7 +924,7 @@ worker:
     ingressNSPodMatchLabels: {}
   ## @section Deepspeed Worker persistence paramaters
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param worker.persistence.enabled Use a PVC to persist data
@@ -1021,7 +1021,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
