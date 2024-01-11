@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.16.3-debian-11-r1
+  tag: 1.16.3-debian-11-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -130,6 +130,7 @@ forwarder:
   ## @param forwarder.containerSecurityContext.allowPrivilegeEscalation Allow Privilege Escalation
   ## @param forwarder.containerSecurityContext.readOnlyRootFilesystem Require the use of a read only root file system
   ## @param forwarder.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
+  ## @param forwarder.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -141,6 +142,8 @@ forwarder:
     capabilities:
       drop:
         - ALL
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param forwarder.hostNetwork Enable use of host network
   ##
   hostNetwork: false
@@ -151,6 +154,9 @@ forwarder:
   ## https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
   ##
   terminationGracePeriodSeconds: 30
+  ## @param forwarder.extraGems List of extra gems to be installed. Can be used to install additional fluentd plugins.
+  ##
+  extraGems: []
   ## @param forwarder.configFile Name of the config file that will be used by Fluentd at launch under the `/opt/bitnami/fluentd/conf` directory
   ##
   configFile: fluentd.conf
@@ -674,6 +680,7 @@ aggregator:
   ## @param aggregator.containerSecurityContext.allowPrivilegeEscalation Allow Privilege Escalation
   ## @param aggregator.containerSecurityContext.readOnlyRootFilesystem Require the use of a read only root file system
   ## @param aggregator.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
+  ## @param aggregator.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -685,10 +692,15 @@ aggregator:
     capabilities:
       drop:
         - ALL
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param aggregator.terminationGracePeriodSeconds Duration in seconds the pod needs to terminate gracefully
   ## https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
   ##
   terminationGracePeriodSeconds: 30
+  ## @param aggregator.extraGems List of extra gems to be installed. Can be used to install additional fluentd plugins.
+  ##
+  extraGems: []
   ## @param aggregator.configFile Name of the config file that will be used by Fluentd at launch under the `/opt/bitnami/fluentd/conf` directory
   ##
   configFile: fluentd.conf

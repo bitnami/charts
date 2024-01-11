@@ -422,16 +422,24 @@ helm uninstall my-release
 
 ### Init Container parameters
 
-| Name                                 | Description                                                                                                                     | Value                     |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `waitForBackends.enabled`            | Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming                               | `true`                    |
-| `waitForBackends.image.registry`     | Init container wait-for-backend image registry                                                                                  | `REGISTRY_NAME`           |
-| `waitForBackends.image.repository`   | Init container wait-for-backend image name                                                                                      | `REPOSITORY_NAME/kubectl` |
-| `waitForBackends.image.digest`       | Init container wait-for-backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
-| `waitForBackends.image.pullPolicy`   | Init container wait-for-backend image pull policy                                                                               | `IfNotPresent`            |
-| `waitForBackends.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                | `[]`                      |
-| `waitForBackends.resources.limits`   | Init container wait-for-backend resource limits                                                                                 | `{}`                      |
-| `waitForBackends.resources.requests` | Init container wait-for-backend resource requests                                                                               | `{}`                      |
+| Name                                                                | Description                                                                                                                     | Value                     |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `waitForBackends.enabled`                                           | Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming                               | `true`                    |
+| `waitForBackends.image.registry`                                    | Init container wait-for-backend image registry                                                                                  | `REGISTRY_NAME`           |
+| `waitForBackends.image.repository`                                  | Init container wait-for-backend image name                                                                                      | `REPOSITORY_NAME/kubectl` |
+| `waitForBackends.image.digest`                                      | Init container wait-for-backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
+| `waitForBackends.image.pullPolicy`                                  | Init container wait-for-backend image pull policy                                                                               | `IfNotPresent`            |
+| `waitForBackends.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                | `[]`                      |
+| `waitForBackends.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                            | `true`                    |
+| `waitForBackends.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                      | `1001`                    |
+| `waitForBackends.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                   | `true`                    |
+| `waitForBackends.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                     | `false`                   |
+| `waitForBackends.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                         | `false`                   |
+| `waitForBackends.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                       | `false`                   |
+| `waitForBackends.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                              | `["ALL"]`                 |
+| `waitForBackends.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                | `RuntimeDefault`          |
+| `waitForBackends.resources.limits`                                  | Init container wait-for-backend resource limits                                                                                 | `{}`                      |
+| `waitForBackends.resources.requests`                                | Init container wait-for-backend resource requests                                                                               | `{}`                      |
 
 ### Database parameters
 
@@ -511,7 +519,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/sprin
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -911,7 +919,7 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

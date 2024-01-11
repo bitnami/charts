@@ -195,8 +195,17 @@ spec:
 
               {{- if $isDistributedMode }}
               {{- if (or ((empty $bucket.withLock)) (not $bucket.withLock)) }}
-              {{- $versioning := ternary ("enable") ("suspend") (and (not (empty $bucket.versioning)) $bucket.versioning) }}
-              mc version {{ $versioning }} {{ $minioAlias }}/{{ $bucket.name }};
+              {{- $versioning := default "Suspended" $bucket.versioning }}
+              {{- if kindIs "bool" $bucket.versioning }}
+              {{- $versioning = ternary "Versioned" "Suspended" $bucket.versioning }}
+              {{- end }}
+              {{- if eq $versioning "Versioned" }}
+              mc version enable {{ $minioAlias }}/{{ $bucket.name }};
+              {{- else if eq $versioning "Suspended" }}
+              mc version suspend {{ $minioAlias }}/{{ $bucket.name }};
+              {{- else if ne $versioning "Unchanged" }}
+              {{- fail (printf "Invalid value '%s' for versioning of bucket '%s'" $versioning $bucket.name) }}
+              {{- end }}
               {{- end }}
               {{- end }}
 

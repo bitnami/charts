@@ -96,7 +96,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.enabled`                                       | Enable authentication                                                                                                                                     | `true`                            |
 | `auth.rootUser`                                      | MongoDB(&reg;) root user                                                                                                                                  | `root`                            |
 | `auth.rootPassword`                                  | MongoDB(&reg;) root password                                                                                                                              | `""`                              |
-| `auth.replicaSetKey`                                 | Key used for authentication in the replicaset (only when `architecture=replicaset`)                                                                       | `""`                              |
+| `auth.replicaSetKey`                                 | Key used for authentication in the replicaset                                                                                                             | `""`                              |
 | `auth.existingSecret`                                | Existing secret with MongoDB(&reg;) credentials (keys: `mongodb-password`, `mongodb-root-password`, `mongodb-replica-set-key`)                            | `""`                              |
 | `auth.usePasswordFile`                               | Mount credentials as files instead of using environment variables                                                                                         | `false`                           |
 | `shards`                                             | Number of shards to be created                                                                                                                            | `2`                               |
@@ -106,7 +106,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `common.mongodbDirectoryPerDB`                       | Switch to enable/disable DirectoryPerDB on MongoDB&reg;                                                                                                   | `false`                           |
 | `common.mongodbSystemLogVerbosity`                   | MongoDB&reg; system log verbosity level                                                                                                                   | `0`                               |
 | `common.mongodbDisableSystemLog`                     | Whether to disable MongoDB&reg; system log or not                                                                                                         | `false`                           |
-| `common.mongodbMaxWaitTimeout`                       | Maximum time (in seconds) for MongoDB&reg; nodes to wait for another MongoDB&reg; node to be ready                                                        | `120`                             |
+| `common.mongodbInitRetryAttempts`                    | Maximum retries for checking the MongoDB&reg; initialization status                                                                                       | `24`                              |
+| `common.mongodbInitRetryDelay`                       | Time (in seconds) to wait between retries for checking the MongoDB&reg; initialization status                                                             | `5`                               |
 | `common.initScriptsCM`                               | Configmap with init scripts to execute                                                                                                                    | `""`                              |
 | `common.initScriptsSecret`                           | Secret with init scripts to execute (for sensitive data)                                                                                                  | `""`                              |
 | `common.extraEnvVars`                                | An array to add extra env vars                                                                                                                            | `[]`                              |
@@ -554,7 +555,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/mongo
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -724,7 +725,7 @@ MongoDB&reg; container images were updated to `4.4.x` and it can affect compatib
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -253,12 +253,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                       | Description                                                                                                                               | Value                            |
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
 | `metrics.enabled`                          | Start a Prometheus exporter sidecar container                                                                                             | `false`                          |
-| `metrics.port`                             | NGINX Container Status Port scraped by Prometheus Exporter                                                                                | `""`                             |
 | `metrics.image.registry`                   | NGINX Prometheus exporter image registry                                                                                                  | `REGISTRY_NAME`                  |
 | `metrics.image.repository`                 | NGINX Prometheus exporter image repository                                                                                                | `REPOSITORY_NAME/nginx-exporter` |
 | `metrics.image.digest`                     | NGINX Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                             |
 | `metrics.image.pullPolicy`                 | NGINX Prometheus exporter image pull policy                                                                                               | `IfNotPresent`                   |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                          | `[]`                             |
+| `metrics.port`                             | NGINX Container Status Port scraped by Prometheus Exporter                                                                                | `""`                             |
+| `metrics.extraArgs`                        | Extra arguments for Prometheus exporter                                                                                                   | `[]`                             |
+| `metrics.containerPorts.metrics`           | Prometheus exporter container port                                                                                                        | `9113`                           |
 | `metrics.podAnnotations`                   | Additional annotations for NGINX Prometheus exporter pod(s)                                                                               | `{}`                             |
 | `metrics.securityContext.enabled`          | Enabled NGINX Exporter containers' Security Context                                                                                       | `false`                          |
 | `metrics.securityContext.runAsUser`        | Set NGINX Exporter container's Security Context runAsUser                                                                                 | `1001`                           |
@@ -304,7 +306,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/nginx
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -480,7 +482,7 @@ Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](htt
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

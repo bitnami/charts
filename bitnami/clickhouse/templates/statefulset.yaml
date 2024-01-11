@@ -399,8 +399,9 @@ spec:
         {{- if $.Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" $.Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-  {{- if and $.Values.persistence.enabled (not $.Values.persistence.existingClaim) }}
+  {{- if or $.Values.extraVolumeClaimTemplates (and $.Values.persistence.enabled (not $.Values.persistence.existingClaim)) }}
   volumeClaimTemplates:
+    {{- if and $.Values.persistence.enabled (not $.Values.persistence.existingClaim) }}
     - metadata:
         name: data
         {{- if or $.Values.persistence.annotations $.Values.commonAnnotations }}
@@ -425,6 +426,10 @@ spec:
         dataSource: {{- include "common.tplvalues.render" (dict "value" $.Values.persistence.dataSource "context" $) | nindent 10 }}
         {{- end }}
         {{- include "common.storage.class" (dict "persistence" $.Values.persistence "global" $.Values.global) | nindent 8 }}
+    {{- end }}
+    {{- if $.Values.extraVolumeClaimTemplates }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.extraVolumeClaimTemplates "context" $) | nindent 4 }}
+    {{- end }}
   {{- end }}
 ---
 {{- end }}

@@ -127,6 +127,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.containerSecurityContext.allowPrivilegeEscalation` | Enables privilege Escalation context for the pod.                                                                                           | `false`                              |
 | `controller.containerSecurityContext.readOnlyRootFilesystem`   | Allows the pod to mount the RootFS as ReadOnly                                                                                              | `true`                               |
 | `controller.containerSecurityContext.capabilities.drop`        | Drop capabilities for the securityContext                                                                                                   | `[]`                                 |
+| `controller.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                            | `RuntimeDefault`                     |
 | `controller.command`                                           | Override default container command (useful when using custom images)                                                                        | `[]`                                 |
 | `controller.args`                                              | Override default container args (useful when using custom images)                                                                           | `[]`                                 |
 | `controller.lifecycleHooks`                                    | for the MetalLB Controller container(s) to automate configuration before or after startup                                                   | `{}`                                 |
@@ -225,6 +226,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `speaker.containerSecurityContext.readOnlyRootFilesystem`   | Allows the pod to mount the RootFS as ReadOnly                                                                                              | `true`                            |
 | `speaker.containerSecurityContext.capabilities.drop`        | Drop capabilities for the securityContext                                                                                                   | `[]`                              |
 | `speaker.containerSecurityContext.capabilities.add`         | Add capabilities for the securityContext                                                                                                    | `[]`                              |
+| `speaker.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                            | `RuntimeDefault`                  |
 | `speaker.command`                                           | Override default container command (useful when using custom images)                                                                        | `[]`                              |
 | `speaker.args`                                              | Override default container args (useful when using custom images)                                                                           | `[]`                              |
 | `speaker.lifecycleHooks`                                    | for the Speaker container(s) to automate configuration before or after startup                                                              | `{}`                              |
@@ -296,7 +298,7 @@ The above command sets the `readinessProbe.successThreshold` to `5`.
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -391,7 +393,7 @@ Affected values:
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

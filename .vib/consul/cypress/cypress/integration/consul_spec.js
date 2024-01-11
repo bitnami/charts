@@ -12,7 +12,7 @@ const REPLICA_COUNT = Cypress.env('replicaCount');
 
 it('is able to display all of the nodes', () => {
   cy.visit(`/ui/${DATACENTER_NAME}/nodes`);
-  cy.get('.ember-view').within(() => {
+  cy.get('div[class*=consul-node-list]').within(() => {
     cy.get('.passing').should('have.length', REPLICA_COUNT);
     cy.get('.leader').click();
   });

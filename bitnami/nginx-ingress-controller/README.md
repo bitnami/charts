@@ -91,6 +91,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `addHeaders`                           | Custom headers before sending response traffic to the client                                                                                       | `{}`                                       |
 | `defaultBackendService`                | Default 404 backend service; required only if `defaultBackend.enabled = false`                                                                     | `""`                                       |
 | `electionID`                           | Election ID to use for status update                                                                                                               | `ingress-controller-leader`                |
+| `allowSnippetAnnotations`              | Allow users to set snippet annotations                                                                                                             | `false`                                    |
 | `reportNodeInternalIp`                 | If using `hostNetwork=true`, setting `reportNodeInternalIp=true`, will pass the flag `report-node-internal-ip-address` to Nginx Ingress Controller | `false`                                    |
 | `watchIngressWithoutClass`             | Process Ingress objects without ingressClass annotation/ingressClassName field                                                                     | `false`                                    |
 | `ingressClassResource.name`            | Name of the IngressClass resource                                                                                                                  | `nginx`                                    |
@@ -119,144 +120,146 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Nginx Ingress deployment / daemonset parameters
 
-| Name                                                | Description                                                                                                                                 | Value          |
-| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
-| `kind`                                              | Install as Deployment or DaemonSet                                                                                                          | `Deployment`   |
-| `daemonset.useHostPort`                             | If `kind` is `DaemonSet`, this will enable `hostPort` for `TCP/80` and `TCP/443`                                                            | `false`        |
-| `daemonset.hostPorts`                               | HTTP and HTTPS ports                                                                                                                        | `{}`           |
-| `replicaCount`                                      | Desired number of Controller pods                                                                                                           | `1`            |
-| `updateStrategy`                                    | Strategy to use to update Pods                                                                                                              | `{}`           |
-| `revisionHistoryLimit`                              | The number of old history to retain to allow rollback                                                                                       | `10`           |
-| `podSecurityContext.enabled`                        | Enable Controller pods' Security Context                                                                                                    | `true`         |
-| `podSecurityContext.fsGroup`                        | Group ID for the container filesystem                                                                                                       | `1001`         |
-| `containerSecurityContext.enabled`                  | Enable Controller containers' Security Context                                                                                              | `true`         |
-| `containerSecurityContext.allowPrivilegeEscalation` | Switch to allow priviledge escalation on the Controller container                                                                           | `true`         |
-| `containerSecurityContext.runAsUser`                | User ID for the Controller container                                                                                                        | `1001`         |
-| `containerSecurityContext.capabilities.drop`        | Linux Kernel capabilities that should be dropped                                                                                            | `[]`           |
-| `containerSecurityContext.capabilities.add`         | Linux Kernel capabilities that should be added                                                                                              | `[]`           |
-| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                               | `true`         |
-| `minReadySeconds`                                   | How many seconds a pod needs to be ready before killing the next, during update                                                             | `0`            |
-| `resources.limits`                                  | The resources limits for the Controller container                                                                                           | `{}`           |
-| `resources.requests`                                | The requested resources for the Controller container                                                                                        | `{}`           |
-| `livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                        | `true`         |
-| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                     | `10`           |
-| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                            | `10`           |
-| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                           | `1`            |
-| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                         | `3`            |
-| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                         | `1`            |
-| `readinessProbe.enabled`                            | Enable readinessProbe                                                                                                                       | `true`         |
-| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                    | `10`           |
-| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                           | `10`           |
-| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                          | `1`            |
-| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                        | `3`            |
-| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                        | `1`            |
-| `startupProbe.enabled`                              | Enable startupProbe                                                                                                                         | `false`        |
-| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                      | `10`           |
-| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                             | `10`           |
-| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                            | `1`            |
-| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                          | `3`            |
-| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                          | `1`            |
-| `customLivenessProbe`                               | Override default liveness probe                                                                                                             | `{}`           |
-| `customReadinessProbe`                              | Override default readiness probe                                                                                                            | `{}`           |
-| `customStartupProbe`                                | Custom liveness probe for the Web component                                                                                                 | `{}`           |
-| `lifecycle`                                         | LifecycleHooks to set additional configuration at startup                                                                                   | `{}`           |
-| `podLabels`                                         | Extra labels for Controller pods                                                                                                            | `{}`           |
-| `podAnnotations`                                    | Annotations for Controller pods                                                                                                             | `{}`           |
-| `priorityClassName`                                 | Controller priorityClassName                                                                                                                | `""`           |
-| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                                              | `""`           |
-| `hostNetwork`                                       | If the Nginx deployment / daemonset should run on the host's network namespace                                                              | `false`        |
-| `dnsPolicy`                                         | By default, while using host network, name resolution uses the host's DNS                                                                   | `ClusterFirst` |
-| `dnsConfig`                                         | is an object with optional parameters to pass to the DNS resolver                                                                           | `{}`           |
-| `terminationGracePeriodSeconds`                     | How many seconds to wait before terminating a pod                                                                                           | `60`           |
-| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                         | `""`           |
-| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                    | `soft`         |
-| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                   | `""`           |
-| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set.                                                                                      | `""`           |
-| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                                                                   | `[]`           |
-| `affinity`                                          | Affinity for pod assignment. Evaluated as a template.                                                                                       | `{}`           |
-| `nodeSelector`                                      | Node labels for pod assignment. Evaluated as a template.                                                                                    | `{}`           |
-| `tolerations`                                       | Tolerations for pod assignment. Evaluated as a template.                                                                                    | `[]`           |
-| `extraVolumes`                                      | Optionally specify extra list of additional volumes for Controller pods                                                                     | `[]`           |
-| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Controller container(s)                                                        | `[]`           |
-| `initContainers`                                    | Add init containers to the controller pods                                                                                                  | `[]`           |
-| `sidecars`                                          | Add sidecars to the controller pods.                                                                                                        | `[]`           |
-| `customTemplate`                                    | Override NGINX template                                                                                                                     | `{}`           |
-| `topologySpreadConstraints`                         | Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in                                     | `[]`           |
-| `podSecurityPolicy.enabled`                         | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`        |
+| Name                                                | Description                                                                                                                                 | Value            |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `kind`                                              | Install as Deployment or DaemonSet                                                                                                          | `Deployment`     |
+| `daemonset.useHostPort`                             | If `kind` is `DaemonSet`, this will enable `hostPort` for `TCP/80` and `TCP/443`                                                            | `false`          |
+| `daemonset.hostPorts`                               | HTTP and HTTPS ports                                                                                                                        | `{}`             |
+| `replicaCount`                                      | Desired number of Controller pods                                                                                                           | `1`              |
+| `updateStrategy`                                    | Strategy to use to update Pods                                                                                                              | `{}`             |
+| `revisionHistoryLimit`                              | The number of old history to retain to allow rollback                                                                                       | `10`             |
+| `podSecurityContext.enabled`                        | Enable Controller pods' Security Context                                                                                                    | `true`           |
+| `podSecurityContext.fsGroup`                        | Group ID for the container filesystem                                                                                                       | `1001`           |
+| `containerSecurityContext.enabled`                  | Enable Controller containers' Security Context                                                                                              | `true`           |
+| `containerSecurityContext.allowPrivilegeEscalation` | Switch to allow priviledge escalation on the Controller container                                                                           | `true`           |
+| `containerSecurityContext.runAsUser`                | User ID for the Controller container                                                                                                        | `1001`           |
+| `containerSecurityContext.capabilities.drop`        | Linux Kernel capabilities that should be dropped                                                                                            | `[]`             |
+| `containerSecurityContext.capabilities.add`         | Linux Kernel capabilities that should be added                                                                                              | `[]`             |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                               | `true`           |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                            | `RuntimeDefault` |
+| `minReadySeconds`                                   | How many seconds a pod needs to be ready before killing the next, during update                                                             | `0`              |
+| `resources.limits`                                  | The resources limits for the Controller container                                                                                           | `{}`             |
+| `resources.requests`                                | The requested resources for the Controller container                                                                                        | `{}`             |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                        | `true`           |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                     | `10`             |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                            | `10`             |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                           | `1`              |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                         | `3`              |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                         | `1`              |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                                                                       | `true`           |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                    | `10`             |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                           | `10`             |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                          | `1`              |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                        | `3`              |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                        | `1`              |
+| `startupProbe.enabled`                              | Enable startupProbe                                                                                                                         | `false`          |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                      | `10`             |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                             | `10`             |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                            | `1`              |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                          | `3`              |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                          | `1`              |
+| `customLivenessProbe`                               | Override default liveness probe                                                                                                             | `{}`             |
+| `customReadinessProbe`                              | Override default readiness probe                                                                                                            | `{}`             |
+| `customStartupProbe`                                | Custom liveness probe for the Web component                                                                                                 | `{}`             |
+| `lifecycle`                                         | LifecycleHooks to set additional configuration at startup                                                                                   | `{}`             |
+| `podLabels`                                         | Extra labels for Controller pods                                                                                                            | `{}`             |
+| `podAnnotations`                                    | Annotations for Controller pods                                                                                                             | `{}`             |
+| `priorityClassName`                                 | Controller priorityClassName                                                                                                                | `""`             |
+| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                                              | `""`             |
+| `hostNetwork`                                       | If the Nginx deployment / daemonset should run on the host's network namespace                                                              | `false`          |
+| `dnsPolicy`                                         | By default, while using host network, name resolution uses the host's DNS                                                                   | `ClusterFirst`   |
+| `dnsConfig`                                         | is an object with optional parameters to pass to the DNS resolver                                                                           | `{}`             |
+| `terminationGracePeriodSeconds`                     | How many seconds to wait before terminating a pod                                                                                           | `60`             |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                         | `""`             |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                    | `soft`           |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                   | `""`             |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set.                                                                                      | `""`             |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                                                                   | `[]`             |
+| `affinity`                                          | Affinity for pod assignment. Evaluated as a template.                                                                                       | `{}`             |
+| `nodeSelector`                                      | Node labels for pod assignment. Evaluated as a template.                                                                                    | `{}`             |
+| `tolerations`                                       | Tolerations for pod assignment. Evaluated as a template.                                                                                    | `[]`             |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for Controller pods                                                                     | `[]`             |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Controller container(s)                                                        | `[]`             |
+| `initContainers`                                    | Add init containers to the controller pods                                                                                                  | `[]`             |
+| `sidecars`                                          | Add sidecars to the controller pods.                                                                                                        | `[]`             |
+| `customTemplate`                                    | Override NGINX template                                                                                                                     | `{}`             |
+| `topologySpreadConstraints`                         | Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in                                     | `[]`             |
+| `podSecurityPolicy.enabled`                         | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`          |
 
 ### Default backend parameters
 
-| Name                                                   | Description                                                                                                     | Value                   |
-| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `defaultBackend.enabled`                               | Enable a default backend based on NGINX                                                                         | `true`                  |
-| `defaultBackend.hostAliases`                           | Add deployment host aliases                                                                                     | `[]`                    |
-| `defaultBackend.image.registry`                        | Default backend image registry                                                                                  | `REGISTRY_NAME`         |
-| `defaultBackend.image.repository`                      | Default backend image repository                                                                                | `REPOSITORY_NAME/nginx` |
-| `defaultBackend.image.digest`                          | Default backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `defaultBackend.image.pullPolicy`                      | Image pull policy                                                                                               | `IfNotPresent`          |
-| `defaultBackend.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                | `[]`                    |
-| `defaultBackend.extraArgs`                             | Additional command line arguments to pass to Nginx container                                                    | `{}`                    |
-| `defaultBackend.containerPort`                         | HTTP container port number                                                                                      | `8080`                  |
-| `defaultBackend.serverBlockConfig`                     | NGINX backend default server block configuration                                                                | `""`                    |
-| `defaultBackend.replicaCount`                          | Desired number of default backend pods                                                                          | `1`                     |
-| `defaultBackend.podSecurityContext.enabled`            | Enable Default backend pods' Security Context                                                                   | `true`                  |
-| `defaultBackend.podSecurityContext.fsGroup`            | Group ID for the container filesystem                                                                           | `1001`                  |
-| `defaultBackend.containerSecurityContext.enabled`      | Enable Default backend containers' Security Context                                                             | `true`                  |
-| `defaultBackend.containerSecurityContext.runAsUser`    | User ID for the Default backend container                                                                       | `1001`                  |
-| `defaultBackend.containerSecurityContext.runAsNonRoot` | Set container's Security Context runAsNonRoot                                                                   | `true`                  |
-| `defaultBackend.resources.limits`                      | The resources limits for the Default backend container                                                          | `{}`                    |
-| `defaultBackend.resources.requests`                    | The requested resources for the Default backend container                                                       | `{}`                    |
-| `defaultBackend.livenessProbe.enabled`                 | Enable livenessProbe                                                                                            | `true`                  |
-| `defaultBackend.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                         | `30`                    |
-| `defaultBackend.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                | `10`                    |
-| `defaultBackend.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                               | `5`                     |
-| `defaultBackend.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                             | `3`                     |
-| `defaultBackend.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                             | `1`                     |
-| `defaultBackend.readinessProbe.enabled`                | Enable readinessProbe                                                                                           | `true`                  |
-| `defaultBackend.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                        | `0`                     |
-| `defaultBackend.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                               | `5`                     |
-| `defaultBackend.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                              | `5`                     |
-| `defaultBackend.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                            | `6`                     |
-| `defaultBackend.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                            | `1`                     |
-| `defaultBackend.startupProbe.enabled`                  | Enable startupProbe                                                                                             | `false`                 |
-| `defaultBackend.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                          | `0`                     |
-| `defaultBackend.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                 | `5`                     |
-| `defaultBackend.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                | `5`                     |
-| `defaultBackend.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                              | `6`                     |
-| `defaultBackend.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                              | `1`                     |
-| `defaultBackend.customStartupProbe`                    | Custom liveness probe for the Web component                                                                     | `{}`                    |
-| `defaultBackend.customLivenessProbe`                   | Custom liveness probe for the Web component                                                                     | `{}`                    |
-| `defaultBackend.customReadinessProbe`                  | Custom readiness probe for the Web component                                                                    | `{}`                    |
-| `defaultBackend.podLabels`                             | Extra labels for Controller pods                                                                                | `{}`                    |
-| `defaultBackend.podAnnotations`                        | Annotations for Controller pods                                                                                 | `{}`                    |
-| `defaultBackend.priorityClassName`                     | priorityClassName                                                                                               | `""`                    |
-| `defaultBackend.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                  | `""`                    |
-| `defaultBackend.terminationGracePeriodSeconds`         | In seconds, time the given to the pod to terminate gracefully                                                   | `60`                    |
-| `defaultBackend.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                  | `[]`                    |
-| `defaultBackend.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                    |
-| `defaultBackend.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                        | `soft`                  |
-| `defaultBackend.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                       | `""`                    |
-| `defaultBackend.nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                                          | `""`                    |
-| `defaultBackend.nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                       | `[]`                    |
-| `defaultBackend.command`                               | Override default container command (useful when using custom images)                                            | `[]`                    |
-| `defaultBackend.args`                                  | Override default container args (useful when using custom images)                                               | `[]`                    |
-| `defaultBackend.lifecycleHooks`                        | for the %%MAIN_CONTAINER_NAME%% container(s) to automate configuration before or after startup                  | `{}`                    |
-| `defaultBackend.extraEnvVars`                          | Array with extra environment variables to add to %%MAIN_CONTAINER_NAME%% nodes                                  | `[]`                    |
-| `defaultBackend.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes                          | `""`                    |
-| `defaultBackend.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes                             | `""`                    |
-| `defaultBackend.extraVolumes`                          | Optionally specify extra list of additional volumes for the %%MAIN_CONTAINER_NAME%% pod(s)                      | `[]`                    |
-| `defaultBackend.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the %%MAIN_CONTAINER_NAME%% container(s)           | `[]`                    |
-| `defaultBackend.sidecars`                              | Add additional sidecar containers to the %%MAIN_CONTAINER_NAME%% pod(s)                                         | `[]`                    |
-| `defaultBackend.initContainers`                        | Add additional init containers to the %%MAIN_CONTAINER_NAME%% pod(s)                                            | `[]`                    |
-| `defaultBackend.affinity`                              | Affinity for pod assignment                                                                                     | `{}`                    |
-| `defaultBackend.nodeSelector`                          | Node labels for pod assignment                                                                                  | `{}`                    |
-| `defaultBackend.tolerations`                           | Tolerations for pod assignment                                                                                  | `[]`                    |
-| `defaultBackend.service.type`                          | Kubernetes Service type for default backend                                                                     | `ClusterIP`             |
-| `defaultBackend.service.ports.http`                    | Default backend service HTTP port                                                                               | `80`                    |
-| `defaultBackend.service.annotations`                   | Annotations for the default backend service                                                                     | `{}`                    |
-| `defaultBackend.pdb.create`                            | Enable/disable a Pod Disruption Budget creation for Default backend                                             | `false`                 |
-| `defaultBackend.pdb.minAvailable`                      | Minimum number/percentage of Default backend pods that should remain scheduled                                  | `1`                     |
-| `defaultBackend.pdb.maxUnavailable`                    | Maximum number/percentage of Default backend pods that may be made unavailable                                  | `""`                    |
+| Name                                                          | Description                                                                                                     | Value                   |
+| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `defaultBackend.enabled`                                      | Enable a default backend based on NGINX                                                                         | `true`                  |
+| `defaultBackend.hostAliases`                                  | Add deployment host aliases                                                                                     | `[]`                    |
+| `defaultBackend.image.registry`                               | Default backend image registry                                                                                  | `REGISTRY_NAME`         |
+| `defaultBackend.image.repository`                             | Default backend image repository                                                                                | `REPOSITORY_NAME/nginx` |
+| `defaultBackend.image.digest`                                 | Default backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `defaultBackend.image.pullPolicy`                             | Image pull policy                                                                                               | `IfNotPresent`          |
+| `defaultBackend.image.pullSecrets`                            | Specify docker-registry secret names as an array                                                                | `[]`                    |
+| `defaultBackend.extraArgs`                                    | Additional command line arguments to pass to Nginx container                                                    | `{}`                    |
+| `defaultBackend.containerPort`                                | HTTP container port number                                                                                      | `8080`                  |
+| `defaultBackend.serverBlockConfig`                            | NGINX backend default server block configuration                                                                | `""`                    |
+| `defaultBackend.replicaCount`                                 | Desired number of default backend pods                                                                          | `1`                     |
+| `defaultBackend.podSecurityContext.enabled`                   | Enable Default backend pods' Security Context                                                                   | `true`                  |
+| `defaultBackend.podSecurityContext.fsGroup`                   | Group ID for the container filesystem                                                                           | `1001`                  |
+| `defaultBackend.containerSecurityContext.enabled`             | Enable Default backend containers' Security Context                                                             | `true`                  |
+| `defaultBackend.containerSecurityContext.runAsUser`           | User ID for the Default backend container                                                                       | `1001`                  |
+| `defaultBackend.containerSecurityContext.runAsNonRoot`        | Set container's Security Context runAsNonRoot                                                                   | `true`                  |
+| `defaultBackend.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                | `RuntimeDefault`        |
+| `defaultBackend.resources.limits`                             | The resources limits for the Default backend container                                                          | `{}`                    |
+| `defaultBackend.resources.requests`                           | The requested resources for the Default backend container                                                       | `{}`                    |
+| `defaultBackend.livenessProbe.enabled`                        | Enable livenessProbe                                                                                            | `true`                  |
+| `defaultBackend.livenessProbe.initialDelaySeconds`            | Initial delay seconds for livenessProbe                                                                         | `30`                    |
+| `defaultBackend.livenessProbe.periodSeconds`                  | Period seconds for livenessProbe                                                                                | `10`                    |
+| `defaultBackend.livenessProbe.timeoutSeconds`                 | Timeout seconds for livenessProbe                                                                               | `5`                     |
+| `defaultBackend.livenessProbe.failureThreshold`               | Failure threshold for livenessProbe                                                                             | `3`                     |
+| `defaultBackend.livenessProbe.successThreshold`               | Success threshold for livenessProbe                                                                             | `1`                     |
+| `defaultBackend.readinessProbe.enabled`                       | Enable readinessProbe                                                                                           | `true`                  |
+| `defaultBackend.readinessProbe.initialDelaySeconds`           | Initial delay seconds for readinessProbe                                                                        | `0`                     |
+| `defaultBackend.readinessProbe.periodSeconds`                 | Period seconds for readinessProbe                                                                               | `5`                     |
+| `defaultBackend.readinessProbe.timeoutSeconds`                | Timeout seconds for readinessProbe                                                                              | `5`                     |
+| `defaultBackend.readinessProbe.failureThreshold`              | Failure threshold for readinessProbe                                                                            | `6`                     |
+| `defaultBackend.readinessProbe.successThreshold`              | Success threshold for readinessProbe                                                                            | `1`                     |
+| `defaultBackend.startupProbe.enabled`                         | Enable startupProbe                                                                                             | `false`                 |
+| `defaultBackend.startupProbe.initialDelaySeconds`             | Initial delay seconds for startupProbe                                                                          | `0`                     |
+| `defaultBackend.startupProbe.periodSeconds`                   | Period seconds for startupProbe                                                                                 | `5`                     |
+| `defaultBackend.startupProbe.timeoutSeconds`                  | Timeout seconds for startupProbe                                                                                | `5`                     |
+| `defaultBackend.startupProbe.failureThreshold`                | Failure threshold for startupProbe                                                                              | `6`                     |
+| `defaultBackend.startupProbe.successThreshold`                | Success threshold for startupProbe                                                                              | `1`                     |
+| `defaultBackend.customStartupProbe`                           | Custom liveness probe for the Web component                                                                     | `{}`                    |
+| `defaultBackend.customLivenessProbe`                          | Custom liveness probe for the Web component                                                                     | `{}`                    |
+| `defaultBackend.customReadinessProbe`                         | Custom readiness probe for the Web component                                                                    | `{}`                    |
+| `defaultBackend.podLabels`                                    | Extra labels for Controller pods                                                                                | `{}`                    |
+| `defaultBackend.podAnnotations`                               | Annotations for Controller pods                                                                                 | `{}`                    |
+| `defaultBackend.priorityClassName`                            | priorityClassName                                                                                               | `""`                    |
+| `defaultBackend.schedulerName`                                | Name of the k8s scheduler (other than default)                                                                  | `""`                    |
+| `defaultBackend.terminationGracePeriodSeconds`                | In seconds, time the given to the pod to terminate gracefully                                                   | `60`                    |
+| `defaultBackend.topologySpreadConstraints`                    | Topology Spread Constraints for pod assignment                                                                  | `[]`                    |
+| `defaultBackend.podAffinityPreset`                            | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                    |
+| `defaultBackend.podAntiAffinityPreset`                        | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                        | `soft`                  |
+| `defaultBackend.nodeAffinityPreset.type`                      | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                       | `""`                    |
+| `defaultBackend.nodeAffinityPreset.key`                       | Node label key to match. Ignored if `affinity` is set.                                                          | `""`                    |
+| `defaultBackend.nodeAffinityPreset.values`                    | Node label values to match. Ignored if `affinity` is set.                                                       | `[]`                    |
+| `defaultBackend.command`                                      | Override default container command (useful when using custom images)                                            | `[]`                    |
+| `defaultBackend.args`                                         | Override default container args (useful when using custom images)                                               | `[]`                    |
+| `defaultBackend.lifecycleHooks`                               | for the %%MAIN_CONTAINER_NAME%% container(s) to automate configuration before or after startup                  | `{}`                    |
+| `defaultBackend.extraEnvVars`                                 | Array with extra environment variables to add to %%MAIN_CONTAINER_NAME%% nodes                                  | `[]`                    |
+| `defaultBackend.extraEnvVarsCM`                               | Name of existing ConfigMap containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes                          | `""`                    |
+| `defaultBackend.extraEnvVarsSecret`                           | Name of existing Secret containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes                             | `""`                    |
+| `defaultBackend.extraVolumes`                                 | Optionally specify extra list of additional volumes for the %%MAIN_CONTAINER_NAME%% pod(s)                      | `[]`                    |
+| `defaultBackend.extraVolumeMounts`                            | Optionally specify extra list of additional volumeMounts for the %%MAIN_CONTAINER_NAME%% container(s)           | `[]`                    |
+| `defaultBackend.sidecars`                                     | Add additional sidecar containers to the %%MAIN_CONTAINER_NAME%% pod(s)                                         | `[]`                    |
+| `defaultBackend.initContainers`                               | Add additional init containers to the %%MAIN_CONTAINER_NAME%% pod(s)                                            | `[]`                    |
+| `defaultBackend.affinity`                                     | Affinity for pod assignment                                                                                     | `{}`                    |
+| `defaultBackend.nodeSelector`                                 | Node labels for pod assignment                                                                                  | `{}`                    |
+| `defaultBackend.tolerations`                                  | Tolerations for pod assignment                                                                                  | `[]`                    |
+| `defaultBackend.service.type`                                 | Kubernetes Service type for default backend                                                                     | `ClusterIP`             |
+| `defaultBackend.service.ports.http`                           | Default backend service HTTP port                                                                               | `80`                    |
+| `defaultBackend.service.annotations`                          | Annotations for the default backend service                                                                     | `{}`                    |
+| `defaultBackend.pdb.create`                                   | Enable/disable a Pod Disruption Budget creation for Default backend                                             | `false`                 |
+| `defaultBackend.pdb.minAvailable`                             | Minimum number/percentage of Default backend pods that should remain scheduled                                  | `1`                     |
+| `defaultBackend.pdb.maxUnavailable`                           | Maximum number/percentage of Default backend pods that may be made unavailable                                  | `""`                    |
 
 ### Traffic exposure parameters
 
@@ -352,7 +355,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/nginx
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -466,7 +469,7 @@ $ kubectl patch daemonset nginx-ingress-controller --type=json -p='[{"op": "remo
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

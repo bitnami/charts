@@ -93,6 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.baseUrl`                                           | Hub base URL                                                                                                             | `/`                          |
 | `hub.adminUser`                                         | Hub Dummy authenticator admin user                                                                                       | `user`                       |
 | `hub.password`                                          | Hub Dummy authenticator password                                                                                         | `""`                         |
+| `hub.services`                                          | JupyterHub services interacting with the JupyterHub API                                                                  | `{}`                         |
 | `hub.configuration`                                     | Hub configuration file (to be used by jupyterhub_config.py)                                                              | `""`                         |
 | `hub.existingConfigmap`                                 | Configmap with Hub init scripts (replaces the scripts in templates/hub/configmap.yml)                                    | `""`                         |
 | `hub.existingSecret`                                    | Secret with hub configuration (replaces the hub.configuration value) and proxy token                                     | `""`                         |
@@ -533,7 +534,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/jupyt
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -611,7 +612,7 @@ Refer to the [chart documentation for more information about how to upgrade from
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

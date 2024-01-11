@@ -74,7 +74,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.25.3-debian-11-r1
+  tag: 1.25.3-debian-11-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -440,7 +440,7 @@ cloneStaticSiteFromGit:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.43.0-debian-11-r0
+    tag: 2.43.0-debian-11-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -792,9 +792,6 @@ metrics:
   ## @param metrics.enabled Start a Prometheus exporter sidecar container
   ##
   enabled: false
-  ## @param metrics.port NGINX Container Status Port scraped by Prometheus Exporter
-  ## Defaults to specified http port
-  port: ""
   ## Bitnami NGINX Prometheus Exporter image
   ## ref: https://hub.docker.com/r/bitnami/nginx-exporter/tags/
   ## @param metrics.image.registry [default: REGISTRY_NAME] NGINX Prometheus exporter image registry
@@ -807,7 +804,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nginx-exporter
-    tag: 0.11.0-debian-11-r370
+    tag: 1.1.0-debian-11-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -818,6 +815,21 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param metrics.port NGINX Container Status Port scraped by Prometheus Exporter
+  ## Defaults to specified http port
+  ##
+  port: ""
+  ## @param metrics.extraArgs Extra arguments for Prometheus exporter
+  ## e.g:
+  ## extraArgs:
+  ##   - --nginx.timeout
+  ##   - 5s
+  ##
+  extraArgs: []
+  ## @param metrics.containerPorts.metrics Prometheus exporter container port
+  ##
+  containerPorts:
+    metrics: 9113
   ## @param metrics.podAnnotations Additional annotations for NGINX Prometheus exporter pod(s)
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##

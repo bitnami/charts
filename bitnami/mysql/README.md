@@ -168,6 +168,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.extraEnvVars`                                      | Extra environment variables to be set on MySQL primary containers                                               | `[]`                |
 | `primary.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for MySQL primary containers                               | `""`                |
 | `primary.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for MySQL primary containers                                  | `""`                |
+| `primary.extraPodSpec`                                      | Optionally specify extra PodSpec for the MySQL Primary pod(s)                                                   | `{}`                |
 | `primary.extraPorts`                                        | Extra ports to expose                                                                                           | `[]`                |
 | `primary.persistence.enabled`                               | Enable persistence on MySQL primary replicas using a `PersistentVolumeClaim`. If false, use emptyDir            | `true`              |
 | `primary.persistence.existingClaim`                         | Name of an existing `PersistentVolumeClaim` for MySQL primary replicas                                          | `""`                |
@@ -264,6 +265,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.extraEnvVars`                                      | An array to add extra environment variables on MySQL secondary containers                                           | `[]`                |
 | `secondary.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for MySQL secondary containers                                 | `""`                |
 | `secondary.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for MySQL secondary containers                                    | `""`                |
+| `secondary.extraPodSpec`                                      | Optionally specify extra PodSpec for the MySQL Secondary pod(s)                                                     | `{}`                |
 | `secondary.extraPorts`                                        | Extra ports to expose                                                                                               | `[]`                |
 | `secondary.persistence.enabled`                               | Enable persistence on MySQL secondary replicas using a `PersistentVolumeClaim`                                      | `true`              |
 | `secondary.persistence.existingClaim`                         | Name of an existing `PersistentVolumeClaim` for MySQL secondary replicas                                            | `""`                |
@@ -404,7 +406,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/mysql
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -558,7 +560,7 @@ kubectl delete statefulset mysql-slave --cascade=false
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

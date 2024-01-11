@@ -121,8 +121,10 @@ spec:
               value: {{ ternary "true" "false" (or $.Values.image.debug $.Values.diagnosticMode.enabled) | quote }}
             - name: MONGODB_SYSTEM_LOG_VERBOSITY
               value: {{ $.Values.common.mongodbSystemLogVerbosity | quote }}
-            - name: MONGODB_MAX_TIMEOUT
-              value: {{ $.Values.common.mongodbMaxWaitTimeout | quote }}
+            - name: MONGODB_INIT_RETRY_ATTEMPTS
+              value: {{ $.Values.common.mongodbInitRetryAttempts | quote }}
+            - name: MONGODB_INIT_RETRY_DELAY
+              value: {{ $.Values.common.mongodbInitRetryDelay | quote }}
             - name: MONGODB_DISABLE_SYSTEM_LOG
               {{- if $.Values.common.mongodbDisableSystemLog }}
               value: "yes"

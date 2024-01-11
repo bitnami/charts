@@ -63,9 +63,42 @@ spec:
       {{- if .Values.forwarder.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.forwarder.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if .Values.forwarder.initContainers }}
-      initContainers: {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.initContainers "context" $ ) | nindent 8 }}
-      {{- end }}
+      initContainers:
+        {{- if .Values.forwarder.extraGems }}
+        - name: install-extra-gems
+          image: {{ include "fluentd.forwarder.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+          args:
+            - |-
+              cd /tmp
+
+              # install extra gems
+              {{- range $gem := .Values.forwarder.extraGems }} --no-document
+              {{- if kindIs "string" $gem }}
+              fluent-gem install {{ $gem }}
+              {{- else }}
+              fluent-gem install {{ $gem.name }}{{ if $gem.version }} -v {{ $gem.version }}{{ end }} --no-document
+              {{- end }}
+              {{- end }}
+
+              # copy installed gems to shared dir
+              cp -r /opt/bitnami/fluentd/gems/* /gems/
+              cp -r /opt/bitnami/fluentd/specifications/* /specifications/
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 0
+          volumeMounts:
+            - name: gems
+              mountPath: /gems
+            - name: specifications
+              mountPath: /specifications
+        {{- end }}
+        {{- if .Values.forwarder.initContainers }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.initContainers "context" $ ) | nindent 8 }}
+        {{- end }}
       terminationGracePeriodSeconds: {{ .Values.forwarder.terminationGracePeriodSeconds }}
       hostNetwork: {{ .Values.forwarder.hostNetwork }}
       {{- if .Values.forwarder.dnsPolicy }}
@@ -178,6 +211,12 @@ spec:
             - name: buffer
               mountPath: /opt/bitnami/fluentd/logs/buffers
             {{- end }}
+            {{- if .Values.forwarder.extraGems }}
+            - name: gems
+              mountPath: /opt/bitnami/fluentd/gems/
+            - name: specifications
+              mountPath: /opt/bitnami/fluentd/specifications/
+            {{- end }}
             {{- if .Values.tls.enabled }}
             - name: fluentd-forwarder-certificates
               mountPath: /opt/bitnami/fluentd/certs/out_forward
@@ -201,20 +240,23 @@ spec:
               mountPath: /var/lib/docker/containers
               readOnly: true
             {{- if .Values.forwarder.extraVolumeMounts }}
-            {{- toYaml .Values.forwarder.extraVolumeMounts | nindent 12 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
         {{- if .Values.forwarder.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.sidecars "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if .Values.forwarder.extraVolumes }}
-            {{- toYaml .Values.forwarder.extraVolumes | nindent 8 }}
-        {{- end }}
         {{- if .Values.tls.enabled }}
         - name: fluentd-forwarder-certificates
           secret:
             secretName: {{ include "fluentd.forwarder.tlsSecretName" . }}
             defaultMode: 256
+        {{- end }}
+        {{- if .Values.forwarder.extraGems }}
+        - name: gems
+          emptyDir: {}
+        - name: specifications
+          emptyDir: {}
         {{- end }}
         {{- if .Values.forwarder.initScripts }}
         - name: custom-init-scripts
@@ -250,4 +292,7 @@ spec:
         - name: varlibdockercontainers
           hostPath:
             path: /var/lib/docker/containers
+        {{- if .Values.forwarder.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
 {{- end }}
