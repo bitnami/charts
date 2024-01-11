@@ -103,6 +103,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `forwarder.containerSecurityContext.allowPrivilegeEscalation`  | Allow Privilege Escalation                                                                                                                                         | `false`                                                    |
 | `forwarder.containerSecurityContext.readOnlyRootFilesystem`    | Require the use of a read only root file system                                                                                                                    | `false`                                                    |
 | `forwarder.containerSecurityContext.capabilities.drop`         | Drop capabilities for the securityContext                                                                                                                          | `[]`                                                       |
+| `forwarder.containerSecurityContext.seccompProfile.type`       | Set container's Security Context seccomp profile                                                                                                                   | `RuntimeDefault`                                           |
 | `forwarder.hostNetwork`                                        | Enable use of host network                                                                                                                                         | `false`                                                    |
 | `forwarder.dnsPolicy`                                          | Pod-specific DNS policy                                                                                                                                            | `""`                                                       |
 | `forwarder.terminationGracePeriodSeconds`                      | Duration in seconds the pod needs to terminate gracefully                                                                                                          | `30`                                                       |
@@ -199,6 +200,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `aggregator.containerSecurityContext.allowPrivilegeEscalation` | Allow Privilege Escalation                                                                                                                                         | `false`                                                    |
 | `aggregator.containerSecurityContext.readOnlyRootFilesystem`   | Require the use of a read only root file system                                                                                                                    | `false`                                                    |
 | `aggregator.containerSecurityContext.capabilities.drop`        | Drop capabilities for the securityContext                                                                                                                          | `[]`                                                       |
+| `aggregator.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                   | `RuntimeDefault`                                           |
 | `aggregator.terminationGracePeriodSeconds`                     | Duration in seconds the pod needs to terminate gracefully                                                                                                          | `30`                                                       |
 | `aggregator.extraGems`                                         | List of extra gems to be installed. Can be used to install additional fluentd plugins.                                                                             | `[]`                                                       |
 | `aggregator.configFile`                                        | Name of the config file that will be used by Fluentd at launch under the `/opt/bitnami/fluentd/conf` directory                                                     | `fluentd.conf`                                             |
@@ -352,7 +354,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/fluen
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
