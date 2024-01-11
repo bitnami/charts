@@ -57,10 +57,10 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.33.0-debian-11-r0
+  tag: 0.33.0-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -248,7 +248,7 @@ query:
     seccompProfile:
       type: "RuntimeDefault"
   ## Thanos Query containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param query.resources.limits The resources limits for the Thanos Query container
   ## @param query.resources.requests The requested resources for the Thanos Query container
   ##
@@ -372,7 +372,7 @@ query:
   ##
   affinity: {}
   ## @param query.nodeSelector Thanos Query node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param query.tolerations Thanos Query tolerations for pod assignment
@@ -656,7 +656,7 @@ query:
     minAvailable: 1
     maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Query
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param query.ingress.enabled Enable ingress controller resource
@@ -675,7 +675,7 @@ query:
     ingressClassName: ""
     ## @param query.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -777,7 +777,7 @@ query:
       ingressClassName: ""
       ## @param query.ingress.grpc.annotations Additional annotations for the Ingress resource (GRPC). To enable certificate autogeneration, place here your cert-manager annotations.
       ## For a full list of possible ingress annotations, please see
-      ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+      ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
       ## Use this parameter to set the required annotations for cert-manager, see
       ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
       ##
@@ -931,7 +931,7 @@ queryFrontend:
     seccompProfile:
       type: "RuntimeDefault"
   ## Thanos Query Frontend containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param queryFrontend.resources.limits The resources limits for the Thanos Query Frontend container
   ## @param queryFrontend.resources.requests The requested resources for the Thanos Query Frontend container
   ##
@@ -1051,7 +1051,7 @@ queryFrontend:
   ##
   affinity: {}
   ## @param queryFrontend.nodeSelector Thanos Query Frontend node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param queryFrontend.tolerations Thanos Query Frontend tolerations for pod assignment
@@ -1212,7 +1212,7 @@ queryFrontend:
     minAvailable: 1
     maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Query Frontend
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param queryFrontend.ingress.enabled Enable ingress controller resource
@@ -1232,7 +1232,7 @@ queryFrontend:
     ingressClassName: ""
     ## @param queryFrontend.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -1386,7 +1386,7 @@ bucketweb:
     seccompProfile:
       type: "RuntimeDefault"
   ## Thanos Bucket Web containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param bucketweb.resources.limits The resources limits for the Thanos Bucket Web container
   ## @param bucketweb.resources.requests The requested resources for the Thanos Bucket Web container
   ##
@@ -1506,7 +1506,7 @@ bucketweb:
   ##
   affinity: {}
   ## @param bucketweb.nodeSelector Thanos Bucket Web node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param bucketweb.tolerations Thanos Bucket Web tolerations for pod assignment
@@ -1643,7 +1643,7 @@ bucketweb:
     minAvailable: 1
     maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Bucketweb
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param bucketweb.ingress.enabled Enable ingress controller resource
@@ -1659,7 +1659,7 @@ bucketweb:
     ingressClassName: ""
     ## @param bucketweb.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -1843,7 +1843,7 @@ compactor:
     seccompProfile:
       type: "RuntimeDefault"
   ## Thanos Compactor containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param compactor.resources.limits The resources limits for the Thanos Compactor container
   ## @param compactor.resources.requests The requested resources for the Thanos Compactor container
   ##
@@ -1963,7 +1963,7 @@ compactor:
   ##
   affinity: {}
   ## @param compactor.nodeSelector Thanos Compactor node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param compactor.tolerations Thanos Compactor tolerations for pod assignment
@@ -2078,7 +2078,7 @@ compactor:
     automountServiceAccountToken: true
     ## existingServiceAccount: ""
   ## Configure the ingress resource that allows you to access Thanos Query Frontend
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param compactor.ingress.enabled Enable ingress controller resource
@@ -2094,7 +2094,7 @@ compactor:
     ingressClassName: ""
     ## @param compactor.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -2316,7 +2316,7 @@ storegateway:
     seccompProfile:
       type: "RuntimeDefault"
   ## Thanos Store Gateway containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param storegateway.resources.limits The resources limits for the Thanos Store Gateway container
   ## @param storegateway.resources.requests The requested resources for the Thanos Store Gateway container
   ##
@@ -2436,7 +2436,7 @@ storegateway:
   ##
   affinity: {}
   ## @param storegateway.nodeSelector Thanos Store Gateway node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param storegateway.tolerations Thanos Store Gateway tolerations for pod assignment
@@ -2618,7 +2618,7 @@ storegateway:
     minAvailable: 1
     maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Query Frontend
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param storegateway.ingress.enabled Enable ingress controller resource
@@ -2634,7 +2634,7 @@ storegateway:
     ingressClassName: ""
     ## @param storegateway.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -2733,7 +2733,7 @@ storegateway:
       ingressClassName: ""
       ## @param storegateway.ingress.grpc.annotations Additional annotations for the Ingress resource (GRPC). To enable certificate autogeneration, place here your cert-manager annotations.
       ## For a full list of possible ingress annotations, please see
-      ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+      ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
       ## Use this parameter to set the required annotations for cert-manager, see
       ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
       ##
@@ -2967,7 +2967,7 @@ ruler:
     seccompProfile:
       type: "RuntimeDefault"
   ## Thanos Ruler containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param ruler.resources.limits The resources limits for the Thanos Ruler container
   ## @param ruler.resources.requests The requested resources for the Thanos Ruler container
   ##
@@ -3087,7 +3087,7 @@ ruler:
   ##
   affinity: {}
   ## @param ruler.nodeSelector Thanos Ruler node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param ruler.tolerations Thanos Ruler tolerations for pod assignment
@@ -3266,7 +3266,7 @@ ruler:
     minAvailable: 1
     maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Ruler
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param ruler.ingress.enabled Enable ingress controller resource
@@ -3282,7 +3282,7 @@ ruler:
     ingressClassName: ""
     ## @param ruler.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -3482,7 +3482,7 @@ receive:
     seccompProfile:
       type: "RuntimeDefault"
   ## Thanos Receive containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param receive.resources.limits The resources limits for the Thanos Receive container
   ## @param receive.resources.requests The requested resources for the Thanos Receive container
   ##
@@ -3603,7 +3603,7 @@ receive:
   ##
   affinity: {}
   ## @param receive.nodeSelector Thanos Receive node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param receive.tolerations Thanos Receive tolerations for pod assignment
@@ -3789,7 +3789,7 @@ receive:
     ##
     existingClaim: ""
   ## Configure the ingress resource that allows you to access Thanos Receive
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param receive.ingress.enabled Set to true to enable ingress record generation
@@ -3805,7 +3805,7 @@ receive:
     ingressClassName: ""
     ## @param receive.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -3960,7 +3960,7 @@ receiveDistributor:
     seccompProfile:
       type: "RuntimeDefault"
   ## Thanos Receive Distributor containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param receiveDistributor.resources.limits The resources limits for the Thanos Receive container
   ## @param receiveDistributor.resources.requests The requested resources for the Thanos Receive container
   ##
@@ -4081,7 +4081,7 @@ receiveDistributor:
   ##
   affinity: {}
   ## @param receiveDistributor.nodeSelector Thanos Receive Distributor node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param receiveDistributor.tolerations Thanos Receive Distributor tolerations for pod assignment
@@ -4338,10 +4338,10 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r93
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

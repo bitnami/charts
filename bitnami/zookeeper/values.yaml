@@ -79,11 +79,11 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.9.1-debian-11-r4
+  tag: 3.9.1-debian-11-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -312,7 +312,7 @@ customStartupProbe: {}
 ##
 lifecycleHooks: {}
 ## ZooKeeper resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resources.limits The resources limits for the ZooKeeper containers
 ## @param resources.requests.memory The requested memory for the ZooKeeper containers
 ## @param resources.requests.cpu The requested cpu for the ZooKeeper containers
@@ -397,7 +397,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment
@@ -542,7 +542,7 @@ service:
   disableBaseClientPort: false
   ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
-  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   ##
   sessionAffinity: None
   ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -557,7 +557,7 @@ service:
   ##
   clusterIP: ""
   ## @param service.loadBalancerIP ZooKeeper service Load Balancer IP
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges ZooKeeper service Load Balancer sources
@@ -622,7 +622,7 @@ serviceAccount:
 ## @section Persistence parameters
 
 ## Enable persistence using Persistent Volume Claims
-## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable ZooKeeper data persistence using PVC. If false, use emptyDir
@@ -712,7 +712,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
   ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
   ##
@@ -910,7 +910,7 @@ tls:
     ##
     truststorePassword: ""
   ## Init container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param tls.resources.limits The resources limits for the TLS init container
   ## @param tls.resources.requests The requested resources for the TLS init container
   ##

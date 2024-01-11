@@ -80,7 +80,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -160,7 +160,7 @@ client:
   ##
   customStartupProbe: {}
   ## Appsmith client resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param client.resources.limits The resources limits for the Appsmith client containers
   ## @param client.resources.requests The requested resources for the Appsmith client containers
   ##
@@ -247,7 +247,7 @@ client:
   ##
   affinity: {}
   ## @param client.nodeSelector Node labels for Appsmith client pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param client.tolerations Tolerations for Appsmith client pods assignment
@@ -366,7 +366,7 @@ client:
     extraPorts: []
     ## @param client.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param client.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -376,7 +376,7 @@ client:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param client.ingress.enabled Enable ingress record generation for Appsmith
@@ -575,7 +575,7 @@ backend:
   ##
   customStartupProbe: {}
   ## Appsmith backend resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param backend.resources.limits The resources limits for the Appsmith backend containers
   ## @param backend.resources.requests The requested resources for the Appsmith backend containers
   ##
@@ -662,7 +662,7 @@ backend:
   ##
   affinity: {}
   ## @param backend.nodeSelector Node labels for Appsmith backend pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param backend.tolerations Tolerations for Appsmith backend pods assignment
@@ -781,7 +781,7 @@ backend:
     extraPorts: []
     ## @param backend.service.sessionAffinity Control where backend requests go, to the same pod or round-robin
     ## Values: BackendIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param backend.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -795,7 +795,7 @@ backend:
   ##
 
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param backend.persistence.enabled Enable persistence using Persistent Volume Claims
@@ -909,7 +909,7 @@ rts:
   ##
   customStartupProbe: {}
   ## Appsmith rts resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param rts.resources.limits The resources limits for the Appsmith rts containers
   ## @param rts.resources.requests The requested resources for the Appsmith rts containers
   ##
@@ -996,7 +996,7 @@ rts:
   ##
   affinity: {}
   ## @param rts.nodeSelector Node labels for Appsmith rts pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param rts.tolerations Tolerations for Appsmith rts pods assignment
@@ -1115,7 +1115,7 @@ rts:
     extraPorts: []
     ## @param rts.service.sessionAffinity Control where rts requests go, to the same pod or round-robin
     ## Values: RTSIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param rts.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1158,7 +1158,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##

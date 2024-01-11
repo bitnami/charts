@@ -75,7 +75,7 @@ image:
   tag: 1.16.3-debian-11-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -130,6 +130,7 @@ forwarder:
   ## @param forwarder.containerSecurityContext.allowPrivilegeEscalation Allow Privilege Escalation
   ## @param forwarder.containerSecurityContext.readOnlyRootFilesystem Require the use of a read only root file system
   ## @param forwarder.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
+  ## @param forwarder.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -141,6 +142,8 @@ forwarder:
     capabilities:
       drop:
         - ALL
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param forwarder.hostNetwork Enable use of host network
   ##
   hostNetwork: false
@@ -331,7 +334,7 @@ forwarder:
         targetPort: http
         protocol: TCP
     ## @param forwarder.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)
-    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
     ## @param forwarder.service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
@@ -451,7 +454,7 @@ forwarder:
   updateStrategy:
     type: RollingUpdate
   ## Forwarder containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -516,7 +519,7 @@ forwarder:
   ##
   affinity: {}
   ## @param forwarder.nodeSelector Forwarder Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param forwarder.tolerations Forwarder Tolerations for pod assignment
@@ -677,6 +680,7 @@ aggregator:
   ## @param aggregator.containerSecurityContext.allowPrivilegeEscalation Allow Privilege Escalation
   ## @param aggregator.containerSecurityContext.readOnlyRootFilesystem Require the use of a read only root file system
   ## @param aggregator.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
+  ## @param aggregator.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -688,6 +692,8 @@ aggregator:
     capabilities:
       drop:
         - ALL
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param aggregator.terminationGracePeriodSeconds Duration in seconds the pod needs to terminate gracefully
   ## https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
   ##
@@ -820,7 +826,7 @@ aggregator:
         targetPort: tcp
         protocol: TCP
     ## @param aggregator.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)
-    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
     ## @param aggregator.service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
@@ -864,7 +870,7 @@ aggregator:
       annotations: {}
   ## Configure the ingress resource that allows you to access the
   ## Fluentd aggregator. Set up the URL
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param aggregator.ingress.enabled Set to true to enable ingress record generation
@@ -889,7 +895,7 @@ aggregator:
     path: /
     ## @param aggregator.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -1048,7 +1054,7 @@ aggregator:
   updateStrategy:
     type: RollingUpdate
   ## Aggregator containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1114,7 +1120,7 @@ aggregator:
   ##
   affinity: {}
   ## @param aggregator.nodeSelector Aggregator Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param aggregator.tolerations Aggregator Tolerations for pod assignment
@@ -1282,7 +1288,7 @@ metrics:
     ##
     port: 24231
     ## @param metrics.service.loadBalancerIP Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`
-    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
     ## @param metrics.service.clusterIP Prometheus metrics service Cluster IP

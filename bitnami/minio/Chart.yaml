@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: minio-client
-      image: docker.io/bitnami/minio-client:2023.12.23-debian-11-r1
+      image: docker.io/bitnami/minio-client:2023.12.29-debian-11-r1
     - name: minio
-      image: docker.io/bitnami/minio:2023.12.23-debian-11-r2
+      image: docker.io/bitnami/minio:2023.12.23-debian-11-r3
     - name: os-shell
       image: docker.io/bitnami/os-shell:11-debian-11-r93
 apiVersion: v2
@@ -34,4 +34,4 @@ maintainers:
 name: minio
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/minio
-version: 12.13.1
+version: 12.13.2

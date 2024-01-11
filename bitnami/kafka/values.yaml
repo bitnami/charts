@@ -84,7 +84,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -585,7 +585,7 @@ controller:
   ##
   lifecycleHooks: {}
   ## Kafka init container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
   ## @param controller.initContainerResources.limits The resources limits for the init container
   ## @param controller.initContainerResources.requests The requested resources for the init container
   ##
@@ -593,7 +593,7 @@ controller:
     limits: {}
     requests: {}
   ## Kafka resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param controller.resources.limits The resources limits for the container
   ## @param controller.resources.requests The requested resources for the container
   ##
@@ -685,7 +685,7 @@ controller:
   ##
   affinity: {}
   ## @param controller.nodeSelector Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param controller.tolerations Tolerations for pod assignment
@@ -777,7 +777,7 @@ controller:
     minAvailable: ""
     maxUnavailable: 1
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param controller.persistence.enabled Enable Kafka data persistence using PVC, note that ZooKeeper persistence is unaffected
@@ -974,7 +974,7 @@ broker:
   ##
   lifecycleHooks: {}
   ## Kafka init container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
   ## @param broker.initContainerResources.limits The resources limits for the container
   ## @param broker.initContainerResources.requests The requested resources for the container
   ##
@@ -982,7 +982,7 @@ broker:
     limits: {}
     requests: {}
   ## Kafka resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param broker.resources.limits The resources limits for the container
   ## @param broker.resources.requests The requested resources for the container
   ##
@@ -1074,7 +1074,7 @@ broker:
   ##
   affinity: {}
   ## @param broker.nodeSelector Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param broker.tolerations Tolerations for pod assignment
@@ -1166,7 +1166,7 @@ broker:
     minAvailable: ""
     maxUnavailable: 1
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param broker.persistence.enabled Enable Kafka data persistence using PVC, note that ZooKeeper persistence is unaffected
@@ -1244,7 +1244,6 @@ broker:
     ##
     mountPath: /opt/bitnami/kafka/logs
 
-
 ## @section Traffic Exposure parameters
 ##
 
@@ -1276,7 +1275,7 @@ service:
     external: ""
   ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
-  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   ##
   sessionAffinity: None
   ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1291,7 +1290,7 @@ service:
   ##
   clusterIP: ""
   ## @param service.loadBalancerIP Kafka service Load Balancer IP
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges Kafka service Load Balancer sources
@@ -1355,7 +1354,7 @@ externalAccess:
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -1366,7 +1365,7 @@ externalAccess:
       ##
       pullSecrets: []
     ## Init Container resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param externalAccess.autoDiscovery.resources.limits The resources limits for the auto-discovery init container
     ## @param externalAccess.autoDiscovery.resources.requests The requested resources for the auto-discovery init container
     ##
@@ -1639,7 +1638,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
   ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
   ##
@@ -1713,7 +1712,7 @@ metrics:
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -1812,7 +1811,7 @@ metrics:
     ##
     customReadinessProbe: {}
     ## Kafka exporter resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param metrics.kafka.resources.limits The resources limits for the container
     ## @param metrics.kafka.resources.requests The requested resources for the container
     ##
@@ -1898,7 +1897,7 @@ metrics:
     ##
     affinity: {}
     ## @param metrics.kafka.nodeSelector Node labels for pod assignment
-    ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
     ##
     nodeSelector: {}
     ## @param metrics.kafka.tolerations Tolerations for pod assignment
@@ -1972,7 +1971,7 @@ metrics:
       clusterIP: ""
       ## @param metrics.kafka.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param metrics.kafka.service.annotations [object] Annotations for the Kafka exporter service
@@ -2021,7 +2020,7 @@ metrics:
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -2059,7 +2058,7 @@ metrics:
     containerPorts:
       metrics: 5556
     ## Prometheus JMX exporter resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param metrics.jmx.resources.limits The resources limits for the JMX exporter container
     ## @param metrics.jmx.resources.requests The requested resources for the JMX exporter container
     ##
@@ -2079,7 +2078,7 @@ metrics:
       clusterIP: ""
       ## @param metrics.jmx.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param metrics.jmx.service.annotations [object] Annotations for the Prometheus JMX exporter service
@@ -2203,7 +2202,7 @@ provisioning:
   ##
   topics: []
   ## @param provisioning.nodeSelector Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param provisioning.tolerations Tolerations for pod assignment
@@ -2334,7 +2333,7 @@ provisioning:
     ##
     automountServiceAccountToken: true
   ## Kafka provisioning resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param provisioning.resources.limits The resources limits for the Kafka provisioning container
   ## @param provisioning.resources.requests The requested resources for the Kafka provisioning container
   ##
@@ -2482,7 +2481,7 @@ zookeeper:
       ##
       serverPasswords: ""
   ## ZooKeeper Persistence parameters
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ## @param zookeeper.persistence.enabled Enable persistence on ZooKeeper using PVC(s)
   ## @param zookeeper.persistence.storageClass Persistent Volume storage class
   ## @param zookeeper.persistence.accessModes Persistent Volume access modes

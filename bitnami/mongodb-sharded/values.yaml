@@ -83,7 +83,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -340,7 +340,7 @@ configsvr:
   ##
   replicaCount: 1
   ## @param configsvr.resources Configure pod resources
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## @param configsvr.hostAliases Deployment pod host aliases
@@ -394,7 +394,7 @@ configsvr:
   ##
   affinity: {}
   ## @param configsvr.nodeSelector Config Server Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param configsvr.tolerations Config Server Tolerations for pod assignment
@@ -481,7 +481,7 @@ configsvr:
     ##
     maxUnavailable: 1
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param configsvr.persistence.enabled Use a PVC to persist data
@@ -664,7 +664,7 @@ mongos:
   ##
   replicaCount: 1
   ## @param mongos.resources Configure pod resources
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## @param mongos.hostAliases Deployment pod host aliases
@@ -718,7 +718,7 @@ mongos:
   ##
   affinity: {}
   ## @param mongos.nodeSelector Mongos Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param mongos.tolerations Mongos Tolerations for pod assignment
@@ -998,7 +998,7 @@ shardsvr:
     ##
     replicaCount: 1
     ## @param shardsvr.dataNode.resources Configure pod resources
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ##
     resources: {}
     ## @param shardsvr.dataNode.mongodbExtraFlags MongoDB&reg; additional command line flags
@@ -1053,7 +1053,7 @@ shardsvr:
     ##
     affinity: {}
     ## @param shardsvr.dataNode.nodeSelector Data nodes Node labels for pod assignment
-    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
     ## You can set dataNodeLoopId (or any other parameter) by setting the below code block under this 'nodeSelector' section:
     ## nodeSelector: { shardId: "{{ .dataNodeLoopId }}" }
     ##
@@ -1277,7 +1277,7 @@ shardsvr:
   ##
 
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param shardsvr.persistence.enabled Use a PVC to persist data
@@ -1327,7 +1327,7 @@ shardsvr:
     ##
     hostAliases: []
     ## @param shardsvr.arbiter.resources Configure pod resources
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ##
     resources: {}
     ## @param shardsvr.arbiter.mongodbExtraFlags MongoDB&reg; additional command line flags
@@ -1382,7 +1382,7 @@ shardsvr:
     ##
     affinity: {}
     ## @param shardsvr.arbiter.nodeSelector Arbiter's Node labels for pod assignment
-    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
     ##
     nodeSelector: {}
     ## @param shardsvr.arbiter.tolerations Arbiter's Tolerations for pod assignment
@@ -1611,7 +1611,7 @@ metrics:
   ##
   extraArgs: ""
   ## @param metrics.resources Metrics exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## Configure Container Security Context

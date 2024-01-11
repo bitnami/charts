@@ -80,72 +80,73 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Multus CNI parameters
 
-| Name                                    | Description                                                                                                           | Value                        |
-| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| `image.registry`                        | Multus CNI image registry                                                                                             | `REGISTRY_NAME`              |
-| `image.repository`                      | Multus CNI Image name                                                                                                 | `REPOSITORY_NAME/multus-cni` |
-| `image.digest`                          | Multus CNI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag            | `""`                         |
-| `image.pullPolicy`                      | Multus CNI image pull policy                                                                                          | `IfNotPresent`               |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                         |
-| `image.debug`                           | Specify if debug logs should be enabled                                                                               | `false`                      |
-| `CNIVersion`                            | CNI version                                                                                                           | `0.3.0`                      |
-| `hostCNIBinDir`                         | CNI binary dir in the host machine to mount                                                                           | `/opt/cni/bin`               |
-| `hostCNINetDir`                         | CNI net.d dir in the host machine to mount                                                                            | `/etc/cni/net.d`             |
-| `CNIMountPath`                          | Path inside the container to mount the CNI dirs                                                                       | `/bitnami/multus-cni/host`   |
-| `command`                               | Override default container command (useful when using custom images)                                                  | `[]`                         |
-| `args`                                  | Override default container args (useful when using custom images)                                                     | `[]`                         |
-| `updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                                        | `RollingUpdate`              |
-| `priorityClassName`                     | Multus CNI pods' priorityClassName                                                                                    | `""`                         |
-| `schedulerName`                         | Name of the k8s scheduler (other than default)                                                                        | `""`                         |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                        | `[]`                         |
-| `hostAliases`                           | Add deployment host aliases                                                                                           | `[]`                         |
-| `extraEnvVars`                          | Extra environment variables                                                                                           | `[]`                         |
-| `extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                                   | `""`                         |
-| `extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                          | `""`                         |
-| `extraVolumes`                          | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `[]`                         |
-| `extraVolumeMounts`                     | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                         |
-| `initContainers`                        | Add additional init containers to the pod (evaluated as a template)                                                   | `[]`                         |
-| `sidecars`                              | Attach additional containers to the pod (evaluated as a template)                                                     | `[]`                         |
-| `tolerations`                           | Tolerations for pod assignment                                                                                        | `[]`                         |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                         |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                       |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                         |
-| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                         |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                         |
-| `affinity`                              | Affinity for pod assignment                                                                                           | `{}`                         |
-| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                                              | `{}`                         |
-| `resources.requests`                    | The requested resources for the init container                                                                        | `{}`                         |
-| `resources.limits`                      | The resources limits for the init container                                                                           | `{}`                         |
-| `podSecurityContext.enabled`            | Enable Multus CNI pods' Security Context                                                                              | `true`                       |
-| `podSecurityContext.fsGroup`            | Multus CNI pods' group ID                                                                                             | `0`                          |
-| `containerSecurityContext.enabled`      | Enable Multus CNI containers' Security Context                                                                        | `true`                       |
-| `containerSecurityContext.runAsUser`    | Multus CNI containers' Security Context                                                                               | `0`                          |
-| `containerSecurityContext.runAsNonRoot` | Set Multus CNI container's Security Context runAsNonRoot                                                              | `false`                      |
-| `containerSecurityContext.privileged`   | Set Multus CNI container's Security Context privileged                                                                | `true`                       |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                                                   | `false`                      |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                | `10`                         |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                       | `10`                         |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                      | `5`                          |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                    | `5`                          |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                    | `1`                          |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                                  | `true`                       |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                               | `10`                         |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                      | `10`                         |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                     | `5`                          |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                   | `5`                          |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                   | `1`                          |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                                                 | `false`                      |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                              | `10`                         |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                     | `5`                          |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                    | `1`                          |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                  | `5`                          |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                  | `1`                          |
-| `customStartupProbe`                    | Override default startup probe                                                                                        | `{}`                         |
-| `customLivenessProbe`                   | Override default liveness probe                                                                                       | `{}`                         |
-| `customReadinessProbe`                  | Override default readiness probe                                                                                      | `{}`                         |
-| `lifecycleHooks`                        | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | `{}`                         |
-| `podAnnotations`                        | Pod annotations                                                                                                       | `{}`                         |
-| `podLabels`                             | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                         |
+| Name                                           | Description                                                                                                           | Value                        |
+| ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `image.registry`                               | Multus CNI image registry                                                                                             | `REGISTRY_NAME`              |
+| `image.repository`                             | Multus CNI Image name                                                                                                 | `REPOSITORY_NAME/multus-cni` |
+| `image.digest`                                 | Multus CNI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag            | `""`                         |
+| `image.pullPolicy`                             | Multus CNI image pull policy                                                                                          | `IfNotPresent`               |
+| `image.pullSecrets`                            | Specify docker-registry secret names as an array                                                                      | `[]`                         |
+| `image.debug`                                  | Specify if debug logs should be enabled                                                                               | `false`                      |
+| `CNIVersion`                                   | CNI version                                                                                                           | `0.3.0`                      |
+| `hostCNIBinDir`                                | CNI binary dir in the host machine to mount                                                                           | `/opt/cni/bin`               |
+| `hostCNINetDir`                                | CNI net.d dir in the host machine to mount                                                                            | `/etc/cni/net.d`             |
+| `CNIMountPath`                                 | Path inside the container to mount the CNI dirs                                                                       | `/bitnami/multus-cni/host`   |
+| `command`                                      | Override default container command (useful when using custom images)                                                  | `[]`                         |
+| `args`                                         | Override default container args (useful when using custom images)                                                     | `[]`                         |
+| `updateStrategy.type`                          | Update strategy - only really applicable for deployments with RWO PVs attached                                        | `RollingUpdate`              |
+| `priorityClassName`                            | Multus CNI pods' priorityClassName                                                                                    | `""`                         |
+| `schedulerName`                                | Name of the k8s scheduler (other than default)                                                                        | `""`                         |
+| `topologySpreadConstraints`                    | Topology Spread Constraints for pod assignment                                                                        | `[]`                         |
+| `hostAliases`                                  | Add deployment host aliases                                                                                           | `[]`                         |
+| `extraEnvVars`                                 | Extra environment variables                                                                                           | `[]`                         |
+| `extraEnvVarsCM`                               | ConfigMap containing extra env vars                                                                                   | `""`                         |
+| `extraEnvVarsSecret`                           | Secret containing extra env vars (in case of sensitive data)                                                          | `""`                         |
+| `extraVolumes`                                 | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `[]`                         |
+| `extraVolumeMounts`                            | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                         |
+| `initContainers`                               | Add additional init containers to the pod (evaluated as a template)                                                   | `[]`                         |
+| `sidecars`                                     | Attach additional containers to the pod (evaluated as a template)                                                     | `[]`                         |
+| `tolerations`                                  | Tolerations for pod assignment                                                                                        | `[]`                         |
+| `podAffinityPreset`                            | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                         |
+| `podAntiAffinityPreset`                        | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                       |
+| `nodeAffinityPreset.type`                      | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                         |
+| `nodeAffinityPreset.key`                       | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                         |
+| `nodeAffinityPreset.values`                    | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                         |
+| `affinity`                                     | Affinity for pod assignment                                                                                           | `{}`                         |
+| `nodeSelector`                                 | Node labels for pod assignment. Evaluated as a template.                                                              | `{}`                         |
+| `resources.requests`                           | The requested resources for the init container                                                                        | `{}`                         |
+| `resources.limits`                             | The resources limits for the init container                                                                           | `{}`                         |
+| `podSecurityContext.enabled`                   | Enable Multus CNI pods' Security Context                                                                              | `true`                       |
+| `podSecurityContext.fsGroup`                   | Multus CNI pods' group ID                                                                                             | `0`                          |
+| `containerSecurityContext.enabled`             | Enable Multus CNI containers' Security Context                                                                        | `true`                       |
+| `containerSecurityContext.runAsUser`           | Multus CNI containers' Security Context                                                                               | `0`                          |
+| `containerSecurityContext.runAsNonRoot`        | Set Multus CNI container's Security Context runAsNonRoot                                                              | `false`                      |
+| `containerSecurityContext.privileged`          | Set Multus CNI container's Security Context privileged                                                                | `true`                       |
+| `containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                      | `RuntimeDefault`             |
+| `startupProbe.enabled`                         | Enable startupProbe                                                                                                   | `false`                      |
+| `startupProbe.initialDelaySeconds`             | Initial delay seconds for startupProbe                                                                                | `10`                         |
+| `startupProbe.periodSeconds`                   | Period seconds for startupProbe                                                                                       | `10`                         |
+| `startupProbe.timeoutSeconds`                  | Timeout seconds for startupProbe                                                                                      | `5`                          |
+| `startupProbe.failureThreshold`                | Failure threshold for startupProbe                                                                                    | `5`                          |
+| `startupProbe.successThreshold`                | Success threshold for startupProbe                                                                                    | `1`                          |
+| `livenessProbe.enabled`                        | Enable livenessProbe                                                                                                  | `true`                       |
+| `livenessProbe.initialDelaySeconds`            | Initial delay seconds for livenessProbe                                                                               | `10`                         |
+| `livenessProbe.periodSeconds`                  | Period seconds for livenessProbe                                                                                      | `10`                         |
+| `livenessProbe.timeoutSeconds`                 | Timeout seconds for livenessProbe                                                                                     | `5`                          |
+| `livenessProbe.failureThreshold`               | Failure threshold for livenessProbe                                                                                   | `5`                          |
+| `livenessProbe.successThreshold`               | Success threshold for livenessProbe                                                                                   | `1`                          |
+| `readinessProbe.enabled`                       | Enable readinessProbe                                                                                                 | `false`                      |
+| `readinessProbe.initialDelaySeconds`           | Initial delay seconds for readinessProbe                                                                              | `10`                         |
+| `readinessProbe.periodSeconds`                 | Period seconds for readinessProbe                                                                                     | `5`                          |
+| `readinessProbe.timeoutSeconds`                | Timeout seconds for readinessProbe                                                                                    | `1`                          |
+| `readinessProbe.failureThreshold`              | Failure threshold for readinessProbe                                                                                  | `5`                          |
+| `readinessProbe.successThreshold`              | Success threshold for readinessProbe                                                                                  | `1`                          |
+| `customStartupProbe`                           | Override default startup probe                                                                                        | `{}`                         |
+| `customLivenessProbe`                          | Override default liveness probe                                                                                       | `{}`                         |
+| `customReadinessProbe`                         | Override default readiness probe                                                                                      | `{}`                         |
+| `lifecycleHooks`                               | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | `{}`                         |
+| `podAnnotations`                               | Pod annotations                                                                                                       | `{}`                         |
+| `podLabels`                                    | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                         |
 
 ### Other Parameters
 

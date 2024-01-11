@@ -104,11 +104,11 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/metallb-controller
-    tag: 0.13.12-debian-11-r2
+    tag: 0.13.12-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -171,7 +171,7 @@ controller:
   ##
   topologySpreadConstraints: []
   ## Controller container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -191,7 +191,7 @@ controller:
     ##    memory: 25Mi
     requests: {}
   ## @param controller.nodeSelector Node labels for controller pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param controller.tolerations Tolerations for controller pod assignment
@@ -254,6 +254,7 @@ controller:
   ## @param controller.containerSecurityContext.allowPrivilegeEscalation Enables privilege Escalation context for the pod.
   ## @param controller.containerSecurityContext.readOnlyRootFilesystem Allows the pod to mount the RootFS as ReadOnly
   ## @param controller.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
+  ## @param controller.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -264,6 +265,8 @@ controller:
     capabilities:
       drop:
         - ALL
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param controller.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -489,11 +492,11 @@ speaker:
   image:
     registry: docker.io
     repository: bitnami/metallb-speaker
-    tag: 0.13.12-debian-11-r1
+    tag: 0.13.12-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -544,7 +547,7 @@ speaker:
   ##
   terminationGracePeriodSeconds: 2
   ## Speaker container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -564,7 +567,7 @@ speaker:
     ##    memory: 25Mi
     requests: {}
   ## @param speaker.nodeSelector Node labels for speaker pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param speaker.tolerations Tolerations for speaker pod assignment
@@ -624,8 +627,8 @@ speaker:
   ## @param speaker.containerSecurityContext.readOnlyRootFilesystem Allows the pod to mount the RootFS as ReadOnly
   ## @param speaker.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
   ## @param speaker.containerSecurityContext.capabilities.add [array] Add capabilities for the securityContext
+  ## @param speaker.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
-
   containerSecurityContext:
     enabled: true
     runAsUser: 0
@@ -638,6 +641,8 @@ speaker:
         - NET_ADMIN
         - NET_RAW
         - SYS_ADMIN
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param speaker.command Override default container command (useful when using custom images)
   ##
   command: []
