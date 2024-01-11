@@ -637,11 +637,6 @@ service:
   ## e.g:
   ## loadBalancerSourceRanges:
   ##   - 10.10.10.0/24
-  ##  ## @param service.loadBalancerSourceRanges loadBalancerSourceRanges if Grafana service type is `LoadBalancer` (optional, cloud specific)
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
-  ## e.g:
-  ## loadBalancerSourceRanges:
-  ##   - 10.10.10.0/24
   ##
   loadBalancerSourceRanges: []
   ## @param service.annotations Provide any additional annotations which may be required.
