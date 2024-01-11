@@ -100,7 +100,7 @@ contour:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -157,7 +157,7 @@ contour:
   ##
   extraArgs: []
   ## Contour container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## ref: https://projectcontour.io/guides/resource-limits/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
@@ -248,7 +248,7 @@ contour:
   ##
   affinity: {}
   ## @param contour.nodeSelector [object] Node labels for Contour pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param contour.tolerations [array] Tolerations for Contour pod assignment
@@ -524,7 +524,7 @@ envoy:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -556,7 +556,7 @@ envoy:
   ##
   hostAliases: []
   ## Envoy container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## ref: https://projectcontour.io/guides/resource-limits/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
@@ -725,7 +725,7 @@ envoy:
   ##
   affinity: {}
   ## @param envoy.nodeSelector [object] Node labels for Envoy pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param envoy.tolerations [array] Tolerations for Envoy pod assignment
@@ -1042,7 +1042,7 @@ defaultBackend:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1150,7 +1150,7 @@ defaultBackend:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: false
   ## Default backend containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube.
@@ -1283,7 +1283,7 @@ defaultBackend:
   ##
   affinity: {}
   ## @param defaultBackend.nodeSelector [object] Node labels for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param defaultBackend.tolerations [array] Tolerations for pod assignment. Evaluated as a template.
@@ -1316,7 +1316,7 @@ defaultBackend:
 ##
 ingress:
   ## @param ingress.enabled Ingress configuration enabled
-  ## Ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ## Enable Ingress.
   ##

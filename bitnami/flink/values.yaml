@@ -76,7 +76,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -173,7 +173,7 @@ jobmanager:
   ##
   customReadinessProbe: {}
   ## Apache Flink pods' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## Minimum memory for development is 4GB and 2 CPU cores
   ## Minimum memory for production is 8GB and 4 CPU cores
   ## ref: http://docs.datastax.com/en/archived/flink/2.0/flink/architecture/architecturePlanningHardware_c.html
@@ -369,7 +369,7 @@ jobmanager:
   ##
   affinity: {}
   ## @param jobmanager.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param jobmanager.tolerations Tolerations for pod assignment
@@ -484,7 +484,7 @@ taskmanager:
   ##
   customReadinessProbe: {}
   ## Apache Flink pods' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## Minimum memory for development is 4GB and 2 CPU cores
   ## Minimum memory for production is 8GB and 4 CPU cores
   ## ref: http://docs.datastax.com/en/archived/flink/2.0/flink/architecture/architecturePlanningHardware_c.html
@@ -670,7 +670,7 @@ taskmanager:
   ##
   affinity: {}
   ## @param taskmanager.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param taskmanager.tolerations Tolerations for pod assignment

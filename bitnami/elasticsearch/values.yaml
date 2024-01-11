@@ -193,7 +193,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -353,7 +353,7 @@ service:
   sessionAffinityConfig: {}
 
 ## Elasticsearch ingress parameters
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for Elasticsearch
@@ -500,7 +500,7 @@ master:
   updateStrategy:
     type: RollingUpdate
   ## Elasticsearch resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -590,7 +590,7 @@ master:
   ##
   affinity: {}
   ## @param master.nodeSelector Node labels for master-elegible pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param master.tolerations Tolerations for master-elegible pods assignment
@@ -719,7 +719,7 @@ master:
   ##
   initContainers: []
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param master.persistence.enabled Enable persistence using a `PersistentVolumeClaim`
@@ -824,7 +824,7 @@ data:
   updateStrategy:
     type: RollingUpdate
   ## Elasticsearch resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param data.resources.limits The resources limits for the data containers
   ## @param data.resources.requests [object] The requested resources for the data containers
   ##
@@ -904,7 +904,7 @@ data:
   ##
   affinity: {}
   ## @param data.nodeSelector Node labels for data pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param data.tolerations Tolerations for data pods assignment
@@ -1033,7 +1033,7 @@ data:
   ##
   initContainers: []
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param data.persistence.enabled Enable persistence using a `PersistentVolumeClaim`
@@ -1139,7 +1139,7 @@ coordinating:
   updateStrategy:
     type: RollingUpdate
   ## Elasticsearch resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param coordinating.resources.limits The resources limits for the coordinating-only containers
   ## @param coordinating.resources.requests [object] The requested resources for the coordinating-only containers
   ##
@@ -1219,7 +1219,7 @@ coordinating:
   ##
   affinity: {}
   ## @param coordinating.nodeSelector Node labels for coordinating-only pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param coordinating.tolerations Tolerations for coordinating-only pods assignment
@@ -1423,7 +1423,7 @@ ingest:
   updateStrategy:
     type: RollingUpdate
   ## Elasticsearch resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param ingest.resources.limits The resources limits for the ingest-only containers
   ## @param ingest.resources.requests [object] The requested resources for the ingest-only containers
   ##
@@ -1503,7 +1503,7 @@ ingest:
   ##
   affinity: {}
   ## @param ingest.nodeSelector Node labels for ingest-only pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param ingest.tolerations Tolerations for ingest-only pods assignment
@@ -1721,7 +1721,7 @@ ingest:
     ##
     sessionAffinityConfig: {}
   ## Elasticsearch Ingest-only ingress parameters
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param ingest.ingress.enabled Enable ingress record generation for Elasticsearch
@@ -1935,7 +1935,7 @@ metrics:
   ##
   affinity: {}
   ## @param metrics.nodeSelector Metrics Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param metrics.tolerations Metrics Tolerations for pod assignment
@@ -1947,7 +1947,7 @@ metrics:
   ##
   topologySpreadConstraints: []
   ## Elasticsearch Prometheus exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -2199,7 +2199,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -2238,7 +2238,7 @@ sysctlImage:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -2250,7 +2250,7 @@ sysctlImage:
   ##
   pullSecrets: []
   ## Init container' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following

@@ -63,7 +63,7 @@ diagnosticMode:
 ##
 
 ## loadBalancerIP for the Parse Service (optional, cloud specific)
-## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
 ##
 server:
   ## Bitnami Parse image version
@@ -83,7 +83,7 @@ server:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -224,7 +224,7 @@ server:
   ##
   existingCloudCodeScriptsCM: ""
   ## @param server.resources Parse Server pods' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## Parse Server pods' liveness probes
@@ -316,7 +316,7 @@ server:
   ##
   affinity: {}
   ## @param server.nodeSelector Parse server node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param server.tolerations Parse server tolerations for pod assignment
@@ -350,7 +350,7 @@ server:
   ##
   lifecycleHooks: {}
   ## Kubernetes service for Parse Server Deployment
-  ## ref: https://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services---service-types
   ##
   service:
     ## @param server.service.type Kubernetes Service type
@@ -394,7 +394,7 @@ server:
     extraPorts: []
     ## @param server.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param server.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -428,7 +428,7 @@ dashboard:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -504,7 +504,7 @@ dashboard:
   ##
   appName: MyDashboard
   ## @param dashboard.resources Parse Dashboard pods' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## Parse Dashboard pods' liveness probe
@@ -604,7 +604,7 @@ dashboard:
   ##
   affinity: {}
   ## @param dashboard.nodeSelector Parse dashboard node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dashboard.tolerations Parse dashboard tolerations for pod assignment
@@ -682,7 +682,7 @@ dashboard:
   ##
   initContainers: []
     ## Kubernetes service for Parse Server Deployment
-  ## ref: https://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services---service-types
   ##
   service:
     ## @param dashboard.service.type Kubernetes Service type
@@ -726,7 +726,7 @@ dashboard:
     extraPorts: []
     ## @param dashboard.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param dashboard.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -740,7 +740,7 @@ dashboard:
 ##
 
 ## Configure the ingress resource that allows you to access the Parse installation.
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
@@ -761,7 +761,7 @@ ingress:
   selfSigned: false
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
   ## Use this parameter to set the required annotations for cert-manager, see
   ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
@@ -865,7 +865,7 @@ ingress:
 ##
 
 ## Enable persistence using Persistent Volume Claims
-## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable Parse persistence using PVC
@@ -990,7 +990,7 @@ mongodb:
     ##
     database: bitnami_parse
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param mongodb.persistence.enabled Enable MongoDB&reg; persistence using PVC
