@@ -306,7 +306,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.create`                       | Enable the creation of a ServiceAccount for MySQL pods         | `true`  |
 | `serviceAccount.name`                         | Name of the created ServiceAccount                             | `""`    |
 | `serviceAccount.annotations`                  | Annotations for MySQL Service Account                          | `{}`    |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account | `false` |
 | `rbac.create`                                 | Whether to create & use RBAC resources or not                  | `false` |
 | `rbac.rules`                                  | Custom RBAC rules to set                                       | `[]`    |
 
