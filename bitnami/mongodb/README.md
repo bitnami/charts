@@ -366,7 +366,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `serviceAccount.create`                       | Enable creation of ServiceAccount for MongoDB(&reg;) pods                                                                                   | `true`  |
 | `serviceAccount.name`                         | Name of the created serviceAccount                                                                                                          | `""`    |
 | `serviceAccount.annotations`                  | Additional Service Account annotations                                                                                                      | `{}`    |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `false` |
 | `rbac.create`                                 | Whether to create & use RBAC resources or not                                                                                               | `false` |
 | `rbac.rules`                                  | Custom rules to create following the role specification                                                                                     | `[]`    |
 | `podSecurityPolicy.create`                    | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
