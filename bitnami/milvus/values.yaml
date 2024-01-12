@@ -86,7 +86,7 @@ milvus:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -270,7 +270,7 @@ initJob:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -363,7 +363,7 @@ initJob:
   ##
   extraVolumeMounts: []
   ## Container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param initJob.resources.limits The resources limits for the container
   ## @param initJob.resources.requests The requested resources for the container
   ##
@@ -495,7 +495,7 @@ dataCoord:
   ##
   customStartupProbe: {}
   ## data coordinator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dataCoord.resources.limits The resources limits for the data coordinator containers
   ## @param dataCoord.resources.requests The requested resources for the data coordinator containers
   ##
@@ -582,7 +582,7 @@ dataCoord:
   ##
   affinity: {}
   ## @param dataCoord.nodeSelector Node labels for Data Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dataCoord.tolerations Tolerations for Data Coordinator pods assignment
@@ -745,7 +745,7 @@ dataCoord:
     sessionAffinityConfig: {}
     ## @param dataCoord.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param dataCoord.service.clusterIP Data Coordinator service Cluster IP
@@ -983,7 +983,7 @@ rootCoord:
   ##
   customStartupProbe: {}
   ## data coordinator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param rootCoord.resources.limits The resources limits for the data coordinator containers
   ## @param rootCoord.resources.requests The requested resources for the data coordinator containers
   ##
@@ -1070,7 +1070,7 @@ rootCoord:
   ##
   affinity: {}
   ## @param rootCoord.nodeSelector Node labels for Root Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param rootCoord.tolerations Tolerations for Root Coordinator pods assignment
@@ -1233,7 +1233,7 @@ rootCoord:
     sessionAffinityConfig: {}
     ## @param rootCoord.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param rootCoord.service.clusterIP Root Coordinator service Cluster IP
@@ -1470,7 +1470,7 @@ queryCoord:
   ##
   customStartupProbe: {}
   ## data coordinator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param queryCoord.resources.limits The resources limits for the data coordinator containers
   ## @param queryCoord.resources.requests The requested resources for the data coordinator containers
   ##
@@ -1557,7 +1557,7 @@ queryCoord:
   ##
   affinity: {}
   ## @param queryCoord.nodeSelector Node labels for Query Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param queryCoord.tolerations Tolerations for Query Coordinator pods assignment
@@ -1720,7 +1720,7 @@ queryCoord:
     sessionAffinityConfig: {}
     ## @param queryCoord.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param queryCoord.service.clusterIP Query Coordinator service Cluster IP
@@ -1958,7 +1958,7 @@ indexCoord:
   ##
   customStartupProbe: {}
   ## data coordinator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param indexCoord.resources.limits The resources limits for the data coordinator containers
   ## @param indexCoord.resources.requests The requested resources for the data coordinator containers
   ##
@@ -2045,7 +2045,7 @@ indexCoord:
   ##
   affinity: {}
   ## @param indexCoord.nodeSelector Node labels for Index Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param indexCoord.tolerations Tolerations for Index Coordinator pods assignment
@@ -2208,7 +2208,7 @@ indexCoord:
     sessionAffinityConfig: {}
     ## @param indexCoord.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param indexCoord.service.clusterIP Index Coordinator service Cluster IP
@@ -2446,7 +2446,7 @@ dataNode:
   ##
   customStartupProbe: {}
   ## data node resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dataNode.resources.limits The resources limits for the data node containers
   ## @param dataNode.resources.requests The requested resources for the data node containers
   ##
@@ -2533,7 +2533,7 @@ dataNode:
   ##
   affinity: {}
   ## @param dataNode.nodeSelector Node labels for Data Node pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dataNode.tolerations Tolerations for Data Node pods assignment
@@ -2696,7 +2696,7 @@ dataNode:
     sessionAffinityConfig: {}
     ## @param dataNode.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param dataNode.service.clusterIP Data Node service Cluster IP
@@ -2934,7 +2934,7 @@ queryNode:
   ##
   customStartupProbe: {}
   ## data node resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param queryNode.resources.limits The resources limits for the data node containers
   ## @param queryNode.resources.requests The requested resources for the data node containers
   ##
@@ -3021,7 +3021,7 @@ queryNode:
   ##
   affinity: {}
   ## @param queryNode.nodeSelector Node labels for Query Node pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param queryNode.tolerations Tolerations for Query Node pods assignment
@@ -3184,7 +3184,7 @@ queryNode:
     sessionAffinityConfig: {}
     ## @param queryNode.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param queryNode.service.clusterIP Query Node service Cluster IP
@@ -3422,7 +3422,7 @@ indexNode:
   ##
   customStartupProbe: {}
   ## data node resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param indexNode.resources.limits The resources limits for the data node containers
   ## @param indexNode.resources.requests The requested resources for the data node containers
   ##
@@ -3509,7 +3509,7 @@ indexNode:
   ##
   affinity: {}
   ## @param indexNode.nodeSelector Node labels for Index Node pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param indexNode.tolerations Tolerations for Index Node pods assignment
@@ -3672,7 +3672,7 @@ indexNode:
     sessionAffinityConfig: {}
     ## @param indexNode.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param indexNode.service.clusterIP Index Node service Cluster IP
@@ -3939,7 +3939,7 @@ proxy:
   ##
   customStartupProbe: {}
   ## proxy resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param proxy.resources.limits The resources limits for the proxy containers
   ## @param proxy.resources.requests The requested resources for the proxy containers
   ##
@@ -4026,7 +4026,7 @@ proxy:
   ##
   affinity: {}
   ## @param proxy.nodeSelector Node labels for Proxy pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param proxy.tolerations Tolerations for Proxy pods assignment
@@ -4189,7 +4189,7 @@ proxy:
     sessionAffinityConfig: {}
     ## @param proxy.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param proxy.service.clusterIP Proxy service Cluster IP
@@ -4346,7 +4346,7 @@ attu:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -4439,7 +4439,7 @@ attu:
   ##
   customStartupProbe: {}
   ## attu resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param attu.resources.limits The resources limits for the attu containers
   ## @param attu.resources.requests The requested resources for the attu containers
   ##
@@ -4526,7 +4526,7 @@ attu:
   ##
   affinity: {}
   ## @param attu.nodeSelector Node labels for Attu pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param attu.tolerations Tolerations for Attu pods assignment
@@ -4685,7 +4685,7 @@ attu:
     sessionAffinityConfig: {}
     ## @param attu.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param attu.service.clusterIP Attu service Cluster IP
@@ -4715,7 +4715,7 @@ attu:
     ##
     extraPorts: []
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param attu.ingress.enabled Enable ingress record generation for Milvus

@@ -192,14 +192,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                          | Description                                                                                                         | Value  |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------ |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true` |
-| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true` |
-| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`   |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true` |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                              | `""`   |
+| Name                                          | Description                                                                                                         | Value   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true`  |
+| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `false` |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`    |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                              | `""`    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

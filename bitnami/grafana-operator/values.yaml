@@ -151,11 +151,11 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/grafana-operator
-    tag: 5.6.0-debian-11-r1
+    tag: 5.6.0-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## Ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## Ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -304,7 +304,7 @@ operator:
   ##
   podLabels: {}
   ## @param operator.nodeSelector Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param operator.tolerations Tolerations for controller pod assignment
@@ -420,11 +420,11 @@ grafana:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 10.2.3-debian-11-r1
+    tag: 10.2.3-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## Ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## Ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -476,7 +476,7 @@ grafana:
     seccompProfile:
       type: "RuntimeDefault"
   ## Grafana containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -539,7 +539,7 @@ grafana:
   ##
   affinity: {}
   ## @param grafana.nodeSelector Node labels for controller pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param grafana.tolerations Tolerations for controller pod assignment
@@ -585,7 +585,7 @@ grafana:
   ##
   ## Configure the ingress resource that allows you to access the
   ## Grafana web. Set up the URL
-  ## Ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-ingress-or-route
   ##
   ingress:
@@ -611,7 +611,7 @@ grafana:
     labels: {}
     ## @param grafana.ingress.annotations Additional Annotations for the ingress resource
     ## For a full list of possible ingress annotations, please see
-    ## Ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## Ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ##
     ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
     ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
@@ -626,7 +626,7 @@ grafana:
     ##
     tlsSecret: grafana.local-tls
   ## Enable persistence using Persistent Volume Claims
-  ## Ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## Ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param grafana.persistence.enabled Enable persistent storage for the grafana deployment
