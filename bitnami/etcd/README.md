@@ -306,9 +306,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                          | Description                                                  | Value   |
 | --------------------------------------------- | ------------------------------------------------------------ | ------- |
-| `serviceAccount.create`                       | Enable/disable service account creation                      | `false` |
+| `serviceAccount.create`                       | Enable/disable service account creation                      | `true`  |
 | `serviceAccount.name`                         | Name of the service account to create or use                 | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of service account token        | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of service account token        | `false` |
 | `serviceAccount.annotations`                  | Additional annotations to be included on the service account | `{}`    |
 | `serviceAccount.labels`                       | Additional labels to be included on the service account      | `{}`    |
 
