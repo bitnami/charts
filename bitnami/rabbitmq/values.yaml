@@ -147,6 +147,8 @@ auth:
   ##
   securePassword: true
   ## @param auth.existingPasswordSecret Existing secret with RabbitMQ credentials (existing secret must contain a value for `rabbitmq-password` key or override with setting auth.existingSecretPasswordKey)
+  ## e.g:
+  ## existingPasswordSecret: name-of-existing-secret
   ##
   existingPasswordSecret: ""
   ## @param auth.existingSecretPasswordKey [default: rabbitmq-password] Password key to be retrieved from existing secret
