@@ -359,7 +359,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `run.source.git.repository`                             | Repository that holds the files                                                                 | `""`             |
 | `run.source.git.revision`                               | Revision from the repository to checkout                                                        | `""`             |
 | `run.source.git.extraVolumeMounts`                      | Add extra volume mounts for the Git container                                                   | `[]`             |
-| `run.serviceAccount.create`                             | Enable creation of ServiceAccount for Run pods                                                  | `false`          |
+| `run.serviceAccount.create`                             | Enable creation of ServiceAccount for Run pods                                                  | `true`           |
 | `run.serviceAccount.name`                               | The name of the ServiceAccount to use                                                           | `""`             |
 | `run.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                          | `false`          |
 | `run.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                            | `{}`             |
