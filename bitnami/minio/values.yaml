@@ -1032,7 +1032,7 @@ serviceAccount:
   name: ""
   ## @param serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   ## @param serviceAccount.annotations Custom annotations for MinIO&reg; ServiceAccount
   ##
   annotations: {}
