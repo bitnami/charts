@@ -188,12 +188,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### RBAC parameters
 
-| Name                                          | Description                                                | Value  |
-| --------------------------------------------- | ---------------------------------------------------------- | ------ |
-| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Cassandra pods | `true` |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                     | `""`   |
-| `serviceAccount.annotations`                  | Annotations for Cassandra Service Account                  | `{}`   |
-| `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.           | `true` |
+| Name                                          | Description                                                | Value   |
+| --------------------------------------------- | ---------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Cassandra pods | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                     | `""`    |
+| `serviceAccount.annotations`                  | Annotations for Cassandra Service Account                  | `{}`    |
+| `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.           | `false` |
 
 ### Traffic Exposure Parameters
 

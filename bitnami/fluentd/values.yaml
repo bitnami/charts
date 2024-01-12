@@ -1140,7 +1140,7 @@ aggregator:
   serviceAccount:
     ## @param aggregator.serviceAccount.create Specify whether a ServiceAccount should be created
     ##
-    create: false
+    create: true
     ## @param aggregator.serviceAccount.name The name of the ServiceAccount to create
     ## If not set and create is true, a name is generated using the common.names.fullname template
     name: ""
@@ -1149,7 +1149,7 @@ aggregator:
     annotations: {}
     ## @param aggregator.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   ## Autoscaling parameters
   ## This is not recommended in a forwarder+aggregator architecture
   ## @param aggregator.autoscaling.enabled Create an Horizontal Pod Autoscaler
