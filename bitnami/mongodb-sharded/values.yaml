@@ -221,7 +221,7 @@ common:
   serviceAccount:
     ## @param common.serviceAccount.create Whether to create a Service Account for all pods automatically
     ##
-    create: false
+    create: true
     ## @param common.serviceAccount.name Name of a Service Account to be used by all Pods
     ## If not set and create is true, a name is generated using the XXX.fullname template
     ##
@@ -231,7 +231,7 @@ common:
     annotations: {}
     ## @param common.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -522,7 +522,7 @@ configsvr:
   serviceAccount:
     ## @param configsvr.serviceAccount.create Specifies whether a ServiceAccount should be created for Config Server
     ##
-    create: false
+    create: true
     ## @param configsvr.serviceAccount.name Name of a Service Account to be used by Config Server
     ## If not set and create is true, a name is generated using the XXX.fullname template
     ##
@@ -532,7 +532,7 @@ configsvr:
     annotations: {}
     ## @param configsvr.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   ## Use a external config server instead of deploying one
   ##
   external:
@@ -871,7 +871,7 @@ mongos:
   serviceAccount:
     ## @param mongos.serviceAccount.create Whether to create a Service Account for mongos automatically
     ##
-    create: false
+    create: true
     ## @param mongos.serviceAccount.name Name of a Service Account to be used by mongos
     ## If not set and create is true, a name is generated using the XXX.fullname template
     ##
@@ -881,7 +881,7 @@ mongos:
     annotations: {}
     ## @param mongos.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param mongos.podSecurityContext.enabled Enable security context
@@ -1157,7 +1157,7 @@ shardsvr:
     serviceAccount:
       ## @param shardsvr.dataNode.serviceAccount.create Specifies whether a ServiceAccount should be created for shardsvr
       ##
-      create: false
+      create: true
       ## @param shardsvr.dataNode.serviceAccount.name Name of a Service Account to be used by shardsvr data pods
       ## If not set and create is true, a name is generated using the XXX.fullname template
       ##
@@ -1167,7 +1167,7 @@ shardsvr:
       annotations: {}
       ## @param shardsvr.dataNode.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
       ##
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
     ## Configure Pods Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
     ## @param shardsvr.dataNode.podSecurityContext.enabled Enable security context
@@ -1462,7 +1462,7 @@ shardsvr:
     serviceAccount:
       ## @param shardsvr.arbiter.serviceAccount.create Specifies whether a ServiceAccount should be created for shardsvr arbiter nodes
       ##
-      create: false
+      create: true
       ## @param shardsvr.arbiter.serviceAccount.name Name of a Service Account to be used by shardsvr arbiter pods
       ## If not set and create is true, a name is generated using the XXX.fullname template
       ##
@@ -1472,7 +1472,7 @@ shardsvr:
       annotations: {}
       ## @param shardsvr.arbiter.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
       ##
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
     ## Configure Pods Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
     ## @param shardsvr.arbiter.podSecurityContext.enabled Enable security context
