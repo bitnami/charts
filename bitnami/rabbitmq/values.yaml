@@ -146,14 +146,9 @@ auth:
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
   securePassword: true
-  ## @param auth.existingPasswordSecret Existing secret with RabbitMQ credentials (must contain a value for `rabbitmq-password` key)
-  ## DEPRECATED. Use auth.existingSecret instead
+  ## @param auth.existingPasswordSecret Existing secret with RabbitMQ credentials (existing secret must contain a value for `rabbitmq-password` key or override with setting auth.existingSecretPasswordKey)
   ##
   existingPasswordSecret: ""
-  ## @param auth.existingSecret The name of an existing secret with RabbitMQ credentials
-  ## NOTE: When it's set, the previous `auth.password` parameter is ignored
-  ##
-  existingSecret: ""
   ## @param auth.existingSecretPasswordKey [default: rabbitmq-password] Password key to be retrieved from existing secret
   ## NOTE: ignored unless `auth.existingSecret` parameter is set
   ##

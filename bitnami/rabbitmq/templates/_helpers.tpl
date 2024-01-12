@@ -41,8 +41,7 @@ Return the proper Docker Image Registry Secret Names
 Get RabbitMQ password secret name.
 */}}
 {{- define "rabbitmq.secretPasswordName" -}}
-{{- $existingSecret := coalesce .Values.auth.existingSecret .Values.auth.existingPasswordSecret -}}
-{{- $secretName := toString $existingSecret -}}
+{{- $secretName := toString .Values.auth.existingPasswordSecret -}}
 {{- print (default (include "common.names.fullname" .) $secretName) -}}
 {{- end -}}
 
