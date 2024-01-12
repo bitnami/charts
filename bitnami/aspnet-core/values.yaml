@@ -732,4 +732,4 @@ serviceAccount:
   extraLabels: {}
   ## @param serviceAccount.automountServiceAccountToken Automount service account token
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
