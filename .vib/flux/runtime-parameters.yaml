@@ -172,7 +172,7 @@ extraDeploy:
   # This is for image-reflector-controller. We will use the metrics to ensure that it is consumed
   # and therefore RBAC is correct. The values do not need to be correct
   # Source: https://fluxcd.io/flux/components/image/imagerepositories/
-  - apiVersion: image.toolkit.fluxcd.io/v1beta2
+  - apiVersion: image.toolkit.fluxcd.io/v1beta1
     kind: ImageRepository
     metadata:
       name: vib-image-rep-podinfo
