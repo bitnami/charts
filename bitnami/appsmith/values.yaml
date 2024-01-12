@@ -1193,7 +1193,7 @@ serviceAccount:
   annotations: {}
   ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
 
 ## @section External MongoDB parameters
 ## All of these values are only used when mongodb.enabled is set to false
