@@ -40,8 +40,8 @@ replica:
     ports:
       redis: 6378
     type: ClusterIP
+  serviceAccount:
+    create: true
+    automountServiceAccountToken: true
 sentinel:
   enabled: false
-serviceAccount:
-  create: true
-  automountServiceAccountToken: true
