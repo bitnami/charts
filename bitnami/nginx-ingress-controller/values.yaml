@@ -58,11 +58,11 @@ clusterDomain: cluster.local
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 1.9.5-debian-11-r0
+  tag: 1.9.5-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -267,7 +267,7 @@ containerSecurityContext:
 ##
 minReadySeconds: 0
 ## Controller containers' resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -413,7 +413,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template.
@@ -495,11 +495,11 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r2
+    tag: 1.25.3-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -552,7 +552,7 @@ defaultBackend:
     seccompProfile:
       type: "RuntimeDefault"
   ## Default backend containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -735,7 +735,7 @@ defaultBackend:
   ##
   affinity: {}
   ## @param defaultBackend.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param defaultBackend.tolerations Tolerations for pod assignment
@@ -807,7 +807,7 @@ service:
   ##
   clusterIP: ""
   ## @param service.externalIPs Controller Service external IP addresses
-  ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
   ##
   externalIPs: []
   ## @param service.ipFamilyPolicy Controller Service ipFamilyPolicy (optional, cloud specific)
@@ -821,7 +821,7 @@ service:
   ##
   ipFamilies: []
   ## @param service.loadBalancerIP Kubernetes LoadBalancerIP to request for Controller (optional, cloud specific)
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges List of IP CIDRs allowed access to load balancer (if supported)

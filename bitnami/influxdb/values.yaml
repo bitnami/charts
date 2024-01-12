@@ -73,10 +73,10 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.7.5-debian-11-r0
+  tag: 2.7.5-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -223,7 +223,7 @@ influxdb:
   ##
   affinity: {}
   ## @param influxdb.nodeSelector InfluxDB&trade; Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param influxdb.tolerations InfluxDB&trade; Tolerations for pod assignment
@@ -298,7 +298,7 @@ influxdb:
     seccompProfile:
       type: "RuntimeDefault"
   ## InfluxDB&trade; pods' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -544,7 +544,7 @@ collectd:
 
 ## Configure the ingress resource that allows you to access the
 ## influxdb installation. Set up the URL
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress controller resource
@@ -574,7 +574,7 @@ ingress:
   path: /
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
   ## Use this parameter to set the required annotations for cert-manager, see
   ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
@@ -838,7 +838,7 @@ volumePermissions:
     tag: 11-debian-11-r93
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -951,7 +951,7 @@ backup:
   ##
   affinity: {}
   ## @param backup.nodeSelector Backup&trade; Node labels for backup pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param backup.tolerations Backup&trade; Tolerations for backup pod assignment
@@ -986,10 +986,10 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.458.0-debian-11-r0
+        tag: 0.459.0-debian-11-r0
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-        ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+        ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
         pullPolicy: IfNotPresent
         ## Optionally specify an array of imagePullSecrets.
@@ -1025,10 +1025,10 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.55.0-debian-11-r1
+        tag: 2.56.0-debian-11-r0
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-        ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+        ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
         pullPolicy: IfNotPresent
         ## Optionally specify an array of imagePullSecrets.
@@ -1069,7 +1069,7 @@ backup:
         tag: 2.15.2-debian-11-r0
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-        ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+        ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
         pullPolicy: IfNotPresent
         ## Optionally specify an array of imagePullSecrets.

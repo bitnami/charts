@@ -68,7 +68,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -135,7 +135,7 @@ logInfoStdout: false
 containerPorts:
   http: 8080
 ## Sealed Secret resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resources.limits [object] The resources limits for the Sealed Secret containers
 ## @param resources.requests [object] The requested resources for the Sealed Secret containers
 ##
@@ -270,7 +270,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector [object] Node labels for Sealed Secret pods assignment
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations [array] Tolerations for Sealed Secret pods assignment
@@ -355,7 +355,7 @@ service:
   type: ClusterIP
   ports:
     ## @param service.ports.http Sealed Secret service HTTP port number
-    ##  
+    ##
     http: 8080
     ## @param service.ports.name Sealed Secret service HTTP port name
     ##
@@ -395,7 +395,7 @@ service:
   extraPorts: []
   ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
-  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   ##
   sessionAffinity: None
   ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -405,7 +405,7 @@ service:
   ##
   sessionAffinityConfig: {}
 ## Sealed Secret ingress parameters
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for Sealed Secret

@@ -67,11 +67,11 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/nats
-  tag: 2.10.7-debian-11-r0
+  tag: 2.10.9-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -352,7 +352,7 @@ containerSecurityContext:
   seccompProfile:
     type: "RuntimeDefault"
 ## NATS resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resources.limits The resources limits for the NATS containers
 ## @param resources.requests The requested resources for the NATS containers
 ##
@@ -459,7 +459,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template.
@@ -530,7 +530,7 @@ service:
     monitoring: ""
   ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
-  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   ##
   sessionAffinity: None
   ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -572,7 +572,7 @@ service:
     ##
     annotations: {}
 ## NATS ingress parameters
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
@@ -712,7 +712,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nats-exporter
-    tag: 0.13.0-debian-11-r2
+    tag: 0.13.0-debian-11-r4
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -724,7 +724,7 @@ metrics:
     ##
     pullSecrets: []
   ## @param metrics.resources Metrics exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## @param metrics.containerPort Prometheus metrics exporter port
@@ -796,7 +796,7 @@ metrics:
 ## @section Persistence parameters
 
 ## Enable persistence using Persistent Volume Claims
-## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable NATS data persistence using PVC(s)

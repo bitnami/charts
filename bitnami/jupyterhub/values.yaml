@@ -75,7 +75,7 @@ hub:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -333,7 +333,7 @@ hub:
   ##
   customReadinessProbe: {}
   ## Hub resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param hub.resources.limits The resources limits for the Hub containers
   ## @param hub.resources.requests The requested resources for the Hub containers
   ##
@@ -419,7 +419,7 @@ hub:
   ##
   affinity: {}
   ## @param hub.nodeSelector Node labels for pod assignment.
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param hub.tolerations Tolerations for pod assignment.
@@ -561,7 +561,7 @@ hub:
       http: ""
     ## @param hub.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param hub.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -663,7 +663,7 @@ proxy:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -762,7 +762,7 @@ proxy:
   ##
   customReadinessProbe: {}
   ## Proxy resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param proxy.resources.limits The resources limits for the Proxy containers
   ## @param proxy.resources.requests The requested resources for the Proxy containers
   ##
@@ -847,7 +847,7 @@ proxy:
   ##
   affinity: {}
   ## @param proxy.nodeSelector Node labels for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param proxy.tolerations Tolerations for pod assignment. Evaluated as a template.
@@ -979,7 +979,7 @@ proxy:
         http: ""
       ## @param proxy.service.api.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param proxy.service.api.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1029,7 +1029,7 @@ proxy:
         http: ""
       ## @param proxy.service.metrics.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param proxy.service.metrics.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1080,7 +1080,7 @@ proxy:
         http: ""
       ## @param proxy.service.public.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param proxy.service.public.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1299,7 +1299,7 @@ imagePuller:
   ##
   customReadinessProbe: {}
   ## ImagePuller resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param imagePuller.resources.limits The resources limits for the ImagePuller containers
   ## @param imagePuller.resources.requests The requested resources for the ImagePuller containers
   ##
@@ -1382,7 +1382,7 @@ imagePuller:
   ##
   affinity: {}
   ## @param imagePuller.nodeSelector Node labels for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param imagePuller.tolerations Tolerations for pod assignment. Evaluated as a template.
@@ -1464,7 +1464,7 @@ singleuser:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     ##
     pullPolicy: IfNotPresent
@@ -1494,7 +1494,7 @@ singleuser:
   ##
   containerPort: 8888
   ## Singleuser resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param singleuser.resources.limits The resources limits for the Singleuser containers
   ## @param singleuser.resources.requests The requested resources for the Singleuser containers
   ##
@@ -1540,7 +1540,7 @@ singleuser:
   ##
   podAnnotations: {}
   ## @param singleuser.nodeSelector Node labels for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param singleuser.tolerations Tolerations for pod assignment. Evaluated as a template.
@@ -1603,7 +1603,7 @@ singleuser:
 
   ## @section Single User Persistence parameters
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 
   persistence:
     ## @param singleuser.persistence.enabled Enable persistent volume creation on Single User instances

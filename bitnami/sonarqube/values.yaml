@@ -80,7 +80,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -302,7 +302,7 @@ customReadinessProbe: {}
 ##
 customStartupProbe: {}
 ## SonarQube&trade; resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resources.limits The resources limits for the SonarQube&trade; containers
 ## @param resources.requests [object] The requested resources for the SonarQube&trade; containers
 ##
@@ -384,7 +384,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector Node labels for SonarQube&trade; pods assignment
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations Tolerations for SonarQube&trade; pods assignment
@@ -498,7 +498,7 @@ service:
   ##
   sessionAffinityConfig: {}
 ## SonarQube&trade; ingress parameters
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for SonarQube&trade;
@@ -643,7 +643,7 @@ caCerts:
   ##
   secret: ca-certs-secret
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param caCerts.resources.limits The resources limits for the init container
   ## @param caCerts.resources.requests The requested resources for the init container
   ##
@@ -701,7 +701,7 @@ plugins:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param plugins.resources.limits The resources limits for the init container
   ## @param plugins.resources.requests The requested resources for the init container
   ##
@@ -722,7 +722,7 @@ plugins:
 ##
 
 ## Persistence Parameters
-## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable persistence using Persistent Volume Claims
@@ -782,7 +782,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -832,7 +832,7 @@ sysctl:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param sysctl.resources.limits The resources limits for the init container
   ## @param sysctl.resources.requests The requested resources for the init container
   ##
@@ -916,7 +916,7 @@ metrics:
     containerPorts:
       metrics: 10445
     ## Prometheus JMX Exporter' resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param metrics.jmx.resources.limits The resources limits for the init container
     ## @param metrics.jmx.resources.requests The requested resources for the init container
     ##

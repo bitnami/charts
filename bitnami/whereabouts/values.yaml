@@ -77,11 +77,11 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/whereabouts
-  tag: 0.6.3-debian-11-r0
+  tag: 0.6.3-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -197,11 +197,11 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## Whereabouts container's resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resources.requests [object] The requested resources for the init container
 ## @param resources.limits The resources limits for the init container
 ##

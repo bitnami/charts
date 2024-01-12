@@ -89,7 +89,7 @@ kustomizeController:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -166,7 +166,7 @@ kustomizeController:
   ##
   customStartupProbe: {}
   ## Kustomize Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param kustomizeController.resources.limits The resources limits for the Kustomize Controller containers
   ## @param kustomizeController.resources.requests The requested resources for the Kustomize Controller containers
   ##
@@ -277,7 +277,7 @@ kustomizeController:
   ##
   affinity: {}
   ## @param kustomizeController.nodeSelector Node labels for Kustomize Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param kustomizeController.tolerations Tolerations for Kustomize Controller pods assignment
@@ -446,7 +446,7 @@ kustomizeController:
       extraPorts: []
       ## @param kustomizeController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param kustomizeController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -527,7 +527,7 @@ helmController:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -604,7 +604,7 @@ helmController:
   ##
   customStartupProbe: {}
   ## Helm Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param helmController.resources.limits The resources limits for the Helm Controller containers
   ## @param helmController.resources.requests The requested resources for the Helm Controller containers
   ##
@@ -715,7 +715,7 @@ helmController:
   ##
   affinity: {}
   ## @param helmController.nodeSelector Node labels for Helm Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param helmController.tolerations Tolerations for Helm Controller pods assignment
@@ -884,7 +884,7 @@ helmController:
       extraPorts: []
       ## @param helmController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param helmController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -965,7 +965,7 @@ sourceController:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1044,7 +1044,7 @@ sourceController:
   ##
   customStartupProbe: {}
   ## Source Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param sourceController.resources.limits The resources limits for the Source Controller containers
   ## @param sourceController.resources.requests The requested resources for the Source Controller containers
   ##
@@ -1155,7 +1155,7 @@ sourceController:
   ##
   affinity: {}
   ## @param sourceController.nodeSelector Node labels for Source Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param sourceController.tolerations Tolerations for Source Controller pods assignment
@@ -1276,7 +1276,7 @@ sourceController:
     extraPorts: []
     ## @param sourceController.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param sourceController.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1346,7 +1346,7 @@ sourceController:
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
   ## @section Source Conttroller Persistence Parameters
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param sourceController.persistence.enabled Enable persistence using Persistent Volume Claims
@@ -1482,7 +1482,7 @@ sourceController:
       extraPorts: []
       ## @param sourceController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param sourceController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1563,7 +1563,7 @@ notificationController:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1640,7 +1640,7 @@ notificationController:
   ##
   customStartupProbe: {}
   ## Notification Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param notificationController.resources.limits The resources limits for the Notification Controller containers
   ## @param notificationController.resources.requests The requested resources for the Notification Controller containers
   ##
@@ -1751,7 +1751,7 @@ notificationController:
   ##
   affinity: {}
   ## @param notificationController.nodeSelector Node labels for Notification Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param notificationController.tolerations Tolerations for Notification Controller pods assignment
@@ -1920,7 +1920,7 @@ notificationController:
       extraPorts: []
       ## @param notificationController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param notificationController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -2001,7 +2001,7 @@ imageAutomationController:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2078,7 +2078,7 @@ imageAutomationController:
   ##
   customStartupProbe: {}
   ## Image Automation Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param imageAutomationController.resources.limits The resources limits for the Image Automation Controller containers
   ## @param imageAutomationController.resources.requests The requested resources for the Image Automation Controller containers
   ##
@@ -2189,7 +2189,7 @@ imageAutomationController:
   ##
   affinity: {}
   ## @param imageAutomationController.nodeSelector Node labels for Image Automation Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param imageAutomationController.tolerations Tolerations for Image Automation Controller pods assignment
@@ -2358,7 +2358,7 @@ imageAutomationController:
       extraPorts: []
       ## @param imageAutomationController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param imageAutomationController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -2439,7 +2439,7 @@ imageReflectorController:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2516,7 +2516,7 @@ imageReflectorController:
   ##
   customStartupProbe: {}
   ## Image Reflector Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param imageReflectorController.resources.limits The resources limits for the Image Reflector Controller containers
   ## @param imageReflectorController.resources.requests The requested resources for the Image Reflector Controller containers
   ##
@@ -2627,7 +2627,7 @@ imageReflectorController:
   ##
   affinity: {}
   ## @param imageReflectorController.nodeSelector Node labels for Image Reflector Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param imageReflectorController.tolerations Tolerations for Image Reflector Controller pods assignment
@@ -2703,7 +2703,7 @@ imageReflectorController:
   initContainers: []
 
   ## @section Image Reflector Conttroller Persistence Parameters
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param imageReflectorController.persistence.enabled Enable persistence using Persistent Volume Claims
@@ -2839,7 +2839,7 @@ imageReflectorController:
       extraPorts: []
       ## @param imageReflectorController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param imageReflectorController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -2926,7 +2926,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##

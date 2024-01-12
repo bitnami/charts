@@ -72,7 +72,7 @@ server:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -146,7 +146,7 @@ server:
   ##
   customStartupProbe: {}
   ## server resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param server.resources.limits The resources limits for the server containers
   ## @param server.resources.requests The requested resources for the server containers
   ##
@@ -350,7 +350,7 @@ server:
   ##
   affinity: {}
   ## @param server.nodeSelector Node labels for server pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param server.tolerations Tolerations for server pods assignment
@@ -491,7 +491,7 @@ controller:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -562,7 +562,7 @@ controller:
   ##
   customStartupProbe: {}
   ## controller resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param controller.resources.limits The resources limits for the controller containers
   ## @param controller.resources.requests The requested resources for the controller containers
   ##
@@ -626,7 +626,7 @@ controller:
   ##
   ## @param controller.persistence.archive.enabled Save completed workflows to an SQL database.
   persistence:
-    archive:  
+    archive:
       enabled: false
 
   ## Controller configmap configuration content. Requires controller.existingConfigmap to be empty.
@@ -837,7 +837,7 @@ controller:
   ##
   affinity: {}
   ## @param controller.nodeSelector Node labels for controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param controller.tolerations Tolerations for controller pods assignment
@@ -980,7 +980,7 @@ executor:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -992,7 +992,7 @@ executor:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param executor.resources.limits The resources limits for the init container
   ## @param executor.resources.requests The requested resources for the init container
   ##
@@ -1033,7 +1033,7 @@ executor:
 ##
 
 ## Server ingress parameters
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for server
@@ -1059,7 +1059,7 @@ ingress:
   ingressClassName: ""
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
   ## Use this parameter to set the required annotations for cert-manager, see
   ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##

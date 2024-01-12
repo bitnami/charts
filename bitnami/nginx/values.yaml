@@ -74,11 +74,11 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.25.3-debian-11-r3
+  tag: 1.25.3-debian-11-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -178,7 +178,7 @@ hostNetwork: false
 ##
 hostIPC: false
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template.
@@ -254,7 +254,7 @@ containerPorts:
 ##
 extraContainerPorts: []
 ## NGINX containers' resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -444,7 +444,7 @@ cloneStaticSiteFromGit:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -483,7 +483,7 @@ cloneStaticSiteFromGit:
     ##
     args: []
     ## git-repo-syncer resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param cloneStaticSiteFromGit.gitSync.resources.limits The resources limits for the git-repo-syncer container
     ## @param cloneStaticSiteFromGit.gitSync.resources.requests The requested resources for the git-repo-syncer container
     ##
@@ -610,7 +610,7 @@ service:
   externalTrafficPolicy: Cluster
 ## Configure the ingress resource that allows you to access the
 ## Nginx installation. Set up the URL
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
@@ -633,7 +633,7 @@ ingress:
   path: /
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
   ## Use this parameter to set the required annotations for cert-manager, see
   ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
@@ -717,7 +717,7 @@ healthIngress:
   path: /
   ## @param healthIngress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
   ## Use this parameter to set the required annotations for cert-manager, see
   ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
@@ -804,7 +804,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nginx-exporter
-    tag: 1.0.0-debian-11-r0
+    tag: 1.1.0-debian-11-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -854,7 +854,7 @@ metrics:
       prometheus.io/scrape: "true"
       prometheus.io/port: "{{ .Values.metrics.service.port }}"
   ## NGINX Prometheus exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following

@@ -69,11 +69,11 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/jaeger
-  tag: 1.52.0-debian-11-r0
+  tag: 1.53.0-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -170,7 +170,7 @@ query:
   ##
   customReadinessProbe: {}
   ## Jaeger pods' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## Minimum memory for development is 4GB and 2 CPU cores
   ## Minimum memory for production is 8GB and 4 CPU cores
   ## ref: http://docs.datastax.com/en/archived/jaeger/2.0/jaeger/architecture/architecturePlanningHardware_c.html
@@ -364,7 +364,7 @@ query:
   ##
   affinity: {}
   ## @param query.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param query.tolerations Tolerations for pod assignment
@@ -479,7 +479,7 @@ collector:
   ##
   customReadinessProbe: {}
   ## Jaeger pods' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## Minimum memory for development is 4GB and 2 CPU cores
   ## Minimum memory for production is 8GB and 4 CPU cores
   ## ref: http://docs.datastax.com/en/archived/jaeger/2.0/jaeger/architecture/architecturePlanningHardware_c.html
@@ -718,7 +718,7 @@ collector:
   ##
   affinity: {}
   ## @param collector.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param collector.tolerations Tolerations for pod assignment
@@ -833,7 +833,7 @@ agent:
   ##
   customReadinessProbe: {}
   ## Jaeger pods' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## Minimum memory for development is 4GB and 2 CPU cores
   ## Minimum memory for production is 8GB and 4 CPU cores
   ## ref: http://docs.datastax.com/en/archived/jaeger/2.0/jaeger/architecture/architecturePlanningHardware_c.html
@@ -1054,7 +1054,7 @@ agent:
   ##
   affinity: {}
   ## @param agent.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param agent.tolerations Tolerations for pod assignment
@@ -1146,7 +1146,7 @@ migration:
   ##
   extraVolumeMounts: []
   ## Jaeger pods' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## Minimum memory for development is 4GB and 2 CPU cores
   ## Minimum memory for production is 8GB and 4 CPU cores
   ## ref: http://docs.datastax.com/en/archived/jaeger/2.0/jaeger/architecture/architecturePlanningHardware_c.html
@@ -1187,11 +1187,11 @@ migration:
 cqlshImage:
   registry: docker.io
   repository: bitnami/cassandra
-  tag: 4.0.11-debian-11-r84
+  tag: 4.0.11-debian-11-r87
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

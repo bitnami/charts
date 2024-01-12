@@ -67,11 +67,11 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.70.0-debian-11-r3
+    tag: 0.70.0-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -309,7 +309,7 @@ operator:
     ##
     sampleLimit: ""
   ## @param operator.resources Configure resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## @param operator.podAffinityPreset Pod affinity preset
@@ -345,7 +345,7 @@ operator:
   ##
   affinity: {}
   ## @param operator.nodeSelector Prometheus Operator Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param operator.tolerations Prometheus Operator Tolerations for pod assignment
@@ -534,7 +534,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.48.1-debian-11-r0
+    tag: 2.48.1-debian-11-r1
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -692,7 +692,7 @@ prometheus:
 
   ## Configure the ingress resource that allows you to access the
   ## Prometheus installation. Set up the URL
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param prometheus.ingress.enabled Enable ingress controller resource
@@ -712,7 +712,7 @@ prometheus:
     path: /
     ## @param prometheus.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -797,7 +797,7 @@ prometheus:
   ##
   externalUrl: ""
   ## @param prometheus.resources CPU/Memory resource requests/limits for node
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## @param prometheus.podAffinityPreset Prometheus Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
@@ -833,7 +833,7 @@ prometheus:
   ##
   affinity: {}
   ## @param prometheus.nodeSelector Prometheus Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param prometheus.topologySpreadConstraints Prometheus Topology Spread Constraints for pod assignment
@@ -1216,10 +1216,10 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.33.0-debian-11-r0
+      tag: 0.33.0-debian-11-r1
       digest: ""
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -1279,7 +1279,7 @@ prometheus:
     ##
     extraVolumeMounts: []
     ## Thanos sidecar container resource requests and limits.
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1403,7 +1403,7 @@ prometheus:
       sessionAffinityConfig: {}
     ## Configure the ingress resource that allows you to access the
     ## Thanos Sidecar installation. Set up the URL
-    ## ref: https://kubernetes.io/docs/user-guide/ingress/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
     ##
     ingress:
       ## @param prometheus.thanos.ingress.enabled Enable ingress controller resource
@@ -1424,7 +1424,7 @@ prometheus:
       path: /
       ## @param prometheus.thanos.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
       ## For a full list of possible ingress annotations, please see
-      ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+      ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
       ## Use this parameter to set the required annotations for cert-manager, see
       ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
       ##
@@ -1803,7 +1803,7 @@ alertmanager:
     sampleLimit: ""
   ## Configure the ingress resource that allows you to access the
   ## Alertmanager installation. Set up the URL
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param alertmanager.ingress.enabled Enable ingress controller resource
@@ -1823,7 +1823,7 @@ alertmanager:
     path: /
     ## @param alertmanager.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -1905,7 +1905,7 @@ alertmanager:
   ##
   externalUrl: ""
   ## @param alertmanager.resources CPU/Memory resource requests/limits for node
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## @param alertmanager.podAffinityPreset Alertmanager Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
@@ -1941,7 +1941,7 @@ alertmanager:
   ##
   affinity: {}
   ## @param alertmanager.nodeSelector Alertmanager Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param alertmanager.tolerations Alertmanager Tolerations for pod assignment
@@ -2230,7 +2230,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.24.0-debian-11-r142
+    tag: 0.24.0-debian-11-r143
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2385,7 +2385,7 @@ blackboxExporter:
     annotations: {}
 
   ## Blackbox Exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param blackboxExporter.resources.limits The resources limits for the blackboxExporter containers
   ## @param blackboxExporter.resources.requests The requested resources for the blackboxExporter containers
   ##
@@ -2468,7 +2468,7 @@ blackboxExporter:
   ##
   affinity: {}
   ## @param blackboxExporter.nodeSelector Node labels for Blackbox Exporter pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param blackboxExporter.tolerations Tolerations for Blackbox Exporter pods assignment
@@ -2544,7 +2544,7 @@ blackboxExporter:
       http: ""
     ## @param blackboxExporter.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param blackboxExporter.service.sessionAffinityConfig Additional settings for the sessionAffinity

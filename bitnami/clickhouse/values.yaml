@@ -83,7 +83,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -187,7 +187,7 @@ customReadinessProbe: {}
 ##
 customStartupProbe: {}
 ## ClickHouse resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resources.limits The resources limits for the ClickHouse containers
 ## @param resources.requests The requested resources for the ClickHouse containers
 ##
@@ -493,7 +493,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector Node labels for ClickHouse pods assignment
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations Tolerations for ClickHouse pods assignment
@@ -687,7 +687,7 @@ service:
   extraPorts: []
   ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
-  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   ##
   sessionAffinity: None
   ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -802,7 +802,7 @@ externalAccess:
     extraPorts: []
 
 ## ClickHouse ingress parameters
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for ClickHouse
@@ -910,7 +910,7 @@ ingress:
 ##
 
 ## Enable persistence using Persistent Volume Claims
-## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable persistence using Persistent Volume Claims
@@ -984,7 +984,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##

@@ -98,7 +98,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -266,7 +266,7 @@ master:
   ##
   customReadinessProbe: {}
   ## Redis&reg; master resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param master.resources.limits The resources limits for the Redis&reg; master containers
   ## @param master.resources.requests The requested resources for the Redis&reg; master containers
   ##
@@ -372,7 +372,7 @@ master:
   ##
   affinity: {}
   ## @param master.nodeSelector Node labels for Redis&reg; master pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param master.tolerations Tolerations for Redis&reg; master pods assignment
@@ -435,7 +435,7 @@ master:
   ##
   initContainers: []
   ## Persistence parameters
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param master.persistence.enabled Enable persistence on Redis&reg; master nodes using Persistent Volume Claims
@@ -709,7 +709,7 @@ replica:
   ##
   customReadinessProbe: {}
   ## Redis&reg; replicas resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param replica.resources.limits The resources limits for the Redis&reg; replicas containers
   ## @param replica.resources.requests The requested resources for the Redis&reg; replicas containers
   ##
@@ -823,7 +823,7 @@ replica:
   ##
   affinity: {}
   ## @param replica.nodeSelector Node labels for Redis&reg; replicas pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param replica.tolerations Tolerations for Redis&reg; replicas pods assignment
@@ -886,7 +886,7 @@ replica:
   ##
   initContainers: []
   ## Persistence Parameters
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param replica.persistence.enabled Enable persistence on Redis&reg; replicas nodes using Persistent Volume Claims
@@ -1075,7 +1075,7 @@ sentinel:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1213,7 +1213,7 @@ sentinel:
   ##
   customReadinessProbe: {}
   ## Persistence parameters
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param sentinel.persistence.enabled Enable persistence on Redis&reg; sentinel nodes using Persistent Volume Claims (Experimental)
@@ -1265,7 +1265,7 @@ sentinel:
     whenScaled: Retain
     whenDeleted: Retain
   ## Redis&reg; Sentinel resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param sentinel.resources.limits The resources limits for the Redis&reg; Sentinel containers
   ## @param sentinel.resources.requests The requested resources for the Redis&reg; Sentinel containers
   ##
@@ -1666,7 +1666,7 @@ metrics:
   ##
   extraVolumeMounts: []
   ## Redis&reg; exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param metrics.resources.limits The resources limits for the Redis&reg; exporter container
   ## @param metrics.resources.requests The requested resources for the Redis&reg; exporter container
   ##
@@ -1882,7 +1882,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -1936,7 +1936,7 @@ sysctl:
   ##
   mountHostSys: false
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param sysctl.resources.limits The resources limits for the init container
   ## @param sysctl.resources.requests The requested resources for the init container
   ##

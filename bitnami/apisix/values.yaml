@@ -80,7 +80,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -175,7 +175,7 @@ dataPlane:
   ##
   customStartupProbe: {}
   ## APISIX resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dataPlane.resources.limits The resources limits for the APISIX containers
   ## @param dataPlane.resources.requests The requested resources for the APISIX containers
   ##
@@ -405,7 +405,7 @@ dataPlane:
   ##
   affinity: {}
   ## @param dataPlane.nodeSelector Node labels for APISIX pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dataPlane.tolerations Tolerations for APISIX pods assignment
@@ -532,7 +532,7 @@ dataPlane:
     extraPorts: []
     ## @param dataPlane.service.sessionAffinity Control where web requests go, to the same pod or round-robin
     ## Values: WebIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param dataPlane.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -542,7 +542,7 @@ dataPlane:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param dataPlane.ingress.enabled Enable ingress record generation for Apisix
@@ -869,7 +869,7 @@ controlPlane:
   ##
   customStartupProbe: {}
   ## APISIX resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param controlPlane.resources.limits The resources limits for the APISIX containers
   ## @param controlPlane.resources.requests The requested resources for the APISIX containers
   ##
@@ -1126,7 +1126,7 @@ controlPlane:
   ##
   affinity: {}
   ## @param controlPlane.nodeSelector Node labels for APISIX pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param controlPlane.tolerations Tolerations for APISIX pods assignment
@@ -1253,7 +1253,7 @@ controlPlane:
     extraPorts: []
     ## @param controlPlane.service.sessionAffinity Control where web requests go, to the same pod or round-robin
     ## Values: WebIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param controlPlane.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1263,7 +1263,7 @@ controlPlane:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param controlPlane.ingress.enabled Enable ingress record generation for Apisix
@@ -1536,7 +1536,7 @@ dashboard:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1775,7 +1775,7 @@ dashboard:
   ##
   affinity: {}
   ## @param dashboard.nodeSelector Node labels for APISIX Dashboard pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dashboard.tolerations Tolerations for APISIX Dashboard pods assignment
@@ -1909,7 +1909,7 @@ dashboard:
   ##
   customStartupProbe: {}
   ## Dashboard resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dashboard.resources.limits The resources limits for the Dashboard container
   ## @param dashboard.resources.requests The requested resources for the Dashboard container
   ##
@@ -2015,7 +2015,7 @@ dashboard:
     extraPorts: []
     ## @param dashboard.service.sessionAffinity Control where web requests go, to the same pod or round-robin
     ## Values: WebIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param dashboard.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -2025,7 +2025,7 @@ dashboard:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param dashboard.ingress.enabled Enable ingress record generation for Apisix
@@ -2216,7 +2216,7 @@ ingressController:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2293,7 +2293,7 @@ ingressController:
   ##
   customStartupProbe: {}
   ## APISIX Ingress Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param ingressController.resources.limits The resources limits for the APISIX Ingress Controller containers
   ## @param ingressController.resources.requests The requested resources for the APISIX Ingress Controller containers
   ##
@@ -2391,7 +2391,7 @@ ingressController:
   ##
   affinity: {}
   ## @param ingressController.nodeSelector Node labels for APISIX Ingress Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param ingressController.tolerations Tolerations for APISIX Ingress Controller pods assignment
@@ -2587,7 +2587,7 @@ ingressController:
     extraPorts: []
     ## @param ingressController.service.sessionAffinity Control where web requests go, to the same pod or round-robin
     ## Values: WebIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param ingressController.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -2597,7 +2597,7 @@ ingressController:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param ingressController.ingress.enabled Enable ingress record generation for Apisix

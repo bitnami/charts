@@ -80,7 +80,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -304,7 +304,7 @@ web:
   ##
   customStartupProbe: {}
   ## Mastodon web resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param web.resources.limits The resources limits for the Mastodon web containers
   ## @param web.resources.requests The requested resources for the Mastodon web containers
   ##
@@ -391,7 +391,7 @@ web:
   ##
   affinity: {}
   ## @param web.nodeSelector Node labels for Mastodon web pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param web.tolerations Tolerations for Mastodon web pods assignment
@@ -510,7 +510,7 @@ web:
     extraPorts: []
     ## @param web.service.sessionAffinity Control where web requests go, to the same pod or round-robin
     ## Values: WebIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param web.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -582,7 +582,7 @@ sidekiq:
   ##
   customStartupProbe: {}
   ## Mastodon sidekiq resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param sidekiq.resources.limits The resources limits for the Mastodon sidekiq containers
   ## @param sidekiq.resources.requests The requested resources for the Mastodon sidekiq containers
   ##
@@ -669,7 +669,7 @@ sidekiq:
   ##
   affinity: {}
   ## @param sidekiq.nodeSelector Node labels for Mastodon sidekiq pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param sidekiq.tolerations Tolerations for Mastodon sidekiq pods assignment
@@ -810,7 +810,7 @@ streaming:
   ##
   customStartupProbe: {}
   ## Mastodon streaming resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param streaming.resources.limits The resources limits for the Mastodon streaming containers
   ## @param streaming.resources.requests The requested resources for the Mastodon streaming containers
   ##
@@ -897,7 +897,7 @@ streaming:
   ##
   affinity: {}
   ## @param streaming.nodeSelector Node labels for Mastodon streaming pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param streaming.tolerations Tolerations for Mastodon streaming pods assignment
@@ -1016,7 +1016,7 @@ streaming:
     extraPorts: []
     ## @param streaming.service.sessionAffinity Control where streaming requests go, to the same pod or round-robin
     ## Values: StreamingIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param streaming.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1063,7 +1063,7 @@ tootctlMediaManagement:
   successfulJobsHistoryLimit: 3
   ## @param tootctlMediaManagement.concurrencyPolicy Concurrency Policy.  Should be Allow, Forbid or Replace
   concurrencyPolicy: Allow
-  
+
 ## @section Mastodon Migration job Parameters
 ##
 
@@ -1134,7 +1134,7 @@ initJob:
   ##
   extraVolumeMounts: []
   ## Container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param initJob.resources.limits The resources limits for the container
   ## @param initJob.resources.requests The requested resources for the container
   ##
@@ -1164,7 +1164,7 @@ initJob:
 
 ## @section Persistence Parameters (only when S3 is disabled)
 ## Enable persistence using Persistent Volume Claims
-## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable persistence using Persistent Volume Claims
@@ -1241,7 +1241,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##

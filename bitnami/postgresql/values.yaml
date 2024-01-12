@@ -102,7 +102,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -438,7 +438,7 @@ primary:
   ##
   lifecycleHooks: {}
   ## PostgreSQL Primary resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param primary.resources.limits The resources limits for the PostgreSQL Primary containers
   ## @param primary.resources.requests.memory The requested memory for the PostgreSQL Primary containers
   ## @param primary.resources.requests.cpu The requested cpu for the PostgreSQL Primary containers
@@ -533,7 +533,7 @@ primary:
   ##
   affinity: {}
   ## @param primary.nodeSelector Node labels for PostgreSQL primary pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param primary.tolerations Tolerations for PostgreSQL primary pods assignment
@@ -802,7 +802,7 @@ readReplicas:
   ##
   lifecycleHooks: {}
   ## PostgreSQL read only resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param readReplicas.resources.limits The resources limits for the PostgreSQL read only containers
   ## @param readReplicas.resources.requests.memory The requested memory for the PostgreSQL read only containers
   ## @param readReplicas.resources.requests.cpu The requested cpu for the PostgreSQL read only containers
@@ -897,7 +897,7 @@ readReplicas:
   ##
   affinity: {}
   ## @param readReplicas.nodeSelector Node labels for PostgreSQL read only pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param readReplicas.tolerations Tolerations for PostgreSQL read only pods assignment
@@ -1140,7 +1140,7 @@ backup:
     ## @param backup.cronjob.annotations Set the cronjob annotations
     annotations: {}
     ## @param backup.cronjob.nodeSelector Node labels for PostgreSQL backup CronJob pod assignment
-    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/
     ##
     nodeSelector: {}
     storage:
@@ -1312,7 +1312,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
   ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
   ##
@@ -1401,7 +1401,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.15.0-debian-11-r4
+    tag: 0.15.0-debian-11-r5
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1520,7 +1520,7 @@ metrics:
   containerPorts:
     metrics: 9187
   ## PostgreSQL Prometheus exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param metrics.resources.limits The resources limits for the PostgreSQL Prometheus exporter container
   ## @param metrics.resources.requests The requested resources for the PostgreSQL Prometheus exporter container
   ##
@@ -1540,7 +1540,7 @@ metrics:
     clusterIP: ""
     ## @param metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param metrics.service.annotations [object] Annotations for Prometheus to auto-discover the metrics endpoint
