@@ -154,6 +154,22 @@ jwt:
     ## @param jwt.autoGenerate.extraVolumes Optionally specify extra list of additional volumes for the jwt init job
     ##
     extraVolumes: []
+    ## ServiceAccount configuration
+    ##
+    serviceAccount:
+      ## @param jwt.autoGenerate.serviceAccount.create Specifies whether a ServiceAccount should be created
+      ##
+      create: true
+      ## @param jwt.autoGenerate.serviceAccount.name The name of the ServiceAccount to use.
+      ## If not set and create is true, a name is generated using the common.names.fullname template
+      ##
+      name: ""
+      ## @param jwt.autoGenerate.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+      ##
+      annotations: {}
+      ## @param jwt.autoGenerate.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+      ##
+      automountServiceAccountToken: true
 
     ## Configure Container Security Context
     ## @param jwt.autoGenerate.containerSecurityContext.enabled Enabled jwt init job containers' Security Context
@@ -2533,7 +2549,7 @@ serviceAccount:
   annotations: {}
   ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
 
 ## @section Kong sub-chart parameters
 ##
