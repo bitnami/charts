@@ -111,7 +111,7 @@ jwt:
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -138,7 +138,7 @@ jwt:
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -154,6 +154,22 @@ jwt:
     ## @param jwt.autoGenerate.extraVolumes Optionally specify extra list of additional volumes for the jwt init job
     ##
     extraVolumes: []
+    ## ServiceAccount configuration
+    ##
+    serviceAccount:
+      ## @param jwt.autoGenerate.serviceAccount.create Specifies whether a ServiceAccount should be created
+      ##
+      create: true
+      ## @param jwt.autoGenerate.serviceAccount.name The name of the ServiceAccount to use.
+      ## If not set and create is true, a name is generated using the common.names.fullname template
+      ##
+      name: ""
+      ## @param jwt.autoGenerate.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+      ##
+      annotations: {}
+      ## @param jwt.autoGenerate.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+      ##
+      automountServiceAccountToken: true
 
     ## Configure Container Security Context
     ## @param jwt.autoGenerate.containerSecurityContext.enabled Enabled jwt init job containers' Security Context
@@ -201,7 +217,7 @@ jwt:
     ##
     extraVolumeMounts: []
     ## Container resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param jwt.autoGenerate.resources.limits The resources limits for the container
     ## @param jwt.autoGenerate.resources.requests The requested resources for the container
     ##
@@ -301,7 +317,7 @@ auth:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -371,7 +387,7 @@ auth:
   ##
   customStartupProbe: {}
   ## Supabase auth resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param auth.resources.limits The resources limits for the Supabase auth containers
   ## @param auth.resources.requests The requested resources for the Supabase auth containers
   ##
@@ -458,7 +474,7 @@ auth:
   ##
   affinity: {}
   ## @param auth.nodeSelector Node labels for Supabase auth pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param auth.tolerations Tolerations for Supabase auth pods assignment
@@ -577,7 +593,7 @@ auth:
     extraPorts: []
     ## @param auth.service.sessionAffinity Control where auth requests go, to the same pod or round-robin
     ## Values: AuthIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param auth.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -635,7 +651,7 @@ meta:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -705,7 +721,7 @@ meta:
   ##
   customStartupProbe: {}
   ## Supabase Postgres Meta resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param meta.resources.limits The resources limits for the Supabase Postgres Meta containers
   ## @param meta.resources.requests The requested resources for the Supabase Postgres Meta containers
   ##
@@ -792,7 +808,7 @@ meta:
   ##
   affinity: {}
   ## @param meta.nodeSelector Node labels for Supabase Postgres Meta pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param meta.tolerations Tolerations for Supabase Postgres Meta pods assignment
@@ -911,7 +927,7 @@ meta:
     extraPorts: []
     ## @param meta.service.sessionAffinity Control where meta requests go, to the same pod or round-robin
     ## Values: MetaIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param meta.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -988,7 +1004,7 @@ realtime:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1058,7 +1074,7 @@ realtime:
   ##
   customStartupProbe: {}
   ## Supabase realtime resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param realtime.resources.limits The resources limits for the Supabase realtime containers
   ## @param realtime.resources.requests The requested resources for the Supabase realtime containers
   ##
@@ -1145,7 +1161,7 @@ realtime:
   ##
   affinity: {}
   ## @param realtime.nodeSelector Node labels for Supabase realtime pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param realtime.tolerations Tolerations for Supabase realtime pods assignment
@@ -1264,7 +1280,7 @@ realtime:
     extraPorts: []
     ## @param realtime.service.sessionAffinity Control where realtime requests go, to the same pod or round-robin
     ## Values: RealtimeIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param realtime.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1320,7 +1336,7 @@ rest:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1390,7 +1406,7 @@ rest:
   ##
   customStartupProbe: {}
   ## Supabase rest resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param rest.resources.limits The resources limits for the Supabase rest containers
   ## @param rest.resources.requests The requested resources for the Supabase rest containers
   ##
@@ -1477,7 +1493,7 @@ rest:
   ##
   affinity: {}
   ## @param rest.nodeSelector Node labels for Supabase rest pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param rest.tolerations Tolerations for Supabase rest pods assignment
@@ -1596,7 +1612,7 @@ rest:
     extraPorts: []
     ## @param rest.service.sessionAffinity Control where rest requests go, to the same pod or round-robin
     ## Values: RestIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param rest.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1657,7 +1673,7 @@ storage:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1727,7 +1743,7 @@ storage:
   ##
   customStartupProbe: {}
   ## Supabase storage resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param storage.resources.limits The resources limits for the Supabase storage containers
   ## @param storage.resources.requests The requested resources for the Supabase storage containers
   ##
@@ -1814,7 +1830,7 @@ storage:
   ##
   affinity: {}
   ## @param storage.nodeSelector Node labels for Supabase storage pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param storage.tolerations Tolerations for Supabase storage pods assignment
@@ -1933,7 +1949,7 @@ storage:
     extraPorts: []
     ## @param storage.service.sessionAffinity Control where storage requests go, to the same pod or round-robin
     ## Values: StorageIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param storage.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1947,7 +1963,7 @@ storage:
   ##
 
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param storage.persistence.enabled Enable persistence using Persistent Volume Claims
@@ -2041,7 +2057,7 @@ studio:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2111,7 +2127,7 @@ studio:
   ##
   customStartupProbe: {}
   ## Supabase studio resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param studio.resources.limits The resources limits for the Supabase studio containers
   ## @param studio.resources.requests The requested resources for the Supabase studio containers
   ##
@@ -2198,7 +2214,7 @@ studio:
   ##
   affinity: {}
   ## @param studio.nodeSelector Node labels for Supabase studio pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param studio.tolerations Tolerations for Supabase studio pods assignment
@@ -2317,7 +2333,7 @@ studio:
     extraPorts: []
     ## @param studio.service.sessionAffinity Control where studio requests go, to the same pod or round-robin
     ## Values: StudioIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param studio.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -2327,7 +2343,7 @@ studio:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param studio.ingress.enabled Enable ingress record generation for Supabase
@@ -2461,7 +2477,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -2495,7 +2511,7 @@ psqlImage:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -2533,7 +2549,7 @@ serviceAccount:
   annotations: {}
   ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
 
 ## @section Kong sub-chart parameters
 ##
@@ -2662,7 +2678,7 @@ postgresql:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

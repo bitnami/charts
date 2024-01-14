@@ -152,7 +152,7 @@ service:
     https: ""
   ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
-  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   ##
   sessionAffinity: None
   ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -190,7 +190,7 @@ service:
 
 ingress:
   ## Configure the ingress resource that allows you to access Harbor Core
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   core:
     ## @param ingress.core.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
@@ -222,10 +222,10 @@ ingress:
     ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations:
-      ingress.kubernetes.io/ssl-redirect: 'true'
-      ingress.kubernetes.io/proxy-body-size: '0'
-      nginx.ingress.kubernetes.io/ssl-redirect: 'true'
-      nginx.ingress.kubernetes.io/proxy-body-size: '0'
+      ingress.kubernetes.io/ssl-redirect: "true"
+      ingress.kubernetes.io/proxy-body-size: "0"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-body-size: "0"
     ## @param ingress.core.tls Enable TLS configuration for the host defined at `ingress.core.hostname` parameter
     ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.core.hostname }}`
     ## You can:
@@ -316,7 +316,7 @@ persistence:
   ## Resource Policy
   ## @param persistence.resourcePolicy Setting it to `keep` to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted
   ##
-  resourcePolicy: 'keep'
+  resourcePolicy: "keep"
   persistentVolumeClaim:
     ## @param persistence.persistentVolumeClaim.registry.existingClaim Name of an existing PVC to use
     ## @param persistence.persistentVolumeClaim.registry.storageClass PVC Storage Class for Harbor Registry data volume
@@ -609,7 +609,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
   ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
   ##
@@ -647,7 +647,7 @@ nginx:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -761,7 +761,7 @@ nginx:
   ##
   customStartupProbe: {}
   ## NGINX resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param nginx.resources.limits The resources limits for the NGINX containers
   ## @param nginx.resources.requests The requested resources for the NGINX containers
   ##
@@ -778,14 +778,14 @@ nginx:
     fsGroup: 1001
   ## Configure NGINX containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param nginx.containerSecurityContext.enabled Enabled containers' Security Context
-## @param nginx.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-## @param nginx.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
-## @param nginx.containerSecurityContext.privileged Set container's Security Context privileged
-## @param nginx.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
-## @param nginx.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
-## @param nginx.containerSecurityContext.capabilities.drop List of capabilities to be dropped
-## @param nginx.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ## @param nginx.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param nginx.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param nginx.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param nginx.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param nginx.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param nginx.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param nginx.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param nginx.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -853,7 +853,7 @@ nginx:
   ##
   affinity: {}
   ## @param nginx.nodeSelector NGINX Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param nginx.tolerations NGINX Tolerations for pod assignment
@@ -922,7 +922,7 @@ portal:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1022,7 +1022,7 @@ portal:
   ##
   customStartupProbe: {}
   ## Harbor Portal resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param portal.resources.limits The resources limits for the Harbor Portal containers
   ## @param portal.resources.requests The requested resources for the Harbor Portal containers
   ##
@@ -1113,7 +1113,7 @@ portal:
   ##
   affinity: {}
   ## @param portal.nodeSelector Harbor Portal Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param portal.tolerations Harbor Portal Tolerations for pod assignment
@@ -1194,7 +1194,7 @@ core:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1353,7 +1353,7 @@ core:
   ##
   customStartupProbe: {}
   ## Harbor Core resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param core.resources.limits The resources limits for the Harbor Core containers
   ## @param core.resources.requests The requested resources for the Harbor Core containers
   ##
@@ -1444,7 +1444,7 @@ core:
   ##
   affinity: {}
   ## @param core.nodeSelector Harbor Core Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param core.tolerations Harbor Core Tolerations for pod assignment
@@ -1527,7 +1527,7 @@ jobservice:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1648,7 +1648,7 @@ jobservice:
   ##
   customStartupProbe: {}
   ## Harbor Jobservice resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param jobservice.resources.limits The resources limits for the Harbor Jobservice containers
   ## @param jobservice.resources.requests The requested resources for the Harbor Jobservice containers
   ##
@@ -1739,7 +1739,7 @@ jobservice:
   ##
   affinity: {}
   ## @param jobservice.nodeSelector Harbor Jobservice Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param jobservice.tolerations Harbor Jobservice Tolerations for pod assignment
@@ -1829,12 +1829,12 @@ registry:
   ## @param registry.credentials.htpasswd The content of htpasswd file based on the value of `registry.credentials.username` `registry.credentials.password`.  Currently `helm` does not support bcrypt in the template script, if the credential is updated you need to manually generated by calling
   ##
   credentials:
-    username: 'harbor_registry_user'
-    password: 'harbor_registry_password'
+    username: harbor_registry_user
+    password: harbor_registry_password
     ## If you update the username or password of registry, make sure use cli tool htpasswd to generate the bcrypt hash
     ## e.g. "htpasswd -nbBC10 $username $password"
     ##
-    htpasswd: 'harbor_registry_user:$2y$10$9L4Tc0DJbFFMB6RdSCunrOpTHdwhid4ktBJmLD00bYgqkkGOvll3m'
+    htpasswd: harbor_registry_user:$2y$10$9L4Tc0DJbFFMB6RdSCunrOpTHdwhid4ktBJmLD00bYgqkkGOvll3m
   middleware:
     ## @param registry.middleware.enabled Middleware is used to add support for a CDN between backend storage and `docker pull` recipient.  See
     ##
@@ -1856,7 +1856,7 @@ registry:
       ## The secret key that should be present is CLOUDFRONT_KEY_DATA, which should be the encoded private key
       ## that allows access to CloudFront
       ##
-      privateKeySecret: 'my-secret'
+      privateKeySecret: my-secret
   ## Use TLS in the container
   ##
   tls:
@@ -1927,7 +1927,7 @@ registry:
   ##
   affinity: {}
   ## @param registry.nodeSelector Harbor Registry Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param registry.tolerations Harbor Registry Tolerations for pod assignment
@@ -1994,7 +1994,7 @@ registry:
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -2087,7 +2087,7 @@ registry:
     ##
     customStartupProbe: {}
     ## Harbor Registry main resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param registry.server.resources.limits The resources limits for the Harbor Registry main containers
     ## @param registry.server.resources.requests The requested resources for the Harbor Registry main containers
     ##
@@ -2153,7 +2153,7 @@ registry:
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -2242,7 +2242,7 @@ registry:
     ##
     customStartupProbe: {}
     ## Harbor Registryctl resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param registry.controller.resources.limits The resources limits for the Harbor Registryctl containers
     ## @param registry.controller.resources.requests The requested resources for the Harbor Registryctl containers
     ##
@@ -2308,7 +2308,7 @@ trivy:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2330,10 +2330,10 @@ trivy:
   debugMode: false
   ## @param trivy.vulnType Comma-separated list of vulnerability types. Possible values `os` and `library`.
   ##
-  vulnType: 'os,library'
+  vulnType: "os,library"
   ## @param trivy.severity Comma-separated list of severities to be checked
   ##
-  severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+  severity: "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
   ## @param trivy.ignoreUnfixed The flag to display only fixed vulnerabilities
   ##
   ignoreUnfixed: false
@@ -2365,7 +2365,7 @@ trivy:
   skipUpdate: false
   ## @param trivy.cacheDir Directory to store the cache
   ##
-  cacheDir: '/bitnami/harbor-adapter-trivy/.cache'
+  cacheDir: "/bitnami/harbor-adapter-trivy/.cache"
   ## Use TLS in the container
   ##
   tls:
@@ -2452,7 +2452,7 @@ trivy:
   ##
   customStartupProbe: {}
   ## Trivy resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param trivy.resources.limits [object] The resources limits for the Trivy containers
   ## @param trivy.resources.requests [object] The requested resources for the Trivy containers
   ##
@@ -2547,7 +2547,7 @@ trivy:
   ##
   affinity: {}
   ## @param trivy.nodeSelector Trivy Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param trivy.tolerations Trivy Tolerations for pod assignment
@@ -2628,7 +2628,7 @@ exporter:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2723,7 +2723,7 @@ exporter:
   ##
   customStartupProbe: {}
   ## Harbor Exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param exporter.resources.limits The resources limits for the Harbor Exporter containers
   ## @param exporter.resources.requests The requested resources for the Harbor Exporter containers
   ##
@@ -2826,7 +2826,7 @@ exporter:
   ##
   serviceAccountName: ""
   ## @param exporter.nodeSelector Harbor Exporter Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param exporter.tolerations Harbor Exporter Tolerations for pod assignment
@@ -2965,10 +2965,10 @@ externalRedis:
   host: localhost
   port: 6379
   password: ""
-  coreDatabaseIndex: '0'
-  jobserviceDatabaseIndex: '1'
-  registryDatabaseIndex: '2'
-  trivyAdapterDatabaseIndex: '5'
+  coreDatabaseIndex: "0"
+  jobserviceDatabaseIndex: "1"
+  registryDatabaseIndex: "2"
+  trivyAdapterDatabaseIndex: "5"
   ## Redis&reg; sentinel configuration
   ## @param externalRedis.sentinel.enabled If external redis with sentinal is used, set it to `true`
   ## @param externalRedis.sentinel.masterSet Name of sentinel masterSet if sentinel is used
@@ -2976,7 +2976,7 @@ externalRedis:
   ##
   sentinel:
     enabled: false
-    masterSet: 'mymaster'
+    masterSet: "mymaster"
     hosts: ""
 
 ## @section Harbor metrics parameters

@@ -80,7 +80,7 @@ rayImage:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -114,11 +114,11 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/kuberay-operator
-    tag: 1.0.0-debian-11-r3
+    tag: 1.0.0-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -204,7 +204,7 @@ operator:
   ##
   enableBatchScheduler: false
   ## Kuberay Operator resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
   ## @param operator.resources.limits The resources limits for the Kuberay Operator containers
   ## @param operator.resources.requests The requested resources for the Kuberay Operator containers
   ##
@@ -301,7 +301,7 @@ operator:
   ##
   affinity: {}
   ## @param operator.nodeSelector Node labels for Kuberay Operator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/
   ##
   nodeSelector: {}
   ## @param operator.tolerations Tolerations for Kuberay Operator pods assignment
@@ -464,7 +464,7 @@ operator:
     extraPorts: []
     ## @param operator.service.sessionAffinity Control where web requests go, to the same pod or round-robin
     ## Values: WebIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param operator.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -474,7 +474,7 @@ operator:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param operator.ingress.enabled Enable ingress record generation for Kuberay
@@ -695,11 +695,11 @@ apiserver:
   image:
     registry: docker.io
     repository: bitnami/kuberay-apiserver
-    tag: 1.0.0-debian-11-r1
+    tag: 1.0.0-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -782,7 +782,7 @@ apiserver:
   ##
   watchNamespaces: []
   ## Kuberay API Server resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
   ## @param apiserver.resources.limits The resources limits for the Kuberay API Server containers
   ## @param apiserver.resources.requests The requested resources for the Kuberay API Server containers
   ##
@@ -879,7 +879,7 @@ apiserver:
   ##
   affinity: {}
   ## @param apiserver.nodeSelector Node labels for Kuberay API Server pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/
   ##
   nodeSelector: {}
   ## @param apiserver.tolerations Tolerations for Kuberay API Server pods assignment
@@ -1045,7 +1045,7 @@ apiserver:
     extraPorts: []
     ## @param apiserver.service.sessionAffinity Control where web requests go, to the same pod or round-robin
     ## Values: WebIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param apiserver.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1055,7 +1055,7 @@ apiserver:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param apiserver.ingress.enabled Enable ingress record generation for Kuberay
@@ -1274,7 +1274,7 @@ cluster:
     ##
     rayStartParams: {}
     ## Ray Cluster Worker (common) resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
     ## @param cluster.head.resources.limits The resources limits for the Ray Cluster Worker (common) containers
     ## @param cluster.head.resources.requests The requested resources for the Ray Cluster Worker (common) containers
     ##
@@ -1360,7 +1360,7 @@ cluster:
     ##
     affinity: {}
     ## @param cluster.head.nodeSelector Node labels for Ray Cluster Worker (common) pods assignment
-    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/
     ##
     nodeSelector: {}
     ## @param cluster.head.tolerations Tolerations for Ray Cluster Worker (common) pods assignment
@@ -1455,7 +1455,7 @@ cluster:
       ##
       customStartupProbe: {}
       ## Ray Cluster Worker (common) resource requests and limits
-      ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+      ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
       ## @param cluster.worker.common.resources.limits The resources limits for the Ray Cluster Worker (common) containers
       ## @param cluster.worker.common.resources.requests The requested resources for the Ray Cluster Worker (common) containers
       ##
@@ -1541,7 +1541,7 @@ cluster:
       ##
       affinity: {}
       ## @param cluster.worker.common.nodeSelector Node labels for Ray Cluster Worker (common) pods assignment
-      ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/
       ##
       nodeSelector: {}
       ## @param cluster.worker.common.tolerations Tolerations for Ray Cluster Worker (common) pods assignment

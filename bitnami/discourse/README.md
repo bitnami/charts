@@ -105,7 +105,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `smtp.auth`                     | SMTP authentication method                                                                                               | `""`                        |
 | `smtp.existingSecret`           | Name of an existing Kubernetes secret. The secret must have the following key configured: `smtp-password`                | `""`                        |
 | `replicaCount`                  | Number of Discourse & Sidekiq replicas                                                                                   | `1`                         |
-| `podSecurityContext.enabled`    | Enabled Discourse pods' Security Context                                                                                 | `false`                     |
+| `podSecurityContext.enabled`    | Enabled Discourse pods' Security Context                                                                                 | `true`                      |
 | `podSecurityContext.fsGroup`    | Set Discourse pod's Security Context fsGroup                                                                             | `0`                         |
 | `hostAliases`                   | Add deployment host aliases                                                                                              | `[]`                        |
 | `podAnnotations`                | Additional pod annotations                                                                                               | `{}`                        |
@@ -131,91 +131,93 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Discourse container parameters
 
-| Name                                              | Description                                                                                  | Value           |
-| ------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------------- |
-| `discourse.skipInstall`                           | Do not run the Discourse installation wizard                                                 | `false`         |
-| `discourse.plugins`                               | List of plugins to be installed before the container initialization                          | `[]`            |
-| `discourse.persistPlugins`                        | Persist plugins across container restarts                                                    | `true`          |
-| `discourse.command`                               | Custom command to override image cmd                                                         | `[]`            |
-| `discourse.args`                                  | Custom args for the custom command                                                           | `[]`            |
-| `discourse.extraEnvVars`                          | Array with extra environment variables to add Discourse pods                                 | `[]`            |
-| `discourse.extraEnvVarsCM`                        | ConfigMap containing extra environment variables for Discourse pods                          | `""`            |
-| `discourse.extraEnvVarsSecret`                    | Secret containing extra environment variables (in case of sensitive data) for Discourse pods | `""`            |
-| `discourse.containerPorts.http`                   | Discourse HTTP container port                                                                | `8080`          |
-| `discourse.livenessProbe.enabled`                 | Enable livenessProbe on Discourse containers                                                 | `true`          |
-| `discourse.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                      | `500`           |
-| `discourse.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                             | `10`            |
-| `discourse.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                            | `5`             |
-| `discourse.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                          | `6`             |
-| `discourse.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                          | `1`             |
-| `discourse.readinessProbe.enabled`                | Enable readinessProbe on Discourse containers                                                | `true`          |
-| `discourse.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                     | `180`           |
-| `discourse.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                            | `10`            |
-| `discourse.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                           | `5`             |
-| `discourse.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                         | `6`             |
-| `discourse.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                         | `1`             |
-| `discourse.startupProbe.enabled`                  | Enable startupProbe on Discourse containers                                                  | `false`         |
-| `discourse.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                       | `60`            |
-| `discourse.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                              | `10`            |
-| `discourse.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                             | `5`             |
-| `discourse.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                           | `15`            |
-| `discourse.startupProbe.successThreshold`         | Success threshold for startupProbe                                                           | `1`             |
-| `discourse.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                          | `{}`            |
-| `discourse.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                         | `{}`            |
-| `discourse.customStartupProbe`                    | Custom startupProbe that overrides the default one                                           | `{}`            |
-| `discourse.resources.limits`                      | The resources limits for the Discourse containers                                            | `{}`            |
-| `discourse.resources.requests`                    | The requested resources for the Discourse containers                                         | `{}`            |
-| `discourse.containerSecurityContext.enabled`      | Enabled Discourse containers' Security Context                                               | `false`         |
-| `discourse.containerSecurityContext.runAsUser`    | Set Discourse containers' Security Context runAsUser                                         | `0`             |
-| `discourse.containerSecurityContext.runAsNonRoot` | Set Discourse containers' Security Context runAsNonRoot                                      | `false`         |
-| `discourse.lifecycleHooks`                        | for the Discourse container(s) to automate configuration before or after startup             | `{}`            |
-| `discourse.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Discourse pods              | `[]`            |
-| `persistence.enabled`                             | Enable persistence using Persistent Volume Claims                                            | `true`          |
-| `persistence.storageClass`                        | Persistent Volume storage class                                                              | `""`            |
-| `persistence.accessModes`                         | Persistent Volume access modes                                                               | `[]`            |
-| `persistence.accessMode`                          | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)            | `ReadWriteOnce` |
-| `persistence.size`                                | Persistent Volume size                                                                       | `10Gi`          |
-| `persistence.existingClaim`                       | The name of an existing PVC to use for persistence                                           | `""`            |
-| `persistence.selector`                            | Selector to match an existing Persistent Volume for Discourse data PVC                       | `{}`            |
-| `persistence.annotations`                         | Persistent Volume Claim annotations                                                          | `{}`            |
+| Name                                                     | Description                                                                                  | Value            |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------- |
+| `discourse.skipInstall`                                  | Do not run the Discourse installation wizard                                                 | `false`          |
+| `discourse.plugins`                                      | List of plugins to be installed before the container initialization                          | `[]`             |
+| `discourse.persistPlugins`                               | Persist plugins across container restarts                                                    | `true`           |
+| `discourse.command`                                      | Custom command to override image cmd                                                         | `[]`             |
+| `discourse.args`                                         | Custom args for the custom command                                                           | `[]`             |
+| `discourse.extraEnvVars`                                 | Array with extra environment variables to add Discourse pods                                 | `[]`             |
+| `discourse.extraEnvVarsCM`                               | ConfigMap containing extra environment variables for Discourse pods                          | `""`             |
+| `discourse.extraEnvVarsSecret`                           | Secret containing extra environment variables (in case of sensitive data) for Discourse pods | `""`             |
+| `discourse.containerPorts.http`                          | Discourse HTTP container port                                                                | `8080`           |
+| `discourse.livenessProbe.enabled`                        | Enable livenessProbe on Discourse containers                                                 | `true`           |
+| `discourse.livenessProbe.initialDelaySeconds`            | Initial delay seconds for livenessProbe                                                      | `500`            |
+| `discourse.livenessProbe.periodSeconds`                  | Period seconds for livenessProbe                                                             | `10`             |
+| `discourse.livenessProbe.timeoutSeconds`                 | Timeout seconds for livenessProbe                                                            | `5`              |
+| `discourse.livenessProbe.failureThreshold`               | Failure threshold for livenessProbe                                                          | `6`              |
+| `discourse.livenessProbe.successThreshold`               | Success threshold for livenessProbe                                                          | `1`              |
+| `discourse.readinessProbe.enabled`                       | Enable readinessProbe on Discourse containers                                                | `true`           |
+| `discourse.readinessProbe.initialDelaySeconds`           | Initial delay seconds for readinessProbe                                                     | `180`            |
+| `discourse.readinessProbe.periodSeconds`                 | Period seconds for readinessProbe                                                            | `10`             |
+| `discourse.readinessProbe.timeoutSeconds`                | Timeout seconds for readinessProbe                                                           | `5`              |
+| `discourse.readinessProbe.failureThreshold`              | Failure threshold for readinessProbe                                                         | `6`              |
+| `discourse.readinessProbe.successThreshold`              | Success threshold for readinessProbe                                                         | `1`              |
+| `discourse.startupProbe.enabled`                         | Enable startupProbe on Discourse containers                                                  | `false`          |
+| `discourse.startupProbe.initialDelaySeconds`             | Initial delay seconds for startupProbe                                                       | `60`             |
+| `discourse.startupProbe.periodSeconds`                   | Period seconds for startupProbe                                                              | `10`             |
+| `discourse.startupProbe.timeoutSeconds`                  | Timeout seconds for startupProbe                                                             | `5`              |
+| `discourse.startupProbe.failureThreshold`                | Failure threshold for startupProbe                                                           | `15`             |
+| `discourse.startupProbe.successThreshold`                | Success threshold for startupProbe                                                           | `1`              |
+| `discourse.customLivenessProbe`                          | Custom livenessProbe that overrides the default one                                          | `{}`             |
+| `discourse.customReadinessProbe`                         | Custom readinessProbe that overrides the default one                                         | `{}`             |
+| `discourse.customStartupProbe`                           | Custom startupProbe that overrides the default one                                           | `{}`             |
+| `discourse.resources.limits`                             | The resources limits for the Discourse containers                                            | `{}`             |
+| `discourse.resources.requests`                           | The requested resources for the Discourse containers                                         | `{}`             |
+| `discourse.containerSecurityContext.enabled`             | Enabled Discourse containers' Security Context                                               | `true`           |
+| `discourse.containerSecurityContext.runAsUser`           | Set Discourse containers' Security Context runAsUser                                         | `0`              |
+| `discourse.containerSecurityContext.runAsNonRoot`        | Set Discourse containers' Security Context runAsNonRoot                                      | `false`          |
+| `discourse.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                             | `RuntimeDefault` |
+| `discourse.lifecycleHooks`                               | for the Discourse container(s) to automate configuration before or after startup             | `{}`             |
+| `discourse.extraVolumeMounts`                            | Optionally specify extra list of additional volumeMounts for the Discourse pods              | `[]`             |
+| `persistence.enabled`                                    | Enable persistence using Persistent Volume Claims                                            | `true`           |
+| `persistence.storageClass`                               | Persistent Volume storage class                                                              | `""`             |
+| `persistence.accessModes`                                | Persistent Volume access modes                                                               | `[]`             |
+| `persistence.accessMode`                                 | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)            | `ReadWriteOnce`  |
+| `persistence.size`                                       | Persistent Volume size                                                                       | `10Gi`           |
+| `persistence.existingClaim`                              | The name of an existing PVC to use for persistence                                           | `""`             |
+| `persistence.selector`                                   | Selector to match an existing Persistent Volume for Discourse data PVC                       | `{}`             |
+| `persistence.annotations`                                | Persistent Volume Claim annotations                                                          | `{}`             |
 
 ### Sidekiq container parameters
 
-| Name                                            | Description                                                                                | Value                                               |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------------------------------------- |
-| `sidekiq.command`                               | Custom command to override image cmd (evaluated as a template)                             | `["/opt/bitnami/scripts/discourse/entrypoint.sh"]`  |
-| `sidekiq.args`                                  | Custom args for the custom command (evaluated as a template)                               | `["/opt/bitnami/scripts/discourse-sidekiq/run.sh"]` |
-| `sidekiq.extraEnvVars`                          | Array with extra environment variables to add Sidekiq pods                                 | `[]`                                                |
-| `sidekiq.extraEnvVarsCM`                        | ConfigMap containing extra environment variables for Sidekiq pods                          | `""`                                                |
-| `sidekiq.extraEnvVarsSecret`                    | Secret containing extra environment variables (in case of sensitive data) for Sidekiq pods | `""`                                                |
-| `sidekiq.livenessProbe.enabled`                 | Enable livenessProbe on Sidekiq containers                                                 | `true`                                              |
-| `sidekiq.livenessProbe.initialDelaySeconds`     | Delay before liveness probe is initiated                                                   | `500`                                               |
-| `sidekiq.livenessProbe.periodSeconds`           | How often to perform the probe                                                             | `10`                                                |
-| `sidekiq.livenessProbe.timeoutSeconds`          | When the probe times out                                                                   | `5`                                                 |
-| `sidekiq.livenessProbe.failureThreshold`        | Minimum consecutive failures for the probe                                                 | `6`                                                 |
-| `sidekiq.livenessProbe.successThreshold`        | Minimum consecutive successes for the probe                                                | `1`                                                 |
-| `sidekiq.readinessProbe.enabled`                | Enable readinessProbe on Sidekiq containers                                                | `true`                                              |
-| `sidekiq.readinessProbe.initialDelaySeconds`    | Delay before readiness probe is initiated                                                  | `30`                                                |
-| `sidekiq.readinessProbe.periodSeconds`          | How often to perform the probe                                                             | `10`                                                |
-| `sidekiq.readinessProbe.timeoutSeconds`         | When the probe times out                                                                   | `5`                                                 |
-| `sidekiq.readinessProbe.failureThreshold`       | Minimum consecutive failures for the probe                                                 | `6`                                                 |
-| `sidekiq.readinessProbe.successThreshold`       | Minimum consecutive successes for the probe                                                | `1`                                                 |
-| `sidekiq.startupProbe.enabled`                  | Enable startupProbe on Sidekiq containers                                                  | `false`                                             |
-| `sidekiq.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                     | `60`                                                |
-| `sidekiq.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                            | `10`                                                |
-| `sidekiq.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                           | `5`                                                 |
-| `sidekiq.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                         | `15`                                                |
-| `sidekiq.startupProbe.successThreshold`         | Success threshold for startupProbe                                                         | `1`                                                 |
-| `sidekiq.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                        | `{}`                                                |
-| `sidekiq.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                       | `{}`                                                |
-| `sidekiq.customStartupProbe`                    | Custom startupProbe that overrides the default one                                         | `{}`                                                |
-| `sidekiq.resources.limits`                      | The resources limits for the Sidekiq containers                                            | `{}`                                                |
-| `sidekiq.resources.requests`                    | The requested resources for the Sidekiq containers                                         | `{}`                                                |
-| `sidekiq.containerSecurityContext.enabled`      | Enabled Sidekiq containers' Security Context                                               | `false`                                             |
-| `sidekiq.containerSecurityContext.runAsUser`    | Set Sidekiq containers' Security Context runAsUser                                         | `0`                                                 |
-| `sidekiq.containerSecurityContext.runAsNonRoot` | Set Sidekiq containers' Security Context runAsNonRoot                                      | `false`                                             |
-| `sidekiq.lifecycleHooks`                        | for the Sidekiq container(s) to automate configuration before or after startup             | `{}`                                                |
-| `sidekiq.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Sidekiq pods              | `[]`                                                |
+| Name                                                   | Description                                                                                | Value                                               |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------ | --------------------------------------------------- |
+| `sidekiq.command`                                      | Custom command to override image cmd (evaluated as a template)                             | `["/opt/bitnami/scripts/discourse/entrypoint.sh"]`  |
+| `sidekiq.args`                                         | Custom args for the custom command (evaluated as a template)                               | `["/opt/bitnami/scripts/discourse-sidekiq/run.sh"]` |
+| `sidekiq.extraEnvVars`                                 | Array with extra environment variables to add Sidekiq pods                                 | `[]`                                                |
+| `sidekiq.extraEnvVarsCM`                               | ConfigMap containing extra environment variables for Sidekiq pods                          | `""`                                                |
+| `sidekiq.extraEnvVarsSecret`                           | Secret containing extra environment variables (in case of sensitive data) for Sidekiq pods | `""`                                                |
+| `sidekiq.livenessProbe.enabled`                        | Enable livenessProbe on Sidekiq containers                                                 | `true`                                              |
+| `sidekiq.livenessProbe.initialDelaySeconds`            | Delay before liveness probe is initiated                                                   | `500`                                               |
+| `sidekiq.livenessProbe.periodSeconds`                  | How often to perform the probe                                                             | `10`                                                |
+| `sidekiq.livenessProbe.timeoutSeconds`                 | When the probe times out                                                                   | `5`                                                 |
+| `sidekiq.livenessProbe.failureThreshold`               | Minimum consecutive failures for the probe                                                 | `6`                                                 |
+| `sidekiq.livenessProbe.successThreshold`               | Minimum consecutive successes for the probe                                                | `1`                                                 |
+| `sidekiq.readinessProbe.enabled`                       | Enable readinessProbe on Sidekiq containers                                                | `true`                                              |
+| `sidekiq.readinessProbe.initialDelaySeconds`           | Delay before readiness probe is initiated                                                  | `30`                                                |
+| `sidekiq.readinessProbe.periodSeconds`                 | How often to perform the probe                                                             | `10`                                                |
+| `sidekiq.readinessProbe.timeoutSeconds`                | When the probe times out                                                                   | `5`                                                 |
+| `sidekiq.readinessProbe.failureThreshold`              | Minimum consecutive failures for the probe                                                 | `6`                                                 |
+| `sidekiq.readinessProbe.successThreshold`              | Minimum consecutive successes for the probe                                                | `1`                                                 |
+| `sidekiq.startupProbe.enabled`                         | Enable startupProbe on Sidekiq containers                                                  | `false`                                             |
+| `sidekiq.startupProbe.initialDelaySeconds`             | Initial delay seconds for startupProbe                                                     | `60`                                                |
+| `sidekiq.startupProbe.periodSeconds`                   | Period seconds for startupProbe                                                            | `10`                                                |
+| `sidekiq.startupProbe.timeoutSeconds`                  | Timeout seconds for startupProbe                                                           | `5`                                                 |
+| `sidekiq.startupProbe.failureThreshold`                | Failure threshold for startupProbe                                                         | `15`                                                |
+| `sidekiq.startupProbe.successThreshold`                | Success threshold for startupProbe                                                         | `1`                                                 |
+| `sidekiq.customLivenessProbe`                          | Custom livenessProbe that overrides the default one                                        | `{}`                                                |
+| `sidekiq.customReadinessProbe`                         | Custom readinessProbe that overrides the default one                                       | `{}`                                                |
+| `sidekiq.customStartupProbe`                           | Custom startupProbe that overrides the default one                                         | `{}`                                                |
+| `sidekiq.resources.limits`                             | The resources limits for the Sidekiq containers                                            | `{}`                                                |
+| `sidekiq.resources.requests`                           | The requested resources for the Sidekiq containers                                         | `{}`                                                |
+| `sidekiq.containerSecurityContext.enabled`             | Enabled Sidekiq containers' Security Context                                               | `true`                                              |
+| `sidekiq.containerSecurityContext.runAsUser`           | Set Sidekiq containers' Security Context runAsUser                                         | `0`                                                 |
+| `sidekiq.containerSecurityContext.runAsNonRoot`        | Set Sidekiq containers' Security Context runAsNonRoot                                      | `false`                                             |
+| `sidekiq.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                           | `RuntimeDefault`                                    |
+| `sidekiq.lifecycleHooks`                               | for the Sidekiq container(s) to automate configuration before or after startup             | `{}`                                                |
+| `sidekiq.extraVolumeMounts`                            | Optionally specify extra list of additional volumeMounts for the Sidekiq pods              | `[]`                                                |
 
 ### Traffic Exposure Parameters
 
@@ -249,17 +251,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                                   | Description                                                                                                                       | Value                      |
-| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                    |
-| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                       |
-| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`                       |
-| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                       |
-| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                        |
+| Name                                                             | Description                                                                                                                       | Value                      |
+| ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`                                      | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                    |
+| `volumePermissions.image.registry`                               | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                             | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                                 | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`                             | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                            | Init container volume-permissions image pull secrets                                                                              | `[]`                       |
+| `volumePermissions.resources.limits`                             | Init container volume-permissions resource limits                                                                                 | `{}`                       |
+| `volumePermissions.resources.requests`                           | Init container volume-permissions resource requests                                                                               | `{}`                       |
+| `volumePermissions.containerSecurityContext.runAsUser`           | User ID for the init container                                                                                                    | `0`                        |
+| `volumePermissions.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                  | `RuntimeDefault`           |
 
 ### Other Parameters
 

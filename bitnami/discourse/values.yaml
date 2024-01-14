@@ -76,7 +76,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -145,7 +145,7 @@ replicaCount: 1
 ## @param podSecurityContext.fsGroup Set Discourse pod's Security Context fsGroup
 ##
 podSecurityContext:
-  enabled: false
+  enabled: true
   fsGroup: 0
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
@@ -191,7 +191,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector Node labels for pod assignment.
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment.
@@ -341,7 +341,7 @@ discourse:
   ##
   customStartupProbe: {}
   ## Discourse resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param discourse.resources.limits The resources limits for the Discourse containers
   ## @param discourse.resources.requests The requested resources for the Discourse containers
   ##
@@ -353,11 +353,14 @@ discourse:
   ## @param discourse.containerSecurityContext.enabled Enabled Discourse containers' Security Context
   ## @param discourse.containerSecurityContext.runAsUser Set Discourse containers' Security Context runAsUser
   ## @param discourse.containerSecurityContext.runAsNonRoot Set Discourse containers' Security Context runAsNonRoot
+  ## @param discourse.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
-    enabled: false
+    enabled: true
     runAsUser: 0
     runAsNonRoot: false
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param discourse.lifecycleHooks for the Discourse container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -366,7 +369,7 @@ discourse:
   extraVolumeMounts: []
 
 ## Persistence Parameters
-## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable persistence using Persistent Volume Claims
@@ -476,7 +479,7 @@ sidekiq:
   ##
   customStartupProbe: {}
   ## Sidekiq resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param sidekiq.resources.limits The resources limits for the Sidekiq containers
   ## @param sidekiq.resources.requests The requested resources for the Sidekiq containers
   ##
@@ -488,11 +491,14 @@ sidekiq:
   ## @param sidekiq.containerSecurityContext.enabled Enabled Sidekiq containers' Security Context
   ## @param sidekiq.containerSecurityContext.runAsUser Set Sidekiq containers' Security Context runAsUser
   ## @param sidekiq.containerSecurityContext.runAsNonRoot Set Sidekiq containers' Security Context runAsNonRoot
+  ## @param sidekiq.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
-    enabled: false
+    enabled: true
     runAsUser: 0
     runAsNonRoot: false
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param sidekiq.lifecycleHooks for the Sidekiq container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -520,7 +526,7 @@ service:
     http: ""
   ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
-  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   ##
   sessionAffinity: None
   ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -557,7 +563,7 @@ service:
   extraPorts: []
 
 ## Discourse ingress parameters
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for Discourse
@@ -692,7 +698,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
   ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
   ##
@@ -703,9 +709,12 @@ volumePermissions:
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
+  ## @param volumePermissions.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     runAsUser: 0
+    seccompProfile:
+      type: "RuntimeDefault"
 
 ## @section Other Parameters
 

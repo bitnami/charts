@@ -282,12 +282,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### RBAC parameters
 
-| Name                                          | Description                                                 | Value  |
-| --------------------------------------------- | ----------------------------------------------------------- | ------ |
-| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for MinIO&reg; pods | `true` |
-| `serviceAccount.name`                         | Name of the created ServiceAccount                          | `""`   |
-| `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of the service account token   | `true` |
-| `serviceAccount.annotations`                  | Custom annotations for MinIO&reg; ServiceAccount            | `{}`   |
+| Name                                          | Description                                                 | Value   |
+| --------------------------------------------- | ----------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for MinIO&reg; pods | `true`  |
+| `serviceAccount.name`                         | Name of the created ServiceAccount                          | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of the service account token   | `false` |
+| `serviceAccount.annotations`                  | Custom annotations for MinIO&reg; ServiceAccount            | `{}`    |
 
 ### Other parameters
 

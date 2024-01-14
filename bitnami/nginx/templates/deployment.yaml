@@ -252,10 +252,19 @@ spec:
           {{- if .Values.metrics.securityContext.enabled }}
           securityContext: {{- omit .Values.metrics.securityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          command: ['/usr/bin/exporter', '-nginx.scrape-uri', 'http://127.0.0.1:{{- default .Values.containerPorts.http .Values.metrics.port }}/status']
+          command:
+            - exporter
+          args:
+            - --nginx.scrape-uri
+            - {{ printf "http://127.0.0.1:%d/status" (int (default .Values.containerPorts.http .Values.metrics.port)) | quote }}
+            - --web.listen-address
+            - {{ printf ":%d" (int .Values.metrics.containerPorts.metrics) | quote }}
+            {{- if .Values.metrics.extraArgs }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.extraArgs "context" $ ) | nindent 12 }}
+            {{- end }}
           ports:
             - name: metrics
-              containerPort: 9113
+              containerPort: {{ .Values.metrics.containerPorts.metrics }}
           livenessProbe:
             httpGet:
               path: /metrics

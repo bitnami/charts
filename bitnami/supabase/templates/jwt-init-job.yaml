@@ -27,7 +27,7 @@ spec:
       {{- end }}
     spec:
       {{- include "supabase.imagePullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ template "supabase.serviceAccountName" . }}
+      serviceAccountName: {{ template "supabase.jwt.serviceAccountName" . }}
       restartPolicy: OnFailure
       {{- if .Values.jwt.autoGenerate.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.jwt.autoGenerate.podSecurityContext "enabled" | toYaml | nindent 8 }}
