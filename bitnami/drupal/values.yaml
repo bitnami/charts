@@ -179,7 +179,7 @@ serviceAccount:
   annotations: {}
   ## @param serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
 ## @param existingSecret Name of a secret with the application password
 ##
 existingSecret: ""
