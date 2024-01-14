@@ -218,12 +218,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### RBAC parameters
 
-| Name                                          | Description                                                      | Value  |
-| --------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Schema Registry pods | `true` |
-| `serviceAccount.name`                         | Name of the created ServiceAccount to use                        | `""`   |
-| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                          | Description                                                      | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Schema Registry pods | `true`  |
+| `serviceAccount.name`                         | Name of the created ServiceAccount to use                        | `""`    |
+| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Kafka chart parameters
 
