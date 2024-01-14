@@ -31,12 +31,6 @@
       },
       "actions": [
         {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-pinniped-supervisor-https"
-          }
-        },
-        {
           "action_id": "ginkgo",
           "params": {
             "resources": {

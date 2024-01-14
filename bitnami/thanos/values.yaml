@@ -47,9 +47,9 @@ extraDeploy: []
 
 ## Bitnami Thanos image
 ## ref: https://hub.docker.com/r/bitnami/thanos/tags/
-## @param image.registry Thanos image registry
-## @param image.repository Thanos image repository
-## @param image.tag Thanos image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Thanos image registry
+## @param image.repository [default: REPOSITORY_NAME/thanos] Thanos image repository
+## @skip image.tag Thanos image tag (immutable tags are recommended)
 ## @param image.digest Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Thanos image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -57,10 +57,10 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.32.4-debian-11-r0
+  tag: 0.33.0-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -227,20 +227,28 @@ query:
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Query containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param query.containerSecurityContext.enabled Enable container security context for the Thanos Query containers
-  ## @param query.containerSecurityContext.runAsUser User ID for the service user running the Thanos Query containers
-  ## @param query.containerSecurityContext.runAsNonRoot Force the Thanos Query containers to run as a non root user
-  ## @param query.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off for Thanos Query containers
-  ## @param query.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Thanos Query containers
+  ## @param query.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param query.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param query.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param query.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param query.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param query.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param query.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param query.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    allowPrivilegeEscalation: false
+    privileged: false
     readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Thanos Query containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param query.resources.limits The resources limits for the Thanos Query container
   ## @param query.resources.requests The requested resources for the Thanos Query container
   ##
@@ -364,7 +372,7 @@ query:
   ##
   affinity: {}
   ## @param query.nodeSelector Thanos Query node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param query.tolerations Thanos Query tolerations for pod assignment
@@ -648,7 +656,7 @@ query:
     minAvailable: 1
     maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Query
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param query.ingress.enabled Enable ingress controller resource
@@ -667,7 +675,7 @@ query:
     ingressClassName: ""
     ## @param query.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -769,7 +777,7 @@ query:
       ingressClassName: ""
       ## @param query.ingress.grpc.annotations Additional annotations for the Ingress resource (GRPC). To enable certificate autogeneration, place here your cert-manager annotations.
       ## For a full list of possible ingress annotations, please see
-      ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+      ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
       ## Use this parameter to set the required annotations for cert-manager, see
       ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
       ##
@@ -902,20 +910,28 @@ queryFrontend:
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Query Frontend containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param queryFrontend.containerSecurityContext.enabled Enable container security context for the Thanos Query Frontend containers
-  ## @param queryFrontend.containerSecurityContext.runAsUser User ID for the service user running the Thanos Query Frontend containers
-  ## @param queryFrontend.containerSecurityContext.runAsNonRoot Force the Thanos Query Frontend containers to run as a non root user
-  ## @param queryFrontend.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off for Thanos Query Frontend containers
-  ## @param queryFrontend.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Thanos Query Frontend containers
+  ## @param queryFrontend.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param queryFrontend.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param queryFrontend.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param queryFrontend.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param queryFrontend.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param queryFrontend.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param queryFrontend.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param queryFrontend.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    allowPrivilegeEscalation: false
+    privileged: false
     readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Thanos Query Frontend containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param queryFrontend.resources.limits The resources limits for the Thanos Query Frontend container
   ## @param queryFrontend.resources.requests The requested resources for the Thanos Query Frontend container
   ##
@@ -1035,7 +1051,7 @@ queryFrontend:
   ##
   affinity: {}
   ## @param queryFrontend.nodeSelector Thanos Query Frontend node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param queryFrontend.tolerations Thanos Query Frontend tolerations for pod assignment
@@ -1196,7 +1212,7 @@ queryFrontend:
     minAvailable: 1
     maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Query Frontend
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param queryFrontend.ingress.enabled Enable ingress controller resource
@@ -1205,6 +1221,10 @@ queryFrontend:
     ## @param queryFrontend.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos.local
+    ## @param queryFrontend.ingress.overrideAlertQueryURL Automatically use query-frontend's ingress hostname as --alert.queryURL for both Query and Ruler.
+    ## This is used in order for the expression url on alerts/rules to be correctly rendered on UI as Frontend's hostname, instead of http://localhost:10902
+    ##
+    overrideAlertQueryURL: true
     ## @param queryFrontend.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
     ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
@@ -1212,7 +1232,7 @@ queryFrontend:
     ingressClassName: ""
     ## @param queryFrontend.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -1345,20 +1365,28 @@ bucketweb:
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Bucket Web containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param bucketweb.containerSecurityContext.enabled Enable container security context for the Thanos Bucket Web containers
-  ## @param bucketweb.containerSecurityContext.runAsUser User ID for the service user running the Thanos Bucket Web containers
-  ## @param bucketweb.containerSecurityContext.runAsNonRoot Force the Thanos Bucket Web containers to run as a non root user
-  ## @param bucketweb.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off for Thanos Bucket Web containers
-  ## @param bucketweb.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Thanos Bucket Web containers
+  ## @param bucketweb.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param bucketweb.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param bucketweb.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param bucketweb.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param bucketweb.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param bucketweb.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param bucketweb.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param bucketweb.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    allowPrivilegeEscalation: false
+    privileged: false
     readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Thanos Bucket Web containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param bucketweb.resources.limits The resources limits for the Thanos Bucket Web container
   ## @param bucketweb.resources.requests The requested resources for the Thanos Bucket Web container
   ##
@@ -1478,7 +1506,7 @@ bucketweb:
   ##
   affinity: {}
   ## @param bucketweb.nodeSelector Thanos Bucket Web node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param bucketweb.tolerations Thanos Bucket Web tolerations for pod assignment
@@ -1615,7 +1643,7 @@ bucketweb:
     minAvailable: 1
     maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Bucketweb
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param bucketweb.ingress.enabled Enable ingress controller resource
@@ -1631,7 +1659,7 @@ bucketweb:
     ingressClassName: ""
     ## @param bucketweb.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -1762,7 +1790,8 @@ compactor:
   ## @param compactor.cronJob.suspend This flag tells the controller to suspend subsequent executions
   ## @param compactor.cronJob.successfulJobsHistoryLimit The number of successful finished jobs to retain
   ## @param compactor.cronJob.failedJobsHistoryLimit The number of failed finished jobs to retain
-  ## @param compactor.cronJob.backoffLimit Specifies the number of retries before marking this job failed
+  ## @param compactor.cronJob.backoffLimit The number of retries before marking this job failed
+  ## @param compactor.cronJob.ttlSecondsAfterFinished The maximum retention before removing the job
   ##
   cronJob:
     enabled: false
@@ -1774,6 +1803,7 @@ compactor:
     successfulJobsHistoryLimit: ""
     failedJobsHistoryLimit: ""
     backoffLimit: ""
+    ttlSecondsAfterFinished: ""
   ## @param compactor.restartPolicy Compactor container restart policy.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy
   ##
@@ -1792,20 +1822,28 @@ compactor:
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Compactor containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param compactor.containerSecurityContext.enabled Enable container security context for the Thanos Compactor containers
-  ## @param compactor.containerSecurityContext.runAsUser User ID for the service user running the Thanos Compactor containers
-  ## @param compactor.containerSecurityContext.runAsNonRoot Force the Thanos Compactor containers to run as a non root user
-  ## @param compactor.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off for Thanos Compactor containers
-  ## @param compactor.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Thanos Compactor containers
+  ## @param compactor.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param compactor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param compactor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param compactor.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param compactor.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param compactor.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param compactor.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param compactor.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    allowPrivilegeEscalation: false
+    privileged: false
     readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Thanos Compactor containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param compactor.resources.limits The resources limits for the Thanos Compactor container
   ## @param compactor.resources.requests The requested resources for the Thanos Compactor container
   ##
@@ -1925,7 +1963,7 @@ compactor:
   ##
   affinity: {}
   ## @param compactor.nodeSelector Thanos Compactor node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param compactor.tolerations Thanos Compactor tolerations for pod assignment
@@ -2040,7 +2078,7 @@ compactor:
     automountServiceAccountToken: true
     ## existingServiceAccount: ""
   ## Configure the ingress resource that allows you to access Thanos Query Frontend
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param compactor.ingress.enabled Enable ingress controller resource
@@ -2056,7 +2094,7 @@ compactor:
     ingressClassName: ""
     ## @param compactor.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -2137,6 +2175,9 @@ compactor:
     ## @param compactor.persistence.enabled Enable data persistence using PVC(s) on Thanos Compactor pods
     ##
     enabled: true
+    ## @param compactor.persistence.defaultEmptyDir Defaults to emptyDir if persistence is disabled.
+    ##
+    defaultEmptyDir: true
     ## @param compactor.persistence.storageClass Specify the `storageClass` used to provision the volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -2254,20 +2295,28 @@ storegateway:
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Store Gateway containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param storegateway.containerSecurityContext.enabled Enable container security context for the Thanos Store Gateway containers
-  ## @param storegateway.containerSecurityContext.runAsUser User ID for the service user running the Thanos Store Gateway containers
-  ## @param storegateway.containerSecurityContext.runAsNonRoot Force the Thanos Store Gateway containers to run as a non root user
-  ## @param storegateway.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off for Thanos Store Gateway containers
-  ## @param storegateway.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Thanos Store Gateway containers
+  ## @param storegateway.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param storegateway.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param storegateway.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param storegateway.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param storegateway.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param storegateway.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param storegateway.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param storegateway.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    allowPrivilegeEscalation: false
+    privileged: false
     readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Thanos Store Gateway containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param storegateway.resources.limits The resources limits for the Thanos Store Gateway container
   ## @param storegateway.resources.requests The requested resources for the Thanos Store Gateway container
   ##
@@ -2387,7 +2436,7 @@ storegateway:
   ##
   affinity: {}
   ## @param storegateway.nodeSelector Thanos Store Gateway node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param storegateway.tolerations Thanos Store Gateway tolerations for pod assignment
@@ -2569,7 +2618,7 @@ storegateway:
     minAvailable: 1
     maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Query Frontend
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param storegateway.ingress.enabled Enable ingress controller resource
@@ -2585,7 +2634,7 @@ storegateway:
     ingressClassName: ""
     ## @param storegateway.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -2684,7 +2733,7 @@ storegateway:
       ingressClassName: ""
       ## @param storegateway.ingress.grpc.annotations Additional annotations for the Ingress resource (GRPC). To enable certificate autogeneration, place here your cert-manager annotations.
       ## For a full list of possible ingress annotations, please see
-      ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+      ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
       ## Use this parameter to set the required annotations for cert-manager, see
       ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
       ##
@@ -2897,20 +2946,28 @@ ruler:
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Ruler containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param ruler.containerSecurityContext.enabled Enable container security context for the Thanos Ruler containers
-  ## @param ruler.containerSecurityContext.runAsUser User ID for the service user running the Thanos Ruler containers
-  ## @param ruler.containerSecurityContext.runAsNonRoot Force the Thanos Ruler containers to run as a non root user
-  ## @param ruler.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off for Thanos Ruler containers
-  ## @param ruler.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Thanos Ruler containers
+  ## @param ruler.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param ruler.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param ruler.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param ruler.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param ruler.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param ruler.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param ruler.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param ruler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    allowPrivilegeEscalation: false
+    privileged: false
     readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Thanos Ruler containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param ruler.resources.limits The resources limits for the Thanos Ruler container
   ## @param ruler.resources.requests The requested resources for the Thanos Ruler container
   ##
@@ -3030,7 +3087,7 @@ ruler:
   ##
   affinity: {}
   ## @param ruler.nodeSelector Thanos Ruler node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param ruler.tolerations Thanos Ruler tolerations for pod assignment
@@ -3209,7 +3266,7 @@ ruler:
     minAvailable: 1
     maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Ruler
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param ruler.ingress.enabled Enable ingress controller resource
@@ -3225,7 +3282,7 @@ ruler:
     ingressClassName: ""
     ## @param ruler.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -3391,6 +3448,9 @@ receive:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
+  ## @param receive.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
+  ##
+  minReadySeconds: 0
   ## K8s Pod Security Context for Thanos Receive pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param receive.podSecurityContext.enabled Enable security context for the Thanos Receive pods
@@ -3401,20 +3461,28 @@ receive:
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Receive containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param receive.containerSecurityContext.enabled Enable container security context for the Thanos Receive containers
-  ## @param receive.containerSecurityContext.runAsUser User ID for the service user running the Thanos Receive containers
-  ## @param receive.containerSecurityContext.runAsNonRoot Force the Thanos Receive containers to run as a non root user
-  ## @param receive.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off for Thanos Receive containers
-  ## @param receive.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Thanos Receive containers
+  ## @param receive.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param receive.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param receive.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param receive.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param receive.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param receive.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param receive.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param receive.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    allowPrivilegeEscalation: false
+    privileged: false
     readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Thanos Receive containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param receive.resources.limits The resources limits for the Thanos Receive container
   ## @param receive.resources.requests The requested resources for the Thanos Receive container
   ##
@@ -3535,7 +3603,7 @@ receive:
   ##
   affinity: {}
   ## @param receive.nodeSelector Thanos Receive node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param receive.tolerations Thanos Receive tolerations for pod assignment
@@ -3721,7 +3789,7 @@ receive:
     ##
     existingClaim: ""
   ## Configure the ingress resource that allows you to access Thanos Receive
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param receive.ingress.enabled Set to true to enable ingress record generation
@@ -3737,7 +3805,7 @@ receive:
     ingressClassName: ""
     ## @param receive.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -3871,20 +3939,28 @@ receiveDistributor:
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Receive Distributor containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param receiveDistributor.containerSecurityContext.enabled Enable container security context for the Thanos Receive Distributor containers
-  ## @param receiveDistributor.containerSecurityContext.runAsUser User ID for the service user running the Thanos Receive Distributor containers
-  ## @param receiveDistributor.containerSecurityContext.runAsNonRoot Force the Thanos Receive Distributor containers to run as a non root user
-  ## @param receiveDistributor.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off for Thanos Receive Distributor containers
-  ## @param receiveDistributor.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Thanos Receive Distributor containers
+  ## @param receiveDistributor.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param receiveDistributor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param receiveDistributor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param receiveDistributor.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param receiveDistributor.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param receiveDistributor.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param receiveDistributor.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param receiveDistributor.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-    allowPrivilegeEscalation: false
+    privileged: false
     readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Thanos Receive Distributor containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param receiveDistributor.resources.limits The resources limits for the Thanos Receive container
   ## @param receiveDistributor.resources.requests The requested resources for the Thanos Receive container
   ##
@@ -4005,7 +4081,7 @@ receiveDistributor:
   ##
   affinity: {}
   ## @param receiveDistributor.nodeSelector Thanos Receive Distributor node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param receiveDistributor.tolerations Thanos Receive Distributor tolerations for pod assignment
@@ -4217,6 +4293,9 @@ metrics:
       ## @param metrics.prometheusRule.default.disabled disable one specific prometheus alert rule
       ##
       disabled: {}
+    ## @param metrics.prometheusRule.runbookUrl Prefix for runbook URLs. Use this to override the first part of the runbookURLs that is common to all rules
+    ##
+    runbookUrl: "https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-"
     ## @param metrics.prometheusRule.namespace Namespace in which the PrometheusRule CRD is created
     ##
     namespace: ""
@@ -4231,7 +4310,7 @@ metrics:
     ##         - alert: ThanosCompactMultipleRunning
     ##           annotations:
     ##             description: No more than one Thanos Compact instance should be running at once. There are {{`{{`}}$value{{`}}`}} instances running.
-    ##             runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanoscompactmultiplerunning
+    ##             runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanoscompactmultiplerunning
     ##             summary: Thanos Compact has multiple instances running.
     ##           expr: sum by (job) (up{job=~"{{ template "common.names.fullname" . }}-compact.*"}) > 1
     ##           for: 5m
@@ -4249,9 +4328,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
@@ -4259,10 +4338,10 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r86
+    tag: 11-debian-11-r93
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

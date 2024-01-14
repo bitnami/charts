@@ -128,6 +128,10 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "ns1") .Values.ns1.apiKey (not .Values.ns1.secretName) -}}
     {{- true -}}
+{{- else if and (eq .Values.provider "civo") .Values.civo.apiToken (not .Values.civo.secretName) -}}
+    {{- true -}}
+{{- else if and (eq .Values.provider "pihole") .Values.pihole.secretName (not .Values.pihole.secretName) -}}
+    {{- true -}}
 {{- else -}}
 {{- end -}}
 {{- end -}}
@@ -180,6 +184,8 @@ Return the name of the Secret used to store the passwords
 {{- .Values.rfc2136.secretName }}
 {{- else if and (eq .Values.provider "ns1") .Values.ns1.secretName }}
 {{- .Values.ns1.secretName }}
+{{- else if and (eq .Values.provider "civo") .Values.civo.secretName }}
+{{- .Values.civo.secretName }}
 {{- else -}}
 {{- template "external-dns.fullname" . }}
 {{- end -}}
@@ -262,7 +268,7 @@ compartment: {{ .Values.oci.compartmentOCID }}
 {{ end }}
 
 {{/*
-Compile all warnings into a single message, and call fail.
+Compile all warnings into a single message, and call fail if the validation is enabled
 */}}
 {{- define "external-dns.validateValues" -}}
 {{- $messages := list -}}
@@ -308,8 +314,10 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
+{{- if .Values.validation.enabled -}}
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -453,7 +461,7 @@ external-dns: pdns.apiKey
 {{- define "external-dns.checkRollingTags" -}}
 {{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
 WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
++info https://docs.bitnami.com/tutorials/understand-rolling-tags-containers
 {{- end }}
 {{- end -}}
 

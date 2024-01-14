@@ -19,15 +19,15 @@ file:
     filetype: file
     mode: "0644"
     owner: root
-    contains:
+    contents:
     - /hub_container_port.*{{ .Vars.hub.containerPorts.http }}/
   /usr/local/etc/jupyterhub/secret/values.yaml:
     exists: true
     filetype: symlink
     mode: "0777"
     owner: root
-    contains:
-    - postgresql://{{ .Vars.postgresql.auth.username }}@jupyterhub-postgresql:{{ .Vars.postgresql.service.ports.postgresql }}/{{ .Vars.postgresql.auth.database }}
+    contents:
+    - "postgresql://{{ .Vars.postgresql.auth.username }}@jupyterhub-postgresql:{{ .Vars.postgresql.service.ports.postgresql }}/{{ .Vars.postgresql.auth.database }}"
     - /type.*dynamic/
 command:
   {{- $uid := .Vars.hub.containerSecurityContext.runAsUser }}

@@ -37,7 +37,7 @@ command:
     exit-status: 0
     stdout:
     {{ range $plugin := (split " " .Vars.extraPlugins) }}
-      - {{ $plugin }}
+      - "{{ $plugin }}"
     {{ end }}
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.podSecurityContext.fsGroup }}

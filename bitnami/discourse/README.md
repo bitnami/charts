@@ -14,6 +14,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/discourse
 ```
 
+Looking to use Discoursereg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Introduction
 
 This chart bootstraps a [Discourse](https://www.discourse.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
@@ -21,8 +23,6 @@ This chart bootstraps a [Discourse](https://www.discourse.org/) deployment on a 
 It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) and [Bitnami Redis&reg;](https://github.com/bitnami/charts/tree/main/bitnami/redis) which are required as databases for the Discourse application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Discoursereg; in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -36,8 +36,10 @@ Looking to use Discoursereg; in production? Try [VMware Application Catalog](htt
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/discourse
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/discourse
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys Discourse on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -80,140 +82,142 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Discourse Common parameters
 
-| Name                            | Description                                                                                                              | Value                 |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
-| `image.registry`                | Discourse image registry                                                                                                 | `docker.io`           |
-| `image.repository`              | Discourse image repository                                                                                               | `bitnami/discourse`   |
-| `image.tag`                     | Discourse image tag                                                                                                      | `3.1.1-debian-11-r13` |
-| `image.digest`                  | Discourse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                  |
-| `image.pullPolicy`              | Discourse image pull policy                                                                                              | `IfNotPresent`        |
-| `image.pullSecrets`             | Discourse image pull secrets                                                                                             | `[]`                  |
-| `image.debug`                   | Enable image debug mode                                                                                                  | `false`               |
-| `auth.email`                    | Discourse admin user email                                                                                               | `user@example.com`    |
-| `auth.username`                 | Discourse admin user                                                                                                     | `user`                |
-| `auth.password`                 | Discourse admin password. WARNING: Minimum length of 10 characters                                                       | `""`                  |
-| `auth.existingSecret`           | Name of an existing secret to use for Discourse credentials                                                              | `""`                  |
-| `host`                          | Hostname to create application URLs (include the port if =/= 80)                                                         | `""`                  |
-| `siteName`                      | Discourse site name                                                                                                      | `My Site!`            |
-| `smtp.enabled`                  | Enable/disable SMTP                                                                                                      | `false`               |
-| `smtp.host`                     | SMTP host name                                                                                                           | `""`                  |
-| `smtp.port`                     | SMTP port number                                                                                                         | `""`                  |
-| `smtp.user`                     | SMTP account user name                                                                                                   | `""`                  |
-| `smtp.password`                 | SMTP account password                                                                                                    | `""`                  |
-| `smtp.protocol`                 | SMTP protocol (Allowed values: tls, ssl)                                                                                 | `""`                  |
-| `smtp.auth`                     | SMTP authentication method                                                                                               | `""`                  |
-| `smtp.existingSecret`           | Name of an existing Kubernetes secret. The secret must have the following key configured: `smtp-password`                | `""`                  |
-| `replicaCount`                  | Number of Discourse & Sidekiq replicas                                                                                   | `1`                   |
-| `podSecurityContext.enabled`    | Enabled Discourse pods' Security Context                                                                                 | `false`               |
-| `podSecurityContext.fsGroup`    | Set Discourse pod's Security Context fsGroup                                                                             | `0`                   |
-| `hostAliases`                   | Add deployment host aliases                                                                                              | `[]`                  |
-| `podAnnotations`                | Additional pod annotations                                                                                               | `{}`                  |
-| `podLabels`                     | Additional pod labels                                                                                                    | `{}`                  |
-| `podAffinityPreset`             | Pod affinity preset. Allowed values: soft, hard                                                                          | `""`                  |
-| `podAntiAffinityPreset`         | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`                |
-| `nodeAffinityPreset.type`       | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`                  |
-| `nodeAffinityPreset.key`        | Node label key to match Ignored if `affinity` is set.                                                                    | `""`                  |
-| `nodeAffinityPreset.values`     | Node label values to match. Ignored if `affinity` is set.                                                                | `[]`                  |
-| `affinity`                      | Affinity for pod assignment                                                                                              | `{}`                  |
-| `nodeSelector`                  | Node labels for pod assignment.                                                                                          | `{}`                  |
-| `tolerations`                   | Tolerations for pod assignment.                                                                                          | `[]`                  |
-| `topologySpreadConstraints`     | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                  |
-| `priorityClassName`             | Priority Class Name                                                                                                      | `""`                  |
-| `schedulerName`                 | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                  |
-| `terminationGracePeriodSeconds` | Seconds Discourse pod needs to terminate gracefully                                                                      | `""`                  |
-| `updateStrategy.type`           | Discourse deployment strategy type                                                                                       | `RollingUpdate`       |
-| `updateStrategy.rollingUpdate`  | Discourse deployment rolling update configuration parameters                                                             | `{}`                  |
-| `sidecars`                      | Add additional sidecar containers to the Discourse pods                                                                  | `[]`                  |
-| `initContainers`                | Add additional init containers to the Discourse pods                                                                     | `[]`                  |
-| `extraVolumeMounts`             | Optionally specify extra list of additional volumeMounts for the Discourse pods                                          | `[]`                  |
-| `extraVolumes`                  | Optionally specify extra list of additional volumes for the Discourse pods                                               | `[]`                  |
+| Name                            | Description                                                                                                              | Value                       |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------- |
+| `image.registry`                | Discourse image registry                                                                                                 | `REGISTRY_NAME`             |
+| `image.repository`              | Discourse image repository                                                                                               | `REPOSITORY_NAME/discourse` |
+| `image.digest`                  | Discourse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                        |
+| `image.pullPolicy`              | Discourse image pull policy                                                                                              | `IfNotPresent`              |
+| `image.pullSecrets`             | Discourse image pull secrets                                                                                             | `[]`                        |
+| `image.debug`                   | Enable image debug mode                                                                                                  | `false`                     |
+| `auth.email`                    | Discourse admin user email                                                                                               | `user@example.com`          |
+| `auth.username`                 | Discourse admin user                                                                                                     | `user`                      |
+| `auth.password`                 | Discourse admin password. WARNING: Minimum length of 10 characters                                                       | `""`                        |
+| `auth.existingSecret`           | Name of an existing secret to use for Discourse credentials                                                              | `""`                        |
+| `host`                          | Hostname to create application URLs (include the port if =/= 80)                                                         | `""`                        |
+| `siteName`                      | Discourse site name                                                                                                      | `My Site!`                  |
+| `smtp.enabled`                  | Enable/disable SMTP                                                                                                      | `false`                     |
+| `smtp.host`                     | SMTP host name                                                                                                           | `""`                        |
+| `smtp.port`                     | SMTP port number                                                                                                         | `""`                        |
+| `smtp.user`                     | SMTP account user name                                                                                                   | `""`                        |
+| `smtp.password`                 | SMTP account password                                                                                                    | `""`                        |
+| `smtp.protocol`                 | SMTP protocol (Allowed values: tls, ssl)                                                                                 | `""`                        |
+| `smtp.auth`                     | SMTP authentication method                                                                                               | `""`                        |
+| `smtp.existingSecret`           | Name of an existing Kubernetes secret. The secret must have the following key configured: `smtp-password`                | `""`                        |
+| `replicaCount`                  | Number of Discourse & Sidekiq replicas                                                                                   | `1`                         |
+| `podSecurityContext.enabled`    | Enabled Discourse pods' Security Context                                                                                 | `true`                      |
+| `podSecurityContext.fsGroup`    | Set Discourse pod's Security Context fsGroup                                                                             | `0`                         |
+| `hostAliases`                   | Add deployment host aliases                                                                                              | `[]`                        |
+| `podAnnotations`                | Additional pod annotations                                                                                               | `{}`                        |
+| `podLabels`                     | Additional pod labels                                                                                                    | `{}`                        |
+| `podAffinityPreset`             | Pod affinity preset. Allowed values: soft, hard                                                                          | `""`                        |
+| `podAntiAffinityPreset`         | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`                      |
+| `nodeAffinityPreset.type`       | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`                        |
+| `nodeAffinityPreset.key`        | Node label key to match Ignored if `affinity` is set.                                                                    | `""`                        |
+| `nodeAffinityPreset.values`     | Node label values to match. Ignored if `affinity` is set.                                                                | `[]`                        |
+| `affinity`                      | Affinity for pod assignment                                                                                              | `{}`                        |
+| `nodeSelector`                  | Node labels for pod assignment.                                                                                          | `{}`                        |
+| `tolerations`                   | Tolerations for pod assignment.                                                                                          | `[]`                        |
+| `topologySpreadConstraints`     | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                        |
+| `priorityClassName`             | Priority Class Name                                                                                                      | `""`                        |
+| `schedulerName`                 | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                        |
+| `terminationGracePeriodSeconds` | Seconds Discourse pod needs to terminate gracefully                                                                      | `""`                        |
+| `updateStrategy.type`           | Discourse deployment strategy type                                                                                       | `RollingUpdate`             |
+| `updateStrategy.rollingUpdate`  | Discourse deployment rolling update configuration parameters                                                             | `{}`                        |
+| `sidecars`                      | Add additional sidecar containers to the Discourse pods                                                                  | `[]`                        |
+| `initContainers`                | Add additional init containers to the Discourse pods                                                                     | `[]`                        |
+| `extraVolumeMounts`             | Optionally specify extra list of additional volumeMounts for the Discourse pods                                          | `[]`                        |
+| `extraVolumes`                  | Optionally specify extra list of additional volumes for the Discourse pods                                               | `[]`                        |
 
 ### Discourse container parameters
 
-| Name                                              | Description                                                                                  | Value           |
-| ------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------------- |
-| `discourse.skipInstall`                           | Do not run the Discourse installation wizard                                                 | `false`         |
-| `discourse.plugins`                               | List of plugins to be installed before the container initialization                          | `[]`            |
-| `discourse.command`                               | Custom command to override image cmd                                                         | `[]`            |
-| `discourse.args`                                  | Custom args for the custom command                                                           | `[]`            |
-| `discourse.extraEnvVars`                          | Array with extra environment variables to add Discourse pods                                 | `[]`            |
-| `discourse.extraEnvVarsCM`                        | ConfigMap containing extra environment variables for Discourse pods                          | `""`            |
-| `discourse.extraEnvVarsSecret`                    | Secret containing extra environment variables (in case of sensitive data) for Discourse pods | `""`            |
-| `discourse.containerPorts.http`                   | Discourse HTTP container port                                                                | `8080`          |
-| `discourse.livenessProbe.enabled`                 | Enable livenessProbe on Discourse containers                                                 | `true`          |
-| `discourse.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                      | `500`           |
-| `discourse.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                             | `10`            |
-| `discourse.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                            | `5`             |
-| `discourse.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                          | `6`             |
-| `discourse.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                          | `1`             |
-| `discourse.readinessProbe.enabled`                | Enable readinessProbe on Discourse containers                                                | `true`          |
-| `discourse.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                     | `180`           |
-| `discourse.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                            | `10`            |
-| `discourse.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                           | `5`             |
-| `discourse.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                         | `6`             |
-| `discourse.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                         | `1`             |
-| `discourse.startupProbe.enabled`                  | Enable startupProbe on Discourse containers                                                  | `false`         |
-| `discourse.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                       | `60`            |
-| `discourse.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                              | `10`            |
-| `discourse.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                             | `5`             |
-| `discourse.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                           | `15`            |
-| `discourse.startupProbe.successThreshold`         | Success threshold for startupProbe                                                           | `1`             |
-| `discourse.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                          | `{}`            |
-| `discourse.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                         | `{}`            |
-| `discourse.customStartupProbe`                    | Custom startupProbe that overrides the default one                                           | `{}`            |
-| `discourse.resources.limits`                      | The resources limits for the Discourse containers                                            | `{}`            |
-| `discourse.resources.requests`                    | The requested resources for the Discourse containers                                         | `{}`            |
-| `discourse.containerSecurityContext.enabled`      | Enabled Discourse containers' Security Context                                               | `false`         |
-| `discourse.containerSecurityContext.runAsUser`    | Set Discourse containers' Security Context runAsUser                                         | `0`             |
-| `discourse.containerSecurityContext.runAsNonRoot` | Set Discourse containers' Security Context runAsNonRoot                                      | `false`         |
-| `discourse.lifecycleHooks`                        | for the Discourse container(s) to automate configuration before or after startup             | `{}`            |
-| `discourse.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Discourse pods              | `[]`            |
-| `persistence.enabled`                             | Enable persistence using Persistent Volume Claims                                            | `true`          |
-| `persistence.storageClass`                        | Persistent Volume storage class                                                              | `""`            |
-| `persistence.accessModes`                         | Persistent Volume access modes                                                               | `[]`            |
-| `persistence.accessMode`                          | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)            | `ReadWriteOnce` |
-| `persistence.size`                                | Persistent Volume size                                                                       | `10Gi`          |
-| `persistence.existingClaim`                       | The name of an existing PVC to use for persistence                                           | `""`            |
-| `persistence.selector`                            | Selector to match an existing Persistent Volume for Discourse data PVC                       | `{}`            |
-| `persistence.annotations`                         | Persistent Volume Claim annotations                                                          | `{}`            |
+| Name                                                     | Description                                                                                  | Value            |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------- |
+| `discourse.skipInstall`                                  | Do not run the Discourse installation wizard                                                 | `false`          |
+| `discourse.plugins`                                      | List of plugins to be installed before the container initialization                          | `[]`             |
+| `discourse.persistPlugins`                               | Persist plugins across container restarts                                                    | `true`           |
+| `discourse.command`                                      | Custom command to override image cmd                                                         | `[]`             |
+| `discourse.args`                                         | Custom args for the custom command                                                           | `[]`             |
+| `discourse.extraEnvVars`                                 | Array with extra environment variables to add Discourse pods                                 | `[]`             |
+| `discourse.extraEnvVarsCM`                               | ConfigMap containing extra environment variables for Discourse pods                          | `""`             |
+| `discourse.extraEnvVarsSecret`                           | Secret containing extra environment variables (in case of sensitive data) for Discourse pods | `""`             |
+| `discourse.containerPorts.http`                          | Discourse HTTP container port                                                                | `8080`           |
+| `discourse.livenessProbe.enabled`                        | Enable livenessProbe on Discourse containers                                                 | `true`           |
+| `discourse.livenessProbe.initialDelaySeconds`            | Initial delay seconds for livenessProbe                                                      | `500`            |
+| `discourse.livenessProbe.periodSeconds`                  | Period seconds for livenessProbe                                                             | `10`             |
+| `discourse.livenessProbe.timeoutSeconds`                 | Timeout seconds for livenessProbe                                                            | `5`              |
+| `discourse.livenessProbe.failureThreshold`               | Failure threshold for livenessProbe                                                          | `6`              |
+| `discourse.livenessProbe.successThreshold`               | Success threshold for livenessProbe                                                          | `1`              |
+| `discourse.readinessProbe.enabled`                       | Enable readinessProbe on Discourse containers                                                | `true`           |
+| `discourse.readinessProbe.initialDelaySeconds`           | Initial delay seconds for readinessProbe                                                     | `180`            |
+| `discourse.readinessProbe.periodSeconds`                 | Period seconds for readinessProbe                                                            | `10`             |
+| `discourse.readinessProbe.timeoutSeconds`                | Timeout seconds for readinessProbe                                                           | `5`              |
+| `discourse.readinessProbe.failureThreshold`              | Failure threshold for readinessProbe                                                         | `6`              |
+| `discourse.readinessProbe.successThreshold`              | Success threshold for readinessProbe                                                         | `1`              |
+| `discourse.startupProbe.enabled`                         | Enable startupProbe on Discourse containers                                                  | `false`          |
+| `discourse.startupProbe.initialDelaySeconds`             | Initial delay seconds for startupProbe                                                       | `60`             |
+| `discourse.startupProbe.periodSeconds`                   | Period seconds for startupProbe                                                              | `10`             |
+| `discourse.startupProbe.timeoutSeconds`                  | Timeout seconds for startupProbe                                                             | `5`              |
+| `discourse.startupProbe.failureThreshold`                | Failure threshold for startupProbe                                                           | `15`             |
+| `discourse.startupProbe.successThreshold`                | Success threshold for startupProbe                                                           | `1`              |
+| `discourse.customLivenessProbe`                          | Custom livenessProbe that overrides the default one                                          | `{}`             |
+| `discourse.customReadinessProbe`                         | Custom readinessProbe that overrides the default one                                         | `{}`             |
+| `discourse.customStartupProbe`                           | Custom startupProbe that overrides the default one                                           | `{}`             |
+| `discourse.resources.limits`                             | The resources limits for the Discourse containers                                            | `{}`             |
+| `discourse.resources.requests`                           | The requested resources for the Discourse containers                                         | `{}`             |
+| `discourse.containerSecurityContext.enabled`             | Enabled Discourse containers' Security Context                                               | `true`           |
+| `discourse.containerSecurityContext.runAsUser`           | Set Discourse containers' Security Context runAsUser                                         | `0`              |
+| `discourse.containerSecurityContext.runAsNonRoot`        | Set Discourse containers' Security Context runAsNonRoot                                      | `false`          |
+| `discourse.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                             | `RuntimeDefault` |
+| `discourse.lifecycleHooks`                               | for the Discourse container(s) to automate configuration before or after startup             | `{}`             |
+| `discourse.extraVolumeMounts`                            | Optionally specify extra list of additional volumeMounts for the Discourse pods              | `[]`             |
+| `persistence.enabled`                                    | Enable persistence using Persistent Volume Claims                                            | `true`           |
+| `persistence.storageClass`                               | Persistent Volume storage class                                                              | `""`             |
+| `persistence.accessModes`                                | Persistent Volume access modes                                                               | `[]`             |
+| `persistence.accessMode`                                 | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)            | `ReadWriteOnce`  |
+| `persistence.size`                                       | Persistent Volume size                                                                       | `10Gi`           |
+| `persistence.existingClaim`                              | The name of an existing PVC to use for persistence                                           | `""`             |
+| `persistence.selector`                                   | Selector to match an existing Persistent Volume for Discourse data PVC                       | `{}`             |
+| `persistence.annotations`                                | Persistent Volume Claim annotations                                                          | `{}`             |
 
 ### Sidekiq container parameters
 
-| Name                                            | Description                                                                                | Value                                               |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------------------------------------- |
-| `sidekiq.command`                               | Custom command to override image cmd (evaluated as a template)                             | `["/opt/bitnami/scripts/discourse/entrypoint.sh"]`  |
-| `sidekiq.args`                                  | Custom args for the custom command (evaluated as a template)                               | `["/opt/bitnami/scripts/discourse-sidekiq/run.sh"]` |
-| `sidekiq.extraEnvVars`                          | Array with extra environment variables to add Sidekiq pods                                 | `[]`                                                |
-| `sidekiq.extraEnvVarsCM`                        | ConfigMap containing extra environment variables for Sidekiq pods                          | `""`                                                |
-| `sidekiq.extraEnvVarsSecret`                    | Secret containing extra environment variables (in case of sensitive data) for Sidekiq pods | `""`                                                |
-| `sidekiq.livenessProbe.enabled`                 | Enable livenessProbe on Sidekiq containers                                                 | `true`                                              |
-| `sidekiq.livenessProbe.initialDelaySeconds`     | Delay before liveness probe is initiated                                                   | `500`                                               |
-| `sidekiq.livenessProbe.periodSeconds`           | How often to perform the probe                                                             | `10`                                                |
-| `sidekiq.livenessProbe.timeoutSeconds`          | When the probe times out                                                                   | `5`                                                 |
-| `sidekiq.livenessProbe.failureThreshold`        | Minimum consecutive failures for the probe                                                 | `6`                                                 |
-| `sidekiq.livenessProbe.successThreshold`        | Minimum consecutive successes for the probe                                                | `1`                                                 |
-| `sidekiq.readinessProbe.enabled`                | Enable readinessProbe on Sidekiq containers                                                | `true`                                              |
-| `sidekiq.readinessProbe.initialDelaySeconds`    | Delay before readiness probe is initiated                                                  | `30`                                                |
-| `sidekiq.readinessProbe.periodSeconds`          | How often to perform the probe                                                             | `10`                                                |
-| `sidekiq.readinessProbe.timeoutSeconds`         | When the probe times out                                                                   | `5`                                                 |
-| `sidekiq.readinessProbe.failureThreshold`       | Minimum consecutive failures for the probe                                                 | `6`                                                 |
-| `sidekiq.readinessProbe.successThreshold`       | Minimum consecutive successes for the probe                                                | `1`                                                 |
-| `sidekiq.startupProbe.enabled`                  | Enable startupProbe on Sidekiq containers                                                  | `false`                                             |
-| `sidekiq.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                     | `60`                                                |
-| `sidekiq.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                            | `10`                                                |
-| `sidekiq.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                           | `5`                                                 |
-| `sidekiq.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                         | `15`                                                |
-| `sidekiq.startupProbe.successThreshold`         | Success threshold for startupProbe                                                         | `1`                                                 |
-| `sidekiq.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                        | `{}`                                                |
-| `sidekiq.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                       | `{}`                                                |
-| `sidekiq.customStartupProbe`                    | Custom startupProbe that overrides the default one                                         | `{}`                                                |
-| `sidekiq.resources.limits`                      | The resources limits for the Sidekiq containers                                            | `{}`                                                |
-| `sidekiq.resources.requests`                    | The requested resources for the Sidekiq containers                                         | `{}`                                                |
-| `sidekiq.containerSecurityContext.enabled`      | Enabled Sidekiq containers' Security Context                                               | `false`                                             |
-| `sidekiq.containerSecurityContext.runAsUser`    | Set Sidekiq containers' Security Context runAsUser                                         | `0`                                                 |
-| `sidekiq.containerSecurityContext.runAsNonRoot` | Set Sidekiq containers' Security Context runAsNonRoot                                      | `false`                                             |
-| `sidekiq.lifecycleHooks`                        | for the Sidekiq container(s) to automate configuration before or after startup             | `{}`                                                |
-| `sidekiq.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Sidekiq pods              | `[]`                                                |
+| Name                                                   | Description                                                                                | Value                                               |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------ | --------------------------------------------------- |
+| `sidekiq.command`                                      | Custom command to override image cmd (evaluated as a template)                             | `["/opt/bitnami/scripts/discourse/entrypoint.sh"]`  |
+| `sidekiq.args`                                         | Custom args for the custom command (evaluated as a template)                               | `["/opt/bitnami/scripts/discourse-sidekiq/run.sh"]` |
+| `sidekiq.extraEnvVars`                                 | Array with extra environment variables to add Sidekiq pods                                 | `[]`                                                |
+| `sidekiq.extraEnvVarsCM`                               | ConfigMap containing extra environment variables for Sidekiq pods                          | `""`                                                |
+| `sidekiq.extraEnvVarsSecret`                           | Secret containing extra environment variables (in case of sensitive data) for Sidekiq pods | `""`                                                |
+| `sidekiq.livenessProbe.enabled`                        | Enable livenessProbe on Sidekiq containers                                                 | `true`                                              |
+| `sidekiq.livenessProbe.initialDelaySeconds`            | Delay before liveness probe is initiated                                                   | `500`                                               |
+| `sidekiq.livenessProbe.periodSeconds`                  | How often to perform the probe                                                             | `10`                                                |
+| `sidekiq.livenessProbe.timeoutSeconds`                 | When the probe times out                                                                   | `5`                                                 |
+| `sidekiq.livenessProbe.failureThreshold`               | Minimum consecutive failures for the probe                                                 | `6`                                                 |
+| `sidekiq.livenessProbe.successThreshold`               | Minimum consecutive successes for the probe                                                | `1`                                                 |
+| `sidekiq.readinessProbe.enabled`                       | Enable readinessProbe on Sidekiq containers                                                | `true`                                              |
+| `sidekiq.readinessProbe.initialDelaySeconds`           | Delay before readiness probe is initiated                                                  | `30`                                                |
+| `sidekiq.readinessProbe.periodSeconds`                 | How often to perform the probe                                                             | `10`                                                |
+| `sidekiq.readinessProbe.timeoutSeconds`                | When the probe times out                                                                   | `5`                                                 |
+| `sidekiq.readinessProbe.failureThreshold`              | Minimum consecutive failures for the probe                                                 | `6`                                                 |
+| `sidekiq.readinessProbe.successThreshold`              | Minimum consecutive successes for the probe                                                | `1`                                                 |
+| `sidekiq.startupProbe.enabled`                         | Enable startupProbe on Sidekiq containers                                                  | `false`                                             |
+| `sidekiq.startupProbe.initialDelaySeconds`             | Initial delay seconds for startupProbe                                                     | `60`                                                |
+| `sidekiq.startupProbe.periodSeconds`                   | Period seconds for startupProbe                                                            | `10`                                                |
+| `sidekiq.startupProbe.timeoutSeconds`                  | Timeout seconds for startupProbe                                                           | `5`                                                 |
+| `sidekiq.startupProbe.failureThreshold`                | Failure threshold for startupProbe                                                         | `15`                                                |
+| `sidekiq.startupProbe.successThreshold`                | Success threshold for startupProbe                                                         | `1`                                                 |
+| `sidekiq.customLivenessProbe`                          | Custom livenessProbe that overrides the default one                                        | `{}`                                                |
+| `sidekiq.customReadinessProbe`                         | Custom readinessProbe that overrides the default one                                       | `{}`                                                |
+| `sidekiq.customStartupProbe`                           | Custom startupProbe that overrides the default one                                         | `{}`                                                |
+| `sidekiq.resources.limits`                             | The resources limits for the Sidekiq containers                                            | `{}`                                                |
+| `sidekiq.resources.requests`                           | The requested resources for the Sidekiq containers                                         | `{}`                                                |
+| `sidekiq.containerSecurityContext.enabled`             | Enabled Sidekiq containers' Security Context                                               | `true`                                              |
+| `sidekiq.containerSecurityContext.runAsUser`           | Set Sidekiq containers' Security Context runAsUser                                         | `0`                                                 |
+| `sidekiq.containerSecurityContext.runAsNonRoot`        | Set Sidekiq containers' Security Context runAsNonRoot                                      | `false`                                             |
+| `sidekiq.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                           | `RuntimeDefault`                                    |
+| `sidekiq.lifecycleHooks`                               | for the Sidekiq container(s) to automate configuration before or after startup             | `{}`                                                |
+| `sidekiq.extraVolumeMounts`                            | Optionally specify extra list of additional volumeMounts for the Sidekiq pods              | `[]`                                                |
 
 ### Traffic Exposure Parameters
 
@@ -247,18 +251,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                                   | Description                                                                                                                       | Value              |
-| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`            |
-| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`        |
-| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r77` |
-| `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`               |
-| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`               |
-| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`               |
-| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                |
+| Name                                                             | Description                                                                                                                       | Value                      |
+| ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`                                      | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                    |
+| `volumePermissions.image.registry`                               | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                             | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                                 | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`                             | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                            | Init container volume-permissions image pull secrets                                                                              | `[]`                       |
+| `volumePermissions.resources.limits`                             | Init container volume-permissions resource limits                                                                                 | `{}`                       |
+| `volumePermissions.resources.requests`                           | Init container volume-permissions resource requests                                                                               | `{}`                       |
+| `volumePermissions.containerSecurityContext.runAsUser`           | User ID for the init container                                                                                                    | `0`                        |
+| `volumePermissions.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                  | `RuntimeDefault`           |
 
 ### Other Parameters
 
@@ -332,8 +336,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set auth.username=admin,auth.password=password \
-    oci://registry-1.docker.io/bitnamicharts/discourse
+    oci://REGISTRY_NAME/REPOSITORY_NAME/discourse
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the Discourse administrator account username and password to `admin` and `password` respectively.
 
@@ -342,14 +348,15 @@ The above command sets the Discourse administrator account username and password
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/discourse
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/discourse
 ```
 
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/discourse/values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -364,9 +371,11 @@ By default, this Chart only deploys a single pod running Discourse. Should you w
 1. Create a conventional release, that will be scaled later:
 
     ```console
-    helm install my-release oci://registry-1.docker.io/bitnamicharts/discourse
+    helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/discourse
     ...
     ```
+
+    > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 2. Wait for the release to complete and Discourse to be running successfully.
 
@@ -381,8 +390,10 @@ By default, this Chart only deploys a single pod running Discourse. Should you w
 3. Perform an upgrade specifying the number of replicas and the credentials used.
 
     ```console
-    helm upgrade my-release --set replicaCount=2,discourse.skipInstall=true oci://registry-1.docker.io/bitnamicharts/discourse
+    helm upgrade my-release --set replicaCount=2,discourse.skipInstall=true oci://REGISTRY_NAME/REPOSITORY_NAME/discourse
     ```
+
+    > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
     Note that for this to work properly, you need to provide ReadWriteMany PVCs. If you don't have a provisioner for this type of storage, we recommend that you install the NFS provisioner chart (with the correct parameters, such as `persistence.enabled=true` and `persistence.size=10Gi`) and map it to a RWO volume.
 
@@ -392,6 +403,18 @@ By default, this Chart only deploys a single pod running Discourse. Should you w
     persistence.storageClass=nfs
     postgresql.primary.persistence.storageClass=nfs
     ```
+
+### Installing plugins
+
+You can install custom Discourse plugins during the release installation listing the desired plugin repositories via the `discourse.plugins` parameter. For example:
+
+```yaml
+discourse:
+  plugins:
+  - https://github.com/discourse/discourse-oauth2-basic
+```
+
+> Note: By default, plugins are persisted after the 1st installation, therefore it's not possible to update them on subsequent upgrades. If you want plugins to be updated on every upgrade, set the `discourse.persistPlugins` parameter to `false`.
 
 ### Sidecars
 
@@ -495,7 +518,7 @@ Refer to the [chart documentation for more information about how to upgrade from
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

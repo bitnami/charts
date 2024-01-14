@@ -14,7 +14,7 @@ Return the proper OAuth2 Proxy image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "oauth2-proxy.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image) "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -113,8 +113,10 @@ Get the password secret.
 Get the password key to be retrieved from Redis&reg; secret.
 */}}
 {{- define "oauth2-proxy.redis.secretPasswordKey" -}}
-{{- if and .Values.redis.auth.existingSecret .Values.redis.auth.existingSecretPasswordKey -}}
+{{- if and .Values.redis.enabled .Values.redis.auth.existingSecret .Values.redis.auth.existingSecretPasswordKey -}}
 {{- printf "%s" .Values.redis.auth.existingSecretPasswordKey -}}
+{{- else if and (not .Values.redis.enabled) .Values.externalRedis.existingSecret .Values.externalRedis.existingSecretPasswordKey -}}
+{{- printf "%s" .Values.externalRedis.existingSecretPasswordKey -}}
 {{- else -}}
 {{- printf "redis-password" -}}
 {{- end -}}

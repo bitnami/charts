@@ -14,8 +14,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
-  {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
-  {{- if and $pspAvailable .Values.psp.create }}
+  {{- if and (include "common.capabilities.psp.supported" .) .Values.psp.create }}
   - apiGroups: ["extensions"]
     resources: ["podsecuritypolicies"]
     verbs: ["use"]

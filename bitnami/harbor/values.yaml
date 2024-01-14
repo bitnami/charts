@@ -152,7 +152,7 @@ service:
     https: ""
   ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
-  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   ##
   sessionAffinity: None
   ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -190,7 +190,7 @@ service:
 
 ingress:
   ## Configure the ingress resource that allows you to access Harbor Core
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   core:
     ## @param ingress.core.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
@@ -222,10 +222,10 @@ ingress:
     ##   cert-manager.io/cluster-issuer: cluster-issuer-name
     ##
     annotations:
-      ingress.kubernetes.io/ssl-redirect: 'true'
-      ingress.kubernetes.io/proxy-body-size: '0'
-      nginx.ingress.kubernetes.io/ssl-redirect: 'true'
-      nginx.ingress.kubernetes.io/proxy-body-size: '0'
+      ingress.kubernetes.io/ssl-redirect: "true"
+      ingress.kubernetes.io/proxy-body-size: "0"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-body-size: "0"
     ## @param ingress.core.tls Enable TLS configuration for the host defined at `ingress.core.hostname` parameter
     ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.core.hostname }}`
     ## You can:
@@ -316,7 +316,7 @@ persistence:
   ## Resource Policy
   ## @param persistence.resourcePolicy Setting it to `keep` to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted
   ##
-  resourcePolicy: 'keep'
+  resourcePolicy: "keep"
   persistentVolumeClaim:
     ## @param persistence.persistentVolumeClaim.registry.existingClaim Name of an existing PVC to use
     ## @param persistence.persistentVolumeClaim.registry.storageClass PVC Storage Class for Harbor Registry data volume
@@ -354,24 +354,6 @@ persistence:
       size: 1Gi
       annotations: {}
       selector: {}
-      ## @param persistence.persistentVolumeClaim.jobservice.scanData.existingClaim Name of an existing PVC to use
-      ## @param persistence.persistentVolumeClaim.jobservice.scanData.storageClass PVC Storage Class for Harbor Jobservice scan data volume
-      ## Note: The default StorageClass will be used if not defined. Set it to `-` to disable dynamic provisioning
-      ## @param persistence.persistentVolumeClaim.jobservice.scanData.subPath The sub path used in the volume
-      ## @param persistence.persistentVolumeClaim.jobservice.scanData.accessModes The access mode of the volume
-      ## @param persistence.persistentVolumeClaim.jobservice.scanData.size The size of the volume
-      ## @param persistence.persistentVolumeClaim.jobservice.scanData.annotations Annotations for the PVC
-      ## @param persistence.persistentVolumeClaim.jobservice.scanData.selector Selector to match an existing Persistent Volume
-      ##
-      scanData:
-        existingClaim: ""
-        storageClass: ""
-        subPath: ""
-        accessModes:
-          - ReadWriteOnce
-        size: 1Gi
-        annotations: {}
-        selector: {}
     ## @param persistence.persistentVolumeClaim.trivy.storageClass PVC Storage Class for Trivy data volume
     ## Note: The default StorageClass will be used if not defined. Set it to `-` to disable dynamic provisioning
     ## @param persistence.persistentVolumeClaim.trivy.accessModes The access mode of the volume
@@ -605,9 +587,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
@@ -615,7 +597,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r77
+    tag: 11-debian-11-r92
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -627,7 +609,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
   ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
   ##
@@ -650,9 +632,9 @@ volumePermissions:
 nginx:
   ## Bitnami NGINX image
   ## ref: https://hub.docker.com/r/bitnami/nginx/tags/
-  ## @param nginx.image.registry NGINX image registry
-  ## @param nginx.image.repository NGINX image repository
-  ## @param nginx.image.tag NGINX image tag (immutable tags are recommended)
+  ## @param nginx.image.registry [default: REGISTRY_NAME] NGINX image registry
+  ## @param nginx.image.repository [default: REPOSITORY_NAME/nginx] NGINX image repository
+  ## @skip nginx.image.tag NGINX image tag (immutable tags are recommended)
   ## @param nginx.image.digest NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param nginx.image.pullPolicy NGINX image pull policy
   ## @param nginx.image.pullSecrets NGINX image pull secrets
@@ -661,11 +643,11 @@ nginx:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.2-debian-11-r37
+    tag: 1.25.3-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -779,7 +761,7 @@ nginx:
   ##
   customStartupProbe: {}
   ## NGINX resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param nginx.resources.limits The resources limits for the NGINX containers
   ## @param nginx.resources.requests The requested resources for the NGINX containers
   ##
@@ -796,14 +778,26 @@ nginx:
     fsGroup: 1001
   ## Configure NGINX containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param nginx.containerSecurityContext.enabled Enabled NGINX containers' Security Context
-  ## @param nginx.containerSecurityContext.runAsUser Set NGINX containers' Security Context runAsUser
-  ## @param nginx.containerSecurityContext.runAsNonRoot Set NGINX containers' Security Context runAsNonRoot
+  ## @param nginx.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param nginx.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param nginx.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param nginx.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param nginx.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param nginx.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param nginx.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param nginx.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param nginx.updateStrategy.type NGINX deployment strategy type - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -859,7 +853,7 @@ nginx:
   ##
   affinity: {}
   ## @param nginx.nodeSelector NGINX Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param nginx.tolerations NGINX Tolerations for pod assignment
@@ -913,9 +907,9 @@ nginx:
 portal:
   ## Bitnami Harbor Portal image
   ## ref: https://hub.docker.com/r/bitnami/harbor-portal/tags/
-  ## @param portal.image.registry Harbor Portal image registry
-  ## @param portal.image.repository Harbor Portal image repository
-  ## @param portal.image.tag Harbor Portal image tag (immutable tags are recommended)
+  ## @param portal.image.registry [default: REGISTRY_NAME] Harbor Portal image registry
+  ## @param portal.image.repository [default: REPOSITORY_NAME/harbor-portal] Harbor Portal image repository
+  ## @skip portal.image.tag Harbor Portal image tag (immutable tags are recommended)
   ## @param portal.image.digest Harbor Portal image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param portal.image.pullPolicy Harbor Portal image pull policy
   ## @param portal.image.pullSecrets Harbor Portal image pull secrets
@@ -924,11 +918,11 @@ portal:
   image:
     registry: docker.io
     repository: bitnami/harbor-portal
-    tag: 2.9.0-debian-11-r26
+    tag: 2.10.0-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1028,7 +1022,7 @@ portal:
   ##
   customStartupProbe: {}
   ## Harbor Portal resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param portal.resources.limits The resources limits for the Harbor Portal containers
   ## @param portal.resources.requests The requested resources for the Harbor Portal containers
   ##
@@ -1045,14 +1039,26 @@ portal:
     fsGroup: 1001
   ## Configure Harbor Portal containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param portal.containerSecurityContext.enabled Enabled Harbor Portal containers' Security Context
-  ## @param portal.containerSecurityContext.runAsUser Set Harbor Portal containers' Security Context runAsUser
-  ## @param portal.containerSecurityContext.runAsNonRoot Set Harbor Portal containers' Security Context runAsNonRoot
+  ## @param portal.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param portal.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param portal.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param portal.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param portal.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param portal.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param portal.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param portal.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param portal.updateStrategy.type Harbor Portal deployment strategy type - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -1107,7 +1113,7 @@ portal:
   ##
   affinity: {}
   ## @param portal.nodeSelector Harbor Portal Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param portal.tolerations Harbor Portal Tolerations for pod assignment
@@ -1173,9 +1179,9 @@ portal:
 core:
   ## Bitnami Harbor Core image
   ## ref: https://hub.docker.com/r/bitnami/harbor-core/tags/
-  ## @param core.image.registry Harbor Core image registry
-  ## @param core.image.repository Harbor Core image repository
-  ## @param core.image.tag Harbor Core image tag (immutable tags are recommended)
+  ## @param core.image.registry [default: REGISTRY_NAME] Harbor Core image registry
+  ## @param core.image.repository [default: REPOSITORY_NAME/harbor-core] Harbor Core image repository
+  ## @skip core.image.tag Harbor Core image tag (immutable tags are recommended)
   ## @param core.image.digest Harbor Core image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param core.image.pullPolicy Harbor Core image pull policy
   ## @param core.image.pullSecrets Harbor Core image pull secrets
@@ -1184,11 +1190,11 @@ core:
   image:
     registry: docker.io
     repository: bitnami/harbor-core
-    tag: 2.9.0-debian-11-r14
+    tag: 2.10.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1347,7 +1353,7 @@ core:
   ##
   customStartupProbe: {}
   ## Harbor Core resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param core.resources.limits The resources limits for the Harbor Core containers
   ## @param core.resources.requests The requested resources for the Harbor Core containers
   ##
@@ -1364,14 +1370,26 @@ core:
     fsGroup: 1001
   ## Configure Harbor Core containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param core.containerSecurityContext.enabled Enabled Harbor Core containers' Security Context
-  ## @param core.containerSecurityContext.runAsUser Set Harbor Core containers' Security Context runAsUser
-  ## @param core.containerSecurityContext.runAsNonRoot Set Harbor Core containers' Security Context runAsNonRoot
+  ## @param core.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param core.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param core.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param core.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param core.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param core.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param core.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param core.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param core.updateStrategy.type Harbor Core deployment strategy type - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -1426,7 +1444,7 @@ core:
   ##
   affinity: {}
   ## @param core.nodeSelector Harbor Core Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param core.tolerations Harbor Core Tolerations for pod assignment
@@ -1494,9 +1512,9 @@ core:
 jobservice:
   ## Bitnami Harbor Jobservice image
   ## ref: https://hub.docker.com/r/bitnami/harbor-jobservice/tags/
-  ## @param jobservice.image.registry Harbor Jobservice image registry
-  ## @param jobservice.image.repository Harbor Jobservice image repository
-  ## @param jobservice.image.tag Harbor Jobservice image tag (immutable tags are recommended)
+  ## @param jobservice.image.registry [default: REGISTRY_NAME] Harbor Jobservice image registry
+  ## @param jobservice.image.repository [default: REPOSITORY_NAME/harbor-jobservice] Harbor Jobservice image repository
+  ## @skip jobservice.image.tag Harbor Jobservice image tag (immutable tags are recommended)
   ## @param jobservice.image.digest Harbor Jobservice image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param jobservice.image.pullPolicy Harbor Jobservice image pull policy
   ## @param jobservice.image.pullSecrets Harbor Jobservice image pull secrets
@@ -1505,11 +1523,11 @@ jobservice:
   image:
     registry: docker.io
     repository: bitnami/harbor-jobservice
-    tag: 2.9.0-debian-11-r11
+    tag: 2.10.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1630,7 +1648,7 @@ jobservice:
   ##
   customStartupProbe: {}
   ## Harbor Jobservice resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param jobservice.resources.limits The resources limits for the Harbor Jobservice containers
   ## @param jobservice.resources.requests The requested resources for the Harbor Jobservice containers
   ##
@@ -1647,14 +1665,26 @@ jobservice:
     fsGroup: 1001
   ## Configure Harbor Jobservice containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param jobservice.containerSecurityContext.enabled Enabled Harbor Jobservice containers' Security Context
-  ## @param jobservice.containerSecurityContext.runAsUser Set Harbor Jobservice containers' Security Context runAsUser
-  ## @param jobservice.containerSecurityContext.runAsNonRoot Set Harbor Jobservice containers' Security Context runAsNonRoot
+  ## @param jobservice.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param jobservice.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param jobservice.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param jobservice.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param jobservice.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param jobservice.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param jobservice.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param jobservice.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param jobservice.updateStrategy.type Harbor Jobservice deployment strategy type - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -1709,7 +1739,7 @@ jobservice:
   ##
   affinity: {}
   ## @param jobservice.nodeSelector Harbor Jobservice Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param jobservice.tolerations Harbor Jobservice Tolerations for pod assignment
@@ -1799,12 +1829,12 @@ registry:
   ## @param registry.credentials.htpasswd The content of htpasswd file based on the value of `registry.credentials.username` `registry.credentials.password`.  Currently `helm` does not support bcrypt in the template script, if the credential is updated you need to manually generated by calling
   ##
   credentials:
-    username: 'harbor_registry_user'
-    password: 'harbor_registry_password'
+    username: harbor_registry_user
+    password: harbor_registry_password
     ## If you update the username or password of registry, make sure use cli tool htpasswd to generate the bcrypt hash
     ## e.g. "htpasswd -nbBC10 $username $password"
     ##
-    htpasswd: 'harbor_registry_user:$2y$10$9L4Tc0DJbFFMB6RdSCunrOpTHdwhid4ktBJmLD00bYgqkkGOvll3m'
+    htpasswd: harbor_registry_user:$2y$10$9L4Tc0DJbFFMB6RdSCunrOpTHdwhid4ktBJmLD00bYgqkkGOvll3m
   middleware:
     ## @param registry.middleware.enabled Middleware is used to add support for a CDN between backend storage and `docker pull` recipient.  See
     ##
@@ -1826,7 +1856,7 @@ registry:
       ## The secret key that should be present is CLOUDFRONT_KEY_DATA, which should be the encoded private key
       ## that allows access to CloudFront
       ##
-      privateKeySecret: 'my-secret'
+      privateKeySecret: my-secret
   ## Use TLS in the container
   ##
   tls:
@@ -1897,7 +1927,7 @@ registry:
   ##
   affinity: {}
   ## @param registry.nodeSelector Harbor Registry Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param registry.tolerations Harbor Registry Tolerations for pod assignment
@@ -1949,9 +1979,9 @@ registry:
   server:
     ## Bitnami Harbor Registry image
     ## ref: https://hub.docker.com/r/bitnami/harbor-registry/tags/
-    ## @param registry.server.image.registry Harbor Registry image registry
-    ## @param registry.server.image.repository Harbor Registry image repository
-    ## @param registry.server.image.tag Harbor Registry image tag (immutable tags are recommended)
+    ## @param registry.server.image.registry [default: REGISTRY_NAME] Harbor Registry image registry
+    ## @param registry.server.image.repository [default: REPOSITORY_NAME/harbor-registry] Harbor Registry image repository
+    ## @skip registry.server.image.tag Harbor Registry image tag (immutable tags are recommended)
     ## @param registry.server.image.digest Harbor Registry image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param registry.server.image.pullPolicy Harbor Registry image pull policy
     ## @param registry.server.image.pullSecrets Harbor Registry image pull secrets
@@ -1960,11 +1990,11 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registry
-      tag: 2.9.0-debian-11-r26
+      tag: 2.10.0-debian-11-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -2057,7 +2087,7 @@ registry:
     ##
     customStartupProbe: {}
     ## Harbor Registry main resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param registry.server.resources.limits The resources limits for the Harbor Registry main containers
     ## @param registry.server.resources.requests The requested resources for the Harbor Registry main containers
     ##
@@ -2066,14 +2096,26 @@ registry:
       requests: {}
     ## Configure Harbor Registry main containers (only main one) Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param registry.server.containerSecurityContext.enabled Enabled Harbor Registry main containers' Security Context
-    ## @param registry.server.containerSecurityContext.runAsUser Set Harbor Registry main containers' Security Context runAsUser
-    ## @param registry.server.containerSecurityContext.runAsNonRoot Set Harbor Registry main containers' Security Context runAsNonRoot
+    ## @param registry.server.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param registry.server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param registry.server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param registry.server.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param registry.server.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param registry.server.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param registry.server.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param registry.server.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
       runAsUser: 1001
       runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## @param registry.server.lifecycleHooks LifecycleHook for the Harbor Registry main container(s) to automate configuration before or after startup
     ##
     lifecycleHooks: {}
@@ -2096,9 +2138,9 @@ registry:
   controller:
     ## Bitnami Harbor Registryctl image
     ## ref: https://hub.docker.com/r/bitnami/harbor-registryctl/tags/
-    ## @param registry.controller.image.registry Harbor Registryctl image registry
-    ## @param registry.controller.image.repository Harbor Registryctl image repository
-    ## @param registry.controller.image.tag Harbor Registryctl image tag (immutable tags are recommended)
+    ## @param registry.controller.image.registry [default: REGISTRY_NAME] Harbor Registryctl image registry
+    ## @param registry.controller.image.repository [default: REPOSITORY_NAME/harbor-registryctl] Harbor Registryctl image repository
+    ## @skip registry.controller.image.tag Harbor Registryctl image tag (immutable tags are recommended)
     ## @param registry.controller.image.digest Harbor Registryctl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param registry.controller.image.pullPolicy Harbor Registryctl image pull policy
     ## @param registry.controller.image.pullSecrets Harbor Registryctl image pull secrets
@@ -2107,11 +2149,11 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registryctl
-      tag: 2.9.0-debian-11-r11
+      tag: 2.10.0-debian-11-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -2200,7 +2242,7 @@ registry:
     ##
     customStartupProbe: {}
     ## Harbor Registryctl resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param registry.controller.resources.limits The resources limits for the Harbor Registryctl containers
     ## @param registry.controller.resources.requests The requested resources for the Harbor Registryctl containers
     ##
@@ -2209,14 +2251,26 @@ registry:
       requests: {}
     ## Configure Harbor Registryctl containers (only main one) Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param registry.controller.containerSecurityContext.enabled Enabled Harbor Registryctl containers' Security Context
-    ## @param registry.controller.containerSecurityContext.runAsUser Set Harbor Registryctl containers' Security Context runAsUser
-    ## @param registry.controller.containerSecurityContext.runAsNonRoot Set Harbor Registryctl containers' Security Context runAsNonRoot
+    ## @param registry.controller.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param registry.controller.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param registry.controller.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param registry.controller.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param registry.controller.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param registry.controller.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param registry.controller.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param registry.controller.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
       runAsUser: 1001
       runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## @param registry.controller.lifecycleHooks LifecycleHook for the Harbor Registryctl container(s) to automate configuration before or after startup
     ##
     lifecycleHooks: {}
@@ -2239,9 +2293,9 @@ registry:
 trivy:
   ## Bitnami Harbor Adapter Trivy image
   ## ref: https://hub.docker.com/r/bitnami/harbor-adapter-trivy/tags/
-  ## @param trivy.image.registry Harbor Adapter Trivy image registry
-  ## @param trivy.image.repository Harbor Adapter Trivy image repository
-  ## @param trivy.image.tag Harbor Adapter Trivy image tag (immutable tags are recommended)
+  ## @param trivy.image.registry [default: REGISTRY_NAME] Harbor Adapter Trivy image registry
+  ## @param trivy.image.repository [default: REPOSITORY_NAME/harbor-adapter-trivy] Harbor Adapter Trivy image repository
+  ## @skip trivy.image.tag Harbor Adapter Trivy image tag (immutable tags are recommended)
   ## @param trivy.image.digest Harbor Adapter Trivy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param trivy.image.pullPolicy Harbor Adapter Trivy image pull policy
   ## @param trivy.image.pullSecrets Harbor Adapter Trivy image pull secrets
@@ -2250,11 +2304,11 @@ trivy:
   image:
     registry: docker.io
     repository: bitnami/harbor-adapter-trivy
-    tag: 2.9.0-debian-11-r14
+    tag: 2.10.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2276,10 +2330,10 @@ trivy:
   debugMode: false
   ## @param trivy.vulnType Comma-separated list of vulnerability types. Possible values `os` and `library`.
   ##
-  vulnType: 'os,library'
+  vulnType: "os,library"
   ## @param trivy.severity Comma-separated list of severities to be checked
   ##
-  severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+  severity: "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
   ## @param trivy.ignoreUnfixed The flag to display only fixed vulnerabilities
   ##
   ignoreUnfixed: false
@@ -2311,7 +2365,7 @@ trivy:
   skipUpdate: false
   ## @param trivy.cacheDir Directory to store the cache
   ##
-  cacheDir: '/bitnami/harbor-adapter-trivy/.cache'
+  cacheDir: "/bitnami/harbor-adapter-trivy/.cache"
   ## Use TLS in the container
   ##
   tls:
@@ -2398,7 +2452,7 @@ trivy:
   ##
   customStartupProbe: {}
   ## Trivy resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param trivy.resources.limits [object] The resources limits for the Trivy containers
   ## @param trivy.resources.requests [object] The requested resources for the Trivy containers
   ##
@@ -2419,14 +2473,26 @@ trivy:
     fsGroup: 1001
   ## Configure Trivy containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param trivy.containerSecurityContext.enabled Enabled Trivy containers' Security Context
-  ## @param trivy.containerSecurityContext.runAsUser Set Trivy containers' Security Context runAsUser
-  ## @param trivy.containerSecurityContext.runAsNonRoot Set Trivy containers' Security Context runAsNonRoot
+  ## @param trivy.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param trivy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param trivy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param trivy.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param trivy.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param trivy.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param trivy.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param trivy.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param trivy.updateStrategy.type Trivy deployment strategy type - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -2481,7 +2547,7 @@ trivy:
   ##
   affinity: {}
   ## @param trivy.nodeSelector Trivy Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param trivy.tolerations Trivy Tolerations for pod assignment
@@ -2547,9 +2613,9 @@ trivy:
 exporter:
   ## Bitnami Harbor Exporter image
   ## ref: https://hub.docker.com/r/bitnami/harbor-exporter/tags/
-  ## @param exporter.image.registry Harbor Exporter image registry
-  ## @param exporter.image.repository Harbor Exporter image repository
-  ## @param exporter.image.tag Harbor Exporter image tag
+  ## @param exporter.image.registry [default: REGISTRY_NAME] Harbor Exporter image registry
+  ## @param exporter.image.repository [default: REPOSITORY_NAME/harbor-exporter] Harbor Exporter image repository
+  ## @skip exporter.image.tag Harbor Exporter image tag
   ## @param exporter.image.digest Harbor Exporter image image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param exporter.image.pullPolicy Harbor exporter image pull policy
   ## @param exporter.image.pullSecrets Specify docker-registry secret names as an array
@@ -2558,11 +2624,11 @@ exporter:
   image:
     registry: docker.io
     repository: bitnami/harbor-exporter
-    tag: 2.9.0-debian-11-r14
+    tag: 2.10.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2657,7 +2723,7 @@ exporter:
   ##
   customStartupProbe: {}
   ## Harbor Exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param exporter.resources.limits The resources limits for the Harbor Exporter containers
   ## @param exporter.resources.requests The requested resources for the Harbor Exporter containers
   ##
@@ -2674,14 +2740,26 @@ exporter:
     fsGroup: 1001
   ## Configure Exporter containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param exporter.containerSecurityContext.enabled Enabled Exporter containers' Security Context
-  ## @param exporter.containerSecurityContext.runAsUser Set Exporter containers' Security Context runAsUser
-  ## @param exporter.containerSecurityContext.runAsNonRoot Set Exporter containers' Security Context runAsNonRoot
+  ## @param exporter.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param exporter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param exporter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param exporter.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param exporter.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param exporter.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param exporter.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param exporter.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param exporter.updateStrategy.type The update strategy for deployments with persistent volumes: RollingUpdate or Recreate. Set it as Recreate when RWM for volumes isn't supported
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -2748,7 +2826,7 @@ exporter:
   ##
   serviceAccountName: ""
   ## @param exporter.nodeSelector Harbor Exporter Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param exporter.tolerations Harbor Exporter Tolerations for pod assignment
@@ -2799,15 +2877,15 @@ postgresql:
   enabled: true
   ## Override PostgreSQL default image as 14.x is not supported https://goharbor.io/docs/2.4.0/install-config/
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql
-  ## @param postgresql.image.registry PostgreSQL image registry
-  ## @param postgresql.image.repository PostgreSQL image repository
-  ## @param postgresql.image.tag PostgreSQL image tag (immutable tags are recommended)
+  ## @param postgresql.image.registry [default: REGISTRY_NAME] PostgreSQL image registry
+  ## @param postgresql.image.repository [default: REPOSITORY_NAME/postgresql] PostgreSQL image repository
+  ## @skip postgresql.image.tag PostgreSQL image tag (immutable tags are recommended)
   ## @param postgresql.image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 13.12.0-debian-11-r46
+    tag: 13.13.0-debian-11-r16
     digest: ""
   auth:
     enablePostgresUser: true
@@ -2887,10 +2965,10 @@ externalRedis:
   host: localhost
   port: 6379
   password: ""
-  coreDatabaseIndex: '0'
-  jobserviceDatabaseIndex: '1'
-  registryDatabaseIndex: '2'
-  trivyAdapterDatabaseIndex: '5'
+  coreDatabaseIndex: "0"
+  jobserviceDatabaseIndex: "1"
+  registryDatabaseIndex: "2"
+  trivyAdapterDatabaseIndex: "5"
   ## Redis&reg; sentinel configuration
   ## @param externalRedis.sentinel.enabled If external redis with sentinal is used, set it to `true`
   ## @param externalRedis.sentinel.masterSet Name of sentinel masterSet if sentinel is used
@@ -2898,7 +2976,7 @@ externalRedis:
   ##
   sentinel:
     enabled: false
-    masterSet: 'mymaster'
+    masterSet: "mymaster"
     hosts: ""
 
 ## @section Harbor metrics parameters

@@ -29,7 +29,7 @@ Return the proper Prometheus metrics image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "nginx.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.cloneStaticSiteFromGit.image .Values.metrics.image) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.cloneStaticSiteFromGit.image .Values.metrics.image) "context" $) }}
 {{- end -}}
 
 {{/*

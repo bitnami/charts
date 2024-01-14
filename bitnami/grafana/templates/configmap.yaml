@@ -16,10 +16,8 @@ metadata:
 data:
   GF_SECURITY_ADMIN_USER: {{ .Values.admin.user | quote }}
   {{- if .Values.imageRenderer.enabled }}
-  {{- $domain := .Values.clusterDomain }}
-  {{- $namespace := .Release.Namespace }}
-  GF_RENDERING_SERVER_URL: "http://{{ include "common.names.fullname" . }}-image-renderer.{{ $namespace }}.svc.{{ $domain }}:{{ .Values.imageRenderer.service.ports.imageRenderer }}/render"
-  GF_RENDERING_CALLBACK_URL: "http://{{ include "common.names.fullname" . }}.{{ $namespace }}.svc.{{ $domain }}:{{ .Values.service.ports.grafana }}/"
+  GF_RENDERING_SERVER_URL: {{ .Values.imageRenderer.serverURL | quote }}
+  GF_RENDERING_CALLBACK_URL: {{ .Values.imageRenderer.callbackURL | quote }}
   {{- end }}
   {{- if .Values.plugins }}
   GF_INSTALL_PLUGINS: {{ .Values.plugins | quote }}

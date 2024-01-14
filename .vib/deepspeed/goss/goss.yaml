@@ -5,7 +5,7 @@
 file:
   /job/hostfile:
     exists: true
-    contains:
+    contents:
     {{- range $i, $e := until $nodes }}
       - /deepspeed-worker-{{ $i }}/
     {{ end }}

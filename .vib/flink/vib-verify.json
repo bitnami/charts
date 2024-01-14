@@ -31,13 +31,6 @@
       },
       "actions": [
         {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-flink-jobmanager-http",
-            "app_protocol": "HTTP"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
@@ -46,7 +39,9 @@
             "tests_file": "flink/goss/goss.yaml",
             "vars_file": "flink/runtime-parameters.yaml",
             "remote": {
-              "workload": "deploy-flink-jobmanager"
+              "pod": {
+                "workload": "deploy-flink-jobmanager"
+              }
             }
           }
         },

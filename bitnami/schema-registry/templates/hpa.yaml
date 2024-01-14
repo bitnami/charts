@@ -21,6 +21,17 @@ spec:
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:
+    {{- if not (empty .Values.autoscaling.customPodMetrics) }}
+    {{- range .Values.autoscaling.customPodMetrics }}
+    - type: Pods
+      pods:
+        metric:
+          name: {{ .name }}
+        target:
+          type: AverageValue
+          averageValue: {{ .averageValue }}
+    {{ end -}}
+    {{- end }}
     {{- if .Values.autoscaling.targetCPU }}
     - type: Resource
       resource:

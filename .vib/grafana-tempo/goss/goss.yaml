@@ -21,7 +21,7 @@ file:
     filetype: file
     mode: "0644"
     owner: root
-    contains:
+    contents:
       - /http_listen_port.*{{ .Vars.tempo.containerPorts.web }}/
       - /override_config.*\/bitnami\/grafana-tempo\/conf\/overrides.yaml/
       - /cache.*memcached/

@@ -20,9 +20,6 @@ it('allows uploading a dashboard as JSON file', () => {
       .type(`${dashboard.newDashboard.title} ${random}`);
     cy.get('[data-testid*="data-testid-import-dashboard-submit"]').click();
     cy.visit('dashboards');
-    cy.get(
-      '[aria-label*="View as list"]'
-    ).click({ force: true });
     cy.contains(`${dashboard.newDashboard.title} ${random}`);
   });
 });

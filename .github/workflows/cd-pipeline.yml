@@ -11,10 +11,6 @@ on: # rebuild any PRs and main branch changes
       - '!**.md'
 # Remove all permissions by default.
 permissions: {}
-env:
-  CSP_API_URL: https://console.cloud.vmware.com
-  CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
-  VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
 jobs:
   get-chart:
     runs-on: ubuntu-latest
@@ -25,7 +21,7 @@ jobs:
       chart: ${{ steps.get-chart.outputs.chart }}
       result: ${{ steps.get-chart.outputs.result }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         with:
           path: charts
           fetch-depth: 2 # to be able to obtain files changed in the latest commit
@@ -59,7 +55,7 @@ jobs:
       - id: show-error
         name: 'Show error'
         if: ${{ steps.get-chart.outputs.result == 'fail' }}
-        uses: actions/github-script@v6
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
           script: |
               core.setFailed('${{ steps.get-chart.outputs.error }}')
@@ -70,39 +66,21 @@ jobs:
     name: VIB Publish
     permissions:
       contents: read
+    env:
+      CSP_API_URL: https://console.cloud.vmware.com
+      CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
+      VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         name: Checkout Repository
         with:
           path: charts
-      - id: get-asset-vib-config
-        name: Get asset-specific configuration for VIB action
-        run: |
-          config_file="charts/.vib/${{ needs.get-chart.outputs.chart }}/vib-action.config"
-
-          # Supported configuration customizations and default values
-          verification_mode="PARALLEL"
-
-          if [[ -f $config_file ]]; then
-            verification_mode="$(cat $config_file | grep 'verification-mode' | cut -d'=' -f2)"
-          fi
-          runtime_parameters_file=""
-          if [[ -f "charts/.vib/${{ needs.get-chart.outputs.chart }}/runtime-parameters.yaml" ]]; then
-            # The path is relative to the .vib folder
-            runtime_parameters_file="${{ needs.get-chart.outputs.chart }}/runtime-parameters.yaml"
-          fi
-          echo "verification_mode=${verification_mode}" >> $GITHUB_OUTPUT
-          echo "runtime_parameters_file=${runtime_parameters_file}" >> $GITHUB_OUTPUT
       - uses: vmware-labs/vmware-image-builder-action@v0
-        name: Verify and publish ${{ needs.get-chart.outputs.chart }}
+        name: Publish ${{ needs.get-chart.outputs.chart }}
         with:
           pipeline: ${{ needs.get-chart.outputs.chart }}/vib-publish.json
           config: charts/.vib/
-          verification-mode: ${{ steps.get-asset-vib-config.outputs.verification_mode }}
-          runtime-parameters-file: ${{ steps.get-asset-vib-config.outputs.runtime_parameters_file }}
         env:
-          VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
-          VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: ${{ secrets.VIB_ENV_ALTERNATIVE_TARGET_PLATFORM }}
           VIB_ENV_S3_URL: s3://${{ secrets.AWS_S3_BUCKET }}/bitnami
           VIB_ENV_S3_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           VIB_ENV_S3_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -112,30 +90,26 @@ jobs:
       - vib-publish
     name: Update charts index
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a
         with:
           path: ~/artifacts
       # If we perform a checkout of the main branch, we will find conflicts with the submodules
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         with:
           ref: 'index'
           path: index
           # The token is persisted in the local git config and enables scripts to run authenticated git commands.
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
-      - name: Install and configure aws-cli and helm
+      - name: Install helm
         run: |
-          # AWS CLI
-          export DEBIAN_FRONTEND=noninteractive
-          sudo apt-get update && sudo apt-get install -y awscli
-          aws configure set region us-east-1
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set source_profile default
-          # helm
           HELM_TARBALL="helm-v3.8.1-linux-amd64.tar.gz"
           curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
       - id: update-index
         name: Fetch chart and update index
+        env: 
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
         run: |
           # Extract chart release metadata from the publish report file
           vib_publish_report_file=$(find ~/artifacts -name "report.json" -print -quit)
@@ -179,8 +153,8 @@ jobs:
     name: Notify unsuccessful CD run
     steps:
       - name: Notify in Slack channel
-        if: ${{ needs.vib-publish.result != 'success' || needs.update-index.result != 'success' }}
-        uses: slackapi/slack-github-action@v1.23.0
+        if: ${{ needs.update-index.result != 'success' }}
+        uses: slackapi/slack-github-action@e28cf165c92ffef168d23c5c9000cffc8a25e117
         with:
           channel-id: ${{ secrets.CD_SLACK_CHANNEL_ID }}
           payload: |

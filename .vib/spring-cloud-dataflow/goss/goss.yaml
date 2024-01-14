@@ -10,8 +10,8 @@ file:
     filetype: symlink
     mode: "0777"
     owner: root
-    contains:
-    - {{ .Vars.server.configuration.accountName }}
+    contents:
+    - "{{ .Vars.server.configuration.accountName }}"
     - /url.*jdbc:mariadb.*{{ .Vars.mariadb.auth.database }}/
     - /username.*{{ .Vars.mariadb.auth.username }}/
   /etc/secrets/database:

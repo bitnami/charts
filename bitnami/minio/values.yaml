@@ -24,6 +24,9 @@ global:
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
 nameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
 fullnameOverride: ""
@@ -47,9 +50,9 @@ extraDeploy: []
 
 ## Bitnami MinIO&reg; image version
 ## ref: https://hub.docker.com/r/bitnami/minio/tags/
-## @param image.registry MinIO&reg; image registry
-## @param image.repository MinIO&reg; image repository
-## @param image.tag MinIO&reg; image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] MinIO&reg; image registry
+## @param image.repository [default: REPOSITORY_NAME/minio] MinIO&reg; image repository
+## @skip image.tag MinIO&reg; image tag (immutable tags are recommended)
 ## @param image.digest MinIO&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -58,11 +61,11 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2023.9.30-debian-11-r2
+  tag: 2024.1.11-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -78,15 +81,15 @@ image:
   debug: false
 ## Bitnami MinIO&reg; Client image version
 ## ref: https://hub.docker.com/r/bitnami/minio-client/tags/
-## @param clientImage.registry MinIO&reg; Client image registry
-## @param clientImage.repository MinIO&reg; Client image repository
-## @param clientImage.tag MinIO&reg; Client image tag (immutable tags are recommended)
+## @param clientImage.registry [default: REGISTRY_NAME] MinIO&reg; Client image registry
+## @param clientImage.repository [default: REPOSITORY_NAME/minio-client] MinIO&reg; Client image repository
+## @skip clientImage.tag MinIO&reg; Client image tag (immutable tags are recommended)
 ## @param clientImage.digest MinIO&reg; Client image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ##
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2023.9.29-debian-11-r2
+  tag: 2024.1.11-debian-11-r0
   digest: ""
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
@@ -221,6 +224,10 @@ provisioning:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
+  ## @param provisioning.nodeSelector Node labels for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/
+  ##
+  nodeSelector: {}
   ## @param provisioning.podLabels Extra labels for provisioning pods
   ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
@@ -350,8 +357,12 @@ provisioning:
   ##   - name: test-bucket
   ##     region: us-east-1
   ##     # Only when mode is 'distributed'
+  ##     # Allowed values: "Versioned" | "Suspended" | "Unchanged"
+  ##     # Defaults to "Suspended" if not specified.
+  ##     # For compatibility, accepts boolean values as well, where true maps
+  ##     # to "Versioned" and false to "Suspended".
   ##     # ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
-  ##     versioning: false
+  ##     versioning: Suspended
   ##     # Versioning is automatically enabled if withLock is true
   ##     # ref: https://docs.min.io/docs/minio-bucket-versioning-guide.html
   ##     withLock: true
@@ -393,14 +404,27 @@ provisioning:
     fsGroup: 1001
   ## MinIO&reg; container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param provisioning.containerSecurityContext.enabled Enable container Security Context
-  ## @param provisioning.containerSecurityContext.runAsUser User ID for the container
-  ## @param provisioning.containerSecurityContext.runAsNonRoot Avoid running as root User
+  ## @param provisioning.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param provisioning.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param provisioning.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param provisioning.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param provisioning.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param provisioning.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param provisioning.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param provisioning.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+
   ## Automatic Cleanup for Finished Jobs
   ## @param provisioning.cleanupAfterFinished.enabled Enables Cleanup for Finished Jobs
   ## @param provisioning.cleanupAfterFinished.seconds Sets the value of ttlSecondsAfterFinished
@@ -423,20 +447,34 @@ containerPorts:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable pod Security Context
 ## @param podSecurityContext.fsGroup Group ID for the container
+## @param podSecurityContext.fsGroupChangePolicy When K8s should preform chown on attached volumes
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
+  fsGroupChangePolicy: "OnRootMismatch"
 ## MinIO&reg; container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enable container Security Context
-## @param containerSecurityContext.runAsUser User ID for the container
-## @param containerSecurityContext.runAsNonRoot Avoid running as root User
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## @param podLabels Extra labels for MinIO&reg; pods
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
@@ -478,7 +516,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template.
@@ -493,7 +531,7 @@ topologySpreadConstraints: []
 ##
 priorityClassName: ""
 ## MinIO&reg; containers' resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -628,7 +666,7 @@ service:
   ##
   clusterIP: ""
   ## @param service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
@@ -658,7 +696,7 @@ service:
     annotations: {}
 ## Configure the ingress resource that allows you to access the
 ## MinIO&reg; Console. Set up the URL
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress controller resource for MinIO Console
@@ -687,7 +725,7 @@ ingress:
   servicePort: minio-console
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
   ## Use this parameter to set the required annotations for cert-manager, see
   ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
@@ -767,7 +805,7 @@ ingress:
 
 ## Configure the ingress resource that allows you to access the
 ## MinIO&reg; API. Set up the URL
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 apiIngress:
   ## @param apiIngress.enabled Enable ingress controller resource for MinIO API
@@ -796,7 +834,7 @@ apiIngress:
   servicePort: minio-api
   ## @param apiIngress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
   ## Use this parameter to set the required annotations for cert-manager, see
   ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
@@ -895,7 +933,7 @@ networkPolicy:
 ## @section Persistence parameters
 
 ## Enable persistence using Persistent Volume Claims
-## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable MinIO&reg; data persistence using PVC. If false, use emptyDir
@@ -935,9 +973,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
@@ -945,7 +983,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r86
+    tag: 11-debian-11-r93
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -957,7 +995,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -994,7 +1032,7 @@ serviceAccount:
   name: ""
   ## @param serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   ## @param serviceAccount.annotations Custom annotations for MinIO&reg; ServiceAccount
   ##
   annotations: {}
@@ -1037,9 +1075,14 @@ metrics:
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
     ##
     jobLabel: ""
-    ## @param metrics.serviceMonitor.path HTTP path to scrape for metrics
+    ## DEPRECATED metrics.serviceMonitor.path - please use `metrics.serviceMonitor.paths` instead
     ##
-    path: /minio/v2/metrics/cluster
+    ## path: /minio/v2/metrics/cluster
+    ## @param metrics.serviceMonitor.paths HTTP paths to scrape for metrics
+    ##
+    paths:
+      - /minio/v2/metrics/cluster
+      - /minio/v2/metrics/node
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
     ##
     interval: 30s

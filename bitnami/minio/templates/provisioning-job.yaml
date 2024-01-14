@@ -10,7 +10,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ $fullname }}
-  namespace: {{ .Release.Namespace | quote  }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: minio-provisioning
   annotations:
@@ -195,8 +195,17 @@ spec:
 
               {{- if $isDistributedMode }}
               {{- if (or ((empty $bucket.withLock)) (not $bucket.withLock)) }}
-              {{- $versioning := ternary ("enable") ("suspend") (and (not (empty $bucket.versioning)) $bucket.versioning) }}
-              mc version {{ $versioning }} {{ $minioAlias }}/{{ $bucket.name }};
+              {{- $versioning := default "Suspended" $bucket.versioning }}
+              {{- if kindIs "bool" $bucket.versioning }}
+              {{- $versioning = ternary "Versioned" "Suspended" $bucket.versioning }}
+              {{- end }}
+              {{- if eq $versioning "Versioned" }}
+              mc version enable {{ $minioAlias }}/{{ $bucket.name }};
+              {{- else if eq $versioning "Suspended" }}
+              mc version suspend {{ $minioAlias }}/{{ $bucket.name }};
+              {{- else if ne $versioning "Unchanged" }}
+              {{- fail (printf "Invalid value '%s' for versioning of bucket '%s'" $versioning $bucket.name) }}
+              {{- end }}
               {{- end }}
               {{- end }}
 
@@ -283,6 +292,9 @@ spec:
             {{- end }}
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.provisioning.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       volumes:
         {{- if .Values.provisioning.enabled }}

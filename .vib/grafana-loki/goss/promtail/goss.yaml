@@ -7,7 +7,7 @@ file:
     filetype: file
     exists: true
     owner: root
-    contains:
+    contents:
     - /http_listen_port.*{{ .Vars.promtail.containerPorts.http }}/
 http:
   http://grafana-loki-promtail:{{ .Vars.promtail.service.ports.http }}/config:

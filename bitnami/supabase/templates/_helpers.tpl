@@ -386,6 +386,17 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
+Create the name of the service account to use
+*/}}
+{{- define "supabase.jwt.serviceAccountName" -}}
+{{- if .Values.jwt.autoGenerate.serviceAccount.create -}}
+    {{ default (printf "%s-jwt-init" (include "common.names.fullname" .)) .Values.jwt.autoGenerate.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.jwt.autoGenerate.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return postgresql fullname
 */}}
 {{- define "supabase.database.fullname" -}}
@@ -536,10 +547,10 @@ Retrieve key of the postgresql secret
         {{- if .Values.externalDatabase.existingSecretPasswordKey -}}
             {{- printf "%s" .Values.externalDatabase.existingSecretPasswordKey -}}
         {{- else -}}
-            {{- print "postgres-password" -}}
+            {{- print "db-password" -}}
         {{- end -}}
     {{- else -}}
-        {{- print "postgres-password" -}}
+        {{- print "db-password" -}}
     {{- end -}}
 {{- end -}}
 {{- end -}}

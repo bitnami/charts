@@ -30,7 +30,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Replicate is failing to run, {{`{{`}} $value | humanize {{`}}`}}% of attempts failed.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosbucketreplicateerrorrate
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosbucketreplicateerrorrate
         summary: Thanos Replicate is failing to run.
       expr: |
         (
@@ -52,7 +52,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Replicate {{`{{`}} $labels.job {{`}}`}} has a 99th percentile latency of {{`{{`}} $value {{`}}`}} seconds for the replicate operations.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosbucketreplicaterunlatency
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosbucketreplicaterunlatency
         summary: Thanos Replicate has a high latency for replicate operations.
       expr: |
         (

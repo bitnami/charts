@@ -11,7 +11,7 @@ file:
     exists: true
     filetype: file
     mode: "0644"
-    contains:
+    contents:
       - /masterKey.*{{ .Vars.server.masterKey }}/
       - /user.*{{ .Vars.dashboard.username }}/
       - /pass.*{{ .Vars.dashboard.password }}/

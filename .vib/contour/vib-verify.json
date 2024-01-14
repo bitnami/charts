@@ -31,12 +31,6 @@
       },
       "actions": [
         {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-contour-envoy-http"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {

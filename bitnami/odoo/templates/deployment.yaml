@@ -121,6 +121,8 @@ spec:
               value: {{ template "odoo.databasePort" . }}
             - name: ODOO_DATABASE_NAME
               value: {{ template "odoo.databaseName" . }}
+            - name: ODOO_DATABASE_FILTER
+              value: {{ .Values.odooDatabaseFilter | quote }}
             - name: ODOO_DATABASE_USER
               value: {{ template "odoo.databaseUser" . }}
             - name: ODOO_DATABASE_PASSWORD

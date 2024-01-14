@@ -16,69 +16,6 @@
         }
       ]
     },
-    "verify": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/grafana-loki"
-        },
-        "target_platform": {
-          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
-          "size": {
-            "name": "S4"
-          }
-        }
-      },
-      "actions": [
-        {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-grafana-loki-gateway-http",
-            "app_protocol": "HTTP"
-          }
-        },
-        {
-          "action_id": "goss",
-          "params": {
-            "resources": {
-              "path": "/.vib"
-            },
-            "tests_file": "grafana-loki/goss/promtail/goss.yaml",
-            "vars_file": "grafana-loki/runtime-parameters.yaml",
-            "remote": {
-              "pod": {
-                "workload": "ds-grafana-loki-promtail"
-              }
-            }
-          }
-        },
-        {
-          "action_id": "goss",
-          "params": {
-            "resources": {
-              "path": "/.vib"
-            },
-            "tests_file": "grafana-loki/goss/querier/goss.yaml",
-            "vars_file": "grafana-loki/runtime-parameters.yaml",
-            "remote": {
-              "pod": {
-                "workload": "sts-grafana-loki-querier"
-              }
-            }
-          }
-        },
-        {
-          "action_id": "cypress",
-          "params": {
-            "resources": {
-              "path": "/.vib/grafana-loki/cypress"
-            },
-            "endpoint": "lb-grafana-loki-gateway-http",
-            "app_protocol": "HTTP"
-          }
-        }
-      ]
-    },
     "publish": {
       "actions": [
         {

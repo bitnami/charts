@@ -69,11 +69,14 @@ kustomizeController:
   ## @param kustomizeController.enabled Enable Kustomize Controller
   ##
   enabled: true
+  ## @param kustomizeController.installCRDs Flag to install Kustomize Controller CRDs
+  ##
+  installCRDs: true
   ## Bitnami Kustomize Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-kustomize-controller/tags/
-  ## @param kustomizeController.image.registry Kustomize Controller image registry
-  ## @param kustomizeController.image.repository Kustomize Controller image repository
-  ## @param kustomizeController.image.tag Kustomize Controller image tag (immutable tags are recommended)
+  ## @param kustomizeController.image.registry [default: REGISTRY_NAME] Kustomize Controller image registry
+  ## @param kustomizeController.image.repository [default: REPOSITORY_NAME/fluxcd-kustomize-controller] Kustomize Controller image repository
+  ## @skip kustomizeController.image.tag Kustomize Controller image tag (immutable tags are recommended)
   ## @param kustomizeController.image.digest Kustomize Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param kustomizeController.image.pullPolicy Kustomize Controller image pull policy
   ## @param kustomizeController.image.pullSecrets Kustomize Controller image pull secrets
@@ -82,11 +85,11 @@ kustomizeController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-kustomize-controller
-    tag: 1.1.0-debian-11-r25
+    tag: 1.2.1-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -163,7 +166,7 @@ kustomizeController:
   ##
   customStartupProbe: {}
   ## Kustomize Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param kustomizeController.resources.limits The resources limits for the Kustomize Controller containers
   ## @param kustomizeController.resources.requests The requested resources for the Kustomize Controller containers
   ##
@@ -174,30 +177,32 @@ kustomizeController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param kustomizeController.podSecurityContext.enabled Enabled Kustomize Controller pods' Security Context
   ## @param kustomizeController.podSecurityContext.fsGroup Set Kustomize Controller pod's Security Context fsGroup
-  ## @param kustomizeController.podSecurityContext.seccompProfile.type Set Kustomize Controller container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param kustomizeController.containerSecurityContext.enabled Enabled Kustomize Controller containers' Security Context
   ## @param kustomizeController.containerSecurityContext.runAsUser Set Kustomize Controller containers' Security Context runAsUser
   ## @param kustomizeController.containerSecurityContext.runAsNonRoot Set Kustomize Controller containers' Security Context runAsNonRoot
+  ## @param kustomizeController.containerSecurityContext.privileged Set Kustomize Controller containers' Security Context privileged
   ## @param kustomizeController.containerSecurityContext.readOnlyRootFilesystem Set Kustomize Controller containers' Security Context runAsNonRoot
   ## @param kustomizeController.containerSecurityContext.allowPrivilegeEscalation Set Kustomize Controller container's privilege escalation
   ## @param kustomizeController.containerSecurityContext.capabilities.drop Set Kustomize Controller container's Security Context runAsNonRoot
+  ## @param kustomizeController.containerSecurityContext.seccompProfile.type Set Kustomize Controller container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
 
   ## @param kustomizeController.command Override default container command (useful when using custom images)
   ##
@@ -272,7 +277,7 @@ kustomizeController:
   ##
   affinity: {}
   ## @param kustomizeController.nodeSelector Node labels for Kustomize Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param kustomizeController.tolerations Tolerations for Kustomize Controller pods assignment
@@ -441,7 +446,7 @@ kustomizeController:
       extraPorts: []
       ## @param kustomizeController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param kustomizeController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -502,11 +507,14 @@ helmController:
   ## @param helmController.enabled Enable Helm Controller
   ##
   enabled: true
+  ## @param helmController.installCRDs Flag to install Helm Controller CRDs
+  ##
+  installCRDs: true
   ## Bitnami Helm Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
-  ## @param helmController.image.registry Helm Controller image registry
-  ## @param helmController.image.repository Helm Controller image repository
-  ## @param helmController.image.tag Helm Controller image tag (immutable tags are recommended)
+  ## @param helmController.image.registry [default: REGISTRY_NAME] Helm Controller image registry
+  ## @param helmController.image.repository [default: REPOSITORY_NAME/fluxcd-helm-controller] Helm Controller image repository
+  ## @skip helmController.image.tag Helm Controller image tag (immutable tags are recommended)
   ## @param helmController.image.digest Helm Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param helmController.image.pullPolicy Helm Controller image pull policy
   ## @param helmController.image.pullSecrets Helm Controller image pull secrets
@@ -515,11 +523,11 @@ helmController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-helm-controller
-    tag: 0.36.1-debian-11-r14
+    tag: 0.37.2-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -596,7 +604,7 @@ helmController:
   ##
   customStartupProbe: {}
   ## Helm Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param helmController.resources.limits The resources limits for the Helm Controller containers
   ## @param helmController.resources.requests The requested resources for the Helm Controller containers
   ##
@@ -607,30 +615,32 @@ helmController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param helmController.podSecurityContext.enabled Enabled Helm Controller pods' Security Context
   ## @param helmController.podSecurityContext.fsGroup Set Helm Controller pod's Security Context fsGroup
-  ## @param helmController.podSecurityContext.seccompProfile.type Set Helm Controller container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param helmController.containerSecurityContext.enabled Enabled Helm Controller containers' Security Context
   ## @param helmController.containerSecurityContext.runAsUser Set Helm Controller containers' Security Context runAsUser
   ## @param helmController.containerSecurityContext.runAsNonRoot Set Helm Controller containers' Security Context runAsNonRoot
+  ## @param helmController.containerSecurityContext.privileged Set Helm Controller containers' Security Context privileged
   ## @param helmController.containerSecurityContext.readOnlyRootFilesystem Set Helm Controller containers' Security Context runAsNonRoot
   ## @param helmController.containerSecurityContext.allowPrivilegeEscalation Set Helm Controller container's privilege escalation
   ## @param helmController.containerSecurityContext.capabilities.drop Set Helm Controller container's Security Context runAsNonRoot
+  ## @param helmController.containerSecurityContext.seccompProfile.type Set Helm Controller container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
 
   ## @param helmController.command Override default container command (useful when using custom images)
   ##
@@ -705,7 +715,7 @@ helmController:
   ##
   affinity: {}
   ## @param helmController.nodeSelector Node labels for Helm Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param helmController.tolerations Tolerations for Helm Controller pods assignment
@@ -874,7 +884,7 @@ helmController:
       extraPorts: []
       ## @param helmController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param helmController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -935,11 +945,14 @@ sourceController:
   ## @param sourceController.enabled Enable Source Controller
   ##
   enabled: true
+  ## @param sourceController.installCRDs Flag to install Source Controller CRDs
+  ##
+  installCRDs: true
   ## Bitnami Source Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
-  ## @param sourceController.image.registry Source Controller image registry
-  ## @param sourceController.image.repository Source Controller image repository
-  ## @param sourceController.image.tag Source Controller image tag (immutable tags are recommended)
+  ## @param sourceController.image.registry [default: REGISTRY_NAME] Source Controller image registry
+  ## @param sourceController.image.repository [default: REPOSITORY_NAME/fluxcd-source-controller] Source Controller image repository
+  ## @skip sourceController.image.tag Source Controller image tag (immutable tags are recommended)
   ## @param sourceController.image.digest Source Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param sourceController.image.pullPolicy Source Controller image pull policy
   ## @param sourceController.image.pullSecrets Source Controller image pull secrets
@@ -948,11 +961,11 @@ sourceController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-source-controller
-    tag: 1.1.1-debian-11-r14
+    tag: 1.2.3-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1031,7 +1044,7 @@ sourceController:
   ##
   customStartupProbe: {}
   ## Source Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param sourceController.resources.limits The resources limits for the Source Controller containers
   ## @param sourceController.resources.requests The requested resources for the Source Controller containers
   ##
@@ -1042,30 +1055,32 @@ sourceController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param sourceController.podSecurityContext.enabled Enabled Source Controller pods' Security Context
   ## @param sourceController.podSecurityContext.fsGroup Set Source Controller pod's Security Context fsGroup
-  ## @param sourceController.podSecurityContext.seccompProfile.type Set Source Controller container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param sourceController.containerSecurityContext.enabled Enabled Source Controller containers' Security Context
   ## @param sourceController.containerSecurityContext.runAsUser Set Source Controller containers' Security Context runAsUser
   ## @param sourceController.containerSecurityContext.runAsNonRoot Set Source Controller containers' Security Context runAsNonRoot
+  ## @param sourceController.containerSecurityContext.privileged Set Source Controller containers' Security Context privileged
   ## @param sourceController.containerSecurityContext.readOnlyRootFilesystem Set Source Controller containers' Security Context runAsNonRoot
   ## @param sourceController.containerSecurityContext.allowPrivilegeEscalation Set Source Controller container's privilege escalation
   ## @param sourceController.containerSecurityContext.capabilities.drop Set Source Controller container's Security Context runAsNonRoot
+  ## @param sourceController.containerSecurityContext.seccompProfile.type Set Source Controller container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
+    privileged: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
 
   ## @param sourceController.command Override default container command (useful when using custom images)
   ##
@@ -1140,7 +1155,7 @@ sourceController:
   ##
   affinity: {}
   ## @param sourceController.nodeSelector Node labels for Source Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param sourceController.tolerations Tolerations for Source Controller pods assignment
@@ -1261,7 +1276,7 @@ sourceController:
     extraPorts: []
     ## @param sourceController.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param sourceController.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1331,7 +1346,7 @@ sourceController:
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
   ## @section Source Conttroller Persistence Parameters
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param sourceController.persistence.enabled Enable persistence using Persistent Volume Claims
@@ -1467,7 +1482,7 @@ sourceController:
       extraPorts: []
       ## @param sourceController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param sourceController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1528,11 +1543,14 @@ notificationController:
   ## @param notificationController.enabled Enable Notification Controller
   ##
   enabled: true
+  ## @param notificationController.installCRDs Flag to install Notification Controller CRDs
+  ##
+  installCRDs: true
   ## Bitnami Notification Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-notification-controller/tags/
-  ## @param notificationController.image.registry Notification Controller image registry
-  ## @param notificationController.image.repository Notification Controller image repository
-  ## @param notificationController.image.tag Notification Controller image tag (immutable tags are recommended)
+  ## @param notificationController.image.registry [default: REGISTRY_NAME] Notification Controller image registry
+  ## @param notificationController.image.repository [default: REPOSITORY_NAME/fluxcd-notification-controller] Notification Controller image repository
+  ## @skip notificationController.image.tag Notification Controller image tag (immutable tags are recommended)
   ## @param notificationController.image.digest Notification Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param notificationController.image.pullPolicy Notification Controller image pull policy
   ## @param notificationController.image.pullSecrets Notification Controller image pull secrets
@@ -1541,11 +1559,11 @@ notificationController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-notification-controller
-    tag: 1.1.0-debian-11-r26
+    tag: 1.2.3-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1622,7 +1640,7 @@ notificationController:
   ##
   customStartupProbe: {}
   ## Notification Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param notificationController.resources.limits The resources limits for the Notification Controller containers
   ## @param notificationController.resources.requests The requested resources for the Notification Controller containers
   ##
@@ -1633,30 +1651,32 @@ notificationController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param notificationController.podSecurityContext.enabled Enabled Notification Controller pods' Security Context
   ## @param notificationController.podSecurityContext.fsGroup Set Notification Controller pod's Security Context fsGroup
-  ## @param notificationController.podSecurityContext.seccompProfile.type Set Notification Controller container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param notificationController.containerSecurityContext.enabled Enabled Notification Controller containers' Security Context
   ## @param notificationController.containerSecurityContext.runAsUser Set Notification Controller containers' Security Context runAsUser
   ## @param notificationController.containerSecurityContext.runAsNonRoot Set Notification Controller containers' Security Context runAsNonRoot
   ## @param notificationController.containerSecurityContext.readOnlyRootFilesystem Set Notification Controller containers' Security Context runAsNonRoot
+  ## @param notificationController.containerSecurityContext.privileged Set Notification Controller containers' Security Context privileged
   ## @param notificationController.containerSecurityContext.allowPrivilegeEscalation Set Notification Controller container's privilege escalation
   ## @param notificationController.containerSecurityContext.capabilities.drop Set Notification Controller container's Security Context runAsNonRoot
+  ## @param notificationController.containerSecurityContext.seccompProfile.type Set Notification Controller container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
 
   ## @param notificationController.command Override default container command (useful when using custom images)
   ##
@@ -1731,7 +1751,7 @@ notificationController:
   ##
   affinity: {}
   ## @param notificationController.nodeSelector Node labels for Notification Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param notificationController.tolerations Tolerations for Notification Controller pods assignment
@@ -1900,7 +1920,7 @@ notificationController:
       extraPorts: []
       ## @param notificationController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param notificationController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1961,11 +1981,14 @@ imageAutomationController:
   ## @param imageAutomationController.enabled Enable Image Automation Controller
   ##
   enabled: true
+  ## @param imageAutomationController.installCRDs Flag to install Image Automation Controller CRDs
+  ##
+  installCRDs: true
   ## Bitnami Image Automation Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-image-automation-controller/tags/
-  ## @param imageAutomationController.image.registry Image Automation Controller image registry
-  ## @param imageAutomationController.image.repository Image Automation Controller image repository
-  ## @param imageAutomationController.image.tag Image Automation Controller image tag (immutable tags are recommended)
+  ## @param imageAutomationController.image.registry [default: REGISTRY_NAME] Image Automation Controller image registry
+  ## @param imageAutomationController.image.repository [default: REPOSITORY_NAME/fluxcd-image-automation-controller] Image Automation Controller image repository
+  ## @skip imageAutomationController.image.tag Image Automation Controller image tag (immutable tags are recommended)
   ## @param imageAutomationController.image.digest Image Automation Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param imageAutomationController.image.pullPolicy Image Automation Controller image pull policy
   ## @param imageAutomationController.image.pullSecrets Image Automation Controller image pull secrets
@@ -1974,11 +1997,11 @@ imageAutomationController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-image-automation-controller
-    tag: 0.36.1-debian-11-r11
+    tag: 0.37.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2055,7 +2078,7 @@ imageAutomationController:
   ##
   customStartupProbe: {}
   ## Image Automation Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param imageAutomationController.resources.limits The resources limits for the Image Automation Controller containers
   ## @param imageAutomationController.resources.requests The requested resources for the Image Automation Controller containers
   ##
@@ -2066,30 +2089,32 @@ imageAutomationController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param imageAutomationController.podSecurityContext.enabled Enabled Image Automation Controller pods' Security Context
   ## @param imageAutomationController.podSecurityContext.fsGroup Set Image Automation Controller pod's Security Context fsGroup
-  ## @param imageAutomationController.podSecurityContext.seccompProfile.type Set Image Automation Controller container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param imageAutomationController.containerSecurityContext.enabled Enabled Image Automation Controller containers' Security Context
   ## @param imageAutomationController.containerSecurityContext.runAsUser Set Image Automation Controller containers' Security Context runAsUser
   ## @param imageAutomationController.containerSecurityContext.runAsNonRoot Set Image Automation Controller containers' Security Context runAsNonRoot
   ## @param imageAutomationController.containerSecurityContext.readOnlyRootFilesystem Set Image Automation Controller containers' Security Context runAsNonRoot
+  ## @param imageAutomationController.containerSecurityContext.privileged Set Image Automation Controller containers' Security Context privileged
   ## @param imageAutomationController.containerSecurityContext.allowPrivilegeEscalation Set Image Automation Controller container's privilege escalation
   ## @param imageAutomationController.containerSecurityContext.capabilities.drop Set Image Automation Controller container's Security Context runAsNonRoot
+  ## @param imageAutomationController.containerSecurityContext.seccompProfile.type Set Image Automation Controller container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
+    privileged: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
 
   ## @param imageAutomationController.command Override default container command (useful when using custom images)
   ##
@@ -2164,7 +2189,7 @@ imageAutomationController:
   ##
   affinity: {}
   ## @param imageAutomationController.nodeSelector Node labels for Image Automation Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param imageAutomationController.tolerations Tolerations for Image Automation Controller pods assignment
@@ -2333,7 +2358,7 @@ imageAutomationController:
       extraPorts: []
       ## @param imageAutomationController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param imageAutomationController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -2394,11 +2419,14 @@ imageReflectorController:
   ## @param imageReflectorController.enabled Enable Image Reflector Controller
   ##
   enabled: true
+  ## @param imageReflectorController.installCRDs Flag to install Image Reflector Controller CRDs
+  ##
+  installCRDs: true
   ## Bitnami Image Reflector Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
-  ## @param imageReflectorController.image.registry Image Reflector Controller image registry
-  ## @param imageReflectorController.image.repository Image Reflector Controller image repository
-  ## @param imageReflectorController.image.tag Image Reflector Controller image tag (immutable tags are recommended)
+  ## @param imageReflectorController.image.registry [default: REGISTRY_NAME] Image Reflector Controller image registry
+  ## @param imageReflectorController.image.repository [default: REPOSITORY_NAME/fluxcd-image-reflector-controller] Image Reflector Controller image repository
+  ## @skip imageReflectorController.image.tag Image Reflector Controller image tag (immutable tags are recommended)
   ## @param imageReflectorController.image.digest Image Reflector Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param imageReflectorController.image.pullPolicy Image Reflector Controller image pull policy
   ## @param imageReflectorController.image.pullSecrets Image Reflector Controller image pull secrets
@@ -2407,11 +2435,11 @@ imageReflectorController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-image-reflector-controller
-    tag: 0.30.0-debian-11-r39
+    tag: 0.31.1-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2488,7 +2516,7 @@ imageReflectorController:
   ##
   customStartupProbe: {}
   ## Image Reflector Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param imageReflectorController.resources.limits The resources limits for the Image Reflector Controller containers
   ## @param imageReflectorController.resources.requests The requested resources for the Image Reflector Controller containers
   ##
@@ -2499,30 +2527,32 @@ imageReflectorController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param imageReflectorController.podSecurityContext.enabled Enabled Image Reflector Controller pods' Security Context
   ## @param imageReflectorController.podSecurityContext.fsGroup Set Image Reflector Controller pod's Security Context fsGroup
-  ## @param imageReflectorController.podSecurityContext.seccompProfile.type Set Image Reflector Controller container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param imageReflectorController.containerSecurityContext.enabled Enabled Image Reflector Controller containers' Security Context
   ## @param imageReflectorController.containerSecurityContext.runAsUser Set Image Reflector Controller containers' Security Context runAsUser
   ## @param imageReflectorController.containerSecurityContext.runAsNonRoot Set Image Reflector Controller containers' Security Context runAsNonRoot
+  ## @param imageReflectorController.containerSecurityContext.privileged Set Image Reflector Controller containers' Security Context privileged
   ## @param imageReflectorController.containerSecurityContext.readOnlyRootFilesystem Set Image Reflector Controller containers' Security Context runAsNonRoot
   ## @param imageReflectorController.containerSecurityContext.allowPrivilegeEscalation Set Image Reflector Controller container's privilege escalation
   ## @param imageReflectorController.containerSecurityContext.capabilities.drop Set Image Reflector Controller container's Security Context runAsNonRoot
+  ## @param imageReflectorController.containerSecurityContext.seccompProfile.type Set Image Reflector Controller container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
 
   ## @param imageReflectorController.command Override default container command (useful when using custom images)
   ##
@@ -2597,7 +2627,7 @@ imageReflectorController:
   ##
   affinity: {}
   ## @param imageReflectorController.nodeSelector Node labels for Image Reflector Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param imageReflectorController.tolerations Tolerations for Image Reflector Controller pods assignment
@@ -2673,7 +2703,7 @@ imageReflectorController:
   initContainers: []
 
   ## @section Image Reflector Conttroller Persistence Parameters
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param imageReflectorController.persistence.enabled Enable persistence using Persistent Volume Claims
@@ -2809,7 +2839,7 @@ imageReflectorController:
       extraPorts: []
       ## @param imageReflectorController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param imageReflectorController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -2874,9 +2904,9 @@ volumePermissions:
   enabled: false
   ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param volumePermissions.image.registry OS Shell + Utility image registry
-  ## @param volumePermissions.image.repository OS Shell + Utility image repository
-  ## @param volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
   ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
@@ -2884,7 +2914,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag:  11-debian-11-r86
+    tag:  11-debian-11-r93
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2896,7 +2926,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##

@@ -48,7 +48,7 @@ func StsScale(ctx context.Context, c kubernetes.Interface, ss *appsv1.StatefulSe
 		if err != nil {
 			return nil, fmt.Errorf("failed to get statefulset %q: %v", name, err)
 		}
-		if ss.Status.Replicas == count {
+		if ss.Status.Replicas == count && ss.Status.AvailableReplicas == count {
 			return ss, nil
 		}
 		*(ss.Spec.Replicas) = count
@@ -89,7 +89,7 @@ func DplScale(ctx context.Context, c kubernetes.Interface, dpl *appsv1.Deploymen
 		if err != nil {
 			return nil, fmt.Errorf("failed to get deployment %q: %v", name, err)
 		}
-		if currentDpl.Status.Replicas == count {
+		if currentDpl.Status.Replicas == count && currentDpl.Status.AvailableReplicas == count {
 			return currentDpl, nil
 		}
 		*(currentDpl.Spec.Replicas) = count

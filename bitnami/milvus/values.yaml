@@ -45,6 +45,12 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
+## @param enableServiceLinks Whether information about services should be injected into all pods' environment variable
+## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+##
+enableServiceLinks: false
+
 ## Enable diagnostic mode in the deployments/statefulsets
 ##
 diagnosticMode:
@@ -65,9 +71,9 @@ diagnosticMode:
 milvus:
   ## Bitnami Milvus image
   ## ref: https://hub.docker.com/r/bitnami/milvus/tags/
-  ## @param milvus.image.registry Milvus image registry
-  ## @param milvus.image.repository Milvus image repository
-  ## @param milvus.image.tag Milvus image tag (immutable tags are recommended)
+  ## @param milvus.image.registry [default: REGISTRY_NAME] Milvus image registry
+  ## @param milvus.image.repository [default: REPOSITORY_NAME/milvus] Milvus image repository
+  ## @skip milvus.image.tag Milvus image tag (immutable tags are recommended)
   ## @param milvus.image.digest Milvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param milvus.image.pullPolicy Milvus image pull policy
   ## @param milvus.image.pullSecrets Milvus image pull secrets
@@ -76,11 +82,11 @@ milvus:
   image:
     registry: docker.io
     repository: bitnami/milvus
-    tag: 2.2.14-debian-11-r26
+    tag: 2.2.14-debian-11-r37
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -125,8 +131,13 @@ milvus:
         - {{ printf "%s://%s-%d.%s:%v" (ternary "https" "http" $.Values.etcd.auth.client.secureTransport) (include "milvus.etcd.fullname" $ ) $i (include "milvus.etcd.headlessServiceName" $) ( include "milvus.etcd.port" $ ) }}          {{- end }}
         {{- else }}
         {{- range $node := .Values.externalEtcd.servers }}
-        - {{ ternary "https" "http" $.Values.externalEtcd.secureTransport }}://{{ printf "%s:%v" $node (include "milvus.etcd.port" $) }}
+        - {{ ternary "https" "http" $.Values.externalEtcd.tls.enabled }}://{{ printf "%s:%v" $node (include "milvus.etcd.port" $) }}
         {{- end }}
+      ssl:
+        enabled: {{ .Values.externalEtcd.tls.enabled }}
+        tlsCert: /opt/bitnami/milvus/configs/cert/etcd/client/{{ .Values.externalEtcd.tls.cert }}
+        tlsKey: /opt/bitnami/milvus/configs/cert/etcd/client/{{ .Values.externalEtcd.tls.key }}
+        tlsCACert: /opt/bitnami/milvus/configs/cert/etcd/client/{{ .Values.externalEtcd.tls.caCert }}
         {{- end }}
     metastore:
       type: etcd
@@ -245,9 +256,9 @@ initJob:
   forceRun: false
   ## Bitnami PyMilvus image
   ## ref: https://hub.docker.com/r/bitnami/jwt-cli/tags/
-  ## @param initJob.image.registry PyMilvus image registry
-  ## @param initJob.image.repository PyMilvus image repository
-  ## @param initJob.image.tag PyMilvus image tag (immutable tags are recommended)
+  ## @param initJob.image.registry [default: REGISTRY_NAME] PyMilvus image registry
+  ## @param initJob.image.repository [default: REPOSITORY_NAME/pymilvus] PyMilvus image repository
+  ## @skip initJob.image.tag PyMilvus image tag (immutable tags are recommended)
   ## @param initJob.image.digest PyMilvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param initJob.image.pullPolicy PyMilvus image pull policy
   ## @param initJob.image.pullSecrets PyMilvus image pull secrets
@@ -255,11 +266,11 @@ initJob:
   image:
     registry: docker.io
     repository: bitnami/pymilvus
-    tag: 2.3.1-debian-11-r0
+    tag: 2.3.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -273,6 +284,28 @@ initJob:
   ## @param initJob.enableDefaultInitContainers Deploy default init containers
   ##
   enableDefaultInitContainers: true
+  ## @section TLS Client Configuration Parameters Connecting to Proxy
+  ##
+  tls:
+    ## @param initJob.tls.existingSecret Name of the existing secret containing the TLS certificates for initJob.
+    ## if proxy.tls.mode equals to 1, existingSecret should contain a server cert
+    ## if proxy.tls.mode equals to 2, existingSecret should contain a client cert, a client key and a CA cert
+    ##
+    existingSecret: ""
+    ## @param initJob.tls.cert The secret key from the existingSecret if 'cert' key different from the default (client.pem)
+    ##
+    cert: client.pem
+    ## @param initJob.tls.key The secret key from the existingSecret if 'key' key different from the default (client.key)
+    ## Milvus cannot decrypt key file with password, so now the key must not be encrypted
+    ##
+    key: client.key
+    ## @param initJob.tls.caCert The secret key from the existingSecret if 'caCert' key different from the default (ca.pem)
+    ##
+    caCert: ca.pem
+    ## @param initJob.tls.keyPassword Password to access the password-protected PEM key if necessary.
+    ## Milvus cannot decrypt key file with password, so now the key must not be encrypted, value here must be empty
+    ##
+    keyPassword: ""
   ## @param initJob.backoffLimit set backoff limit of the job
   ##
   backoffLimit: 10
@@ -285,32 +318,34 @@ initJob:
   extraCommands: ""
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param initJob.containerSecurityContext.enabled Enabled credential init job containers' Security Context
-  ## @param initJob.containerSecurityContext.runAsUser Set credential init job containers' Security Context runAsUser
-  ## @param initJob.containerSecurityContext.runAsNonRoot Set credential init job containers' Security Context runAsNonRoot
-  ## @param initJob.containerSecurityContext.readOnlyRootFilesystem Set credential init job containers' Security Context runAsNonRoot
-  ## @param initJob.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
-  ## @param initJob.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ## @param initJob.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param initJob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param initJob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param initJob.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param initJob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param initJob.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param initJob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param initJob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param initJob.podSecurityContext.enabled Enabled credential init job pods' Security Context
   ## @param initJob.podSecurityContext.fsGroup Set credential init job pod's Security Context fsGroup
-  ## @param initJob.podSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## @param initJob.extraEnvVars Array containing extra env vars to configure the credential init job
   ## For example:
   ## extraEnvVars:
@@ -328,7 +363,7 @@ initJob:
   ##
   extraVolumeMounts: []
   ## Container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param initJob.resources.limits The resources limits for the container
   ## @param initJob.resources.requests The requested resources for the container
   ##
@@ -460,7 +495,7 @@ dataCoord:
   ##
   customStartupProbe: {}
   ## data coordinator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dataCoord.resources.limits The resources limits for the data coordinator containers
   ## @param dataCoord.resources.requests The requested resources for the data coordinator containers
   ##
@@ -471,30 +506,32 @@ dataCoord:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dataCoord.podSecurityContext.enabled Enabled Data Coordinator pods' Security Context
   ## @param dataCoord.podSecurityContext.fsGroup Set Data Coordinator pod's Security Context fsGroup
-  ## @param dataCoord.podSecurityContext.seccompProfile.type Set Data Coordinator container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param dataCoord.containerSecurityContext.enabled Enabled Data Coordinator containers' Security Context
-  ## @param dataCoord.containerSecurityContext.runAsUser Set Data Coordinator containers' Security Context runAsUser
-  ## @param dataCoord.containerSecurityContext.runAsNonRoot Set Data Coordinator containers' Security Context runAsNonRoot
-  ## @param dataCoord.containerSecurityContext.readOnlyRootFilesystem Set Data Coordinator containers' Security Context runAsNonRoot
-  ## @param dataCoord.containerSecurityContext.allowPrivilegeEscalation Set Data Coordinator container's privilege escalation
-  ## @param dataCoord.containerSecurityContext.capabilities.drop Set Data Coordinator container's Security Context runAsNonRoot
+  ## @param dataCoord.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param dataCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param dataCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param dataCoord.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param dataCoord.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param dataCoord.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param dataCoord.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param dataCoord.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param dataCoord.lifecycleHooks for the data coordinator container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -545,7 +582,7 @@ dataCoord:
   ##
   affinity: {}
   ## @param dataCoord.nodeSelector Node labels for Data Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dataCoord.tolerations Tolerations for Data Coordinator pods assignment
@@ -708,7 +745,7 @@ dataCoord:
     sessionAffinityConfig: {}
     ## @param dataCoord.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param dataCoord.service.clusterIP Data Coordinator service Cluster IP
@@ -946,7 +983,7 @@ rootCoord:
   ##
   customStartupProbe: {}
   ## data coordinator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param rootCoord.resources.limits The resources limits for the data coordinator containers
   ## @param rootCoord.resources.requests The requested resources for the data coordinator containers
   ##
@@ -957,30 +994,32 @@ rootCoord:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param rootCoord.podSecurityContext.enabled Enabled Root Coordinator pods' Security Context
   ## @param rootCoord.podSecurityContext.fsGroup Set Root Coordinator pod's Security Context fsGroup
-  ## @param rootCoord.podSecurityContext.seccompProfile.type Set Root Coordinator container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param rootCoord.containerSecurityContext.enabled Enabled Root Coordinator containers' Security Context
-  ## @param rootCoord.containerSecurityContext.runAsUser Set Root Coordinator containers' Security Context runAsUser
-  ## @param rootCoord.containerSecurityContext.runAsNonRoot Set Root Coordinator containers' Security Context runAsNonRoot
-  ## @param rootCoord.containerSecurityContext.readOnlyRootFilesystem Set Root Coordinator containers' Security Context runAsNonRoot
-  ## @param rootCoord.containerSecurityContext.allowPrivilegeEscalation Set Root Coordinator container's privilege escalation
-  ## @param rootCoord.containerSecurityContext.capabilities.drop Set Root Coordinator container's Security Context runAsNonRoot
+  ## @param rootCoord.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param rootCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param rootCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param rootCoord.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param rootCoord.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param rootCoord.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param rootCoord.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param rootCoord.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param rootCoord.lifecycleHooks for the data coordinator container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -1031,7 +1070,7 @@ rootCoord:
   ##
   affinity: {}
   ## @param rootCoord.nodeSelector Node labels for Root Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param rootCoord.tolerations Tolerations for Root Coordinator pods assignment
@@ -1194,7 +1233,7 @@ rootCoord:
     sessionAffinityConfig: {}
     ## @param rootCoord.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param rootCoord.service.clusterIP Root Coordinator service Cluster IP
@@ -1431,7 +1470,7 @@ queryCoord:
   ##
   customStartupProbe: {}
   ## data coordinator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param queryCoord.resources.limits The resources limits for the data coordinator containers
   ## @param queryCoord.resources.requests The requested resources for the data coordinator containers
   ##
@@ -1442,30 +1481,32 @@ queryCoord:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryCoord.podSecurityContext.enabled Enabled Query Coordinator pods' Security Context
   ## @param queryCoord.podSecurityContext.fsGroup Set Query Coordinator pod's Security Context fsGroup
-  ## @param queryCoord.podSecurityContext.seccompProfile.type Set Query Coordinator container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param queryCoord.containerSecurityContext.enabled Enabled Query Coordinator containers' Security Context
-  ## @param queryCoord.containerSecurityContext.runAsUser Set Query Coordinator containers' Security Context runAsUser
-  ## @param queryCoord.containerSecurityContext.runAsNonRoot Set Query Coordinator containers' Security Context runAsNonRoot
-  ## @param queryCoord.containerSecurityContext.readOnlyRootFilesystem Set Query Coordinator containers' Security Context runAsNonRoot
-  ## @param queryCoord.containerSecurityContext.allowPrivilegeEscalation Set Query Coordinator container's privilege escalation
-  ## @param queryCoord.containerSecurityContext.capabilities.drop Set Query Coordinator container's Security Context runAsNonRoot
+  ## @param queryCoord.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param queryCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param queryCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param queryCoord.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param queryCoord.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param queryCoord.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param queryCoord.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param queryCoord.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param queryCoord.lifecycleHooks for the data coordinator container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -1516,7 +1557,7 @@ queryCoord:
   ##
   affinity: {}
   ## @param queryCoord.nodeSelector Node labels for Query Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param queryCoord.tolerations Tolerations for Query Coordinator pods assignment
@@ -1679,7 +1720,7 @@ queryCoord:
     sessionAffinityConfig: {}
     ## @param queryCoord.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param queryCoord.service.clusterIP Query Coordinator service Cluster IP
@@ -1917,7 +1958,7 @@ indexCoord:
   ##
   customStartupProbe: {}
   ## data coordinator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param indexCoord.resources.limits The resources limits for the data coordinator containers
   ## @param indexCoord.resources.requests The requested resources for the data coordinator containers
   ##
@@ -1928,30 +1969,32 @@ indexCoord:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param indexCoord.podSecurityContext.enabled Enabled Index Coordinator pods' Security Context
   ## @param indexCoord.podSecurityContext.fsGroup Set Index Coordinator pod's Security Context fsGroup
-  ## @param indexCoord.podSecurityContext.seccompProfile.type Set Index Coordinator container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param indexCoord.containerSecurityContext.enabled Enabled Index Coordinator containers' Security Context
-  ## @param indexCoord.containerSecurityContext.runAsUser Set Index Coordinator containers' Security Context runAsUser
-  ## @param indexCoord.containerSecurityContext.runAsNonRoot Set Index Coordinator containers' Security Context runAsNonRoot
-  ## @param indexCoord.containerSecurityContext.readOnlyRootFilesystem Set Index Coordinator containers' Security Context runAsNonRoot
-  ## @param indexCoord.containerSecurityContext.allowPrivilegeEscalation Set Index Coordinator container's privilege escalation
-  ## @param indexCoord.containerSecurityContext.capabilities.drop Set Index Coordinator container's Security Context runAsNonRoot
+  ## @param indexCoord.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param indexCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param indexCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param indexCoord.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param indexCoord.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param indexCoord.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param indexCoord.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param indexCoord.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param indexCoord.lifecycleHooks for the data coordinator container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -2002,7 +2045,7 @@ indexCoord:
   ##
   affinity: {}
   ## @param indexCoord.nodeSelector Node labels for Index Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param indexCoord.tolerations Tolerations for Index Coordinator pods assignment
@@ -2165,7 +2208,7 @@ indexCoord:
     sessionAffinityConfig: {}
     ## @param indexCoord.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param indexCoord.service.clusterIP Index Coordinator service Cluster IP
@@ -2403,7 +2446,7 @@ dataNode:
   ##
   customStartupProbe: {}
   ## data node resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dataNode.resources.limits The resources limits for the data node containers
   ## @param dataNode.resources.requests The requested resources for the data node containers
   ##
@@ -2414,30 +2457,32 @@ dataNode:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dataNode.podSecurityContext.enabled Enabled Data Node pods' Security Context
   ## @param dataNode.podSecurityContext.fsGroup Set Data Node pod's Security Context fsGroup
-  ## @param dataNode.podSecurityContext.seccompProfile.type Set Data Node container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param dataNode.containerSecurityContext.enabled Enabled Data Node containers' Security Context
-  ## @param dataNode.containerSecurityContext.runAsUser Set Data Node containers' Security Context runAsUser
-  ## @param dataNode.containerSecurityContext.runAsNonRoot Set Data Node containers' Security Context runAsNonRoot
-  ## @param dataNode.containerSecurityContext.readOnlyRootFilesystem Set Data Node containers' Security Context runAsNonRoot
-  ## @param dataNode.containerSecurityContext.allowPrivilegeEscalation Set Data Node container's privilege escalation
-  ## @param dataNode.containerSecurityContext.capabilities.drop Set Data Node container's Security Context runAsNonRoot
+  ## @param dataNode.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param dataNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param dataNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param dataNode.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param dataNode.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param dataNode.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param dataNode.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param dataNode.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param dataNode.lifecycleHooks for the data node container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -2488,7 +2533,7 @@ dataNode:
   ##
   affinity: {}
   ## @param dataNode.nodeSelector Node labels for Data Node pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dataNode.tolerations Tolerations for Data Node pods assignment
@@ -2651,7 +2696,7 @@ dataNode:
     sessionAffinityConfig: {}
     ## @param dataNode.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param dataNode.service.clusterIP Data Node service Cluster IP
@@ -2889,7 +2934,7 @@ queryNode:
   ##
   customStartupProbe: {}
   ## data node resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param queryNode.resources.limits The resources limits for the data node containers
   ## @param queryNode.resources.requests The requested resources for the data node containers
   ##
@@ -2900,30 +2945,32 @@ queryNode:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryNode.podSecurityContext.enabled Enabled Query Node pods' Security Context
   ## @param queryNode.podSecurityContext.fsGroup Set Query Node pod's Security Context fsGroup
-  ## @param queryNode.podSecurityContext.seccompProfile.type Set Query Node container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param queryNode.containerSecurityContext.enabled Enabled Query Node containers' Security Context
-  ## @param queryNode.containerSecurityContext.runAsUser Set Query Node containers' Security Context runAsUser
-  ## @param queryNode.containerSecurityContext.runAsNonRoot Set Query Node containers' Security Context runAsNonRoot
-  ## @param queryNode.containerSecurityContext.readOnlyRootFilesystem Set Query Node containers' Security Context runAsNonRoot
-  ## @param queryNode.containerSecurityContext.allowPrivilegeEscalation Set Query Node container's privilege escalation
-  ## @param queryNode.containerSecurityContext.capabilities.drop Set Query Node container's Security Context runAsNonRoot
+  ## @param queryNode.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param queryNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param queryNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param queryNode.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param queryNode.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param queryNode.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param queryNode.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param queryNode.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param queryNode.lifecycleHooks for the data node container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -2974,7 +3021,7 @@ queryNode:
   ##
   affinity: {}
   ## @param queryNode.nodeSelector Node labels for Query Node pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param queryNode.tolerations Tolerations for Query Node pods assignment
@@ -3137,7 +3184,7 @@ queryNode:
     sessionAffinityConfig: {}
     ## @param queryNode.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param queryNode.service.clusterIP Query Node service Cluster IP
@@ -3375,7 +3422,7 @@ indexNode:
   ##
   customStartupProbe: {}
   ## data node resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param indexNode.resources.limits The resources limits for the data node containers
   ## @param indexNode.resources.requests The requested resources for the data node containers
   ##
@@ -3386,30 +3433,32 @@ indexNode:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param indexNode.podSecurityContext.enabled Enabled Index Node pods' Security Context
   ## @param indexNode.podSecurityContext.fsGroup Set Index Node pod's Security Context fsGroup
-  ## @param indexNode.podSecurityContext.seccompProfile.type Set Index Node container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param indexNode.containerSecurityContext.enabled Enabled Index Node containers' Security Context
-  ## @param indexNode.containerSecurityContext.runAsUser Set Index Node containers' Security Context runAsUser
-  ## @param indexNode.containerSecurityContext.runAsNonRoot Set Index Node containers' Security Context runAsNonRoot
-  ## @param indexNode.containerSecurityContext.readOnlyRootFilesystem Set Index Node containers' Security Context runAsNonRoot
-  ## @param indexNode.containerSecurityContext.allowPrivilegeEscalation Set Index Node container's privilege escalation
-  ## @param indexNode.containerSecurityContext.capabilities.drop Set Index Node container's Security Context runAsNonRoot
+  ## @param indexNode.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param indexNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param indexNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param indexNode.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param indexNode.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param indexNode.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param indexNode.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param indexNode.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param indexNode.lifecycleHooks for the data node container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -3460,7 +3509,7 @@ indexNode:
   ##
   affinity: {}
   ## @param indexNode.nodeSelector Node labels for Index Node pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param indexNode.tolerations Tolerations for Index Node pods assignment
@@ -3623,7 +3672,7 @@ indexNode:
     sessionAffinityConfig: {}
     ## @param indexNode.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param indexNode.service.clusterIP Index Node service Cluster IP
@@ -3763,6 +3812,33 @@ proxy:
   ## @param proxy.enabled Enable Proxy deployment
   ##
   enabled: true
+  ## @section Proxy TLS Connection Configuration Parameters
+  ##
+  tls:
+    ## @param proxy.tls.mode TLS mode for proxy. Allowed values: `0`, `1`, `2`
+    ## 0 for close, 1 for one-way authentication, 2 for two-way authentication.
+    ##
+    mode: 0
+    ## @param proxy.tls.existingSecret Name of the existing secret containing the TLS certificates for proxy.
+    ## if mode equals to 1, existingSecret should contain a server cert and a server key
+    ## if mode equals to 2, existingSecret should contain a server cert, a server key and a CA cert
+    ##
+    existingSecret: ""
+    ## @param proxy.tls.cert The secret key from the existingSecret if 'cert' key different from the default (server.pem)
+    ##
+    cert: server.pem
+    ## @param proxy.tls.key The secret key from the existingSecret if 'key' key different from the default (server.key)
+    ## Milvus cannot decrypt key file with password, so now the key must not be encrypted
+    ##
+    key: server.key
+    ## @param proxy.tls.caCert The secret key from the existingSecret if 'caCert' key different from the default (ca.pem)
+    ##
+    caCert: ca.pem
+    ## @param proxy.tls.keyPassword Password to access the password-protected PEM key if necessary.
+    ## Milvus cannot decrypt key file with password, so now the key must not be encrypted, value here must be empty
+    ##
+    keyPassword: ""
+
   ## @param proxy.extraEnvVars Array with extra environment variables to add to proxy nodes
   ## e.g:
   ## extraEnvVars:
@@ -3863,7 +3939,7 @@ proxy:
   ##
   customStartupProbe: {}
   ## proxy resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param proxy.resources.limits The resources limits for the proxy containers
   ## @param proxy.resources.requests The requested resources for the proxy containers
   ##
@@ -3874,30 +3950,32 @@ proxy:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param proxy.podSecurityContext.enabled Enabled Proxy pods' Security Context
   ## @param proxy.podSecurityContext.fsGroup Set Proxy pod's Security Context fsGroup
-  ## @param proxy.podSecurityContext.seccompProfile.type Set Proxy container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param proxy.containerSecurityContext.enabled Enabled Proxy containers' Security Context
-  ## @param proxy.containerSecurityContext.runAsUser Set Proxy containers' Security Context runAsUser
-  ## @param proxy.containerSecurityContext.runAsNonRoot Set Proxy containers' Security Context runAsNonRoot
-  ## @param proxy.containerSecurityContext.readOnlyRootFilesystem Set Proxy containers' Security Context runAsNonRoot
-  ## @param proxy.containerSecurityContext.allowPrivilegeEscalation Set Proxy container's privilege escalation
-  ## @param proxy.containerSecurityContext.capabilities.drop Set Proxy container's Security Context runAsNonRoot
+  ## @param proxy.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param proxy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param proxy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param proxy.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param proxy.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param proxy.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param proxy.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param proxy.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param proxy.lifecycleHooks for the proxy container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -3948,7 +4026,7 @@ proxy:
   ##
   affinity: {}
   ## @param proxy.nodeSelector Node labels for Proxy pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param proxy.tolerations Tolerations for Proxy pods assignment
@@ -4111,7 +4189,7 @@ proxy:
     sessionAffinityConfig: {}
     ## @param proxy.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param proxy.service.clusterIP Proxy service Cluster IP
@@ -4253,9 +4331,9 @@ attu:
   enabled: true
   ## Bitnami Attu image
   ## ref: https://hub.docker.com/r/bitnami/attu/tags/
-  ## @param attu.image.registry Attu image registry
-  ## @param attu.image.repository Attu image repository
-  ## @param attu.image.tag Attu image tag (immutable tags are recommended)
+  ## @param attu.image.registry [default: REGISTRY_NAME] Attu image registry
+  ## @param attu.image.repository [default: REPOSITORY_NAME/attu] Attu image repository
+  ## @skip attu.image.tag Attu image tag (immutable tags are recommended)
   ## @param attu.image.digest Attu image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param attu.image.pullPolicy Attu image pull policy
   ## @param attu.image.pullSecrets Attu image pull secrets
@@ -4264,11 +4342,11 @@ attu:
   image:
     registry: docker.io
     repository: bitnami/attu
-    tag: 2.3.1-debian-11-r8
+    tag: 2.3.2-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -4361,7 +4439,7 @@ attu:
   ##
   customStartupProbe: {}
   ## attu resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param attu.resources.limits The resources limits for the attu containers
   ## @param attu.resources.requests The requested resources for the attu containers
   ##
@@ -4372,30 +4450,32 @@ attu:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param attu.podSecurityContext.enabled Enabled Attu pods' Security Context
   ## @param attu.podSecurityContext.fsGroup Set Attu pod's Security Context fsGroup
-  ## @param attu.podSecurityContext.seccompProfile.type Set Attu container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param attu.containerSecurityContext.enabled Enabled Attu containers' Security Context
-  ## @param attu.containerSecurityContext.runAsUser Set Attu containers' Security Context runAsUser
-  ## @param attu.containerSecurityContext.runAsNonRoot Set Attu containers' Security Context runAsNonRoot
-  ## @param attu.containerSecurityContext.readOnlyRootFilesystem Set Attu containers' Security Context runAsNonRoot
-  ## @param attu.containerSecurityContext.allowPrivilegeEscalation Set Attu container's privilege escalation
-  ## @param attu.containerSecurityContext.capabilities.drop Set Attu container's Security Context runAsNonRoot
+  ## @param attu.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param attu.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param attu.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param attu.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param attu.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param attu.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param attu.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param attu.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param attu.lifecycleHooks for the attu container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -4446,7 +4526,7 @@ attu:
   ##
   affinity: {}
   ## @param attu.nodeSelector Node labels for Attu pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param attu.tolerations Tolerations for Attu pods assignment
@@ -4605,7 +4685,7 @@ attu:
     sessionAffinityConfig: {}
     ## @param attu.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param attu.service.clusterIP Attu service Cluster IP
@@ -4635,7 +4715,7 @@ attu:
     ##
     extraPorts: []
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param attu.ingress.enabled Enable ingress record generation for Milvus
@@ -4795,15 +4875,15 @@ attu:
 ##
 
 waitContainer:
-  ## @param waitContainer.image.registry Init container wait-container image registry
-  ## @param waitContainer.image.repository Init container wait-container image name
-  ## @param waitContainer.image.tag Init container wait-container image tag
+  ## @param waitContainer.image.registry [default: REGISTRY_NAME] Init container wait-container image registry
+  ## @param waitContainer.image.repository [default: REPOSITORY_NAME/os-shell] Init container wait-container image name
+  ## @skip waitContainer.image.tag Init container wait-container image tag
   ## @param waitContainer.image.digest Init container wait-container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r77
+    tag: 11-debian-11-r90
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
@@ -4820,23 +4900,28 @@ waitContainer:
 
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param waitContainer.containerSecurityContext.enabled Enabled Milvus containers' Security Context
-  ## @param waitContainer.containerSecurityContext.runAsUser Set Milvus containers' Security Context runAsUser
-  ## @param waitContainer.containerSecurityContext.runAsNonRoot Set Milvus containers' Security Context runAsNonRoot
-  ## @param waitContainer.containerSecurityContext.readOnlyRootFilesystem Set Milvus containers' Security Context runAsNonRoot
-  ## @param waitContainer.containerSecurityContext.allowPrivilegeEscalation Set Milvus container's privilege escalation
-  ## @param waitContainer.containerSecurityContext.capabilities.drop Set Milvus container's Security Context runAsNonRoot
+  ## @param waitContainer.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param waitContainer.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param waitContainer.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param waitContainer.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param waitContainer.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param waitContainer.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param waitContainer.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param waitContainer.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
-## @section External etcd parameters
+## @section External etcd settings
 ##
 externalEtcd:
   ## @param externalEtcd.servers List of hostnames of the external etcd
@@ -4845,9 +4930,41 @@ externalEtcd:
   ## @param externalEtcd.port Port of the external etcd instance
   ##
   port: 2379
-  ## @param externalEtcd.secureTransport Use TLS for client-to-server communications
+  ## @param externalEtcd.user User of the external etcd instance
   ##
-  secureTransport: false
+  user: root
+  ## @param externalEtcd.password Password of the external etcd instance
+  ##
+  password: ""
+  ## @param externalEtcd.existingSecret Name of a secret containing the external etcd password
+  ##
+  existingSecret: ""
+  ## @param externalEtcd.existingSecretPasswordKey Key inside the secret containing the external etcd password
+  ##
+  existingSecretPasswordKey: "etcd-root-password"
+  ## External etcd TLS connection configuration
+  ##
+  tls:
+    ## @param externalEtcd.tls.enabled Enable TLS for etcd client connections.
+    ##
+    enabled: false
+    ## @param externalEtcd.tls.existingSecret Name of the existing secret containing the TLS certificates for external etcd client communications.
+    ##
+    existingSecret: ""
+    ## @param externalEtcd.tls.cert The secret key from the existingSecret if 'cert' key different from the default (tls.crt)
+    ##
+    cert: tls.crt
+    ## @param externalEtcd.tls.key The secret key from the existingSecret if 'key' key different from the default (tls.key)
+    ## Milvus cannot decrypt key file with password, so now the key must not be encrypted
+    ##
+    key: tls.key
+    ## @param externalEtcd.tls.caCert The secret key from the existingSecret if 'caCert' key different from the default (ca.crt)
+    ##
+    caCert: ca.crt
+    ## @param externalEtcd.tls.keyPassword Password to access the password-protected PEM key if necessary.
+    ## Milvus cannot decrypt key file with password, so now the key must not be encrypted, value here must be empty
+    ##
+    keyPassword: ""
 
 ## @section External S3 parameters
 ## All of these values are only used when redis.enabled is set to false

@@ -1,0 +1,61 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.tracking.enabled .Values.tracking.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ template "mlflow.v0.tracking.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mlflow
+    app.kubernetes.io/component: tracking
+  {{- if or .Values.tracking.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" ( list .Values.tracking.ingress.annotations .Values.commonAnnotations ) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.tracking.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.tracking.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.tracking.ingress.hostname }}
+    - host: {{ .Values.tracking.ingress.hostname }}
+      http:
+        paths:
+          {{- if .Values.tracking.ingress.extraPaths }}
+          {{- toYaml .Values.tracking.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.tracking.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.tracking.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "mlflow.v0.tracking.fullname" .) "servicePort" (include "mlflow.v0.tracking.protocol" $)  "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.tracking.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "mlflow.v0.tracking.fullname" $) "servicePort" (include "mlflow.v0.tracking.protocol" $) "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.tracking.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.tracking.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.tracking.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.tracking.ingress.annotations )) .Values.tracking.ingress.selfSigned)) .Values.tracking.ingress.extraTls }}
+  tls:
+    {{- if and .Values.tracking.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.tracking.ingress.annotations )) .Values.tracking.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.tracking.ingress.hostname | quote }}
+      secretName: {{ printf "%s-tls" .Values.tracking.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.tracking.ingress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.tracking.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

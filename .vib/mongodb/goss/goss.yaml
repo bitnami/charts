@@ -11,7 +11,7 @@ file:
     exists: true
     filetype: file
     mode: "0660"
-    contains:
+    contents:
       - /port:.*{{ .Vars.containerPorts.mongodb }}/
 command:
   {{- $conn_opts := printf "--quiet --username %s --password '%s' --host mongodb --port %d" .Vars.auth.rootUser .Vars.auth.rootPassword .Vars.service.ports.mongodb }}
@@ -24,7 +24,7 @@ command:
     exec: mongosh {{ $conn_opts }} --eval "db.{{ $testCollection }}.drop(); db.createCollection('{{ $testCollection }}'); db.getCollectionNames()" {{ (index .Vars.auth.databases 0) }}
     exit-status: 0
     stdout:
-      - {{ $testCollection }}
+      - "{{ $testCollection }}"
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.podSecurityContext.fsGroup }}
   check-user-info:

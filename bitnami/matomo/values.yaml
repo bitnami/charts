@@ -51,9 +51,9 @@ extraDeploy: []
 
 ## Bitnami Matomo image version
 ## ref: https://hub.docker.com/r/bitnami/matomo/tags/
-## @param image.registry Matomo image registry
-## @param image.repository Matomo Image name
-## @param image.tag Matomo Image tag
+## @param image.registry [default: REGISTRY_NAME] Matomo image registry
+## @param image.repository [default: REPOSITORY_NAME/matomo] Matomo Image name
+## @skip image.tag Matomo Image tag
 ## @param image.digest Matomo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Matomo image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -62,11 +62,11 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/matomo
-  tag: 4.15.1-debian-11-r42
+  tag: 4.16.0-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -225,7 +225,7 @@ containerPorts:
   http: 8080
   https: 8443
 ## Enable persistence using Persistent Volume Claims
-## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable persistence using PVC
@@ -306,11 +306,11 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## Matomo container's resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -339,14 +339,26 @@ podSecurityContext:
   fsGroup: 1001
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enable Matomo containers' Security Context
-## @param containerSecurityContext.runAsUser Matomo containers' Security Context
-## @param containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## Configure extra options for startup probe
 ## Matomo core exposes / to unauthenticated requests, making it a good
 ## default startup and readiness path. However, that may not always be the
@@ -456,7 +468,7 @@ service:
   ##
   loadBalancerSourceRanges: []
   ## @param service.loadBalancerIP loadBalancerIP for the Matomo Service (optional, cloud specific)
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.nodePorts [object] Kubernetes node port
@@ -495,7 +507,7 @@ service:
   sessionAffinityConfig: {}
 ## Configure the ingress resource that allows you to access the
 ## Matomo installation. Set up the URL
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress controller resource
@@ -522,7 +534,7 @@ ingress:
   path: /
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
   ## Use this parameter to set the required annotations for cert-manager, see
   ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
@@ -627,7 +639,7 @@ mariadb:
     password: ""
   primary:
     ## Enable persistence using Persistent Volume Claims
-    ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+    ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
     ## @param mariadb.primary.persistence.enabled Enable database persistence using PVC
     ## @param mariadb.primary.persistence.storageClass MariaDB primary persistent volume storage Class
     ## @param mariadb.primary.persistence.accessModes Database Persistent Volume Access Modes
@@ -676,9 +688,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work)
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image name
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image name
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
@@ -686,7 +698,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r69
+    tag: 11-debian-11-r92
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -698,7 +710,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -729,9 +741,9 @@ metrics:
   ## @param metrics.enabled Start a exporter side-car
   ##
   enabled: false
-  ## @param metrics.image.registry Apache exporter image registry
-  ## @param metrics.image.repository Apache exporter image repository
-  ## @param metrics.image.tag Apache exporter image tag
+  ## @param metrics.image.registry [default: REGISTRY_NAME] Apache exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/apache-exporter] Apache exporter image repository
+  ## @skip metrics.image.tag Apache exporter image tag
   ## @param metrics.image.digest Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
@@ -739,7 +751,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.1-debian-11-r50
+    tag: 1.0.3-debian-11-r2
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -751,7 +763,7 @@ metrics:
     ##
     pullSecrets: []
   ## @param metrics.resources Metrics exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ##
@@ -800,9 +812,9 @@ certificates:
   ## @param certificates.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
   ##
   extraEnvVarsSecret: ""
-  ## @param certificates.image.registry Container sidecar registry
-  ## @param certificates.image.repository Container sidecar image
-  ## @param certificates.image.tag Container sidecar image tag
+  ## @param certificates.image.registry [default: REGISTRY_NAME] Container sidecar registry
+  ## @param certificates.image.repository [default: REPOSITORY_NAME/os-shell] Container sidecar image
+  ## @skip certificates.image.tag Container sidecar image tag
   ## @param certificates.image.digest Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param certificates.image.pullPolicy Container sidecar image pull policy
   ## @param certificates.image.pullSecrets Container sidecar image pull secrets
@@ -810,11 +822,11 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r69
+    tag: 11-debian-11-r92
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## e.g:
@@ -916,17 +928,26 @@ networkPolicy:
     ##
     customRules: {}
 
+## @section CronJob parameters
+##
+
 cronjobs:
-  ## @param cronjobs.enabled Enables cronjobs for archive and scheduler tasks
+  ## DEPRECATED @param cronjobs.enabled Please use cronjobs.taskScheduler.enabled and/or cronjobs.archive.enabled
   ##
-  enabled: true
+  # enabled: true
   taskScheduler:
+    ## @param cronjobs.taskScheduler.enabled Whether to enable scheduled mail-to-task CronJob
+    ##
+    enabled: true
     ## @param cronjobs.taskScheduler.schedule Kubernetes CronJob schedule
     ##
     schedule: "*/5 * * * *"
     ## @param cronjobs.taskScheduler.suspend Whether to create suspended CronJob
     ##
     suspend: false
+    ## @param cronjobs.taskScheduler.affinity Affinity for CronJob pod assignment
+    ##
+    affinity: {}
     ## @param cronjobs.taskScheduler.command Override default container command (useful when using custom images)
     ##
     command: []
@@ -935,14 +956,26 @@ cronjobs:
     args: []
     ## @param
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param cronjobs.taskScheduler.containerSecurityContext.enabled archive Container securityContext
-    ## @param cronjobs.taskScheduler.containerSecurityContext.runAsUser User ID for the archive container
-    ## @param cronjobs.taskScheduler.containerSecurityContext.runAsNonRoot Whether to run the archive container as a non-root user
+    ## @param cronjobs.taskScheduler.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param cronjobs.taskScheduler.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param cronjobs.taskScheduler.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param cronjobs.taskScheduler.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param cronjobs.taskScheduler.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param cronjobs.taskScheduler.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param cronjobs.taskScheduler.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param cronjobs.taskScheduler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
-      enabled: false
+      enabled: true
       runAsUser: 1001
       runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## @param cronjobs.taskScheduler.podAnnotations Additional pod annotations
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
@@ -954,13 +987,16 @@ cronjobs:
   archive:
     ## @param cronjobs.archive.enabled Whether to enable scheduled mail-to-task CronJob
     ##
-    enabled: false
+    enabled: true
     ## @param cronjobs.archive.schedule Kubernetes CronJob schedule
     ##
     schedule: "*/5 * * * *"
     ## @param cronjobs.archive.suspend Whether to create suspended CronJob
     ##
     suspend: false
+    ## @param cronjobs.archive.affinity Affinity for CronJob pod assignment
+    ##
+    affinity: {}
     ## @param cronjobs.archive.command Override default container command (useful when using custom images)
     ##
     command: []
@@ -969,14 +1005,26 @@ cronjobs:
     args: []
     ## @param
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param cronjobs.archive.containerSecurityContext.enabled archive Container securityContext
-    ## @param cronjobs.archive.containerSecurityContext.runAsUser User ID for the archive container
-    ## @param cronjobs.archive.containerSecurityContext.runAsNonRoot Whether to run the archive container as a non-root user
+    ## @param cronjobs.archive.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param cronjobs.archive.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param cronjobs.archive.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param cronjobs.archive.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param cronjobs.archive.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param cronjobs.archive.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param cronjobs.archive.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param cronjobs.archive.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
-      enabled: false
+      enabled: true
       runAsUser: 1001
       runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## @param cronjobs.archive.podAnnotations Additional pod annotations
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##

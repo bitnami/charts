@@ -195,6 +195,10 @@ spec:
             - name: notifiers
               mountPath: /opt/bitnami/grafana/conf/provisioning/notifiers
             {{- end }}
+            {{- if .Values.alerting.configMapName }}
+            - name: alerting
+              mountPath: /opt/bitnami/grafana/conf/provisioning/alerting
+            {{- end }}
             {{- if .Values.ldap.enabled }}
             - name: ldap
               mountPath: /opt/bitnami/grafana/conf/ldap.toml
@@ -217,6 +221,9 @@ spec:
             - name: dashboard
               containerPort: {{ .Values.grafana.containerPorts.grafana }}
               protocol: TCP
+            {{- if .Values.grafana.extraPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraPorts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if .Values.grafana.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.grafana.livenessProbe.enabled }}
@@ -316,6 +323,11 @@ spec:
         - name: notifiers
           configMap:
             name: {{ .Values.notifiers.configMapName }}
+        {{- end }}
+        {{- if .Values.alerting.configMapName }}
+        - name: alerting
+          configMap:
+            name: {{ .Values.alerting.configMapName }}
         {{- end }}
         {{- if .Values.config.useGrafanaIniFile }}
         - name: grafana-ini

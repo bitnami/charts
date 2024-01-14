@@ -69,9 +69,9 @@ diagnosticMode:
 
 ## Bitnami MariaDB Galera image
 ## ref: https://hub.docker.com/r/bitnami/mariadb-galera/tags/
-## @param image.registry MariaDB Galera image registry
-## @param image.repository MariaDB Galera image repository
-## @param image.tag MariaDB Galera image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] MariaDB Galera image registry
+## @param image.repository [default: REPOSITORY_NAME/mariadb-galera] MariaDB Galera image repository
+## @skip image.tag MariaDB Galera image tag (immutable tags are recommended)
 ## @param image.digest MariaDB Galera image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy MariaDB Galera image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -80,11 +80,11 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 11.0.3-debian-11-r33
+  tag: 11.2.2-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -186,7 +186,7 @@ service:
 ## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
 ##
 serviceAccount:
-  create: false
+  create: true
   name: ""
   automountServiceAccountToken: false
   annotations: {}
@@ -220,21 +220,31 @@ rbac:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ## @param podSecurityContext.enabled Enable security context
 ## @param podSecurityContext.fsGroup Group ID for the container filesystem
-## @param podSecurityContext.runAsUser User ID for the container
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-  runAsUser: 1001
 ## Configure Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param containerSecurityContext.enabled Enabled galera's container Security Context
-## @param containerSecurityContext.runAsUser Set galera's container Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set galera's container Security Context runAsNonRoot
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## Database credentials for root (admin) user
 ##
 rootUser:
@@ -564,7 +574,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector Node labels for pod assignment
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment
@@ -584,7 +594,7 @@ topologySpreadConstraints: []
 ##
 lifecycleHooks: {}
 ## Enable persistence using Persistent Volume Claims
-## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ##
 ## Galera container port
 ## @param containerPorts.mysql mariadb database container port
@@ -789,9 +799,9 @@ metrics:
   enabled: false
   ## Bitnami MySQL Prometheus exporter image
   ## ref: https://hub.docker.com/r/bitnami/mysqld-exporter/tags/
-  ## @param metrics.image.registry MariaDB Prometheus exporter image registry
-  ## @param metrics.image.repository MariaDB Prometheus exporter image repository
-  ## @param metrics.image.tag MariaDB Prometheus exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.registry [default: REGISTRY_NAME] MariaDB Prometheus exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/mysqld-exporter] MariaDB Prometheus exporter image repository
+  ## @skip metrics.image.tag MariaDB Prometheus exporter image tag (immutable tags are recommended)
   ## @param metrics.image.digest MariaDB Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy MariaDB Prometheus exporter image pull policy
   ## @param metrics.image.pullSecrets MariaDB Prometheus exporter image pull secrets
@@ -799,7 +809,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.15.0-debian-11-r53
+    tag: 0.15.1-debian-11-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -817,7 +827,7 @@ metrics:
   ##
   extraFlags: []
   ## MySQL Prometheus exporter containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -838,9 +848,25 @@ metrics:
     requests: {}
   ## MySQL Prometheus exporter's Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param metrics.containerSecurityContext.enabled Enabled exporter's container Security Context
+  ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param metrics.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   containerSecurityContext:
-    enabled: false
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## MySQL Prometheus exporter service parameters
   ## @param metrics.service.type Prometheus exporter service type
   ## @param metrics.service.port Prometheus exporter service port
@@ -853,7 +879,7 @@ metrics:
       prometheus.io/scrape: "true"
       prometheus.io/port: "9104"
     ## @param metrics.service.loadBalancerIP Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`
-    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
     ## @param metrics.service.clusterIP Prometheus metrics service Cluster IP

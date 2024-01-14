@@ -6,7 +6,7 @@ file:
     exists: true
     filetype: file
     mode: "0644"
-    contains: 
+    contents: 
     - /bootstrap_expect.*{{ .Vars.replicaCount }}/
     - /http.*{{ .Vars.containerPorts.http }}/
   /bitnami/consul:
@@ -23,5 +23,5 @@ command:
     exit-status: 0
     stdout:
     {{ range $e, $i := until .Vars.replicaCount }}
-      - consul-{{ $i }}
+      - "consul-{{ $i }}"
     {{ end }}

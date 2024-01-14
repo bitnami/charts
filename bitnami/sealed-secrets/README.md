@@ -1,6 +1,6 @@
 <!--- app-name: Sealed Secrets -->
 
-# Sealed Secrets packaged by Bitnami
+# Bitnami package for Sealed Secrets
 
 Sealed Secrets are "one-way" encrypted K8s Secrets that can be created by anyone, but can only be decrypted by the controller running in the target cluster recovering the original object.
 
@@ -12,15 +12,15 @@ Sealed Secrets are "one-way" encrypted K8s Secrets that can be created by anyone
 helm install my-release oci://registry-1.docker.io/bitnamicharts/sealed-secrets
 ```
 
+Looking to use Sealed Secrets in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Introduction
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [Sealed Secret controller](https://github.com/bitnami-labs/sealed-secrets) Deployment in [Kubernetes](http://kubernetes.io) using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Sealed Secret controller](https://github.com/bitnami-labs/sealed-secrets) Deployment in [Kubernetes](https://kubernetes.io) using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Sealed Secrets in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -32,8 +32,10 @@ Looking to use Sealed Secrets in production? Try [VMware Application Catalog](ht
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/sealed-secrets
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/sealed-secrets
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys the Sealed Secrets controller on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -74,76 +76,87 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Sealed Secrets Parameters
 
-| Name                                                | Description                                                                                                              | Value                    |
-| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
-| `image.registry`                                    | Sealed Secrets image registry                                                                                            | `docker.io`              |
-| `image.repository`                                  | Sealed Secrets image repository                                                                                          | `bitnami/sealed-secrets` |
-| `image.tag`                                         | Sealed Secrets image tag (immutable tags are recommended)                                                                | `0.24.1-debian-11-r0`    |
-| `image.digest`                                      | Sealed Secrets image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                     |
-| `image.pullPolicy`                                  | Sealed Secrets image pull policy                                                                                         | `IfNotPresent`           |
-| `image.pullSecrets`                                 | Sealed Secrets image pull secrets                                                                                        | `[]`                     |
-| `image.debug`                                       | Enable Sealed Secrets image debug mode                                                                                   | `false`                  |
-| `command`                                           | Override default container command (useful when using custom images)                                                     | `[]`                     |
-| `commandArgs`                                       | Additional args (doesn't override the default ones)                                                                      | `[]`                     |
-| `args`                                              | Override default container args (useful when using custom images)                                                        | `[]`                     |
-| `containerPorts.http`                               | Controller HTTP container port to open                                                                                   | `8080`                   |
-| `resources.limits`                                  | The resources limits for the Sealed Secret containers                                                                    | `{}`                     |
-| `resources.requests`                                | The requested resources for the Sealed Secret containers                                                                 | `{}`                     |
-| `livenessProbe.enabled`                             | Enable livenessProbe on Sealed Secret containers                                                                         | `true`                   |
-| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `5`                      |
-| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `10`                     |
-| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `1`                      |
-| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                      | `3`                      |
-| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                      | `1`                      |
-| `readinessProbe.enabled`                            | Enable readinessProbe on Sealed Secret containers                                                                        | `true`                   |
-| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                 | `5`                      |
-| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                        | `10`                     |
-| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                       | `1`                      |
-| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                     | `3`                      |
-| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                     | `1`                      |
-| `startupProbe.enabled`                              | Enable startupProbe on Sealed Secret containers                                                                          | `false`                  |
-| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                   | `10`                     |
-| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                          | `10`                     |
-| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                         | `1`                      |
-| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                       | `15`                     |
-| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                       | `1`                      |
-| `customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                      | `{}`                     |
-| `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`                     |
-| `customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`                     |
-| `podSecurityContext.enabled`                        | Enabled Sealed Secret pods' Security Context                                                                             | `true`                   |
-| `podSecurityContext.fsGroup`                        | Set Sealed Secret pod's Security Context fsGroup                                                                         | `1001`                   |
-| `podSecurityContext.seccompProfile.type`            | Set Sealed Secret pod's Security Context seccompProfile type                                                             | `RuntimeDefault`         |
-| `containerSecurityContext.enabled`                  | Enabled Sealed Secret containers' Security Context                                                                       | `true`                   |
-| `containerSecurityContext.allowPrivilegeEscalation` | Whether the Sealed Secret container can escalate privileges                                                              | `false`                  |
-| `containerSecurityContext.capabilities.drop`        | Which privileges to drop in the Sealed Secret container                                                                  | `["ALL"]`                |
-| `containerSecurityContext.readOnlyRootFilesystem`   | Whether the Sealed Secret container has a read-only root filesystem                                                      | `true`                   |
-| `containerSecurityContext.runAsNonRoot`             | Indicates that the Sealed Secret container must run as a non-root user                                                   | `true`                   |
-| `containerSecurityContext.runAsUser`                | Set Sealed Secret containers' Security Context runAsUser                                                                 | `1001`                   |
-| `containerSecurityContext.seccompProfile.type`      | Set Sealed Secret container's Security Context seccompProfile type                                                       | `RuntimeDefault`         |
-| `hostAliases`                                       | Sealed Secret pods host aliases                                                                                          | `[]`                     |
-| `podLabels`                                         | Extra labels for Sealed Secret pods                                                                                      | `{}`                     |
-| `podAnnotations`                                    | Annotations for Sealed Secret pods                                                                                       | `{}`                     |
-| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`                     |
-| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`                   |
-| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`                     |
-| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set                                                                    | `""`                     |
-| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set                                                                 | `[]`                     |
-| `affinity`                                          | Affinity for Sealed Secret pods assignment                                                                               | `{}`                     |
-| `nodeSelector`                                      | Node labels for Sealed Secret pods assignment                                                                            | `{}`                     |
-| `tolerations`                                       | Tolerations for Sealed Secret pods assignment                                                                            | `[]`                     |
-| `updateStrategy.type`                               | Sealed Secret statefulset strategy type                                                                                  | `RollingUpdate`          |
-| `priorityClassName`                                 | Sealed Secret pods' priorityClassName                                                                                    | `""`                     |
-| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                     |
-| `schedulerName`                                     | Name of the k8s scheduler (other than default) for Sealed Secret pods                                                    | `""`                     |
-| `terminationGracePeriodSeconds`                     | Seconds the pod needs to terminate gracefully                                                                            | `""`                     |
-| `lifecycleHooks`                                    | for the Sealed Secret container(s) to automate configuration before or after startup                                     | `{}`                     |
-| `extraEnvVars`                                      | Array with extra environment variables to add to Sealed Secret nodes                                                     | `[]`                     |
-| `extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Sealed Secret nodes                                             | `""`                     |
-| `extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Sealed Secret nodes                                                | `""`                     |
-| `extraVolumes`                                      | Optionally specify extra list of additional volumes for the Sealed Secret pod(s)                                         | `[]`                     |
-| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Sealed Secret container(s)                              | `[]`                     |
-| `sidecars`                                          | Add additional sidecar containers to the Sealed Secret pod(s)                                                            | `{}`                     |
-| `initContainers`                                    | Add additional init containers to the Sealed Secret pod(s)                                                               | `{}`                     |
+| Name                                                | Description                                                                                                              | Value                            |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------- |
+| `image.registry`                                    | Sealed Secrets image registry                                                                                            | `REGISTRY_NAME`                  |
+| `image.repository`                                  | Sealed Secrets image repository                                                                                          | `REPOSITORY_NAME/sealed-secrets` |
+| `image.digest`                                      | Sealed Secrets image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                             |
+| `image.pullPolicy`                                  | Sealed Secrets image pull policy                                                                                         | `IfNotPresent`                   |
+| `image.pullSecrets`                                 | Sealed Secrets image pull secrets                                                                                        | `[]`                             |
+| `image.debug`                                       | Enable Sealed Secrets image debug mode                                                                                   | `false`                          |
+| `command`                                           | Override default container command (useful when using custom images)                                                     | `[]`                             |
+| `commandArgs`                                       | Additional args (doesn't override the default ones)                                                                      | `[]`                             |
+| `args`                                              | Override default container args (useful when using custom images)                                                        | `[]`                             |
+| `revisionHistoryLimit`                              | Number of old history to retain to allow rollback (If not set, default Kubernetes value is set to 10)                    | `""`                             |
+| `createController`                                  | Specifies whether the Sealed Secrets controller should be created                                                        | `true`                           |
+| `secretName`                                        | The name of an existing TLS secret containing the key used to encrypt secrets                                            | `""`                             |
+| `updateStatus`                                      | Specifies whether the Sealed Secrets controller should update the status subresource                                     | `true`                           |
+| `skipRecreate`                                      | Specifies whether the Sealed Secrets controller should skip recreating removed secrets                                   | `false`                          |
+| `keyRenewPeriod`                                    | Specifies key renewal period. Default 30 days. e.g keyRenewPeriod: "720h30m"                                             | `""`                             |
+| `rateLimit`                                         | Number of allowed sustained request per second for verify endpoint                                                       | `""`                             |
+| `rateLimitBurst`                                    | Number of requests allowed to exceed the rate limit per second for verify endpoint                                       | `""`                             |
+| `additionalNamespaces`                              | List of namespaces used to manage the Sealed Secrets                                                                     | `[]`                             |
+| `privateKeyAnnotations`                             | Map of annotations to be set on the sealing keypairs                                                                     | `{}`                             |
+| `privateKeyLabels`                                  | Map of labels to be set on the sealing keypairs                                                                          | `{}`                             |
+| `logInfoStdout`                                     | Specifies whether the Sealed Secrets controller will log info to stdout                                                  | `false`                          |
+| `containerPorts.http`                               | Controller HTTP container port to open                                                                                   | `8080`                           |
+| `resources.limits`                                  | The resources limits for the Sealed Secret containers                                                                    | `{}`                             |
+| `resources.requests`                                | The requested resources for the Sealed Secret containers                                                                 | `{}`                             |
+| `livenessProbe.enabled`                             | Enable livenessProbe on Sealed Secret containers                                                                         | `true`                           |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `5`                              |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `10`                             |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `1`                              |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                      | `3`                              |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                      | `1`                              |
+| `readinessProbe.enabled`                            | Enable readinessProbe on Sealed Secret containers                                                                        | `true`                           |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                 | `5`                              |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                        | `10`                             |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                       | `1`                              |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                     | `3`                              |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                     | `1`                              |
+| `startupProbe.enabled`                              | Enable startupProbe on Sealed Secret containers                                                                          | `false`                          |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                   | `10`                             |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                          | `10`                             |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                         | `1`                              |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                       | `15`                             |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                       | `1`                              |
+| `customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                      | `{}`                             |
+| `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`                             |
+| `customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`                             |
+| `podSecurityContext.enabled`                        | Enabled Sealed Secret pods' Security Context                                                                             | `true`                           |
+| `podSecurityContext.fsGroup`                        | Set Sealed Secret pod's Security Context fsGroup                                                                         | `1001`                           |
+| `podSecurityContext.seccompProfile.type`            | Set Sealed Secret pod's Security Context seccompProfile type                                                             | `RuntimeDefault`                 |
+| `containerSecurityContext.enabled`                  | Enabled Sealed Secret containers' Security Context                                                                       | `true`                           |
+| `containerSecurityContext.allowPrivilegeEscalation` | Whether the Sealed Secret container can escalate privileges                                                              | `false`                          |
+| `containerSecurityContext.capabilities.drop`        | Which privileges to drop in the Sealed Secret container                                                                  | `["ALL"]`                        |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Whether the Sealed Secret container has a read-only root filesystem                                                      | `true`                           |
+| `containerSecurityContext.runAsNonRoot`             | Indicates that the Sealed Secret container must run as a non-root user                                                   | `true`                           |
+| `containerSecurityContext.runAsUser`                | Set Sealed Secret containers' Security Context runAsUser                                                                 | `1001`                           |
+| `containerSecurityContext.seccompProfile.type`      | Set Sealed Secret container's Security Context seccompProfile type                                                       | `RuntimeDefault`                 |
+| `hostAliases`                                       | Sealed Secret pods host aliases                                                                                          | `[]`                             |
+| `podLabels`                                         | Extra labels for Sealed Secret pods                                                                                      | `{}`                             |
+| `podAnnotations`                                    | Annotations for Sealed Secret pods                                                                                       | `{}`                             |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`                             |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`                           |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`                             |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set                                                                    | `""`                             |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set                                                                 | `[]`                             |
+| `affinity`                                          | Affinity for Sealed Secret pods assignment                                                                               | `{}`                             |
+| `nodeSelector`                                      | Node labels for Sealed Secret pods assignment                                                                            | `{}`                             |
+| `tolerations`                                       | Tolerations for Sealed Secret pods assignment                                                                            | `[]`                             |
+| `updateStrategy.type`                               | Sealed Secret statefulset strategy type                                                                                  | `RollingUpdate`                  |
+| `priorityClassName`                                 | Sealed Secret pods' priorityClassName                                                                                    | `""`                             |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                             |
+| `schedulerName`                                     | Name of the k8s scheduler (other than default) for Sealed Secret pods                                                    | `""`                             |
+| `terminationGracePeriodSeconds`                     | Seconds the pod needs to terminate gracefully                                                                            | `""`                             |
+| `lifecycleHooks`                                    | for the Sealed Secret container(s) to automate configuration before or after startup                                     | `{}`                             |
+| `extraEnvVars`                                      | Array with extra environment variables to add to Sealed Secret nodes                                                     | `[]`                             |
+| `extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Sealed Secret nodes                                             | `""`                             |
+| `extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Sealed Secret nodes                                                | `""`                             |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for the Sealed Secret pod(s)                                         | `[]`                             |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Sealed Secret container(s)                              | `[]`                             |
+| `sidecars`                                          | Add additional sidecar containers to the Sealed Secret pod(s)                                                            | `{}`                             |
+| `initContainers`                                    | Add additional init containers to the Sealed Secret pod(s)                                                               | `{}`                             |
 
 ### Traffic Exposure Parameters
 
@@ -178,19 +191,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                          | Description                                                      | Value   |
-| --------------------------------------------- | ---------------------------------------------------------------- | ------- |
-| `rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
-| `rbac.pspEnabled`                             | PodSecurityPolicy                                                | `false` |
-| `rbac.unsealer.rules`                         | Custom RBAC rules to set for unsealer ClusterRole                | `[]`    |
-| `rbac.keyAdmin.rules`                         | Custom RBAC rules to set for key-admin role                      | `[]`    |
-| `rbac.serviceProxier.rules`                   | Custom RBAC rules to set for service-proxier role                | `[]`    |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
-| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true`  |
-| `networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created              | `false` |
-| `networkPolicy.allowExternal`                 | Don't require client label for connections                       | `true`  |
+| Name                                          | Description                                                                                                                                                                                           | Value   |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                                                                                                    | `true`  |
+| `rbac.pspEnabled`                             | PodSecurityPolicy                                                                                                                                                                                     | `false` |
+| `rbac.clusterRole`                            | Specifies whether the Cluster Role resource should be created. If both rbac.clusterRole and rbac.namespacedRoles are set to false no RBAC will be created.                                            | `true`  |
+| `rbac.clusterRoleName`                        | Specifies the name for the Cluster Role resource                                                                                                                                                      | `""`    |
+| `rbac.namespacedRoles`                        | Specifies whether the namespaced Roles should be created (in each of the specified additionalNamespaces). If both rbac.clusterRole and rbac.namespacedRoles are set to false no RBAC will be created. | `false` |
+| `rbac.namespacedRolesName`                    | Specifies the name for the namesapced Role resource                                                                                                                                                   | `""`    |
+| `rbac.unsealer.rules`                         | Custom RBAC rules to set for unsealer ClusterRole                                                                                                                                                     | `[]`    |
+| `rbac.keyAdmin.rules`                         | Custom RBAC rules to set for key-admin role                                                                                                                                                           | `[]`    |
+| `rbac.serviceProxier.rules`                   | Custom RBAC rules to set for service-proxier role                                                                                                                                                     | `[]`    |
+| `rbac.labels`                                 | Extra labels to be added to RBAC resources                                                                                                                                                            | `{}`    |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                                                                                  | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                                                                                | `""`    |
+| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)                                                                                                                                      | `{}`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                                                                                        | `true`  |
+| `networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created                                                                                                                                                   | `false` |
+| `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                                                                                                            | `true`  |
+| `pdb.create`                                  | Enable a Pod Disruption Budget creation                                                                                                                                                               | `false` |
+| `pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                                                                                        | `""`    |
+| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                                                                                                        | `""`    |
 
 ### Metrics parameters
 
@@ -213,18 +234,21 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set livenessProbe.successThreshold=5 \
-    oci://registry-1.docker.io/bitnamicharts/sealed-secrets
+    oci://REGISTRY_NAME/REPOSITORY_NAME/sealed-secrets
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the `livenessProbe.successThreshold` to `5`.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/sealed-secrets
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/sealed-secrets
 ```
 
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/sealed-secrets/values.yaml)
 
 ## Configuration and installation details
 
@@ -243,7 +267,7 @@ $ kubeseal --fetch-cert \
 
 Refer to Sealed Secrets documentation for more information about [kubeseal usage](https://github.com/bitnami-labs/sealed-secrets#usage).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -286,7 +310,7 @@ This major release renames several values in this chart and adds missing feature
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

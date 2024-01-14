@@ -50,9 +50,9 @@ extraDeploy: []
 server:
   ## Bitnami Spring Cloud Dataflow Server image
   ## ref: https://hub.docker.com/r/bitnami/spring-cloud-dataflow/tags/
-  ## @param server.image.registry Spring Cloud Dataflow image registry
-  ## @param server.image.repository Spring Cloud Dataflow image repository
-  ## @param server.image.tag Spring Cloud Dataflow image tag (immutable tags are recommended)
+  ## @param server.image.registry [default: REGISTRY_NAME] Spring Cloud Dataflow image registry
+  ## @param server.image.repository [default: REPOSITORY_NAME/spring-cloud-dataflow] Spring Cloud Dataflow image repository
+  ## @skip server.image.tag Spring Cloud Dataflow image tag (immutable tags are recommended)
   ## @param server.image.digest Spring Cloud Dataflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param server.image.pullPolicy Spring Cloud Dataflow image pull policy
   ## @param server.image.pullSecrets Specify docker-registry secret names as an array
@@ -61,10 +61,10 @@ server:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-dataflow
-    tag: 2.11.0-debian-11-r0
+    tag: 2.11.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -85,15 +85,15 @@ server:
   composedTaskRunner:
     ## Bitnami Spring Cloud Dataflow Composed Task Runner image
     ## ref: https://hub.docker.com/r/bitnami/spring-cloud-dataflow/tags/
-    ## @param server.composedTaskRunner.image.registry Spring Cloud Dataflow Composed Task Runner image registry
-    ## @param server.composedTaskRunner.image.repository Spring Cloud Dataflow Composed Task Runner image repository
-    ## @param server.composedTaskRunner.image.tag Spring Cloud Dataflow Composed Task Runner image tag (immutable tags are recommended)
+    ## @param server.composedTaskRunner.image.registry [default: REGISTRY_NAME] Spring Cloud Dataflow Composed Task Runner image registry
+    ## @param server.composedTaskRunner.image.repository [default: REPOSITORY_NAME/spring-cloud-dataflow-composed-task-runner] Spring Cloud Dataflow Composed Task Runner image repository
+    ## @skip server.composedTaskRunner.image.tag Spring Cloud Dataflow Composed Task Runner image tag (immutable tags are recommended)
     ## @param server.composedTaskRunner.image.digest Spring Cloud Dataflow Composed Task Runner image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ##
     image:
       registry: docker.io
       repository: bitnami/spring-cloud-dataflow-composed-task-runner
-      tag: 2.11.0-debian-11-r5
+      tag: 2.11.2-debian-11-r0
       digest: ""
   ## Spring Cloud Dataflow Server configuration parameters
   ##
@@ -203,7 +203,7 @@ server:
   ##
   affinity: {}
   ## @param server.nodeSelector Dataflow server node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param server.tolerations Dataflow server tolerations for pod assignment
@@ -252,14 +252,28 @@ server:
     fsGroup: 1001
   ## Dataflow Server containers' Security Context (only main container).
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param server.containerSecurityContext.enabled Enabled Dataflow Server containers' Security Context
-  ## @param server.containerSecurityContext.runAsUser Set Dataflow Server container's Security Context runAsUser
+  ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param server.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param server.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param server.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Dataflow Server containers' resource requests and limits.
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -409,7 +423,7 @@ server:
     hostname: dataflow.local
     ## @param server.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -585,9 +599,9 @@ skipper:
   hostAliases: []
   ## Bitnami Spring Cloud Skipper image
   ## ref: https://hub.docker.com/r/bitnami/spring-cloud-skipper/tags/
-  ## @param skipper.image.registry Spring Cloud Skipper image registry
-  ## @param skipper.image.repository Spring Cloud Skipper image repository
-  ## @param skipper.image.tag Spring Cloud Skipper image tag (immutable tags are recommended)
+  ## @param skipper.image.registry [default: REGISTRY_NAME] Spring Cloud Skipper image registry
+  ## @param skipper.image.repository [default: REPOSITORY_NAME/spring-cloud-skipper] Spring Cloud Skipper image repository
+  ## @skip skipper.image.tag Spring Cloud Skipper image tag (immutable tags are recommended)
   ## @param skipper.image.digest Spring Cloud Skipper image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param skipper.image.pullPolicy Spring Cloud Skipper image pull policy
   ## @param skipper.image.pullSecrets Specify docker-registry secret names as an array
@@ -596,10 +610,10 @@ skipper:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-skipper
-    tag: 2.9.3-debian-11-r131
+    tag: 2.11.1-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -685,7 +699,7 @@ skipper:
   ##
   affinity: {}
   ## @param skipper.nodeSelector Skipper node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param skipper.tolerations Skipper tolerations for pod assignment
@@ -734,14 +748,28 @@ skipper:
     fsGroup: 1001
   ## Skipper containers' Security Context (only main container).
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param skipper.containerSecurityContext.enabled Enabled Datafkiw Skipper containers' Security Context
-  ## @param skipper.containerSecurityContext.runAsUser Set Dataflow Skipper container's Security Context runAsUser
+  ## @param skipper.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param skipper.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param skipper.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param skipper.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param skipper.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param skipper.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param skipper.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param skipper.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Skipper containers' resource requests and limits.
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -956,7 +984,7 @@ externalSkipper:
 ##
 deployer:
   ## Streaming applications resource requests and limits.
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param deployer.resources.limits [object] Streaming applications resource limits
   ## @param deployer.resources.requests Streaming applications resource requests
   ##
@@ -1057,9 +1085,9 @@ metrics:
   enabled: false
   ## Bitnami Prometheus Rsocket Proxy image
   ## ref: https://hub.docker.com/r/bitnami/prometheus-rsocket-proxy/tags/
-  ## @param metrics.image.registry Prometheus Rsocket Proxy image registry
-  ## @param metrics.image.repository Prometheus Rsocket Proxy image repository
-  ## @param metrics.image.tag Prometheus Rsocket Proxy image tag (immutable tags are recommended)
+  ## @param metrics.image.registry [default: REGISTRY_NAME] Prometheus Rsocket Proxy image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/prometheus-rsocket-proxy] Prometheus Rsocket Proxy image repository
+  ## @skip metrics.image.tag Prometheus Rsocket Proxy image tag (immutable tags are recommended)
   ## @param metrics.image.digest Prometheus Rsocket Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Prometheus Rsocket Proxy image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
@@ -1067,10 +1095,10 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/prometheus-rsocket-proxy
-    tag: 1.5.2-debian-11-r74
+    tag: 1.5.3-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1082,7 +1110,7 @@ metrics:
     ##
     pullSecrets: []
   ## Prometheus Rsocket Proxy containers' resource requests and limits.
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1137,7 +1165,7 @@ metrics:
   ##
   affinity: {}
   ## @param metrics.nodeSelector Prometheus Rsocket Proxy node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param metrics.hostAliases Prometheus Proxy pods host aliases
@@ -1162,16 +1190,30 @@ metrics:
   ## @param metrics.podSecurityContext.fsGroup Set Prometheus Proxy pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param metrics.containerSecurityContext.enabled Enabled Prometheus Proxy containers' Security Context
-  ## @param metrics.containerSecurityContext.runAsUser Set Prometheus Proxy containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param metrics.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
-    enabled: false
+    enabled: true
     runAsUser: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param metrics.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -1207,6 +1249,59 @@ metrics:
   containerPorts:
     http: 8080
     rsocket: 7001
+  ## Configure extra options for Prometheus Proxy containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param metrics.startupProbe.enabled Enable startupProbe on Prometheus Proxy nodes
+  ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param metrics.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param metrics.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param metrics.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param metrics.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param metrics.livenessProbe.enabled Enable livenessProbe on Prometheus Proxy nodes
+  ## @param metrics.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param metrics.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param metrics.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param metrics.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param metrics.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param metrics.readinessProbe.enabled Enable readinessProbe on Prometheus Proxy nodes
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metrics.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param metrics.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param metrics.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param metrics.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
   ## @param metrics.sidecars Add additional sidecar containers to the Prometheus Proxy pod(s)
   ## e.g:
   ## sidecars:
@@ -1392,9 +1487,9 @@ waitForBackends:
   ## @param waitForBackends.enabled Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming
   ##
   enabled: true
-  ## @param waitForBackends.image.registry Init container wait-for-backend image registry
-  ## @param waitForBackends.image.repository Init container wait-for-backend image name
-  ## @param waitForBackends.image.tag Init container wait-for-backend image tag
+  ## @param waitForBackends.image.registry [default: REGISTRY_NAME] Init container wait-for-backend image registry
+  ## @param waitForBackends.image.repository [default: REPOSITORY_NAME/kubectl] Init container wait-for-backend image name
+  ## @skip waitForBackends.image.tag Init container wait-for-backend image tag
   ## @param waitForBackends.image.digest Init container wait-for-backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param waitForBackends.image.pullPolicy Init container wait-for-backend image pull policy
   ## @param waitForBackends.image.pullSecrets Specify docker-registry secret names as an array
@@ -1402,11 +1497,11 @@ waitForBackends:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.28.2-debian-11-r5
+    tag: 1.29.0-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -1416,8 +1511,30 @@ waitForBackends:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## waitForBackends containers' Security Context (init container).
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param waitForBackends.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param waitForBackends.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param waitForBackends.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param waitForBackends.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param waitForBackends.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param waitForBackends.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param waitForBackends.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param waitForBackends.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Init container resource requests and limits.
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1447,15 +1564,15 @@ mariadb:
   ##
   enabled: true
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb
-  ## @param mariadb.image.registry MariaDB image registry
-  ## @param mariadb.image.repository MariaDB image repository
-  ## @param mariadb.image.tag MariaDB image tag (immutable tags are recommended)
+  ## @param mariadb.image.registry [default: REGISTRY_NAME] MariaDB image registry
+  ## @param mariadb.image.repository [default: REPOSITORY_NAME/mariadb] MariaDB image repository
+  ## @skip mariadb.image.tag MariaDB image tag (immutable tags are recommended)
   ## @param mariadb.image.digest MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 10.11.5-debian-11-r39
+    tag: 10.11.6-debian-11-r2
     digest: ""
   ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##

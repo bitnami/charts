@@ -5,7 +5,7 @@ file:
 /opt/bitnami/opensearch/config/opensearch.yml:
   mode: "0644"
   filetype: file
-  contains:
+  contents:
    - /port.*{{ .Vars.containerPorts.transport }}/
    - /allow_nmap:.*false/
   exists: true

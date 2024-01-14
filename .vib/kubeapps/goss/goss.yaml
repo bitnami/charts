@@ -11,13 +11,13 @@ file:
     filetype: symlink
     exists: true
     mode: "0777"
-    contains:
+    contents:
       - /timeoutSeconds.*{{ .Vars.kubeappsapis.pluginConfig.core.packages.v1alpha1.timeoutSeconds }}/
   /config/clusters.conf:
     filetype: symlink
     exists: true
     mode: "0777"
-    contains:
+    contents:
     {{ range .Vars.clusters }}
       - /domain.*{{ .domain }}/
       - /name.*{{ .name }}/

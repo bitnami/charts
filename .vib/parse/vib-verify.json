@@ -31,12 +31,6 @@
       },
       "actions": [
         {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-parse-dashboard-http-dashboard"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {

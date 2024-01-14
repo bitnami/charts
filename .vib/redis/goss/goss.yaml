@@ -16,21 +16,21 @@ command:
     exec: {{ $auth }} redis-cli {{ $master_endpoint }} {{ $command }}
     exit-status: 0
     stdout:
-      - ERR unknown command
+      - "ERR unknown command"
   {{ end }}
   redis-master-role:
     exec: {{ $auth }} redis-cli {{ $master_endpoint }} ROLE
     exit-status: 0
     stdout:
-      - master
+      - "master"
       {{ range $e, $i := until $replicas }}
-      - redis-replicas-{{ $i }}
+      - "redis-replicas-{{ $i }}"
       {{ end }}
   redis-replicas-role:
     exec: {{ $auth }} redis-cli {{ $replicas_endpoint }} ROLE
     exit-status: 0
     stdout:
-      - slave
+      - "slave"
   {{- $uid := .Vars.master.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.master.podSecurityContext.fsGroup }}
   check-user-info:

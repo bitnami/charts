@@ -72,6 +72,27 @@ Return the CryptKeeper value
 {{- end }}
 
 {{/*
+Return the API token for a hub service
+Usage:
+{{ include "jupyterhub.hub.services.get_api_token" ( dict "serviceKey" "my-service" "context" $) }}
+*/}}
+{{- define "jupyterhub.hub.services.get_api_token" -}}
+    {{- $services := .context.Values.hub.services }}
+    {{- $explicitly_set_api_token := or (dig .serviceKey "api_token" "" $services) (dig .serviceKey "apiToken" "" $services) }}
+    {{- if $explicitly_set_api_token }}
+        {{- $explicitly_set_api_token }}
+    {{- else }}
+        {{- $k8s_state := lookup "v1" "Secret" .context.Release.Namespace (include "jupyterhub.hub.name" .context) | default (dict "data" (dict)) }}
+        {{- $k8s_secret_key := printf "hub.services.%s.apiToken" .serviceKey }}
+        {{- if hasKey $k8s_state.data $k8s_secret_key }}
+            {{- index $k8s_state.data $k8s_secret_key | b64dec }}
+        {{- else }}
+            {{- include "jupyterhub.randHex" 64 }}
+        {{- end }}
+    {{- end }}
+{{- end }}
+
+{{/*
 Return the proper hub image name
 */}}
 {{- define "jupyterhub.proxy.name" -}}

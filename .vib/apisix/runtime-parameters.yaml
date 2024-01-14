@@ -79,6 +79,14 @@ extraDeploy:
           image: bitnami/nginx
           ports:
           - containerPort: 8080
+          securityContext:
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: "RuntimeDefault"
 - apiVersion: v1
   kind: Service
   metadata:

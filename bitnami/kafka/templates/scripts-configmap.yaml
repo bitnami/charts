@@ -182,8 +182,10 @@ data:
     }
     {{- if (include "kafka.sslEnabled" .) }}
     configure_kafka_tls() {
-      # Remove previously existing keystores
+      # Remove previously existing keystores and certificates, if any
       rm -f /certs/kafka.keystore.jks /certs/kafka.truststore.jks
+      rm -f /certs/tls.crt /certs/tls.key /certs/ca.crt
+      find /certs -name "xx*" -exec rm {} \;
       if [[ "${KAFKA_TLS_TYPE}" = "PEM" ]]; then
         # Copy PEM certificate and key
         if [[ -f "/mounted-certs/kafka-${POD_ROLE}-${POD_ID}.crt" && "/mounted-certs/kafka-${POD_ROLE}-${POD_ID}.key" ]]; then
@@ -212,15 +214,9 @@ data:
           error "CA certificate file not found"
         fi
         {{- else }}
-        # Extract CA certificate from PEM cert
-        cat /certs/tls.crt | csplit - -s -z '/\-*END CERTIFICATE\-*/+1' '{*}' -f /certs/xx
-        FIND_CA_RESULT=$(find /certs -not -name 'xx00' -name 'xx*')
-        if [[ $(echo $FIND_CA_RESULT | wc -l)  < 1 ]]; then
-          error "auth.tls.pemChainIncluded was set, but PEM chain only contained 1 cert"
-        fi
-        echo $FIND_CA_RESULT | sort | xargs cat >> /certs/ca.crt
-        cat /certs/xx00 > /certs/tls.crt
-        find /certs -name "xx*" -exec rm {} \;
+        # CA certificates are also included in the same certificate
+        # All public certs will be included in the truststore
+        cp /certs/tls.crt /certs/ca.crt
         {{- end }}
 
         # Create JKS keystore from PEM cert and key
@@ -241,8 +237,8 @@ data:
       elif [[ "${KAFKA_TLS_TYPE}" = "JKS" ]]; then
         if [[ -f "/mounted-certs/kafka-${POD_ROLE}-${POD_ID}.keystore.jks" ]]; then
           cp "/mounted-certs/kafka-${POD_ROLE}-${POD_ID}.keystore.jks" /certs/kafka.keystore.jks
-        elif [[ -f /mounted-certs/kafka.keystore.jks ]]; then
-          cp /mounted-certs/kafka.keystore.jks /certs/kafka.keystore.jks
+        elif [[ -f {{ printf "/mounted-certs/%s" ( default "kafka.keystore.jks" .Values.tls.jksKeystoreKey) | quote }} ]]; then
+          cp {{ printf "/mounted-certs/%s" ( default "kafka.keystore.jks" .Values.tls.jksKeystoreKey) | quote }} /certs/kafka.keystore.jks
         else
           error "Keystore file not found"
         fi

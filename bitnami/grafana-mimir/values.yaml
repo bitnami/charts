@@ -69,9 +69,9 @@ diagnosticMode:
 mimir:
   ## Bitnami Grafana Mimir image
   ## ref: https://hub.docker.com/r/bitnami/grafana-mimir/tags/
-  ## @param mimir.image.registry Grafana Mimir image registry
-  ## @param mimir.image.repository Grafana Mimir image repository
-  ## @param mimir.image.tag Grafana Mimir image tag (immutable tags are recommended)
+  ## @param mimir.image.registry [default: REGISTRY_NAME] Grafana Mimir image registry
+  ## @param mimir.image.repository [default: REPOSITORY_NAME/grafana-mimir] Grafana Mimir image repository
+  ## @skip mimir.image.tag Grafana Mimir image tag (immutable tags are recommended)
   ## @param mimir.image.digest Grafana Mimir image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param mimir.image.pullPolicy Grafana Mimir image pull policy
   ## @param mimir.image.pullSecrets Grafana Mimir image pull secrets
@@ -79,11 +79,11 @@ mimir:
   image:
     registry: docker.io
     repository: bitnami/grafana-mimir
-    tag: 2.10.0-debian-11-r14
+    tag: 2.11.0-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -121,7 +121,6 @@ mimir:
     # This configures how the store-gateway synchronizes blocks stored in the bucket. It uses Minio by default for getting started (configured via flags) but this should be changed for production deployments.
     blocks_storage:
       bucket_store:
-        max_chunk_pool_bytes: 12884901888 # 12GiB
         sync_dir: {{ .Values.mimir.dataDir }}/tsdb-sync
         {{- if .Values.memcachedchunks.enabled }}
         chunks_cache:
@@ -263,7 +262,7 @@ mimir:
     alertmanager:
       data_dir: {{ .Values.mimir.dataDir }}/alert-manager
       enable_api: true
-      external_url: {{ .Values.mimir.httpPrefix.prometheus }}
+      external_url: {{ .Values.mimir.httpPrefix.alertmanager }}
     {{- if .Values.minio.enabled }}
     alertmanager_storage:
       backend: s3
@@ -422,7 +421,7 @@ alertmanager:
   ##
   customStartupProbe: {}
   ## alertmanager resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param alertmanager.resources.limits The resources limits for the alertmanager containers
   ## @param alertmanager.resources.requests The requested resources for the alertmanager containers
   ##
@@ -439,14 +438,26 @@ alertmanager:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param alertmanager.containerSecurityContext.enabled Enabled Alertmanager containers' Security Context
-  ## @param alertmanager.containerSecurityContext.runAsUser Set Alertmanager containers' Security Context runAsUser
-  ## @param alertmanager.containerSecurityContext.runAsNonRoot Set Alertmanager containers' Security Context runAsNonRoot
+  ## @param alertmanager.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param alertmanager.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param alertmanager.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param alertmanager.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param alertmanager.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param alertmanager.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param alertmanager.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param alertmanager.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param alertmanager.lifecycleHooks for the ingester container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -493,7 +504,7 @@ alertmanager:
   ##
   affinity: {}
   ## @param alertmanager.nodeSelector Node labels for Alertmanager pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param alertmanager.tolerations Tolerations for Alertmanager pods assignment
@@ -551,7 +562,7 @@ alertmanager:
   initContainers: []
 
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param alertmanager.persistence.enabled Enable persistence in alertmanager instances
@@ -619,7 +630,7 @@ alertmanager:
     sessionAffinityConfig: {}
     ## @param alertmanager.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param alertmanager.service.clusterIP Alertmanager service Cluster IP
@@ -769,7 +780,7 @@ compactor:
   ##
   customStartupProbe: {}
   ## compactor resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param compactor.resources.limits The resources limits for the compactor containers
   ## @param compactor.resources.requests The requested resources for the compactor containers
   ##
@@ -786,14 +797,26 @@ compactor:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param compactor.containerSecurityContext.enabled Enabled Compactor containers' Security Context
-  ## @param compactor.containerSecurityContext.runAsUser Set Compactor containers' Security Context runAsUser
-  ## @param compactor.containerSecurityContext.runAsNonRoot Set Compactor containers' Security Context runAsNonRoot
+  ## @param compactor.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param compactor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param compactor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param compactor.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param compactor.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param compactor.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param compactor.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param compactor.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param compactor.lifecycleHooks for the compactor container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -840,7 +863,7 @@ compactor:
   ##
   affinity: {}
   ## @param compactor.nodeSelector Node labels for Compactor pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param compactor.tolerations Tolerations for Compactor pods assignment
@@ -898,7 +921,7 @@ compactor:
   initContainers: []
 
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param compactor.persistence.enabled Enable persistence in Compactor instances
@@ -966,7 +989,7 @@ compactor:
     sessionAffinityConfig: {}
     ## @param compactor.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param compactor.service.clusterIP Compactor service Cluster IP
@@ -1090,7 +1113,7 @@ distributor:
   ##
   customStartupProbe: {}
   ## Distributor resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param distributor.resources.limits The resources limits for the distributor containers
   ## @param distributor.resources.requests The requested resources for the distributor containers
   ##
@@ -1107,14 +1130,26 @@ distributor:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param distributor.containerSecurityContext.enabled Enabled Distributor containers' Security Context
-  ## @param distributor.containerSecurityContext.runAsUser Set Distributor containers' Security Context runAsUser
-  ## @param distributor.containerSecurityContext.runAsNonRoot Set Distributor containers' Security Context runAsNonRoot
+  ## @param distributor.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param distributor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param distributor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param distributor.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param distributor.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param distributor.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param distributor.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param distributor.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param distributor.lifecycleHooks for the distributor container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -1161,7 +1196,7 @@ distributor:
   ##
   affinity: {}
   ## @param distributor.nodeSelector Node labels for Distributor pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param distributor.tolerations Tolerations for Distributor pods assignment
@@ -1250,7 +1285,7 @@ distributor:
     sessionAffinityConfig: {}
     ## @param distributor.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param distributor.service.clusterIP Distributor service Cluster IP
@@ -1305,9 +1340,9 @@ gateway:
 
   ## Bitnami Nginx image
   ## ref: https://hub.docker.com/r/bitnami/grafana-nginx/tags/
-  ## @param gateway.image.registry Nginx image registry
-  ## @param gateway.image.repository Nginx image repository
-  ## @param gateway.image.tag Nginx image tag (immutable tags are recommended)
+  ## @param gateway.image.registry [default: REGISTRY_NAME] Nginx image registry
+  ## @param gateway.image.repository [default: REPOSITORY_NAME/nginx] Nginx image repository
+  ## @skip gateway.image.tag Nginx image tag (immutable tags are recommended)
   ## @param gateway.image.digest Nginx image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param gateway.image.pullPolicy Nginx image pull policy
   ## @param gateway.image.pullSecrets Nginx image pull secrets
@@ -1316,11 +1351,11 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.2-debian-11-r42
+    tag: 1.25.3-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1426,7 +1461,7 @@ gateway:
   containerPorts:
     http: 8080
   ## gateway resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param gateway.resources.limits The resources limits for the gateway containers
   ## @param gateway.resources.requests The requested resources for the gateway containers
   ##
@@ -1443,14 +1478,26 @@ gateway:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param gateway.containerSecurityContext.enabled Enabled Gateway containers' Security Context
-  ## @param gateway.containerSecurityContext.runAsUser Set Gateway containers' Security Context runAsUser
-  ## @param gateway.containerSecurityContext.runAsNonRoot Set Gateway containers' Security Context runAsNonRoot
+  ## @param gateway.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param gateway.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param gateway.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param gateway.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param gateway.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param gateway.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param gateway.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param gateway.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param gateway.lifecycleHooks for the gateway container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -1497,7 +1544,7 @@ gateway:
   ##
   affinity: {}
   ## @param gateway.nodeSelector Node labels for Gateway pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param gateway.tolerations Tolerations for Gateway pods assignment
@@ -1577,7 +1624,7 @@ gateway:
     sessionAffinityConfig: {}
     ## @param gateway.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param gateway.service.clusterIP Gateway service Cluster IP
@@ -1634,7 +1681,7 @@ gateway:
     path: /
     ## @param gateway.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -1799,7 +1846,7 @@ ingester:
   ##
   customStartupProbe: {}
   ## ingester resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param ingester.resources.limits The resources limits for the ingester containers
   ## @param ingester.resources.requests The requested resources for the ingester containers
   ##
@@ -1816,14 +1863,26 @@ ingester:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param ingester.containerSecurityContext.enabled Enabled Ingester containers' Security Context
-  ## @param ingester.containerSecurityContext.runAsUser Set Ingester containers' Security Context runAsUser
-  ## @param ingester.containerSecurityContext.runAsNonRoot Set Ingester containers' Security Context runAsNonRoot
+  ## @param ingester.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param ingester.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param ingester.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param ingester.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param ingester.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param ingester.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param ingester.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param ingester.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param ingester.lifecycleHooks for the ingester container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -1870,7 +1929,7 @@ ingester:
   ##
   affinity: {}
   ## @param ingester.nodeSelector Node labels for Ingester pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param ingester.tolerations Tolerations for Ingester pods assignment
@@ -1928,7 +1987,7 @@ ingester:
   initContainers: []
 
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param ingester.persistence.enabled Enable persistence in Ingester instances
@@ -1996,7 +2055,7 @@ ingester:
     sessionAffinityConfig: {}
     ## @param ingester.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param ingester.service.clusterIP Ingester service Cluster IP
@@ -2129,7 +2188,7 @@ overridesExporter:
   ##
   customStartupProbe: {}
   ## overrides-exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param overridesExporter.resources.limits The resources limits for the overrides-exporter containers
   ## @param overridesExporter.resources.requests The requested resources for the overrides-exporter containers
   ##
@@ -2146,14 +2205,26 @@ overridesExporter:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param overridesExporter.containerSecurityContext.enabled Enabled Overrides Exporter containers' Security Context
-  ## @param overridesExporter.containerSecurityContext.runAsUser Set Overrides Exporter containers' Security Context runAsUser
-  ## @param overridesExporter.containerSecurityContext.runAsNonRoot Set Overrides Exporter containers' Security Context runAsNonRoot
+  ## @param overridesExporter.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param overridesExporter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param overridesExporter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param overridesExporter.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param overridesExporter.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param overridesExporter.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param overridesExporter.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param overridesExporter.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param overridesExporter.lifecycleHooks for the ingester container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -2200,7 +2271,7 @@ overridesExporter:
   ##
   affinity: {}
   ## @param overridesExporter.nodeSelector Node labels for Overrides Exporter pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param overridesExporter.tolerations Tolerations for Overrides Exporter pods assignment
@@ -2289,7 +2360,7 @@ overridesExporter:
     sessionAffinityConfig: {}
     ## @param overridesExporter.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param overridesExporter.service.clusterIP Overrides Exporter service Cluster IP
@@ -2419,7 +2490,7 @@ querier:
   ##
   customStartupProbe: {}
   ## querier resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param querier.resources.limits The resources limits for the querier containers
   ## @param querier.resources.requests The requested resources for the querier containers
   ##
@@ -2436,14 +2507,26 @@ querier:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param querier.containerSecurityContext.enabled Enabled Querier containers' Security Context
-  ## @param querier.containerSecurityContext.runAsUser Set Querier containers' Security Context runAsUser
-  ## @param querier.containerSecurityContext.runAsNonRoot Set Querier containers' Security Context runAsNonRoot
+  ## @param querier.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param querier.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param querier.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param querier.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param querier.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param querier.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param querier.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param querier.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param querier.lifecycleHooks for the ingester container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -2490,7 +2573,7 @@ querier:
   ##
   affinity: {}
   ## @param querier.nodeSelector Node labels for Querier pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param querier.tolerations Tolerations for Querier pods assignment
@@ -2579,7 +2662,7 @@ querier:
     sessionAffinityConfig: {}
     ## @param querier.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param querier.service.clusterIP Querier service Cluster IP
@@ -2709,7 +2792,7 @@ queryFrontend:
   ##
   customStartupProbe: {}
   ## ingester resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param queryFrontend.resources.limits The resources limits for the ingester containers
   ## @param queryFrontend.resources.requests The requested resources for the ingester containers
   ##
@@ -2726,14 +2809,26 @@ queryFrontend:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param queryFrontend.containerSecurityContext.enabled Enabled Query Frontend containers' Security Context
-  ## @param queryFrontend.containerSecurityContext.runAsUser Set Query Frontend containers' Security Context runAsUser
-  ## @param queryFrontend.containerSecurityContext.runAsNonRoot Set Query Frontend containers' Security Context runAsNonRoot
+  ## @param queryFrontend.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param queryFrontend.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param queryFrontend.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param queryFrontend.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param queryFrontend.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param queryFrontend.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param queryFrontend.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param queryFrontend.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param queryFrontend.lifecycleHooks for the ingester container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -2780,7 +2875,7 @@ queryFrontend:
   ##
   affinity: {}
   ## @param queryFrontend.nodeSelector Node labels for Query Frontend pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param queryFrontend.tolerations Tolerations for Query Frontend pods assignment
@@ -2869,7 +2964,7 @@ queryFrontend:
     sessionAffinityConfig: {}
     ## @param queryFrontend.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param queryFrontend.service.clusterIP Query Frontend service Cluster IP
@@ -3002,7 +3097,7 @@ queryScheduler:
   ##
   customStartupProbe: {}
   ## query-scheduler resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param queryScheduler.resources.limits The resources limits for the query-scheduler containers
   ## @param queryScheduler.resources.requests The requested resources for the query-scheduler containers
   ##
@@ -3019,14 +3114,26 @@ queryScheduler:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param queryScheduler.containerSecurityContext.enabled Enabled Query Scheduler containers' Security Context
-  ## @param queryScheduler.containerSecurityContext.runAsUser Set Query Scheduler containers' Security Context runAsUser
-  ## @param queryScheduler.containerSecurityContext.runAsNonRoot Set Query Scheduler containers' Security Context runAsNonRoot
+  ## @param queryScheduler.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param queryScheduler.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param queryScheduler.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param queryScheduler.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param queryScheduler.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param queryScheduler.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param queryScheduler.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param queryScheduler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param queryScheduler.lifecycleHooks for the ingester container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -3073,7 +3180,7 @@ queryScheduler:
   ##
   affinity: {}
   ## @param queryScheduler.nodeSelector Node labels for Query Scheduler pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param queryScheduler.tolerations Tolerations for Query Scheduler pods assignment
@@ -3162,7 +3269,7 @@ queryScheduler:
     sessionAffinityConfig: {}
     ## @param queryScheduler.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param queryScheduler.service.clusterIP Query Scheduler service Cluster IP
@@ -3296,7 +3403,7 @@ storeGateway:
   ##
   customStartupProbe: {}
   ## ingester resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param storeGateway.resources.limits The resources limits for the ingester containers
   ## @param storeGateway.resources.requests The requested resources for the ingester containers
   ##
@@ -3313,14 +3420,26 @@ storeGateway:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param storeGateway.containerSecurityContext.enabled Enabled Store Gateway containers' Security Context
-  ## @param storeGateway.containerSecurityContext.runAsUser Set Store Gateway containers' Security Context runAsUser
-  ## @param storeGateway.containerSecurityContext.runAsNonRoot Set Store Gateway containers' Security Context runAsNonRoot
+  ## @param storeGateway.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param storeGateway.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param storeGateway.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param storeGateway.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param storeGateway.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param storeGateway.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param storeGateway.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param storeGateway.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param storeGateway.lifecycleHooks for the ingester container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -3367,7 +3486,7 @@ storeGateway:
   ##
   affinity: {}
   ## @param storeGateway.nodeSelector Node labels for Store Gateway pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param storeGateway.tolerations Tolerations for Store Gateway pods assignment
@@ -3425,7 +3544,7 @@ storeGateway:
   initContainers: []
 
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param storeGateway.persistence.enabled Enable persistence in Store Gateway instances
@@ -3496,7 +3615,7 @@ storeGateway:
     sessionAffinityConfig: {}
     ## @param storeGateway.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param storeGateway.service.clusterIP Store Gateway service Cluster IP
@@ -3636,7 +3755,7 @@ ruler:
   ##
   lifecycleHooks: {}
   ## ruler resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param ruler.resources.limits The resources limits for the Ruler containers
   ## @param ruler.resources.requests The requested resources for the Ruler containers
   ##
@@ -3653,14 +3772,26 @@ ruler:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param ruler.containerSecurityContext.enabled Enabled Ruler containers' Security Context
-  ## @param ruler.containerSecurityContext.runAsUser Set Ruler containers' Security Context runAsUser
-  ## @param ruler.containerSecurityContext.runAsNonRoot Set Ruler containers' Security Context runAsNonRoot
+  ## @param ruler.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param ruler.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param ruler.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param ruler.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param ruler.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param ruler.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param ruler.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param ruler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param ruler.hostAliases ruler pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -3704,7 +3835,7 @@ ruler:
   ##
   affinity: {}
   ## @param ruler.nodeSelector Node labels for Ruler pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param ruler.tolerations Tolerations for Ruler pods assignment
@@ -3765,7 +3896,7 @@ ruler:
   ##
 
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param ruler.persistence.enabled Enable persistence in Ruler instances
@@ -3829,7 +3960,7 @@ ruler:
     sessionAffinityConfig: {}
     ## @param ruler.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param ruler.service.clusterIP Ruler service Cluster IP
@@ -3899,16 +4030,16 @@ volumePermissions:
   enabled: false
   ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param volumePermissions.image.registry OS Shell + Utility image registry
-  ## @param volumePermissions.image.repository OS Shell + Utility image repository
-  ## @param volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
   ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
   ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r86
+    tag: 11-debian-11-r93
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -3919,7 +4050,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -4095,15 +4226,15 @@ memcachedchunks:
   enabled: true
   ## Bitnami Memcached image version
   ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-  ## @param memcachedchunks.image.registry Memcached image registry
-  ## @param memcachedchunks.image.repository Memcached image repository
-  ## @param memcachedchunks.image.tag Memcached image tag (immutable tags are recommended)
+  ## @param memcachedchunks.image.registry [default: REGISTRY_NAME] Memcached image registry
+  ## @param memcachedchunks.image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
+  ## @skip memcachedchunks.image.tag Memcached image tag (immutable tags are recommended)
   ## @param memcachedchunks.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.21-debian-11-r104
+    tag: 1.6.23-debian-11-r0
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -4136,15 +4267,15 @@ memcachedfrontend:
   enabled: true
   ## Bitnami Memcached image version
   ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-  ## @param memcachedfrontend.image.registry Memcached image registry
-  ## @param memcachedfrontend.image.repository Memcached image repository
-  ## @param memcachedfrontend.image.tag Memcached image tag (immutable tags are recommended)
+  ## @param memcachedfrontend.image.registry [default: REGISTRY_NAME] Memcached image registry
+  ## @param memcachedfrontend.image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
+  ## @skip memcachedfrontend.image.tag Memcached image tag (immutable tags are recommended)
   ## @param memcachedfrontend.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.21-debian-11-r104
+    tag: 1.6.23-debian-11-r0
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -4178,15 +4309,15 @@ memcachedindex:
 
   ## Bitnami Memcached image version
   ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-  ## @param memcachedindex.image.registry Memcached image registry
-  ## @param memcachedindex.image.repository Memcached image repository
-  ## @param memcachedindex.image.tag Memcached image tag (immutable tags are recommended)
+  ## @param memcachedindex.image.registry [default: REGISTRY_NAME] Memcached image registry
+  ## @param memcachedindex.image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
+  ## @skip memcachedindex.image.tag Memcached image tag (immutable tags are recommended)
   ## @param memcachedindex.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.21-debian-11-r104
+    tag: 1.6.23-debian-11-r0
     digest: ""
   ## @param memcachedindex.architecture Memcached architecture
   ##
@@ -4219,15 +4350,15 @@ memcachedmetadata:
   enabled: true
   ## Bitnami Memcached image version
   ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-  ## @param memcachedmetadata.image.registry Memcached image registry
-  ## @param memcachedmetadata.image.repository Memcached image repository
-  ## @param memcachedmetadata.image.tag Memcached image tag (immutable tags are recommended)
+  ## @param memcachedmetadata.image.registry [default: REGISTRY_NAME] Memcached image registry
+  ## @param memcachedmetadata.image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
+  ## @skip memcachedmetadata.image.tag Memcached image tag (immutable tags are recommended)
   ## @param memcachedmetadata.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.21-debian-11-r104
+    tag: 1.6.23-debian-11-r0
     digest: ""
   ## @param memcachedmetadata.architecture Memcached architecture
   ##

@@ -6,14 +6,14 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: schema-registry
-      image: docker.io/bitnami/schema-registry:7.5.0-debian-11-r0
+      image: docker.io/bitnami/schema-registry:7.5.3-debian-11-r0
 apiVersion: v2
-appVersion: 7.5.0
+appVersion: 7.5.3
 dependencies:
 - condition: kafka.enabled
   name: kafka
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 25.x.x
+  version: 26.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -34,4 +34,4 @@ maintainers:
 name: schema-registry
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/schema-registry
-version: 15.0.0
+version: 16.2.6

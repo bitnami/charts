@@ -57,9 +57,9 @@ operator:
   enabled: true
   ## Bitnami Prometheus Operator image version
   ## ref: https://hub.docker.com/r/bitnami/prometheus-operator/tags/
-  ## @param operator.image.registry Prometheus Operator image registry
-  ## @param operator.image.repository Prometheus Operator image repository
-  ## @param operator.image.tag Prometheus Operator image tag (immutable tags are recommended)
+  ## @param operator.image.registry [default: REGISTRY_NAME] Prometheus Operator image registry
+  ## @param operator.image.repository [default: REPOSITORY_NAME/prometheus-operator] Prometheus Operator image repository
+  ## @skip operator.image.tag Prometheus Operator image tag (immutable tags are recommended)
   ## @param operator.image.digest Prometheus Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param operator.image.pullPolicy Prometheus Operator image pull policy
   ## @param operator.image.pullSecrets Specify docker-registry secret names as an array
@@ -67,11 +67,11 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.68.0-debian-11-r24
+    tag: 0.71.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -175,29 +175,33 @@ operator:
   ## Prometheus Operator pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param operator.podSecurityContext.enabled Enable pod security context
-  ## @param operator.podSecurityContext.runAsUser User ID for the container
   ## @param operator.podSecurityContext.fsGroup Group ID for the container filesystem
   ##
   podSecurityContext:
     enabled: true
-    runAsUser: 1001
     fsGroup: 1001
   ## Prometheus Operator containers' Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param operator.containerSecurityContext.enabled Enable container security context
-  ## @param operator.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
-  ## @param operator.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
-  ## @param operator.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
-  ## @param operator.containerSecurityContext.readOnlyRootFilesystem Mount / (root) as a readonly filesystem
+  ## @param operator.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param operator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param operator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param operator.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param operator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param operator.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param operator.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param operator.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    capabilities:
-      drop:
-      - ALL
+    runAsUser: 1001
     runAsNonRoot: true
-    allowPrivilegeEscalation: false
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Prometheus Operator Service
   ##
   service:
@@ -305,7 +309,7 @@ operator:
     ##
     sampleLimit: ""
   ## @param operator.resources Configure resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## @param operator.podAffinityPreset Pod affinity preset
@@ -341,7 +345,7 @@ operator:
   ##
   affinity: {}
   ## @param operator.nodeSelector Prometheus Operator Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param operator.tolerations Prometheus Operator Tolerations for pod assignment
@@ -452,20 +456,26 @@ operator:
     image: {}
     ## Prometheus config reload container's securityContext
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param operator.prometheusConfigReloader.containerSecurityContext.enabled Enable container security context
-    ## @param operator.prometheusConfigReloader.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem
-    ## @param operator.prometheusConfigReloader.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
-    ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
-    ## @param operator.prometheusConfigReloader.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
+      runAsUser: 1001
+      runAsNonRoot: true
+      privileged: false
       readOnlyRootFilesystem: false
       allowPrivilegeEscalation: false
-      runAsNonRoot: true
       capabilities:
-        drop:
-          - ALL
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## Configure extra options for liveness probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
     ## @param operator.prometheusConfigReloader.livenessProbe.enabled Turn on and off liveness probe
@@ -515,16 +525,16 @@ prometheus:
   enabled: true
   ## Bitnami Prometheus image version
   ## ref: https://hub.docker.com/r/bitnami/prometheus/tags/
-  ## @param prometheus.image.registry Prometheus image registry
-  ## @param prometheus.image.repository Prometheus image repository
-  ## @param prometheus.image.tag Prometheus image tag (immutable tags are recommended)
+  ## @param prometheus.image.registry [default: REGISTRY_NAME] Prometheus image registry
+  ## @param prometheus.image.repository [default: REPOSITORY_NAME/prometheus] Prometheus image repository
+  ## @skip prometheus.image.tag Prometheus image tag (immutable tags are recommended)
   ## @param prometheus.image.digest Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param prometheus.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.47.0-debian-11-r26
+    tag: 2.48.1-debian-11-r1
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -556,29 +566,33 @@ prometheus:
   ## Prometheus pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param prometheus.podSecurityContext.enabled Enable security context
-  ## @param prometheus.podSecurityContext.runAsUser User ID for the container
   ## @param prometheus.podSecurityContext.fsGroup Group ID for the container filesystem
   ##
   podSecurityContext:
     enabled: true
-    runAsUser: 1001
     fsGroup: 1001
   ## Prometheus containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param prometheus.containerSecurityContext.enabled Enable container security context
-  ## @param prometheus.containerSecurityContext.readOnlyRootFilesystem Mount / (root) as a readonly filesystem
-  ## @param prometheus.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
-  ## @param prometheus.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
-  ## @param prometheus.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
+  ## @param prometheus.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param prometheus.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param prometheus.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param prometheus.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param prometheus.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param prometheus.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param prometheus.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param prometheus.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
-    runAsNonRoot: true
     capabilities:
-      drop:
-        - ALL
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure pod disruption budgets for Prometheus
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget
   ## @param prometheus.pdb.create Create a pod disruption budget for Prometheus
@@ -678,7 +692,7 @@ prometheus:
 
   ## Configure the ingress resource that allows you to access the
   ## Prometheus installation. Set up the URL
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param prometheus.ingress.enabled Enable ingress controller resource
@@ -698,7 +712,7 @@ prometheus:
     path: /
     ## @param prometheus.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -783,7 +797,7 @@ prometheus:
   ##
   externalUrl: ""
   ## @param prometheus.resources CPU/Memory resource requests/limits for node
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## @param prometheus.podAffinityPreset Prometheus Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
@@ -819,7 +833,7 @@ prometheus:
   ##
   affinity: {}
   ## @param prometheus.nodeSelector Prometheus Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param prometheus.topologySpreadConstraints Prometheus Topology Spread Constraints for pod assignment
@@ -1192,9 +1206,9 @@ prometheus:
     create: false
     ## Bitnami Thanos image
     ## ref: https://hub.docker.com/r/bitnami/thanos/tags/
-    ## @param prometheus.thanos.image.registry Thanos image registry
-    ## @param prometheus.thanos.image.repository Thanos image name
-    ## @param prometheus.thanos.image.tag Thanos image tag
+    ## @param prometheus.thanos.image.registry [default: REGISTRY_NAME] Thanos image registry
+    ## @param prometheus.thanos.image.repository [default: REPOSITORY_NAME/thanos] Thanos image name
+    ## @skip prometheus.thanos.image.tag Thanos image tag
     ## @param prometheus.thanos.image.digest Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param prometheus.thanos.image.pullPolicy Thanos image pull policy
     ## @param prometheus.thanos.image.pullSecrets Specify docker-registry secret names as an array
@@ -1202,10 +1216,10 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.32.3-debian-11-r11
+      tag: 0.33.0-debian-11-r1
       digest: ""
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -1218,20 +1232,26 @@ prometheus:
       pullSecrets: []
     ## Thanos Sidecar container's securityContext
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param prometheus.thanos.containerSecurityContext.enabled Enable container security context
-    ## @param prometheus.thanos.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem
-    ## @param prometheus.thanos.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
-    ## @param prometheus.thanos.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
-    ## @param prometheus.thanos.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
+    ## @param prometheus.thanos.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param prometheus.thanos.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param prometheus.thanos.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param prometheus.thanos.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param prometheus.thanos.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param prometheus.thanos.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param prometheus.thanos.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param prometheus.thanos.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
+      runAsUser: 1001
+      runAsNonRoot: true
+      privileged: false
       readOnlyRootFilesystem: false
       allowPrivilegeEscalation: false
-      runAsNonRoot: true
       capabilities:
-        drop:
-          - ALL
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## @param prometheus.thanos.prometheusUrl Override default prometheus url `http://localhost:9090`
     ##
     prometheusUrl: ""
@@ -1259,7 +1279,7 @@ prometheus:
     ##
     extraVolumeMounts: []
     ## Thanos sidecar container resource requests and limits.
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1383,7 +1403,7 @@ prometheus:
       sessionAffinityConfig: {}
     ## Configure the ingress resource that allows you to access the
     ## Thanos Sidecar installation. Set up the URL
-    ## ref: https://kubernetes.io/docs/user-guide/ingress/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
     ##
     ingress:
       ## @param prometheus.thanos.ingress.enabled Enable ingress controller resource
@@ -1404,7 +1424,7 @@ prometheus:
       path: /
       ## @param prometheus.thanos.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
       ## For a full list of possible ingress annotations, please see
-      ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+      ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
       ## Use this parameter to set the required annotations for cert-manager, see
       ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
       ##
@@ -1592,16 +1612,16 @@ alertmanager:
   enabled: true
   ## Bitnami Alertmanager image version
   ## ref: https://hub.docker.com/r/bitnami/prometheus-operator/tags/
-  ## @param alertmanager.image.registry Prometheus image registry
-  ## @param alertmanager.image.repository Prometheus image repository
-  ## @param alertmanager.image.tag Prometheus image tag (immutable tags are recommended)
+  ## @param alertmanager.image.registry [default: REGISTRY_NAME] Prometheus image registry
+  ## @param alertmanager.image.repository [default: REPOSITORY_NAME/alertmanager] Prometheus image repository
+  ## @skip alertmanager.image.tag Prometheus image tag (immutable tags are recommended)
   ## @param alertmanager.image.digest Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param alertmanager.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.26.0-debian-11-r38
+    tag: 0.26.0-debian-11-r46
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1631,29 +1651,33 @@ alertmanager:
   ## Prometheus Alertmanager pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param alertmanager.podSecurityContext.enabled Enable security context
-  ## @param alertmanager.podSecurityContext.runAsUser User ID for the container
   ## @param alertmanager.podSecurityContext.fsGroup Group ID for the container filesystem
   ##
   podSecurityContext:
     enabled: true
-    runAsUser: 1001
     fsGroup: 1001
   ## Prometheus Alertmanager container's securityContext
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param alertmanager.containerSecurityContext.enabled Enable container security context
-  ## @param alertmanager.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem
-  ## @param alertmanager.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
-  ## @param alertmanager.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
-  ## @param alertmanager.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
+  ## @param alertmanager.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param alertmanager.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param alertmanager.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param alertmanager.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param alertmanager.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param alertmanager.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param alertmanager.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param alertmanager.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
-    runAsNonRoot: true
     capabilities:
-      drop:
-        - ALL
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure pod disruption budgets for Alertmanager
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget
   ## @param alertmanager.pdb.create Create a pod disruption budget for Alertmanager
@@ -1779,7 +1803,7 @@ alertmanager:
     sampleLimit: ""
   ## Configure the ingress resource that allows you to access the
   ## Alertmanager installation. Set up the URL
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param alertmanager.ingress.enabled Enable ingress controller resource
@@ -1799,7 +1823,7 @@ alertmanager:
     path: /
     ## @param alertmanager.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -1881,7 +1905,7 @@ alertmanager:
   ##
   externalUrl: ""
   ## @param alertmanager.resources CPU/Memory resource requests/limits for node
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## @param alertmanager.podAffinityPreset Alertmanager Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
@@ -1917,7 +1941,7 @@ alertmanager:
   ##
   affinity: {}
   ## @param alertmanager.nodeSelector Alertmanager Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param alertmanager.tolerations Alertmanager Tolerations for pod assignment
@@ -2083,7 +2107,15 @@ alertmanager:
   ## @param alertmanager.configuration EXPERIMENTAL: alertmanagerConfiguration specifies the global Alertmanager configuration. If defined, it takes precedence over the `configSecret` field. This field may change in future releases. The specified global alertmanager config will not force add a namespace label in routes and inhibitRules
   ##
   configuration: {}
-
+  ## @param alertmanager.configMatcherStrategy alertmanagerConfigMatcherStrategy defines how AlertmanagerConfig objects match the alerts.
+  ## E.g.
+  ## configMatcherStrategy:
+  ##   type: OnNamespace
+  ## If type set to `OnNamespace`, the operator injects a label matcher matching the
+  ## namespace of the AlertmanagerConfig object for all its routes and inhibition
+  ## rules. `None` will not add any additional matchers other than the ones
+  ## specified in the AlertmanagerConfig. Default is `OnNamespace`.
+  configMatcherStrategy: {}
 ## @section Exporters
 ##
 
@@ -2188,17 +2220,17 @@ blackboxExporter:
   enabled: true
   ## Bitnami Alertmanager image version
   ## ref: https://hub.docker.com/r/bitnami/prometheus-operator/tags/
-  ## @param blackboxExporter.image.registry Blackbox Exporter image registry
-  ## @param blackboxExporter.image.repository Blackbox Exporter image repository
+  ## @param blackboxExporter.image.registry [default: REGISTRY_NAME] Blackbox Exporter image registry
+  ## @param blackboxExporter.image.repository [default: REPOSITORY_NAME/blackbox-exporter] Blackbox Exporter image repository
   ## @param blackboxExporter.image.pullPolicy Blackbox Exporter image pull policy
-  ## @param blackboxExporter.image.tag Blackbox Exporter image tag (immutable tags are recommended)
+  ## @skip blackboxExporter.image.tag Blackbox Exporter image tag (immutable tags are recommended)
   ## @param blackboxExporter.image.digest Blackbox Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param blackboxExporter.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.24.0-debian-11-r135
+    tag: 0.24.0-debian-11-r143
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2353,7 +2385,7 @@ blackboxExporter:
     annotations: {}
 
   ## Blackbox Exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param blackboxExporter.resources.limits The resources limits for the blackboxExporter containers
   ## @param blackboxExporter.resources.requests The requested resources for the blackboxExporter containers
   ##
@@ -2370,14 +2402,26 @@ blackboxExporter:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param blackboxExporter.containerSecurityContext.enabled Enabled Blackbox Exporter containers' Security Context
-  ## @param blackboxExporter.containerSecurityContext.runAsUser Set Blackbox Exporter containers' Security Context runAsUser
-  ## @param blackboxExporter.containerSecurityContext.runAsNonRoot Set Blackbox Exporter containers' Security Context runAsNonRoot
+  ## @param blackboxExporter.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param blackboxExporter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param blackboxExporter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param blackboxExporter.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param blackboxExporter.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param blackboxExporter.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param blackboxExporter.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param blackboxExporter.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param blackboxExporter.lifecycleHooks for the blackboxExporter container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -2424,7 +2468,7 @@ blackboxExporter:
   ##
   affinity: {}
   ## @param blackboxExporter.nodeSelector Node labels for Blackbox Exporter pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param blackboxExporter.tolerations Tolerations for Blackbox Exporter pods assignment
@@ -2500,7 +2544,7 @@ blackboxExporter:
       http: ""
     ## @param blackboxExporter.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param blackboxExporter.service.sessionAffinityConfig Additional settings for the sessionAffinity

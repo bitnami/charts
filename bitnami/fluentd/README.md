@@ -1,6 +1,6 @@
 <!--- app-name: Fluentd -->
 
-# Fluentd packaged by Bitnami
+# Bitnami package for Fluentd
 
 Fluentd collects events from various data sources and writes them to files, RDBMS, NoSQL, IaaS, SaaS, Hadoop and so on.
 
@@ -14,13 +14,13 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/fluentd
 ```
 
+Looking to use Fluentd in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Introduction
 
 This chart bootstraps a [Fluentd](https://github.com/bitnami/containers/tree/main/bitnami/fluentd) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Fluentd in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -35,8 +35,10 @@ Looking to use Fluentd in production? Try [VMware Application Catalog](https://b
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/fluentd
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/fluentd
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy Fluentd on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -81,16 +83,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                                           | Description                                                                                                                                                        | Value                                                      |
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------- |
-| `image.registry`                                               | Fluentd image registry                                                                                                                                             | `docker.io`                                                |
-| `image.repository`                                             | Fluentd image repository                                                                                                                                           | `bitnami/fluentd`                                          |
-| `image.tag`                                                    | Fluentd image tag (immutable tags are recommended)                                                                                                                 | `1.16.2-debian-11-r72`                                     |
+| `image.registry`                                               | Fluentd image registry                                                                                                                                             | `REGISTRY_NAME`                                            |
+| `image.repository`                                             | Fluentd image repository                                                                                                                                           | `REPOSITORY_NAME/fluentd`                                  |
 | `image.pullPolicy`                                             | Fluentd image pull policy                                                                                                                                          | `IfNotPresent`                                             |
 | `image.pullSecrets`                                            | Fluentd image pull secrets                                                                                                                                         | `[]`                                                       |
 | `image.debug`                                                  | Enable image debug mode                                                                                                                                            | `false`                                                    |
 | `forwarder.enabled`                                            | Enable forwarder daemonset                                                                                                                                         | `true`                                                     |
 | `forwarder.image.registry`                                     | Fluentd forwarder image registry override                                                                                                                          | `""`                                                       |
 | `forwarder.image.repository`                                   | Fluentd forwarder image repository override                                                                                                                        | `""`                                                       |
-| `forwarder.image.tag`                                          | Fluentd forwarder image tag override (immutable tags are recommended)                                                                                              | `""`                                                       |
 | `forwarder.daemonUser`                                         | Forwarder daemon user and group (set to root by default because it reads from host paths)                                                                          | `root`                                                     |
 | `forwarder.daemonGroup`                                        | Fluentd forwarder daemon system group                                                                                                                              | `root`                                                     |
 | `forwarder.hostAliases`                                        | Add deployment host aliases                                                                                                                                        | `[]`                                                       |
@@ -103,9 +103,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `forwarder.containerSecurityContext.allowPrivilegeEscalation`  | Allow Privilege Escalation                                                                                                                                         | `false`                                                    |
 | `forwarder.containerSecurityContext.readOnlyRootFilesystem`    | Require the use of a read only root file system                                                                                                                    | `false`                                                    |
 | `forwarder.containerSecurityContext.capabilities.drop`         | Drop capabilities for the securityContext                                                                                                                          | `[]`                                                       |
+| `forwarder.containerSecurityContext.seccompProfile.type`       | Set container's Security Context seccomp profile                                                                                                                   | `RuntimeDefault`                                           |
 | `forwarder.hostNetwork`                                        | Enable use of host network                                                                                                                                         | `false`                                                    |
 | `forwarder.dnsPolicy`                                          | Pod-specific DNS policy                                                                                                                                            | `""`                                                       |
 | `forwarder.terminationGracePeriodSeconds`                      | Duration in seconds the pod needs to terminate gracefully                                                                                                          | `30`                                                       |
+| `forwarder.extraGems`                                          | List of extra gems to be installed. Can be used to install additional fluentd plugins.                                                                             | `[]`                                                       |
 | `forwarder.configFile`                                         | Name of the config file that will be used by Fluentd at launch under the `/opt/bitnami/fluentd/conf` directory                                                     | `fluentd.conf`                                             |
 | `forwarder.configMap`                                          | Name of the config map that contains the Fluentd configuration files                                                                                               | `""`                                                       |
 | `forwarder.configMapFiles`                                     | Files to be added to be config map. Ignored if `forwarder.configMap` is set                                                                                        | `{}`                                                       |
@@ -187,7 +189,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `aggregator.enabled`                                           | Enable Fluentd aggregator statefulset                                                                                                                              | `true`                                                     |
 | `aggregator.image.registry`                                    | Fluentd aggregator image registry override                                                                                                                         | `""`                                                       |
 | `aggregator.image.repository`                                  | Fluentd aggregator image repository override                                                                                                                       | `""`                                                       |
-| `aggregator.image.tag`                                         | Fluentd aggregator image tag override (immutable tags are recommended)                                                                                             | `""`                                                       |
 | `aggregator.replicaCount`                                      | Number of aggregator pods to deploy in the Stateful Set                                                                                                            | `1`                                                        |
 | `aggregator.podSecurityContext.enabled`                        | Enable security context for aggregator pods                                                                                                                        | `true`                                                     |
 | `aggregator.podSecurityContext.runAsUser`                      | User ID for aggregator's containers                                                                                                                                | `1001`                                                     |
@@ -199,7 +200,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `aggregator.containerSecurityContext.allowPrivilegeEscalation` | Allow Privilege Escalation                                                                                                                                         | `false`                                                    |
 | `aggregator.containerSecurityContext.readOnlyRootFilesystem`   | Require the use of a read only root file system                                                                                                                    | `false`                                                    |
 | `aggregator.containerSecurityContext.capabilities.drop`        | Drop capabilities for the securityContext                                                                                                                          | `[]`                                                       |
+| `aggregator.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                   | `RuntimeDefault`                                           |
 | `aggregator.terminationGracePeriodSeconds`                     | Duration in seconds the pod needs to terminate gracefully                                                                                                          | `30`                                                       |
+| `aggregator.extraGems`                                         | List of extra gems to be installed. Can be used to install additional fluentd plugins.                                                                             | `[]`                                                       |
 | `aggregator.configFile`                                        | Name of the config file that will be used by Fluentd at launch under the `/opt/bitnami/fluentd/conf` directory                                                     | `fluentd.conf`                                             |
 | `aggregator.configMap`                                         | Name of the config map that contains the Fluentd configuration files                                                                                               | `""`                                                       |
 | `aggregator.configMapFiles`                                    | Files to be added to be config map. Ignored if `aggregator.configMap` is set                                                                                       | `{}`                                                       |
@@ -277,10 +280,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `aggregator.tolerations`                                       | Aggregator Tolerations for pod assignment                                                                                                                          | `[]`                                                       |
 | `aggregator.podAnnotations`                                    | Pod annotations                                                                                                                                                    | `{}`                                                       |
 | `aggregator.podLabels`                                         | Extra labels to add to Pod                                                                                                                                         | `{}`                                                       |
-| `aggregator.serviceAccount.create`                             | Specify whether a ServiceAccount should be created                                                                                                                 | `false`                                                    |
+| `aggregator.serviceAccount.create`                             | Specify whether a ServiceAccount should be created                                                                                                                 | `true`                                                     |
 | `aggregator.serviceAccount.name`                               | The name of the ServiceAccount to create                                                                                                                           | `""`                                                       |
 | `aggregator.serviceAccount.annotations`                        | Additional Service Account annotations (evaluated as a template)                                                                                                   | `{}`                                                       |
-| `aggregator.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                                     | `true`                                                     |
+| `aggregator.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                                     | `false`                                                    |
 | `aggregator.autoscaling.enabled`                               | Create an Horizontal Pod Autoscaler                                                                                                                                | `false`                                                    |
 | `aggregator.autoscaling.minReplicas`                           | Minimum number of replicas for the HPA                                                                                                                             | `2`                                                        |
 | `aggregator.autoscaling.maxReplicas`                           | Maximum number of replicas for the HPA                                                                                                                             | `5`                                                        |
@@ -333,22 +336,25 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 helm install my-release \
-  --set aggregator.port=24444 oci://registry-1.docker.io/bitnamicharts/fluentd
+  --set aggregator.port=24444 oci://REGISTRY_NAME/REPOSITORY_NAME/fluentd
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the aggregators to listen on port 24444.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/fluentd
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/fluentd
 ```
 
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/fluentd/values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -460,7 +466,7 @@ The default behaviour is to run as `root` because:
 
 Since we would like the chart to work out-of-the-box for as many users as possible, the `forwarder` thus runs as root by default. You can read more about the motivation for this at [#1905](https://github.com/bitnami/charts/issues/1905) and [#2323](https://github.com/bitnami/charts/pull/2323), however you should be aware of this, and the risks of running root containers in general.
 
-If you enable the forwarder's [bundled PodSecurityPolicy](templates/forwarder-psp.yaml) with `forwarder.rbac.pspEnabled=true` it will allow the pod to run as `root` by default, while ensuring as many other privileges as possible are dropped.
+If you enable the forwarder's [bundled PodSecurityPolicy](https://github.com/bitnami/charts/tree/main/bitnami/fluentd/templates/forwarder-psp.yaml) with `forwarder.rbac.pspEnabled=true` it will allow the pod to run as `root` by default, while ensuring as many other privileges as possible are dropped.
 
 #### Running as non-root
 
@@ -469,7 +475,7 @@ You can run as the `fluentd` user/group (non-root) with the below overrides if:
 - you have control of the `hostPath` filesystem permissions on your nodes sufficient to allow the fluentd user to read from them
 - don't need to write to the `hostPath`s
 
-Note that if you have enabled the [bundled PodSecurityPolicy](templates/forwarder-psp.yaml), it will adapt to the Chart values overrides.
+Note that if you have enabled the [bundled PodSecurityPolicy](https://github.com/bitnami/charts/tree/main/bitnami/fluentd/templates/forwarder-psp.yaml), it will adapt to the Chart values overrides.
 
 ```yaml
 forwarder:
@@ -484,7 +490,7 @@ forwarder:
 
 #### Pod Security Policy & Custom `hostPath`s
 
-Mounting additional `hostPath`s is sometimes required to deal with `/var/lib` being symlinked on some Kubernetes environments. If you need to do so, the [bundled PodSecurityPolicy](templates/forwarder-psp.yaml) will likely not meet your needs, as it whitelists only the standard `hostPath`s.
+Mounting additional `hostPath`s is sometimes required to deal with `/var/lib` being symlinked on some Kubernetes environments. If you need to do so, the [bundled PodSecurityPolicy](https://github.com/bitnami/charts/tree/main/bitnami/fluentd/templates/forwarder-psp.yaml) will likely not meet your needs, as it whitelists only the standard `hostPath`s.
 
 ### Setting Pod's affinity
 
@@ -581,7 +587,7 @@ No issues are expected in the upgrade process. However, please ensure that you a
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

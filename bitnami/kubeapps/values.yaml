@@ -197,9 +197,9 @@ packaging:
 frontend:
   ## Bitnami NGINX image
   ## ref: https://hub.docker.com/r/bitnami/nginx/tags/
-  ## @param frontend.image.registry NGINX image registry
-  ## @param frontend.image.repository NGINX image repository
-  ## @param frontend.image.tag NGINX image tag (immutable tags are recommended)
+  ## @param frontend.image.registry [default: REGISTRY_NAME] NGINX image registry
+  ## @param frontend.image.repository [default: REPOSITORY_NAME/nginx] NGINX image repository
+  ## @skip frontend.image.tag NGINX image tag (immutable tags are recommended)
   ## @param frontend.image.digest NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param frontend.image.pullPolicy NGINX image pull policy
   ## @param frontend.image.pullSecrets NGINX image pull secrets
@@ -208,11 +208,11 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.2-debian-11-r8
+    tag: 1.25.3-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -254,7 +254,7 @@ frontend:
   updateStrategy:
     type: RollingUpdate
   ## Frontend containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param frontend.resources.limits.cpu The CPU limits for the NGINX container
   ## @param frontend.resources.limits.memory The memory limits for the NGINX container
   ## @param frontend.resources.requests.cpu The requested CPU for the NGINX container
@@ -292,16 +292,28 @@ frontend:
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-  ## Configure Container Security Context (only main container)
+  ## Configure Container Security Context for NGINX
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param frontend.containerSecurityContext.enabled Enabled NGINX containers' Security Context
-  ## @param frontend.containerSecurityContext.runAsUser Set NGINX container's Security Context runAsUser
-  ## @param frontend.containerSecurityContext.runAsNonRoot Set NGINX container's Security Context runAsNonRoot
+  ## @param frontend.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param frontend.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param frontend.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param frontend.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param frontend.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param frontend.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param frontend.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param frontend.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure extra options for frontend containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param frontend.livenessProbe.enabled Enable livenessProbe
@@ -403,7 +415,7 @@ frontend:
   ##
   affinity: {}
   ## @param frontend.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param frontend.tolerations Tolerations for pod assignment
@@ -516,9 +528,9 @@ dashboard:
   enabled: true
   ## Bitnami Kubeapps Dashboard image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-dashboard/
-  ## @param dashboard.image.registry Dashboard image registry
-  ## @param dashboard.image.repository Dashboard image repository
-  ## @param dashboard.image.tag Dashboard image tag (immutable tags are recommended)
+  ## @param dashboard.image.registry [default: REGISTRY_NAME] Dashboard image registry
+  ## @param dashboard.image.repository [default: REPOSITORY_NAME/kubeapps-dashboard] Dashboard image repository
+  ## @skip dashboard.image.tag Dashboard image tag (immutable tags are recommended)
   ## @param dashboard.image.digest Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param dashboard.image.pullPolicy Dashboard image pull policy
   ## @param dashboard.image.pullSecrets Dashboard image pull secrets
@@ -527,11 +539,11 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.8.0-debian-11-r50
+    tag: 2.9.0-debian-11-r19
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -622,7 +634,7 @@ dashboard:
   containerPorts:
     http: 8080
   ## Dashboard containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dashboard.resources.limits.cpu The CPU limits for the Dashboard container
   ## @param dashboard.resources.limits.memory The memory limits for the Dashboard container
   ## @param dashboard.resources.requests.cpu The requested CPU for the Dashboard container
@@ -643,16 +655,28 @@ dashboard:
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-  ## Configure Container Security Context (only main container)
+  ## Configure Container Security Context for Dashboard
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param dashboard.containerSecurityContext.enabled Enabled Dashboard containers' Security Context
-  ## @param dashboard.containerSecurityContext.runAsUser Set Dashboard container's Security Context runAsUser
-  ## @param dashboard.containerSecurityContext.runAsNonRoot Set Dashboard container's Security Context runAsNonRoot
+  ## @param dashboard.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param dashboard.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param dashboard.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param dashboard.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param dashboard.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param dashboard.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param dashboard.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param dashboard.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure extra options for Dashboard containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param dashboard.livenessProbe.enabled Enable livenessProbe
@@ -756,7 +780,7 @@ dashboard:
   ##
   affinity: {}
   ## @param dashboard.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dashboard.tolerations Tolerations for pod assignment
@@ -824,9 +848,9 @@ dashboard:
 apprepository:
   ## Bitnami Kubeapps AppRepository Controller image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-apprepository-controller/tags/
-  ## @param apprepository.image.registry Kubeapps AppRepository Controller image registry
-  ## @param apprepository.image.repository Kubeapps AppRepository Controller image repository
-  ## @param apprepository.image.tag Kubeapps AppRepository Controller image tag (immutable tags are recommended)
+  ## @param apprepository.image.registry [default: REGISTRY_NAME] Kubeapps AppRepository Controller image registry
+  ## @param apprepository.image.repository [default: REPOSITORY_NAME/kubeapps-apprepository-controller] Kubeapps AppRepository Controller image repository
+  ## @skip apprepository.image.tag Kubeapps AppRepository Controller image tag (immutable tags are recommended)
   ## @param apprepository.image.digest Kubeapps AppRepository Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param apprepository.image.pullPolicy Kubeapps AppRepository Controller image pull policy
   ## @param apprepository.image.pullSecrets Kubeapps AppRepository Controller image pull secrets
@@ -834,11 +858,11 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.8.0-debian-11-r20
+    tag: 2.9.0-debian-11-r13
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -851,9 +875,9 @@ apprepository:
     pullSecrets: []
   ## Bitnami Kubeapps Asset Syncer image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-asset-syncer/tags/
-  ## @param apprepository.syncImage.registry Kubeapps Asset Syncer image registry
-  ## @param apprepository.syncImage.repository Kubeapps Asset Syncer image repository
-  ## @param apprepository.syncImage.tag Kubeapps Asset Syncer image tag (immutable tags are recommended)
+  ## @param apprepository.syncImage.registry [default: REGISTRY_NAME] Kubeapps Asset Syncer image registry
+  ## @param apprepository.syncImage.repository [default: REPOSITORY_NAME/kubeapps-asset-syncer] Kubeapps Asset Syncer image repository
+  ## @skip apprepository.syncImage.tag Kubeapps Asset Syncer image tag (immutable tags are recommended)
   ## @param apprepository.syncImage.digest Kubeapps Asset Syncer image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param apprepository.syncImage.pullPolicy Kubeapps Asset Syncer image pull policy
   ## @param apprepository.syncImage.pullSecrets Kubeapps Asset Syncer image pull secrets
@@ -861,11 +885,11 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.8.0-debian-11-r20
+    tag: 2.9.0-debian-11-r14
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -969,7 +993,7 @@ apprepository:
   updateStrategy:
     type: RollingUpdate
   ## AppRepository Controller containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param apprepository.resources.limits.cpu The CPU limits for the AppRepository Controller container
   ## @param apprepository.resources.limits.memory The memory limits for the AppRepository Controller container
   ## @param apprepository.resources.requests.cpu The requested CPU for the AppRepository Controller container
@@ -990,16 +1014,28 @@ apprepository:
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-  ## Configure Container Security Context (only main container)
+  ## Configure Container Security Context for App Repository jobs
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param apprepository.containerSecurityContext.enabled Enabled AppRepository Controller containers' Security Context
-  ## @param apprepository.containerSecurityContext.runAsUser Set AppRepository Controller container's Security Context runAsUser
-  ## @param apprepository.containerSecurityContext.runAsNonRoot Set AppRepository Controller container's Security Context runAsNonRoot
+  ## @param apprepository.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param apprepository.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param apprepository.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param apprepository.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param apprepository.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param apprepository.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param apprepository.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param apprepository.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param apprepository.lifecycleHooks Custom lifecycle hooks for AppRepository Controller containers
   ##
   lifecycleHooks: {}
@@ -1067,7 +1103,7 @@ apprepository:
   ##
   affinity: {}
   ## @param apprepository.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param apprepository.tolerations Tolerations for pod assignment
@@ -1135,9 +1171,9 @@ authProxy:
   enabled: false
   ## Bitnami OAuth2 Proxy image
   ## ref: https://hub.docker.com/r/bitnami/oauth2-proxy/tags/
-  ## @param authProxy.image.registry OAuth2 Proxy image registry
-  ## @param authProxy.image.repository OAuth2 Proxy image repository
-  ## @param authProxy.image.tag OAuth2 Proxy image tag (immutable tags are recommended)
+  ## @param authProxy.image.registry [default: REGISTRY_NAME] OAuth2 Proxy image registry
+  ## @param authProxy.image.repository [default: REPOSITORY_NAME/oauth2-proxy] OAuth2 Proxy image repository
+  ## @skip authProxy.image.tag OAuth2 Proxy image tag (immutable tags are recommended)
   ## @param authProxy.image.digest OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param authProxy.image.pullPolicy OAuth2 Proxy image pull policy
   ## @param authProxy.image.pullSecrets OAuth2 Proxy image pull secrets
@@ -1145,11 +1181,11 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 7.4.0-debian-11-r281
+    tag: 7.5.1-debian-11-r12
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1240,16 +1276,28 @@ authProxy:
     proxy: 3000
   ## Configure Container Security Context for Auth Proxy
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param authProxy.containerSecurityContext.enabled Enabled Auth Proxy containers' Security Context
-  ## @param authProxy.containerSecurityContext.runAsUser Set Auth Proxy container's Security Context runAsUser
-  ## @param authProxy.containerSecurityContext.runAsNonRoot Set Auth Proxy container's Security Context runAsNonRoot
+  ## @param authProxy.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param authProxy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param authProxy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param authProxy.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param authProxy.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param authProxy.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param authProxy.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param authProxy.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## OAuth2 Proxy containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param authProxy.resources.limits.cpu The CPU limits for the OAuth2 Proxy container
   ## @param authProxy.resources.limits.memory The memory limits for the OAuth2 Proxy container
   ## @param authProxy.resources.requests.cpu The requested CPU for the OAuth2 Proxy container
@@ -1273,9 +1321,9 @@ pinnipedProxy:
   enabled: false
   ## Bitnami Pinniped Proxy image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-pinniped-proxy/tags/
-  ## @param pinnipedProxy.image.registry Pinniped Proxy image registry
-  ## @param pinnipedProxy.image.repository Pinniped Proxy image repository
-  ## @param pinnipedProxy.image.tag Pinniped Proxy image tag (immutable tags are recommended)
+  ## @param pinnipedProxy.image.registry [default: REGISTRY_NAME] Pinniped Proxy image registry
+  ## @param pinnipedProxy.image.repository [default: REPOSITORY_NAME/kubeapps-pinniped-proxy] Pinniped Proxy image repository
+  ## @skip pinnipedProxy.image.tag Pinniped Proxy image tag (immutable tags are recommended)
   ## @param pinnipedProxy.image.digest Pinniped Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param pinnipedProxy.image.pullPolicy Pinniped Proxy image pull policy
   ## @param pinnipedProxy.image.pullSecrets Pinniped Proxy image pull secrets
@@ -1283,11 +1331,11 @@ pinnipedProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-pinniped-proxy
-    tag: 2.8.0-debian-11-r49
+    tag: 2.9.0-debian-11-r12
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1352,16 +1400,28 @@ pinnipedProxy:
     pinnipedProxy: 3333
   ## Configure Container Security Context for Pinniped Proxy
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param pinnipedProxy.containerSecurityContext.enabled Enabled Pinniped Proxy containers' Security Context
-  ## @param pinnipedProxy.containerSecurityContext.runAsUser Set Pinniped Proxy container's Security Context runAsUser
-  ## @param pinnipedProxy.containerSecurityContext.runAsNonRoot Set Pinniped Proxy container's Security Context runAsNonRoot
+  ## @param pinnipedProxy.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param pinnipedProxy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param pinnipedProxy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param pinnipedProxy.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param pinnipedProxy.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param pinnipedProxy.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param pinnipedProxy.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param pinnipedProxy.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Pinniped Proxy containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param pinnipedProxy.resources.limits.cpu The CPU limits for the Pinniped Proxy container
   ## @param pinnipedProxy.resources.limits.memory The memory limits for the Pinniped Proxy container
   ## @param pinnipedProxy.resources.requests.cpu The requested CPU for the Pinniped Proxy container
@@ -1483,7 +1543,7 @@ postgresql:
   securityContext:
     enabled: false
   ## PostgreSQL containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param postgresql.resources.limits The resources limits for the PostgreSQL container
   ## @param postgresql.resources.requests.cpu The requested CPU for the PostgreSQL container
   ## @param postgresql.resources.requests.memory The requested memory for the PostgreSQL container
@@ -1566,9 +1626,9 @@ kubeappsapis:
             headerPattern: ""
   ## Bitnami Kubeapps-APIs image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-apis/tags/
-  ## @param kubeappsapis.image.registry Kubeapps-APIs image registry
-  ## @param kubeappsapis.image.repository Kubeapps-APIs image repository
-  ## @param kubeappsapis.image.tag Kubeapps-APIs image tag (immutable tags are recommended)
+  ## @param kubeappsapis.image.registry [default: REGISTRY_NAME] Kubeapps-APIs image registry
+  ## @param kubeappsapis.image.repository [default: REPOSITORY_NAME/kubeapps-apis] Kubeapps-APIs image repository
+  ## @skip kubeappsapis.image.tag Kubeapps-APIs image tag (immutable tags are recommended)
   ## @param kubeappsapis.image.digest Kubeapps-APIs image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param kubeappsapis.image.pullPolicy Kubeapps-APIs image pull policy
   ## @param kubeappsapis.image.pullSecrets Kubeapps-APIs image pull secrets
@@ -1576,11 +1636,11 @@ kubeappsapis:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apis
-    tag: 2.8.0-debian-11-r49
+    tag: 2.9.0-debian-11-r14
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1636,7 +1696,7 @@ kubeappsapis:
   containerPorts:
     http: 50051
   ## KubeappsAPIs containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param kubeappsapis.resources.limits.cpu The CPU limits for the KubeappsAPIs container
   ## @param kubeappsapis.resources.limits.memory The memory limits for the KubeappsAPIs container
   ## @param kubeappsapis.resources.requests.cpu The requested CPU for the KubeappsAPIs container
@@ -1657,16 +1717,28 @@ kubeappsapis:
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-  ## Configure Container Security Context (only main container)
+  ## Configure Container Security Context for Kubeapps APIs
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param kubeappsapis.containerSecurityContext.enabled Enabled KubeappsAPIs containers' Security Context
-  ## @param kubeappsapis.containerSecurityContext.runAsUser Set KubeappsAPIs container's Security Context runAsUser
-  ## @param kubeappsapis.containerSecurityContext.runAsNonRoot Set KubeappsAPIs container's Security Context runAsNonRoot
+  ## @param kubeappsapis.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param kubeappsapis.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param kubeappsapis.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param kubeappsapis.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param kubeappsapis.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param kubeappsapis.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param kubeappsapis.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param kubeappsapis.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure extra options for KubeappsAPIs containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param kubeappsapis.livenessProbe.enabled Enable livenessProbe
@@ -1776,7 +1848,7 @@ kubeappsapis:
   ##
   affinity: {}
   ## @param kubeappsapis.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param kubeappsapis.tolerations Tolerations for pod assignment
@@ -1842,6 +1914,169 @@ kubeappsapis:
     name: ""
     automountServiceAccountToken: true
     annotations: {}
+
+## @section OCI Catalog chart configuration
+ociCatalog:
+  ## @param ociCatalog.enabled Enable the OCI catalog gRPC service for cataloging
+  ## OCI repositories
+  enabled: false
+  ## Bitnami Kubeapps OCI Catalog image
+  ## ref: https://hub.docker.com/r/bitnami/kubeapps-ocicatalog/
+  ## @param ociCatalog.image.registry [default: REGISTRY_NAME] OCI Catalog image registry
+  ## @param ociCatalog.image.repository [default: REPOSITORY_NAME/kubeapps-oci-catalog] OCI Catalog image repository
+  ## @skip ociCatalog.image.tag OCI Catalog image tag (immutable tags are recommended)
+  ## @param ociCatalog.image.digest OCI Catalog image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param ociCatalog.image.pullPolicy OCI Catalog image pull policy
+  ## @param ociCatalog.image.pullSecrets OCI Catalog image pull secrets
+  ## @param ociCatalog.image.debug Enable image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/kubeapps-oci-catalog
+    tag: 2.9.0-debian-11-r8
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param ociCatalog.extraFlags Additional command line flags for OCI Catalog
+  ##
+  extraFlags: []
+  ## @param ociCatalog.extraEnvVars Array with extra environment variables to add to the oci-catalog container
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param ociCatalog.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for the OCI Catalog container
+  ##
+  extraEnvVarsCM: ""
+  ## @param ociCatalog.extraEnvVarsSecret Name of existing Secret containing extra env vars for the OCI Catalog container
+  ##
+  extraEnvVarsSecret: ""
+  ## @param ociCatalog.containerPorts.grpc OCI Catalog gRPC container port
+  ##
+  containerPorts:
+    grpc: 50061
+  ## OCI Catalog containers' resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+  ## @param ociCatalog.resources.limits.cpu The CPU limits for the OCI Catalog container
+  ## @param ociCatalog.resources.limits.memory The memory limits for the OCI Catalog container
+  ## @param ociCatalog.resources.requests.cpu The requested CPU for the OCI Catalog container
+  ## @param ociCatalog.resources.requests.memory The requested memory for the OCI Catalog container
+  ##
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
+  ## Configure Container Security Context (only main container)
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param ociCatalog.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param ociCatalog.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param ociCatalog.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param ociCatalog.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param ociCatalog.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param ociCatalog.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param ociCatalog.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param ociCatalog.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Configure extra options for OCI Catalog containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param ociCatalog.livenessProbe.enabled Enable livenessProbe
+  ## @param ociCatalog.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param ociCatalog.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param ociCatalog.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param ociCatalog.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param ociCatalog.livenessProbe.successThreshold Success threshold for livenessProbe
+  ## OCI Catalog containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param ociCatalog.readinessProbe.enabled Enable readinessProbe
+  ## @param ociCatalog.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param ociCatalog.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param ociCatalog.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param ociCatalog.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param ociCatalog.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param ociCatalog.startupProbe.enabled Enable startupProbe
+  ## @param ociCatalog.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param ociCatalog.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param ociCatalog.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param ociCatalog.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param ociCatalog.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param ociCatalog.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param ociCatalog.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param ociCatalog.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param ociCatalog.lifecycleHooks Custom lifecycle hooks for OCI Catalog containers
+  ##
+  lifecycleHooks: {}
+  ## @param ociCatalog.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param ociCatalog.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param ociCatalog.extraVolumes Optionally specify extra list of additional volumes for the OCI Catalog pod(s)
+  ##
+  extraVolumes: []
+  ## @param ociCatalog.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the OCI Catalog container(s)
+  ##
+  extraVolumeMounts: []
 
 ## @section Redis&reg; chart configuration
 ## ref: https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml

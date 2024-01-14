@@ -14,4 +14,5 @@ rbac:
 podSecurityContext:
   enabled: true
   fsGroup: 1002
+containerSecurityContext:
   runAsUser: 1002

@@ -9,16 +9,16 @@ import { random } from '../support/utils';
 it('allows to create and publish a new post with an image', () => {
   cy.login();
   cy.visit('/ghost/#/posts');
-  cy.contains('New post').click();
-  cy.get('[type="file"]').selectFile(
-    'cypress/fixtures/images/test_image.jpeg',
-    { force: true }
-  );
+  cy.get('span').contains('New post').click();
   cy.fixture('posts').then((posts) => {
     cy.get('textarea[placeholder="Post title"]').type(
       `${posts.newPost.title}-${random}`
     );
-    cy.get('article div[contenteditable="true"]').type(posts.newPost.content, {
+    cy.get('div[contenteditable="true"]').type(posts.newPost.content, {
+      force: true,
+    });
+    cy.get('[type="file"]').selectFile(
+      'cypress/fixtures/images/test_image.jpeg', {
       force: true,
     });
   });

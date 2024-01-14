@@ -56,9 +56,9 @@ diagnosticMode:
 
 ## TensorFlow Serving server image version
 ## ref: https://hub.docker.com/r/bitnami/tensorflow-serving/tags/
-## @param server.image.registry TensorFlow Serving image registry
-## @param server.image.repository TensorFlow Serving image repository
-## @param server.image.tag TensorFlow Serving Image tag (immutable tags are recommended)
+## @param server.image.registry [default: REGISTRY_NAME] TensorFlow Serving image registry
+## @param server.image.repository [default: REPOSITORY_NAME/tensorflow-serving] TensorFlow Serving image repository
+## @skip server.image.tag TensorFlow Serving Image tag (immutable tags are recommended)
 ## @param server.image.digest TensorFlow Serving image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param server.image.pullPolicy TensorFlow Serving image pull policy
 ## @param server.image.pullSecrets Specify docker-registry secret names as an array
@@ -67,11 +67,11 @@ server:
   image:
     registry: docker.io
     repository: bitnami/tensorflow-serving
-    tag: 2.13.1-debian-11-r0
+    tag: 2.14.1-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -84,9 +84,9 @@ server:
     pullSecrets: []
 ## TensorFlow ResNet image version
 ## ref: https://hub.docker.com/r/bitnami/tensorflow-resnet/tags/
-## @param client.image.registry TensorFlow ResNet image registry
-## @param client.image.repository TensorFlow ResNet image repository
-## @param client.image.tag TensorFlow ResNet image tag (immutable tags are recommended)
+## @param client.image.registry [default: REGISTRY_NAME] TensorFlow ResNet image registry
+## @param client.image.repository [default: REPOSITORY_NAME/tensorflow-resnet] TensorFlow ResNet image repository
+## @skip client.image.tag TensorFlow ResNet image tag (immutable tags are recommended)
 ## @param client.image.digest TensorFlow ResNet image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param client.image.pullPolicy TensorFlow ResNet image pull policy
 ## @param client.image.pullSecrets Specify docker-registry secret names as an array
@@ -95,11 +95,11 @@ client:
   image:
     registry: docker.io
     repository: bitnami/tensorflow-resnet
-    tag: 2.13.1-debian-11-r0
+    tag: 2.14.1-debian-11-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -165,7 +165,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template.
@@ -182,14 +182,26 @@ podSecurityContext:
   fsGroup: 1001
 ## Configure Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param containerSecurityContext.enabled Enabled container Security Context
-## @param containerSecurityContext.runAsUser Set container Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set container Security Context runAsNonRoot
+## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
@@ -263,7 +275,7 @@ schedulerName: ""
 ##
 topologySpreadConstraints: []
 ## Containers' resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following

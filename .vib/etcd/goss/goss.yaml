@@ -17,7 +17,7 @@ command:
     exit-status: 0
     stdout:
     {{- range $e, $i := until .Vars.replicaCount }}
-      - etcd-{{ $i }}
+      - "etcd-{{ $i }}"
     {{- end }}
   {{- range $e, $i := until .Vars.replicaCount }}
   {{- $key := printf "key_%s" (randAlpha 5) }}
@@ -26,7 +26,7 @@ command:
     exec: etcdctl {{ $auth }} {{ $svc_endpoint }} put {{ $key }} {{ $value }} && etcdctl {{ $auth }} --endpoints=etcd-{{ $i }}.etcd-headless:{{ $.Vars.containerPorts.client }} get {{ $key }}
     exit-status: 0
     stdout:
-    - {{ $key }}
+    - "{{ $key }}"
   {{- end }}
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.podSecurityContext.fsGroup }}

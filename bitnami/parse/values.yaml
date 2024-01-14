@@ -63,14 +63,14 @@ diagnosticMode:
 ##
 
 ## loadBalancerIP for the Parse Service (optional, cloud specific)
-## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
 ##
 server:
   ## Bitnami Parse image version
   ## ref: https://hub.docker.com/r/bitnami/parse/tags/
-  ## @param server.image.registry Parse image registry
-  ## @param server.image.repository Parse image repository
-  ## @param server.image.tag Parse image tag (immutable tags are recommended)
+  ## @param server.image.registry [default: REGISTRY_NAME] Parse image registry
+  ## @param server.image.repository [default: REPOSITORY_NAME/parse] Parse image repository
+  ## @skip server.image.tag Parse image tag (immutable tags are recommended)
   ## @param server.image.digest Parse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param server.image.pullPolicy Image pull policy
   ## @param server.image.pullSecrets Specify docker-registry secret names as an array
@@ -79,11 +79,11 @@ server:
   image:
     registry: docker.io
     repository: bitnami/parse
-    tag: 6.3.0-debian-11-r8
+    tag: 6.4.0-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -119,16 +119,26 @@ server:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param server.containerSecurityContext.enabled Enabled Parse Dashboard containers' Security Context
-  ## @param server.containerSecurityContext.runAsUser Set Parse Dashboard containers' Security Context runAsUser
-  ## @param server.containerSecurityContext.runAsNonRoot Set Parse Dashboard containers' Security Context runAsNonRoot
-  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set Parse Dashboard containers' Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param server.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param server.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param server.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param server.command Override default container command (useful when using custom images)
   ##
@@ -214,7 +224,7 @@ server:
   ##
   existingCloudCodeScriptsCM: ""
   ## @param server.resources Parse Server pods' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## Parse Server pods' liveness probes
@@ -306,7 +316,7 @@ server:
   ##
   affinity: {}
   ## @param server.nodeSelector Parse server node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param server.tolerations Parse server tolerations for pod assignment
@@ -340,7 +350,7 @@ server:
   ##
   lifecycleHooks: {}
   ## Kubernetes service for Parse Server Deployment
-  ## ref: https://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services---service-types
   ##
   service:
     ## @param server.service.type Kubernetes Service type
@@ -384,7 +394,7 @@ server:
     extraPorts: []
     ## @param server.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param server.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -403,9 +413,9 @@ dashboard:
   enabled: true
   ## Bitnami Parse Dashboard image version
   ## ref: https://hub.docker.com/r/bitnami/parse-dashboard/tags/
-  ## @param dashboard.image.registry Dashboard image registry
-  ## @param dashboard.image.repository Dashboard image repository
-  ## @param dashboard.image.tag Dashboard image tag (immutable tags are recommended)
+  ## @param dashboard.image.registry [default: REGISTRY_NAME] Dashboard image registry
+  ## @param dashboard.image.repository [default: REPOSITORY_NAME/parse-dashboard] Dashboard image repository
+  ## @skip dashboard.image.tag Dashboard image tag (immutable tags are recommended)
   ## @param dashboard.image.digest Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param dashboard.image.pullPolicy image pull policy
   ## @param dashboard.image.pullSecrets Specify docker-registry secret names as an array
@@ -414,11 +424,11 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/parse-dashboard
-    tag: 5.2.0-debian-11-r8
+    tag: 5.3.0-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -453,16 +463,26 @@ dashboard:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param dashboard.containerSecurityContext.enabled Enabled Parse Dashboard containers' Security Context
-  ## @param dashboard.containerSecurityContext.runAsUser Set Parse Dashboard containers' Security Context runAsUser
-  ## @param dashboard.containerSecurityContext.runAsNonRoot Set Parse Dashboard containers' Security Context runAsNonRoot
-  ## @param dashboard.containerSecurityContext.readOnlyRootFilesystem Set Parse Dashboard containers' Security Context runAsNonRoot
+  ## @param dashboard.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param dashboard.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param dashboard.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param dashboard.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param dashboard.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param dashboard.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param dashboard.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param dashboard.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param dashboard.command Override default container command (useful when using custom images)
   ##
@@ -484,7 +504,7 @@ dashboard:
   ##
   appName: MyDashboard
   ## @param dashboard.resources Parse Dashboard pods' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## Parse Dashboard pods' liveness probe
@@ -584,7 +604,7 @@ dashboard:
   ##
   affinity: {}
   ## @param dashboard.nodeSelector Parse dashboard node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dashboard.tolerations Parse dashboard tolerations for pod assignment
@@ -662,7 +682,7 @@ dashboard:
   ##
   initContainers: []
     ## Kubernetes service for Parse Server Deployment
-  ## ref: https://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services---service-types
   ##
   service:
     ## @param dashboard.service.type Kubernetes Service type
@@ -706,7 +726,7 @@ dashboard:
     extraPorts: []
     ## @param dashboard.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param dashboard.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -720,7 +740,7 @@ dashboard:
 ##
 
 ## Configure the ingress resource that allows you to access the Parse installation.
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
@@ -741,7 +761,7 @@ ingress:
   selfSigned: false
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
   ## Use this parameter to set the required annotations for cert-manager, see
   ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
@@ -845,7 +865,7 @@ ingress:
 ##
 
 ## Enable persistence using Persistent Volume Claims
-## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable Parse persistence using PVC
@@ -894,9 +914,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work)
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image name
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image name
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
@@ -904,7 +924,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r77
+    tag: 11-debian-11-r92
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -970,7 +990,7 @@ mongodb:
     ##
     database: bitnami_parse
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param mongodb.persistence.enabled Enable MongoDB&reg; persistence using PVC

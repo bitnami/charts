@@ -1,6 +1,6 @@
 <!--- app-name: Gitea -->
 
-# Gitea packaged by Bitnami
+# Bitnami package for Gitea
 
 Gitea is a lightweight code hosting solution. Written in Go, features low resource consumption, easy upgrades and multiple databases.
 
@@ -14,6 +14,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/gitea
 ```
 
+Looking to use Gitea in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Introduction
 
 This chart bootstraps a [Gitea](https://github.com/bitnami/containers/tree/main/bitnami/gitea) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
@@ -22,22 +24,21 @@ It also packages the [Bitnami PostgreSQL chart](https://github.com/bitnami/chart
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Gitea in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
 - Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
-- ReadWriteMany volumes for deployment scaling
 
 ## Installing the Chart
 
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/gitea
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/gitea
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys Gitea on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -77,96 +78,99 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Gitea parameters
 
-| Name                                    | Description                                                                                                           | Value                 |
-| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`                        | Gitea image registry                                                                                                  | `docker.io`           |
-| `image.repository`                      | Gitea Image name                                                                                                      | `bitnami/gitea`       |
-| `image.tag`                             | Gitea Image tag                                                                                                       | `1.20.5-debian-11-r2` |
-| `image.digest`                          | Gitea image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                  |
-| `image.pullPolicy`                      | Gitea image pull policy                                                                                               | `IfNotPresent`        |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                  |
-| `image.debug`                           | Specify if debug logs should be enabled                                                                               | `false`               |
-| `replicaCount`                          | Number of Gitea Pods to run (requires ReadWriteMany PVC support)                                                      | `1`                   |
-| `adminUsername`                         | User of the application                                                                                               | `bn_user`             |
-| `adminPassword`                         | Application password                                                                                                  | `""`                  |
-| `adminEmail`                            | Admin email                                                                                                           | `user@example.com`    |
-| `appName`                               | Gitea application name                                                                                                | `example`             |
-| `runMode`                               | Gitea application host                                                                                                | `prod`                |
-| `exposeSSH`                             | Make the SSH server accesible                                                                                         | `true`                |
-| `rootURL`                               | UI Root URL (for link generation)                                                                                     | `""`                  |
-| `command`                               | Override default container command (useful when using custom images)                                                  | `[]`                  |
-| `args`                                  | Override default container args (useful when using custom images)                                                     | `[]`                  |
-| `updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                                        | `RollingUpdate`       |
-| `priorityClassName`                     | Gitea pods' priorityClassName                                                                                         | `""`                  |
-| `schedulerName`                         | Name of the k8s scheduler (other than default)                                                                        | `""`                  |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                        | `[]`                  |
-| `hostAliases`                           | Add deployment host aliases                                                                                           | `[]`                  |
-| `extraEnvVars`                          | Extra environment variables                                                                                           | `[]`                  |
-| `extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                                   | `""`                  |
-| `extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                          | `""`                  |
-| `extraVolumes`                          | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `[]`                  |
-| `extraVolumeMounts`                     | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                  |
-| `initContainers`                        | Add additional init containers to the pod (evaluated as a template)                                                   | `[]`                  |
-| `sidecars`                              | Attach additional containers to the pod (evaluated as a template)                                                     | `[]`                  |
-| `tolerations`                           | Tolerations for pod assignment                                                                                        | `[]`                  |
-| `existingSecret`                        | Name of a secret with the application password                                                                        | `""`                  |
-| `existingSecretKey`                     | Key inside the existing secret containing the password                                                                | `admin-password`      |
-| `smtpHost`                              | SMTP host                                                                                                             | `""`                  |
-| `smtpPort`                              | SMTP port                                                                                                             | `""`                  |
-| `smtpUser`                              | SMTP user                                                                                                             | `""`                  |
-| `smtpPassword`                          | SMTP password                                                                                                         | `""`                  |
-| `smtpExistingSecret`                    | The name of an existing secret with SMTP credentials                                                                  | `""`                  |
-| `containerPorts`                        | Container ports                                                                                                       | `{}`                  |
-| `persistence.enabled`                   | Enable persistence using PVC                                                                                          | `true`                |
-| `persistence.storageClass`              | PVC Storage Class for Gitea volume                                                                                    | `""`                  |
-| `persistence.accessModes`               | PVC Access Mode for Gitea volume                                                                                      | `["ReadWriteOnce"]`   |
-| `persistence.size`                      | PVC Storage Request for Gitea volume                                                                                  | `8Gi`                 |
-| `persistence.dataSource`                | Custom PVC data source                                                                                                | `{}`                  |
-| `persistence.existingClaim`             | A manually managed Persistent Volume Claim                                                                            | `""`                  |
-| `persistence.hostPath`                  | If defined, the gitea-data volume will mount to the specified hostPath.                                               | `""`                  |
-| `persistence.annotations`               | Persistent Volume Claim annotations                                                                                   | `{}`                  |
-| `persistence.selector`                  | Selector to match an existing Persistent Volume for Gitea data PVC                                                    | `{}`                  |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                  |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                  |
-| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                  |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                  |
-| `affinity`                              | Affinity for pod assignment                                                                                           | `{}`                  |
-| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                                              | `{}`                  |
-| `resources.requests`                    | The requested resources for the init container                                                                        | `{}`                  |
-| `resources.limits`                      | The resources limits for the init container                                                                           | `{}`                  |
-| `podSecurityContext.enabled`            | Enable Gitea pods' Security Context                                                                                   | `true`                |
-| `podSecurityContext.fsGroup`            | Gitea pods' group ID                                                                                                  | `1001`                |
-| `containerSecurityContext.enabled`      | Enable Gitea containers' Security Context                                                                             | `true`                |
-| `containerSecurityContext.runAsUser`    | Gitea containers' Security Context                                                                                    | `1001`                |
-| `containerSecurityContext.runAsNonRoot` | Set Controller container's Security Context runAsNonRoot                                                              | `true`                |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                                                   | `false`               |
-| `startupProbe.path`                     | Request path for startupProbe                                                                                         | `/`                   |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                | `600`                 |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                       | `10`                  |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                      | `5`                   |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                    | `5`                   |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                    | `1`                   |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                                  | `true`                |
-| `livenessProbe.path`                    | Request path for livenessProbe                                                                                        | `/`                   |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                               | `600`                 |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                      | `10`                  |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                     | `5`                   |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                   | `5`                   |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                   | `1`                   |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                                                 | `true`                |
-| `readinessProbe.path`                   | Request path for readinessProbe                                                                                       | `/`                   |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                              | `30`                  |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                     | `5`                   |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                    | `1`                   |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                  | `5`                   |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                  | `1`                   |
-| `customStartupProbe`                    | Override default startup probe                                                                                        | `{}`                  |
-| `customLivenessProbe`                   | Override default liveness probe                                                                                       | `{}`                  |
-| `customReadinessProbe`                  | Override default readiness probe                                                                                      | `{}`                  |
-| `lifecycleHooks`                        | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | `{}`                  |
-| `podAnnotations`                        | Pod annotations                                                                                                       | `{}`                  |
-| `podLabels`                             | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                  |
+| Name                                                | Description                                                                                                           | Value                   |
+| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `image.registry`                                    | Gitea image registry                                                                                                  | `REGISTRY_NAME`         |
+| `image.repository`                                  | Gitea Image name                                                                                                      | `REPOSITORY_NAME/gitea` |
+| `image.digest`                                      | Gitea image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                    |
+| `image.pullPolicy`                                  | Gitea image pull policy                                                                                               | `IfNotPresent`          |
+| `image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                      | `[]`                    |
+| `image.debug`                                       | Specify if debug logs should be enabled                                                                               | `false`                 |
+| `adminUsername`                                     | User of the application                                                                                               | `bn_user`               |
+| `adminPassword`                                     | Application password                                                                                                  | `""`                    |
+| `adminEmail`                                        | Admin email                                                                                                           | `user@example.com`      |
+| `appName`                                           | Gitea application name                                                                                                | `example`               |
+| `runMode`                                           | Gitea application host                                                                                                | `prod`                  |
+| `exposeSSH`                                         | Make the SSH server accesible                                                                                         | `true`                  |
+| `rootURL`                                           | UI Root URL (for link generation)                                                                                     | `""`                    |
+| `command`                                           | Override default container command (useful when using custom images)                                                  | `[]`                    |
+| `args`                                              | Override default container args (useful when using custom images)                                                     | `[]`                    |
+| `updateStrategy.type`                               | Update strategy - only really applicable for deployments with RWO PVs attached                                        | `RollingUpdate`         |
+| `priorityClassName`                                 | Gitea pods' priorityClassName                                                                                         | `""`                    |
+| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                        | `""`                    |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                        | `[]`                    |
+| `hostAliases`                                       | Add deployment host aliases                                                                                           | `[]`                    |
+| `extraEnvVars`                                      | Extra environment variables                                                                                           | `[]`                    |
+| `extraEnvVarsCM`                                    | ConfigMap containing extra env vars                                                                                   | `""`                    |
+| `extraEnvVarsSecret`                                | Secret containing extra env vars (in case of sensitive data)                                                          | `""`                    |
+| `extraVolumes`                                      | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `[]`                    |
+| `extraVolumeMounts`                                 | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                    |
+| `initContainers`                                    | Add additional init containers to the pod (evaluated as a template)                                                   | `[]`                    |
+| `sidecars`                                          | Attach additional containers to the pod (evaluated as a template)                                                     | `[]`                    |
+| `tolerations`                                       | Tolerations for pod assignment                                                                                        | `[]`                    |
+| `existingSecret`                                    | Name of a secret with the application password                                                                        | `""`                    |
+| `existingSecretKey`                                 | Key inside the existing secret containing the password                                                                | `admin-password`        |
+| `smtpHost`                                          | SMTP host                                                                                                             | `""`                    |
+| `smtpPort`                                          | SMTP port                                                                                                             | `""`                    |
+| `smtpUser`                                          | SMTP user                                                                                                             | `""`                    |
+| `smtpPassword`                                      | SMTP password                                                                                                         | `""`                    |
+| `smtpExistingSecret`                                | The name of an existing secret with SMTP credentials                                                                  | `""`                    |
+| `containerPorts`                                    | Container ports                                                                                                       | `{}`                    |
+| `persistence.enabled`                               | Enable persistence using PVC                                                                                          | `true`                  |
+| `persistence.storageClass`                          | PVC Storage Class for Gitea volume                                                                                    | `""`                    |
+| `persistence.accessModes`                           | PVC Access Mode for Gitea volume                                                                                      | `["ReadWriteOnce"]`     |
+| `persistence.size`                                  | PVC Storage Request for Gitea volume                                                                                  | `8Gi`                   |
+| `persistence.dataSource`                            | Custom PVC data source                                                                                                | `{}`                    |
+| `persistence.existingClaim`                         | A manually managed Persistent Volume Claim                                                                            | `""`                    |
+| `persistence.hostPath`                              | If defined, the gitea-data volume will mount to the specified hostPath.                                               | `""`                    |
+| `persistence.annotations`                           | Persistent Volume Claim annotations                                                                                   | `{}`                    |
+| `persistence.selector`                              | Selector to match an existing Persistent Volume for Gitea data PVC                                                    | `{}`                    |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                    |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                  |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                    |
+| `nodeAffinityPreset.key`                            | Node label key to match Ignored if `affinity` is set.                                                                 | `""`                    |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                                             | `[]`                    |
+| `affinity`                                          | Affinity for pod assignment                                                                                           | `{}`                    |
+| `nodeSelector`                                      | Node labels for pod assignment. Evaluated as a template.                                                              | `{}`                    |
+| `resources.requests`                                | The requested resources for the init container                                                                        | `{}`                    |
+| `resources.limits`                                  | The resources limits for the init container                                                                           | `{}`                    |
+| `podSecurityContext.enabled`                        | Enable Gitea pods' Security Context                                                                                   | `true`                  |
+| `podSecurityContext.fsGroup`                        | Gitea pods' group ID                                                                                                  | `1001`                  |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                  | `true`                  |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                            | `1001`                  |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                         | `true`                  |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                           | `false`                 |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                               | `false`                 |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                             | `false`                 |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                    | `["ALL"]`               |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                      | `RuntimeDefault`        |
+| `startupProbe.enabled`                              | Enable startupProbe                                                                                                   | `false`                 |
+| `startupProbe.path`                                 | Request path for startupProbe                                                                                         | `/`                     |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                | `600`                   |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                       | `10`                    |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                      | `5`                     |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                    | `5`                     |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                    | `1`                     |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                                                  | `true`                  |
+| `livenessProbe.path`                                | Request path for livenessProbe                                                                                        | `/`                     |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                               | `600`                   |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                      | `10`                    |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                     | `5`                     |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                   | `5`                     |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                   | `1`                     |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                                                 | `true`                  |
+| `readinessProbe.path`                               | Request path for readinessProbe                                                                                       | `/`                     |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                              | `30`                    |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                     | `5`                     |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                    | `1`                     |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                  | `5`                     |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                  | `1`                     |
+| `customStartupProbe`                                | Override default startup probe                                                                                        | `{}`                    |
+| `customLivenessProbe`                               | Override default liveness probe                                                                                       | `{}`                    |
+| `customReadinessProbe`                              | Override default readiness probe                                                                                      | `{}`                    |
+| `lifecycleHooks`                                    | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | `{}`                    |
+| `podAnnotations`                                    | Pod annotations                                                                                                       | `{}`                    |
+| `podLabels`                                         | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                    |
 
 ### Traffic Exposure Parameters
 
@@ -201,12 +205,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                          | Description                                                            | Value  |
-| --------------------------------------------- | ---------------------------------------------------------------------- | ------ |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for Gitea pod                        | `true` |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`   |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true` |
-| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
+| Name                                          | Description                                                            | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for Gitea pod                        | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
 
 ### Database parameters
 
@@ -229,25 +233,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                   | Description                                                                                                                                               | Value              |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`            |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`        |
-| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/os-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r86` |
-| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`               |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`               |
-| `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`               |
-| `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`               |
+| Name                                   | Description                                                                                                                                               | Value                      |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                    |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                       |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                       |
+| `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                       |
+| `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                       |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 helm install my-release \
   --set adminUsername=user,giteaPassword=password,postgresql.auth.rootPassword=secretpassword \
-    oci://registry-1.docker.io/bitnamicharts/gitea
+    oci://REGISTRY_NAME/REPOSITORY_NAME/gitea
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the Gitea administrator account username and password to `user` and `password` respectively. Additionally, it sets the PostgreSQL `root` user password to `secretpassword`.
 
@@ -256,14 +261,15 @@ The above command sets the Gitea administrator account username and password to 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/gitea
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/gitea
 ```
 
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/gitea/values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -307,8 +313,10 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 3. Install the chart
 
 ```console
-helm install my-release --set persistence.existingClaim=PVC_NAME oci://registry-1.docker.io/bitnamicharts/gitea
+helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_NAME/REPOSITORY_NAME/gitea
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ### Host path
 
@@ -323,8 +331,10 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://registry-
 2. Install the chart
 
     ```console
-    helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT oci://registry-1.docker.io/bitnamicharts/gitea
+    helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT oci://REGISTRY_NAME/REPOSITORY_NAME/gitea
     ```
+
+    > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
     This will mount the `gitea-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
 3. Because the container cannot control the host machine's directory permissions, you must set the Gitea file directory permissions yourself
@@ -341,7 +351,7 @@ This major updates the PostgreSQL subchart to its newest major, 13.0.0. [Here](h
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

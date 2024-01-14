@@ -22,10 +22,10 @@ it('allows adding a project and a quality gate', () => {
     cy.fixture('quality-gates').then((qualityGates) => {
       cy.contains('Create').click();
       cy.get('#quality-gate-form-name').type(`${qualityGates.newQualityGate.name}${random}`);
-      cy.get('[type="submit"]').contains('Save').click();
+      cy.get('[type="submit"]').contains('Create').click();
       cy.contains('Unlock editing').click();
       cy.contains('Add Condition').click({force: true});
-      cy.get('#condition-metric').click();
+      cy.contains('Select').click({force: true});
       cy.contains('Lines to Cover').click({force: true});
       cy.get('#condition-threshold').type(qualityGates.newQualityGate.threshold);
       cy.get('[type="submit"]').click();

@@ -15,7 +15,7 @@ file:
     exists: true
     filetype: file
     mode: "0644"
-    contains:
+    contents:
       - /http.*{{ .Vars.containerPorts.http }}/
       - /https.*{{ .Vars.containerPorts.https }}/
       - /connection-url.*{{ .Vars.mariadb.auth.database }}/

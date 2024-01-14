@@ -30,7 +30,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Receive {{`{{`}} $labels.job {{`}}`}} is failing to handle {{`{{`}} $value | humanize {{`}}`}}% of requests.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosreceivehttprequesterrorratehigh
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosreceivehttprequesterrorratehigh
         summary: Thanos Receive is failing to handle requests.
       expr: |
         (
@@ -52,7 +52,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Receive {{`{{`}} $labels.job {{`}}`}} has a 99th percentile latency of {{`{{`}} $value {{`}}`}} seconds for requests.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosreceivehttprequestlatencyhigh
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosreceivehttprequestlatencyhigh
         summary: Thanos Receive has high HTTP requests latency.
       expr: |
         (
@@ -74,7 +74,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Receive {{`{{`}} $labels.job {{`}}`}} is failing to replicate {{`{{`}} $value | humanize {{`}}`}}% of requests.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosreceivehighreplicationfailures
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosreceivehighreplicationfailures
         summary: Thanos Receive is having high number of replication failures.
       expr: |
         thanos_receive_replication_factor > 1
@@ -106,7 +106,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Receive {{`{{`}} $labels.job {{`}}`}} is failing to forward {{`{{`}} $value | humanize {{`}}`}}% of requests.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosreceivehighforwardrequestfailures
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosreceivehighforwardrequestfailures
         summary: Thanos Receive is failing to forward requests.
       expr: |
         (
@@ -128,7 +128,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Receive {{`{{`}} $labels.job {{`}}`}} is failing to refresh hashring file, {{`{{`}} $value | humanize {{`}}`}} of attempts failed.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosreceivehighhashringfilerefreshfailures
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosreceivehighhashringfilerefreshfailures
         summary: Thanos Receive is failing to refresh hasring file.
       expr: |
         (
@@ -151,7 +151,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Receive {{`{{`}} $labels.job {{`}}`}} has not been able to reload hashring configurations.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosreceiveconfigreloadfailure
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosreceiveconfigreloadfailure
         summary: Thanos Receive has not been able to reload configuration.
       expr: avg by (job) (thanos_receive_config_last_reload_successful{job=~".*thanos-receive.*"}) != 1
       for: 5m
@@ -168,7 +168,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: Thanos Receive {{`{{`}} $labels.instance {{`}}`}} has not uploaded latest data to object storage.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosreceivenoupload
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosreceivenoupload
         summary: Thanos Receive has not uploaded latest data to object storage.
       expr: |
         (up{job=~".*thanos-receive.*"} - 1)
@@ -188,7 +188,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         description: At Thanos Receive {{`{{`}} $labels.job {{`}}`}} in {{`{{`}} $labels.namespace {{`}}`}} , the average 1-hr avg. metrics ingestion rate  is {{`{{`}} $value | humanize {{`}}`}}% of 12-hr avg. ingestion rate.
-        runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanosreceivetrafficbelowthreshold
+        runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosreceivetrafficbelowthreshold
         summary: Thanos Receive is experiencing low avg. 1-hr ingestion rate relative to avg. 12-hr ingestion rate.
       expr: |
         (

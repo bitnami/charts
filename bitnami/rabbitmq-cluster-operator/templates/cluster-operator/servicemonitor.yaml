@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.clusterOperator.metrics.serviceMonitor.enabled .Values.clusterOperator.metrics.enabled }}
+{{- if and .Values.clusterOperator.metrics.serviceMonitor.enabled .Values.clusterOperator.metrics.service.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -46,5 +46,27 @@ spec:
       {{- end }}
       {{- if .Values.clusterOperator.metrics.serviceMonitor.relabelings }}
       relabelings: {{ toYaml .Values.clusterOperator.metrics.serviceMonitor.relabelings | nindent 8 }}
+      {{- end }}
+    - port: metrics
+      {{- if .Values.clusterOperator.metrics.serviceMonitor.path }}
+      path: {{ .Values.clusterOperator.metrics.serviceMonitor.path }}
+      {{- end }}
+      {{- if .Values.clusterOperator.metrics.serviceMonitor.params }}
+      params: {{ toYaml .Values.clusterOperator.metrics.serviceMonitor.params | nindent 8 }}
+      {{- end }}
+      {{- if .Values.clusterOperator.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.clusterOperator.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.clusterOperator.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.clusterOperator.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.clusterOperator.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.clusterOperator.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.clusterOperator.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.clusterOperator.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.clusterOperator.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.clusterOperator.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
       {{- end }}
 {{- end }}

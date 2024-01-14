@@ -12,7 +12,7 @@ file:
     filetype: file
     mode: "0644"
     group: root
-    contains:
+    contents:
       - /num_tokens.*{{ .Vars.cluster.numTokens }}/
 command:
   {{- $dbUser := .Vars.dbUser.user }}

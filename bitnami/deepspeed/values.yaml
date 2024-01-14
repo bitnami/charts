@@ -64,9 +64,9 @@ diagnosticMode:
 
 ## Bitnami Deepspeed image version
 ## ref: https://hub.docker.com/r/bitnami/deepspeed/tags/
-## @param image.registry Deepspeed image registry
-## @param image.repository Deepspeed image repository
-## @param image.tag Deepspeed image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Deepspeed image registry
+## @param image.repository [default: REPOSITORY_NAME/deepspeed] Deepspeed image repository
+## @skip image.tag Deepspeed image tag (immutable tags are recommended)
 ## @param image.digest Deepspeed image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Deepspeed image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -74,11 +74,11 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/deepspeed
-  tag: 0.10.3-debian-11-r0
+  tag: 0.12.3-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -272,7 +272,7 @@ client:
   ##
   customStartupProbe: {}
   ## client resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param client.resources.limits The resources limits for the client containers
   ## @param client.resources.requests The requested resources for the client containers
   ##
@@ -283,13 +283,10 @@ client:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param client.podSecurityContext.enabled Enabled Client pods' Security Context
   ## @param client.podSecurityContext.fsGroup Set Client pod's Security Context fsGroup
-  ## @param client.podSecurityContext.seccompProfile.type Set Client container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param client.containerSecurityContext.enabled Enabled Client containers' Security Context
@@ -297,18 +294,23 @@ client:
   ## @param client.containerSecurityContext.runAsGroup Set Client containers' Security Context runAsGroup
   ## @param client.containerSecurityContext.runAsNonRoot Set Client containers' Security Context runAsNonRoot
   ## @param client.containerSecurityContext.readOnlyRootFilesystem Set Client containers' Security Context runAsNonRoot
+  ## @param client.containerSecurityContext.privileged Set Client containers' Security Context privileged
   ## @param client.containerSecurityContext.allowPrivilegeEscalation Set Client container's privilege escalation
   ## @param client.containerSecurityContext.capabilities.drop Set Client container's Security Context runAsNonRoot
+  ## @param client.containerSecurityContext.seccompProfile.type Set Client container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param client.lifecycleHooks for the client container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -363,7 +365,7 @@ client:
   ##
   affinity: {}
   ## @param client.nodeSelector Node labels for Client pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param client.tolerations Tolerations for Client pods assignment
@@ -479,7 +481,7 @@ client:
     annotations: {}
   ## @section Deepspeed Client persistence paramaters
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param client.persistence.enabled Use a PVC to persist data
@@ -617,7 +619,7 @@ worker:
   ##
   customStartupProbe: {}
   ## client resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param worker.resources.limits The resources limits for the client containers
   ## @param worker.resources.requests The requested resources for the client containers
   ##
@@ -628,13 +630,10 @@ worker:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param worker.podSecurityContext.enabled Enabled Worker pods' Security Context
   ## @param worker.podSecurityContext.fsGroup Set Worker pod's Security Context fsGroup
-  ## @param worker.podSecurityContext.seccompProfile.type Set Worker container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param worker.containerSecurityContext.enabled Enabled Worker containers' Security Context
@@ -644,16 +643,21 @@ worker:
   ## @param worker.containerSecurityContext.readOnlyRootFilesystem Set Worker containers' Security Context runAsNonRoot
   ## @param worker.containerSecurityContext.allowPrivilegeEscalation Set Worker container's privilege escalation
   ## @param worker.containerSecurityContext.capabilities.drop Set Worker container's Security Context runAsNonRoot
+  ## @param worker.containerSecurityContext.seccompProfile.type Set Worker container's Security Context seccomp profile
+  ## @param worker.containerSecurityContext.privileged Set Worker container's Security Context privileged
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param worker.lifecycleHooks for the client container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -711,7 +715,7 @@ worker:
   ##
   affinity: {}
   ## @param worker.nodeSelector Node labels for Worker pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param worker.tolerations Tolerations for Worker pods assignment
@@ -827,7 +831,7 @@ worker:
       sessionAffinityConfig: {}
       ## @param worker.externalAccess.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param worker.externalAccess.service.loadBalancerSourceRanges Worker service Load Balancer sources
@@ -920,7 +924,7 @@ worker:
     ingressNSPodMatchLabels: {}
   ## @section Deepspeed Worker persistence paramaters
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param worker.persistence.enabled Use a PVC to persist data
@@ -967,9 +971,9 @@ worker:
 
 ## Bitnami git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
-## @param gitImage.registry Git image registry
-## @param gitImage.repository Git image repository
-## @param gitImage.tag Git image tag (immutable tags are recommended)
+## @param gitImage.registry [default: REGISTRY_NAME] Git image registry
+## @param gitImage.repository [default: REPOSITORY_NAME/git] Git image repository
+## @skip gitImage.tag Git image tag (immutable tags are recommended)
 ## @param gitImage.digest Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param gitImage.pullPolicy Git image pull policy
 ## @param gitImage.pullSecrets Specify docker-registry secret names as an array
@@ -977,7 +981,7 @@ worker:
 gitImage:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.42.0-debian-11-r20
+  tag: 2.43.0-debian-11-r0
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -995,9 +999,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes volume permissions in the data directory
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
@@ -1005,7 +1009,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r63
+    tag: 11-debian-11-r91
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1017,7 +1021,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following

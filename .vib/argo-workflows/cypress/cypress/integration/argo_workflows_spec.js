@@ -28,8 +28,6 @@ it('allows submitting a workflow using a template created from a file', () => {
   });
 
   cy.visit('/workflows');
-  // Closes explanation text
-  cy.contains('a', 'Continue').click();
 
   cy.contains('Submit New').click({ force: true });
   cy.get('.sliding-panel__body').should('be.visible').within(() => {

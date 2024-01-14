@@ -59,9 +59,9 @@ diagnosticMode:
 
 ## Bitnami Metrics Server image version
 ## ref: https://hub.docker.com/r/bitnami/metrics-server/tags/
-## @param image.registry Metrics Server image registry
-## @param image.repository Metrics Server image repository
-## @param image.tag Metrics Server image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Metrics Server image registry
+## @param image.repository [default: REPOSITORY_NAME/metrics-server] Metrics Server image repository
+## @skip image.tag Metrics Server image tag (immutable tags are recommended)
 ## @param image.digest Metrics Server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Metrics Server image pull policy
 ## @param image.pullSecrets Metrics Server image pull secrets
@@ -69,11 +69,11 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/metrics-server
-  tag: 0.6.4-debian-11-r67
+  tag: 0.6.4-debian-11-r75
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -271,7 +271,7 @@ affinity: {}
 ##
 topologySpreadConstraints: []
 ## @param nodeSelector Node labels for pod assignment
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment
@@ -342,7 +342,7 @@ service:
   ##
   sessionAffinityConfig: {}
 ## Metric Server containers' resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -415,16 +415,26 @@ customLivenessProbe: {}
 customReadinessProbe: {}
 ## Container security context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enable Container security context
-## @param containerSecurityContext.readOnlyRootFilesystem ReadOnlyRootFilesystem for the container
-## @param containerSecurityContext.runAsNonRoot Run containers as non-root users
+## @param containerSecurityContext.enabled Enabled containers' Security Context
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
-  readOnlyRootFilesystem: false
-  runAsNonRoot: true
   runAsUser: 1001
+  runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 ## Pod security context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Pod security context

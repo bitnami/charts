@@ -75,8 +75,11 @@ spec:
         - name: wait-for-redis
           image: {{ include "argocd.redis.image" . }}
           imagePullPolicy: {{ .Values.redis.image.pullPolicy | quote }}
-          {{- with .Values.redisWait.securityContext }}
-          securityContext: {{ . | toYaml }}
+          {{- if .Values.redisWait.securityContext }}
+          # Deprecated: use redisWait.containerSecurityContext
+          securityContext: {{- toYaml .Values.redisWait.securityContext | nindent 12 }}
+          {{- else if .Values.redisWait.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.redisWait.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           command:
             - /bin/bash

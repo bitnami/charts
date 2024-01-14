@@ -19,7 +19,7 @@ spec:
     matchLabels: {{- include "kube-prometheus.operator.matchLabels" . | nindent 6 }}
   template:
     metadata:
-      labels: {{- include "kube-prometheus.operator.labels" . | nindent 8 }}
+      labels: {{- include "kube-prometheus.operator.podLabels" . | nindent 8 }}
       {{- if .Values.operator.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.operator.podAnnotations "context" $) | nindent 8 }}
       {{- end }}

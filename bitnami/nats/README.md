@@ -1,6 +1,6 @@
 <!--- app-name: NATS -->
 
-# NATS packaged by Bitnami
+# Bitnami package for NATS
 
 NATS is an open source, lightweight and high-performance messaging system. It is ideal for distributed systems and supports modern cloud architectures and pub-sub, request-reply and queuing models.
 
@@ -14,13 +14,13 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/nats
 ```
 
+Looking to use NATS in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Introduction
 
 This chart bootstraps a [NATS](https://github.com/bitnami/containers/tree/main/bitnami/nats) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use NATS in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -32,8 +32,10 @@ Looking to use NATS in production? Try [VMware Application Catalog](https://bitn
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/nats
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/nats
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys NATS on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -77,9 +79,8 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                     | Description                                                                                           | Value                  |
 | ------------------------ | ----------------------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`         | NATS image registry                                                                                   | `docker.io`            |
-| `image.repository`       | NATS image repository                                                                                 | `bitnami/nats`         |
-| `image.tag`              | NATS image tag (immutable tags are recommended)                                                       | `2.10.1-debian-11-r12` |
+| `image.registry`         | NATS image registry                                                                                   | `REGISTRY_NAME`        |
+| `image.repository`       | NATS image repository                                                                                 | `REPOSITORY_NAME/nats` |
 | `image.digest`           | NATS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag  | `""`                   |
 | `image.pullPolicy`       | NATS image pull policy                                                                                | `IfNotPresent`         |
 | `image.pullSecrets`      | NATS image pull secrets                                                                               | `[]`                   |
@@ -116,61 +117,66 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### NATS deployment/statefulset parameters
 
-| Name                                    | Description                                                                                           | Value           |
-| --------------------------------------- | ----------------------------------------------------------------------------------------------------- | --------------- |
-| `resourceType`                          | NATS cluster resource type under Kubernetes. Allowed values: `statefulset` (default) or `deployment`  | `statefulset`   |
-| `replicaCount`                          | Number of NATS nodes                                                                                  | `1`             |
-| `schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                             | `""`            |
-| `priorityClassName`                     | Name of pod priority class                                                                            | `""`            |
-| `updateStrategy.type`                   | StrategyType. Can be set to RollingUpdate or OnDelete                                                 | `RollingUpdate` |
-| `containerPorts.client`                 | NATS client container port                                                                            | `4222`          |
-| `containerPorts.cluster`                | NATS cluster container port                                                                           | `6222`          |
-| `containerPorts.monitoring`             | NATS monitoring container port                                                                        | `8222`          |
-| `podSecurityContext.enabled`            | Enabled NATS pods' Security Context                                                                   | `false`         |
-| `podSecurityContext.fsGroup`            | Set NATS pod's Security Context fsGroup                                                               | `1001`          |
-| `containerSecurityContext.enabled`      | Enabled NATS containers' Security Context                                                             | `false`         |
-| `containerSecurityContext.runAsUser`    | Set NATS containers' Security Context runAsUser                                                       | `1001`          |
-| `containerSecurityContext.runAsNonRoot` | Set NATS containers' Security Context runAsNonRoot                                                    | `true`          |
-| `resources.limits`                      | The resources limits for the NATS containers                                                          | `{}`            |
-| `resources.requests`                    | The requested resources for the NATS containers                                                       | `{}`            |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                  | `true`          |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                               | `30`            |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                      | `10`            |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                     | `5`             |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                   | `6`             |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                   | `1`             |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                                 | `true`          |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                              | `5`             |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                     | `10`            |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                    | `5`             |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                  | `6`             |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                  | `1`             |
-| `startupProbe.enabled`                  | Enable startupProbe on NATS containers                                                                | `false`         |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                | `5`             |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                       | `10`            |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                      | `5`             |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                    | `6`             |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                    | `1`             |
-| `customLivenessProbe`                   | Override default liveness probe                                                                       | `{}`            |
-| `customReadinessProbe`                  | Override default readiness probe                                                                      | `{}`            |
-| `customStartupProbe`                    | Custom startupProbe that overrides the default one                                                    | `{}`            |
-| `hostAliases`                           | Deployment pod host aliases                                                                           | `[]`            |
-| `podLabels`                             | Extra labels for NATS pods                                                                            | `{}`            |
-| `podAnnotations`                        | Annotations for NATS pods                                                                             | `{}`            |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                   | `""`            |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `soft`          |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`             | `""`            |
-| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                                | `""`            |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                             | `[]`            |
-| `affinity`                              | Affinity for pod assignment. Evaluated as a template.                                                 | `{}`            |
-| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                              | `{}`            |
-| `tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                              | `[]`            |
-| `topologySpreadConstraints`             | Topology Spread Constraints for NATS pods assignment spread across your cluster among failure-domains | `[]`            |
-| `lifecycleHooks`                        | for the NATS container(s) to automate configuration before or after startup                           | `{}`            |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes for NATS pods                                     | `[]`            |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for NATS container(s)                        | `[]`            |
-| `initContainers`                        | Add additional init containers to the NATS pods                                                       | `[]`            |
-| `sidecars`                              | Add additional sidecar containers to the NATS pods                                                    | `[]`            |
+| Name                                                | Description                                                                                           | Value            |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------- |
+| `resourceType`                                      | NATS cluster resource type under Kubernetes. Allowed values: `statefulset` (default) or `deployment`  | `statefulset`    |
+| `replicaCount`                                      | Number of NATS nodes                                                                                  | `1`              |
+| `schedulerName`                                     | Use an alternate scheduler, e.g. "stork".                                                             | `""`             |
+| `priorityClassName`                                 | Name of pod priority class                                                                            | `""`             |
+| `updateStrategy.type`                               | StrategyType. Can be set to RollingUpdate or OnDelete                                                 | `RollingUpdate`  |
+| `containerPorts.client`                             | NATS client container port                                                                            | `4222`           |
+| `containerPorts.cluster`                            | NATS cluster container port                                                                           | `6222`           |
+| `containerPorts.monitoring`                         | NATS monitoring container port                                                                        | `8222`           |
+| `podSecurityContext.enabled`                        | Enabled NATS pods' Security Context                                                                   | `true`           |
+| `podSecurityContext.fsGroup`                        | Set NATS pod's Security Context fsGroup                                                               | `1001`           |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                  | `true`           |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                            | `1001`           |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                         | `true`           |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                           | `false`          |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                               | `false`          |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                             | `false`          |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                    | `["ALL"]`        |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                      | `RuntimeDefault` |
+| `resources.limits`                                  | The resources limits for the NATS containers                                                          | `{}`             |
+| `resources.requests`                                | The requested resources for the NATS containers                                                       | `{}`             |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                                  | `true`           |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                               | `30`             |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                      | `10`             |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                     | `5`              |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                   | `6`              |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                   | `1`              |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                                 | `true`           |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                              | `5`              |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                     | `10`             |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                    | `5`              |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                  | `6`              |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                  | `1`              |
+| `startupProbe.enabled`                              | Enable startupProbe on NATS containers                                                                | `false`          |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                | `5`              |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                       | `10`             |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                      | `5`              |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                    | `6`              |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                    | `1`              |
+| `customLivenessProbe`                               | Override default liveness probe                                                                       | `{}`             |
+| `customReadinessProbe`                              | Override default readiness probe                                                                      | `{}`             |
+| `customStartupProbe`                                | Custom startupProbe that overrides the default one                                                    | `{}`             |
+| `hostAliases`                                       | Deployment pod host aliases                                                                           | `[]`             |
+| `podLabels`                                         | Extra labels for NATS pods                                                                            | `{}`             |
+| `podAnnotations`                                    | Annotations for NATS pods                                                                             | `{}`             |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                   | `""`             |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `soft`           |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`             | `""`             |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set.                                                | `""`             |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                             | `[]`             |
+| `affinity`                                          | Affinity for pod assignment. Evaluated as a template.                                                 | `{}`             |
+| `nodeSelector`                                      | Node labels for pod assignment. Evaluated as a template.                                              | `{}`             |
+| `tolerations`                                       | Tolerations for pod assignment. Evaluated as a template.                                              | `[]`             |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for NATS pods assignment spread across your cluster among failure-domains | `[]`             |
+| `lifecycleHooks`                                    | for the NATS container(s) to automate configuration before or after startup                           | `{}`             |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for NATS pods                                     | `[]`             |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for NATS container(s)                        | `[]`             |
+| `initContainers`                                    | Add additional init containers to the NATS pods                                                       | `[]`             |
+| `sidecars`                                          | Add additional sidecar containers to the NATS pods                                                    | `[]`             |
 
 ### Traffic Exposure parameters
 
@@ -212,32 +218,31 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                                                   | Value                   |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `metrics.enabled`                          | Enable Prometheus metrics via exporter side-car                                                               | `false`                 |
-| `metrics.image.registry`                   | Prometheus metrics exporter image registry                                                                    | `docker.io`             |
-| `metrics.image.repository`                 | Prometheus metrics exporter image repository                                                                  | `bitnami/nats-exporter` |
-| `metrics.image.tag`                        | Prometheus metrics exporter image tag (immutable tags are recommended)                                        | `0.12.0-debian-11-r94`  |
-| `metrics.image.digest`                     | NATS Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `metrics.image.pullPolicy`                 | Prometheus metrics image pull policy                                                                          | `IfNotPresent`          |
-| `metrics.image.pullSecrets`                | Prometheus metrics image pull secrets                                                                         | `[]`                    |
-| `metrics.resources`                        | Metrics exporter resource requests and limits                                                                 | `{}`                    |
-| `metrics.containerPort`                    | Prometheus metrics exporter port                                                                              | `7777`                  |
-| `metrics.flags`                            | Flags to be passed to Prometheus metrics                                                                      | `[]`                    |
-| `metrics.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                           | `ClusterIP`             |
-| `metrics.service.port`                     | Prometheus metrics service port                                                                               | `7777`                  |
-| `metrics.service.loadBalancerIP`           | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                              | `""`                    |
-| `metrics.service.annotations`              | Annotations for Prometheus metrics service                                                                    | `{}`                    |
-| `metrics.service.labels`                   | Labels for Prometheus metrics service                                                                         | `{}`                    |
-| `metrics.serviceMonitor.enabled`           | Specify if a ServiceMonitor will be deployed for Prometheus Operator                                          | `false`                 |
-| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                                      | `monitoring`            |
-| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                           | `{}`                    |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus                              | `""`                    |
-| `metrics.serviceMonitor.interval`          | How frequently to scrape metrics                                                                              | `""`                    |
-| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                       | `""`                    |
-| `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                                                      | `[]`                    |
-| `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                                                    | `[]`                    |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                           | `{}`                    |
+| Name                                       | Description                                                                                                   | Value                           |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `metrics.enabled`                          | Enable Prometheus metrics via exporter side-car                                                               | `false`                         |
+| `metrics.image.registry`                   | Prometheus metrics exporter image registry                                                                    | `REGISTRY_NAME`                 |
+| `metrics.image.repository`                 | Prometheus metrics exporter image repository                                                                  | `REPOSITORY_NAME/nats-exporter` |
+| `metrics.image.digest`                     | NATS Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                            |
+| `metrics.image.pullPolicy`                 | Prometheus metrics image pull policy                                                                          | `IfNotPresent`                  |
+| `metrics.image.pullSecrets`                | Prometheus metrics image pull secrets                                                                         | `[]`                            |
+| `metrics.resources`                        | Metrics exporter resource requests and limits                                                                 | `{}`                            |
+| `metrics.containerPort`                    | Prometheus metrics exporter port                                                                              | `7777`                          |
+| `metrics.flags`                            | Flags to be passed to Prometheus metrics                                                                      | `[]`                            |
+| `metrics.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                           | `ClusterIP`                     |
+| `metrics.service.port`                     | Prometheus metrics service port                                                                               | `7777`                          |
+| `metrics.service.loadBalancerIP`           | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                              | `""`                            |
+| `metrics.service.annotations`              | Annotations for Prometheus metrics service                                                                    | `{}`                            |
+| `metrics.service.labels`                   | Labels for Prometheus metrics service                                                                         | `{}`                            |
+| `metrics.serviceMonitor.enabled`           | Specify if a ServiceMonitor will be deployed for Prometheus Operator                                          | `false`                         |
+| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                                      | `monitoring`                    |
+| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                           | `{}`                            |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus                              | `""`                            |
+| `metrics.serviceMonitor.interval`          | How frequently to scrape metrics                                                                              | `""`                            |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                       | `""`                            |
+| `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                                                      | `[]`                            |
+| `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                                                    | `[]`                            |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                           | `{}`                            |
 
 ### Persistence parameters
 
@@ -263,8 +268,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set auth.enabled=true,auth.user=my-user,auth.password=T0pS3cr3t \
-    oci://registry-1.docker.io/bitnamicharts/nats
+    oci://REGISTRY_NAME/REPOSITORY_NAME/nats
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command enables NATS client authentication with `my-user` as user and `T0pS3cr3t` as password credentials.
 
@@ -273,14 +280,15 @@ The above command enables NATS client authentication with `my-user` as user and 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/nats
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/nats
 ```
 
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/nats/values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -326,8 +334,10 @@ NATS version 2.0.0 has renamed the server binary filename from `gnatsd` to `nats
 however, it is still possible to use the chart to deploy NATS version 1.x.x using the `natsFilename` property.
 
 ```console
-helm install nats-v1 --set natsFilename=gnatsd --set image.tag=1.4.1 oci://registry-1.docker.io/bitnamicharts/nats
+helm install nats-v1 --set natsFilename=gnatsd --set image.tag=1.4.1 oci://REGISTRY_NAME/REPOSITORY_NAME/nats
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ### To 7.0.0
 
@@ -375,7 +385,7 @@ kubectl delete statefulset nats-nats --cascade=false
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

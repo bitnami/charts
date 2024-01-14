@@ -9,9 +9,9 @@ file:
     exists: true
     filetype: file
     mode: "0644"
-    contains:
-      - {{ .Vars.containerPorts.client }}
-      - preAllocSize={{ .Vars.preAllocSize }}
+    contents:
+      - "{{ .Vars.containerPorts.client }}"
+      - "preAllocSize={{ .Vars.preAllocSize }}"
 command:
   zookeeper-create-znode:
     exec: zkCli.sh -server zookeeper-0:{{ .Vars.containerPorts.client }} create /my_key_{{randAlpha 5}} my_data

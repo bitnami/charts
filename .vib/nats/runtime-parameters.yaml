@@ -8,6 +8,10 @@ cluster:
     enabled: true
     user: test_nats_cluster
     password: ClusterPassword123!4
+jetstream:
+  enabled: true
+persistence:
+  enabled: true
 podSecurityContext:
   enabled: true
   fsGroup: 1002

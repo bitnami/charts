@@ -72,9 +72,9 @@ server:
   enabled: true
   ## Bitnami Vault Server image
   ## ref: https://hub.docker.com/r/bitnami/vault/tags/
-  ## @param server.image.registry Vault Server image registry
-  ## @param server.image.repository Vault Server image repository
-  ## @param server.image.tag Vault Server image tag (immutable tags are recommended)
+  ## @param server.image.registry [default: REGISTRY_NAME] Vault Server image registry
+  ## @param server.image.repository [default: REPOSITORY_NAME/vault] Vault Server image repository
+  ## @skip server.image.tag Vault Server image tag (immutable tags are recommended)
   ## @param server.image.digest Vault Server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param server.image.pullPolicy Vault Server image pull policy
   ## @param server.image.pullSecrets Vault Server image pull secrets
@@ -83,11 +83,11 @@ server:
   image:
     registry: docker.io
     repository: bitnami/vault
-    tag: 1.15.0-debian-11-r5
+    tag: 1.15.4-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -169,7 +169,7 @@ server:
   ##
   customStartupProbe: {}
   ## Vault Server resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param server.resources.limits The resources limits for the Vault Server containers
   ## @param server.resources.requests The requested resources for the Vault Server containers
   ##
@@ -180,30 +180,32 @@ server:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param server.podSecurityContext.enabled Enabled Vault Server pods' Security Context
   ## @param server.podSecurityContext.fsGroup Set Vault Server pod's Security Context fsGroup
-  ## @param server.podSecurityContext.seccompProfile.type Set Vault Server container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param server.containerSecurityContext.enabled Enabled Vault Server containers' Security Context
-  ## @param server.containerSecurityContext.runAsUser Set Vault Server containers' Security Context runAsUser
-  ## @param server.containerSecurityContext.runAsNonRoot Set Vault Server containers' Security Context runAsNonRoot
-  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set Vault Server containers' Security Context runAsNonRoot
-  ## @param server.containerSecurityContext.allowPrivilegeEscalation Set Vault Server container's privilege escalation
-  ## @param server.containerSecurityContext.capabilities.drop Set Vault Server container's Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param server.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param server.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param server.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param server.command Override default container command (useful when using custom images)
   ##
@@ -290,7 +292,7 @@ server:
   ##
   affinity: {}
   ## @param server.nodeSelector Node labels for Vault Server pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param server.tolerations Tolerations for Vault Server pods assignment
@@ -414,7 +416,7 @@ server:
       extraPorts: []
       ## @param server.service.general.sessionAffinity Control where web requests go, to the same pod or round-robin
       ## Values: WebIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param server.service.general.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -469,7 +471,7 @@ server:
       extraPorts: []
       ## @param server.service.active.sessionAffinity Control where web requests go, to the same pod or round-robin
       ## Values: WebIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param server.service.active.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -479,7 +481,7 @@ server:
       ##
       sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param server.ingress.enabled Enable ingress record generation for Vault
@@ -613,7 +615,7 @@ server:
     automountServiceAccountToken: true
 
   ## @section Source Conttroller Persistence Parameters
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param server.persistence.enabled Enable persistence using Persistent Volume Claims
@@ -721,9 +723,9 @@ csiProvider:
   enabled: false
   ## Bitnami Vault CSI Provider image
   ## ref: https://hub.docker.com/r/bitnami/vault-csi-provider/tags/
-  ## @param csiProvider.image.registry Vault CSI Provider image registry
-  ## @param csiProvider.image.repository Vault CSI Provider image repository
-  ## @param csiProvider.image.tag Vault CSI Provider image tag (immutable tags are recommended)
+  ## @param csiProvider.image.registry [default: REGISTRY_NAME] Vault CSI Provider image registry
+  ## @param csiProvider.image.repository [default: REPOSITORY_NAME/vault-csi-provider] Vault CSI Provider image repository
+  ## @skip csiProvider.image.tag Vault CSI Provider image tag (immutable tags are recommended)
   ## @param csiProvider.image.digest Vault CSI Provider image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param csiProvider.image.pullPolicy Vault CSI Provider image pull policy
   ## @param csiProvider.image.pullSecrets Vault CSI Provider image pull secrets
@@ -732,11 +734,11 @@ csiProvider:
   image:
     registry: docker.io
     repository: bitnami/vault-csi-provider
-    tag: 1.4.0-debian-11-r137
+    tag: 1.4.1-debian-11-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -816,7 +818,7 @@ csiProvider:
   ##
   affinity: {}
   ## @param csiProvider.nodeSelector Node labels for Vault CSI Provider pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param csiProvider.tolerations Tolerations for Vault CSI Provider pods assignment
@@ -876,13 +878,10 @@ csiProvider:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param csiProvider.podSecurityContext.enabled Enabled CSI Provider pods' Security Context
   ## @param csiProvider.podSecurityContext.fsGroup Set CSI Provider pod's Security Context fsGroup
-  ## @param csiProvider.podSecurityContext.seccompProfile.type Set CSI Provider pod's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
 
   provider:
     ## @param csiProvider.provider.containerPorts.health CSI Provider health container port
@@ -943,7 +942,7 @@ csiProvider:
     ##
     customStartupProbe: {}
     ## CSI Provider resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param csiProvider.provider.resources.limits The resources limits for the CSI Provider container
     ## @param csiProvider.provider.resources.requests The requested resources for the CSI Provider container
     ##
@@ -952,21 +951,26 @@ csiProvider:
       requests: {}
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param csiProvider.provider.containerSecurityContext.enabled Enabled CSI Provider container' Security Context
-    ## @param csiProvider.provider.containerSecurityContext.runAsUser Set CSI Provider container' Security Context runAsUser
-    ## @param csiProvider.provider.containerSecurityContext.runAsNonRoot Set CSI Provider container' Security Context runAsNonRoot
-    ## @param csiProvider.provider.containerSecurityContext.readOnlyRootFilesystem Set CSI Provider container' Security Context runAsNonRoot
-    ## @param csiProvider.provider.containerSecurityContext.allowPrivilegeEscalation Set CSI Provider container's privilege escalation
-    ## @param csiProvider.provider.containerSecurityContext.capabilities.drop Set CSI Provider container's Security Context runAsNonRoot
+    ## @param csiProvider.provider.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param csiProvider.provider.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param csiProvider.provider.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param csiProvider.provider.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param csiProvider.provider.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param csiProvider.provider.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param csiProvider.provider.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param csiProvider.provider.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
       runAsUser: 1001
       runAsNonRoot: true
+      privileged: false
       readOnlyRootFilesystem: true
       allowPrivilegeEscalation: false
       capabilities:
         drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
 
     ## @param csiProvider.provider.command Override default container command (useful when using custom images)
     ##
@@ -1056,23 +1060,28 @@ csiProvider:
     customStartupProbe: {}
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param csiProvider.agent.containerSecurityContext.enabled Enabled CSI Agent container' Security Context
-    ## @param csiProvider.agent.containerSecurityContext.runAsUser Set CSI Agent container' Security Context runAsUser
-    ## @param csiProvider.agent.containerSecurityContext.runAsNonRoot Set CSI Agent container' Security Context runAsNonRoot
-    ## @param csiProvider.agent.containerSecurityContext.readOnlyRootFilesystem Set CSI Agent container' Security Context runAsNonRoot
-    ## @param csiProvider.agent.containerSecurityContext.allowPrivilegeEscalation Set CSI Agent container's privilege escalation
-    ## @param csiProvider.agent.containerSecurityContext.capabilities.drop Set CSI Agent container's Security Context runAsNonRoot
+    ## @param csiProvider.agent.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param csiProvider.agent.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param csiProvider.agent.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param csiProvider.agent.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param csiProvider.agent.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param csiProvider.agent.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param csiProvider.agent.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param csiProvider.agent.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
       runAsUser: 1001
       runAsNonRoot: true
+      privileged: false
       readOnlyRootFilesystem: true
       allowPrivilegeEscalation: false
       capabilities:
         drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## CSI Provider Agent resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param csiProvider.agent.resources.limits The resources limits for the CSI Provider Agent container
     ## @param csiProvider.agent.resources.requests The requested resources for the CSI Provider Agent container
     ##
@@ -1156,9 +1165,9 @@ injector:
   enabled: true
   ## Bitnami Vault Kubernetes Injector image
   ## ref: https://hub.docker.com/r/bitnami/vault-k8s/tags/
-  ## @param injector.image.registry Vault Kubernetes Injector image registry
-  ## @param injector.image.repository Vault Kubernetes Injector image repository
-  ## @param injector.image.tag Vault Kubernetes Injector image tag (immutable tags are recommended)
+  ## @param injector.image.registry [default: REGISTRY_NAME] Vault Kubernetes Injector image registry
+  ## @param injector.image.repository [default: REPOSITORY_NAME/vault-k8s] Vault Kubernetes Injector image repository
+  ## @skip injector.image.tag Vault Kubernetes Injector image tag (immutable tags are recommended)
   ## @param injector.image.digest Vault Kubernetes Injector image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param injector.image.pullPolicy Vault Kubernetes Injector image pull policy
   ## @param injector.image.pullSecrets Vault Kubernetes Injector image pull secrets
@@ -1167,11 +1176,11 @@ injector:
   image:
     registry: docker.io
     repository: bitnami/vault-k8s
-    tag: 1.3.0-debian-11-r20
+    tag: 1.3.1-debian-11-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1246,7 +1255,7 @@ injector:
   ##
   customStartupProbe: {}
   ## Vault Kubernetes Injector resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param injector.resources.limits The resources limits for the Vault Kubernetes Injector containers
   ## @param injector.resources.requests The requested resources for the Vault Kubernetes Injector containers
   ##
@@ -1257,30 +1266,32 @@ injector:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param injector.podSecurityContext.enabled Enabled Vault Kubernetes Injector pods' Security Context
   ## @param injector.podSecurityContext.fsGroup Set Vault Kubernetes Injector pod's Security Context fsGroup
-  ## @param injector.podSecurityContext.seccompProfile.type Set Vault Kubernetes Injector container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param injector.containerSecurityContext.enabled Enabled Vault Kubernetes Injector containers' Security Context
-  ## @param injector.containerSecurityContext.runAsUser Set Vault Kubernetes Injector containers' Security Context runAsUser
-  ## @param injector.containerSecurityContext.runAsNonRoot Set Vault Kubernetes Injector containers' Security Context runAsNonRoot
-  ## @param injector.containerSecurityContext.readOnlyRootFilesystem Set Vault Kubernetes Injector containers' Security Context runAsNonRoot
-  ## @param injector.containerSecurityContext.allowPrivilegeEscalation Set Vault Kubernetes Injector container's privilege escalation
-  ## @param injector.containerSecurityContext.capabilities.drop Set Vault Kubernetes Injector container's Security Context runAsNonRoot
+  ## @param injector.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param injector.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param injector.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param injector.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param injector.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param injector.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param injector.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param injector.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 
   ## @param injector.command Override default container command (useful when using custom images)
   ##
@@ -1355,7 +1366,7 @@ injector:
   ##
   affinity: {}
   ## @param injector.nodeSelector Node labels for Vault Kubernetes Injector pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param injector.tolerations Tolerations for Vault Kubernetes Injector pods assignment
@@ -1474,7 +1485,7 @@ injector:
     extraPorts: []
     ## @param injector.service.sessionAffinity Control where web requests go, to the same pod or round-robin
     ## Values: WebIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param injector.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1534,9 +1545,9 @@ volumePermissions:
   enabled: false
   ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param volumePermissions.image.registry OS Shell + Utility image registry
-  ## @param volumePermissions.image.repository OS Shell + Utility image repository
-  ## @param volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
   ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
@@ -1544,7 +1555,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r86
+    tag: 11-debian-11-r93
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1556,7 +1567,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##

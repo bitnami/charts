@@ -65,9 +65,9 @@ diagnosticMode:
 
 ## Bitnami APISIX image
 ## ref: https://hub.docker.com/r/bitnami/apisix/tags/
-## @param image.registry APISIX image registry
-## @param image.repository APISIX image repository
-## @param image.tag APISIX image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] APISIX image registry
+## @param image.repository [default: REPOSITORY_NAME/apisix] APISIX image repository
+## @skip image.tag APISIX image tag (immutable tags are recommended)
 ## @param image.digest APISIX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
 ## @param image.pullPolicy APISIX image pull policy
 ## @param image.pullSecrets APISIX image pull secrets
@@ -76,11 +76,11 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/apisix
-  tag: 3.5.0-debian-11-r0
+  tag: 3.7.0-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -175,7 +175,7 @@ dataPlane:
   ##
   customStartupProbe: {}
   ## APISIX resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dataPlane.resources.limits The resources limits for the APISIX containers
   ## @param dataPlane.resources.requests The requested resources for the APISIX containers
   ##
@@ -186,13 +186,10 @@ dataPlane:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dataPlane.podSecurityContext.enabled Enabled APISIX pods' Security Context
   ## @param dataPlane.podSecurityContext.fsGroup Set APISIX pod's Security Context fsGroup
-  ## @param dataPlane.podSecurityContext.seccompProfile.type Set APISIX container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param dataPlane.containerSecurityContext.enabled Enabled APISIX containers' Security Context
@@ -201,6 +198,7 @@ dataPlane:
   ## @param dataPlane.containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context runAsNonRoot
   ## @param dataPlane.containerSecurityContext.allowPrivilegeEscalation Set APISIX container's privilege escalation
   ## @param dataPlane.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
+  ## @param dataPlane.containerSecurityContext.seccompProfile.type Set APISIX container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -210,6 +208,8 @@ dataPlane:
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
 
   ## @param dataPlane.command Override default container command (useful when using custom images)
   ##
@@ -259,13 +259,33 @@ dataPlane:
     deployment:
       role: data_plane
       role_data_plane:
-        config_provider: control_plane
+        config_provider: etcd
         {{- if .Values.controlPlane.enabled }}
         control_plane:
           host:
             - {{ ternary "https" "http" .Values.controlPlane.tls.enabled }}://{{ include "apisix.control-plane.fullname" . }}:{{ .Values.controlPlane.service.ports.configServer }}
           prefix: /apisix
           timeout: 30
+        {{- end }}
+      etcd:
+        host:
+          {{- if .Values.etcd.enabled  }}
+            {{- $replicas := $.Values.etcd.replicaCount | int }}
+            {{- range $i, $_e := until $replicas }}
+          - {{ printf "%s://%s-%d.%s:%v" (ternary "https" "http" $.Values.etcd.auth.client.secureTransport) (include "apisix.etcd.fullname" $ ) $i (include "apisix.etcd.headlessServiceName" $) ( include "apisix.etcd.port" $ ) }}
+            {{- end }}
+          {{- else }}
+          {{- range $node := .Values.externalEtcd.servers }}
+          - {{ ternary "https" "http" $.Values.externalEtcd.secureTransport }}://{{ printf "%s:%v" $node (include "apisix.etcd.port" $) }}
+          {{- end }}
+          {{- end }}
+        prefix: /apisix
+        timeout: 30
+        use_grpc: false
+        startup_retry: 60
+        {{- if (include "apisix.etcd.authEnabled" .) }}
+        user: "{{ print "{{APISIX_ETCD_USER}}" }}"
+        password: "{{ print "{{APISIX_ETCD_PASSWORD}}" }}"
         {{- end }}
       {{- if .Values.dataPlane.tls.enabled }}
       certs:
@@ -385,7 +405,7 @@ dataPlane:
   ##
   affinity: {}
   ## @param dataPlane.nodeSelector Node labels for APISIX pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dataPlane.tolerations Tolerations for APISIX pods assignment
@@ -512,7 +532,7 @@ dataPlane:
     extraPorts: []
     ## @param dataPlane.service.sessionAffinity Control where web requests go, to the same pod or round-robin
     ## Values: WebIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param dataPlane.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -522,7 +542,7 @@ dataPlane:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param dataPlane.ingress.enabled Enable ingress record generation for Apisix
@@ -849,7 +869,7 @@ controlPlane:
   ##
   customStartupProbe: {}
   ## APISIX resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param controlPlane.resources.limits The resources limits for the APISIX containers
   ## @param controlPlane.resources.requests The requested resources for the APISIX containers
   ##
@@ -860,13 +880,10 @@ controlPlane:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controlPlane.podSecurityContext.enabled Enabled APISIX pods' Security Context
   ## @param controlPlane.podSecurityContext.fsGroup Set APISIX pod's Security Context fsGroup
-  ## @param controlPlane.podSecurityContext.seccompProfile.type Set APISIX container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param controlPlane.containerSecurityContext.enabled Enabled APISIX containers' Security Context
@@ -875,6 +892,7 @@ controlPlane:
   ## @param controlPlane.containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context runAsNonRoot
   ## @param controlPlane.containerSecurityContext.allowPrivilegeEscalation Set APISIX container's privilege escalation
   ## @param controlPlane.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
+  ## @param controlPlane.containerSecurityContext.seccompProfile.type Set APISIX container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -884,6 +902,8 @@ controlPlane:
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
 
   ## @param controlPlane.command Override default container command (useful when using custom images)
   ##
@@ -1106,7 +1126,7 @@ controlPlane:
   ##
   affinity: {}
   ## @param controlPlane.nodeSelector Node labels for APISIX pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param controlPlane.tolerations Tolerations for APISIX pods assignment
@@ -1233,7 +1253,7 @@ controlPlane:
     extraPorts: []
     ## @param controlPlane.service.sessionAffinity Control where web requests go, to the same pod or round-robin
     ## Values: WebIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param controlPlane.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1243,7 +1263,7 @@ controlPlane:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param controlPlane.ingress.enabled Enable ingress record generation for Apisix
@@ -1501,9 +1521,9 @@ dashboard:
   replicaCount: 1
   ## Bitnami APISIX Dashboard image
   ## ref: https://hub.docker.com/r/bitnami/apisix-dashboard/tags/
-  ## @param dashboard.image.registry APISIX Dashboard image registry
-  ## @param dashboard.image.repository APISIX Dashboard image repository
-  ## @param dashboard.image.tag APISIX Dashboard image tag (immutable tags are recommended)
+  ## @param dashboard.image.registry [default: REGISTRY_NAME] APISIX Dashboard image registry
+  ## @param dashboard.image.repository [default: REPOSITORY_NAME/apisix-dashboard] APISIX Dashboard image repository
+  ## @skip dashboard.image.tag APISIX Dashboard image tag (immutable tags are recommended)
   ## @param dashboard.image.digest APISIX Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param dashboard.image.pullPolicy APISIX Dashboard image pull policy
   ## @param dashboard.image.pullSecrets APISIX Dashboard image pull secrets
@@ -1512,11 +1532,11 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/apisix-dashboard
-    tag: 3.0.1-debian-11-r98
+    tag: 3.0.1-debian-11-r140
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1755,7 +1775,7 @@ dashboard:
   ##
   affinity: {}
   ## @param dashboard.nodeSelector Node labels for APISIX Dashboard pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dashboard.tolerations Tolerations for APISIX Dashboard pods assignment
@@ -1824,13 +1844,10 @@ dashboard:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dashboard.podSecurityContext.enabled Enabled Dashboard pods' Security Context
   ## @param dashboard.podSecurityContext.fsGroup Set Dashboard pod's Security Context fsGroup
-  ## @param dashboard.podSecurityContext.seccompProfile.type Set Dashboard pod's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
 
   ## @param dashboard.containerPorts.http Dashboard http container port
   ## @param dashboard.containerPorts.https Dashboard https container port
@@ -1892,7 +1909,7 @@ dashboard:
   ##
   customStartupProbe: {}
   ## Dashboard resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dashboard.resources.limits The resources limits for the Dashboard container
   ## @param dashboard.resources.requests The requested resources for the Dashboard container
   ##
@@ -1904,18 +1921,23 @@ dashboard:
   ## @param dashboard.containerSecurityContext.enabled Enabled Dashboard container' Security Context
   ## @param dashboard.containerSecurityContext.runAsUser Set Dashboard container' Security Context runAsUser
   ## @param dashboard.containerSecurityContext.runAsNonRoot Set Dashboard container' Security Context runAsNonRoot
+  ## @param dashboard.containerSecurityContext.privileged Set Dashboard container' Security Context privileged
   ## @param dashboard.containerSecurityContext.readOnlyRootFilesystem Set Dashboard container' Security Context runAsNonRoot
   ## @param dashboard.containerSecurityContext.allowPrivilegeEscalation Set Dashboard container's privilege escalation
   ## @param dashboard.containerSecurityContext.capabilities.drop Set Dashboard container's Security Context runAsNonRoot
+  ## @param dashboard.containerSecurityContext.seccompProfile.type Set Dashboard container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
+    privileged: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
 
   ## @param dashboard.command Override default container command (useful when using custom images)
   ##
@@ -1993,7 +2015,7 @@ dashboard:
     extraPorts: []
     ## @param dashboard.service.sessionAffinity Control where web requests go, to the same pod or round-robin
     ## Values: WebIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param dashboard.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -2003,7 +2025,7 @@ dashboard:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param dashboard.ingress.enabled Enable ingress record generation for Apisix
@@ -2179,9 +2201,9 @@ ingressController:
   enabled: true
   ## Bitnami APISIX Ingress Controller image
   ## ref: https://hub.docker.com/r/bitnami/vault-k8s/tags/
-  ## @param ingressController.image.registry APISIX Ingress Controller image registry
-  ## @param ingressController.image.repository APISIX Ingress Controller image repository
-  ## @param ingressController.image.tag APISIX Ingress Controller image tag (immutable tags are recommended)
+  ## @param ingressController.image.registry [default: REGISTRY_NAME] APISIX Ingress Controller image registry
+  ## @param ingressController.image.repository [default: REPOSITORY_NAME/apisix-ingress-controller] APISIX Ingress Controller image repository
+  ## @skip ingressController.image.tag APISIX Ingress Controller image tag (immutable tags are recommended)
   ## @param ingressController.image.digest APISIX Ingress Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param ingressController.image.pullPolicy APISIX Ingress Controller image pull policy
   ## @param ingressController.image.pullSecrets APISIX Ingress Controller image pull secrets
@@ -2190,11 +2212,11 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/apisix-ingress-controller
-    tag: 1.6.1-debian-11-r97
+    tag: 1.7.1-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2271,7 +2293,7 @@ ingressController:
   ##
   customStartupProbe: {}
   ## APISIX Ingress Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param ingressController.resources.limits The resources limits for the APISIX Ingress Controller containers
   ## @param ingressController.resources.requests The requested resources for the APISIX Ingress Controller containers
   ##
@@ -2282,30 +2304,32 @@ ingressController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param ingressController.podSecurityContext.enabled Enabled APISIX Ingress Controller pods' Security Context
   ## @param ingressController.podSecurityContext.fsGroup Set APISIX Ingress Controller pod's Security Context fsGroup
-  ## @param ingressController.podSecurityContext.seccompProfile.type Set APISIX Ingress Controller container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param ingressController.containerSecurityContext.enabled Enabled APISIX Ingress Controller containers' Security Context
   ## @param ingressController.containerSecurityContext.runAsUser Set APISIX Ingress Controller containers' Security Context runAsUser
   ## @param ingressController.containerSecurityContext.runAsNonRoot Set APISIX Ingress Controller containers' Security Context runAsNonRoot
+  ## @param ingressController.containerSecurityContext.privileged Set APISIX Ingress Controller containers' Security Context privileged
   ## @param ingressController.containerSecurityContext.readOnlyRootFilesystem Set APISIX Ingress Controller containers' Security Context runAsNonRoot
   ## @param ingressController.containerSecurityContext.allowPrivilegeEscalation Set APISIX Ingress Controller container's privilege escalation
   ## @param ingressController.containerSecurityContext.capabilities.drop Set APISIX Ingress Controller container's Security Context runAsNonRoot
+  ## @param ingressController.containerSecurityContext.seccompProfile.type Set APISIX Ingress Controller container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
 
   ## @param ingressController.command Override default container command (useful when using custom images)
   ##
@@ -2367,7 +2391,7 @@ ingressController:
   ##
   affinity: {}
   ## @param ingressController.nodeSelector Node labels for APISIX Ingress Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param ingressController.tolerations Tolerations for APISIX Ingress Controller pods assignment
@@ -2563,7 +2587,7 @@ ingressController:
     extraPorts: []
     ## @param ingressController.service.sessionAffinity Control where web requests go, to the same pod or round-robin
     ## Values: WebIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param ingressController.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -2573,7 +2597,7 @@ ingressController:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param ingressController.ingress.enabled Enable ingress record generation for Apisix
@@ -2819,15 +2843,15 @@ ingressController:
 ## @section Init containers parameters
 ##
 waitContainer:
-  ## @param waitContainer.image.registry Init container wait-container image registry
-  ## @param waitContainer.image.repository Init container wait-container image name
-  ## @param waitContainer.image.tag Init container wait-container image tag
+  ## @param waitContainer.image.registry [default: REGISTRY_NAME] Init container wait-container image registry
+  ## @param waitContainer.image.repository [default: REPOSITORY_NAME/os-shell] Init container wait-container image name
+  ## @skip waitContainer.image.tag Init container wait-container image tag
   ## @param waitContainer.image.digest Init container wait-container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r54
+    tag: 11-debian-11-r93
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
@@ -2849,16 +2873,21 @@ waitContainer:
   ## @param waitContainer.containerSecurityContext.runAsNonRoot Set APISIX containers' Security Context runAsNonRoot
   ## @param waitContainer.containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context runAsNonRoot
   ## @param waitContainer.containerSecurityContext.allowPrivilegeEscalation Set APISIX container's privilege escalation
+  ## @param waitContainer.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param waitContainer.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
+  ## @param waitContainer.containerSecurityContext.seccompProfile.type Set APISIX container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: RuntimeDefault
 
 ## @section External etcd settings
 ##

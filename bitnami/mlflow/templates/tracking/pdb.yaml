@@ -1,0 +1,31 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- $replicaCount := int .Values.tracking.replicaCount }}
+{{- if and .Values.tracking.enabled .Values.tracking.pdb.create (or (gt $replicaCount 1) .Values.tracking.autoscaling.hpa.enabled) }}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "mlflow.v0.tracking.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: mlflow
+    app.kubernetes.io/component: tracking
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.tracking.pdb.minAvailable }}
+  minAvailable: {{ .Values.tracking.pdb.minAvailable }}
+  {{- end  }}
+  {{- if .Values.tracking.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.tracking.pdb.maxUnavailable }}
+  {{- end  }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.tracking.podLabels .Values.commonLabels) "context" .) | fromYaml }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: mlflow
+      app.kubernetes.io/component: tracking
+{{- end }}

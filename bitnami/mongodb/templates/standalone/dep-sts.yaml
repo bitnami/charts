@@ -81,6 +81,7 @@ spec:
       {{ if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
       {{- if or .Values.initContainers (and .Values.volumePermissions.enabled .Values.persistence.enabled) .Values.tls.enabled }}
       initContainers:
         {{- if .Values.initContainers }}
@@ -107,7 +108,7 @@ spec:
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: datadir
+            - name: {{ .Values.persistence.name | default "datadir" }}
               mountPath: {{ .Values.persistence.mountPath }}
         {{- end }}
         {{- if .Values.tls.enabled }}
@@ -228,7 +229,10 @@ spec:
               value: {{ ternary "yes" "no" .Values.directoryPerDB | quote }}
             {{- $extraFlags := .Values.extraFlags | join " " -}}
             {{- if .Values.tls.enabled }}
-              {{- $extraFlags = printf "--tlsMode=%s --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert %s" .Values.tls.mode $extraFlags  }}
+              {{- if .Values.tls.mTLS.enabled }}
+              {{- $extraFlags = printf "--tlsCAFile=/certs/mongodb-ca-cert %s" $extraFlags  }}
+              {{- end }}
+              {{- $extraFlags = printf "--tlsMode=%s --tlsCertificateKeyFile=/certs/mongodb.pem %s" .Values.tls.mode $extraFlags  }}
             {{- end }}
             {{- if ne $extraFlags "" }}
             - name: MONGODB_EXTRA_FLAGS
@@ -236,7 +240,7 @@ spec:
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: MONGODB_CLIENT_EXTRA_FLAGS
-              value: --tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert
+              value: --tls {{ if .Values.tls.mTLS.enabled }}--tlsCertificateKeyFile=/certs/mongodb.pem {{ end }}--tlsCAFile=/certs/mongodb-ca-cert
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
@@ -289,7 +293,7 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: datadir
+            - name: {{ .Values.persistence.name | default "datadir" }}
               mountPath: {{ .Values.persistence.mountPath }}
               subPath: {{ .Values.persistence.subPath }}
             - name: common-scripts
@@ -438,7 +442,7 @@ spec:
         {{- end }}
         {{- end }}
   {{- if not .Values.persistence.enabled }}
-        - name: datadir
+        - name: {{ .Values.persistence.name | default "datadir" }}
           {{- if .Values.persistence.medium }}
           emptyDir:
             medium: {{ .Values.persistence.medium | quote }}
@@ -446,17 +450,22 @@ spec:
           emptyDir: {}
           {{- end }}
   {{- else if .Values.persistence.existingClaim }}
-        - name: datadir
+        - name: {{ .Values.persistence.name | default "datadir" }}
           persistentVolumeClaim:
             claimName: {{ printf "%s" (tpl .Values.persistence.existingClaim .) }}
   {{- else if not .Values.useStatefulSet }}
-        - name: datadir
+        - name: {{ .Values.persistence.name | default "datadir" }}
           persistentVolumeClaim:
             claimName: {{ template "mongodb.fullname" . }}
   {{- else }}
+  {{- if .Values.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
     - metadata:
-        name: datadir
+        name: {{ .Values.persistence.name | default "datadir" }}
         {{- if .Values.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
         {{- end }}

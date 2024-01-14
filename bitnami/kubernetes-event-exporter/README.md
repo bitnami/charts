@@ -1,6 +1,6 @@
 <!--- app-name: Kubernetes Event Exporter -->
 
-# Kubernetes Event Exporter packaged by Bitnami
+# Bitnami package for Kubernetes Event Exporter
 
 Kubernetes Event Exporter makes it easy to export Kubernetes events to other tools, thereby enabling better event observability, custom alerts and aggregation.
 
@@ -14,13 +14,13 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/kubernetes-event-exporter
 ```
 
+Looking to use Kubernetes Event Exporter in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Introduction
 
 This chart bootstraps a [Kubernetes Event Exporter](https://github.com/resmoio/kubernetes-event-exporter) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Kubernetes Event Exporter in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -32,8 +32,10 @@ Looking to use Kubernetes Event Exporter in production? Try [VMware Application 
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/kubernetes-event-exporter
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kubernetes-event-exporter
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy Kubernetes Event Exporter on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -74,85 +76,105 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kubernetes Event Exporter parameters
 
-| Name                                              | Description                                                                                                               | Value                               |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
-| `replicaCount`                                    | Desired number of pod replicas                                                                                            | `1`                                 |
-| `revisionHistoryLimit`                            | Desired number of old ReplicaSets to retain                                                                               | `10`                                |
-| `containerPorts.http`                             | HTTP container port                                                                                                       | `2112`                              |
-| `extraContainerPorts`                             | Optionally specify extra list of additional port-mappings for the container                                               | `[]`                                |
-| `image.registry`                                  | Container image registry                                                                                                  | `docker.io`                         |
-| `image.repository`                                | Container image name                                                                                                      | `bitnami/kubernetes-event-exporter` |
-| `image.tag`                                       | Container image tag                                                                                                       | `1.4.0-debian-11-r57`               |
-| `image.digest`                                    | Container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                                |
-| `image.pullPolicy`                                | Container image pull policy                                                                                               | `IfNotPresent`                      |
-| `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                          | `[]`                                |
-| `hostAliases`                                     | Add deployment host aliases                                                                                               | `[]`                                |
-| `config.logLevel`                                 | Verbosity of the logs (options: `fatal`, `error`, `warn`, `info` or `debug`)                                              | `debug`                             |
-| `config.logFormat`                                | How the logs are formatted. Allowed values: `pretty` or `json`                                                            | `pretty`                            |
-| `config.receivers`                                | Array containing event receivers                                                                                          | `[]`                                |
-| `config.route.routes`                             | Array containing event route configuration                                                                                | `[]`                                |
-| `rbac.create`                                     | Create the RBAC roles for API accessibility                                                                               | `true`                              |
-| `serviceAccount.create`                           | Specifies whether a ServiceAccount should be created                                                                      | `true`                              |
-| `serviceAccount.name`                             | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.       | `""`                                |
-| `serviceAccount.automountServiceAccountToken`     | Automount service account token for the server service account                                                            | `true`                              |
-| `serviceAccount.annotations`                      | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                | `{}`                                |
-| `podAnnotations`                                  | Pod annotations                                                                                                           | `{}`                                |
-| `podLabels`                                       | Pod labels                                                                                                                | `{}`                                |
-| `podSecurityContext.enabled`                      | Enable security context                                                                                                   | `true`                              |
-| `podSecurityContext.fsGroup`                      | Group ID for the container                                                                                                | `1001`                              |
-| `containerSecurityContext.enabled`                | Enable container security context                                                                                         | `true`                              |
-| `containerSecurityContext.capabilities.add`       | Add capabilities for the securityContext                                                                                  | `[]`                                |
-| `containerSecurityContext.capabilities.drop`      | Drop capabilities for the securityContext                                                                                 | `[]`                                |
-| `containerSecurityContext.readOnlyRootFilesystem` | Allows the pod to mount the RootFS as ReadOnly only                                                                       | `true`                              |
-| `containerSecurityContext.runAsNonRoot`           | If the pod should run as a non root container.                                                                            | `true`                              |
-| `containerSecurityContext.runAsUser`              | Define the uid with which the pod will run                                                                                | `1001`                              |
-| `command`                                         | Override default container command (useful when using custom images)                                                      | `[]`                                |
-| `args`                                            | Override default container args (useful when using custom images)                                                         | `[]`                                |
-| `lifecycleHooks`                                  | Lifecycle for the container to automate configuration before or after startup                                             | `{}`                                |
-| `resources.limits`                                | Specify resource limits which the container is not allowed to succeed.                                                    | `{}`                                |
-| `resources.requests`                              | Specify resource requests which the container needs to spawn.                                                             | `{}`                                |
-| `customStartupProbe`                              | Configure startup probe for Kubernetes event exporter pod                                                                 | `{}`                                |
-| `customLivenessProbe`                             | Configure liveness probe for Kubernetes event exporter pod                                                                | `{}`                                |
-| `customReadinessProbe`                            | Configure readiness probe for Kubernetes event exporter pod                                                               | `{}`                                |
-| `nodeSelector`                                    | Node labels for pod assignment                                                                                            | `{}`                                |
-| `priorityClassName`                               | Set Priority Class Name to allow priority control over other pods                                                         | `""`                                |
-| `schedulerName`                                   | Name of the k8s scheduler (other than default)                                                                            | `""`                                |
-| `topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment                                                                            | `[]`                                |
-| `tolerations`                                     | Tolerations for pod assignment                                                                                            | `[]`                                |
-| `podAffinityPreset`                               | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                       | `""`                                |
-| `podAntiAffinityPreset`                           | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                  | `soft`                              |
-| `nodeAffinityPreset.type`                         | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `""`                                |
-| `nodeAffinityPreset.key`                          | Node label key to match. Ignored if `affinity` is set.                                                                    | `""`                                |
-| `nodeAffinityPreset.values`                       | Node label values to match. Ignored if `affinity` is set.                                                                 | `[]`                                |
-| `affinity`                                        | Affinity for pod assignment                                                                                               | `{}`                                |
-| `updateStrategy.type`                             | Deployment strategy type.                                                                                                 | `RollingUpdate`                     |
-| `extraEnvVars`                                    | Array containing extra env vars to be added to all containers                                                             | `[]`                                |
-| `extraEnvVarsCM`                                  | ConfigMap containing extra env vars to be added to all containers                                                         | `""`                                |
-| `extraEnvVarsSecret`                              | Secret containing extra env vars to be added to all containers                                                            | `""`                                |
-| `extraVolumeMounts`                               | Array to add extra mounts (normally used with extraVolumes)                                                               | `[]`                                |
-| `extraVolumes`                                    | Array to add extra volumes                                                                                                | `[]`                                |
-| `initContainers`                                  | Attach additional init containers to pods                                                                                 | `[]`                                |
-| `sidecars`                                        | Add additional sidecar containers to pods                                                                                 | `[]`                                |
-| `metrics.enabled`                                 | Enable exposing  statistics                                                                                               | `false`                             |
-| `metrics.service.ports.http`                      | Metrics service HTTP port                                                                                                 | `2112`                              |
-| `metrics.service.annotations`                     | Annotations for enabling prometheus to access the metrics endpoints                                                       | `{}`                                |
-| `metrics.serviceMonitor.enabled`                  | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                              | `false`                             |
-| `metrics.serviceMonitor.port`                     | Metrics service HTTP port                                                                                                 | `http`                              |
-| `metrics.serviceMonitor.endpoints`                | The endpoint configuration of the ServiceMonitor. Path is mandatory. Interval, timeout and labellings can be overwritten. | `[]`                                |
-| `metrics.serviceMonitor.path`                     | Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead                                | `""`                                |
-| `metrics.serviceMonitor.namespace`                | Namespace which Prometheus is running in                                                                                  | `""`                                |
-| `metrics.serviceMonitor.interval`                 | Interval at which metrics should be scraped                                                                               | `30s`                               |
-| `metrics.serviceMonitor.scrapeTimeout`            | Specify the timeout after which the scrape is ended                                                                       | `""`                                |
-| `metrics.serviceMonitor.labels`                   | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                     | `{}`                                |
-| `metrics.serviceMonitor.selector`                 | Prometheus instance selector labels                                                                                       | `{}`                                |
-| `metrics.serviceMonitor.relabelings`              | RelabelConfigs to apply to samples before scraping                                                                        | `[]`                                |
-| `metrics.serviceMonitor.metricRelabelings`        | MetricRelabelConfigs to apply to samples before ingestion                                                                 | `[]`                                |
-| `metrics.serviceMonitor.honorLabels`              | honorLabels chooses the metric's labels on collisions with target labels                                                  | `false`                             |
-| `metrics.serviceMonitor.jobLabel`                 | The name of the label on the target service to use as the job name in prometheus.                                         | `""`                                |
-| `metrics.prometheusRule.enabled`                  | Create PrometheusRule Resource for scraping metrics using PrometheusOperator                                              | `false`                             |
-| `metrics.prometheusRule.namespace`                | Namespace which Prometheus is running in                                                                                  | `""`                                |
-| `metrics.prometheusRule.labels`                   | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                     | `{}`                                |
-| `metrics.prometheusRule.groups`                   | Groups, containing the alert rules.                                                                                       | `[]`                                |
+| Name                                                | Description                                                                                                               | Value                                       |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| `replicaCount`                                      | Desired number of pod replicas                                                                                            | `1`                                         |
+| `revisionHistoryLimit`                              | Desired number of old ReplicaSets to retain                                                                               | `10`                                        |
+| `containerPorts.http`                               | HTTP container port                                                                                                       | `2112`                                      |
+| `extraContainerPorts`                               | Optionally specify extra list of additional port-mappings for the container                                               | `[]`                                        |
+| `image.registry`                                    | Container image registry                                                                                                  | `REGISTRY_NAME`                             |
+| `image.repository`                                  | Container image name                                                                                                      | `REPOSITORY_NAME/kubernetes-event-exporter` |
+| `image.digest`                                      | Container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                                        |
+| `image.pullPolicy`                                  | Container image pull policy                                                                                               | `IfNotPresent`                              |
+| `image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                          | `[]`                                        |
+| `hostAliases`                                       | Add deployment host aliases                                                                                               | `[]`                                        |
+| `config.logLevel`                                   | Verbosity of the logs (options: `fatal`, `error`, `warn`, `info` or `debug`)                                              | `debug`                                     |
+| `config.logFormat`                                  | How the logs are formatted. Allowed values: `pretty` or `json`                                                            | `pretty`                                    |
+| `config.receivers`                                  | Array containing event receivers                                                                                          | `[]`                                        |
+| `config.route.routes`                               | Array containing event route configuration                                                                                | `[]`                                        |
+| `rbac.create`                                       | Create the RBAC roles for API accessibility                                                                               | `true`                                      |
+| `rbac.rules`                                        | List of rules for the cluster role                                                                                        | `[]`                                        |
+| `serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                      | `true`                                      |
+| `serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.       | `""`                                        |
+| `serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                            | `true`                                      |
+| `serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                | `{}`                                        |
+| `podAnnotations`                                    | Pod annotations                                                                                                           | `{}`                                        |
+| `podLabels`                                         | Pod labels                                                                                                                | `{}`                                        |
+| `podSecurityContext.enabled`                        | Enable security context                                                                                                   | `true`                                      |
+| `podSecurityContext.fsGroup`                        | Group ID for the container                                                                                                | `1001`                                      |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                      | `true`                                      |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                | `1001`                                      |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                             | `true`                                      |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                               | `false`                                     |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                   | `true`                                      |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                 | `false`                                     |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                        | `["ALL"]`                                   |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                          | `RuntimeDefault`                            |
+| `command`                                           | Override default container command (useful when using custom images)                                                      | `[]`                                        |
+| `args`                                              | Override default container args (useful when using custom images)                                                         | `[]`                                        |
+| `lifecycleHooks`                                    | Lifecycle for the container to automate configuration before or after startup                                             | `{}`                                        |
+| `resources.limits`                                  | Specify resource limits which the container is not allowed to succeed.                                                    | `{}`                                        |
+| `resources.requests`                                | Specify resource requests which the container needs to spawn.                                                             | `{}`                                        |
+| `livenessProbe.enabled`                             | Enable livenessProbe on Kubernetes event exporter container                                                               | `true`                                      |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                   | `5`                                         |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                          | `5`                                         |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                         | `2`                                         |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                       | `5`                                         |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                       | `1`                                         |
+| `readinessProbe.enabled`                            | Enable readinessProbe on Kubernetes event exporter container                                                              | `true`                                      |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                  | `5`                                         |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                         | `5`                                         |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                        | `2`                                         |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                      | `1`                                         |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                      | `1`                                         |
+| `startupProbe.enabled`                              | Enable startupProbe on Kubernetes event exporter container                                                                | `false`                                     |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                    | `40`                                        |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                           | `10`                                        |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                          | `15`                                        |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                        | `15`                                        |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                        | `1`                                         |
+| `customStartupProbe`                                | Configure startup probe for Kubernetes event exporter pod                                                                 | `{}`                                        |
+| `customLivenessProbe`                               | Configure liveness probe for Kubernetes event exporter pod                                                                | `{}`                                        |
+| `customReadinessProbe`                              | Configure readiness probe for Kubernetes event exporter pod                                                               | `{}`                                        |
+| `nodeSelector`                                      | Node labels for pod assignment                                                                                            | `{}`                                        |
+| `priorityClassName`                                 | Set Priority Class Name to allow priority control over other pods                                                         | `""`                                        |
+| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                            | `""`                                        |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                            | `[]`                                        |
+| `tolerations`                                       | Tolerations for pod assignment                                                                                            | `[]`                                        |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                       | `""`                                        |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                  | `soft`                                      |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `""`                                        |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set.                                                                    | `""`                                        |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                                                 | `[]`                                        |
+| `affinity`                                          | Affinity for pod assignment                                                                                               | `{}`                                        |
+| `updateStrategy.type`                               | Deployment strategy type.                                                                                                 | `RollingUpdate`                             |
+| `extraEnvVars`                                      | Array containing extra env vars to be added to all containers                                                             | `[]`                                        |
+| `extraEnvVarsCM`                                    | ConfigMap containing extra env vars to be added to all containers                                                         | `""`                                        |
+| `extraEnvVarsSecret`                                | Secret containing extra env vars to be added to all containers                                                            | `""`                                        |
+| `extraVolumeMounts`                                 | Array to add extra mounts (normally used with extraVolumes)                                                               | `[]`                                        |
+| `extraVolumes`                                      | Array to add extra volumes                                                                                                | `[]`                                        |
+| `initContainers`                                    | Attach additional init containers to pods                                                                                 | `[]`                                        |
+| `sidecars`                                          | Add additional sidecar containers to pods                                                                                 | `[]`                                        |
+| `metrics.enabled`                                   | Enable exposing  statistics                                                                                               | `false`                                     |
+| `metrics.service.ports.http`                        | Metrics service HTTP port                                                                                                 | `2112`                                      |
+| `metrics.service.annotations`                       | Annotations for enabling prometheus to access the metrics endpoints                                                       | `{}`                                        |
+| `metrics.serviceMonitor.enabled`                    | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                              | `false`                                     |
+| `metrics.serviceMonitor.port`                       | Metrics service HTTP port                                                                                                 | `http`                                      |
+| `metrics.serviceMonitor.endpoints`                  | The endpoint configuration of the ServiceMonitor. Path is mandatory. Interval, timeout and labellings can be overwritten. | `[]`                                        |
+| `metrics.serviceMonitor.path`                       | Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead                                | `""`                                        |
+| `metrics.serviceMonitor.namespace`                  | Namespace which Prometheus is running in                                                                                  | `""`                                        |
+| `metrics.serviceMonitor.interval`                   | Interval at which metrics should be scraped                                                                               | `30s`                                       |
+| `metrics.serviceMonitor.scrapeTimeout`              | Specify the timeout after which the scrape is ended                                                                       | `""`                                        |
+| `metrics.serviceMonitor.labels`                     | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                     | `{}`                                        |
+| `metrics.serviceMonitor.selector`                   | Prometheus instance selector labels                                                                                       | `{}`                                        |
+| `metrics.serviceMonitor.relabelings`                | RelabelConfigs to apply to samples before scraping                                                                        | `[]`                                        |
+| `metrics.serviceMonitor.metricRelabelings`          | MetricRelabelConfigs to apply to samples before ingestion                                                                 | `[]`                                        |
+| `metrics.serviceMonitor.honorLabels`                | honorLabels chooses the metric's labels on collisions with target labels                                                  | `false`                                     |
+| `metrics.serviceMonitor.jobLabel`                   | The name of the label on the target service to use as the job name in prometheus.                                         | `""`                                        |
+| `metrics.prometheusRule.enabled`                    | Create PrometheusRule Resource for scraping metrics using PrometheusOperator                                              | `false`                                     |
+| `metrics.prometheusRule.namespace`                  | Namespace which Prometheus is running in                                                                                  | `""`                                        |
+| `metrics.prometheusRule.labels`                     | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                     | `{}`                                        |
+| `metrics.prometheusRule.groups`                     | Groups, containing the alert rules.                                                                                       | `[]`                                        |
 
 ### Autoscaling
 
@@ -174,7 +196,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -196,7 +218,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
