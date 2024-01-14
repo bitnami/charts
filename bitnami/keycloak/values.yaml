@@ -266,6 +266,9 @@ extraEnvVarsSecret: ""
 ## @param replicaCount Number of Keycloak replicas to deploy
 ##
 replicaCount: 1
+## @param revisionHistoryLimitCount Number of controller revisions to keep
+##
+revisionHistoryLimitCount: 10
 ## @param containerPorts.http Keycloak HTTP container port
 ## @param containerPorts.https Keycloak HTTPS container port
 ## @param containerPorts.infinispan Keycloak infinispan container port

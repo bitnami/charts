@@ -106,6 +106,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jwt.autoGenerate.kubectlImage.pullSecrets`                          | Kubectl image pull secrets                                                                                                                         | `[]`                      |
 | `jwt.autoGenerate.backoffLimit`                                      | set backoff limit of the job                                                                                                                       | `10`                      |
 | `jwt.autoGenerate.extraVolumes`                                      | Optionally specify extra list of additional volumes for the jwt init job                                                                           | `[]`                      |
+| `jwt.autoGenerate.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                                               | `true`                    |
+| `jwt.autoGenerate.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                             | `""`                      |
+| `jwt.autoGenerate.serviceAccount.annotations`                        | Additional Service Account annotations (evaluated as a template)                                                                                   | `{}`                      |
+| `jwt.autoGenerate.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                     | `true`                    |
 | `jwt.autoGenerate.containerSecurityContext.enabled`                  | Enabled jwt init job containers' Security Context                                                                                                  | `true`                    |
 | `jwt.autoGenerate.containerSecurityContext.runAsUser`                | Set jwt init job containers' Security Context runAsUser                                                                                            | `1001`                    |
 | `jwt.autoGenerate.containerSecurityContext.runAsNonRoot`             | Set jwt init job container's Security Context runAsNonRoot                                                                                         | `true`                    |
@@ -734,13 +738,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                          | Description                                                      | Value  |
-| --------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                          | Description                                                      | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Kong sub-chart parameters
 

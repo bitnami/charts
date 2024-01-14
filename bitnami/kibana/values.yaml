@@ -481,7 +481,7 @@ ingress:
 serviceAccount:
   create: true
   name: ""
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   annotations: {}
 
 ## @param containerPorts.http Port to expose at container level

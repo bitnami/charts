@@ -386,7 +386,6 @@ tcpListenOptions:
 
 configuration: |-
   ## Username and password
-  ##
   default_user = {{ .Values.auth.username }}
   {{- if and (not .Values.auth.securePassword) .Values.auth.password }}
   default_pass = {{ .Values.auth.password }}
@@ -488,7 +487,11 @@ configuration: |-
   ## Memory Threshold
   ##
   total_memory_available_override_value = {{ include "rabbitmq.toBytes" .Values.resources.limits.memory }}
+  {{- if (eq .Values.memoryHighWatermark.type "absolute") }}
+  vm_memory_high_watermark.{{ .Values.memoryHighWatermark.type }} = {{ include "rabbitmq.toBytes" .Values.memoryHighWatermark.value }}
+  {{- else if (eq .Values.memoryHighWatermark.type "relative") }}
   vm_memory_high_watermark.{{ .Values.memoryHighWatermark.type }} = {{ .Values.memoryHighWatermark.value }}
+  {{- end }}
   ## TCP Listen Options
   ##
   tcp_listen_options.backlog = {{ .Values.tcpListenOptions.backlog }}
