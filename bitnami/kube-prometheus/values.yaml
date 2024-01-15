@@ -1644,7 +1644,7 @@ alertmanager:
     name: ""
     ## @param alertmanager.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param alertmanager.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -2379,7 +2379,7 @@ blackboxExporter:
     ## @param blackboxExporter.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ## Can be set to false if pods using this serviceAccount do not need to use K8s API
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param blackboxExporter.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
