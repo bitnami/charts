@@ -90,7 +90,7 @@ jobs:
       - vib-publish
     name: Update charts index
     steps:
-      - uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a
+      - uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935
         with:
           path: ~/artifacts
       # If we perform a checkout of the main branch, we will find conflicts with the submodules
