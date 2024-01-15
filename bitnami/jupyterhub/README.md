@@ -24,8 +24,6 @@ This chart bootstraps a [JupyterHub](https://github.com/jupyterhub/jupyterhub) D
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/get-started/understand-default-configuration/).
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -55,6 +53,62 @@ helm uninstall my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
+
+## Architecture
+
+The JupyterHub chart deploys three basic elements:
+
+- JupyterHub: Central element of the chart. Manages authentication and is responsible for creating the Jupyter Notebook instances (called Single User instances). As a consequence, the Hub requires special RBAC privileges in order to access the Kubernetes API to create and manage Deployments.
+- Proxy: This is the external endpoint for users. It manages the communication with the Hub and the Single User instances.
+- Image Puller: In order to improve the Single User instance boot time, a DaemonSet object is deployed that pre-pulls all the necessary images to run the Single User Notebooks.
+
+The following diagram shows a deployed release of the chart:
+
+```text
+                                                         |
+                                                         |
+                                                         |
+                                                         |
+             ------------------                          |
+             |                |                          |
+             |  Image Puller  |<------Pull images to------
+             |                |         all nodes
+             ------------------
+
+    -------------           ---------------
+    |           |           |             |
+    |   Proxy   |---------->|     Hub     |
+    |           |           |             |
+    -------------           ---------------
+```
+
+After accessing the hub and creating a Single User instance, the deployment looks as follows:
+
+```text
+                                                         |
+                                                         |
+                                                         |
+                                                         |
+              ----------------                           |
+             |                |                          |
+             |  Image Puller  |<------Pull images to-----
+             |                |         all nodes
+              ----------------
+    -----------             -------------
+   |           |           |             |
+   |   Proxy   |---------->|     Hub     |
+   |           |           |             |
+    -----------             -------------
+        |                          |
+        |                          |
+        |                          |
+        |     ---------------      |
+        |     | Single User |      |
+         ---->|  Instance   |<-----
+              ---------------
+```
+
+For more information, check the official [JupyterHub documentation](https://github.com/jupyterhub/jupyterhub).
 
 ## Parameters
 
@@ -534,6 +588,62 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/jupyt
 
 ## Configuration and installation details
 
+### Understand the default configuration
+
+This chart deploys three basic elements:
+
+- JupyterHub: Central element of the chart. Manages authentication and is responsible for creating the Jupyter Notebook instances (called Single User instances). As a consequence, the Hub requires special RBAC privileges in order to access the Kubernetes API to create and manage Deployments.
+- Proxy: This is the external endpoint for users. It manages the communication with the Hub and the Single User instances.
+- Image Puller: In order to improve the Single User instance boot time, a DaemonSet object is deployed that pre-pulls all the necessary images to run the Single User Notebooks.
+
+The following diagram shows a deployed release of the chart:
+
+```text
+                                                         |
+                                                         |
+                                                         |
+                                                         |
+             ------------------                          |
+             |                |                          |
+             |  Image Puller  |<------Pull images to------
+             |                |         all nodes
+             ------------------
+
+    -------------           ---------------
+    |           |           |             |
+    |   Proxy   |---------->|     Hub     |
+    |           |           |             |
+    -------------           ---------------
+```
+
+After accessing the hub and creating a Single User instance, the deployment looks as follows:
+
+```text
+                                                         |
+                                                         |
+                                                         |
+                                                         |
+              ----------------                           |
+             |                |                          |
+             |  Image Puller  |<------Pull images to-----
+             |                |         all nodes
+              ----------------
+    -----------             -------------
+   |           |           |             |
+   |   Proxy   |---------->|     Hub     |
+   |           |           |             |
+    -----------             -------------
+        |                          |
+        |                          |
+        |                          |
+        |     ---------------      |
+        |     | Single User |      |
+         ---->|  Instance   |<-----
+              ---------------
+```
+
+For more information, check the official [JupyterHub documentation](https://github.com/jupyterhub/jupyterhub).
+
 ### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
@@ -544,13 +654,34 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 The chart configures the Hub [DummyAuthenticator](https://github.com/jupyterhub/dummyauthenticator) by default, with the password set in the `hub.password` (auto-generated if not set) chart parameter and `user` as the administrator user. In order to change the authentication mechanism, change the `hub.config.JupyterHub` section inside the `hub.configuration` value.
 
-Refer to the [chart documentation for a configuration example](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/configuration/configure-authentication).
+The following example sets the [NativeAuthenticator](https://github.com/jupyterhub/nativeauthenticator) authenticator, and configures an admin user called *test*.
+
+```
+hub:
+  configuration: |
+    ...
+    hub:
+      config:
+        JupyterHub:
+          admin_access: true
+          authenticator_class: nativeauthenticator.NativeAuthenticator
+          Authenticator:
+            admin_users:
+              - test
+    ...
+```
+
+When deploying, you will need to sign up to set the password for the `test`` user.
+
+For more information on Authenticators, check the [official JupyterHub documentation](https://jupyterhub.readthedocs.io/en/stable/getting-started/authenticators-users-basics.html).
 
 ### Configure the Single User instances
 
-As explained in the [documentation](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/get-started/understand-default-configuration/), the Hub is responsible for deploying the Single User instances. The configuration of these instances is passed to the Hub instance via the `hub.configuration` chart parameter. The chart's `singleuser` section can be used to generate the `hub.configuration` value.
+As explained in this [section](#understand-the-default-configuration), the Hub is responsible for deploying the Single User instances. The configuration of these instances is passed to the Hub instance via the `hub.configuration` chart parameter.
 
-For more information, including how to provide a secret or a custom ConfigMap, refer to the [chart documentation on configuring Single User instances](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/configuration/configure-single-user-instances/).
+In order to make the chart follow standards and to ease the generation of this configuration file, the chart has a `singleuser` section, which is then used for generating the `hub.configuration` value. This value can be easily overridden by modifying its default value or by providing a secret via the `hub.existingSecret` value. In this case, all the settings in the `singleuser` section will be ignored.
+
+All the settings specified in the `hub.configuration` value are consumed by the `jupyter_config.py` script available in the [templates/hub/configmap.yaml](https://github.com/bitnami/charts/blob/main/bitnami/jupyterhub/templates/hub/configmap.yaml) file. This script can be changed by providing a custom ConfigMap via the `hub.existingConfigmap` value. The [official JupyterHub documentation](https://jupyterhub.readthedocs.io/en/stable/reference/config-examples.html) has more examples of the `jupyter_config.py` script.
 
 ### Restrict traffic using NetworkPolicies
 
@@ -586,7 +717,11 @@ Refer to the [chart documentation for more information on working with TLS](http
 
 ### Set pod affinity
 
-This chart allows you to set your custom affinity using the `hub.affinity` and `proxy.affinity` parameters. Refer to the [chart documentation on pod affinity](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/configuration/configure-pod-affinity).
+This chart allows you to set your custom affinity using the `*.affinity` parameter(s).
+
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available in the `bitnami/common` chart. To do so, set the `*.podAffinityPreset`, `*.podAntiAffinityPreset`, or `*.nodeAffinityPreset` parameters.
+
+[Learn more about pod affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 ### Deploy extra resources
 

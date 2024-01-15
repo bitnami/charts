@@ -443,7 +443,7 @@ externalDatabase.database=mydatabase
 externalDatabase.port=3306
 ```
 
-Refer to the [documentation on using an external database with WordPress](https://docs.bitnami.com/kubernetes/apps/wordpress/configuration/use-external-database/) and the [tutorial on integrating WordPress with a managed cloud database](https://docs.bitnami.com/tutorials/secure-wordpress-kubernetes-managed-database-ssl-upgrades/) for more information.
+Refer to the [tutorial on integrating WordPress with a managed cloud database](https://docs.bitnami.com/tutorials/secure-wordpress-kubernetes-managed-database-ssl-upgrades/) for more information.
 
 ### Memcached
 
@@ -476,7 +476,19 @@ For performance and security reasons, it is a good practice to configure Apache 
 
 By default, the container image includes all the default `.htaccess` files in WordPress (together with the default plugins). To enable this feature, install the chart with the value `allowOverrideNone=yes`.
 
-[Learn more about working with `.htaccess` files](https://docs.bitnami.com/kubernetes/apps/wordpress/configuration/understand-htaccess/).
+However, some plugins may include `.htaccess` directives that will not be loaded when `AllowOverride` is set to `None`. To make them work, create a custom `wordpress-htaccess.conf` file with all the required directives. After creating it, create a Kubernetes ConfigMap with it (for example, named `custom-htaccess`) and install the chart with the correct parameters as shown below:
+
+```text
+    allowOverrideNone=true
+    customHTAccessCM=custom-htaccess
+```
+
+Some plugins permit editing the `.htaccess` file and it may be necessary to persist it in order to keep those edits. To make these plugins work, set the `htaccessPersistenceEnabled` parameter as shown below:
+
+```text
+    allowOverrideNone=false
+    htaccessPersistenceEnabled=true
+```
 
 ## Persistence
 

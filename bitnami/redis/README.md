@@ -631,7 +631,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Use a different Redis&reg; version
 
-To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/redis/configuration/change-image-version/).
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
 
 ### Bootstrapping with an External Cluster
 
@@ -733,13 +733,27 @@ It's recommended to only change `master.count` if you know what you are doing.
 
 ### Using a password file
 
-To use a password file for Redis&reg; you need to create a secret containing the password and then deploy the chart using that secret.
+To use a password file for Redis&reg; you need to create a secret containing the password and then deploy the chart using that secret. Follow these instructions:
 
-Refer to the chart documentation for more information on [using a password file for Redis&reg;](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/use-password-file/).
+- Create the secret with the password. It is important that the file with the password must be called `redis-password`.
+
+```console
+kubectl create secret generic redis-password-secret --from-file=redis-password.yaml
+```
+
+- Deploy the Helm Chart using the secret name as parameter:
+
+```text
+usePassword=true
+usePasswordFile=true
+existingSecret=redis-password-secret
+sentinels.enabled=true
+metrics.enabled=true
+```
 
 ### Securing traffic using TLS
 
-TLS support can be enabled in the chart by specifying the `tls.` parameters while creating a release. The following parameters should be configured to properly enable the TLS support in the chart:
+TLS support can be enabled in the chart by specifying the `tls.` parameters while creating a release. The following parameters should be configured to properly enable the TLS support in the cluster:
 
 - `tls.enabled`: Enable TLS support. Defaults to `false`
 - `tls.existingSecret`: Name of the secret that contains the certificates. No defaults.
@@ -747,7 +761,23 @@ TLS support can be enabled in the chart by specifying the `tls.` parameters whil
 - `tls.certKeyFilename`: Certificate key filename. No defaults.
 - `tls.certCAFilename`: CA Certificate filename. No defaults.
 
-Refer to the chart documentation for more information on [creating the secret and a TLS deployment example](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/enable-tls/).
+For example:
+
+First, create the secret with the certificates files:
+
+```console
+kubectl create secret generic certificates-tls-secret --from-file=./cert.pem --from-file=./cert.key --from-file=./ca.pem
+```
+
+Then, use the following parameters:
+
+```console
+tls.enabled="true"
+tls.existingSecret="certificates-tls-secret"
+tls.certFilename="cert.pem"
+tls.certKeyFilename="cert.key"
+tls.certCAFilename="ca.pem"
+```
 
 ### Metrics
 
@@ -765,9 +795,31 @@ tls-ca-cert-file
 
 ### Host Kernel Settings
 
-Redis&reg; may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages.
+Redis&reg; may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages. To do so, you can set up a privileged `initContainer` with the `sysctlImage` config values, for example:
 
-Refer to the chart documentation for more information on [configuring host kernel settings with an example](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/configure-kernel-settings/).
+```
+sysctlImage:
+  enabled: true
+  mountHostSys: true
+  command:
+    - /bin/sh
+    - -c
+    - |-
+      install_packages procps
+      sysctl -w net.core.somaxconn=10000
+      echo never > /host-sys/kernel/mm/transparent_hugepage/enabled
+```
+
+Alternatively, for Kubernetes 1.12+ you can set `securityContext.sysctls` which will configure `sysctls` for master and slave pods. Example:
+
+```
+securityContext:
+  sysctls:
+  - name: net.core.somaxconn
+    value: "10000"
+```
+
+Note that this will not disable transparent huge tables.
 
 ## Persistence
 
@@ -787,13 +839,103 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 
 ## Backup and restore
 
-Refer to the chart documentation for more information on [backing up and restoring Redis&reg; deployments](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/backup-restore/).
+To backup and restore Redis deployments on Kubernetes, you will need to create a snapshot of the data in the source cluster, and later restore it in a new cluster with the new parameters. Follow the instructions below:
+
+### Step 1: Backup the deployment
+
+* Connect to one of the nodes and start the Redis CLI tool. Then, run the commands below:
+
+        $ kubectl exec -it my-release-master-0 bash
+        $ redis-cli
+        127.0.0.1:6379> auth your_current_redis_password
+        OK
+        127.0.0.1:6379> save
+        OK
+
+* Copy the dump file from the Redis node:
+
+        $ kubectl cp my-release-master-0:/data/dump.rdb dump.rdb -c redis
+
+### Step 2: Restore the data on the destination cluster
+
+To restore the data in a new cluster, you will need to create a PVC and then upload the *dump.rdb* file to the new volume.
+
+Follow the following steps:
+
+* In the [*values.yaml*](https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml) file set the *appendonly* parameter to *no*. You can skip this step if it is already configured as *no*
+
+        commonConfiguration: |-
+           # Enable AOF https://redis.io/topics/persistence#append-only-file
+           appendonly no
+           # Disable RDB persistence, AOF persistence already enabled.
+           save ""
+
+    > *Note that the `Enable AOF` comment belongs to the original config file and what you're actually doing is disabling it. This change will only be neccessary for the temporal cluster you're creating to upload the dump.*
+
+* Start the new cluster to create the PVCs. Use the command below as an example:
+
+        $ helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
+
+* Now that the PVC were created, stop it and copy the *dump.rdp* file on the persisted data by using a helping pod.
+
+        $ helm delete new-redis
+
+        $ kubectl run --generator=run-pod/v1 -i --rm --tty volpod --overrides='
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "name": "redisvolpod"
+            },
+            "spec": {
+                "containers": [{
+                   "command": [
+                        "tail",
+                        "-f",
+                        "/dev/null"
+                   ],
+                   "image": "bitnami/minideb",
+                   "name": "mycontainer",
+                   "volumeMounts": [{
+                       "mountPath": "/mnt",
+                       "name": "redisdata"
+                    }]
+                }],
+                "restartPolicy": "Never",
+                "volumes": [{
+                    "name": "redisdata",
+                    "persistentVolumeClaim": {
+                        "claimName": "redis-data-new-redis-master-0"
+                    }
+                }]
+            }
+        }' --image="bitnami/minideb"
+
+        $ kubectl cp dump.rdb redisvolpod:/mnt/dump.rdb
+        $ kubectl delete pod volpod
+
+* Restart the cluster:
+
+    > **INFO:** The *appendonly* parameter can be safely restored to your desired value.
+
+        $ helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
 
 ## NetworkPolicy
 
 To enable network policy for Redis&reg;, install [a networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy#before-you-begin), and set `networkPolicy.enabled` to `true`.
 
-Refer to the chart documenation for more information on [enabling the network policy in Redis&reg; deployments](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/enable-network-policy/).
+With NetworkPolicy enabled, only pods with the generated client label will be able to connect to Redis. This label will be displayed in the output after a successful install.
+
+With `networkPolicy.ingressNSMatchLabels` pods from other namespaces can connect to Redis. Set `networkPolicy.ingressNSPodMatchLabels` to match pod labels in matched namespace. For example, for a namespace labeled `redis=external` and pods in that namespace labeled `redis-client=true` the fields should be set:
+
+```
+networkPolicy:
+  enabled: true
+  ingressNSMatchLabels:
+    redis: external
+  ingressNSPodMatchLabels:
+    redis-client: true
+```
 
 ### Setting Pod's affinity
 

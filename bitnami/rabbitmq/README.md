@@ -426,11 +426,24 @@ To horizontally scale this chart once it has been deployed, two options are avai
 - Use the `kubectl scale` command.
 - Upgrade the chart modifying the `replicaCount` parameter.
 
+```
+    replicaCount=3
+    auth.password="$RABBITMQ_PASSWORD"
+    auth.erlangCookie="$RABBITMQ_ERLANG_COOKIE"
+```
+
+> NOTE: It is mandatory to specify the password and Erlang cookie that was set the first time the chart was installed when upgrading the chart. Otherwise, new pods won't be able to join the cluster.
+
+When scaling down the solution, unnecessary RabbitMQ nodes are automatically stopped, but they are not removed from the cluster. These nodes must be manually removed via the `rabbitmqctl forget_cluster_node` command.
+
+For instance, if RabbitMQ was initially installed with three replicas and then scaled down to two replicas, run the commands below (assuming that the release name is `rabbitmq` and the clustering type is `hostname`):
+
+```
+    $ kubectl exec rabbitmq-0 --container rabbitmq -- rabbitmqctl forget_cluster_node rabbit@rabbitmq-2.rabbitmq-headless.default.svc.cluster.local
+    $ kubectl delete pvc data-rabbitmq-2
+```
+
 > NOTE: It is mandatory to specify the password and Erlang cookie that was set the first time the chart was installed when upgrading the chart.
-
-When scaling down the solution, unnecessary RabbitMQ nodes are automatically stopped, but they are not removed from the cluster. You need to manually remove them by running the `rabbitmqctl forget_cluster_node` command.
-
-Refer to the chart documentation for [more information on scaling the Rabbit cluster horizontally](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq/administration/scale-deployment/).
 
 ### Enable TLS support
 
@@ -449,7 +462,7 @@ Refer to the chart documentation for [more information and examples of enabling 
 
 ### Load custom definitions
 
-It is possible to [load a RabbitMQ definitions file to configure RabbitMQ](https://www.rabbitmq.com/management.html#load-definitions).
+It is possible to [load a RabbitMQ definitions file to configure RabbitMQ](https://www.rabbitmq.com/management.html#load-definitions). Follow the steps below:
 
 Because definitions may contain RabbitMQ credentials, [store the JSON as a Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-files-from-a-pod). Within the secret's data, choose a key name that corresponds with the desired load definitions filename (i.e. `load_definition.json`) and use the JSON object as the value.
 
@@ -457,13 +470,47 @@ Next, specify the `load_definitions` property as an `extraConfiguration` pointin
 
 > NOTE: Loading a definition will take precedence over any configuration done through [Helm values](#parameters).
 
-If needed, you can use `extraSecrets` to let the chart create the secret for you. This way, you don't need to manually create it before deploying a release. These secrets can also be templated to use supplied chart values.
+If needed, you can use `extraSecrets` to let the chart create the secret for you. This way, you don't need to manually create it before deploying a release. These secrets can also be templated to use supplied chart values. Here is an example:
 
-Refer to the chart documentation for [more information and configuration examples of loading custom definitions](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq/configuration/load-files/).
+```
+auth:
+  password: CHANGEME
+extraSecrets:
+  load-definition:
+    load_definition.json: |
+      {
+        "users": [
+          {
+            "name": "{{ .Values.auth.username }}",
+            "password": "{{ .Values.auth.password }}",
+            "tags": "administrator"
+          }
+        ],
+        "vhosts": [
+          {
+            "name": "/"
+          }
+        ]
+      }
+loadDefinition:
+  enabled: true
+  existingSecret: load-definition
+extraConfiguration: |
+  load_definitions = /app/load_definition.json
+```
 
 ### Configure LDAP support
 
-LDAP support can be enabled in the chart by specifying the `ldap.*` parameters while creating a release. Refer to the chart documentation for [more information and a configuration example](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq/configuration/configure-ldap/).
+LDAP support can be enabled in the chart by specifying the `ldap.*` parameters while creating a release. For example:
+
+```
+ldap.enabled="true"
+ldap.server="my-ldap-server"
+ldap.port="389"
+ldap.user_dn_pattern="cn=${username},dc=example,dc=org"
+```
+
+If `ldap.tls.enabled` is set to true, consider using `ldap.port=636` and checking the settings in the `advancedConfiguration` chart parameters.
 
 ### Configure memory high watermark
 
@@ -504,7 +551,10 @@ The Bitnami Docker RabbitMQ image ships a set of plugins by default. By default,
 
 To enable extra plugins, set the `extraPlugins` parameter with the list of plugins you want to enable. In addition to this, the `communityPlugins` parameter can be used to specify a list of URLs (separated by spaces) for custom plugins for RabbitMQ.
 
-Refer to the chart documentation for [more information on using RabbitMQ plugins](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq/configuration/use-plugins/).
+```text
+communityPlugins="http://URL-TO-PLUGIN/"
+extraPlugins="my-custom-plugin"
+```
 
 ### Advanced logging
 

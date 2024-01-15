@@ -432,7 +432,19 @@ The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
 These scripts are treated differently depending on their extension. While `.sh` scripts are executed on all the nodes, `.sql` and `.sql.gz` scripts are only executed on the primary nodes. This is because `.sh` scripts support conditional tests to identify the type of node they are running on, while such tests are not supported in `.sql` or `.sql.gz` files.
 
-[Refer to the chart documentation for more information and a usage example](https://docs.bitnami.com/kubernetes/infrastructure/mariadb/configuration/customize-new-instance/).
+When using a `.sh` script, you may wish to perform a "one-time" action like creating a database. This can be achieved by adding a condition in the script to ensure that it is executed only on one node, as shown in the example below:
+
+```
+initdbScripts:
+  my_init_script.sh: |
+    #!/bin/sh
+    if [[ $(hostname) == *primary* ]]; then
+      echo "Primary node"
+      mysql -P 3306 -uroot -prandompassword -e "create database new_database";
+    else
+      echo "No primary node"
+    fi
+```
 
 ### Sidecars and Init Containers
 

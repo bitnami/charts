@@ -237,9 +237,58 @@ Bitnami will release a new chart updating its containers if a new version of the
 By default, HAProxy is deployed with a sample, non-functional, configuration. You will need to edit the following values to adapt it to your use case:
 
 - Set the configuration to be injected in the `haproxy.cfg` file by changing the `configuration` parameter. Alternatively, you can provide an existing ConfigMap with `haproxy.cfg` by using the `existingConfigmap` parameter.
+
+  The example below configures HAProxy to forward all requests to port 8080 to a service called *service1:8080* (it is assumed that this is accessible from inside the cluster).
+
+  ```yaml
+  configuration: |
+    global
+      log 127.0.0.1 local2
+      maxconn 4096
+
+    defaults
+      mode http
+      log global
+      option httplog
+      option dontlognull
+      option http-server-close
+      option forwardfor except 127.0.0.0/8
+      option redispatch
+      retries 3
+      timeout http-request 20s
+      timeout queue 1m
+      timeout connect 10s
+      timeout client 1m
+      timeout server 1m
+      timeout http-keep-alive 30s
+      timeout check 10s
+      maxconn 3000
+
+    frontend fe_http
+      option forwardfor except 127.0.0.1
+      option httpclose
+      bind *:8080
+      default_backend be_http
+
+    backend be_http
+      balance roundrobin
+      server nginx service:8080 check port 8080
+  ```
+
 - Based on your HAProxy configuration, edit the `containerPorts` and `service.ports` parameters. In the `containerPorts` parameter, set all the ports that the HAProxy configuration uses, and in the `service.ports` parameter, set the ports to be externally exposed.
 
-Refer to the [chart documentation for a more detailed configuration example](https://docs.bitnami.com/kubernetes/infrastructure/haproxy/get-started/configure-proxy).
+  For the example above, the configuration would look like this:
+
+  ```yaml
+  service:
+    - name: http
+      port: 80 # We use port 80 in the service
+      targetPort: http
+
+  containerPorts:
+    - name: http
+      containerPort: 8080
+  ```
 
 ### Add extra environment variables
 

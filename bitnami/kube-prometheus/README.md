@@ -815,15 +815,39 @@ prometheus.additionalScrapeConfigsExternal.key
 
 It is possible to inject externally managed scrape configurations via a Secret by setting `prometheus.additionalScrapeConfigs.enabled` to `true` and `prometheus.additionalScrapeConfigs.type` to `external`. The secret must exist in the same namespace as the chart deployment. Set the secret name using the parameter `prometheus.additionalScrapeConfigs.external.name`, and the key containing the additional scrape configuration using the `prometheus.additionalScrapeConfigs.external.key`.
 
+```
+prometheus.additionalScrapeConfigs.enabled=true
+prometheus.additionalScrapeConfigs.type=external
+prometheus.additionalScrapeConfigs.external.name=kube-prometheus-prometheus-scrape-config
+prometheus.additionalScrapeConfigs.external.key=additional-scrape-configs.yaml
+```
+
 It is also possible to define scrape configuratios to be managed by the Helm chart by setting `prometheus.additionalScrapeConfigs.enabled` to `true` and `prometheus.additionalScrapeConfigs.type` to `internal`. You can then use `prometheus.additionalScrapeConfigs.internal.jobList` to define a list of additional scrape jobs for Prometheus.
 
-Refer to the [chart documentation on customizing scrape configurations](https://docs.bitnami.com/kubernetes/apps/prometheus-operator/configuration/customize-scrape-configurations) for an example.
+```
+prometheus.additionalScrapeConfigs.enabled=true
+prometheus.additionalScrapeConfigs.type=internal
+prometheus.additionalScrapeConfigs.internal.jobList=
+      - job_name: 'opentelemetry-collector'
+        # metrics_path defaults to '/metrics'
+        # scheme defaults to 'http'.
+        static_configs:
+          - targets: ['opentelemetry-collector:8889']
+```
+
+For more information, see the [additional scrape configuration documentation](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/additional-scrape-config.md).
 
 ### Additional alert relabel configurations
 
-It is possible to inject externally managed Prometheus alert relabel configurations via a Secret by setting `prometheus.additionalAlertRelabelConfigsExternal.enabled` to `true`. The secret must exist in the same namespace as the chart deployment. Set the secret name using the parameter `prometheus.additionalAlertRelabelConfigsExternal.name`, and the key containing the additional alert relabel configuration using the `prometheus.additionalAlertRelabelConfigsExternal.key`.
+It is possible to inject externally managed Prometheus alert relabel configurations via a Secret by setting `prometheus.additionalAlertRelabelConfigsExternal.enabled` to `true`. The secret must exist in the same namespace as the chart deployment.
 
-Refer to the [chart documentation on customizing alert configurations](https://docs.bitnami.com/kubernetes/apps/prometheus-operator/configuration/customize-alert-configurations) for an example.
+Set the secret name using the parameter `prometheus.additionalAlertRelabelConfigsExternal.name`, and the key containing the additional alert relabel configuration using the `prometheus.additionalAlertRelabelConfigsExternal.key`. For instance, if you created a secret named `kube-prometheus-prometheus-alert-relabel-config` and it contains a file named `additional-alert-relabel-configs.yaml`, use the parameters below:
+
+```
+prometheus.additionalAlertRelabelConfigsExternal.enabled=true
+prometheus.additionalAlertRelabelConfigsExternal.name=kube-prometheus-prometheus-alert-relabel-config
+prometheus.additionalAlertRelabelConfigsExternal.key=additional-alert-relabel-configs.yaml
+```
 
 ### Set Pod affinity
 

@@ -61,7 +61,69 @@ architecture="standalone"
 architecture="replicaset"
 ```
 
-Refer to the [chart documentation for more information on each of these architectures](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/get-started/understand-architecture/).
+### Standalone architecture
+
+The *standalone* architecture installs a deployment (or StatefulSet) with one MongoDB&reg; server (it cannot be scaled):
+
+```text
+     ----------------
+    |   MongoDB&reg; |
+    |      svc       |
+     ----------------
+            |
+            v
+       ------------
+      |MongoDB&reg;|
+      |   Server   |
+      |    Pod     |
+       -----------
+```
+
+### Replicaset architecture
+
+The chart also supports the *replicaset* architecture with and without a MongoDB(&reg;) Arbiter:
+
+When the MongoDB(&reg;) Arbiter is enabled, the chart installs two StatefulSets: A StatefulSet with N MongoDB(&reg;) servers (organised with one primary and N-1 secondary nodes), and a StatefulSet with one MongoDB(&reg;) arbiter node (it cannot be scaled).
+
+```text
+     ----------------   ----------------   ----------------      -------------
+    | MongoDB&reg; 0 | | MongoDB&reg; 1 | | MongoDB&reg; N |    |   Arbiter   |
+    |  external svc  | |  external svc  | |  external svc  |    |     svc     |
+     ----------------   ----------------   ----------------      -------------
+            |                  |                  |                    |
+            v                  v                  v                    v
+     ----------------   ----------------   ----------------      --------------
+    | MongoDB&reg; 0 | | MongoDB&reg; 1 | | MongoDB&reg; N |    | MongoDB&reg; |
+    |    Server      | |     Server     | |     Server     |    |    Arbiter   |
+    |     Pod        | |      Pod       | |      Pod       |    |     Pod      |
+     ----------------   ----------------   ----------------      --------------
+          primary           secondary         secondary
+```
+
+The PSA model is useful when the third Availability Zone cannot hold a full MongoDB(&reg;) instance. The MongoDB(&reg;) Arbiter as decision maker is lightweight and can run alongside other workloads.
+
+> NOTE: An update takes your MongoDB(&reg;) replicaset offline if the Arbiter is enabled and the number of MongoDB(&reg;) replicas is two. Helm applies updates to the StatefulSets for the MongoDB(&reg;) instance and the Arbiter at the same time so you lose two out of three quorum votes.
+
+Without the Arbiter, the chart deploys a single statefulset with N MongoDB(&reg;) servers (organised with one primary and N-1 secondary nodes).
+
+```text
+     ----------------   ----------------   ----------------
+    | MongoDB&reg; 0 | | MongoDB&reg; 1 | | MongoDB&reg; N |
+    |  external svc  | |  external svc  | |  external svc  |
+     ----------------   ----------------   ----------------
+            |                  |                  |
+            v                  v                  v
+     ----------------   ----------------   ----------------
+    | MongoDB&reg; 0 | | MongoDB&reg; 1 | | MongoDB&reg; N |
+    |    Server      | |     Server     | |     Server     |
+    |     Pod        | |      Pod       | |      Pod       |
+     ----------------   ----------------   ----------------
+          primary           secondary         secondary
+```
+
+There are no services load balancing requests between MongoDB(&reg;) nodes; instead, each node has an associated service to access them individually.
+
+> NOTE: Although the first replica is initially assigned the primary role, any of the secondary nodes can become the primary if it is down, or during upgrades. Do not make any assumption about what replica has the primary role. Instead, configure your MongoDB(&reg;) client with the list of MongoDB(&reg;) hostnames so it can dynamically choose the node to send requests.
 
 ## Parameters
 
@@ -681,7 +743,49 @@ In order to access MongoDB(&reg;) nodes from outside the cluster when using a re
 - Using LoadBalancer services
 - Using NodePort services.
 
-Refer to the [chart documentation for more details and configuration examples](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/configuration/configure-external-access-replicaset/).
+#### Use LoadBalancer services
+
+Two alternatives are available to use *LoadBalancer* services:
+
+* Use random load balancer IP addresses using an *initContainer* that waits for the IP addresses to be ready and discovers them automatically. An example deployment configuration is shown below:
+
+        architecture=replicaset
+        replicaCount=2
+        externalAccess.enabled=true
+        externalAccess.service.type=LoadBalancer
+        externalAccess.service.port=27017
+        externalAccess.autoDiscovery.enabled=true
+        serviceAccount.create=true
+        rbac.create=true
+
+    > NOTE: This option requires creating RBAC rules on clusters where RBAC policies are enabled.
+
+* Manually specify the load balancer IP addresses. An example deployment configuration is shown below, with the placeholder EXTERNAL-IP-ADDRESS-X used in place of the load balancer IP addresses:
+
+        architecture=replicaset
+        replicaCount=2
+        externalAccess.enabled=true
+        externalAccess.service.type=LoadBalancer
+        externalAccess.service.port=27017
+        externalAccess.service.loadBalancerIPs[0]='EXTERNAL-IP-ADDRESS-1'
+        externalAccess.service.loadBalancerIPs[1]='EXTERNAL-IP-ADDRESS-2'
+
+    > NOTE: This option requires knowing the load balancer IP addresses, so that each MongoDB&reg; node's advertised hostname is configured with it.
+
+#### Use NodePort services
+
+Manually specify the node ports to use. An example deployment configuration is shown below, with the placeholder NODE-PORT-X used in place of the node ports:
+
+        architecture=replicaset
+        replicaCount=2
+        externalAccess.enabled=true
+        externalAccess.service.type=NodePort
+        externalAccess.service.nodePorts[0]='NODE-PORT-1'
+        externalAccess.service.nodePorts[1]='NODE-PORT-2'
+
+    > NOTE: This option requires knowing the node ports that will be exposed, so each MongoDB&reg; node's advertised hostname is configured with it.
+
+The pod will try to get the external IP address of the node using the command `curl -s https://ipinfo.io/IP-ADDRESS` unless the `externalAccess.service.domain` parameter is set.
 
 ### Bootstrapping with an External Cluster
 
@@ -724,17 +828,54 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 
 ## Use custom Prometheus rules
 
-Custom Prometheus rules can be defined for the Prometheus Operator by using the `prometheusRule` parameter.
+Custom Prometheus rules can be defined for the Prometheus Operator by using the `prometheusRule` parameter. A basic configuration example is shown below:
 
-Refer to the [chart documentation for an example of a custom rule](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/administration/use-prometheus-rules/).
+```text
+    metrics:
+      enabled: true
+      prometheusRule:
+        enabled: true
+        rules:
+        - name: rule1
+          rules:
+          - alert: HighRequestLatency
+            expr: job:request_latency_seconds:mean5m{job="myjob"} > 0.5
+            for: 10m
+            labels:
+              severity: page
+            annotations:
+              summary: High request latency
+```
 
 ## Enable SSL/TLS
 
 This chart supports enabling SSL/TLS between nodes in the cluster, as well as between MongoDB(&reg;) clients and nodes, by setting the `MONGODB_EXTRA_FLAGS` and `MONGODB_CLIENT_EXTRA_FLAGS` container environment variables, together with the correct `MONGODB_ADVERTISED_HOSTNAME`. To enable full TLS encryption, set the `tls.enabled` parameter to `true`.
 
-Refer to the [chart documentation for more information on enabling TLS](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/administration/enable-tls/).
+### Generate the self-signed certificates via pre-install Helm hooks
 
-### Set Pod affinity
+The `secrets-ca.yaml` file utilizes the Helm "pre-install" hook to ensure that the certificates will only be generated on chart install.
+
+The `genCA()` function will create a new self-signed x509 certificate authority. The `genSignedCert()` function creates an object with the certificate and key, which are base64-encoded and used in a YAML-like object. The `genSignedCert()` function is passed the CN, an empty IP list (the nil part), the validity and the CA created previously.
+
+A Kubernetes Secret is used to hold the signed certificate created above, and the `initContainer` sets up the rest. Using Helm's hook annotations ensures that the certificates will only be generated on chart install. This will prevent overriding the certificates if the chart is upgraded.
+
+### Use your own CA
+
+To use your own CA, set `tls.caCert` and `tls.caKey` with appropriate base64 encoded data. The `secrets-ca.yaml` file will utilize this data to create the Secret.
+
+> NOTE: Currently, only RSA private keys are supported.
+
+### Access the cluster
+
+To access the cluster, enable the init container which generates the MongoDB(&reg;) server/client PEM key needed to access the cluster. Please be sure to include the `$my_hostname` section with your actual hostname, and the alternative hostnames section should contain the hostnames that should be allowed access to the MongoDB(&reg;) replicaset. Additionally, if external access is enabled, the load balancer IP addresses are added to the alternative names list.
+
+> NOTE: You will be generating self-signed certificates for the MongoDB(&reg;) deployment. The init container generates a new MongoDB(&reg;) private key which will be used to create a Certificate Authority (CA) and the public certificate for the CA. The Certificate Signing Request will be created as well and signed using the private key of the CA previously created. Finally, the PEM bundle will be created using the private key and public certificate. This process will be repeated for each node in the cluster.
+
+### Start the cluster
+
+After the certificates have been generated and made available to the containers at the correct mount points, the MongoDB(&reg;) server will be started with TLS enabled. The options for the TLS mode will be one of `disabled`, `allowTLS`, `preferTLS`, or `requireTLS`. This value can be changed via the `MONGODB_EXTRA_FLAGS` field using the `tlsMode` parameter. The client should now be able to connect to the TLS-enabled cluster with the provided certificates.
+
+## Set Pod affinity
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
