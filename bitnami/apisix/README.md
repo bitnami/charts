@@ -562,12 +562,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### APISIX Dashboard RBAC Parameters
 
-| Name                                                    | Description                                                      | Value  |
-| ------------------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `dashboard.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `dashboard.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `dashboard.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `dashboard.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                                    | Description                                                      | Value   |
+| ------------------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `dashboard.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `dashboard.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `dashboard.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `dashboard.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### APISIX Ingress Controller Parameters
 
