@@ -182,7 +182,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources                                                       | `false`          |
 | `client.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                     | `[]`             |
 | `client.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                     | `[]`             |
-| `client.serviceAccount.create`                             | Enable creation of ServiceAccount for Client pods                                                | `false`          |
+| `client.serviceAccount.create`                             | Enable creation of ServiceAccount for Client pods                                                | `true`           |
 | `client.serviceAccount.name`                               | The name of the ServiceAccount to use                                                            | `""`             |
 | `client.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                           | `false`          |
 | `client.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                             | `{}`             |
@@ -297,7 +297,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.externalAccess.service.labels`                   | Additional custom labels for Worker service                                                                                               | `{}`        |
 | `worker.externalAccess.service.annotations`              | Additional custom annotations for Worker service                                                                                          | `{}`        |
 | `worker.externalAccess.service.extraPorts`               | Extra ports to expose in the Worker service                                                                                               | `[]`        |
-| `worker.serviceAccount.create`                           | Enable creation of ServiceAccount for Data Coordinator pods                                                                               | `false`     |
+| `worker.serviceAccount.create`                           | Enable creation of ServiceAccount for Data Coordinator pods                                                                               | `true`      |
 | `worker.serviceAccount.name`                             | The name of the ServiceAccount to use                                                                                                     | `""`        |
 | `worker.serviceAccount.automountServiceAccountToken`     | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                    | `false`     |
 | `worker.serviceAccount.annotations`                      | Additional custom annotations for the ServiceAccount                                                                                      | `{}`        |
