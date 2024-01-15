@@ -297,7 +297,7 @@ jobmanager:
     annotations: {}
     ## @param jobmanager.serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param jobmanager.podSecurityContext.enabled Enabled Apache Flink pods' Security Context
@@ -598,7 +598,7 @@ taskmanager:
     annotations: {}
     ## @param taskmanager.serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param taskmanager.podSecurityContext.enabled Enabled Apache Flink pods' Security Context
