@@ -228,9 +228,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                  | `None`                   |
 | `master.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                           | `{}`                     |
 | `master.terminationGracePeriodSeconds`                     | Integer setting the termination grace period for the redis-master pods                                | `30`                     |
-| `master.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                  | `false`                  |
+| `master.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                  | `true`                   |
 | `master.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                | `""`                     |
-| `master.serviceAccount.automountServiceAccountToken`       | Whether to auto mount the service account token                                                       | `true`                   |
+| `master.serviceAccount.automountServiceAccountToken`       | Whether to auto mount the service account token                                                       | `false`                  |
 | `master.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                  | `{}`                     |
 
 ### Redis&reg; replicas configuration parameters
@@ -346,9 +346,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.autoscaling.maxReplicas`                           | Maximum replicas for the pod autoscaling                                                                | `11`                     |
 | `replica.autoscaling.targetCPU`                             | Percentage of CPU to consider when autoscaling                                                          | `""`                     |
 | `replica.autoscaling.targetMemory`                          | Percentage of Memory to consider when autoscaling                                                       | `""`                     |
-| `replica.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                    | `false`                  |
+| `replica.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                    | `true`                   |
 | `replica.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                  | `""`                     |
-| `replica.serviceAccount.automountServiceAccountToken`       | Whether to auto mount the service account token                                                         | `true`                   |
+| `replica.serviceAccount.automountServiceAccountToken`       | Whether to auto mount the service account token                                                         | `false`                  |
 | `replica.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                    | `{}`                     |
 
 ### Redis&reg; Sentinel configuration parameters
@@ -466,7 +466,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.rules`                                    | Custom RBAC rules to set                                                                                                                    | `[]`    |
 | `serviceAccount.create`                         | Specifies whether a ServiceAccount should be created                                                                                        | `true`  |
 | `serviceAccount.name`                           | The name of the ServiceAccount to use.                                                                                                      | `""`    |
-| `serviceAccount.automountServiceAccountToken`   | Whether to auto mount the service account token                                                                                             | `true`  |
+| `serviceAccount.automountServiceAccountToken`   | Whether to auto mount the service account token                                                                                             | `false` |
 | `serviceAccount.annotations`                    | Additional custom annotations for the ServiceAccount                                                                                        | `{}`    |
 | `pdb.create`                                    | Specifies whether a PodDisruptionBudget should be created                                                                                   | `false` |
 | `pdb.minAvailable`                              | Min number of pods that must still be available after the eviction                                                                          | `1`     |
