@@ -254,7 +254,6 @@ containerPorts:
 ## @param podSecurityContext.enabled Enabled ASP.NET Core pods' Security Context
 ## @param podSecurityContext.sysctls Set namespaced sysctls for the ASP.NET Core pods
 ## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
-## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
 ## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Set Security Context fsGroup
 ##
@@ -267,7 +266,6 @@ podSecurityContext:
   ##
   sysctls: []
   fsGroupChangePolicy: Always
-  sysctls: []
   supplementalGroups: []
   fsGroup: 0
 ## Configure Container Security Context (only main container)
