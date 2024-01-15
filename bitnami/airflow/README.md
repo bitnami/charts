@@ -478,7 +478,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `postgresql.architecture`                    | PostgreSQL architecture (`standalone` or `replication`)                                                | `standalone`      |
 | `externalDatabase.host`                      | Database host                                                                                          | `localhost`       |
 | `externalDatabase.port`                      | Database port number                                                                                   | `5432`            |
-| `externalDatabase.user`                      | Non-root username for Airflow                                                                          | `bn_airflow`      |
+| `externalDatabase.user`                      | Non-root username for Airflow in the username@host format                                              | `bn_airflow`      |
 | `externalDatabase.password`                  | Password for the non-root username for Airflow                                                         | `""`              |
 | `externalDatabase.database`                  | Airflow database name                                                                                  | `bitnami_airflow` |
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials                                | `""`              |
