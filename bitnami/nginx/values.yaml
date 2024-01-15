@@ -205,7 +205,6 @@ topologySpreadConstraints: []
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled NGINX pods' Security Context
 ## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
-## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
 ## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Set NGINX pod's Security Context fsGroup
 ## @param podSecurityContext.sysctls sysctl settings of the NGINX pods
@@ -213,7 +212,6 @@ topologySpreadConstraints: []
 podSecurityContext:
   enabled: true
   fsGroupChangePolicy: Always
-  sysctls: []
   supplementalGroups: []
   fsGroup: 1001
   ## sysctl settings
