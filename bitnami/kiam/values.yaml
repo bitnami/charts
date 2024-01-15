@@ -258,7 +258,6 @@ server:
   ## SecurityContext configuration
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param server.containerSecurityContext.enabled Enabled kiam server containers' Security Context
-  ## @param server.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param server.containerSecurityContext.runAsUser Set kiam server container's Security Context runAsUser
   ## @param server.containerSecurityContext.runAsNonRoot Set kiam server container's Security Context runAsNonRoot
   ## @param server.containerSecurityContext.seLinuxOptions Set kiam server container's Security Context SE Linux options
@@ -266,7 +265,6 @@ server:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     seLinuxOptions: {}
@@ -690,7 +688,6 @@ agent:
   ## SecurityContext configuration
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param agent.containerSecurityContext.enabled Enabled agent containers' Security Context
-  ## @param agent.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param agent.containerSecurityContext.runAsUser Set agent container's Security Context runAsUser
   ## @param agent.containerSecurityContext.runAsNonRoot Set agent container's Security Context runAsNonRoot
   ## @param agent.containerSecurityContext.seLinuxOptions [object] Set agent container's Security Context SE Linux options
@@ -699,7 +696,6 @@ agent:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
     runAsUser: 0
     runAsNonRoot: false
     seLinuxOptions: {}
