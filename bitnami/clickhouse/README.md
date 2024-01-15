@@ -317,7 +317,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                   | `true`  |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                 | `""`    |
 | `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)                                       | `{}`    |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                         | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                         | `false` |
 | `metrics.enabled`                             | Enable the export of Prometheus metrics                                                                | `false` |
 | `metrics.podAnnotations`                      | Annotations for metrics scraping                                                                       | `{}`    |
 | `metrics.serviceMonitor.enabled`              | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false` |
