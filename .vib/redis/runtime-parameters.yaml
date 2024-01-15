@@ -23,6 +23,9 @@ master:
     ports:
       redis: 80
     type: LoadBalancer
+  serviceAccount:
+    create: true
+    automountServiceAccountToken: true
 replica:
   replicaCount: 3
   containerPorts:
@@ -40,8 +43,5 @@ replica:
     ports:
       redis: 6378
     type: ClusterIP
-  serviceAccount:
-    create: true
-    automountServiceAccountToken: true
 sentinel:
   enabled: false
