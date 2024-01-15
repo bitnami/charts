@@ -144,9 +144,9 @@ auth:
 ## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
 ##
 serviceAccount:
-  create: false
+  create: true
   name: ""
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   annotations: {}
 
 ## DEPRECATED - existingServiceAccount. This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
@@ -607,7 +607,7 @@ query:
     create: true
     name: ""
     annotations: {}
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## existingServiceAccount: ""
   ## RBAC configuration
   ##
@@ -1163,7 +1163,7 @@ queryFrontend:
     create: true
     name: ""
     annotations: {}
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## existingServiceAccount: ""
   ## RBAC configuration
   ##
@@ -1616,7 +1616,7 @@ bucketweb:
     create: true
     name: ""
     annotations: {}
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## existingServiceAccount: ""
   ## Thanos Bucket Web Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -2075,7 +2075,7 @@ compactor:
     create: true
     name: ""
     annotations: {}
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## existingServiceAccount: ""
   ## Configure the ingress resource that allows you to access Thanos Query Frontend
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
@@ -2591,7 +2591,7 @@ storegateway:
     create: true
     name: ""
     annotations: {}
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## existingServiceAccount: ""
   ## Thanos Store Gateway Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -3239,7 +3239,7 @@ ruler:
     create: true
     name: ""
     annotations: {}
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## existingServiceAccount: ""
   ## Thanos Ruler Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -3735,7 +3735,7 @@ receive:
     create: true
     name: ""
     annotations: {}
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## existingServiceAccount: ""
   ## Thanos Receive Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -4145,7 +4145,7 @@ receiveDistributor:
     create: true
     name: ""
     annotations: {}
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## existingServiceAccount: ""
   ## Thanos Receive Distributor Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/

@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/jaeger
-  tag: 1.53.0-debian-11-r1
+  tag: 1.53.0-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -290,7 +290,7 @@ query:
     annotations: {}
     ## @param query.serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param query.podSecurityContext.enabled Enabled Jaeger pods' Security Context
@@ -644,7 +644,7 @@ collector:
     annotations: {}
     ## @param collector.serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param collector.podSecurityContext.enabled Enabled Jaeger pods' Security Context
@@ -980,7 +980,7 @@ agent:
     annotations: {}
     ## @param agent.serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param agent.podSecurityContext.enabled Enabled Jaeger pods' Security Context

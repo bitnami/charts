@@ -216,7 +216,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataCoord.sidecars`                                          | Add additional sidecar containers to the Data Coordinator pod(s)                                           | `[]`             |
 | `dataCoord.enableDefaultInitContainers`                       | Deploy default init containers                                                                             | `true`           |
 | `dataCoord.initContainers`                                    | Add additional init containers to the Data Coordinator pod(s)                                              | `[]`             |
-| `dataCoord.serviceAccount.create`                             | Enable creation of ServiceAccount for Data Coordinator pods                                                | `false`          |
+| `dataCoord.serviceAccount.create`                             | Enable creation of ServiceAccount for Data Coordinator pods                                                | `true`           |
 | `dataCoord.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                      | `""`             |
 | `dataCoord.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                     | `false`          |
 | `dataCoord.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                       | `{}`             |
@@ -356,7 +356,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rootCoord.sidecars`                                          | Add additional sidecar containers to the Root Coordinator pod(s)                                           | `[]`             |
 | `rootCoord.enableDefaultInitContainers`                       | Deploy default init containers                                                                             | `true`           |
 | `rootCoord.initContainers`                                    | Add additional init containers to the Root Coordinator pod(s)                                              | `[]`             |
-| `rootCoord.serviceAccount.create`                             | Enable creation of ServiceAccount for Root Coordinator pods                                                | `false`          |
+| `rootCoord.serviceAccount.create`                             | Enable creation of ServiceAccount for Root Coordinator pods                                                | `true`           |
 | `rootCoord.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                      | `""`             |
 | `rootCoord.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                     | `false`          |
 | `rootCoord.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                       | `{}`             |
@@ -496,7 +496,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryCoord.sidecars`                                          | Add additional sidecar containers to the Query Coordinator pod(s)                                          | `[]`             |
 | `queryCoord.enableDefaultInitContainers`                       | Deploy default init containers                                                                             | `true`           |
 | `queryCoord.initContainers`                                    | Add additional init containers to the Query Coordinator pod(s)                                             | `[]`             |
-| `queryCoord.serviceAccount.create`                             | Enable creation of ServiceAccount for Query Coordinator pods                                               | `false`          |
+| `queryCoord.serviceAccount.create`                             | Enable creation of ServiceAccount for Query Coordinator pods                                               | `true`           |
 | `queryCoord.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                      | `""`             |
 | `queryCoord.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                     | `false`          |
 | `queryCoord.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                       | `{}`             |
@@ -636,7 +636,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexCoord.sidecars`                                          | Add additional sidecar containers to the Index Coordinator pod(s)                                          | `[]`             |
 | `indexCoord.enableDefaultInitContainers`                       | Deploy default init containers                                                                             | `true`           |
 | `indexCoord.initContainers`                                    | Add additional init containers to the Index Coordinator pod(s)                                             | `[]`             |
-| `indexCoord.serviceAccount.create`                             | Enable creation of ServiceAccount for Index Coordinator pods                                               | `false`          |
+| `indexCoord.serviceAccount.create`                             | Enable creation of ServiceAccount for Index Coordinator pods                                               | `true`           |
 | `indexCoord.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                      | `""`             |
 | `indexCoord.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                     | `false`          |
 | `indexCoord.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                       | `{}`             |
@@ -776,7 +776,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataNode.sidecars`                                          | Add additional sidecar containers to the Data Node pod(s)                                           | `[]`             |
 | `dataNode.enableDefaultInitContainers`                       | Deploy default init containers                                                                      | `true`           |
 | `dataNode.initContainers`                                    | Add additional init containers to the Data Node pod(s)                                              | `[]`             |
-| `dataNode.serviceAccount.create`                             | Enable creation of ServiceAccount for Data Node pods                                                | `false`          |
+| `dataNode.serviceAccount.create`                             | Enable creation of ServiceAccount for Data Node pods                                                | `true`           |
 | `dataNode.serviceAccount.name`                               | The name of the ServiceAccount to use                                                               | `""`             |
 | `dataNode.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                              | `false`          |
 | `dataNode.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                | `{}`             |
@@ -916,7 +916,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryNode.sidecars`                                          | Add additional sidecar containers to the Query Node pod(s)                                          | `[]`             |
 | `queryNode.enableDefaultInitContainers`                       | Deploy default init containers                                                                      | `true`           |
 | `queryNode.initContainers`                                    | Add additional init containers to the Query Node pod(s)                                             | `[]`             |
-| `queryNode.serviceAccount.create`                             | Enable creation of ServiceAccount for Query Node pods                                               | `false`          |
+| `queryNode.serviceAccount.create`                             | Enable creation of ServiceAccount for Query Node pods                                               | `true`           |
 | `queryNode.serviceAccount.name`                               | The name of the ServiceAccount to use                                                               | `""`             |
 | `queryNode.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                              | `false`          |
 | `queryNode.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                | `{}`             |
@@ -1056,7 +1056,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexNode.sidecars`                                          | Add additional sidecar containers to the Index Node pod(s)                                          | `[]`             |
 | `indexNode.enableDefaultInitContainers`                       | Deploy default init containers                                                                      | `true`           |
 | `indexNode.initContainers`                                    | Add additional init containers to the Index Node pod(s)                                             | `[]`             |
-| `indexNode.serviceAccount.create`                             | Enable creation of ServiceAccount for Index Node pods                                               | `false`          |
+| `indexNode.serviceAccount.create`                             | Enable creation of ServiceAccount for Index Node pods                                               | `true`           |
 | `indexNode.serviceAccount.name`                               | The name of the ServiceAccount to use                                                               | `""`             |
 | `indexNode.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                              | `false`          |
 | `indexNode.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                | `{}`             |
@@ -1208,7 +1208,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.sidecars`                                          | Add additional sidecar containers to the Proxy pod(s)                                           | `[]`             |
 | `proxy.enableDefaultInitContainers`                       | Deploy default init containers                                                                  | `true`           |
 | `proxy.initContainers`                                    | Add additional init containers to the Proxy pod(s)                                              | `[]`             |
-| `proxy.serviceAccount.create`                             | Enable creation of ServiceAccount for Proxy pods                                                | `false`          |
+| `proxy.serviceAccount.create`                             | Enable creation of ServiceAccount for Proxy pods                                                | `true`           |
 | `proxy.serviceAccount.name`                               | The name of the ServiceAccount to use                                                           | `""`             |
 | `proxy.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                          | `false`          |
 | `proxy.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                            | `{}`             |
@@ -1349,7 +1349,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `attu.sidecars`                                          | Add additional sidecar containers to the Attu pod(s)                                                 | `[]`                   |
 | `attu.enableDefaultInitContainers`                       | Deploy default init containers                                                                       | `true`                 |
 | `attu.initContainers`                                    | Add additional init containers to the Attu pod(s)                                                    | `[]`                   |
-| `attu.serviceAccount.create`                             | Enable creation of ServiceAccount for Attu pods                                                      | `false`                |
+| `attu.serviceAccount.create`                             | Enable creation of ServiceAccount for Attu pods                                                      | `true`                 |
 | `attu.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                | `""`                   |
 | `attu.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                               | `false`                |
 | `attu.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                 | `{}`                   |

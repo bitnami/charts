@@ -243,7 +243,7 @@ terminationGracePeriodSeconds: ""
 image:
   registry: docker.io
   repository: bitnami/haproxy
-  tag: 2.9.1-debian-11-r1
+  tag: 2.9.2-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -546,5 +546,5 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the common.names.fullname template
   ##
   name: ""
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   annotations: {}

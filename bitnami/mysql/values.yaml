@@ -998,7 +998,7 @@ serviceAccount:
   annotations: {}
   ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
 
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/

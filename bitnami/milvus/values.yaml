@@ -643,7 +643,7 @@ dataCoord:
   serviceAccount:
     ## @param dataCoord.serviceAccount.create Enable creation of ServiceAccount for Data Coordinator pods
     ##
-    create: false
+    create: true
     ## @param dataCoord.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -1131,7 +1131,7 @@ rootCoord:
   serviceAccount:
     ## @param rootCoord.serviceAccount.create Enable creation of ServiceAccount for Root Coordinator pods
     ##
-    create: false
+    create: true
     ## @param rootCoord.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -1618,7 +1618,7 @@ queryCoord:
   serviceAccount:
     ## @param queryCoord.serviceAccount.create Enable creation of ServiceAccount for Query Coordinator pods
     ##
-    create: false
+    create: true
     ## @param queryCoord.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -2106,7 +2106,7 @@ indexCoord:
   serviceAccount:
     ## @param indexCoord.serviceAccount.create Enable creation of ServiceAccount for Index Coordinator pods
     ##
-    create: false
+    create: true
     ## @param indexCoord.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -2594,7 +2594,7 @@ dataNode:
   serviceAccount:
     ## @param dataNode.serviceAccount.create Enable creation of ServiceAccount for Data Node pods
     ##
-    create: false
+    create: true
     ## @param dataNode.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -3082,7 +3082,7 @@ queryNode:
   serviceAccount:
     ## @param queryNode.serviceAccount.create Enable creation of ServiceAccount for Query Node pods
     ##
-    create: false
+    create: true
     ## @param queryNode.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -3570,7 +3570,7 @@ indexNode:
   serviceAccount:
     ## @param indexNode.serviceAccount.create Enable creation of ServiceAccount for Index Node pods
     ##
-    create: false
+    create: true
     ## @param indexNode.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -4087,7 +4087,7 @@ proxy:
   serviceAccount:
     ## @param proxy.serviceAccount.create Enable creation of ServiceAccount for Proxy pods
     ##
-    create: false
+    create: true
     ## @param proxy.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -4587,7 +4587,7 @@ attu:
   serviceAccount:
     ## @param attu.serviceAccount.create Enable creation of ServiceAccount for Attu pods
     ##
-    create: false
+    create: true
     ## @param attu.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##

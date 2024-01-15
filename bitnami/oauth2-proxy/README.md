@@ -220,7 +220,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dnsConfig`                                         | Pod DNS configuration.                                                                           | `{}`             |
 | `serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                             | `true`           |
 | `serviceAccount.name`                               | The name of the ServiceAccount to use                                                            | `""`             |
-| `serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                   | `true`           |
+| `serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                   | `false`          |
 | `serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.       | `{}`             |
 
 ### External Redis&reg; parameters

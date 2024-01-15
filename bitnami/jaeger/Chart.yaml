@@ -8,7 +8,7 @@ annotations:
     - name: cassandra
       image: docker.io/bitnami/cassandra:4.0.11-debian-11-r87
     - name: jaeger
-      image: docker.io/bitnami/jaeger:1.53.0-debian-11-r1
+      image: docker.io/bitnami/jaeger:1.53.0-debian-11-r2
 apiVersion: v2
 appVersion: 1.53.0
 dependencies:
@@ -34,4 +34,4 @@ maintainers:
 name: jaeger
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/jaeger
-version: 1.5.6
+version: 1.5.8

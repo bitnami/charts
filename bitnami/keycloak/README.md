@@ -130,6 +130,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                | Description                                                                                                              | Value            |
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------- |
 | `replicaCount`                                      | Number of Keycloak replicas to deploy                                                                                    | `1`              |
+| `revisionHistoryLimitCount`                         | Number of controller revisions to keep                                                                                   | `10`             |
 | `containerPorts.http`                               | Keycloak HTTP container port                                                                                             | `8080`           |
 | `containerPorts.https`                              | Keycloak HTTPS container port                                                                                            | `8443`           |
 | `containerPorts.infinispan`                         | Keycloak infinispan container port                                                                                       | `7800`           |

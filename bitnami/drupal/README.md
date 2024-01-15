@@ -112,7 +112,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.create`                             | Specifies whether a service account should be created                                                                  | `true`                   |
 | `serviceAccount.name`                               | The name of the service account to use. If not set and create is true, a name is generated using the fullname template | `""`                     |
 | `serviceAccount.annotations`                        | Add annotations                                                                                                        | `{}`                     |
-| `serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                                                       | `true`                   |
+| `serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                                                       | `false`                  |
 | `existingSecret`                                    | Name of a secret with the application password                                                                         | `""`                     |
 | `smtpHost`                                          | SMTP host                                                                                                              | `""`                     |
 | `smtpPort`                                          | SMTP port                                                                                                              | `""`                     |
