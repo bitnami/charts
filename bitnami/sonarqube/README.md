@@ -417,9 +417,16 @@ This chart uses a **privileged** initContainer to change those settings in the K
 
 ### External database support
 
-You may want to have SonarQube&trade; connect to an external database rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, set the `postgresql.enabled` parameter to `false` and specify the credentials for the external database using the `externalDatabase.*` parameters.
+You may want to have SonarQube&trade; connect to an external database rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, set the `postgresql.enabled` parameter to `false` and specify the credentials for the external database using the `externalDatabase.*` parameters. Here is an example:
 
-Refer to the [chart documentation on using an external database](https://docs.bitnami.com/kubernetes/apps/sonarqube/configuration/use-external-database) for more details and an example.
+```text
+postgresql.enabled=false
+externalDatabase.host=myexternalhost
+externalDatabase.user=myuser
+externalDatabase.password=mypassword
+externalDatabase.database=mydatabase
+externalDatabase.port=5432
+```
 
 ### Ingress
 

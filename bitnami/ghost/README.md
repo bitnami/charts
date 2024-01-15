@@ -327,7 +327,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 You may want to have Ghost connect to an external database rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalDatabase` parameter](#database-parameters). You should also disable the MySQL installation with the `mysql.enabled` option. Here is an example:
 
-```console
+```text
 mysql.enabled=false
 externalDatabase.host=myexternalhost
 externalDatabase.user=myuser

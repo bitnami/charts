@@ -294,9 +294,16 @@ If additional containers are needed in the same pod as EJBCA (such as additional
 
 ### Use an external database
 
-Sometimes, you may want to have EJBCA connect to an external database rather than a database within your cluster - for example, when using a managed database service, or when running a single database server for all your applications. To do this, set the `mariadb.enabled` parameter to `false` and specify the credentials for the external database using the `externalDatabase.*` parameters.
+Sometimes, you may want to have EJBCA connect to an external database rather than a database within your cluster - for example, when using a managed database service, or when running a single database server for all your applications. To do this, set the `mariadb.enabled` parameter to `false` and specify the credentials for the external database using the `externalDatabase.*` parameters. Here is an example:
 
-Refer to the [chart documentation on using an external database](https://docs.bitnami.com/kubernetes/apps/ejbca/configuration/use-external-database) for more details and an example.
+```text
+mysql.enabled=false
+externalDatabase.host=myexternalhost
+externalDatabase.user=myuser
+externalDatabase.password=mypassword
+externalDatabase.database=mydatabase
+externalDatabase.port=3306
+```
 
 ### Set Pod affinity
 
