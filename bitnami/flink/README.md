@@ -144,7 +144,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jobmanager.serviceAccount.create`                             | Enables ServiceAccount                                                                    | `true`           |
 | `jobmanager.serviceAccount.name`                               | ServiceAccount name                                                                       | `""`             |
 | `jobmanager.serviceAccount.annotations`                        | Annotations to add to all deployed objects                                                | `{}`             |
-| `jobmanager.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                          | `true`           |
+| `jobmanager.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                          | `false`          |
 | `jobmanager.podSecurityContext.enabled`                        | Enabled Apache Flink pods' Security Context                                               | `true`           |
 | `jobmanager.podSecurityContext.fsGroup`                        | Set Apache Flink pod's Security Context fsGroup                                           | `1001`           |
 | `jobmanager.containerSecurityContext.enabled`                  | Enabled Apache Flink containers' Security Context                                         | `true`           |
@@ -226,7 +226,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `taskmanager.serviceAccount.create`                             | Enables ServiceAccount                                                                    | `true`           |
 | `taskmanager.serviceAccount.name`                               | ServiceAccount name                                                                       | `""`             |
 | `taskmanager.serviceAccount.annotations`                        | Annotations to add to all deployed objects                                                | `{}`             |
-| `taskmanager.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                          | `true`           |
+| `taskmanager.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                          | `false`          |
 | `taskmanager.podSecurityContext.enabled`                        | Enabled Apache Flink pods' Security Context                                               | `true`           |
 | `taskmanager.podSecurityContext.fsGroup`                        | Set Apache Flink pod's Security Context fsGroup                                           | `1001`           |
 | `taskmanager.containerSecurityContext.enabled`                  | Enabled Apache Flink containers' Security Context                                         | `true`           |
