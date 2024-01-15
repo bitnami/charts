@@ -1,5 +1,6 @@
 <!--- app-name: Joomla! -->
 
+<!-- markdownlint-disable-next-line MD026 -->
 # Bitnami package for Joomla!
 
 Joomla! is an award winning open source CMS platform for building websites and applications. It includes page caching, page compression and Let's Encrypt auto-configuration support.
@@ -411,6 +412,7 @@ Please read the update notes carefully.
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
+<!-- markdownlint-disable-next-line MD026 -->
 ##### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
