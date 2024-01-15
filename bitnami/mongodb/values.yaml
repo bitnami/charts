@@ -536,7 +536,6 @@ runtimeClassName: ""
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable MongoDB(&reg;) pod(s)' Security Context
 ## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
-## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
 ## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Group ID for the volumes of the MongoDB(&reg;) pod(s)
 ## @param podSecurityContext.sysctls sysctl settings of the MongoDB(&reg;) pod(s)'
@@ -544,7 +543,6 @@ runtimeClassName: ""
 podSecurityContext:
   enabled: true
   fsGroupChangePolicy: Always
-  sysctls: []
   supplementalGroups: []
   fsGroup: 1001
   ## sysctl settings
@@ -1574,7 +1572,6 @@ arbiter:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param arbiter.podSecurityContext.enabled Enable Arbiter pod(s)' Security Context
   ## @param arbiter.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
-  ## @param arbiter.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param arbiter.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param arbiter.podSecurityContext.fsGroup Group ID for the volumes of the Arbiter pod(s)
   ## @param arbiter.podSecurityContext.sysctls sysctl settings of the Arbiter pod(s)'
@@ -1582,7 +1579,6 @@ arbiter:
   podSecurityContext:
     enabled: true
     fsGroupChangePolicy: Always
-    sysctls: []
     supplementalGroups: []
     fsGroup: 1001
     ## sysctl settings
@@ -1917,7 +1913,6 @@ hidden:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param hidden.podSecurityContext.enabled Enable Hidden pod(s)' Security Context
   ## @param hidden.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
-  ## @param hidden.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param hidden.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param hidden.podSecurityContext.fsGroup Group ID for the volumes of the Hidden pod(s)
   ## @param hidden.podSecurityContext.sysctls sysctl settings of the Hidden pod(s)'
@@ -1925,7 +1920,6 @@ hidden:
   podSecurityContext:
     enabled: true
     fsGroupChangePolicy: Always
-    sysctls: []
     supplementalGroups: []
     fsGroup: 1001
     ## sysctl settings
