@@ -290,12 +290,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Proxy RBAC Parameters
 
-| Name                                                | Description                                                            | Value  |
-| --------------------------------------------------- | ---------------------------------------------------------------------- | ------ |
-| `proxy.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true` |
-| `proxy.serviceAccount.name`                         | Override Hub service account name                                      | `""`   |
-| `proxy.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true` |
-| `proxy.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
+| Name                                                | Description                                                            | Value   |
+| --------------------------------------------------- | ---------------------------------------------------------------------- | ------- |
+| `proxy.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true`  |
+| `proxy.serviceAccount.name`                         | Override Hub service account name                                      | `""`    |
+| `proxy.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
+| `proxy.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
 
 ### Proxy Traffic Exposure Parameters
 
@@ -456,12 +456,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Single User RBAC parameters
 
-| Name                                                     | Description                                                            | Value  |
-| -------------------------------------------------------- | ---------------------------------------------------------------------- | ------ |
-| `singleuser.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true` |
-| `singleuser.serviceAccount.name`                         | Override Single User service account name                              | `""`   |
-| `singleuser.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true` |
-| `singleuser.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
+| Name                                                     | Description                                                            | Value   |
+| -------------------------------------------------------- | ---------------------------------------------------------------------- | ------- |
+| `singleuser.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true`  |
+| `singleuser.serviceAccount.name`                         | Override Single User service account name                              | `""`    |
+| `singleuser.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
+| `singleuser.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
 
 ### Single User Persistence parameters
 
