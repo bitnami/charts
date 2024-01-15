@@ -96,11 +96,11 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.26.1-debian-11-r1
+    tag: 1.27.0-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -113,13 +113,13 @@ contour:
     pullSecrets: []
     debug: false
   ## @param contour.contourConfigName Contour Deployment with ContourConfiguration CRD.
-  # 
+  #
   contourConfigName: "contour"
   ## @param contour.configPath Contour Deployment with configmap.
   ##
   configPath: true
-  ## @param contour.replicaCount Number of Contour Pod replicas 
-  # 
+  ## @param contour.replicaCount Number of Contour Pod replicas
+  #
   replicaCount: 1
   ## @param contour.priorityClassName Priority class assigned to the pods
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
@@ -157,7 +157,7 @@ contour:
   ##
   extraArgs: []
   ## Contour container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## ref: https://projectcontour.io/guides/resource-limits/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
@@ -248,7 +248,7 @@ contour:
   ##
   affinity: {}
   ## @param contour.nodeSelector [object] Node labels for Contour pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param contour.tolerations [array] Tolerations for Contour pod assignment
@@ -520,11 +520,11 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.26.6-debian-11-r0
+    tag: 1.27.2-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -556,7 +556,7 @@ envoy:
   ##
   hostAliases: []
   ## Envoy container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## ref: https://projectcontour.io/guides/resource-limits/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
@@ -725,7 +725,7 @@ envoy:
   ##
   affinity: {}
   ## @param envoy.nodeSelector [object] Node labels for Envoy pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param envoy.tolerations [array] Tolerations for Envoy pod assignment
@@ -868,6 +868,7 @@ envoy:
     targetPorts:
       http: http
       https: https
+      metrics: metrics
     ## @param envoy.service.type Type of Envoy service to create
     ##
     type: LoadBalancer
@@ -915,6 +916,9 @@ envoy:
       ## @param envoy.service.ports.https Sets service https port
       ##
       https: 443
+      ## @param envoy.service.ports.metrics Sets service metrics port
+      ##
+      metrics: 8002
     ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ## @param envoy.service.nodePorts.http HTTP Port. If `envoy.service.type` is NodePort and this is non-empty
@@ -938,9 +942,14 @@ envoy:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
-  ## @param envoy.useHostPort Enable/disable `hostPort` for TCP/80 and TCP/443
+  ## @param envoy.useHostPort.http Enable/disable `hostPort` for TCP/80
+  ## @param envoy.useHostPort.https Enable/disable `hostPort` TCP/443
+  ## @param envoy.useHostPort.metrics Enable/disable `hostPort` for TCP/8002
   ##
-  useHostPort: true
+  useHostPort:
+    http: true
+    https: true
+    metrics: true
   ## @param envoy.useHostIP Enable/disable `hostIP`
   ##
   useHostIP: false
@@ -1029,11 +1038,11 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r0
+    tag: 1.25.3-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1141,7 +1150,7 @@ defaultBackend:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: false
   ## Default backend containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube.
@@ -1274,7 +1283,7 @@ defaultBackend:
   ##
   affinity: {}
   ## @param defaultBackend.nodeSelector [object] Node labels for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param defaultBackend.tolerations [array] Tolerations for pod assignment. Evaluated as a template.
@@ -1307,7 +1316,7 @@ defaultBackend:
 ##
 ingress:
   ## @param ingress.enabled Ingress configuration enabled
-  ## Ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ## Enable Ingress.
   ##

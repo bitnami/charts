@@ -22,7 +22,7 @@ spec:
   {{- if .Values.tracking.updateStrategy }}
   strategy: {{- toYaml .Values.tracking.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := include "common.tplvalues.merge" (dict "values" .Values.tracking.podLabels .Values.commonLabels "context" .) | fromYaml }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.tracking.podLabels .Values.commonLabels) "context" .) | fromYaml }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: mlflow
@@ -43,7 +43,7 @@ spec:
         app.kubernetes.io/component: tracking
     spec:
       serviceAccountName: {{ include "mlflow.v0.tracking.serviceAccountName" . }}
-      {{- include "mlflow.v0.imagePullSecrets" . | nindent 6 }}
+      {{- include "mlflow.v0.imagePullSecrets" . | indent 6 }}
       {{- if .Values.tracking.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -143,7 +143,12 @@ spec:
             {{- else }}
             - --artifacts-destination={{ .Values.tracking.persistence.mountPath }}/mlartifacts
             {{- end }}
+            {{- if and (not (include "mlflow.v0.s3.serveArtifacts" .)) (include "mlflow.v0.s3.enabled" .) }}
+            - --default-artifact-root=s3://{{ include "mlflow.v0.s3.bucket" . }}
+            - --no-serve-artifacts
+            {{ else }}
             - --serve-artifacts
+            {{- end }}
             - --host=0.0.0.0
             - --port={{ .Values.tracking.containerPorts.http }}
             {{- if .Values.tracking.metrics.enabled }}
@@ -196,7 +201,7 @@ spec:
           resources: {{- toYaml .Values.tracking.resources | nindent 12 }}
           {{- end }}
           ports:
-            - name: {{ include "mlflow.v0.tracking.protocol" . }}
+            - name: {{ include "mlflow.v0.tracking.portName" . }}
               containerPort: {{ .Values.tracking.containerPorts.http }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.tracking.customLivenessProbe }}
@@ -205,11 +210,11 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.tracking.livenessProbe "enabled") "context" $) | nindent 12 }}
             {{- if .Values.tracking.auth.enabled }}
             tcpSocket:
-              port: {{ include "mlflow.v0.tracking.protocol" . }}
+              port: {{ include "mlflow.v0.tracking.portName" . }}
             {{- else }}
             httpGet:
               path: /
-              port: {{ include "mlflow.v0.tracking.protocol" . }}
+              port: {{ include "mlflow.v0.tracking.portName" . }}
             {{- end }}
           {{- end }}
           {{- if .Values.tracking.customReadinessProbe }}
@@ -218,11 +223,11 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.tracking.readinessProbe "enabled") "context" $) | nindent 12 }}
             {{- if .Values.tracking.auth.enabled }}
             tcpSocket:
-              port: {{ include "mlflow.v0.tracking.protocol" . }}
+              port: {{ include "mlflow.v0.tracking.portName" . }}
             {{- else }}
             httpGet:
               path: /
-              port: {{ include "mlflow.v0.tracking.protocol" . }}
+              port: {{ include "mlflow.v0.tracking.portName" . }}
             {{- end }}
           {{- end }}
           {{- if .Values.tracking.customStartupProbe }}
@@ -231,11 +236,11 @@ spec:
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.tracking.startupProbe "enabled") "context" $) | nindent 12 }}
             {{- if .Values.tracking.auth.enabled }}
             tcpSocket:
-              port: {{ include "mlflow.v0.tracking.protocol" . }}
+              port: {{ include "mlflow.v0.tracking.portName" . }}
             {{- else }}
             httpGet:
               path: /
-              port: {{ include "mlflow.v0.tracking.protocol" . }}
+              port: {{ include "mlflow.v0.tracking.portName" . }}
             {{- end }}
           {{- end }}
           {{- end }}

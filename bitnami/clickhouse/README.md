@@ -1,6 +1,6 @@
 <!--- app-name: ClickHouse -->
 
-# ClickHouse packaged by Bitnami
+# Bitnami package for ClickHouse
 
 ClickHouse is an open-source column-oriented OLAP database management system. Use it to boost your database performance while providing linear scalability and hardware efficiency.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/clickhouse
+helm install my-release oci://registry-1.docker.io/bitnamicharts/clickhouse
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use ClickHouse in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -25,8 +25,6 @@ This chart bootstraps a [ClickHouse](https://github.com/clickhouse/clickhouse) D
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/clickhouse/get-started/).
-
-Looking to use ClickHouse in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -194,6 +192,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsSecret`            | Name of existing Secret containing extra env vars for ClickHouse nodes                                                   | `""`                    |
 | `extraVolumes`                  | Optionally specify extra list of additional volumes for the ClickHouse pod(s)                                            | `[]`                    |
 | `extraVolumeMounts`             | Optionally specify extra list of additional volumeMounts for the ClickHouse container(s)                                 | `[]`                    |
+| `extraVolumeClaimTemplates`     | Optionally specify extra list of additional volumeClaimTemplates for the ClickHouse container(s)                         | `[]`                    |
 | `sidecars`                      | Add additional sidecar containers to the ClickHouse pod(s)                                                               | `[]`                    |
 | `initContainers`                | Add additional init containers to the ClickHouse pod(s)                                                                  | `[]`                    |
 | `tls.enabled`                   | Enable TLS traffic support                                                                                               | `false`                 |
@@ -318,7 +317,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                   | `true`  |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                 | `""`    |
 | `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)                                       | `{}`    |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                         | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                         | `false` |
 | `metrics.enabled`                             | Enable the export of Prometheus metrics                                                                | `false` |
 | `metrics.podAnnotations`                      | Annotations for metrics scraping                                                                       | `{}`    |
 | `metrics.serviceMonitor.enabled`              | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false` |
@@ -355,7 +354,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zookeeper.image.repository`     | Zookeeper image repository    | `REPOSITORY_NAME/zookeeper` |
 | `zookeeper.image.pullPolicy`     | Zookeeper image pull policy   | `IfNotPresent`              |
 
-See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table.
+See <https://github.com/bitnami/readme-generator-for-helm> to create the table.
 
 The above parameters map to the env variables defined in [bitnami/clickhouse](https://github.com/bitnami/containers/tree/main/bitnami/clickhouse). For more information please refer to the [bitnami/clickhouse](https://github.com/bitnami/containers/tree/main/bitnami/clickhouse) image documentation.
 
@@ -381,11 +380,11 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/click
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/clickhouse/values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -516,7 +515,7 @@ This major updates the Zookeeper subchart to it newest major, 11.0.0. For more i
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

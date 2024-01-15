@@ -1,6 +1,6 @@
 <!--- app-name: Etcd -->
 
-# Etcd packaged by Bitnami
+# Bitnami package for Etcd
 
 etcd is a distributed key-value store designed to securely store data across a cluster. etcd is widely used in production on account of its reliability, fault-tolerance and ease of use.
 
@@ -11,18 +11,16 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/etcd
+helm install my-release oci://registry-1.docker.io/bitnamicharts/etcd
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Etcd in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [etcd](https://github.com/bitnami/containers/tree/main/bitnami/etcd) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Etcd in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -297,6 +295,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `disasterRecovery.cronjob.resources.requests`   | Cronjob container resource requests                                     | `{}`           |
 | `disasterRecovery.cronjob.nodeSelector`         | Node labels for cronjob pods assignment                                 | `{}`           |
 | `disasterRecovery.cronjob.tolerations`          | Tolerations for cronjob pods assignment                                 | `[]`           |
+| `disasterRecovery.cronjob.podLabels`            | Labels that will be added to pods created by cronjob                    | `{}`           |
+| `disasterRecovery.cronjob.serviceAccountName`   | Specifies the service account to use for disaster recovery cronjob      | `""`           |
 | `disasterRecovery.pvc.existingClaim`            | A manually managed Persistent Volume and Claim                          | `""`           |
 | `disasterRecovery.pvc.size`                     | PVC Storage Request                                                     | `2Gi`          |
 | `disasterRecovery.pvc.storageClassName`         | Storage Class for snapshots volume                                      | `nfs`          |
@@ -306,9 +306,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                          | Description                                                  | Value   |
 | --------------------------------------------- | ------------------------------------------------------------ | ------- |
-| `serviceAccount.create`                       | Enable/disable service account creation                      | `false` |
+| `serviceAccount.create`                       | Enable/disable service account creation                      | `true`  |
 | `serviceAccount.name`                         | Name of the service account to create or use                 | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of service account token        | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of service account token        | `false` |
 | `serviceAccount.annotations`                  | Additional annotations to be included on the service account | `{}`    |
 | `serviceAccount.labels`                       | Additional labels to be included on the service account      | `{}`    |
 
@@ -340,11 +340,11 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/etcd
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/etcd/values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -566,7 +566,7 @@ kubectl delete statefulset etcd --cascade=false
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

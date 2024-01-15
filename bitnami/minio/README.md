@@ -11,18 +11,16 @@ Disclaimer: All software products, projects and company names are trademark(TM) 
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/minio
+helm install my-release oci://registry-1.docker.io/bitnamicharts/minio
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Bitnami Object Storage based on MinIOreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [MinIO&reg;](https://github.com/bitnami/containers/tree/main/bitnami/minio) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Bitnami Object Storage based on MinIOreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -69,6 +67,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                | Description                                                                                  | Value           |
 | ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
 | `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `namespaceOverride` | String to fully override common.names.namespace                                              | `""`            |
 | `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`            |
 | `commonLabels`      | Labels to add to all deployed objects                                                        | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects                                                   | `{}`            |
@@ -122,6 +121,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `statefulset.drivesPerNode`                                      | Number of drives attached to every node (only for MinIO&reg; distributed mode)                                                                                                                | `1`              |
 | `provisioning.enabled`                                           | Enable MinIO&reg; provisioning Job                                                                                                                                                            | `false`          |
 | `provisioning.schedulerName`                                     | Name of the k8s scheduler (other than default) for MinIO&reg; provisioning                                                                                                                    | `""`             |
+| `provisioning.nodeSelector`                                      | Node labels for pod assignment. Evaluated as a template.                                                                                                                                      | `{}`             |
 | `provisioning.podLabels`                                         | Extra labels for provisioning pods                                                                                                                                                            | `{}`             |
 | `provisioning.podAnnotations`                                    | Provisioning Pod annotations.                                                                                                                                                                 | `{}`             |
 | `provisioning.command`                                           | Default provisioning container command (useful when using custom images). Use array form                                                                                                      | `[]`             |
@@ -154,6 +154,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.console`                                         | MinIO&reg; container port to open for MinIO&reg; Console                                                                                                                                      | `9001`           |
 | `podSecurityContext.enabled`                                     | Enable pod Security Context                                                                                                                                                                   | `true`           |
 | `podSecurityContext.fsGroup`                                     | Group ID for the container                                                                                                                                                                    | `1001`           |
+| `podSecurityContext.fsGroupChangePolicy`                         | When K8s should preform chown on attached volumes                                                                                                                                             | `OnRootMismatch` |
 | `containerSecurityContext.enabled`                               | Enabled containers' Security Context                                                                                                                                                          | `true`           |
 | `containerSecurityContext.runAsUser`                             | Set containers' Security Context runAsUser                                                                                                                                                    | `1001`           |
 | `containerSecurityContext.runAsNonRoot`                          | Set container's Security Context runAsNonRoot                                                                                                                                                 | `true`           |
@@ -281,12 +282,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### RBAC parameters
 
-| Name                                          | Description                                                 | Value  |
-| --------------------------------------------- | ----------------------------------------------------------- | ------ |
-| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for MinIO&reg; pods | `true` |
-| `serviceAccount.name`                         | Name of the created ServiceAccount                          | `""`   |
-| `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of the service account token   | `true` |
-| `serviceAccount.annotations`                  | Custom annotations for MinIO&reg; ServiceAccount            | `{}`   |
+| Name                                          | Description                                                 | Value   |
+| --------------------------------------------- | ----------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for MinIO&reg; pods | `true`  |
+| `serviceAccount.name`                         | Name of the created ServiceAccount                          | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of the service account token   | `false` |
+| `serviceAccount.annotations`                  | Custom annotations for MinIO&reg; ServiceAccount            | `{}`    |
 
 ### Other parameters
 
@@ -298,26 +299,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                                                                   | Value                       |
-| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `metrics.prometheusAuthType`               | Authentication mode for Prometheus (`jwt` or `public`)                                                                        | `public`                    |
-| `metrics.serviceMonitor.enabled`           | If the operator is installed in your cluster, set to true to create a Service Monitor Entry                                   | `false`                     |
-| `metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                                                                      | `""`                        |
-| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                                           | `{}`                        |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus                                              | `""`                        |
-| `metrics.serviceMonitor.path`              | HTTP path to scrape for metrics                                                                                               | `/minio/v2/metrics/cluster` |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped                                                                                   | `30s`                       |
-| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                                                           | `""`                        |
-| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                     | `[]`                        |
-| `metrics.serviceMonitor.relabelings`       | Metrics relabelings to add to the scrape endpoint, applied before scraping                                                    | `[]`                        |
-| `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                                                      | `false`                     |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                           | `{}`                        |
-| `metrics.serviceMonitor.apiVersion`        | ApiVersion for the serviceMonitor Resource (defaults to "monitoring.coreos.com/v1")                                           | `""`                        |
-| `metrics.serviceMonitor.tlsConfig`         | Additional TLS configuration for metrics endpoint with "https" scheme                                                         | `{}`                        |
-| `metrics.prometheusRule.enabled`           | Create a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                     |
-| `metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                 | `""`                        |
-| `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                         | `{}`                        |
-| `metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                   | `[]`                        |
+| Name                                       | Description                                                                                                                   | Value                                                    |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `metrics.prometheusAuthType`               | Authentication mode for Prometheus (`jwt` or `public`)                                                                        | `public`                                                 |
+| `metrics.serviceMonitor.enabled`           | If the operator is installed in your cluster, set to true to create a Service Monitor Entry                                   | `false`                                                  |
+| `metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                                                                      | `""`                                                     |
+| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                                           | `{}`                                                     |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus                                              | `""`                                                     |
+| `metrics.serviceMonitor.paths`             | HTTP paths to scrape for metrics                                                                                              | `["/minio/v2/metrics/cluster","/minio/v2/metrics/node"]` |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped                                                                                   | `30s`                                                    |
+| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                                                           | `""`                                                     |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                     | `[]`                                                     |
+| `metrics.serviceMonitor.relabelings`       | Metrics relabelings to add to the scrape endpoint, applied before scraping                                                    | `[]`                                                     |
+| `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                                                      | `false`                                                  |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                           | `{}`                                                     |
+| `metrics.serviceMonitor.apiVersion`        | ApiVersion for the serviceMonitor Resource (defaults to "monitoring.coreos.com/v1")                                           | `""`                                                     |
+| `metrics.serviceMonitor.tlsConfig`         | Additional TLS configuration for metrics endpoint with "https" scheme                                                         | `{}`                                                     |
+| `metrics.prometheusRule.enabled`           | Create a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                                                  |
+| `metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                 | `""`                                                     |
+| `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                         | `{}`                                                     |
+| `metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                   | `[]`                                                     |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -339,11 +340,11 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/minio
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/minio/values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -530,7 +531,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

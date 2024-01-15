@@ -16,7 +16,7 @@ Return the proper ES image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "elasticsearch.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.sysctlImage .Values.volumePermissions.image) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.sysctlImage .Values.volumePermissions.image) "context" $) }}
 {{- end -}}
 
 {{/*
@@ -318,6 +318,17 @@ Get the initialization scripts Secret name.
     {{ default (include "elasticsearch.ingest.fullname" .) .Values.ingest.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.ingest.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+ Create the name of the metrics service account to use
+ */}}
+{{- define "elasticsearch.metrics.serviceAccountName" -}}
+{{- if .Values.metrics.serviceAccount.create -}}
+    {{ default (include "elasticsearch.metrics.fullname" .) .Values.metrics.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.metrics.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 

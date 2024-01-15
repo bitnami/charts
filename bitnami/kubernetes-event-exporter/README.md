@@ -1,6 +1,6 @@
 <!--- app-name: Kubernetes Event Exporter -->
 
-# Kubernetes Event Exporter packaged by Bitnami
+# Bitnami package for Kubernetes Event Exporter
 
 Kubernetes Event Exporter makes it easy to export Kubernetes events to other tools, thereby enabling better event observability, custom alerts and aggregation.
 
@@ -11,18 +11,16 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kubernetes-event-exporter
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kubernetes-event-exporter
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Kubernetes Event Exporter in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [Kubernetes Event Exporter](https://github.com/resmoio/kubernetes-event-exporter) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Kubernetes Event Exporter in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -95,6 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `config.receivers`                                  | Array containing event receivers                                                                                          | `[]`                                        |
 | `config.route.routes`                               | Array containing event route configuration                                                                                | `[]`                                        |
 | `rbac.create`                                       | Create the RBAC roles for API accessibility                                                                               | `true`                                      |
+| `rbac.rules`                                        | List of rules for the cluster role                                                                                        | `[]`                                        |
 | `serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                      | `true`                                      |
 | `serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.       | `""`                                        |
 | `serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                            | `true`                                      |
@@ -116,6 +115,24 @@ The command removes all the Kubernetes components associated with the chart and 
 | `lifecycleHooks`                                    | Lifecycle for the container to automate configuration before or after startup                                             | `{}`                                        |
 | `resources.limits`                                  | Specify resource limits which the container is not allowed to succeed.                                                    | `{}`                                        |
 | `resources.requests`                                | Specify resource requests which the container needs to spawn.                                                             | `{}`                                        |
+| `livenessProbe.enabled`                             | Enable livenessProbe on Kubernetes event exporter container                                                               | `true`                                      |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                   | `5`                                         |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                          | `5`                                         |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                         | `2`                                         |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                       | `5`                                         |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                       | `1`                                         |
+| `readinessProbe.enabled`                            | Enable readinessProbe on Kubernetes event exporter container                                                              | `true`                                      |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                  | `5`                                         |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                         | `5`                                         |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                        | `2`                                         |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                      | `1`                                         |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                      | `1`                                         |
+| `startupProbe.enabled`                              | Enable startupProbe on Kubernetes event exporter container                                                                | `false`                                     |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                    | `40`                                        |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                           | `10`                                        |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                          | `15`                                        |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                        | `15`                                        |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                        | `1`                                         |
 | `customStartupProbe`                                | Configure startup probe for Kubernetes event exporter pod                                                                 | `{}`                                        |
 | `customLivenessProbe`                               | Configure liveness probe for Kubernetes event exporter pod                                                                | `{}`                                        |
 | `customReadinessProbe`                              | Configure readiness probe for Kubernetes event exporter pod                                                               | `{}`                                        |
@@ -179,7 +196,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -201,7 +218,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

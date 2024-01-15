@@ -1,6 +1,6 @@
 <!--- app-name: MySQL -->
 
-# MySQL packaged by Bitnami
+# Bitnami package for MySQL
 
 MySQL is a fast, reliable, scalable, and easy to use open source relational database system. Designed to handle mission-critical, heavy-load production applications.
 
@@ -11,18 +11,16 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mysql
+helm install my-release oci://registry-1.docker.io/bitnamicharts/mysql
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use MySQL in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [MySQL](https://github.com/bitnami/containers/tree/main/bitnami/mysql) replication cluster deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use MySQL in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -170,6 +168,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.extraEnvVars`                                      | Extra environment variables to be set on MySQL primary containers                                               | `[]`                |
 | `primary.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for MySQL primary containers                               | `""`                |
 | `primary.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for MySQL primary containers                                  | `""`                |
+| `primary.extraPodSpec`                                      | Optionally specify extra PodSpec for the MySQL Primary pod(s)                                                   | `{}`                |
 | `primary.extraPorts`                                        | Extra ports to expose                                                                                           | `[]`                |
 | `primary.persistence.enabled`                               | Enable persistence on MySQL primary replicas using a `PersistentVolumeClaim`. If false, use emptyDir            | `true`              |
 | `primary.persistence.existingClaim`                         | Name of an existing `PersistentVolumeClaim` for MySQL primary replicas                                          | `""`                |
@@ -179,6 +178,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.persistence.accessModes`                           | MySQL primary persistent volume access Modes                                                                    | `["ReadWriteOnce"]` |
 | `primary.persistence.size`                                  | MySQL primary persistent volume size                                                                            | `8Gi`               |
 | `primary.persistence.selector`                              | Selector to match an existing Persistent Volume                                                                 | `{}`                |
+| `primary.persistentVolumeClaimRetentionPolicy.enabled`      | Enable Persistent volume retention policy for Primary StatefulSet                                               | `false`             |
+| `primary.persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced                                  | `Retain`            |
+| `primary.persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                                          | `Retain`            |
 | `primary.extraVolumes`                                      | Optionally specify extra list of additional volumes to the MySQL Primary pod(s)                                 | `[]`                |
 | `primary.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the MySQL Primary container(s)                     | `[]`                |
 | `primary.initContainers`                                    | Add additional init containers for the MySQL Primary pod(s)                                                     | `[]`                |
@@ -263,6 +265,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.extraEnvVars`                                      | An array to add extra environment variables on MySQL secondary containers                                           | `[]`                |
 | `secondary.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for MySQL secondary containers                                 | `""`                |
 | `secondary.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for MySQL secondary containers                                    | `""`                |
+| `secondary.extraPodSpec`                                      | Optionally specify extra PodSpec for the MySQL Secondary pod(s)                                                     | `{}`                |
 | `secondary.extraPorts`                                        | Extra ports to expose                                                                                               | `[]`                |
 | `secondary.persistence.enabled`                               | Enable persistence on MySQL secondary replicas using a `PersistentVolumeClaim`                                      | `true`              |
 | `secondary.persistence.existingClaim`                         | Name of an existing `PersistentVolumeClaim` for MySQL secondary replicas                                            | `""`                |
@@ -272,6 +275,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.persistence.accessModes`                           | MySQL secondary persistent volume access Modes                                                                      | `["ReadWriteOnce"]` |
 | `secondary.persistence.size`                                  | MySQL secondary persistent volume size                                                                              | `8Gi`               |
 | `secondary.persistence.selector`                              | Selector to match an existing Persistent Volume                                                                     | `{}`                |
+| `secondary.persistentVolumeClaimRetentionPolicy.enabled`      | Enable Persistent volume retention policy for read only StatefulSet                                                 | `false`             |
+| `secondary.persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced                                      | `Retain`            |
+| `secondary.persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                                              | `Retain`            |
 | `secondary.extraVolumes`                                      | Optionally specify extra list of additional volumes to the MySQL secondary pod(s)                                   | `[]`                |
 | `secondary.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the MySQL secondary container(s)                       | `[]`                |
 | `secondary.initContainers`                                    | Add additional init containers for the MySQL secondary pod(s)                                                       | `[]`                |
@@ -300,7 +306,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.create`                       | Enable the creation of a ServiceAccount for MySQL pods         | `true`  |
 | `serviceAccount.name`                         | Name of the created ServiceAccount                             | `""`    |
 | `serviceAccount.annotations`                  | Annotations for MySQL Service Account                          | `{}`    |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account | `false` |
 | `rbac.create`                                 | Whether to create & use RBAC resources or not                  | `false` |
 | `rbac.rules`                                  | Custom RBAC rules to set                                       | `[]`    |
 
@@ -396,11 +402,11 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/mysql
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/mysql/values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -418,7 +424,7 @@ The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
 These scripts are treated differently depending on their extension. While `.sh` scripts are executed on all the nodes, `.sql` and `.sql.gz` scripts are only executed on the primary nodes. This is because `.sh` scripts support conditional tests to identify the type of node they are running on, while such tests are not supported in `.sql` or `sql.gz` files.
 
-Refer to the [chart documentation for more information and a usage example](http://docs.bitnami.com/kubernetes/infrastructure/mysql/configuration/customize-new-instance/).
+Refer to the [chart documentation for more information and a usage example](https://docs.bitnami.com/kubernetes/infrastructure/mysql/configuration/customize-new-instance/).
 
 ### Sidecars and Init Containers
 
@@ -554,7 +560,7 @@ kubectl delete statefulset mysql-slave --cascade=false
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

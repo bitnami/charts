@@ -34,7 +34,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.12.8-debian-11-r1
+  tag: 3.12.12-debian-11-r0
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -42,7 +42,7 @@ image:
   debug: false
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -253,6 +253,10 @@ clustering:
   ## @param clustering.enabled Enable RabbitMQ clustering
   ##
   enabled: true
+  ## @param clustering.name RabbitMQ cluster name
+  ## If not set, a name is generated using the common.names.fullname template
+  ##
+  name: ""
   ## @param clustering.addressType Switch clustering mode. Either `ip` or `hostname`
   ##
   addressType: hostname
@@ -382,7 +386,6 @@ tcpListenOptions:
 
 configuration: |-
   ## Username and password
-  ##
   default_user = {{ .Values.auth.username }}
   {{- if and (not .Values.auth.securePassword) .Values.auth.password }}
   default_pass = {{ .Values.auth.password }}
@@ -390,8 +393,13 @@ configuration: |-
   {{- if .Values.clustering.enabled }}
   ## Clustering
   ##
+  cluster_name = {{ default (include "common.names.fullname" .) .Values.clustering.name }}
   cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
   cluster_formation.k8s.host = kubernetes.default
+  cluster_formation.k8s.address_type = {{ .Values.clustering.addressType }}
+  {{- $svcName := printf "%s-%s" (include "common.names.fullname" .) (default "headless" .Values.servicenameOverride) }}
+  cluster_formation.k8s.service_name = {{ $svcName }}
+  cluster_formation.k8s.hostname_suffix = .{{ $svcName }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}
   cluster_formation.node_cleanup.interval = 10
   cluster_formation.node_cleanup.only_log_warning = true
   cluster_partition_handling = {{ .Values.clustering.partitionHandling }}
@@ -479,7 +487,11 @@ configuration: |-
   ## Memory Threshold
   ##
   total_memory_available_override_value = {{ include "rabbitmq.toBytes" .Values.resources.limits.memory }}
+  {{- if (eq .Values.memoryHighWatermark.type "absolute") }}
+  vm_memory_high_watermark.{{ .Values.memoryHighWatermark.type }} = {{ include "rabbitmq.toBytes" .Values.memoryHighWatermark.value }}
+  {{- else if (eq .Values.memoryHighWatermark.type "relative") }}
   vm_memory_high_watermark.{{ .Values.memoryHighWatermark.type }} = {{ .Values.memoryHighWatermark.value }}
+  {{- end }}
   ## TCP Listen Options
   ##
   tcp_listen_options.backlog = {{ .Values.tcpListenOptions.backlog }}
@@ -715,7 +727,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template
@@ -760,7 +772,7 @@ containerSecurityContext:
     type: "RuntimeDefault"
 
 ## RabbitMQ containers' resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -964,6 +976,20 @@ persistence:
   ##   app: my-app
   labels: {}
 
+## Persistent Volume Claim Retention Policy
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+##
+persistentVolumeClaimRetentionPolicy:
+  ## @param persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for rabbitmq Statefulset
+  ##
+  enabled: false
+  ## @param persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ##
+  whenScaled: Retain
+  ## @param persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  whenDeleted: Retain
+
 ## @section Exposure parameters
 ##
 
@@ -1103,7 +1129,7 @@ service:
 
 ## Configure the ingress resource that allows you to access the
 ## RabbitMQ installation. Set up the URL
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress resource for Management console
@@ -1122,7 +1148,7 @@ ingress:
   hostname: rabbitmq.local
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
   ## Use this parameter to set the required annotations for cert-manager, see
   ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   ##
@@ -1405,11 +1431,11 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r91
+    tag: 11-debian-11-r93
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -1420,7 +1446,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init Container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following

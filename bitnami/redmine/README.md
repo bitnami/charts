@@ -1,20 +1,20 @@
 <!--- app-name: Redmine -->
 
-# Redmine packaged by Bitnami
+# Bitnami package for Redmine
 
 Redmine is an open source management application. It includes a tracking issue system, Gantt charts for a visual view of projects and deadlines, and supports SCM integration for version control.
 
-[Overview of Redmine](http://www.redmine.org/)
+[Overview of Redmine](https://www.redmine.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redmine
+helm install my-release oci://registry-1.docker.io/bitnamicharts/redmine
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Redmine in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -23,8 +23,6 @@ This chart bootstraps a [Redmine](https://github.com/bitnami/containers/tree/mai
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/main/bitnami/mariadb) and the [PostgreSQL chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) which are required for bootstrapping a MariaDB/PostgreSQL deployment for the database requirements of the Redmine application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Redmine in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -123,62 +121,63 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redmine --set databa
 
 ### Redmine deployment parameters
 
-| Name                                 | Description                                                                                                              | Value           |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | --------------- |
-| `replicaCount`                       | Number of Redmine replicas to deploy                                                                                     | `1`             |
-| `containerPorts.http`                | Redmine HTTP container port                                                                                              | `3000`          |
-| `resources.limits`                   | The resources limits for the Redmine container                                                                           | `{}`            |
-| `resources.requests`                 | The requested resources for the Redmine container                                                                        | `{}`            |
-| `podSecurityContext.enabled`         | Enabled Redmine pods' Security Context                                                                                   | `false`         |
-| `podSecurityContext.fsGroup`         | Set Redmine pod's Security Context fsGroup                                                                               | `1001`          |
-| `containerSecurityContext.enabled`   | Enabled Redmine containers' Security Context                                                                             | `false`         |
-| `containerSecurityContext.runAsUser` | Set Redmine container's Security Context runAsUser                                                                       | `1001`          |
-| `livenessProbe.enabled`              | Enable livenessProbe on Redmine containers                                                                               | `true`          |
-| `livenessProbe.path`                 | Path for to check for livenessProbe                                                                                      | `/`             |
-| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                  | `300`           |
-| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                         | `10`            |
-| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                        | `5`             |
-| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                      | `6`             |
-| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                      | `1`             |
-| `readinessProbe.enabled`             | Enable readinessProbe on Redmine containers                                                                              | `true`          |
-| `readinessProbe.path`                | Path to check for readinessProbe                                                                                         | `/`             |
-| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                 | `5`             |
-| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                        | `10`            |
-| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                       | `5`             |
-| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                     | `6`             |
-| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                     | `1`             |
-| `startupProbe.enabled`               | Enable startupProbe on Redmine containers                                                                                | `false`         |
-| `startupProbe.path`                  | Path to check for startupProbe                                                                                           | `/`             |
-| `startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                   | `300`           |
-| `startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                          | `10`            |
-| `startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                         | `5`             |
-| `startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                       | `6`             |
-| `startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                       | `1`             |
-| `customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
-| `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
-| `customStartupProbe`                 | Custom startupProbe that overrides the default one                                                                       | `{}`            |
-| `lifecycleHooks`                     | LifecycleHooks to set additional configuration at startup                                                                | `{}`            |
-| `hostAliases`                        | Redmine pod host aliases                                                                                                 | `[]`            |
-| `podLabels`                          | Extra labels for Redmine pods                                                                                            | `{}`            |
-| `podAnnotations`                     | Annotations for Redmine pods                                                                                             | `{}`            |
-| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`            |
-| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`          |
-| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`            |
-| `nodeAffinityPreset.key`             | Node label key to match. Ignored if `affinity` is set                                                                    | `""`            |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set                                                                 | `[]`            |
-| `affinity`                           | Affinity for pod assignment                                                                                              | `{}`            |
-| `nodeSelector`                       | Node labels for pod assignment                                                                                           | `{}`            |
-| `tolerations`                        | Tolerations for pod assignment                                                                                           | `[]`            |
-| `priorityClassName`                  | Redmine pods' Priority Class Name                                                                                        | `""`            |
-| `schedulerName`                      | Alternate scheduler                                                                                                      | `""`            |
-| `terminationGracePeriodSeconds`      | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`            |
-| `topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
-| `updateStrategy.type`                | Redmine statefulset strategy type                                                                                        | `RollingUpdate` |
-| `updateStrategy.rollingUpdate`       | Redmine statefulset rolling update configuration parameters                                                              | `{}`            |
-| `extraVolumes`                       | Optionally specify extra list of additional volumes for Redmine pods                                                     | `[]`            |
-| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Redmine container(s)                                        | `[]`            |
-| `initContainers`                     | Add additional init containers to the Redmine pods                                                                       | `[]`            |
-| `sidecars`                           | Add additional sidecar containers to the Redmine pod                                                                     | `[]`            |
+| Name                                           | Description                                                                                                              | Value            |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------- |
+| `replicaCount`                                 | Number of Redmine replicas to deploy                                                                                     | `1`              |
+| `containerPorts.http`                          | Redmine HTTP container port                                                                                              | `3000`           |
+| `resources.limits`                             | The resources limits for the Redmine container                                                                           | `{}`             |
+| `resources.requests`                           | The requested resources for the Redmine container                                                                        | `{}`             |
+| `podSecurityContext.enabled`                   | Enabled Redmine pods' Security Context                                                                                   | `true`           |
+| `podSecurityContext.fsGroup`                   | Set Redmine pod's Security Context fsGroup                                                                               | `0`              |
+| `containerSecurityContext.enabled`             | Enabled Redmine containers' Security Context                                                                             | `true`           |
+| `containerSecurityContext.runAsUser`           | Set Redmine container's Security Context runAsUser                                                                       | `0`              |
+| `containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
+| `livenessProbe.enabled`                        | Enable livenessProbe on Redmine containers                                                                               | `true`           |
+| `livenessProbe.path`                           | Path for to check for livenessProbe                                                                                      | `/`              |
+| `livenessProbe.initialDelaySeconds`            | Initial delay seconds for livenessProbe                                                                                  | `300`            |
+| `livenessProbe.periodSeconds`                  | Period seconds for livenessProbe                                                                                         | `10`             |
+| `livenessProbe.timeoutSeconds`                 | Timeout seconds for livenessProbe                                                                                        | `5`              |
+| `livenessProbe.failureThreshold`               | Failure threshold for livenessProbe                                                                                      | `6`              |
+| `livenessProbe.successThreshold`               | Success threshold for livenessProbe                                                                                      | `1`              |
+| `readinessProbe.enabled`                       | Enable readinessProbe on Redmine containers                                                                              | `true`           |
+| `readinessProbe.path`                          | Path to check for readinessProbe                                                                                         | `/`              |
+| `readinessProbe.initialDelaySeconds`           | Initial delay seconds for readinessProbe                                                                                 | `5`              |
+| `readinessProbe.periodSeconds`                 | Period seconds for readinessProbe                                                                                        | `10`             |
+| `readinessProbe.timeoutSeconds`                | Timeout seconds for readinessProbe                                                                                       | `5`              |
+| `readinessProbe.failureThreshold`              | Failure threshold for readinessProbe                                                                                     | `6`              |
+| `readinessProbe.successThreshold`              | Success threshold for readinessProbe                                                                                     | `1`              |
+| `startupProbe.enabled`                         | Enable startupProbe on Redmine containers                                                                                | `false`          |
+| `startupProbe.path`                            | Path to check for startupProbe                                                                                           | `/`              |
+| `startupProbe.initialDelaySeconds`             | Initial delay seconds for startupProbe                                                                                   | `300`            |
+| `startupProbe.periodSeconds`                   | Period seconds for startupProbe                                                                                          | `10`             |
+| `startupProbe.timeoutSeconds`                  | Timeout seconds for startupProbe                                                                                         | `5`              |
+| `startupProbe.failureThreshold`                | Failure threshold for startupProbe                                                                                       | `6`              |
+| `startupProbe.successThreshold`                | Success threshold for startupProbe                                                                                       | `1`              |
+| `customLivenessProbe`                          | Custom livenessProbe that overrides the default one                                                                      | `{}`             |
+| `customReadinessProbe`                         | Custom readinessProbe that overrides the default one                                                                     | `{}`             |
+| `customStartupProbe`                           | Custom startupProbe that overrides the default one                                                                       | `{}`             |
+| `lifecycleHooks`                               | LifecycleHooks to set additional configuration at startup                                                                | `{}`             |
+| `hostAliases`                                  | Redmine pod host aliases                                                                                                 | `[]`             |
+| `podLabels`                                    | Extra labels for Redmine pods                                                                                            | `{}`             |
+| `podAnnotations`                               | Annotations for Redmine pods                                                                                             | `{}`             |
+| `podAffinityPreset`                            | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`             |
+| `podAntiAffinityPreset`                        | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`           |
+| `nodeAffinityPreset.type`                      | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`             |
+| `nodeAffinityPreset.key`                       | Node label key to match. Ignored if `affinity` is set                                                                    | `""`             |
+| `nodeAffinityPreset.values`                    | Node label values to match. Ignored if `affinity` is set                                                                 | `[]`             |
+| `affinity`                                     | Affinity for pod assignment                                                                                              | `{}`             |
+| `nodeSelector`                                 | Node labels for pod assignment                                                                                           | `{}`             |
+| `tolerations`                                  | Tolerations for pod assignment                                                                                           | `[]`             |
+| `priorityClassName`                            | Redmine pods' Priority Class Name                                                                                        | `""`             |
+| `schedulerName`                                | Alternate scheduler                                                                                                      | `""`             |
+| `terminationGracePeriodSeconds`                | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`             |
+| `topologySpreadConstraints`                    | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`             |
+| `updateStrategy.type`                          | Redmine statefulset strategy type                                                                                        | `RollingUpdate`  |
+| `updateStrategy.rollingUpdate`                 | Redmine statefulset rolling update configuration parameters                                                              | `{}`             |
+| `extraVolumes`                                 | Optionally specify extra list of additional volumes for Redmine pods                                                     | `[]`             |
+| `extraVolumeMounts`                            | Optionally specify extra list of additional volumeMounts for Redmine container(s)                                        | `[]`             |
+| `initContainers`                               | Add additional init containers to the Redmine pods                                                                       | `[]`             |
+| `sidecars`                                     | Add additional sidecar containers to the Redmine pod                                                                     | `[]`             |
 
 ### Traffic Exposure Parameters
 
@@ -388,11 +387,11 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/redmi
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/redmine/values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -565,6 +564,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 26.0.0
+
+This major release bumps the MariaDB version to 11.2. No major issues are expected during the upgrade.
+
 ### To 25.0.0
 
 This major release bumps the MariaDB version to 11.1. No major issues are expected during the upgrade.
@@ -591,7 +594,7 @@ Refer to the [chart documentation for more information about how to upgrade from
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

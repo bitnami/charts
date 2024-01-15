@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.cronjobs.enabled -}}
+{{- if ( include "matomo.cronjobs.enabled" ( dict "context" $ "cronjob" "archive" ) ) -}}
 apiVersion: {{ include "common.capabilities.cronjob.apiVersion" . }}
 kind: CronJob
 metadata:
@@ -35,6 +35,9 @@ spec:
         spec:
           {{- include "matomo.imagePullSecrets" . | nindent 10 }}
           restartPolicy: OnFailure
+          {{- if .Values.cronjobs.archive.affinity }}
+          affinity: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.archive.affinity "context" $) | nindent 12 }}
+          {{- end }}
           initContainers:
             {{ include "matomo.initContainers" . | nindent 12 }}
           containers:
@@ -88,7 +91,7 @@ spec:
                   name: custom-postinit
                 {{- end }}
                 {{- if .Values.extraVolumeMounts }}
-                {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+                {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 16 }}
                 {{- end }}
               resources:
                 {{- toYaml .Values.resources | nindent 16 }}
@@ -135,6 +138,8 @@ spec:
             {{- if .Values.extraVolumes }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 12 }}
             {{- end }}
+{{- end }}
+{{- if ( include "matomo.cronjobs.enabled" ( dict "context" $ "cronjob" "taskScheduler" ) ) }}
 ---
 apiVersion: {{ include "common.capabilities.cronjob.apiVersion" . }}
 kind: CronJob
@@ -150,7 +155,7 @@ metadata:
   {{- end }}
 spec:
   schedule: {{ .Values.cronjobs.taskScheduler.schedule | quote }}
-  suspend: {{ .Values.cronjobs.archive.suspend }}
+  suspend: {{ .Values.cronjobs.taskScheduler.suspend }}
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
@@ -166,6 +171,9 @@ spec:
           {{- end }}
         spec:
           {{- include "matomo.imagePullSecrets" . | nindent 10 }}
+          {{- if .Values.cronjobs.taskScheduler.affinity }}
+          affinity: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.taskScheduler.affinity "context" $) | nindent 12 }}
+          {{- end }}
           restartPolicy: OnFailure
           initContainers:
             {{ include "matomo.initContainers" . | nindent 12 }}
@@ -215,6 +223,9 @@ spec:
               volumeMounts:
                 - name: matomo-data
                   mountPath: /bitnami/matomo
+                {{- if .Values.extraVolumeMounts }}
+                {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 16 }}
+                {{- end }}
           volumes:
             {{- if .Values.certificates.customCAs }}
             - name: etc-ssl-certs

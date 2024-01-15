@@ -174,17 +174,20 @@ Return the matomo pods needed initContainers
   {{- range (default .Values.image.pullSecrets .Values.certificates.image.pullSecrets) }}
     - name: {{ . }}
   {{- end }}
-  command:
+  securityContext:
+    runAsUser: 0
   {{- if .Values.certificates.command }}
   command: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.command "context" $) | nindent 4 }}
   {{- else if .Values.certificates.customCertificate.certificateSecret }}
-  - sh
-  - -c
-  - install_packages ca-certificates openssl
+  command:
+    - sh
+    - -c
+    - install_packages ca-certificates openssl
   {{- else }}
-  - sh
-  - -c
-  - install_packages ca-certificates openssl
+  command:
+    - sh
+    - -c
+    - install_packages ca-certificates openssl
     && openssl req -new -x509 -days 3650 -nodes -sha256
       -subj "/CN=$(hostname)" -addext "subjectAltName = DNS:$(hostname)"
       -out  /etc/ssl/certs/ssl-cert-snakeoil.pem
@@ -214,4 +217,19 @@ Return the matomo pods needed initContainers
       mountPath: /usr/local/share/ca-certificates
       readOnly: true
 {{- end }}
+{{- end }}
+{{/*
+Return if cronjob X is enabled. Takes into account the deprecated value 'cronjobs.enabled'.
+Use: include "matomo.cronjobs.enabled" (dict "context" $ "cronjob" "archive" )
+*/}}
+{{- define "matomo.cronjobs.enabled" -}}
+{{- if ( hasKey .context.Values.cronjobs "enabled" ) -}}
+  {{- if .context.Values.cronjobs.enabled -}}
+    {{- true -}}
+  {{- end -}}
+{{- else -}}
+  {{- if ( get .context.Values.cronjobs .cronjob ).enabled  -}}
+    {{- true -}}
+  {{- end -}}
+{{- end -}}
 {{- end }}

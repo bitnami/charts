@@ -1,6 +1,6 @@
 <!--- app-name: JupyterHub -->
 
-# JupyterHub packaged by Bitnami
+# Bitnami package for JupyterHub
 
 JupyterHub brings the power of notebooks to groups of users. It gives users access to computational environments and resources without burdening the users with installation and maintenance tasks.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/jupyterhub
+helm install my-release oci://registry-1.docker.io/bitnamicharts/jupyterhub
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use JupyterHub in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -25,8 +25,6 @@ This chart bootstraps a [JupyterHub](https://github.com/jupyterhub/jupyterhub) D
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/get-started/understand-default-configuration/).
-
-Looking to use JupyterHub in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -95,6 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.baseUrl`                                           | Hub base URL                                                                                                             | `/`                          |
 | `hub.adminUser`                                         | Hub Dummy authenticator admin user                                                                                       | `user`                       |
 | `hub.password`                                          | Hub Dummy authenticator password                                                                                         | `""`                         |
+| `hub.services`                                          | JupyterHub services interacting with the JupyterHub API                                                                  | `{}`                         |
 | `hub.configuration`                                     | Hub configuration file (to be used by jupyterhub_config.py)                                                              | `""`                         |
 | `hub.existingConfigmap`                                 | Configmap with Hub init scripts (replaces the scripts in templates/hub/configmap.yml)                                    | `""`                         |
 | `hub.existingSecret`                                    | Secret with hub configuration (replaces the hub.configuration value) and proxy token                                     | `""`                         |
@@ -291,12 +290,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Proxy RBAC Parameters
 
-| Name                                                | Description                                                            | Value  |
-| --------------------------------------------------- | ---------------------------------------------------------------------- | ------ |
-| `proxy.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true` |
-| `proxy.serviceAccount.name`                         | Override Hub service account name                                      | `""`   |
-| `proxy.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true` |
-| `proxy.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
+| Name                                                | Description                                                            | Value   |
+| --------------------------------------------------- | ---------------------------------------------------------------------- | ------- |
+| `proxy.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true`  |
+| `proxy.serviceAccount.name`                         | Override Hub service account name                                      | `""`    |
+| `proxy.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
+| `proxy.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
 
 ### Proxy Traffic Exposure Parameters
 
@@ -457,12 +456,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Single User RBAC parameters
 
-| Name                                                     | Description                                                            | Value  |
-| -------------------------------------------------------- | ---------------------------------------------------------------------- | ------ |
-| `singleuser.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true` |
-| `singleuser.serviceAccount.name`                         | Override Single User service account name                              | `""`   |
-| `singleuser.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true` |
-| `singleuser.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
+| Name                                                     | Description                                                            | Value   |
+| -------------------------------------------------------- | ---------------------------------------------------------------------- | ------- |
+| `singleuser.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true`  |
+| `singleuser.serviceAccount.name`                         | Override Single User service account name                              | `""`    |
+| `singleuser.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
+| `singleuser.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
 
 ### Single User Persistence parameters
 
@@ -472,6 +471,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `singleuser.persistence.storageClass` | Persistent Volumes storage class                           | `""`                |
 | `singleuser.persistence.accessModes`  | Persistent Volumes access modes                            | `["ReadWriteOnce"]` |
 | `singleuser.persistence.size`         | Persistent Volumes size                                    | `10Gi`              |
+| `singleuser.profileList`              | Define JupyterHub profiles                                 | `[]`                |
 
 ### Traffic exposure parameters
 
@@ -534,7 +534,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/jupyt
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -612,7 +612,7 @@ Refer to the [chart documentation for more information about how to upgrade from
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

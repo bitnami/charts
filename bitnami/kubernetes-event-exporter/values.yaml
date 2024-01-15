@@ -57,7 +57,7 @@ extraDeploy: []
 ## @param replicaCount Desired number of pod replicas
 replicaCount: 1
 ##
-## @param revisionHistoryLimit Desired number of old ReplicaSets to retain 
+## @param revisionHistoryLimit Desired number of old ReplicaSets to retain
 ## Defaults to 10, if set to 0 old ReplicaSets will be garbage-collected
 revisionHistoryLimit: 10
 ##
@@ -79,11 +79,11 @@ image:
   ##
   registry: docker.io
   repository: bitnami/kubernetes-event-exporter
-  tag: 1.5.0-debian-11-r1
+  tag: 1.6.1-debian-11-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -133,6 +133,12 @@ rbac:
   ## @param rbac.create Create the RBAC roles for API accessibility
   ##
   create: true
+  ## @param rbac.rules [array] List of rules for the cluster role
+  ##
+  rules:
+    - apiGroups: ["*"]
+      resources: ["*"]
+      verbs: ["get", "watch", "list"]
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
@@ -190,7 +196,7 @@ args: []
 ##
 lifecycleHooks: {}
 ## Container resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -210,6 +216,50 @@ resources:
   ##    memory: 25Mi
   requests: {}
 
+## Configure extra options for Kubernetes event exporter container's liveness, readiness and startup probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe on Kubernetes event exporter container
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 2
+  failureThreshold: 5
+  successThreshold: 1
+## @param readinessProbe.enabled Enable readinessProbe on Kubernetes event exporter container
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 2
+  failureThreshold: 1
+  successThreshold: 1
+## @param startupProbe.enabled Enable startupProbe on Kubernetes event exporter container
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 40
+  periodSeconds: 10
+  timeoutSeconds: 15
+  failureThreshold: 15
+  successThreshold: 1
 ## Configure extra custom startup, liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param customStartupProbe Configure startup probe for Kubernetes event exporter pod
@@ -222,7 +272,7 @@ customLivenessProbe: {}
 ##
 customReadinessProbe: {}
 ## @param nodeSelector Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param priorityClassName Set Priority Class Name to allow priority control over other pods

@@ -1,6 +1,6 @@
 <!--- app-name: OAuth2 Proxy -->
 
-# OAuth2 Proxy packaged by Bitnami
+# Bitnami package for OAuth2 Proxy
 
 A reverse proxy and static file server that provides authentication using Providers (Google, GitHub, and others) to validate accounts by email, domain or group.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/oauth2-proxy
+helm install my-release oci://registry-1.docker.io/bitnamicharts/oauth2-proxy
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use OAuth2 Proxy in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -23,8 +23,6 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 This chart bootstraps a [OAuth2 Proxy](https://github.com/oauth2-proxy/oauth2-proxy) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use OAuth2 Proxy in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -222,7 +220,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dnsConfig`                                         | Pod DNS configuration.                                                                           | `{}`             |
 | `serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                             | `true`           |
 | `serviceAccount.name`                               | The name of the ServiceAccount to use                                                            | `""`             |
-| `serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                   | `true`           |
+| `serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                   | `false`          |
 | `serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.       | `{}`             |
 
 ### External Redis&reg; parameters
@@ -252,7 +250,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.sentinel.service.port`          | Redis&reg; (with Sentinel) service port                    | `6379`       |
 | `redis.sentinel.service.sentinelPort`  | Redis&reg; (with Sentinel) sentinel service port           | `26379`      |
 
-See <https://github.com/bitnami-labs/readmenator> to create the table
+See <https://github.com/bitnami/readme-generator-for-helm> to create the table
 
 The above parameters map to the env variables defined in [bitnami/oauth2-proxy](https://github.com/bitnami/containers/tree/main/bitnami/oauth2-proxy). For more information please refer to the [bitnami/oauth2-proxy](https://github.com/bitnami/containers/tree/main/bitnami/oauth2-proxy) image documentation.
 
@@ -277,11 +275,11 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/oauth
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/oauth2-proxy/values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -341,7 +339,7 @@ Refer to the [chart documentation for more information about how to upgrade from
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

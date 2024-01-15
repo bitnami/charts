@@ -22,8 +22,8 @@ Cypress.Commands.add(
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
     cy.clearCookies();
     cy.visit('/login');
-    cy.get('[aria-label*="Username"]').type(username);
-    cy.get('[aria-label*="Password"]').type(password);
+    cy.get('input[name="user"]').type(username);
+    cy.get('input[name="password"]').type(password);
     cy.contains('Log in').click();
     cy.contains('Home');
   }

@@ -1,6 +1,6 @@
 <!--- app-name: PostgreSQL -->
 
-# PostgreSQL packaged by Bitnami
+# Bitnami package for PostgreSQL
 
 PostgreSQL (Postgres) is an open source object-relational database known for reliability and data integrity. ACID-compliant, it supports foreign keys, joins, views, triggers and stored procedures.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/postgresql
+helm install my-release oci://registry-1.docker.io/bitnamicharts/postgresql
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use PostgreSQL in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -23,8 +23,6 @@ This chart bootstraps a [PostgreSQL](https://github.com/bitnami/containers/tree/
 For HA, please see [this repo](https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha)
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use PostgreSQL in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -450,9 +448,9 @@ kubectl delete pvc -l release=my-release
 | Name                                          | Description                                                                                                                                 | Value   |
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `serviceBindings.enabled`                     | Create secret for service binding (Experimental)                                                                                            | `false` |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for PostgreSQL pod                                                                                        | `false` |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for PostgreSQL pod                                                                                        | `true`  |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                      | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `false` |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                        | `{}`    |
 | `rbac.create`                                 | Create Role and RoleBinding (required for PSP to work)                                                                                      | `false` |
 | `rbac.rules`                                  | Custom RBAC rules to set                                                                                                                    | `[]`    |
@@ -468,6 +466,7 @@ kubectl delete pvc -l release=my-release
 | `metrics.image.digest`                                      | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                |
 | `metrics.image.pullPolicy`                                  | PostgreSQL Prometheus Exporter image pull policy                                                           | `IfNotPresent`                      |
 | `metrics.image.pullSecrets`                                 | Specify image pull secrets                                                                                 | `[]`                                |
+| `metrics.collectors`                                        | Control enabled collectors                                                                                 | `{}`                                |
 | `metrics.customMetrics`                                     | Define additional custom metrics                                                                           | `{}`                                |
 | `metrics.extraEnvVars`                                      | Extra environment variables to add to PostgreSQL Prometheus exporter                                       | `[]`                                |
 | `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                       | `true`                              |
@@ -543,11 +542,11 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/postg
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/postgresql/values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -741,7 +740,7 @@ Refer to the [chart documentation for more information about how to upgrade from
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

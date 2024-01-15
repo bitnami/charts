@@ -1,6 +1,6 @@
 <!--- app-name: Supabase -->
 
-# Supabase packaged by Bitnami
+# Bitnami package for Supabase
 
 Supabase is an open source Firebase alternative. Provides all the necessary backend features to build your application in a scalable way. Uses PostgreSQL as datastore.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/supabase
+helm install my-release oci://registry-1.docker.io/bitnamicharts/supabase
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Supabase in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -24,8 +24,6 @@ This chart bootstraps a [Supabase](https://www.supabase.com/) deployment in a [K
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/supabase/get-started/).
-
-Looking to use Supabase in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -108,6 +106,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jwt.autoGenerate.kubectlImage.pullSecrets`                          | Kubectl image pull secrets                                                                                                                         | `[]`                      |
 | `jwt.autoGenerate.backoffLimit`                                      | set backoff limit of the job                                                                                                                       | `10`                      |
 | `jwt.autoGenerate.extraVolumes`                                      | Optionally specify extra list of additional volumes for the jwt init job                                                                           | `[]`                      |
+| `jwt.autoGenerate.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                                               | `true`                    |
+| `jwt.autoGenerate.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                             | `""`                      |
+| `jwt.autoGenerate.serviceAccount.annotations`                        | Additional Service Account annotations (evaluated as a template)                                                                                   | `{}`                      |
+| `jwt.autoGenerate.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                     | `true`                    |
 | `jwt.autoGenerate.containerSecurityContext.enabled`                  | Enabled jwt init job containers' Security Context                                                                                                  | `true`                    |
 | `jwt.autoGenerate.containerSecurityContext.runAsUser`                | Set jwt init job containers' Security Context runAsUser                                                                                            | `1001`                    |
 | `jwt.autoGenerate.containerSecurityContext.runAsNonRoot`             | Set jwt init job container's Security Context runAsNonRoot                                                                                         | `true`                    |
@@ -736,13 +738,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                          | Description                                                      | Value  |
-| --------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                          | Description                                                      | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Kong sub-chart parameters
 
@@ -813,11 +815,11 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/supab
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/supabase/values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -867,7 +869,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as supabase (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the component specific sections. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/supabase/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as supabase (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the component specific sections. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/supabase/configuration/configure-sidecar-init-containers/).
 
 ### Pod affinity
 
@@ -891,7 +893,7 @@ This major updates the PostgreSQL subchart to its newest major, 13.0.0. [Here](h
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

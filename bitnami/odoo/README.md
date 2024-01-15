@@ -1,6 +1,6 @@
 <!--- app-name: Odoo -->
 
-# Odoo packaged by Bitnami
+# Bitnami package for Odoo
 
 Odoo is an open source ERP and CRM platform, formerly known as OpenERP, that can connect a wide variety of business operations such as sales, supply chain, finance, and project management.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/odoo
+helm install my-release oci://registry-1.docker.io/bitnamicharts/odoo
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Odoo in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -23,8 +23,6 @@ This chart bootstraps a [Odoo](https://github.com/bitnami/containers/tree/main/b
 Odoo Apps can be used as stand-alone applications, but they also integrate seamlessly so you get a full-featured Open Source ERP when you install several Apps.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Odoo in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -115,63 +113,64 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Odoo deployment parameters
 
-| Name                                 | Description                                                                                                              | Value           |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | --------------- |
-| `replicaCount`                       | Number of Odoo replicas to deploy                                                                                        | `1`             |
-| `containerPorts.http`                | Odoo HTTP container port                                                                                                 | `8069`          |
-| `resources.limits`                   | The resources limits for the Odoo container                                                                              | `{}`            |
-| `resources.requests`                 | The requested resources for the Odoo container                                                                           | `{}`            |
-| `podSecurityContext.enabled`         | Enabled Odoo pods' Security Context                                                                                      | `false`         |
-| `podSecurityContext.fsGroup`         | Set Odoo pod's Security Context fsGroup                                                                                  | `1001`          |
-| `containerSecurityContext.enabled`   | Enabled Odoo containers' Security Context                                                                                | `false`         |
-| `containerSecurityContext.runAsUser` | Set Odoo container's Security Context runAsUser                                                                          | `1001`          |
-| `livenessProbe.enabled`              | Enable livenessProbe                                                                                                     | `true`          |
-| `livenessProbe.path`                 | Path for to check for livenessProbe                                                                                      | `/web/health`   |
-| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                  | `600`           |
-| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                         | `30`            |
-| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                        | `5`             |
-| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                      | `6`             |
-| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                      | `1`             |
-| `readinessProbe.enabled`             | Enable readinessProbe                                                                                                    | `true`          |
-| `readinessProbe.path`                | Path to check for readinessProbe                                                                                         | `/web/health`   |
-| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                 | `30`            |
-| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                        | `10`            |
-| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                       | `5`             |
-| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                     | `6`             |
-| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                     | `1`             |
-| `startupProbe.enabled`               | Enable startupProbe                                                                                                      | `false`         |
-| `startupProbe.path`                  | Path to check for startupProbe                                                                                           | `/web/health`   |
-| `startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                   | `300`           |
-| `startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                          | `10`            |
-| `startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                         | `5`             |
-| `startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                       | `6`             |
-| `startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                       | `1`             |
-| `customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
-| `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
-| `customStartupProbe`                 | Custom startupProbe that overrides the default one                                                                       | `{}`            |
-| `lifecycleHooks`                     | LifecycleHooks to set additional configuration at startup                                                                | `{}`            |
-| `hostAliases`                        | Odoo pod host aliases                                                                                                    | `[]`            |
-| `podLabels`                          | Extra labels for Odoo pods                                                                                               | `{}`            |
-| `podAnnotations`                     | Annotations for Odoo pods                                                                                                | `{}`            |
-| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`            |
-| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`          |
-| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`            |
-| `nodeAffinityPreset.key`             | Node label key to match. Ignored if `affinity` is set                                                                    | `""`            |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set                                                                 | `[]`            |
-| `affinity`                           | Affinity for pod assignment                                                                                              | `{}`            |
-| `nodeSelector`                       | Node labels for pod assignment                                                                                           | `{}`            |
-| `tolerations`                        | Tolerations for pod assignment                                                                                           | `[]`            |
-| `topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
-| `priorityClassName`                  | Odoo pods' Priority Class Name                                                                                           | `""`            |
-| `schedulerName`                      | Use an alternate scheduler, e.g. "stork".                                                                                | `""`            |
-| `terminationGracePeriodSeconds`      | Seconds Odoo pod needs to terminate gracefully                                                                           | `""`            |
-| `updateStrategy.type`                | Odoo deployment strategy type                                                                                            | `RollingUpdate` |
-| `updateStrategy.rollingUpdate`       | Odoo deployment rolling update configuration parameters                                                                  | `{}`            |
-| `extraVolumes`                       | Optionally specify extra list of additional volumes for Odoo pods                                                        | `[]`            |
-| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Odoo container(s)                                           | `[]`            |
-| `extraContainerPorts`                | Optionally specify extra list of additional ports for Odoo container(s)                                                  | `[]`            |
-| `sidecars`                           | Add additional sidecar containers to the Odoo pod                                                                        | `[]`            |
-| `initContainers`                     | Add additional init containers to the Odoo pods                                                                          | `[]`            |
+| Name                                           | Description                                                                                                              | Value            |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------- |
+| `replicaCount`                                 | Number of Odoo replicas to deploy                                                                                        | `1`              |
+| `containerPorts.http`                          | Odoo HTTP container port                                                                                                 | `8069`           |
+| `resources.limits`                             | The resources limits for the Odoo container                                                                              | `{}`             |
+| `resources.requests`                           | The requested resources for the Odoo container                                                                           | `{}`             |
+| `podSecurityContext.enabled`                   | Enabled Odoo pods' Security Context                                                                                      | `true`           |
+| `podSecurityContext.fsGroup`                   | Set Odoo pod's Security Context fsGroup                                                                                  | `0`              |
+| `containerSecurityContext.enabled`             | Enabled Odoo containers' Security Context                                                                                | `true`           |
+| `containerSecurityContext.runAsUser`           | Set Odoo container's Security Context runAsUser                                                                          | `0`              |
+| `containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
+| `livenessProbe.enabled`                        | Enable livenessProbe                                                                                                     | `true`           |
+| `livenessProbe.path`                           | Path for to check for livenessProbe                                                                                      | `/web/health`    |
+| `livenessProbe.initialDelaySeconds`            | Initial delay seconds for livenessProbe                                                                                  | `600`            |
+| `livenessProbe.periodSeconds`                  | Period seconds for livenessProbe                                                                                         | `30`             |
+| `livenessProbe.timeoutSeconds`                 | Timeout seconds for livenessProbe                                                                                        | `5`              |
+| `livenessProbe.failureThreshold`               | Failure threshold for livenessProbe                                                                                      | `6`              |
+| `livenessProbe.successThreshold`               | Success threshold for livenessProbe                                                                                      | `1`              |
+| `readinessProbe.enabled`                       | Enable readinessProbe                                                                                                    | `true`           |
+| `readinessProbe.path`                          | Path to check for readinessProbe                                                                                         | `/web/health`    |
+| `readinessProbe.initialDelaySeconds`           | Initial delay seconds for readinessProbe                                                                                 | `30`             |
+| `readinessProbe.periodSeconds`                 | Period seconds for readinessProbe                                                                                        | `10`             |
+| `readinessProbe.timeoutSeconds`                | Timeout seconds for readinessProbe                                                                                       | `5`              |
+| `readinessProbe.failureThreshold`              | Failure threshold for readinessProbe                                                                                     | `6`              |
+| `readinessProbe.successThreshold`              | Success threshold for readinessProbe                                                                                     | `1`              |
+| `startupProbe.enabled`                         | Enable startupProbe                                                                                                      | `false`          |
+| `startupProbe.path`                            | Path to check for startupProbe                                                                                           | `/web/health`    |
+| `startupProbe.initialDelaySeconds`             | Initial delay seconds for startupProbe                                                                                   | `300`            |
+| `startupProbe.periodSeconds`                   | Period seconds for startupProbe                                                                                          | `10`             |
+| `startupProbe.timeoutSeconds`                  | Timeout seconds for startupProbe                                                                                         | `5`              |
+| `startupProbe.failureThreshold`                | Failure threshold for startupProbe                                                                                       | `6`              |
+| `startupProbe.successThreshold`                | Success threshold for startupProbe                                                                                       | `1`              |
+| `customLivenessProbe`                          | Custom livenessProbe that overrides the default one                                                                      | `{}`             |
+| `customReadinessProbe`                         | Custom readinessProbe that overrides the default one                                                                     | `{}`             |
+| `customStartupProbe`                           | Custom startupProbe that overrides the default one                                                                       | `{}`             |
+| `lifecycleHooks`                               | LifecycleHooks to set additional configuration at startup                                                                | `{}`             |
+| `hostAliases`                                  | Odoo pod host aliases                                                                                                    | `[]`             |
+| `podLabels`                                    | Extra labels for Odoo pods                                                                                               | `{}`             |
+| `podAnnotations`                               | Annotations for Odoo pods                                                                                                | `{}`             |
+| `podAffinityPreset`                            | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`             |
+| `podAntiAffinityPreset`                        | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`           |
+| `nodeAffinityPreset.type`                      | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`             |
+| `nodeAffinityPreset.key`                       | Node label key to match. Ignored if `affinity` is set                                                                    | `""`             |
+| `nodeAffinityPreset.values`                    | Node label values to match. Ignored if `affinity` is set                                                                 | `[]`             |
+| `affinity`                                     | Affinity for pod assignment                                                                                              | `{}`             |
+| `nodeSelector`                                 | Node labels for pod assignment                                                                                           | `{}`             |
+| `tolerations`                                  | Tolerations for pod assignment                                                                                           | `[]`             |
+| `topologySpreadConstraints`                    | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`             |
+| `priorityClassName`                            | Odoo pods' Priority Class Name                                                                                           | `""`             |
+| `schedulerName`                                | Use an alternate scheduler, e.g. "stork".                                                                                | `""`             |
+| `terminationGracePeriodSeconds`                | Seconds Odoo pod needs to terminate gracefully                                                                           | `""`             |
+| `updateStrategy.type`                          | Odoo deployment strategy type                                                                                            | `RollingUpdate`  |
+| `updateStrategy.rollingUpdate`                 | Odoo deployment rolling update configuration parameters                                                                  | `{}`             |
+| `extraVolumes`                                 | Optionally specify extra list of additional volumes for Odoo pods                                                        | `[]`             |
+| `extraVolumeMounts`                            | Optionally specify extra list of additional volumeMounts for Odoo container(s)                                           | `[]`             |
+| `extraContainerPorts`                          | Optionally specify extra list of additional ports for Odoo container(s)                                                  | `[]`             |
+| `sidecars`                                     | Add additional sidecar containers to the Odoo pod                                                                        | `[]`             |
+| `initContainers`                               | Add additional init containers to the Odoo pods                                                                          | `[]`             |
 
 ### Traffic Exposure Parameters
 
@@ -205,23 +204,24 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                                                   | Description                                                                                                                           | Value           |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                                                                     | `true`          |
-| `persistence.resourcePolicy`                           | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`            |
-| `persistence.storageClass`                             | Persistent Volume storage class                                                                                                       | `""`            |
-| `persistence.accessModes`                              | Persistent Volume access modes                                                                                                        | `[]`            |
-| `persistence.accessMode`                               | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)                                                     | `ReadWriteOnce` |
-| `persistence.size`                                     | Persistent Volume size                                                                                                                | `10Gi`          |
-| `persistence.dataSource`                               | Custom PVC data source                                                                                                                | `{}`            |
-| `persistence.annotations`                              | Annotations for the PVC                                                                                                               | `{}`            |
-| `persistence.selector`                                 | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                               | `{}`            |
-| `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                                                                    | `""`            |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                       | `false`         |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                                           | `{}`            |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                                        | `{}`            |
-| `volumePermissions.containerSecurityContext.enabled`   | Enable init container's Security Context                                                                                              | `true`          |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                                       | `0`             |
+| Name                                                             | Description                                                                                                                           | Value            |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `persistence.enabled`                                            | Enable persistence using Persistent Volume Claims                                                                                     | `true`           |
+| `persistence.resourcePolicy`                                     | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`             |
+| `persistence.storageClass`                                       | Persistent Volume storage class                                                                                                       | `""`             |
+| `persistence.accessModes`                                        | Persistent Volume access modes                                                                                                        | `[]`             |
+| `persistence.accessMode`                                         | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)                                                     | `ReadWriteOnce`  |
+| `persistence.size`                                               | Persistent Volume size                                                                                                                | `10Gi`           |
+| `persistence.dataSource`                                         | Custom PVC data source                                                                                                                | `{}`             |
+| `persistence.annotations`                                        | Annotations for the PVC                                                                                                               | `{}`             |
+| `persistence.selector`                                           | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                               | `{}`             |
+| `persistence.existingClaim`                                      | The name of an existing PVC to use for persistence                                                                                    | `""`             |
+| `volumePermissions.enabled`                                      | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                       | `false`          |
+| `volumePermissions.resources.limits`                             | The resources limits for the init container                                                                                           | `{}`             |
+| `volumePermissions.resources.requests`                           | The requested resources for the init container                                                                                        | `{}`             |
+| `volumePermissions.containerSecurityContext.enabled`             | Enable init container's Security Context                                                                                              | `true`           |
+| `volumePermissions.containerSecurityContext.runAsUser`           | Set init container's Security Context runAsUser                                                                                       | `0`              |
+| `volumePermissions.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                      | `RuntimeDefault` |
 
 ### RBAC Parameters
 
@@ -307,11 +307,11 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/odoo
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/odoo/values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -384,7 +384,7 @@ Refer to the [chart documentation for more information about how to upgrade from
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

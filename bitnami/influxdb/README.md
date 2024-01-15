@@ -11,18 +11,16 @@ InfluxDB(TM) is a trademark owned by InfluxData, which is not affiliated with, a
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/influxdb
+helm install my-release oci://registry-1.docker.io/bitnamicharts/influxdb
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use InfluxDB&trade; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [influxdb](https://github.com/bitnami/containers/tree/main/bitnami/influxdb) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use InfluxDB## Prerequisitestrade; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -256,7 +254,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.annotations`                     | Persistent Volume Claim annotations                                                                                                         | `{}`                |
 | `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                        | `true`              |
 | `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                         | `""`                |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                              | `true`              |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                              | `false`             |
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                  | `{}`                |
 | `psp.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`             |
 | `rbac.create`                                 | Create Role and RoleBinding (required for PSP to work)                                                                                      | `false`             |
@@ -327,6 +325,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.aws.region`                                | Region of aws s3 bucket                                                                                          | `us-east-1`                        |
 | `backup.uploadProviders.aws.existingSecret`                        | Name of existing secret object                                                                                   | `""`                               |
 | `backup.uploadProviders.aws.bucketName`                            | aws s3 bucket name                                                                                               | `s3://bucket/influxdb`             |
+| `backup.uploadProviders.aws.endpoint`                              | aws s3 endpoint, no value default public endpoint aws s3 endpoint                                                | `""`                               |
 | `backup.uploadProviders.aws.image.registry`                        | AWS CLI image registry                                                                                           | `REGISTRY_NAME`                    |
 | `backup.uploadProviders.aws.image.repository`                      | AWS CLI image repository                                                                                         | `REPOSITORY_NAME/aws-cli`          |
 | `backup.uploadProviders.aws.image.digest`                          | AWS CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag          | `""`                               |
@@ -363,11 +362,11 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/influ
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/influxdb/values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -594,7 +593,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

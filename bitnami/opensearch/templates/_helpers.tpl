@@ -16,7 +16,7 @@ Return the proper OS image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "opensearch.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.sysctlImage .Values.volumePermissions.image) "global" .Values.global) }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.sysctlImage .Values.volumePermissions.image) "context" $) }}
 {{- end -}}
 
 {{/*
@@ -59,7 +59,6 @@ Return the proper image name (for the init container volume-permissions image)
 {{/*
 Name for the Opensearch service
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-Required for the Kibana subchart to find Opensearch service.
 */}}
 {{- define "opensearch.service.name" -}}
     {{- printf "%s" ( include "common.names.fullname" . )  | trunc 63 | trimSuffix "-" -}}
@@ -67,7 +66,6 @@ Required for the Kibana subchart to find Opensearch service.
 
 {{/*
 Port number for the Opensearch service REST API port
-Required for the Kibana subchart to find Opensearch service.
 */}}
 {{- define "opensearch.service.ports.restAPI" -}}
 {{- printf "%d" (int .Values.service.ports.restAPI) -}}
@@ -174,7 +172,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Returns true if at least one master-elegible node replica has been configured.
+Returns true if at least one master-eligible node replica has been configured.
 */}}
 {{- define "opensearch.master.enabled" -}}
 {{- if or .Values.master.autoscaling.hpa.enabled (gt (int .Values.master.replicaCount) 0) -}}
@@ -267,8 +265,8 @@ Get the initialization scripts Secret name.
 {{- end -}}
 
 {{/*
- Create the name of the master service account to use
- */}}
+Create the name of the master service account to use
+*/}}
 {{- define "opensearch.master.serviceAccountName" -}}
 {{- if .Values.master.serviceAccount.create -}}
     {{ default (include "opensearch.master.fullname" .) .Values.master.serviceAccount.name }}
@@ -278,8 +276,8 @@ Get the initialization scripts Secret name.
 {{- end -}}
 
 {{/*
- Create the name of the coordinating-only service account to use
- */}}
+Create the name of the coordinating-only service account to use
+*/}}
 {{- define "opensearch.coordinating.serviceAccountName" -}}
 {{- if .Values.coordinating.serviceAccount.create -}}
     {{ default (include "opensearch.coordinating.fullname" .) .Values.coordinating.serviceAccount.name }}
@@ -289,8 +287,8 @@ Get the initialization scripts Secret name.
 {{- end -}}
 
 {{/*
- Create the name of the data service account to use
- */}}
+Create the name of the data service account to use
+*/}}
 {{- define "opensearch.data.serviceAccountName" -}}
 {{- if .Values.data.serviceAccount.create -}}
     {{ default (include "opensearch.data.fullname" .) .Values.data.serviceAccount.name }}
@@ -300,8 +298,8 @@ Get the initialization scripts Secret name.
 {{- end -}}
 
 {{/*
- Create the name of the ingest service account to use
- */}}
+Create the name of the ingest service account to use
+*/}}
 {{- define "opensearch.ingest.serviceAccountName" -}}
 {{- if .Values.ingest.serviceAccount.create -}}
     {{ default (include "opensearch.ingest.fullname" .) .Values.ingest.serviceAccount.name }}
@@ -311,27 +309,95 @@ Get the initialization scripts Secret name.
 {{- end -}}
 
 {{/*
-Return the opensearch TLS credentials secret for master nodes.
+Return the opensearch TLS credentials secret for typed nodes.
 */}}
-{{- define "opensearch.master.tlsSecretName" -}}
-{{- $secretName := .Values.security.tls.master.existingSecret -}}
+{{- define "opensearch.node.tlsSecretName" -}}
+{{- $secretName := index .context.Values.security.tls .nodeRole "existingSecret" -}}
 {{- if $secretName -}}
-    {{- printf "%s" (tpl $secretName $) -}}
+    {{- printf "%s" (tpl $secretName .context) -}}
 {{- else -}}
-    {{- printf "%s-crt" (include "opensearch.master.fullname" .) -}}
+    {{- printf "%s-crt" (include (printf "opensearch.%s.fullname" .nodeRole) .context) -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Return the opensearch TLS credentials secret items for typed nodes.
+*/}}
+{{- define "opensearch.node.tlsSecretItems" -}}
+{{- $items := list }}
+{{- $items = append $items (dict "key" (include "opensearch.node.tlsSecretCertKey" (dict "nodeRole" .nodeRole "context" .context)) "path" "tls.crt") }}
+{{- $items = append $items (dict "key" (include "opensearch.node.tlsSecretKeyKey" (dict "nodeRole" .nodeRole "context" .context)) "path" "tls.key") }}
+{{- $items = append $items (dict "key" (include "opensearch.node.tlsSecretCAKey" (dict "nodeRole" .nodeRole "context" .context)) "path" "ca.crt") }}
+{{ $items | toYaml }}
+{{- end -}}
+
+{{/*
+Return the opensearch TLS credentials secret key of the certificate for typed nodes.
+*/}}
+{{- define "opensearch.node.tlsSecretCertKey" -}}
+{{- include "opensearch.tlsSecretKey" (dict "type" .nodeRole "secretKey" "certKey" "defaultKey" "tls.crt" "context" .context) -}}
+{{- end -}}
+
+{{/*
+Return the opensearch TLS credentials secret key of the certificates key for typed nodes.
+*/}}
+{{- define "opensearch.node.tlsSecretKeyKey" -}}
+{{- include "opensearch.tlsSecretKey" (dict "type" .nodeRole "secretKey" "keyKey" "defaultKey" "tls.key" "context" .context) -}}
+{{- end -}}
+
+{{/*
+Return the opensearch TLS credentials secret key of the ca certificate for typed nodes.
+*/}}
+{{- define "opensearch.node.tlsSecretCAKey" -}}
+{{- include "opensearch.tlsSecretKey" (dict "type" .nodeRole "secretKey" "caKey" "defaultKey" "ca.crt" "context" .context) -}}
 {{- end -}}
 
 {{/*
 Return the opensearch admin TLS credentials secret for all nodes.
 */}}
 {{- define "opensearch.admin.tlsSecretName" -}}
-{{- $secretName := .Values.security.tls.admin.existingSecret -}}
+{{- $secretName := .context.Values.security.tls.admin.existingSecret -}}
 {{- if $secretName -}}
-    {{- printf "%s" (tpl $secretName $) -}}
+    {{- printf "%s" (tpl $secretName .context) -}}
 {{- else -}}
-    {{- printf "%s-admin-crt" (include "common.names.fullname" .) -}}
+    {{- printf "%s-admin-crt" (include "common.names.fullname" .context) -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Return the opensearch TLS credentials secret items for all nodes.
+*/}}
+{{- define "opensearch.admin.tlsSecretItems" -}}
+{{- $items := list }}
+{{- $items = append $items (dict "key" (include "opensearch.admin.tlsSecretCertKey" (dict "context" .context)) "path" "admin.crt") }}
+{{- $items = append $items (dict "key" (include "opensearch.admin.tlsSecretKeyKey" (dict "context" .context)) "path" "admin.key") }}
+{{ $items | toYaml }}
+{{- end -}}
+
+{{/*
+Return the opensearch TLS credentials secret key of the certificate for all nodes.
+*/}}
+{{- define "opensearch.admin.tlsSecretCertKey" -}}
+{{- include "opensearch.tlsSecretKey" (dict "type" "admin" "secretKey" "certKey" "defaultKey" "admin.crt" "context" .context) -}}
+{{- end -}}
+
+{{/*
+Return the opensearch TLS credentials secret key of the certificates key for all nodes.
+*/}}
+{{- define "opensearch.admin.tlsSecretKeyKey" -}}
+{{- include "opensearch.tlsSecretKey" (dict "type" "admin" "secretKey" "keyKey" "defaultKey" "admin.key" "context" .context) -}}
+{{- end -}}
+
+{{/*
+Return the opensearch TLS credentials secret key of the given type.
+*/}}
+{{- define "opensearch.tlsSecretKey" -}}
+{{- $secretConfig := index .context.Values.security.tls .type -}}
+{{- if $secretConfig.existingSecret }}
+{{- print (index $secretConfig .secretKey | default .defaultKey) }}
+{{- else }}
+{{- print .defaultKey }}
+{{- end }}
 {{- end -}}
 
 {{/*
@@ -556,7 +622,7 @@ opensearch: security.tls
 {{- define "opensearch.validateValues.master.replicas" -}}
 {{- if not (include "opensearch.master.enabled" .) -}}
 opensearch: master.replicas
-    Opensearch needs at least one master-elegible node to form a cluster.
+    Opensearch needs at least one master-eligible node to form a cluster.
 {{- end -}}
 {{- end -}}
 
@@ -604,8 +670,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
- Create the name of the dashboards service account to use
- */}}
+Create the name of the dashboards service account to use
+*/}}
 {{- define "opensearch.dashboards.serviceAccountName" -}}
 {{- if .Values.dashboards.serviceAccount.create -}}
     {{ default (include "opensearch.dashboards.fullname" .) .Values.dashboards.serviceAccount.name }}
@@ -662,4 +728,3 @@ Return true if a TLS credentials secret object should be created
     {{- true -}}
 {{- end -}}
 {{- end -}}
-

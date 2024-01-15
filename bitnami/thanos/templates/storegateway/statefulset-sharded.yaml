@@ -29,7 +29,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if not $.Values.storegateway.autoscaling.enabled }}
   replicas: {{ $.Values.storegateway.replicaCount }}
+  {{- end }}
   podManagementPolicy: {{ $.Values.storegateway.podManagementPolicy }}
   {{- $svcNamePrefix := printf "%s-storegateway" (include "common.names.fullname" $) | trunc 61 | trimSuffix "-" }}
   serviceName: {{ printf "%s-%s" $svcNamePrefix (toString $index) }}

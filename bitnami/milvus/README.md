@@ -1,6 +1,6 @@
 <!--- app-name: Milvus -->
 
-# Milvus packaged by Bitnami
+# Bitnami package for Milvus
 
 Milvus is a cloud-native, open-source vector database solution for AI applications and similarity search. Features high scalability, hibrid search and unified lambda structure.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/milvus
+helm install my-release oci://registry-1.docker.io/bitnamicharts/milvus
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Milvus in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -25,8 +25,6 @@ This chart bootstraps a [Milvus](https://github.com/grafana/loki) Deployment in 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/milvus/get-started/).
-
-Looking to use Milvus in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -70,69 +68,80 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                             | Value           |
-| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
-| `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
-| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
-| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
-| `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployments/statefulsets                      | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the deployments/statefulsets                         | `["infinity"]`  |
+| Name                     | Description                                                                               | Value           |
+| ------------------------ | ----------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Override Kubernetes version                                                               | `""`            |
+| `nameOverride`           | String to partially override common.names.fullname                                        | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname                                            | `""`            |
+| `commonLabels`           | Labels to add to all deployed objects                                                     | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                | `{}`            |
+| `clusterDomain`          | Kubernetes cluster domain name                                                            | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                         | `[]`            |
+| `enableServiceLinks`     | Whether information about services should be injected into all pods' environment variable | `false`         |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)   | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployments/statefulsets                        | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployments/statefulsets                           | `["infinity"]`  |
 
 ### Common Milvus Parameters
 
-| Name                                                        | Description                                                                                                                                         | Value                      |
-| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `milvus.image.registry`                                     | Milvus image registry                                                                                                                               | `REGISTRY_NAME`            |
-| `milvus.image.repository`                                   | Milvus image repository                                                                                                                             | `REPOSITORY_NAME/milvus`   |
-| `milvus.image.digest`                                       | Milvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                              | `""`                       |
-| `milvus.image.pullPolicy`                                   | Milvus image pull policy                                                                                                                            | `IfNotPresent`             |
-| `milvus.image.pullSecrets`                                  | Milvus image pull secrets                                                                                                                           | `[]`                       |
-| `milvus.image.debug`                                        | Enable debug mode                                                                                                                                   | `false`                    |
-| `milvus.auth.enabled`                                       | enable Milvus authentication                                                                                                                        | `false`                    |
-| `milvus.auth.username`                                      | Milvus username                                                                                                                                     | `user`                     |
-| `milvus.auth.password`                                      | Milvus username password                                                                                                                            | `""`                       |
-| `milvus.auth.rootPassword`                                  | Milvus root password                                                                                                                                | `""`                       |
-| `milvus.auth.existingSecret`                                | Name of a secret containing the Milvus password                                                                                                     | `""`                       |
-| `milvus.auth.existingSecretPasswordKey`                     | Name of the secret key containing the Milvus password                                                                                               | `""`                       |
-| `milvus.defaultConfig`                                      | Milvus components default configuration                                                                                                             | `""`                       |
-| `milvus.extraConfig`                                        | Extra configuration parameters                                                                                                                      | `{}`                       |
-| `milvus.existingConfigMap`                                  | name of a ConfigMap with existing configuration for the default configuration                                                                       | `""`                       |
-| `milvus.extraConfigExistingConfigMap`                       | name of a ConfigMap with existing configuration for the Dashboard                                                                                   | `""`                       |
-| `initJob.forceRun`                                          | Force the run of the credential job                                                                                                                 | `false`                    |
-| `initJob.image.registry`                                    | PyMilvus image registry                                                                                                                             | `REGISTRY_NAME`            |
-| `initJob.image.repository`                                  | PyMilvus image repository                                                                                                                           | `REPOSITORY_NAME/pymilvus` |
-| `initJob.image.digest`                                      | PyMilvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                       |
-| `initJob.image.pullPolicy`                                  | PyMilvus image pull policy                                                                                                                          | `IfNotPresent`             |
-| `initJob.image.pullSecrets`                                 | PyMilvus image pull secrets                                                                                                                         | `[]`                       |
-| `initJob.enableDefaultInitContainers`                       | Deploy default init containers                                                                                                                      | `true`                     |
-| `initJob.backoffLimit`                                      | set backoff limit of the job                                                                                                                        | `10`                       |
-| `initJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the credential init job                                                                     | `[]`                       |
-| `initJob.extraCommands`                                     | Extra commands to pass to the generation job                                                                                                        | `""`                       |
-| `initJob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                | `true`                     |
-| `initJob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                          | `1001`                     |
-| `initJob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                       | `true`                     |
-| `initJob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                         | `false`                    |
-| `initJob.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                             | `true`                     |
-| `initJob.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                           | `false`                    |
-| `initJob.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                  | `["ALL"]`                  |
-| `initJob.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                    | `RuntimeDefault`           |
-| `initJob.podSecurityContext.enabled`                        | Enabled credential init job pods' Security Context                                                                                                  | `true`                     |
-| `initJob.podSecurityContext.fsGroup`                        | Set credential init job pod's Security Context fsGroup                                                                                              | `1001`                     |
-| `initJob.extraEnvVars`                                      | Array containing extra env vars to configure the credential init job                                                                                | `[]`                       |
-| `initJob.extraEnvVarsCM`                                    | ConfigMap containing extra env vars to configure the credential init job                                                                            | `""`                       |
-| `initJob.extraEnvVarsSecret`                                | Secret containing extra env vars to configure the credential init job (in case of sensitive data)                                                   | `""`                       |
-| `initJob.extraVolumeMounts`                                 | Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`.                           | `[]`                       |
-| `initJob.resources.limits`                                  | The resources limits for the container                                                                                                              | `{}`                       |
-| `initJob.resources.requests`                                | The requested resources for the container                                                                                                           | `{}`                       |
-| `initJob.hostAliases`                                       | Add deployment host aliases                                                                                                                         | `[]`                       |
-| `initJob.annotations`                                       | Add annotations to the job                                                                                                                          | `{}`                       |
-| `initJob.podLabels`                                         | Additional pod labels                                                                                                                               | `{}`                       |
-| `initJob.podAnnotations`                                    | Additional pod annotations                                                                                                                          | `{}`                       |
+| Name                                    | Description                                                                                                                                         | Value                      |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `milvus.image.registry`                 | Milvus image registry                                                                                                                               | `REGISTRY_NAME`            |
+| `milvus.image.repository`               | Milvus image repository                                                                                                                             | `REPOSITORY_NAME/milvus`   |
+| `milvus.image.digest`                   | Milvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                              | `""`                       |
+| `milvus.image.pullPolicy`               | Milvus image pull policy                                                                                                                            | `IfNotPresent`             |
+| `milvus.image.pullSecrets`              | Milvus image pull secrets                                                                                                                           | `[]`                       |
+| `milvus.image.debug`                    | Enable debug mode                                                                                                                                   | `false`                    |
+| `milvus.auth.enabled`                   | enable Milvus authentication                                                                                                                        | `false`                    |
+| `milvus.auth.username`                  | Milvus username                                                                                                                                     | `user`                     |
+| `milvus.auth.password`                  | Milvus username password                                                                                                                            | `""`                       |
+| `milvus.auth.rootPassword`              | Milvus root password                                                                                                                                | `""`                       |
+| `milvus.auth.existingSecret`            | Name of a secret containing the Milvus password                                                                                                     | `""`                       |
+| `milvus.auth.existingSecretPasswordKey` | Name of the secret key containing the Milvus password                                                                                               | `""`                       |
+| `milvus.defaultConfig`                  | Milvus components default configuration                                                                                                             | `""`                       |
+| `milvus.extraConfig`                    | Extra configuration parameters                                                                                                                      | `{}`                       |
+| `milvus.existingConfigMap`              | name of a ConfigMap with existing configuration for the default configuration                                                                       | `""`                       |
+| `milvus.extraConfigExistingConfigMap`   | name of a ConfigMap with existing configuration for the Dashboard                                                                                   | `""`                       |
+| `initJob.forceRun`                      | Force the run of the credential job                                                                                                                 | `false`                    |
+| `initJob.image.registry`                | PyMilvus image registry                                                                                                                             | `REGISTRY_NAME`            |
+| `initJob.image.repository`              | PyMilvus image repository                                                                                                                           | `REPOSITORY_NAME/pymilvus` |
+| `initJob.image.digest`                  | PyMilvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                       |
+| `initJob.image.pullPolicy`              | PyMilvus image pull policy                                                                                                                          | `IfNotPresent`             |
+| `initJob.image.pullSecrets`             | PyMilvus image pull secrets                                                                                                                         | `[]`                       |
+| `initJob.enableDefaultInitContainers`   | Deploy default init containers                                                                                                                      | `true`                     |
+
+### TLS Client Configuration Parameters Connecting to Proxy
+
+| Name                                                        | Description                                                                                                               | Value            |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `initJob.tls.existingSecret`                                | Name of the existing secret containing the TLS certificates for initJob.                                                  | `""`             |
+| `initJob.tls.cert`                                          | The secret key from the existingSecret if 'cert' key different from the default (client.pem)                              | `client.pem`     |
+| `initJob.tls.key`                                           | The secret key from the existingSecret if 'key' key different from the default (client.key)                               | `client.key`     |
+| `initJob.tls.caCert`                                        | The secret key from the existingSecret if 'caCert' key different from the default (ca.pem)                                | `ca.pem`         |
+| `initJob.tls.keyPassword`                                   | Password to access the password-protected PEM key if necessary.                                                           | `""`             |
+| `initJob.backoffLimit`                                      | set backoff limit of the job                                                                                              | `10`             |
+| `initJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the credential init job                                           | `[]`             |
+| `initJob.extraCommands`                                     | Extra commands to pass to the generation job                                                                              | `""`             |
+| `initJob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                      | `true`           |
+| `initJob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                | `1001`           |
+| `initJob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                             | `true`           |
+| `initJob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                               | `false`          |
+| `initJob.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                   | `true`           |
+| `initJob.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                 | `false`          |
+| `initJob.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                        | `["ALL"]`        |
+| `initJob.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                          | `RuntimeDefault` |
+| `initJob.podSecurityContext.enabled`                        | Enabled credential init job pods' Security Context                                                                        | `true`           |
+| `initJob.podSecurityContext.fsGroup`                        | Set credential init job pod's Security Context fsGroup                                                                    | `1001`           |
+| `initJob.extraEnvVars`                                      | Array containing extra env vars to configure the credential init job                                                      | `[]`             |
+| `initJob.extraEnvVarsCM`                                    | ConfigMap containing extra env vars to configure the credential init job                                                  | `""`             |
+| `initJob.extraEnvVarsSecret`                                | Secret containing extra env vars to configure the credential init job (in case of sensitive data)                         | `""`             |
+| `initJob.extraVolumeMounts`                                 | Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`. | `[]`             |
+| `initJob.resources.limits`                                  | The resources limits for the container                                                                                    | `{}`             |
+| `initJob.resources.requests`                                | The requested resources for the container                                                                                 | `{}`             |
+| `initJob.hostAliases`                                       | Add deployment host aliases                                                                                               | `[]`             |
+| `initJob.annotations`                                       | Add annotations to the job                                                                                                | `{}`             |
+| `initJob.podLabels`                                         | Additional pod labels                                                                                                     | `{}`             |
+| `initJob.podAnnotations`                                    | Additional pod annotations                                                                                                | `{}`             |
 
 ### Data Coordinator Deployment Parameters
 
@@ -207,7 +216,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataCoord.sidecars`                                          | Add additional sidecar containers to the Data Coordinator pod(s)                                           | `[]`             |
 | `dataCoord.enableDefaultInitContainers`                       | Deploy default init containers                                                                             | `true`           |
 | `dataCoord.initContainers`                                    | Add additional init containers to the Data Coordinator pod(s)                                              | `[]`             |
-| `dataCoord.serviceAccount.create`                             | Enable creation of ServiceAccount for Data Coordinator pods                                                | `false`          |
+| `dataCoord.serviceAccount.create`                             | Enable creation of ServiceAccount for Data Coordinator pods                                                | `true`           |
 | `dataCoord.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                      | `""`             |
 | `dataCoord.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                     | `false`          |
 | `dataCoord.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                       | `{}`             |
@@ -347,7 +356,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rootCoord.sidecars`                                          | Add additional sidecar containers to the Root Coordinator pod(s)                                           | `[]`             |
 | `rootCoord.enableDefaultInitContainers`                       | Deploy default init containers                                                                             | `true`           |
 | `rootCoord.initContainers`                                    | Add additional init containers to the Root Coordinator pod(s)                                              | `[]`             |
-| `rootCoord.serviceAccount.create`                             | Enable creation of ServiceAccount for Root Coordinator pods                                                | `false`          |
+| `rootCoord.serviceAccount.create`                             | Enable creation of ServiceAccount for Root Coordinator pods                                                | `true`           |
 | `rootCoord.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                      | `""`             |
 | `rootCoord.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                     | `false`          |
 | `rootCoord.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                       | `{}`             |
@@ -487,7 +496,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryCoord.sidecars`                                          | Add additional sidecar containers to the Query Coordinator pod(s)                                          | `[]`             |
 | `queryCoord.enableDefaultInitContainers`                       | Deploy default init containers                                                                             | `true`           |
 | `queryCoord.initContainers`                                    | Add additional init containers to the Query Coordinator pod(s)                                             | `[]`             |
-| `queryCoord.serviceAccount.create`                             | Enable creation of ServiceAccount for Query Coordinator pods                                               | `false`          |
+| `queryCoord.serviceAccount.create`                             | Enable creation of ServiceAccount for Query Coordinator pods                                               | `true`           |
 | `queryCoord.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                      | `""`             |
 | `queryCoord.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                     | `false`          |
 | `queryCoord.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                       | `{}`             |
@@ -627,7 +636,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexCoord.sidecars`                                          | Add additional sidecar containers to the Index Coordinator pod(s)                                          | `[]`             |
 | `indexCoord.enableDefaultInitContainers`                       | Deploy default init containers                                                                             | `true`           |
 | `indexCoord.initContainers`                                    | Add additional init containers to the Index Coordinator pod(s)                                             | `[]`             |
-| `indexCoord.serviceAccount.create`                             | Enable creation of ServiceAccount for Index Coordinator pods                                               | `false`          |
+| `indexCoord.serviceAccount.create`                             | Enable creation of ServiceAccount for Index Coordinator pods                                               | `true`           |
 | `indexCoord.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                      | `""`             |
 | `indexCoord.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                     | `false`          |
 | `indexCoord.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                       | `{}`             |
@@ -767,7 +776,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataNode.sidecars`                                          | Add additional sidecar containers to the Data Node pod(s)                                           | `[]`             |
 | `dataNode.enableDefaultInitContainers`                       | Deploy default init containers                                                                      | `true`           |
 | `dataNode.initContainers`                                    | Add additional init containers to the Data Node pod(s)                                              | `[]`             |
-| `dataNode.serviceAccount.create`                             | Enable creation of ServiceAccount for Data Node pods                                                | `false`          |
+| `dataNode.serviceAccount.create`                             | Enable creation of ServiceAccount for Data Node pods                                                | `true`           |
 | `dataNode.serviceAccount.name`                               | The name of the ServiceAccount to use                                                               | `""`             |
 | `dataNode.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                              | `false`          |
 | `dataNode.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                | `{}`             |
@@ -907,7 +916,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryNode.sidecars`                                          | Add additional sidecar containers to the Query Node pod(s)                                          | `[]`             |
 | `queryNode.enableDefaultInitContainers`                       | Deploy default init containers                                                                      | `true`           |
 | `queryNode.initContainers`                                    | Add additional init containers to the Query Node pod(s)                                             | `[]`             |
-| `queryNode.serviceAccount.create`                             | Enable creation of ServiceAccount for Query Node pods                                               | `false`          |
+| `queryNode.serviceAccount.create`                             | Enable creation of ServiceAccount for Query Node pods                                               | `true`           |
 | `queryNode.serviceAccount.name`                               | The name of the ServiceAccount to use                                                               | `""`             |
 | `queryNode.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                              | `false`          |
 | `queryNode.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                | `{}`             |
@@ -1047,7 +1056,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexNode.sidecars`                                          | Add additional sidecar containers to the Index Node pod(s)                                          | `[]`             |
 | `indexNode.enableDefaultInitContainers`                       | Deploy default init containers                                                                      | `true`           |
 | `indexNode.initContainers`                                    | Add additional init containers to the Index Node pod(s)                                             | `[]`             |
-| `indexNode.serviceAccount.create`                             | Enable creation of ServiceAccount for Index Node pods                                               | `false`          |
+| `indexNode.serviceAccount.create`                             | Enable creation of ServiceAccount for Index Node pods                                               | `true`           |
 | `indexNode.serviceAccount.name`                               | The name of the ServiceAccount to use                                                               | `""`             |
 | `indexNode.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                              | `false`          |
 | `indexNode.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                | `{}`             |
@@ -1116,9 +1125,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Proxy Deployment Parameters
 
+| Name            | Description             | Value  |
+| --------------- | ----------------------- | ------ |
+| `proxy.enabled` | Enable Proxy deployment | `true` |
+
+### Proxy TLS Connection Configuration Parameters
+
 | Name                                                      | Description                                                                                     | Value            |
 | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ---------------- |
-| `proxy.enabled`                                           | Enable Proxy deployment                                                                         | `true`           |
+| `proxy.tls.mode`                                          | TLS mode for proxy. Allowed values: `0`, `1`, `2`                                               | `0`              |
+| `proxy.tls.existingSecret`                                | Name of the existing secret containing the TLS certificates for proxy.                          | `""`             |
+| `proxy.tls.cert`                                          | The secret key from the existingSecret if 'cert' key different from the default (server.pem)    | `server.pem`     |
+| `proxy.tls.key`                                           | The secret key from the existingSecret if 'key' key different from the default (server.key)     | `server.key`     |
+| `proxy.tls.caCert`                                        | The secret key from the existingSecret if 'caCert' key different from the default (ca.pem)      | `ca.pem`         |
+| `proxy.tls.keyPassword`                                   | Password to access the password-protected PEM key if necessary.                                 | `""`             |
 | `proxy.extraEnvVars`                                      | Array with extra environment variables to add to proxy nodes                                    | `[]`             |
 | `proxy.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for proxy nodes                            | `""`             |
 | `proxy.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for proxy nodes                               | `""`             |
@@ -1188,7 +1208,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.sidecars`                                          | Add additional sidecar containers to the Proxy pod(s)                                           | `[]`             |
 | `proxy.enableDefaultInitContainers`                       | Deploy default init containers                                                                  | `true`           |
 | `proxy.initContainers`                                    | Add additional init containers to the Proxy pod(s)                                              | `[]`             |
-| `proxy.serviceAccount.create`                             | Enable creation of ServiceAccount for Proxy pods                                                | `false`          |
+| `proxy.serviceAccount.create`                             | Enable creation of ServiceAccount for Proxy pods                                                | `true`           |
 | `proxy.serviceAccount.name`                               | The name of the ServiceAccount to use                                                           | `""`             |
 | `proxy.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                          | `false`          |
 | `proxy.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                            | `{}`             |
@@ -1329,7 +1349,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `attu.sidecars`                                          | Add additional sidecar containers to the Attu pod(s)                                                 | `[]`                   |
 | `attu.enableDefaultInitContainers`                       | Deploy default init containers                                                                       | `true`                 |
 | `attu.initContainers`                                    | Add additional init containers to the Attu pod(s)                                                    | `[]`                   |
-| `attu.serviceAccount.create`                             | Enable creation of ServiceAccount for Attu pods                                                      | `false`                |
+| `attu.serviceAccount.create`                             | Enable creation of ServiceAccount for Attu pods                                                      | `true`                 |
 | `attu.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                | `""`                   |
 | `attu.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                               | `false`                |
 | `attu.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                 | `{}`                   |
@@ -1494,7 +1514,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kafka.sasl.enabledMechanisms`    | Kafka enabled SASL mechanisms                                                                 | `PLAIN`                              |
 | `kafka.sasl.client.users`         | Kafka client users                                                                            | `["user"]`                           |
 
-See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table.
+See <https://github.com/bitnami/readme-generator-for-helm> to create the table.
 
 The above parameters map to the env variables defined in [bitnami/milvus](https://github.com/bitnami/containers/tree/main/bitnami/milvus). For more information please refer to the [bitnami/milvus](https://github.com/bitnami/containers/tree/main/bitnami/milvus) image documentation.
 
@@ -1517,11 +1537,11 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/milvu
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/milvus/values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -1657,7 +1677,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

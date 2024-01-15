@@ -1,6 +1,6 @@
 <!--- app-name: Logstash -->
 
-# Logstash packaged by Bitnami
+# Bitnami package for Logstash
 
 Logstash is an open source data processing engine. It ingests data from multiple sources, processes it, and sends the output to final destination in real-time. It is a core component of the ELK stack.
 
@@ -11,18 +11,16 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/logstash
+helm install my-release oci://registry-1.docker.io/bitnamicharts/logstash
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Logstash in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [logstash](https://github.com/bitnami/containers/tree/main/bitnami/logstash) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Logstash in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -104,7 +102,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumeMounts`                                 | Array to add extra mounts (normally used with extraVolumes, evaluated as a template)                                              | `[]`                       |
 | `serviceAccount.create`                             | Enable creation of ServiceAccount for Logstash pods                                                                               | `true`                     |
 | `serviceAccount.name`                               | The name of the service account to use. If not set and `create` is `true`, a name is generated                                    | `""`                       |
-| `serviceAccount.automountServiceAccountToken`       | Allows automount of ServiceAccountToken on the serviceAccount created                                                             | `true`                     |
+| `serviceAccount.automountServiceAccountToken`       | Allows automount of ServiceAccountToken on the serviceAccount created                                                             | `false`                    |
 | `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                              | `{}`                       |
 | `containerPorts`                                    | Array containing the ports to open in the Logstash container (evaluated as a template)                                            | `[]`                       |
 | `initContainers`                                    | Add additional init containers to the Logstash pod(s)                                                                             | `[]`                       |
@@ -225,11 +223,11 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/logst
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/logstash/values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -336,7 +334,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

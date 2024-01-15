@@ -86,9 +86,11 @@ extraDeploy:
     metadata:
       name: vib-podinfo
       namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
     spec:
       interval: 5m
-      url: https://github.com/stefanprodan/podinfo
+      url: https://github.com/mdhont/podinfo
       ref:
         branch: master
   - apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -96,6 +98,8 @@ extraDeploy:
     metadata:
       name: vib-podinfo
       namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
     spec:
       interval: 10m
       targetNamespace: '{{ include "common.names.namespace" . }}'
@@ -111,16 +115,20 @@ extraDeploy:
     metadata:
       name: vib-bitnami-charts
       namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
     spec:
       interval: 5m0s
       url: https://github.com/bitnami/charts
       ref:
         branch: main
-  - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  - apiVersion: helm.toolkit.fluxcd.io/v2beta2
     kind: HelmRelease
     metadata:
       name: vib-dokuwiki
       namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
     spec:
       interval: 5m
       chart:
@@ -147,6 +155,8 @@ extraDeploy:
     metadata:
       name: vib-github-receiver
       namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
     spec:
       type: github
       events:
@@ -162,11 +172,13 @@ extraDeploy:
   # This is for image-reflector-controller. We will use the metrics to ensure that it is consumed
   # and therefore RBAC is correct. The values do not need to be correct
   # Source: https://fluxcd.io/flux/components/image/imagerepositories/
-  - apiVersion: image.toolkit.fluxcd.io/v1beta2
+  - apiVersion: image.toolkit.fluxcd.io/v1beta1
     kind: ImageRepository
     metadata:
       name: vib-image-rep-podinfo
       namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
     spec:
       image: stefanprodan/podinfo
       interval: 1h
@@ -179,6 +191,8 @@ extraDeploy:
     metadata:
       name: vib-update-automation
       namespace: '{{ include "common.names.namespace" . }}'
+      annotations:
+        "helm.sh/hook": post-install
     spec:
       interval: 5m
       sourceRef:

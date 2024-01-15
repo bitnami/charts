@@ -36,6 +36,9 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: primary
     spec:
+      {{- if .Values.primary.extraPodSpec }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.primary.extraPodSpec "context" $) | nindent 6 }}
+      {{- end }}
       serviceAccountName: {{ template "mysql.serviceAccountName" . }}
       {{- include "mysql.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.primary.hostAliases }}
@@ -367,6 +370,11 @@ spec:
         - name: data
           emptyDir: {}
   {{- else if and .Values.primary.persistence.enabled (not .Values.primary.persistence.existingClaim) }}
+  {{- if .Values.primary.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.primary.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.primary.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
     - metadata:
         name: data

@@ -1,6 +1,6 @@
 <!--- app-name: Jaeger -->
 
-# Jaeger packaged by Bitnami
+# Bitnami package for Jaeger
 
 Jaeger is a distributed tracing system. It is used for monitoring and troubleshooting microservices-based distributed systems.
 
@@ -11,18 +11,16 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/jaeger
+helm install my-release oci://registry-1.docker.io/bitnamicharts/jaeger
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Jaeger in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [jaeger](https://github.com/bitnami/containers/tree/main/bitnami/jaeger) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Jaeger in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -143,7 +141,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `query.serviceAccount.create`                             | Enables ServiceAccount                                                                    | `true`           |
 | `query.serviceAccount.name`                               | ServiceAccount name                                                                       | `""`             |
 | `query.serviceAccount.annotations`                        | Annotations to add to all deployed objects                                                | `{}`             |
-| `query.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                          | `true`           |
+| `query.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                          | `false`          |
 | `query.podSecurityContext.enabled`                        | Enabled Jaeger pods' Security Context                                                     | `true`           |
 | `query.podSecurityContext.fsGroup`                        | Set Jaeger pod's Security Context fsGroup                                                 | `1001`           |
 | `query.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`           |
@@ -212,15 +210,21 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.containerPorts.grpc`                               | used by jaeger-agent to send spans in model.proto format                                   | `14250`          |
 | `collector.containerPorts.binary`                             | can accept spans directly from clients in jaeger.thrift format over binary thrift protocol | `14268`          |
 | `collector.containerPorts.admin`                              | Admin port: health check at / and metrics at /metrics                                      | `14269`          |
+| `collector.containerPorts.otlp.grpc`                          | Accepts traces in OpenTelemetry OTLP format over gRPC                                      | `4317`           |
+| `collector.containerPorts.otlp.http`                          | Accepts traces in OpenTelemetry OTLP format over HTTP                                      | `4318`           |
 | `collector.service.type`                                      | Jaeger service type                                                                        | `ClusterIP`      |
 | `collector.service.ports.zipkin`                              | can accept Zipkin spans in Thrift, JSON and Proto (disabled by default)                    | `9411`           |
 | `collector.service.ports.grpc`                                | used by jaeger-agent to send spans in model.proto format                                   | `14250`          |
 | `collector.service.ports.binary`                              | can accept spans directly from clients in jaeger.thrift format over binary thrift protocol | `14268`          |
 | `collector.service.ports.admin`                               | Admin port: health check at / and metrics at /metrics                                      | `14269`          |
+| `collector.service.ports.otlp.grpc`                           | Accepts traces in OpenTelemetry OTLP format over gRPC                                      | `4317`           |
+| `collector.service.ports.otlp.http`                           | Accepts traces in OpenTelemetry OTLP format over HTTP                                      | `4318`           |
 | `collector.service.nodePorts.zipkin`                          | can accept Zipkin spans in Thrift, JSON and Proto (disabled by default)                    | `""`             |
 | `collector.service.nodePorts.grpc`                            | used by jaeger-agent to send spans in model.proto format                                   | `""`             |
 | `collector.service.nodePorts.binary`                          | can accept spans directly from clients in jaeger.thrift format over binary thrift protocol | `""`             |
 | `collector.service.nodePorts.admin`                           | Admin port: health check at / and metrics at /metrics                                      | `""`             |
+| `collector.service.nodePorts.otlp.grpc`                       | Accepts traces in OpenTelemetry OTLP format over gRPC                                      | `""`             |
+| `collector.service.nodePorts.otlp.http`                       | Accepts traces in OpenTelemetry OTLP format over HTTP                                      | `""`             |
 | `collector.service.extraPorts`                                | Extra ports to expose in the service (normally used with the `sidecar` value)              | `[]`             |
 | `collector.service.loadBalancerIP`                            | LoadBalancerIP if service type is `LoadBalancer`                                           | `""`             |
 | `collector.service.loadBalancerSourceRanges`                  | Service Load Balancer sources                                                              | `[]`             |
@@ -233,7 +237,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.serviceAccount.create`                             | Enables ServiceAccount                                                                     | `true`           |
 | `collector.serviceAccount.name`                               | ServiceAccount name                                                                        | `""`             |
 | `collector.serviceAccount.annotations`                        | Annotations to add to all deployed objects                                                 | `{}`             |
-| `collector.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                           | `true`           |
+| `collector.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                           | `false`          |
 | `collector.podSecurityContext.enabled`                        | Enabled Jaeger pods' Security Context                                                      | `true`           |
 | `collector.podSecurityContext.fsGroup`                        | Set Jaeger pod's Security Context fsGroup                                                  | `1001`           |
 | `collector.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                       | `true`           |
@@ -326,7 +330,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.serviceAccount.create`                                 | Enables ServiceAccount                                                                                         | `true`           |
 | `agent.serviceAccount.name`                                   | ServiceAccount name                                                                                            | `""`             |
 | `agent.serviceAccount.annotations`                            | Annotations to add to all deployed objects                                                                     | `{}`             |
-| `agent.serviceAccount.automountServiceAccountToken`           | Automount API credentials for a service account.                                                               | `true`           |
+| `agent.serviceAccount.automountServiceAccountToken`           | Automount API credentials for a service account.                                                               | `false`          |
 | `agent.podSecurityContext.enabled`                            | Enabled Jaeger pods' Security Context                                                                          | `true`           |
 | `agent.podSecurityContext.fsGroup`                            | Set Jaeger pod's Security Context fsGroup                                                                      | `1001`           |
 | `agent.containerSecurityContext.enabled`                      | Enabled containers' Security Context                                                                           | `true`           |
@@ -406,11 +410,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cassandra.dbUser.password`    | Password for `dbUser.user`. Randomly generated if empty | `""`             |
 | `cassandra.service.ports.cql`  | Cassandra cql port                                      | `9042`           |
 
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/jaeger/values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -475,7 +479,7 @@ This major updates the Cassandra subchart to its newest major, 10.0.0. [Here](ht
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -1,6 +1,6 @@
 <!--- app-name: RabbitMQ Cluster Operator -->
 
-# RabbitMQ Cluster Operator packaged by Bitnami
+# Bitnami package for RabbitMQ Cluster Operator
 
 The RabbitMQ Cluster Kubernetes Operator automates provisioning, management, and operations of RabbitMQ clusters running on Kubernetes.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/rabbitmq-cluster-operator
+helm install my-release oci://registry-1.docker.io/bitnamicharts/rabbitmq-cluster-operator
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use RabbitMQ Cluster Operator in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -23,8 +23,6 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 This chart bootstraps a [RabbitMQ Cluster Operator](https://www.rabbitmq.com/kubernetes/operator/operator-overview.html) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use RabbitMQ Cluster Operator in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -207,7 +205,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `clusterOperator.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                               | `1001`                                           |
 | `clusterOperator.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                            | `true`                                           |
 | `clusterOperator.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                              | `false`                                          |
-| `clusterOperator.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                  | `false`                                          |
+| `clusterOperator.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                  | `true`                                           |
 | `clusterOperator.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                | `false`                                          |
 | `clusterOperator.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                       | `["ALL"]`                                        |
 | `clusterOperator.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                         | `RuntimeDefault`                                 |
@@ -330,7 +328,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `msgTopologyOperator.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                           | `1001`                                            |
 | `msgTopologyOperator.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                        | `true`                                            |
 | `msgTopologyOperator.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                          | `false`                                           |
-| `msgTopologyOperator.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                              | `false`                                           |
+| `msgTopologyOperator.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                              | `true`                                            |
 | `msgTopologyOperator.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                            | `false`                                           |
 | `msgTopologyOperator.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                   | `["ALL"]`                                         |
 | `msgTopologyOperator.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                     | `RuntimeDefault`                                  |
@@ -440,11 +438,11 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/rabbi
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq-cluster-operator/values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -541,7 +539,7 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/rabbitmq-cluster-ope
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -1,6 +1,6 @@
 <!--- app-name: Prometheus Operator -->
 
-# Prometheus Operator packaged by Bitnami
+# Bitnami package for Prometheus Operator
 
 Prometheus Operator provides easy monitoring definitions for Kubernetes services and deployment and management of Prometheus instances.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kube-prometheus
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kube-prometheus
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Prometheus Operator in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -31,8 +31,6 @@ In the default configuration the chart deploys the following components on the K
 Only one instance of the Prometheus Operator component should be running in the cluster. If you wish to deploy this chart to **manage multiple instances** of Prometheus in your Kubernetes cluster, you **have to disable** the installation of the Prometheus Operator component using the `operator.enabled=false` chart installation argument.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Prometheus Operator in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -465,7 +463,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                                                                                                                                                                                           | `[]`                           |
 | `alertmanager.serviceAccount.create`                             | Specify whether to create a ServiceAccount for Alertmanager                                                                                                                                                                                                                                                | `true`                         |
 | `alertmanager.serviceAccount.name`                               | The name of the ServiceAccount to create                                                                                                                                                                                                                                                                   | `""`                           |
-| `alertmanager.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                                                                                                                                                                             | `true`                         |
+| `alertmanager.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                                                                                                                                                                             | `false`                        |
 | `alertmanager.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                                                                                                                                                                 | `{}`                           |
 | `alertmanager.podSecurityContext.enabled`                        | Enable security context                                                                                                                                                                                                                                                                                    | `true`                         |
 | `alertmanager.podSecurityContext.fsGroup`                        | Group ID for the container filesystem                                                                                                                                                                                                                                                                      | `1001`                         |
@@ -571,6 +569,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.configNamespaceSelector`                           | Namespaces to be selected for AlertmanagerConfig discovery. If nil, only check own namespace. This defaults to {}                                                                                                                                                                                          | `{}`                           |
 | `alertmanager.configSelector`                                    | AlertmanagerConfigs to be selected for to merge and configure Alertmanager with. This defaults to {}                                                                                                                                                                                                       | `{}`                           |
 | `alertmanager.configuration`                                     | EXPERIMENTAL: alertmanagerConfiguration specifies the global Alertmanager configuration. If defined, it takes precedence over the `configSecret` field. This field may change in future releases. The specified global alertmanager config will not force add a namespace label in routes and inhibitRules | `{}`                           |
+| `alertmanager.configMatcherStrategy`                             | alertmanagerConfigMatcherStrategy defines how AlertmanagerConfig objects match the alerts.                                                                                                                                                                                                                 | `{}`                           |
 
 ### Exporters
 
@@ -640,7 +639,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `blackboxExporter.containerPorts.http`                               | Blackbox Exporter HTTP container port                                                                             | `19115`                             |
 | `blackboxExporter.serviceAccount.create`                             | Enable creation of ServiceAccount for WordPress pod                                                               | `true`                              |
 | `blackboxExporter.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                            | `""`                                |
-| `blackboxExporter.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                            | `true`                              |
+| `blackboxExporter.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                            | `false`                             |
 | `blackboxExporter.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                              | `{}`                                |
 | `blackboxExporter.resources.limits`                                  | The resources limits for the blackboxExporter containers                                                          | `{}`                                |
 | `blackboxExporter.resources.requests`                                | The requested resources for the blackboxExporter containers                                                       | `{}`                                |
@@ -794,11 +793,11 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/kube-
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus/values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -987,7 +986,7 @@ helm upgrade my-release --set prometheus.thanos.create=true oci://REGISTRY_NAME/
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

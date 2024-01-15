@@ -71,11 +71,11 @@ hub:
   image:
     registry: docker.io
     repository: bitnami/jupyterhub
-    tag: 4.0.2-debian-11-r58
+    tag: 4.0.2-debian-11-r68
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -95,6 +95,14 @@ hub:
   ## @param hub.password Hub Dummy authenticator password
   ##
   password: ""
+  ## @param hub.services JupyterHub services interacting with the JupyterHub API
+  ## ref: https://z2jh.jupyter.org/en/latest/administrator/services.html
+  ## e.g:
+  ## services:
+  ##   service-admin:
+  ##     apiToken: XXXXXXXXXXXXXXXXXXX
+  ##     admin: true
+  services: {}
   ## Configuration file passed to the hub. This will be used by the jupyterhub_config.py file
   ## This configuration uses the values for the `singleuser` section. In the upstream chart the
   ## values.yaml file is mounted in the hub container. This is chart, we tried to separate both
@@ -130,7 +138,7 @@ hub:
       db:
         type: postgres
         url: postgresql://{{ ternary .Values.postgresql.auth.username .Values.externalDatabase.user .Values.postgresql.enabled }}@{{ ternary (include "jupyterhub.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled }}:{{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled }}/{{ ternary .Values.postgresql.auth.database .Values.externalDatabase.database .Values.postgresql.enabled }}
-      services: {}
+      services: {{- include "common.tplvalues.render" ( dict "value" .Values.hub.services "context" $ ) | nindent 8 }}
       allowNamedServers: false
       namedServerLimitPerUser:
       {{- if .Values.hub.metrics.serviceMonitor.enabled }}
@@ -231,6 +239,9 @@ hub:
       cmd: jupyterhub-singleuser
       {{- end }}
       defaultUrl:
+      {{- if .Values.singleuser.profileList }}
+      profileList: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.profileList "context" $) | nindent 4 }}
+      {{- end }}
     cull:
       enabled: true
       users: false
@@ -322,7 +333,7 @@ hub:
   ##
   customReadinessProbe: {}
   ## Hub resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param hub.resources.limits The resources limits for the Hub containers
   ## @param hub.resources.requests The requested resources for the Hub containers
   ##
@@ -408,7 +419,7 @@ hub:
   ##
   affinity: {}
   ## @param hub.nodeSelector Node labels for pod assignment.
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param hub.tolerations Tolerations for pod assignment.
@@ -550,7 +561,7 @@ hub:
       http: ""
     ## @param hub.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param hub.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -648,11 +659,11 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/configurable-http-proxy
-    tag: 4.6.0-debian-11-r17
+    tag: 4.6.1-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -751,7 +762,7 @@ proxy:
   ##
   customReadinessProbe: {}
   ## Proxy resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param proxy.resources.limits The resources limits for the Proxy containers
   ## @param proxy.resources.requests The requested resources for the Proxy containers
   ##
@@ -836,7 +847,7 @@ proxy:
   ##
   affinity: {}
   ## @param proxy.nodeSelector Node labels for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param proxy.tolerations Tolerations for pod assignment. Evaluated as a template.
@@ -924,7 +935,7 @@ proxy:
     ## @param proxy.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ## Can be set to false if pods using this serviceAccount do not need to use K8s API
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param proxy.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
@@ -968,7 +979,7 @@ proxy:
         http: ""
       ## @param proxy.service.api.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param proxy.service.api.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1018,7 +1029,7 @@ proxy:
         http: ""
       ## @param proxy.service.metrics.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param proxy.service.metrics.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1069,7 +1080,7 @@ proxy:
         http: ""
       ## @param proxy.service.public.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param proxy.service.public.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1288,7 +1299,7 @@ imagePuller:
   ##
   customReadinessProbe: {}
   ## ImagePuller resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param imagePuller.resources.limits The resources limits for the ImagePuller containers
   ## @param imagePuller.resources.requests The requested resources for the ImagePuller containers
   ##
@@ -1371,7 +1382,7 @@ imagePuller:
   ##
   affinity: {}
   ## @param imagePuller.nodeSelector Node labels for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param imagePuller.tolerations Tolerations for pod assignment. Evaluated as a template.
@@ -1449,11 +1460,11 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 4.0.2-debian-11-r58
+    tag: 4.0.2-debian-11-r69
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     ##
     pullPolicy: IfNotPresent
@@ -1483,7 +1494,7 @@ singleuser:
   ##
   containerPort: 8888
   ## Singleuser resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param singleuser.resources.limits The resources limits for the Singleuser containers
   ## @param singleuser.resources.requests The requested resources for the Singleuser containers
   ##
@@ -1529,7 +1540,7 @@ singleuser:
   ##
   podAnnotations: {}
   ## @param singleuser.nodeSelector Node labels for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param singleuser.tolerations Tolerations for pod assignment. Evaluated as a template.
@@ -1585,14 +1596,14 @@ singleuser:
     ## @param singleuser.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ## Can be set to false if pods using this serviceAccount do not need to use K8s API
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param singleuser.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
 
   ## @section Single User Persistence parameters
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 
   persistence:
     ## @param singleuser.persistence.enabled Enable persistent volume creation on Single User instances
@@ -1614,6 +1625,16 @@ singleuser:
     ## @param singleuser.persistence.size Persistent Volumes size
     ##
     size: 10Gi
+
+  ## @param singleuser.profileList  Define JupyterHub profiles
+  profileList: []
+    ## - display_name: "Profile 1"
+    ##   description: "Longer description for profile 1."
+    ##   default: true
+    ## - display_name: "Profile 2"
+    ##   description: "Longer description for profile 2."
+    ##   kubespawner_override:
+    ##     image: jupyter/datascience-notebook:latest
 
   ## @section Traffic exposure parameters
 
@@ -1647,7 +1668,7 @@ singleuser:
 auxiliaryImage:
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 11-debian-11-r90
+  tag: 11-debian-11-r93
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

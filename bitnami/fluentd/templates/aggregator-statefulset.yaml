@@ -70,9 +70,42 @@ spec:
       {{- if .Values.aggregator.priorityClassName }}
       priorityClassName: {{ .Values.aggregator.priorityClassName | quote }}
       {{- end }}
-      {{- if .Values.aggregator.initContainers }}
-      initContainers: {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.initContainers "context" $ ) | nindent 8 }}
-      {{- end }}
+      initContainers:
+        {{- if .Values.aggregator.extraGems }}
+        - name: install-extra-gems
+          image: {{ include "fluentd.aggregator.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+          args:
+            - |-
+              cd /tmp
+
+              # install extra gems
+              {{- range $gem := .Values.aggregator.extraGems }}
+              {{- if kindIs "string" $gem }}
+              fluent-gem install {{ $gem }} --no-document
+              {{- else }}
+              fluent-gem install {{ $gem.name }}{{ if $gem.version }} -v {{ $gem.version }}{{ end }} --no-document
+              {{- end }}
+              {{- end }}
+
+              # copy installed gems to shared dir
+              cp -r /opt/bitnami/fluentd/gems/* /gems/
+              cp -r /opt/bitnami/fluentd/specifications/* /specifications/
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 0
+          volumeMounts:
+            - name: gems
+              mountPath: /gems
+            - name: specifications
+              mountPath: /specifications
+        {{- end }}
+        {{- if .Values.aggregator.initContainers }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.initContainers "context" $ ) | nindent 8 }}
+        {{- end }}
       terminationGracePeriodSeconds: {{ .Values.aggregator.terminationGracePeriodSeconds }}
       containers:
         - name: fluentd
@@ -182,6 +215,12 @@ spec:
             - name: buffer
               mountPath: /opt/bitnami/fluentd/logs/buffers
             {{- end }}
+            {{- if .Values.aggregator.extraGems }}
+            - name: gems
+              mountPath: /opt/bitnami/fluentd/gems/
+            - name: specifications
+              mountPath: /opt/bitnami/fluentd/specifications/
+            {{- end }}
             {{- if .Values.tls.enabled }}
             - name: fluentd-aggregator-certificates
               mountPath: /opt/bitnami/fluentd/certs/in_forward
@@ -200,15 +239,12 @@ spec:
               mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
             {{- end }}
             {{- if .Values.aggregator.extraVolumeMounts }}
-            {{- toYaml .Values.aggregator.extraVolumeMounts | nindent 12 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
         {{- if .Values.aggregator.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.sidecars "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if .Values.aggregator.extraVolumes }}
-          {{- toYaml .Values.aggregator.extraVolumes | nindent 8 }}
-        {{- end }}
         {{- if .Values.tls.enabled }}
         - name: fluentd-aggregator-certificates
           secret:
@@ -220,6 +256,12 @@ spec:
             name: {{ template "fluentd.aggregator.configMap" . }}
         {{- if not .Values.aggregator.persistence.enabled }}
         - name: buffer
+          emptyDir: {}
+        {{- end }}
+        {{- if .Values.aggregator.extraGems }}
+        - name: gems
+          emptyDir: {}
+        - name: specifications
           emptyDir: {}
         {{- end }}
         {{- if .Values.aggregator.initScripts }}
@@ -237,6 +279,9 @@ spec:
           secret:
             secretName: {{ template "fluentd.aggregator.initScriptsSecret" . }}
             defaultMode: 0755
+        {{- end }}
+        {{- if .Values.aggregator.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
 
   {{- if or .Values.aggregator.persistence.enabled .Values.aggregator.extraVolumeClaimTemplates }}

@@ -1,6 +1,6 @@
 <!--- app-name: Spring Cloud Data Flow -->
 
-# Spring Cloud Data Flow packaged by Bitnami
+# Bitnami package for Spring Cloud Data Flow
 
 Spring Cloud Data Flow is a microservices-based toolkit for building streaming and batch data processing pipelines in Cloud Foundry and Kubernetes.
 
@@ -9,18 +9,16 @@ Spring Cloud Data Flow is a microservices-based toolkit for building streaming a
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/spring-cloud-dataflow
+helm install my-release oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Spring Cloud Data Flow in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
 This chart bootstraps a [Spring Cloud Data Flow](https://github.com/bitnami/containers/tree/main/bitnami/spring-cloud-dataflow) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
-Looking to use Spring Cloud Data Flow in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -363,6 +361,27 @@ helm uninstall my-release
 | `metrics.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Prometheus Proxy container(s)                             | `[]`                                       |
 | `metrics.containerPorts.http`                               | Prometheus Proxy HTTP container port                                                                                       | `8080`                                     |
 | `metrics.containerPorts.rsocket`                            | Prometheus Proxy Rsocket container port                                                                                    | `7001`                                     |
+| `metrics.startupProbe.enabled`                              | Enable startupProbe on Prometheus Proxy nodes                                                                              | `false`                                    |
+| `metrics.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                     | `10`                                       |
+| `metrics.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                            | `10`                                       |
+| `metrics.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                           | `1`                                        |
+| `metrics.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                         | `3`                                        |
+| `metrics.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                         | `1`                                        |
+| `metrics.livenessProbe.enabled`                             | Enable livenessProbe on Prometheus Proxy nodes                                                                             | `true`                                     |
+| `metrics.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                    | `10`                                       |
+| `metrics.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                           | `10`                                       |
+| `metrics.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                          | `1`                                        |
+| `metrics.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                        | `3`                                        |
+| `metrics.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                        | `1`                                        |
+| `metrics.readinessProbe.enabled`                            | Enable readinessProbe on Prometheus Proxy nodes                                                                            | `true`                                     |
+| `metrics.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                   | `10`                                       |
+| `metrics.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                          | `10`                                       |
+| `metrics.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                         | `1`                                        |
+| `metrics.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                       | `3`                                        |
+| `metrics.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                       | `1`                                        |
+| `metrics.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                         | `{}`                                       |
+| `metrics.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                        | `{}`                                       |
+| `metrics.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                       | `{}`                                       |
 | `metrics.sidecars`                                          | Add additional sidecar containers to the Prometheus Proxy pod(s)                                                           | `[]`                                       |
 | `metrics.initContainers`                                    | Add additional init containers to the Prometheus Proxy pod(s)                                                              | `[]`                                       |
 | `metrics.updateStrategy.type`                               | Prometheus Proxy deployment strategy type.                                                                                 | `RollingUpdate`                            |
@@ -403,16 +422,24 @@ helm uninstall my-release
 
 ### Init Container parameters
 
-| Name                                 | Description                                                                                                                     | Value                     |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `waitForBackends.enabled`            | Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming                               | `true`                    |
-| `waitForBackends.image.registry`     | Init container wait-for-backend image registry                                                                                  | `REGISTRY_NAME`           |
-| `waitForBackends.image.repository`   | Init container wait-for-backend image name                                                                                      | `REPOSITORY_NAME/kubectl` |
-| `waitForBackends.image.digest`       | Init container wait-for-backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
-| `waitForBackends.image.pullPolicy`   | Init container wait-for-backend image pull policy                                                                               | `IfNotPresent`            |
-| `waitForBackends.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                | `[]`                      |
-| `waitForBackends.resources.limits`   | Init container wait-for-backend resource limits                                                                                 | `{}`                      |
-| `waitForBackends.resources.requests` | Init container wait-for-backend resource requests                                                                               | `{}`                      |
+| Name                                                                | Description                                                                                                                     | Value                     |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `waitForBackends.enabled`                                           | Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming                               | `true`                    |
+| `waitForBackends.image.registry`                                    | Init container wait-for-backend image registry                                                                                  | `REGISTRY_NAME`           |
+| `waitForBackends.image.repository`                                  | Init container wait-for-backend image name                                                                                      | `REPOSITORY_NAME/kubectl` |
+| `waitForBackends.image.digest`                                      | Init container wait-for-backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
+| `waitForBackends.image.pullPolicy`                                  | Init container wait-for-backend image pull policy                                                                               | `IfNotPresent`            |
+| `waitForBackends.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                | `[]`                      |
+| `waitForBackends.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                            | `true`                    |
+| `waitForBackends.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                      | `1001`                    |
+| `waitForBackends.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                   | `true`                    |
+| `waitForBackends.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                     | `false`                   |
+| `waitForBackends.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                         | `false`                   |
+| `waitForBackends.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                       | `false`                   |
+| `waitForBackends.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                              | `["ALL"]`                 |
+| `waitForBackends.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                | `RuntimeDefault`          |
+| `waitForBackends.resources.limits`                                  | Init container wait-for-backend resource limits                                                                                 | `{}`                      |
+| `waitForBackends.resources.requests`                                | Init container wait-for-backend resource requests                                                                               | `{}`                      |
 
 ### Database parameters
 
@@ -492,7 +519,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/sprin
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -631,7 +658,7 @@ Most likely you will only want to have one hostname that maps to this Spring Clo
 
 For each host indicated at `server.ingress.extraHosts`, please indicate a `name`, `path`, and any `annotations` that you may want the ingress controller to know about.
 
-For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
+For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
 
 #### TLS
 
@@ -892,7 +919,7 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

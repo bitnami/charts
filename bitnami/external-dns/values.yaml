@@ -67,11 +67,11 @@ useDaemonset: false
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.14.0-debian-11-r1
+  tag: 0.14.0-debian-11-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -542,6 +542,19 @@ ns1:
   ##
   secretName: ""
 
+## Pi-hole configuration to be set via arguments/env. variables
+##
+pihole:
+  ## @param pihole.server When using the Pi-hole provider, specify The address of the Pi-hole web server
+  ##
+  server: ""
+  ## @param pihole.tlsSkipVerify When using the Pi-hole provider, specify wheter to skip verification of any TLS certificates served by the Pi-hole web server
+  ##
+  tlsSkipVerify: ""
+  ## @param pihole.secretName Use an existing secret with key "pihole_password" defined.
+  ##
+  secretName: ""
+
 ## oci configuration to be set via arguments/env. variables
 ##
 oci:
@@ -824,7 +837,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment
@@ -987,7 +1000,7 @@ podSecurityContext:
   enabled: true
   fsGroup: 1001
 ## Container resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1142,4 +1155,3 @@ metrics:
     ## @param  metrics.googlePodMonitor.endpoint The endpoint for Google Managed Prometheus scraping the metrics
     ##
     endpoint: /metrics
-

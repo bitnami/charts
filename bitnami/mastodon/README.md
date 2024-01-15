@@ -1,6 +1,6 @@
 <!--- app-name: Mastodon -->
 
-# Mastodon packaged by Bitnami
+# Bitnami package for Mastodon
 
 Mastodon is self-hosted social network server based on ActivityPub. Written in Ruby, features real-time updates, multimedia attachments and no vendor lock-in.
 
@@ -11,10 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mastodon
+helm install my-release oci://registry-1.docker.io/bitnamicharts/mastodon
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+Looking to use Mastodon in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -25,8 +25,6 @@ This chart bootstraps an [Mastodon](https://www.mastodon.com/) Deployment in a [
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm charts in clusters.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/apps/mastodon/get-started/).
-
-Looking to use Mastodon in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -451,12 +449,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                    | `true`        |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                  | `""`          |
 | `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)        | `{}`          |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account          | `true`        |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account          | `false`       |
 | `externalDatabase.host`                       | Database host                                                           | `""`          |
 | `externalDatabase.port`                       | Database port number                                                    | `5432`        |
-| `externalDatabase.user`                       | Non-root username for JupyterHub                                        | `postgres`    |
-| `externalDatabase.password`                   | Password for the non-root username for JupyterHub                       | `""`          |
-| `externalDatabase.database`                   | JupyterHub database name                                                | `mastodon`    |
+| `externalDatabase.user`                       | Non-root username for Mastodon                                          | `postgres`    |
+| `externalDatabase.password`                   | Password for the non-root username for Mastodon                         | `""`          |
+| `externalDatabase.database`                   | Mastodon database name                                                  | `mastodon`    |
 | `externalDatabase.existingSecret`             | Name of an existing secret resource containing the database credentials | `""`          |
 | `externalDatabase.existingSecretPasswordKey`  | Name of an existing secret key containing the database credentials      | `db-password` |
 
@@ -589,11 +587,11 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/masto
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/mastodon/values.yaml)
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -688,6 +686,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 4.0.0
+
+This major updates the Apache subchart to its newest major, 10.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/apache#to-1000) you can find more information about the changes introduced in that version.
+
 ### To 3.0.0
 
 This major updates the PostgreSQL subchart to its newest major, 13.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1300) you can find more information about the changes introduced in that version.
@@ -704,7 +706,7 @@ This major updates the MinIO&reg; subchart to its newest major, 12.0.0. This sub
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
