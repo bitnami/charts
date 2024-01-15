@@ -270,14 +270,21 @@ influxdb:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param influxdb.podSecurityContext.enabled Enabled InfluxDB&trade; pods' Security Context
+  ## @param influxdb.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param influxdb.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param influxdb.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param influxdb.podSecurityContext.fsGroup Set InfluxDB&trade; pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param influxdb.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param influxdb.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param influxdb.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param influxdb.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param influxdb.containerSecurityContext.privileged Set container's Security Context privileged
@@ -288,6 +295,7 @@ influxdb:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -857,9 +865,11 @@ volumePermissions:
   ## "auto" is especially useful for OpenShift which has scc with dynamic userids (and 0 is not allowed).
   ## You may want to use this volumePermissions.securityContext.runAsUser="auto" in combination with
   ## pod securityContext.enabled=false and shmVolume.chmod.enabled=false
+  ## @param volumePermissions.securityContext.seLinuxOptions Set SELinux options in container
   ## @param volumePermissions.securityContext.runAsUser User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")
   ##
   securityContext:
+    seLinuxOptions: {}
     runAsUser: 0
 
 ## @section InfluxDB&trade; backup parameters
@@ -892,15 +902,22 @@ backup:
     ## K8s Security Context for Backup Cronjob pods
     ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
     ## @param backup.cronjob.podSecurityContext.enabled Enable security context for InfluxDB&trade; backup pods
+    ## @param backup.cronjob.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param backup.cronjob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param backup.cronjob.podSecurityContext.supplementalGroups Set filesystem extra groups
     ## @param backup.cronjob.podSecurityContext.fsGroup Group ID for the InfluxDB&trade; filesystem
     ##
     podSecurityContext:
       enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
       fsGroup: 1001
 
     ## K8s Security Context for Backup Cronjob containers
     ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
     ## @param backup.cronjob.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param backup.cronjob.containerSecurityContext.seLinuxOptions Set SELinux options in container
     ## @param backup.cronjob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param backup.cronjob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param backup.cronjob.containerSecurityContext.privileged Set container's Security Context privileged
@@ -910,6 +927,7 @@ backup:
     ## @param backup.cronjob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
