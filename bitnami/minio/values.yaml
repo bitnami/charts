@@ -454,7 +454,6 @@ containerPorts:
 ## MinIO&reg; pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable pod Security Context
-## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
 ## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
 ## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Group ID for the container
@@ -465,7 +464,6 @@ containerPorts:
 ##
 podSecurityContext:
   enabled: true
-  fsGroupChangePolicy: Always
   sysctls: []
   supplementalGroups: []
   fsGroup: 1001
