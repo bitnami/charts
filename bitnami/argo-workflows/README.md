@@ -334,13 +334,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Workflows configuration
 
-| Name                                                    | Description                                                                                | Value   |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ------- |
-| `workflows.serviceAccount.create`                       | Whether to create a service account to run workflows                                       | `false` |
-| `workflows.serviceAccount.name`                         | Service account name to run workflows                                                      | `""`    |
-| `workflows.serviceAccount.automountServiceAccountToken` | Automount service account token for the workflows service account                          | `true`  |
-| `workflows.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`. | `{}`    |
-| `workflows.rbac.create`                                 | Whether to create RBAC resource to run workflows                                           | `true`  |
+| Name                                                    | Description                                                                                | Value  |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ------ |
+| `workflows.serviceAccount.create`                       | Whether to create a service account to run workflows                                       | `true` |
+| `workflows.serviceAccount.name`                         | Service account name to run workflows                                                      | `""`   |
+| `workflows.serviceAccount.automountServiceAccountToken` | Automount service account token for the workflows service account                          | `true` |
+| `workflows.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`. | `{}`   |
+| `workflows.rbac.create`                                 | Whether to create RBAC resource to run workflows                                           | `true` |
 
 ### PostgreSQL subchart
 
