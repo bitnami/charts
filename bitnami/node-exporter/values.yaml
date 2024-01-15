@@ -87,7 +87,7 @@ rbac:
 serviceAccount:
   create: true
   name: ""
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   annotations: {}
 
 ## Bitnami Node Exporter image version
