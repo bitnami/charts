@@ -100,8 +100,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.https`                              | HTTPS port to expose at container level                                                   | `8443`           |
 | `updateStrategy.type`                               | Strategy to use to update Pods                                                            | `RollingUpdate`  |
 | `podSecurityContext.enabled`                        | Enable phpMyAdmin pods' Security Context                                                  | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                        | `Always`         |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                            | `[]`             |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `podSecurityContext.fsGroup`                        | User ID for the container                                                                 | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`          |
