@@ -403,6 +403,19 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Notable changes
 
+### 10.0.0
+
+This major version changes the default parameters so it can be run in Pod Security Admission restricted mode:
+
+- Default ports are `8080` and `8443`
+- `allowPrivilegeEscalation` is set to `false`
+
+In order to restore the configuration from versions < 10.0.0, set the following values
+
+- `containerPorts.http=80`
+- `containerPorts.https=443`
+- `containerSecurityContext.allowPrivilegeEscalation=true`
+
 ### 5.3.0
 
 In this version you can indicate the key to download the GeoLite2 databases using the [parameter](#parameters) `maxmindLicenseKey`.
