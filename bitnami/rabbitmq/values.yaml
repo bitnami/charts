@@ -742,13 +742,20 @@ topologySpreadConstraints: []
 ## RabbitMQ pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable RabbitMQ pods' Security Context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Set RabbitMQ pod's Security Context fsGroup
 ##
 podSecurityContext:
   enabled: true
+  fsGroupChangePolicy: Always
+  sysctls: []
+  supplementalGroups: []
   fsGroup: 1001
 
 ## @param containerSecurityContext.enabled Enabled RabbitMQ containers' Security Context
+## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set RabbitMQ containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set RabbitMQ container's Security Context runAsNonRoot
 ## @param containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
@@ -763,6 +770,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
+  seLinuxOptions: {}
   runAsUser: 1001
   runAsNonRoot: true
   allowPrivilegeEscalation: false
@@ -1470,7 +1478,9 @@ volumePermissions:
   ## Init container' Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
   ##
   containerSecurityContext:
+    seLinuxOptions: {}
     runAsUser: 0
