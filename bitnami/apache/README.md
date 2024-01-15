@@ -232,6 +232,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.podAnnotations`                   | Additional custom annotations for Apache exporter service                                                                                 | `{}`                              |
 | `metrics.resources.limits`                 | The resources limits for the container                                                                                                    | `{}`                              |
 | `metrics.resources.requests`               | The requested resources for the container                                                                                                 | `{}`                              |
+| `metrics.containerPort`                    | Apache Prometheus Exporter container port                                                                                                 | `9141`                            |
 | `metrics.service.port`                     | Metrics service port                                                                                                                      | `9117`                            |
 | `metrics.service.annotations`              | Additional custom annotations for Metrics service                                                                                         | `{}`                              |
 | `metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator PodMonitor (also requires `metrics.enabled` to be `true`)                                        | `false`                           |
@@ -245,6 +246,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`                              |
 | `metrics.prometheusRule.labels`            | Labels that can be used so PrometheusRule will be discovered by Prometheus                                                                | `{}`                              |
 | `metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                               | `[]`                              |
+
+### Network policies section
+
+| Name                            | Description                                         | Value   |
+| ------------------------------- | --------------------------------------------------- | ------- |
+| `networkPolicy.enabled`         | Specifies whether a NetworkPolicy should be created | `false` |
+| `networkPolicy.allowExternal`   | Don't require client label for connections          | `true`  |
+| `networkPolicy.additionalRules` | Additional NetworkPolicy rule                       | `{}`    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
