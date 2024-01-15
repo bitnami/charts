@@ -95,6 +95,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                                    | Additional pod annotations                                                                                  | `{}`                    |
 | `podLabels`                                         | Additional pod labels                                                                                       | `{}`                    |
 | `podSecurityContext.enabled`                        | Enable security context for EJBCA container                                                                 | `true`                  |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                          | `Always`                |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                              | `[]`                    |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                 | `[]`                    |
 | `podSecurityContext.fsGroup`                        | Group ID for the volumes of the pod                                                                         | `1001`                  |
 | `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                         | `""`                    |
 | `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                    | `soft`                  |
@@ -135,6 +138,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.limits`                                  | The resources limits for Ejbca containers                                                                   | `{}`                    |
 | `resources.requests`                                | The requested resources for Ejbca containers                                                                | `{}`                    |
 | `containerSecurityContext.enabled`                  | Enabled EJBCA containers' Security Context                                                                  | `true`                  |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                            | `{}`                    |
 | `containerSecurityContext.runAsUser`                | Set EJBCA containers' Security Context runAsUser                                                            | `1001`                  |
 | `containerSecurityContext.runAsNonRoot`             | Set Controller container's Security Context runAsNonRoot                                                    | `true`                  |
 | `containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                         | `false`                 |
