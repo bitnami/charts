@@ -756,14 +756,12 @@ envoy:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param envoy.podSecurityContext.enabled Envoy Pod securityContext
   ## @param envoy.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
-  ## @param envoy.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param envoy.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param envoy.podSecurityContext.fsGroup User ID for the for the mounted volumes
   ## @param envoy.podSecurityContext.sysctls Array of sysctl options to allow
   ##
   podSecurityContext:
     fsGroupChangePolicy: Always
-    sysctls: []
     supplementalGroups: []
     fsGroup: 0
     sysctls: []
