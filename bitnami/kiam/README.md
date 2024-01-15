@@ -314,12 +314,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### kiam agent Service Account parameters
 
-| Name                                                | Description                                                                                                         | Value  |
-| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------ |
-| `agent.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true` |
-| `agent.serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
-| `agent.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true` |
-| `agent.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`   |
+| Name                                                | Description                                                                                                         | Value   |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
+| `agent.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true`  |
+| `agent.serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
+| `agent.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `false` |
+| `agent.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`    |
 
 ### kiam agent metrics parameters
 
