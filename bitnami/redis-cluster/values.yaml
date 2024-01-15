@@ -143,7 +143,6 @@ rbac:
 ## Redis&reg; pod Security Context
 ## @param podSecurityContext.enabled Enable Redis&reg; pod Security Context
 ## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
-## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
 ## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Group ID for the pods
 ## @param podSecurityContext.sysctls Set namespaced sysctls for the pods
@@ -151,7 +150,6 @@ rbac:
 podSecurityContext:
   enabled: true
   fsGroupChangePolicy: Always
-  sysctls: []
   supplementalGroups: []
   fsGroup: 1001
   ## Uncomment the setting below to increase the net.core.somaxconn value
