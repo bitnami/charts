@@ -149,14 +149,21 @@ controller:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.podSecurityContext.enabled Enabled Argo CD pods' Security Context
+  ## @param controller.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param controller.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param controller.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param controller.podSecurityContext.fsGroup Set Argo CD pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.containerSecurityContext.enabled Enabled Argo CD containers' Security Context
+  ## @param controller.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param controller.containerSecurityContext.runAsUser Set Argo CD containers' Security Context runAsUser
   ## @param controller.containerSecurityContext.allowPrivilegeEscalation Set Argo CD containers' Security Context allowPrivilegeEscalation
   ## @param controller.containerSecurityContext.capabilities.drop Set Argo CD containers' Security Context capabilities to be dropped
@@ -167,6 +174,7 @@ controller:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -809,6 +817,7 @@ applicationSet:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param applicationSet.containerSecurityContext.enabled Enabled Argo CD applicationSet controller containers' Security Context
+  ## @param applicationSet.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param applicationSet.containerSecurityContext.runAsUser Set Argo CD applicationSet controller containers' Security Context runAsUser
   ## @param applicationSet.containerSecurityContext.allowPrivilegeEscalation Set Argo CD applicationSet controller containers' Security Context allowPrivilegeEscalation
   ## @param applicationSet.containerSecurityContext.capabilities.drop Set Argo CD applicationSet controller containers' Security Context capabilities to be dropped
@@ -819,6 +828,7 @@ applicationSet:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -873,10 +883,16 @@ applicationSet:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param applicationSet.podSecurityContext.enabled Enabled Argo CD applicationSet controller pods' Security Context
+  ## @param applicationSet.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param applicationSet.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param applicationSet.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param applicationSet.podSecurityContext.fsGroup Set Argo CD applicationSet controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## @param applicationSet.nodeSelector Node labels for Argo CD applicationSet controller pods assignment
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
@@ -1205,6 +1221,7 @@ notifications:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param notifications.containerSecurityContext.enabled Enabled Argo CD notifications controller containers' Security Context
+  ## @param notifications.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param notifications.containerSecurityContext.runAsUser Set Argo CD notifications controller containers' Security Context runAsUser
   ## @param notifications.containerSecurityContext.allowPrivilegeEscalation Set Argo CD notifications controller containers' Security Context allowPrivilegeEscalation
   ## @param notifications.containerSecurityContext.capabilities.drop Set Argo CD notifications controller containers' Security Context capabilities to be dropped
@@ -1215,6 +1232,7 @@ notifications:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -1235,10 +1253,16 @@ notifications:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param notifications.podSecurityContext.enabled Enabled Argo CD notifications controller pods' Security Context
+  ## @param notifications.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param notifications.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param notifications.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param notifications.podSecurityContext.fsGroup Set Argo CD notifications controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## @param notifications.nodeSelector Node labels for Argo CD notifications controller pods assignment
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
@@ -1572,6 +1596,7 @@ notifications:
       ## Configure Container Security Context
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
       ## @param notifications.bots.slack.containerSecurityContext.enabled Enabled Argo CD Slack bot containers' Security Context
+      ## @param notifications.bots.slack.containerSecurityContext.seLinuxOptions Set SELinux options in container
       ## @param notifications.bots.slack.containerSecurityContext.runAsUser Set Argo CD Slack bot containers' Security Context runAsUser
       ## @param notifications.bots.slack.containerSecurityContext.allowPrivilegeEscalation Set Argo CD Slack bot containers' Security Context allowPrivilegeEscalation
       ## @param notifications.bots.slack.containerSecurityContext.capabilities.drop Set Argo CD Slack bot containers' Security Context capabilities to be dropped
@@ -1582,6 +1607,7 @@ notifications:
       ##
       containerSecurityContext:
         enabled: true
+        seLinuxOptions: {}
         runAsUser: 1001
         runAsNonRoot: true
         readOnlyRootFilesystem: false
@@ -1602,10 +1628,16 @@ notifications:
       ## Configure Pods Security Context
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
       ## @param notifications.bots.slack.podSecurityContext.enabled Enabled Argo CD Slack bot pods' Security Context
+      ## @param notifications.bots.slack.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+      ## @param notifications.bots.slack.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+      ## @param notifications.bots.slack.podSecurityContext.supplementalGroups Set filesystem extra groups
       ## @param notifications.bots.slack.podSecurityContext.fsGroup Set Argo CD Slack bot pod's Security Context fsGroup
       ##
       podSecurityContext:
         enabled: true
+        fsGroupChangePolicy: Always
+        sysctls: []
+        supplementalGroups: []
         fsGroup: 1001
       ## @param notifications.bots.slack.nodeSelector Node labels for Argo CD Slack bot pods assignment
       ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
@@ -1711,14 +1743,21 @@ server:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param server.podSecurityContext.enabled Enabled Argo CD server pods' Security Context
+  ## @param server.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param server.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param server.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param server.podSecurityContext.fsGroup Set Argo CD server pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param server.containerSecurityContext.enabled Enabled Argo CD server containers' Security Context
+  ## @param server.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param server.containerSecurityContext.runAsUser Set Argo CD server containers' Security Context runAsUser
   ## @param server.containerSecurityContext.allowPrivilegeEscalation Set Argo CD server containers' Security Context allowPrivilegeEscalation
   ## @param server.containerSecurityContext.capabilities.drop Set Argo CD containers' server Security Context capabilities to be dropped
@@ -1729,6 +1768,7 @@ server:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -2462,14 +2502,21 @@ repoServer:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param repoServer.podSecurityContext.enabled Enabled Argo CD repo server pods' Security Context
+  ## @param repoServer.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param repoServer.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param repoServer.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param repoServer.podSecurityContext.fsGroup Set Argo CD repo server pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param repoServer.containerSecurityContext.enabled Enabled Argo CD repo server containers' Security Context
+  ## @param repoServer.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param repoServer.containerSecurityContext.runAsUser Set Argo CD repo server containers' Security Context runAsUser
   ## @param repoServer.containerSecurityContext.allowPrivilegeEscalation Set Argo CD repo server containers' Security Context allowPrivilegeEscalation
   ## @param repoServer.containerSecurityContext.capabilities.drop Set Argo CD containers' repo server Security Context capabilities to be dropped
@@ -2480,6 +2527,7 @@ repoServer:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -2929,14 +2977,21 @@ dex:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dex.podSecurityContext.enabled Enabled Dex pods' Security Context
+  ## @param dex.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param dex.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param dex.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param dex.podSecurityContext.fsGroup Set Dex pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dex.containerSecurityContext.enabled Enabled Dex containers' Security Context
+  ## @param dex.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param dex.containerSecurityContext.runAsUser Set Dex containers' Security Context runAsUser
   ## @param dex.containerSecurityContext.allowPrivilegeEscalation Set Dex containers' Security Context allowPrivilegeEscalation
   ## @param dex.containerSecurityContext.readOnlyRootFilesystem Set Dex containers' server Security Context readOnlyRootFilesystem
@@ -2947,6 +3002,7 @@ dex:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -3491,12 +3547,14 @@ volumePermissions:
     requests: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
+    seLinuxOptions: {}
     runAsUser: 0
 
 ## @section Other Parameters
@@ -3608,6 +3666,7 @@ redisWait:
   ##
   extraArgs: ''
   ## @param redisWait.containerSecurityContext.enabled Enabled Argo CD repo server containers' Security Context
+  ## @param redisWait.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param redisWait.containerSecurityContext.runAsUser Set Argo CD repo server containers' Security Context runAsUser
   ## @param redisWait.containerSecurityContext.allowPrivilegeEscalation Set Argo CD repo server containers' Security Context allowPrivilegeEscalation
   ## @param redisWait.containerSecurityContext.capabilities.drop Set Argo CD containers' repo server Security Context capabilities to be dropped
@@ -3618,6 +3677,7 @@ redisWait:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
