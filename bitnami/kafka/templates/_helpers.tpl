@@ -301,7 +301,7 @@ Create the name of the service account to use for the Kafka Provisioning client
 */}}
 {{- define "kafka.provisioning.serviceAccountName" -}}
 {{- if .Values.provisioning.serviceAccount.create -}}
-    {{ default (include "common.names.fullname" .) .Values.provisioning.serviceAccount.name }}
+    {{ default (printf "%s-provisioning" (include "common.names.fullname" .)) .Values.provisioning.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.provisioning.serviceAccount.name }}
 {{- end -}}

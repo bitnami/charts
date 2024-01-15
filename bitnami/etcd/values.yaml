@@ -911,14 +911,14 @@ disasterRecovery:
 serviceAccount:
   ## @param serviceAccount.create Enable/disable service account creation
   ##
-  create: false
+  create: true
   ## @param serviceAccount.name Name of the service account to create or use
   ##
   name: ""
   ## @param serviceAccount.automountServiceAccountToken Enable/disable auto mounting of service account token
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   ## @param serviceAccount.annotations [object] Additional annotations to be included on the service account
   ##
   annotations: {}

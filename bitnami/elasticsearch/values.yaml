@@ -765,9 +765,9 @@ master:
   ## @param master.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   serviceAccount:
-    create: false
+    create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
   ## Enable HorizontalPodAutoscaler for Elasticsearch Master pods
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -1079,9 +1079,9 @@ data:
   ## @param data.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   serviceAccount:
-    create: false
+    create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
   ## Enable HorizontalPodAutoscaler for Elasticsearch data pods
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -1355,9 +1355,9 @@ coordinating:
   ## @param coordinating.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   serviceAccount:
-    create: false
+    create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
   ## Enable HorizontalPodAutoscaler for Elasticsearch coordinating pods
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -1639,9 +1639,9 @@ ingest:
   ## @param ingest.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   serviceAccount:
-    create: false
+    create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
   ## Enable HorizontalPodAutoscaler for Elasticsearch ingest-only pods
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -2099,6 +2099,18 @@ metrics:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pods Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param metrics.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param metrics.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param metrics.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param metrics.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ##
+  serviceAccount:
+    create: true
+    name: ""
+    automountServiceAccountToken: false
+    annotations: {}
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
