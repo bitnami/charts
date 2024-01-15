@@ -212,7 +212,7 @@ frontend:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -254,7 +254,7 @@ frontend:
   updateStrategy:
     type: RollingUpdate
   ## Frontend containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param frontend.resources.limits.cpu The CPU limits for the NGINX container
   ## @param frontend.resources.limits.memory The memory limits for the NGINX container
   ## @param frontend.resources.requests.cpu The requested CPU for the NGINX container
@@ -415,7 +415,7 @@ frontend:
   ##
   affinity: {}
   ## @param frontend.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param frontend.tolerations Tolerations for pod assignment
@@ -543,7 +543,7 @@ dashboard:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -634,7 +634,7 @@ dashboard:
   containerPorts:
     http: 8080
   ## Dashboard containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dashboard.resources.limits.cpu The CPU limits for the Dashboard container
   ## @param dashboard.resources.limits.memory The memory limits for the Dashboard container
   ## @param dashboard.resources.requests.cpu The requested CPU for the Dashboard container
@@ -780,7 +780,7 @@ dashboard:
   ##
   affinity: {}
   ## @param dashboard.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dashboard.tolerations Tolerations for pod assignment
@@ -862,7 +862,7 @@ apprepository:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -889,7 +889,7 @@ apprepository:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -993,7 +993,7 @@ apprepository:
   updateStrategy:
     type: RollingUpdate
   ## AppRepository Controller containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param apprepository.resources.limits.cpu The CPU limits for the AppRepository Controller container
   ## @param apprepository.resources.limits.memory The memory limits for the AppRepository Controller container
   ## @param apprepository.resources.requests.cpu The requested CPU for the AppRepository Controller container
@@ -1103,7 +1103,7 @@ apprepository:
   ##
   affinity: {}
   ## @param apprepository.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param apprepository.tolerations Tolerations for pod assignment
@@ -1185,7 +1185,7 @@ authProxy:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1297,7 +1297,7 @@ authProxy:
     seccompProfile:
       type: "RuntimeDefault"
   ## OAuth2 Proxy containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param authProxy.resources.limits.cpu The CPU limits for the OAuth2 Proxy container
   ## @param authProxy.resources.limits.memory The memory limits for the OAuth2 Proxy container
   ## @param authProxy.resources.requests.cpu The requested CPU for the OAuth2 Proxy container
@@ -1335,7 +1335,7 @@ pinnipedProxy:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1421,7 +1421,7 @@ pinnipedProxy:
     seccompProfile:
       type: "RuntimeDefault"
   ## Pinniped Proxy containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param pinnipedProxy.resources.limits.cpu The CPU limits for the Pinniped Proxy container
   ## @param pinnipedProxy.resources.limits.memory The memory limits for the Pinniped Proxy container
   ## @param pinnipedProxy.resources.requests.cpu The requested CPU for the Pinniped Proxy container
@@ -1543,7 +1543,7 @@ postgresql:
   securityContext:
     enabled: false
   ## PostgreSQL containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param postgresql.resources.limits The resources limits for the PostgreSQL container
   ## @param postgresql.resources.requests.cpu The requested CPU for the PostgreSQL container
   ## @param postgresql.resources.requests.memory The requested memory for the PostgreSQL container
@@ -1640,7 +1640,7 @@ kubeappsapis:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1696,7 +1696,7 @@ kubeappsapis:
   containerPorts:
     http: 50051
   ## KubeappsAPIs containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param kubeappsapis.resources.limits.cpu The CPU limits for the KubeappsAPIs container
   ## @param kubeappsapis.resources.limits.memory The memory limits for the KubeappsAPIs container
   ## @param kubeappsapis.resources.requests.cpu The requested CPU for the KubeappsAPIs container
@@ -1848,7 +1848,7 @@ kubeappsapis:
   ##
   affinity: {}
   ## @param kubeappsapis.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param kubeappsapis.tolerations Tolerations for pod assignment
@@ -1937,7 +1937,7 @@ ociCatalog:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1972,7 +1972,7 @@ ociCatalog:
   containerPorts:
     grpc: 50061
   ## OCI Catalog containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
   ## @param ociCatalog.resources.limits.cpu The CPU limits for the OCI Catalog container
   ## @param ociCatalog.resources.limits.memory The memory limits for the OCI Catalog container
   ## @param ociCatalog.resources.requests.cpu The requested CPU for the OCI Catalog container

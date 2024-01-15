@@ -83,7 +83,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -221,7 +221,7 @@ common:
   serviceAccount:
     ## @param common.serviceAccount.create Whether to create a Service Account for all pods automatically
     ##
-    create: false
+    create: true
     ## @param common.serviceAccount.name Name of a Service Account to be used by all Pods
     ## If not set and create is true, a name is generated using the XXX.fullname template
     ##
@@ -231,7 +231,7 @@ common:
     annotations: {}
     ## @param common.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -340,7 +340,7 @@ configsvr:
   ##
   replicaCount: 1
   ## @param configsvr.resources Configure pod resources
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## @param configsvr.hostAliases Deployment pod host aliases
@@ -394,7 +394,7 @@ configsvr:
   ##
   affinity: {}
   ## @param configsvr.nodeSelector Config Server Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param configsvr.tolerations Config Server Tolerations for pod assignment
@@ -481,7 +481,7 @@ configsvr:
     ##
     maxUnavailable: 1
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param configsvr.persistence.enabled Use a PVC to persist data
@@ -522,7 +522,7 @@ configsvr:
   serviceAccount:
     ## @param configsvr.serviceAccount.create Specifies whether a ServiceAccount should be created for Config Server
     ##
-    create: false
+    create: true
     ## @param configsvr.serviceAccount.name Name of a Service Account to be used by Config Server
     ## If not set and create is true, a name is generated using the XXX.fullname template
     ##
@@ -532,7 +532,7 @@ configsvr:
     annotations: {}
     ## @param configsvr.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   ## Use a external config server instead of deploying one
   ##
   external:
@@ -664,7 +664,7 @@ mongos:
   ##
   replicaCount: 1
   ## @param mongos.resources Configure pod resources
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## @param mongos.hostAliases Deployment pod host aliases
@@ -718,7 +718,7 @@ mongos:
   ##
   affinity: {}
   ## @param mongos.nodeSelector Mongos Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param mongos.tolerations Mongos Tolerations for pod assignment
@@ -871,7 +871,7 @@ mongos:
   serviceAccount:
     ## @param mongos.serviceAccount.create Whether to create a Service Account for mongos automatically
     ##
-    create: false
+    create: true
     ## @param mongos.serviceAccount.name Name of a Service Account to be used by mongos
     ## If not set and create is true, a name is generated using the XXX.fullname template
     ##
@@ -881,7 +881,7 @@ mongos:
     annotations: {}
     ## @param mongos.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param mongos.podSecurityContext.enabled Enable security context
@@ -998,7 +998,7 @@ shardsvr:
     ##
     replicaCount: 1
     ## @param shardsvr.dataNode.resources Configure pod resources
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ##
     resources: {}
     ## @param shardsvr.dataNode.mongodbExtraFlags MongoDB&reg; additional command line flags
@@ -1053,7 +1053,7 @@ shardsvr:
     ##
     affinity: {}
     ## @param shardsvr.dataNode.nodeSelector Data nodes Node labels for pod assignment
-    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
     ## You can set dataNodeLoopId (or any other parameter) by setting the below code block under this 'nodeSelector' section:
     ## nodeSelector: { shardId: "{{ .dataNodeLoopId }}" }
     ##
@@ -1157,7 +1157,7 @@ shardsvr:
     serviceAccount:
       ## @param shardsvr.dataNode.serviceAccount.create Specifies whether a ServiceAccount should be created for shardsvr
       ##
-      create: false
+      create: true
       ## @param shardsvr.dataNode.serviceAccount.name Name of a Service Account to be used by shardsvr data pods
       ## If not set and create is true, a name is generated using the XXX.fullname template
       ##
@@ -1167,7 +1167,7 @@ shardsvr:
       annotations: {}
       ## @param shardsvr.dataNode.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
       ##
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
     ## Configure Pods Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
     ## @param shardsvr.dataNode.podSecurityContext.enabled Enable security context
@@ -1277,7 +1277,7 @@ shardsvr:
   ##
 
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param shardsvr.persistence.enabled Use a PVC to persist data
@@ -1327,7 +1327,7 @@ shardsvr:
     ##
     hostAliases: []
     ## @param shardsvr.arbiter.resources Configure pod resources
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ##
     resources: {}
     ## @param shardsvr.arbiter.mongodbExtraFlags MongoDB&reg; additional command line flags
@@ -1382,7 +1382,7 @@ shardsvr:
     ##
     affinity: {}
     ## @param shardsvr.arbiter.nodeSelector Arbiter's Node labels for pod assignment
-    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
     ##
     nodeSelector: {}
     ## @param shardsvr.arbiter.tolerations Arbiter's Tolerations for pod assignment
@@ -1462,7 +1462,7 @@ shardsvr:
     serviceAccount:
       ## @param shardsvr.arbiter.serviceAccount.create Specifies whether a ServiceAccount should be created for shardsvr arbiter nodes
       ##
-      create: false
+      create: true
       ## @param shardsvr.arbiter.serviceAccount.name Name of a Service Account to be used by shardsvr arbiter pods
       ## If not set and create is true, a name is generated using the XXX.fullname template
       ##
@@ -1472,7 +1472,7 @@ shardsvr:
       annotations: {}
       ## @param shardsvr.arbiter.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
       ##
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
     ## Configure Pods Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
     ## @param shardsvr.arbiter.podSecurityContext.enabled Enable security context
@@ -1611,7 +1611,7 @@ metrics:
   ##
   extraArgs: ""
   ## @param metrics.resources Metrics exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## Configure Container Security Context

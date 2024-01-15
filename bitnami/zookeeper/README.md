@@ -111,8 +111,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `fourlwCommandsWhitelist`     | A list of comma separated Four Letter Words commands that can be executed                                                  | `srvr, mntr, ruok`          |
 | `minServerId`                 | Minimal SERVER_ID value, nodes increment their IDs respectively                                                            | `1`                         |
 | `listenOnAllIPs`              | Allow ZooKeeper to listen for connections from its peers on all available IP addresses                                     | `false`                     |
-| `autopurge.snapRetainCount`   | The most recent snapshots amount (and corresponding transaction logs) to retain                                            | `3`                         |
-| `autopurge.purgeInterval`     | The time interval (in hours) for which the purge task has to be triggered                                                  | `0`                         |
+| `autopurge.snapRetainCount`   | The most recent snapshots amount (and corresponding transaction logs) to retain                                            | `10`                        |
+| `autopurge.purgeInterval`     | The time interval (in hours) for which the purge task has to be triggered                                                  | `1`                         |
 | `logLevel`                    | Log level for the ZooKeeper server. ERROR by default                                                                       | `ERROR`                     |
 | `jvmFlags`                    | Default JVM flags for the ZooKeeper process                                                                                | `""`                        |
 | `dataLogDir`                  | Dedicated data log directory                                                                                               | `""`                        |
@@ -228,9 +228,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                          | Description                                                            | Value   |
 | --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for ZooKeeper pod                    | `false` |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for ZooKeeper pod                    | `true`  |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
 
 ### Persistence parameters
@@ -346,7 +346,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/zooke
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 

@@ -105,7 +105,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.allowExternal`                           | The Policy model to apply. Don't require client label for connections                                                                               | `true`                          |
 | `networkPolicy.ingressNSMatchLabels`                    | Allow connections from other namespacess. Just set label for namespace and set label for pods (optional).                                           | `{}`                            |
 | `networkPolicy.ingressNSPodMatchLabels`                 | For other namespaces match by pod labels and namespace labels                                                                                       | `{}`                            |
-| `serviceAccount.create`                                 | Specifies whether a ServiceAccount should be created                                                                                                | `false`                         |
+| `serviceAccount.create`                                 | Specifies whether a ServiceAccount should be created                                                                                                | `true`                          |
 | `serviceAccount.name`                                   | The name of the ServiceAccount to create                                                                                                            | `""`                            |
 | `serviceAccount.annotations`                            | Annotations for Cassandra Service Account                                                                                                           | `{}`                            |
 | `serviceAccount.automountServiceAccountToken`           | Automount API credentials for a service account.                                                                                                    | `false`                         |
@@ -373,7 +373,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/redis
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 

@@ -60,11 +60,11 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/pinniped
-  tag: 0.28.0-debian-11-r0
+  tag: 0.28.0-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -208,7 +208,7 @@ concierge:
   ##
   customStartupProbe: {}
   ## Concierge resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param concierge.resources.limits The resources limits for the Concierge containers
   ## @param concierge.resources.requests The requested resources for the Concierge containers
   ##
@@ -301,7 +301,7 @@ concierge:
   ##
   affinity: {}
   ## @param concierge.nodeSelector Node labels for Concierge pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param concierge.tolerations Tolerations for Concierge pods assignment
@@ -464,7 +464,7 @@ concierge:
     extraPorts: []
     ## @param concierge.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param concierge.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -555,7 +555,7 @@ supervisor:
   ##
   customStartupProbe: {}
   ## Supervisor resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param supervisor.resources.limits The resources limits for the Supervisor containers
   ## @param supervisor.resources.requests The requested resources for the Supervisor containers
   ##
@@ -645,7 +645,7 @@ supervisor:
   ##
   affinity: {}
   ## @param supervisor.nodeSelector Node labels for Supervisor pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param supervisor.tolerations Tolerations for Supervisor pods assignment
@@ -793,7 +793,7 @@ supervisor:
       extraPorts: []
       ## @param supervisor.service.api.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param supervisor.service.api.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -848,7 +848,7 @@ supervisor:
       extraPorts: []
       ## @param supervisor.service.public.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param supervisor.service.public.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -885,7 +885,7 @@ supervisor:
     path: /
     ## @param supervisor.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##

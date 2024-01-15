@@ -180,7 +180,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                                                    | `true`                          |
 | `alertmanager.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                                  | `""`                            |
 | `alertmanager.serviceAccount.annotations`                        | Additional Service Account annotations (evaluated as a template)                                                                                        | `{}`                            |
-| `alertmanager.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                          | `true`                          |
+| `alertmanager.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                          | `false`                         |
 | `alertmanager.service.type`                                      | Alertmanager service type                                                                                                                               | `LoadBalancer`                  |
 | `alertmanager.service.ports.http`                                | Alertmanager service HTTP port                                                                                                                          | `80`                            |
 | `alertmanager.service.ports.cluster`                             | Alertmanager cluster HA port                                                                                                                            | `9094`                          |
@@ -433,7 +433,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/prome
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 

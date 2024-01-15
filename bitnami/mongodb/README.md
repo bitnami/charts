@@ -366,7 +366,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `serviceAccount.create`                       | Enable creation of ServiceAccount for MongoDB(&reg;) pods                                                                                   | `true`  |
 | `serviceAccount.name`                         | Name of the created serviceAccount                                                                                                          | `""`    |
 | `serviceAccount.annotations`                  | Additional Service Account annotations                                                                                                      | `{}`    |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `false` |
 | `rbac.create`                                 | Whether to create & use RBAC resources or not                                                                                               | `false` |
 | `rbac.rules`                                  | Custom rules to create following the role specification                                                                                     | `[]`    |
 | `podSecurityPolicy.create`                    | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
@@ -659,7 +659,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/mongo
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 

@@ -67,11 +67,11 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kiam
-  tag: 4.2.0-debian-11-r423
+  tag: 4.2.0-debian-11-r425
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -236,7 +236,7 @@ server:
     keyFileName: key.pem
     caFileName: ca.pem
   ## Kiam server resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -261,12 +261,15 @@ server:
   ## @param server.containerSecurityContext.runAsUser Set kiam server container's Security Context runAsUser
   ## @param server.containerSecurityContext.runAsNonRoot Set kiam server container's Security Context runAsNonRoot
   ## @param server.containerSecurityContext.seLinuxOptions Set kiam server container's Security Context SE Linux options
+  ## @param server.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
     seLinuxOptions: {}
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param server.podSecurityContext.enabled Enabled kiam server pods' Security Context
   ## @param server.podSecurityContext.fsGroup Set kiam server pod's Security Context fsGroup
   ##
@@ -305,7 +308,7 @@ server:
   ##
   affinity: {}
   ## @param server.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param server.tolerations Tolerations for pod assignment
@@ -392,7 +395,7 @@ server:
     ##
     clusterIP: None
     ## @param server.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
-    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
     ## @param server.service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
@@ -657,7 +660,7 @@ agent:
   ##
   args: []
   ## Container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -683,6 +686,7 @@ agent:
   ## @param agent.containerSecurityContext.runAsNonRoot Set agent container's Security Context runAsNonRoot
   ## @param agent.containerSecurityContext.seLinuxOptions [object] Set agent container's Security Context SE Linux options
   ## @param agent.containerSecurityContext.capabilities.add Add capabilities for the securityContext
+  ## @param agent.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -692,6 +696,8 @@ agent:
     capabilities:
       add:
         - NET_ADMIN
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param agent.podSecurityContext.enabled Enabled agent pods' Security Context
   ## @param agent.podSecurityContext.fsGroup Set agent pod's Security Context fsGroup
   ##
@@ -730,7 +736,7 @@ agent:
   ##
   affinity: {}
   ## @param agent.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param agent.tolerations Tolerations for pod assignment
@@ -813,7 +819,7 @@ agent:
     ##
     clusterIP: ""
     ## @param agent.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
-    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
     ## @param agent.service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
@@ -856,7 +862,7 @@ agent:
   serviceAccount:
     create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
 
   ## @section kiam agent metrics parameters

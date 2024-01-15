@@ -104,7 +104,7 @@ For more information, refer to the [documentation on the differences between the
 | `operator.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Grafana Operator container(s)                                                | `[]`                               |
 | `operator.initContainers`                                    | Add additional init containers to the Grafana Operator pods                                                                               | `[]`                               |
 | `operator.sidecars`                                          | Add additional sidecar containers to the Grafana Operator pods                                                                            | `[]`                               |
-| `operator.namespaceScope`                                    | If the operator should run in namespace-scope mode or not - cannot be used in conjunction with `operator.watchNamespace` when `true`      | `false`                            |
+| `operator.namespaceScope`                                    | If the operator should run in namespace-scope mode or not,                                                                                | `false`                            |
 | `operator.watchNamespace`                                    | Override the namespace to watch                                                                                                           | `""`                               |
 | `operator.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                                            | `[]`                               |
 | `operator.priorityClassName`                                 | %%MAIN_CONTAINER_NAME%% pods' priorityClassName                                                                                           | `""`                               |
@@ -278,7 +278,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/grafa
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 

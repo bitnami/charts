@@ -306,9 +306,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                          | Description                                                  | Value   |
 | --------------------------------------------- | ------------------------------------------------------------ | ------- |
-| `serviceAccount.create`                       | Enable/disable service account creation                      | `false` |
+| `serviceAccount.create`                       | Enable/disable service account creation                      | `true`  |
 | `serviceAccount.name`                         | Name of the service account to create or use                 | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of service account token        | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of service account token        | `false` |
 | `serviceAccount.annotations`                  | Additional annotations to be included on the service account | `{}`    |
 | `serviceAccount.labels`                       | Additional labels to be included on the service account      | `{}`    |
 
@@ -344,7 +344,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/etcd
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 

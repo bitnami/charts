@@ -130,6 +130,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                | Description                                                                                                              | Value            |
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------- |
 | `replicaCount`                                      | Number of Keycloak replicas to deploy                                                                                    | `1`              |
+| `revisionHistoryLimitCount`                         | Number of controller revisions to keep                                                                                   | `10`             |
 | `containerPorts.http`                               | Keycloak HTTP container port                                                                                             | `8080`           |
 | `containerPorts.https`                              | Keycloak HTTPS container port                                                                                            | `8443`           |
 | `containerPorts.infinispan`                         | Keycloak infinispan container port                                                                                       | `7800`           |
@@ -389,7 +390,7 @@ Keycloak realms, users and clients can be created from the Keycloak administrati
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 

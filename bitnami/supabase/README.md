@@ -106,6 +106,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jwt.autoGenerate.kubectlImage.pullSecrets`                          | Kubectl image pull secrets                                                                                                                         | `[]`                      |
 | `jwt.autoGenerate.backoffLimit`                                      | set backoff limit of the job                                                                                                                       | `10`                      |
 | `jwt.autoGenerate.extraVolumes`                                      | Optionally specify extra list of additional volumes for the jwt init job                                                                           | `[]`                      |
+| `jwt.autoGenerate.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                                               | `true`                    |
+| `jwt.autoGenerate.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                             | `""`                      |
+| `jwt.autoGenerate.serviceAccount.annotations`                        | Additional Service Account annotations (evaluated as a template)                                                                                   | `{}`                      |
+| `jwt.autoGenerate.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                     | `true`                    |
 | `jwt.autoGenerate.containerSecurityContext.enabled`                  | Enabled jwt init job containers' Security Context                                                                                                  | `true`                    |
 | `jwt.autoGenerate.containerSecurityContext.runAsUser`                | Set jwt init job containers' Security Context runAsUser                                                                                            | `1001`                    |
 | `jwt.autoGenerate.containerSecurityContext.runAsNonRoot`             | Set jwt init job container's Security Context runAsNonRoot                                                                                         | `true`                    |
@@ -734,13 +738,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                          | Description                                                      | Value  |
-| --------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                          | Description                                                      | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Kong sub-chart parameters
 
@@ -815,7 +819,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/supab
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -865,7 +869,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as supabase (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the component specific sections. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/supabase/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as supabase (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the component specific sections. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/supabase/configuration/configure-sidecar-init-containers/).
 
 ### Pod affinity
 

@@ -83,11 +83,11 @@ server:
   image:
     registry: docker.io
     repository: bitnami/vault
-    tag: 1.15.4-debian-11-r0
+    tag: 1.15.4-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -169,7 +169,7 @@ server:
   ##
   customStartupProbe: {}
   ## Vault Server resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param server.resources.limits The resources limits for the Vault Server containers
   ## @param server.resources.requests The requested resources for the Vault Server containers
   ##
@@ -292,7 +292,7 @@ server:
   ##
   affinity: {}
   ## @param server.nodeSelector Node labels for Vault Server pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param server.tolerations Tolerations for Vault Server pods assignment
@@ -416,7 +416,7 @@ server:
       extraPorts: []
       ## @param server.service.general.sessionAffinity Control where web requests go, to the same pod or round-robin
       ## Values: WebIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param server.service.general.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -471,7 +471,7 @@ server:
       extraPorts: []
       ## @param server.service.active.sessionAffinity Control where web requests go, to the same pod or round-robin
       ## Values: WebIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param server.service.active.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -481,7 +481,7 @@ server:
       ##
       sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param server.ingress.enabled Enable ingress record generation for Vault
@@ -615,7 +615,7 @@ server:
     automountServiceAccountToken: true
 
   ## @section Source Conttroller Persistence Parameters
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param server.persistence.enabled Enable persistence using Persistent Volume Claims
@@ -734,11 +734,11 @@ csiProvider:
   image:
     registry: docker.io
     repository: bitnami/vault-csi-provider
-    tag: 1.4.1-debian-11-r3
+    tag: 1.4.1-debian-11-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -818,7 +818,7 @@ csiProvider:
   ##
   affinity: {}
   ## @param csiProvider.nodeSelector Node labels for Vault CSI Provider pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param csiProvider.tolerations Tolerations for Vault CSI Provider pods assignment
@@ -942,7 +942,7 @@ csiProvider:
     ##
     customStartupProbe: {}
     ## CSI Provider resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param csiProvider.provider.resources.limits The resources limits for the CSI Provider container
     ## @param csiProvider.provider.resources.requests The requested resources for the CSI Provider container
     ##
@@ -1081,7 +1081,7 @@ csiProvider:
       seccompProfile:
         type: "RuntimeDefault"
     ## CSI Provider Agent resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param csiProvider.agent.resources.limits The resources limits for the CSI Provider Agent container
     ## @param csiProvider.agent.resources.requests The requested resources for the CSI Provider Agent container
     ##
@@ -1176,11 +1176,11 @@ injector:
   image:
     registry: docker.io
     repository: bitnami/vault-k8s
-    tag: 1.3.1-debian-11-r3
+    tag: 1.3.1-debian-11-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1255,7 +1255,7 @@ injector:
   ##
   customStartupProbe: {}
   ## Vault Kubernetes Injector resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param injector.resources.limits The resources limits for the Vault Kubernetes Injector containers
   ## @param injector.resources.requests The requested resources for the Vault Kubernetes Injector containers
   ##
@@ -1366,7 +1366,7 @@ injector:
   ##
   affinity: {}
   ## @param injector.nodeSelector Node labels for Vault Kubernetes Injector pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param injector.tolerations Tolerations for Vault Kubernetes Injector pods assignment
@@ -1485,7 +1485,7 @@ injector:
     extraPorts: []
     ## @param injector.service.sessionAffinity Control where web requests go, to the same pod or round-robin
     ## Values: WebIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param injector.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1555,7 +1555,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r93
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1567,7 +1567,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##

@@ -93,6 +93,45 @@ spec:
             - name: metrics
               containerPort: {{ .Values.notifications.containerPorts.metrics }}
               protocol: TCP
+          {{- if .Values.notifications.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notifications.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.notifications.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              port: metrics
+              path: /metrics
+            initialDelaySeconds: {{ .Values.notifications.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.notifications.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.notifications.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.notifications.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.notifications.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.notifications.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notifications.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.notifications.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              port: metrics
+              path: /metrics
+            initialDelaySeconds: {{ .Values.notifications.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.notifications.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.notifications.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.notifications.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.notifications.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.notifications.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notifications.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.notifications.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: {{ .Values.notifications.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.notifications.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.notifications.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.notifications.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.notifications.startupProbe.failureThreshold }}
+          {{- end }}
           {{- if .Values.notifications.resources }}
           resources: {{- toYaml .Values.notifications.resources | nindent 12 }}
           {{- end }}

@@ -58,11 +58,11 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/argo-cd
-  tag: 2.9.3-debian-11-r0
+  tag: 2.9.3-debian-11-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -139,7 +139,7 @@ controller:
   ##
   customReadinessProbe: {}
   ## Argo CD resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param controller.resources.limits The resources limits for the Argo CD containers
   ## @param controller.resources.requests The requested resources for the Argo CD containers
   ##
@@ -479,7 +479,7 @@ controller:
   ##
   affinity: {}
   ## @param controller.nodeSelector Node labels for Argo CD pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param controller.tolerations Tolerations for Argo CD pods assignment
@@ -863,7 +863,7 @@ applicationSet:
   ##
   customReadinessProbe: {}
   ## Argo CD applicationSet controller resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param applicationSet.resources.limits The resources limits for the Argo CD applicationSet controller containers
   ## @param applicationSet.resources.requests The requested resources for the Argo CD applicationSet controller containers
   ##
@@ -879,7 +879,7 @@ applicationSet:
     enabled: true
     fsGroup: 1001
   ## @param applicationSet.nodeSelector Node labels for Argo CD applicationSet controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param applicationSet.tolerations Tolerations for Argo CD applicationSet controller pods assignment
@@ -1225,7 +1225,7 @@ notifications:
     seccompProfile:
       type: "RuntimeDefault"
   ## Argo CD notifications controller resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param notifications.resources.limits The resources limits for the Argo CD notifications controller containers
   ## @param notifications.resources.requests The requested resources for the Argo CD notifications controller containers
   ##
@@ -1241,7 +1241,7 @@ notifications:
     enabled: true
     fsGroup: 1001
   ## @param notifications.nodeSelector Node labels for Argo CD notifications controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param notifications.tolerations Tolerations for Argo CD notifications controller pods assignment
@@ -1270,6 +1270,59 @@ notifications:
   ## @param notifications.extraEnvVarsSecret Name of existing Secret containing extra env vars for Argo CD notifications controller nodes
   ##
   extraEnvVarsSecret: ""
+  ## Configure extra options for Notification containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param notifications.startupProbe.enabled Enable startupProbe on Notification nodes
+  ## @param notifications.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param notifications.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param notifications.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param notifications.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param notifications.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param notifications.livenessProbe.enabled Enable livenessProbe on Notification nodes
+  ## @param notifications.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param notifications.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param notifications.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param notifications.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param notifications.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param notifications.readinessProbe.enabled Enable readinessProbe on Notification nodes
+  ## @param notifications.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param notifications.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param notifications.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param notifications.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param notifications.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param notifications.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param notifications.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param notifications.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
   ## Webhook for the Git Generator
   ## Ref: https://argocd-notifications.readthedocs.io/en/master/Generators-Git/#webhook-configuration)
   ##
@@ -1443,6 +1496,66 @@ notifications:
         ##   - e2e-az2
         ##
         values: []
+
+      ## Argo CD Slack Bot controller ports
+      ## @param notifications.bots.slack.containerPorts.metrics Slack Bot controller metrics port number
+      ##
+      containerPorts:
+        metrics: 9001
+
+      ## Configure extra options for Slack Bot containers' liveness and readiness probes
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+      ## @param notifications.bots.slack.startupProbe.enabled Enable startupProbe on Slack Bot nodes
+      ## @param notifications.bots.slack.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+      ## @param notifications.bots.slack.startupProbe.periodSeconds Period seconds for startupProbe
+      ## @param notifications.bots.slack.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+      ## @param notifications.bots.slack.startupProbe.failureThreshold Failure threshold for startupProbe
+      ## @param notifications.bots.slack.startupProbe.successThreshold Success threshold for startupProbe
+      ##
+      startupProbe:
+        enabled: false
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        timeoutSeconds: 1
+        failureThreshold: 3
+        successThreshold: 1
+      ## @param notifications.bots.slack.livenessProbe.enabled Enable livenessProbe on Slack Bot nodes
+      ## @param notifications.bots.slack.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+      ## @param notifications.bots.slack.livenessProbe.periodSeconds Period seconds for livenessProbe
+      ## @param notifications.bots.slack.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+      ## @param notifications.bots.slack.livenessProbe.failureThreshold Failure threshold for livenessProbe
+      ## @param notifications.bots.slack.livenessProbe.successThreshold Success threshold for livenessProbe
+      ##
+      livenessProbe:
+        enabled: true
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        timeoutSeconds: 1
+        failureThreshold: 3
+        successThreshold: 1
+      ## @param notifications.bots.slack.readinessProbe.enabled Enable readinessProbe on Slack Bot nodes
+      ## @param notifications.bots.slack.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+      ## @param notifications.bots.slack.readinessProbe.periodSeconds Period seconds for readinessProbe
+      ## @param notifications.bots.slack.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+      ## @param notifications.bots.slack.readinessProbe.failureThreshold Failure threshold for readinessProbe
+      ## @param notifications.bots.slack.readinessProbe.successThreshold Success threshold for readinessProbe
+      ##
+      readinessProbe:
+        enabled: true
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        timeoutSeconds: 1
+        failureThreshold: 3
+        successThreshold: 1
+      ## @param notifications.bots.slack.customStartupProbe Custom startupProbe that overrides the default one
+      ##
+      customStartupProbe: {}
+      ## @param notifications.bots.slack.customLivenessProbe Custom livenessProbe that overrides the default one
+      ##
+      customLivenessProbe: {}
+      ## @param notifications.bots.slack.customReadinessProbe Custom readinessProbe that overrides the default one
+      ##
+      customReadinessProbe: {}
       ## @param notifications.bots.slack.affinity Affinity for Argo CD Slack bot pods assignment
       ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
       ## NOTE: `notifications.bots.slack.podAffinityPreset`, `notifications.bots.slack.podAntiAffinityPreset`, and `notifications.bots.slack.nodeAffinityPreset` will be ignored when it's set
@@ -1479,7 +1592,7 @@ notifications:
         seccompProfile:
           type: "RuntimeDefault"
       ## Argo CD Slack bot resource requests and limits
-      ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+      ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
       ## @param notifications.bots.slack.resources.limits The resources limits for the Argo CD Slack bot containers
       ## @param notifications.bots.slack.resources.requests The requested resources for the Argo CD Slack bot containers
       ##
@@ -1495,7 +1608,7 @@ notifications:
         enabled: true
         fsGroup: 1001
       ## @param notifications.bots.slack.nodeSelector Node labels for Argo CD Slack bot pods assignment
-      ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+      ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
       ##
       nodeSelector: {}
       ## @param notifications.bots.slack.tolerations Tolerations for Argo CD Slack bot pods assignment
@@ -1588,7 +1701,7 @@ server:
   ##
   customReadinessProbe: {}
   ## Argo CD server resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param server.resources.limits The resources limits for the Argo CD server containers
   ## @param server.resources.requests The requested resources for the Argo CD server containers
   ##
@@ -1717,7 +1830,7 @@ server:
     dex.config: ""
 
   ## Configure the ingress for the Argo CD server
-  ## Ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ## @param server.ingress.enabled Enable the creation of an ingress for the Argo CD server
   ## @param server.ingress.pathType Path type for the Argo CD server ingress
   ## @param server.ingress.apiVersion Ingress API version for the Argo CD server ingress
@@ -1762,7 +1875,7 @@ server:
     path: /
 
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -1935,7 +2048,7 @@ server:
       honorLabels: false
 
   ## Configure the ingress resource that allows you to access the Argo CD gRPC API
-  ## Ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ## Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/
   ## @param server.ingressGrpc.enabled Enable the creation of an ingress for the Argo CD gRPC server
   ## @param server.ingressGrpc.pathType Path type for the Argo CD gRPC server ingress
@@ -1981,7 +2094,7 @@ server:
     path: /
 
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -2177,7 +2290,7 @@ server:
   ##
   affinity: {}
   ## @param server.nodeSelector Node labels for Argo CD server pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param server.tolerations Tolerations for Argo CD server pods assignment
@@ -2339,7 +2452,7 @@ repoServer:
   ##
   customReadinessProbe: {}
   ## Argo CD repo server resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param repoServer.resources.limits The resources limits for the Argo CD repo server containers
   ## @param repoServer.resources.requests The requested resources for the Argo CD repo server containers
   ##
@@ -2625,7 +2738,7 @@ repoServer:
   ##
   affinity: {}
   ## @param repoServer.nodeSelector Node labels for Argo CD repo server pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param repoServer.tolerations Tolerations for Argo CD repo server pods assignment
@@ -2726,11 +2839,11 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.37.0-debian-11-r100
+    tag: 2.37.0-debian-11-r101
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2806,7 +2919,7 @@ dex:
   ##
   customReadinessProbe: {}
   ## Dex resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dex.resources.limits The resources limits for the Dex containers
   ## @param dex.resources.requests The requested resources for the Dex containers
   ##
@@ -3078,7 +3191,7 @@ dex:
   ##
   affinity: {}
   ## @param dex.nodeSelector Node labels for Dex pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dex.tolerations Tolerations for Dex pods assignment
@@ -3357,7 +3470,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r93
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3369,7 +3482,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -3410,11 +3523,11 @@ redis:
   image:
     registry: docker.io
     repository: bitnami/redis
-    tag: 7.2.3-debian-11-r2
+    tag: 7.2.4-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
