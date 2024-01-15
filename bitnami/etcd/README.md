@@ -140,8 +140,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.peer`                               | Peer port to expose at container level                                                    | `2380`           |
 | `containerPorts.metrics`                            | Metrics port to expose at container level when metrics.useSeparateEndpoint is true        | `9090`           |
 | `podSecurityContext.enabled`                        | Enabled etcd pods' Security Context                                                       | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                        | `Always`         |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                            | `[]`             |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set etcd pod's Security Context fsGroup                                                   | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled etcd containers' Security Context                                                 | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set etcd containers' Security Context runAsUser                                           | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set Controller container's Security Context runAsNonRoot                                  | `true`           |
 | `containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                       | `false`          |
