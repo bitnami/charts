@@ -406,8 +406,6 @@ helm upgrade tomcat oci://REGISTRY_NAME/REPOSITORY_NAME/tomcat --set tomcatPassw
 
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/tomcat/administration/upgrade-helm3/).
-
 ### To 5.0.0
 
 This release updates the Bitnami Tomcat container to `9.0.26-debian-9-r0`, which is based on Bash instead of Node.js.

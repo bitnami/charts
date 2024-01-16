@@ -667,8 +667,6 @@ Compatibility is not guaranteed due to the amount of involved changes, however n
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/apps/wordpress/administration/upgrade-helm3/).
-
 #### Additional upgrade notes
 
 - MariaDB dependency version was bumped to a new major version that introduces several incompatibilities. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/mariadb#to-800) for more information.

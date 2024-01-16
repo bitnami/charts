@@ -549,8 +549,6 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/apps/jenkins/administration/upgrade-helm3/).
-
 ### To 5.0.0
 
 The [Bitnami Jenkins](https://github.com/bitnami/containers/tree/main/bitnami/jenkins) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Jenkins service was started as the `jenkins` user. From now on, both the container and the Jenkins service run as user `jenkins` (`uid=1001`). You can revert this behavior by setting the parameters `securityContext.runAsUser`, and `securityContext.fsGroup` to `root`.

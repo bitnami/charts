@@ -756,8 +756,6 @@ See the [Upgrading guide](https://www.rabbitmq.com/upgrade.html) and the [Rabbit
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq/administration/upgrade-helm3/).
-
 ### To 7.0.0
 
 - Several parameters were renamed or disappeared in favor of new ones on this major version:

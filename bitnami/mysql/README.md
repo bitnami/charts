@@ -558,8 +558,6 @@ helm install mysql oci://REGISTRY_NAME/REPOSITORY_NAME/mysql --set auth.rootPass
 
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/mysql/administration/upgrade-helm3/).
-
 ### To 3.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
