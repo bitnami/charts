@@ -135,8 +135,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.limits`                                  | The resources limits for the Magento container                                                                       | `{}`                      |
 | `resources.requests`                                | The requested resourcesc for the Magento container                                                                   | `{}`                      |
 | `podSecurityContext.enabled`                        | Enable Magento pods' Security Context                                                                                | `true`                    |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                   | `Always`                  |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                       | `[]`                      |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                          | `[]`                      |
 | `podSecurityContext.fsGroup`                        | Magento pods' group ID                                                                                               | `1001`                    |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                 | `true`                    |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                     | `{}`                      |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                           | `1001`                    |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                        | `true`                    |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                          | `false`                   |
