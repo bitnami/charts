@@ -487,7 +487,7 @@ operator:
     ##
     livenessProbe:
       enabled: true
-      initialDelaySeconds: 10
+      initialDelaySeconds: 11
       periodSeconds: 10
       timeoutSeconds: 5
       failureThreshold: 6

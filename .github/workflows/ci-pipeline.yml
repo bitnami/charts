@@ -170,7 +170,7 @@ jobs:
           PR_USER: "${{github.event.pull_request.user.login}}"
         run: |
           # To avoid malicious executions, only PRs performed by the bitnami-bot will perform the CRDs update
-          if [[ "$PR_USER" == "bitnami_bot" ]]; then
+          if [[ "$PR_USER" == "migruiz4" ]]; then
             # Chart CRDs can be stored at 'bitnami/$CHART/crds' or 'bitnami/$CHART/templates/crds'
             crd_files="$(find "bitnami/${CHART}/crds" "bitnami/${CHART}/templates/crds" -name "*.yaml" -o -name "*.yml" || true)"
             for file in "${crd_files[@]}"; do
