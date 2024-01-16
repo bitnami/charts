@@ -184,9 +184,9 @@ master:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
-    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 0
+    seLinuxOptions: {}
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param master.containerSecurityContext.enabled Enabled containers' Security Context
