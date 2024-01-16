@@ -160,6 +160,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                               | Custom Liveness probes for metrics-server                                                                                                                                | `{}`                             |
 | `customReadinessProbe`                              | Custom Readiness probes metrics-server                                                                                                                                   | `{}`                             |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                     | `true`                           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                         | `{}`                             |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                               | `1001`                           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                            | `true`                           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                              | `false`                          |
@@ -168,6 +169,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                       | `["ALL"]`                        |
 | `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                         | `RuntimeDefault`                 |
 | `podSecurityContext.enabled`                        | Pod security context                                                                                                                                                     | `false`                          |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                       | `Always`                         |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                           | `[]`                             |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                              | `[]`                             |
 | `podSecurityContext.fsGroup`                        | Set %%MAIN_CONTAINER_NAME%% pod's Security Context fsGroup                                                                                                               | `1001`                           |
 | `extraVolumes`                                      | Extra volumes                                                                                                                                                            | `[]`                             |
 | `extraVolumeMounts`                                 | Mount extra volume(s)                                                                                                                                                    | `[]`                             |
@@ -194,7 +198,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/metri
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 

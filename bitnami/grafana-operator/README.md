@@ -129,8 +129,12 @@ For more information, refer to the [documentation on the differences between the
 | `operator.serviceAccount.annotations`                        | Add annotations                                                                                                                           | `{}`                               |
 | `operator.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                                                                          | `true`                             |
 | `operator.podSecurityContext.enabled`                        | Enable pods security context                                                                                                              | `true`                             |
+| `operator.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                        | `Always`                           |
+| `operator.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                            | `[]`                               |
+| `operator.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                               | `[]`                               |
 | `operator.podSecurityContext.fsGroup`                        | Group ID for the pods                                                                                                                     | `1001`                             |
 | `operator.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                      | `true`                             |
+| `operator.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                          | `{}`                               |
 | `operator.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                | `1001`                             |
 | `operator.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                             | `true`                             |
 | `operator.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                               | `false`                            |
@@ -194,8 +198,12 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                              | `[]`                      |
 | `grafana.serviceAccount`                                    | Additional service account configuration                                                                | `{}`                      |
 | `grafana.podSecurityContext.enabled`                        | Enable pods security context                                                                            | `true`                    |
+| `grafana.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                      | `Always`                  |
+| `grafana.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                          | `[]`                      |
+| `grafana.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                             | `[]`                      |
 | `grafana.podSecurityContext.fsGroup`                        | Group ID for the pods                                                                                   | `1001`                    |
 | `grafana.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                    | `true`                    |
+| `grafana.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `{}`                      |
 | `grafana.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                              | `1001`                    |
 | `grafana.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                             | `0`                       |
 | `grafana.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                           | `true`                    |
@@ -278,7 +286,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/grafa
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 

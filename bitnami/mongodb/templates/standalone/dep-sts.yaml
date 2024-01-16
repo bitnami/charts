@@ -108,7 +108,7 @@ spec:
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: datadir
+            - name: {{ .Values.persistence.name | default "datadir" }}
               mountPath: {{ .Values.persistence.mountPath }}
         {{- end }}
         {{- if .Values.tls.enabled }}
@@ -293,7 +293,7 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: datadir
+            - name: {{ .Values.persistence.name | default "datadir" }}
               mountPath: {{ .Values.persistence.mountPath }}
               subPath: {{ .Values.persistence.subPath }}
             - name: common-scripts
@@ -442,7 +442,7 @@ spec:
         {{- end }}
         {{- end }}
   {{- if not .Values.persistence.enabled }}
-        - name: datadir
+        - name: {{ .Values.persistence.name | default "datadir" }}
           {{- if .Values.persistence.medium }}
           emptyDir:
             medium: {{ .Values.persistence.medium | quote }}
@@ -450,11 +450,11 @@ spec:
           emptyDir: {}
           {{- end }}
   {{- else if .Values.persistence.existingClaim }}
-        - name: datadir
+        - name: {{ .Values.persistence.name | default "datadir" }}
           persistentVolumeClaim:
             claimName: {{ printf "%s" (tpl .Values.persistence.existingClaim .) }}
   {{- else if not .Values.useStatefulSet }}
-        - name: datadir
+        - name: {{ .Values.persistence.name | default "datadir" }}
           persistentVolumeClaim:
             claimName: {{ template "mongodb.fullname" . }}
   {{- else }}
@@ -465,7 +465,7 @@ spec:
   {{- end }}
   volumeClaimTemplates:
     - metadata:
-        name: datadir
+        name: {{ .Values.persistence.name | default "datadir" }}
         {{- if .Values.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
         {{- end }}

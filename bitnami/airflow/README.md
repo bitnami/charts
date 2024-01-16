@@ -148,8 +148,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.resources.limits`                                  | The resources limits for the Airflow web containers                                                                      | `{}`                      |
 | `web.resources.requests`                                | The requested resources for the Airflow web containers                                                                   | `{}`                      |
 | `web.podSecurityContext.enabled`                        | Enabled Airflow web pods' Security Context                                                                               | `true`                    |
+| `web.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`                  |
+| `web.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`                      |
+| `web.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                      |
 | `web.podSecurityContext.fsGroup`                        | Set Airflow web pod's Security Context fsGroup                                                                           | `1001`                    |
 | `web.containerSecurityContext.enabled`                  | Enabled Airflow web containers' Security Context                                                                         | `true`                    |
+| `web.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                      |
 | `web.containerSecurityContext.runAsUser`                | Set Airflow web containers' Security Context runAsUser                                                                   | `1001`                    |
 | `web.containerSecurityContext.runAsNonRoot`             | Set Airflow web containers' Security Context runAsNonRoot                                                                | `true`                    |
 | `web.containerSecurityContext.privileged`               | Set web container's Security Context privileged                                                                          | `false`                   |
@@ -205,8 +209,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `scheduler.resources.limits`                                  | The resources limits for the Airflow scheduler containers                                                                | `{}`                                |
 | `scheduler.resources.requests`                                | The requested resources for the Airflow scheduler containers                                                             | `{}`                                |
 | `scheduler.podSecurityContext.enabled`                        | Enabled Airflow scheduler pods' Security Context                                                                         | `true`                              |
+| `scheduler.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`                            |
+| `scheduler.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`                                |
+| `scheduler.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                                |
 | `scheduler.podSecurityContext.fsGroup`                        | Set Airflow scheduler pod's Security Context fsGroup                                                                     | `1001`                              |
 | `scheduler.containerSecurityContext.enabled`                  | Enabled Airflow scheduler containers' Security Context                                                                   | `true`                              |
+| `scheduler.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                                |
 | `scheduler.containerSecurityContext.runAsUser`                | Set Airflow scheduler containers' Security Context runAsUser                                                             | `1001`                              |
 | `scheduler.containerSecurityContext.runAsNonRoot`             | Set Airflow scheduler containers' Security Context runAsNonRoot                                                          | `true`                              |
 | `scheduler.containerSecurityContext.privileged`               | Set scheduler container's Security Context privileged                                                                    | `false`                             |
@@ -281,8 +289,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.resources.limits`                                  | The resources limits for the Airflow worker containers                                                                   | `{}`                             |
 | `worker.resources.requests`                                | The requested resources for the Airflow worker containers                                                                | `{}`                             |
 | `worker.podSecurityContext.enabled`                        | Enabled Airflow worker pods' Security Context                                                                            | `true`                           |
+| `worker.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`                         |
+| `worker.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`                             |
+| `worker.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                             |
 | `worker.podSecurityContext.fsGroup`                        | Set Airflow worker pod's Security Context fsGroup                                                                        | `1001`                           |
 | `worker.containerSecurityContext.enabled`                  | Enabled Airflow worker containers' Security Context                                                                      | `true`                           |
+| `worker.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                             |
 | `worker.containerSecurityContext.runAsUser`                | Set Airflow worker containers' Security Context runAsUser                                                                | `1001`                           |
 | `worker.containerSecurityContext.runAsNonRoot`             | Set Airflow worker containers' Security Context runAsNonRoot                                                             | `true`                           |
 | `worker.containerSecurityContext.privileged`               | Set worker container's Security Context privileged                                                                       | `false`                          |
@@ -405,9 +417,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                          | Description                                                            | Value   |
 | --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for Airflow pods                     | `false` |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for Airflow pods                     | `true`  |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
 | `rbac.create`                                 | Create Role and RoleBinding                                            | `false` |
 | `rbac.rules`                                  | Custom RBAC rules to set                                               | `[]`    |
@@ -429,8 +441,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.resources.limits`                                  | The resources limits for the container                                                                           | `{}`                               |
 | `metrics.resources.requests`                                | The requested resources for the container                                                                        | `{}`                               |
 | `metrics.podSecurityContext.enabled`                        | Enable security context for the pods                                                                             | `true`                             |
+| `metrics.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                               | `Always`                           |
+| `metrics.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                   | `[]`                               |
+| `metrics.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                      | `[]`                               |
 | `metrics.podSecurityContext.fsGroup`                        | Set Airflow exporter pod's Security Context fsGroup                                                              | `1001`                             |
 | `metrics.containerSecurityContext.enabled`                  | Enable Airflow exporter containers' Security Context                                                             | `true`                             |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                 | `{}`                               |
 | `metrics.containerSecurityContext.runAsUser`                | Set Airflow exporter containers' Security Context runAsUser                                                      | `1001`                             |
 | `metrics.containerSecurityContext.runAsNonRoot`             | Set Airflow exporter containers' Security Context runAsNonRoot                                                   | `true`                             |
 | `metrics.containerSecurityContext.privileged`               | Set metrics container's Security Context privileged                                                              | `false`                            |
@@ -523,7 +539,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/airfl
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 

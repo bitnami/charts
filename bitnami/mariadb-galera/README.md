@@ -111,7 +111,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.sessionAffinityConfig`                             | Additional settings for the sessionAffinity                                                                                                                                                   | `{}`                              |
 | `service.headless.annotations`                              | Annotations for the headless service.                                                                                                                                                         | `{}`                              |
 | `service.headless.publishNotReadyAddresses`                 | Publish not Ready MariaDB Galera pods' IPs in the headless service.                                                                                                                           | `true`                            |
-| `serviceAccount.create`                                     | Specify whether a ServiceAccount should be created                                                                                                                                            | `false`                           |
+| `serviceAccount.create`                                     | Specify whether a ServiceAccount should be created                                                                                                                                            | `true`                            |
 | `serviceAccount.name`                                       | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                                                                           | `""`                              |
 | `serviceAccount.automountServiceAccountToken`               | Automount service account token for the server service account                                                                                                                                | `false`                           |
 | `serviceAccount.annotations`                                | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                                                    | `{}`                              |
@@ -309,7 +309,7 @@ helm install my-release \
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 

@@ -18,7 +18,7 @@ spec:
   replicas: 1
   strategy:
     type: Recreate
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.bots.slack.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.notifications.bots.slack.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: notifications-slack-bot
@@ -65,6 +65,8 @@ spec:
           args:
             - argocd-notifications
             - bot
+            - --metrics-port
+            - {{ .Values.notifications.bots.slack.containerPorts.metrics | quote }}
           {{- if .Values.notifications.bots.slack.extraArgs }}
           {{- include "common.tplvalues.render" (dict "value" .Values.notifications.bots.slack.extraArgs "context" $) | nindent 12 }}
           {{- end }}
@@ -86,6 +88,48 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+            - name: metrics
+              containerPort: {{ .Values.notifications.bots.slack.containerPorts.metrics }} 
+              protocol: TCP
+          {{- if .Values.notifications.bots.slack.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notifications.bots.slack.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.notifications.bots.slack.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              port: metrics
+              path: /metrics
+            initialDelaySeconds: {{ .Values.notifications.bots.slack.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.notifications.bots.slack.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.notifications.bots.slack.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.notifications.bots.slack.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.notifications.bots.slack.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.notifications.bots.slack.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notifications.bots.slack.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.notifications.bots.slack.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              port: metrics
+              path: /metrics
+            initialDelaySeconds: {{ .Values.notifications.bots.slack.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.notifications.bots.slack.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.notifications.bots.slack.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.notifications.bots.slack.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.notifications.bots.slack.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.notifications.bots.slack.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notifications.bots.slack.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.notifications.bots.slack.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              port: metrics
+              path: /metrics
+            initialDelaySeconds: {{ .Values.notifications.bots.slack.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.notifications.bots.slack.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.notifications.bots.slack.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.notifications.bots.slack.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.notifications.bots.slack.startupProbe.failureThreshold }}
+          {{- end }}
           {{- if .Values.notifications.bots.slack.resources }}
           resources: {{- toYaml .Values.notifications.bots.slack.resources | nindent 12 }}
           {{- end }}

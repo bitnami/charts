@@ -205,7 +205,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `clusterOperator.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                               | `1001`                                           |
 | `clusterOperator.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                            | `true`                                           |
 | `clusterOperator.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                              | `false`                                          |
-| `clusterOperator.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                  | `false`                                          |
+| `clusterOperator.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                  | `true`                                           |
 | `clusterOperator.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                | `false`                                          |
 | `clusterOperator.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                       | `["ALL"]`                                        |
 | `clusterOperator.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                         | `RuntimeDefault`                                 |
@@ -328,7 +328,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `msgTopologyOperator.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                           | `1001`                                            |
 | `msgTopologyOperator.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                        | `true`                                            |
 | `msgTopologyOperator.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                          | `false`                                           |
-| `msgTopologyOperator.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                              | `false`                                           |
+| `msgTopologyOperator.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                              | `true`                                            |
 | `msgTopologyOperator.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                            | `false`                                           |
 | `msgTopologyOperator.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                   | `["ALL"]`                                         |
 | `msgTopologyOperator.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                     | `RuntimeDefault`                                  |
@@ -442,7 +442,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/rabbi
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
