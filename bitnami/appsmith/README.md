@@ -635,10 +635,6 @@ This major updates the Redis&reg; subchart to its newest major, 18.0.0. [Here](h
 
 NOTE: Due to an error in our release process, Redis&reg;' chart versions higher or equal than 17.15.4 already use Redis&reg; 7.2 by default.
 
-### To any previous version
-
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/apps/appsmith/administration/upgrade/).
-
 ## License
 
 Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.

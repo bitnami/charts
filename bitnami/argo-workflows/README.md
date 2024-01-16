@@ -572,9 +572,47 @@ This major moved the parameters under `server.auth.sso` to `server.auth.sso.conf
 
 This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
 
-### To any previous version
+### To 2.0.0
 
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/argo-workflows/administration/upgrade/).
+This major release updates the MySQL subchart to its newest major *9.x.x*, which contain several changes in the supported values (check the [upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/mysql#to-900) to obtain more information).
+
+### To 1.0.0
+
+This major release updates the PostgreSQL subchart to its newest major *11.x.x*, which contain several changes in the supported values (check the [upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/postgresql#to-1100) to obtain more information).
+
+#### Upgrading Instructions
+
+To upgrade to *1.0.0* from *0.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *argo-workflows* and the release namespace *default*):
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+
+```console
+        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default argo-workflows-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=argo-workflows,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+2. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+
+```console
+        kubectl delete statefulsets.apps --cascade=false argo-workflows-postgresql
+        kubectl delete secret argo-workflows-postgresql --namespace default
+```
+
+3. Upgrade your release using the same PostgreSQL version:
+
+```console
+        CURRENT_PG_VERSION=$(kubectl exec argo-workflows-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+        helm upgrade argo-workflows bitnami/argo-workflows \
+          --set postgresql.image.tag=$CURRENT_PG_VERSION \
+          --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+          --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
+
+4. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+
+```console
+        kubectl delete pod argo-workflows-postgresql-0
+```
 
 ## License
 
