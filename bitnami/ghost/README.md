@@ -352,7 +352,41 @@ Adding the TLS parameter (where available) will cause the chart to generate HTTP
 
 ### Configure TLS Secrets for use with Ingress
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/ghost/administration/enable-tls-ingress/).
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
+
+- Generate certificate secrets based on chart parameters.
+- Enable externally generated certificates.
+- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
+- Create self-signed certificates within the chart (if supported).
+
+In the first two cases, a certificate and a key are needed. Files are expected in `.pem` format.
+
+Here is an example of a certificate file:
+
+> NOTE: There may be more than one certificate if there is a certificate chain.
+
+```text
+-----BEGIN CERTIFICATE-----
+MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+...
+jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+-----END CERTIFICATE-----
+```
+
+Here is an example of a certificate key:
+
+```text
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+...
+wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+-----END RSA PRIVATE KEY-----
+```
+
+- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
+- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
+- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
 
 ### Configure extra environment variables
 
