@@ -146,11 +146,15 @@ auth:
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
   securePassword: true
-  ## @param auth.existingPasswordSecret Existing secret with RabbitMQ credentials (must contain a value for `rabbitmq-password` key)
+  ## @param auth.existingPasswordSecret Existing secret with RabbitMQ credentials (existing secret must contain a value for `rabbitmq-password` key or override with setting auth.existingSecretPasswordKey)
   ## e.g:
   ## existingPasswordSecret: name-of-existing-secret
   ##
   existingPasswordSecret: ""
+  ## @param auth.existingSecretPasswordKey [default: rabbitmq-password] Password key to be retrieved from existing secret
+  ## NOTE: ignored unless `auth.existingSecret` parameter is set
+  ##
+  existingSecretPasswordKey: ""
   ## @param auth.enableLoopbackUser If enabled, the user `auth.username` can only connect from localhost
   ##
   enableLoopbackUser: false
