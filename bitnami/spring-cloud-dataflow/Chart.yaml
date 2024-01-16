@@ -14,7 +14,7 @@ annotations:
     - name: spring-cloud-dataflow-composed-task-runner
       image: docker.io/bitnami/spring-cloud-dataflow-composed-task-runner:2.11.2-debian-11-r2
     - name: spring-cloud-dataflow
-      image: docker.io/bitnami/spring-cloud-dataflow:2.11.2-debian-11-r3
+      image: docker.io/bitnami/spring-cloud-dataflow:2.11.2-debian-11-r4
     - name: spring-cloud-skipper
       image: docker.io/bitnami/spring-cloud-skipper:2.11.2-debian-11-r2
 apiVersion: v2
@@ -53,4 +53,4 @@ maintainers:
 name: spring-cloud-dataflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
-version: 26.2.2
+version: 26.2.3
