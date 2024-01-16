@@ -214,14 +214,21 @@ operator:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param operator.podSecurityContext.enabled Enabled Kuberay Operator pods' Security Context
+  ## @param operator.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param operator.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param operator.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param operator.podSecurityContext.fsGroup Set Kuberay Operator pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param operator.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param operator.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param operator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param operator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param operator.containerSecurityContext.privileged Set container's Security Context privileged
@@ -232,6 +239,7 @@ operator:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -792,14 +800,21 @@ apiserver:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param apiserver.podSecurityContext.enabled Enabled Kuberay API Server pods' Security Context
+  ## @param apiserver.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param apiserver.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param apiserver.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param apiserver.podSecurityContext.fsGroup Set Kuberay API Server pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param apiserver.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param apiserver.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param apiserver.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param apiserver.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param apiserver.containerSecurityContext.privileged Set container's Security Context privileged
@@ -810,6 +825,7 @@ apiserver:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1284,14 +1300,21 @@ cluster:
     ## Configure Pods Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
     ## @param cluster.head.podSecurityContext.enabled Enabled Ray Cluster Worker (common) pods' Security Context
+    ## @param cluster.head.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param cluster.head.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param cluster.head.podSecurityContext.supplementalGroups Set filesystem extra groups
     ## @param cluster.head.podSecurityContext.fsGroup Set Ray Cluster Worker (common) pod's Security Context fsGroup
     ##
     podSecurityContext:
       enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
       fsGroup: 1001
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param cluster.head.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param cluster.head.containerSecurityContext.seLinuxOptions Set SELinux options in container
     ## @param cluster.head.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param cluster.head.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param cluster.head.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1302,6 +1325,7 @@ cluster:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -1465,14 +1489,21 @@ cluster:
       ## Configure Pods Security Context
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
       ## @param cluster.worker.common.podSecurityContext.enabled Enabled Ray Cluster Worker (common) pods' Security Context
+      ## @param cluster.worker.common.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+      ## @param cluster.worker.common.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+      ## @param cluster.worker.common.podSecurityContext.supplementalGroups Set filesystem extra groups
       ## @param cluster.worker.common.podSecurityContext.fsGroup Set Ray Cluster Worker (common) pod's Security Context fsGroup
       ##
       podSecurityContext:
         enabled: true
+        fsGroupChangePolicy: Always
+        sysctls: []
+        supplementalGroups: []
         fsGroup: 1001
       ## Configure Container Security Context
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
       ## @param cluster.worker.common.containerSecurityContext.enabled Enabled containers' Security Context
+      ## @param cluster.worker.common.containerSecurityContext.seLinuxOptions Set SELinux options in container
       ## @param cluster.worker.common.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
       ## @param cluster.worker.common.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
       ## @param cluster.worker.common.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1483,6 +1514,7 @@ cluster:
       ##
       containerSecurityContext:
         enabled: true
+        seLinuxOptions: {}
         runAsUser: 1001
         runAsNonRoot: true
         privileged: false
