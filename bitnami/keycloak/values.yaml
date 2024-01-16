@@ -149,11 +149,10 @@ tls:
   ## 3) Rename your keystores to `keycloak.keystore.jks` or use a different name overwriting the value 'tls.keystoreFilename'.
   ## 4) Run the command below where SECRET_NAME is the name of the secret you want to create:
   ##       kubectl create secret generic SECRET_NAME --from-file=./keycloak.truststore.jks --from-file=./keycloak.keystore.jks
-  ## NOTE: If usePem enabled, make sure the PEM key and cert are named 'tls.key' and 'tls.crt' respectively.
   ##
   existingSecret: ""
   ## @param tls.usePem Use PEM certificates as input instead of PKS12/JKS stores
-  ## If "true", the Keycloak chart will look for the files keycloak.key and keycloak.crt inside the secret provided with 'existingSecret'.
+  ## If "true", make sure the PEM key and cert are named 'tls.key' and 'tls.crt' respectively inside the secret provided with 'existingSecret'.
   ##
   usePem: false
   ## @param tls.truststoreFilename Truststore filename inside the existing secret
