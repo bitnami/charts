@@ -50,7 +50,8 @@ spec:
         - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
-      {{- end }}
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
         {{- if .Values.dashboards.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
@@ -65,7 +66,7 @@ spec:
               {{- end }}
           {{- end }}
         {{- end }}
-
+      {{- end }}
     {{- if .Values.dashboards.networkPolicy.extraIngress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.dashboards.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}
