@@ -37,4 +37,4 @@ maintainers:
 name: influxdb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/influxdb
-version: 5.11.4
+version: 5.12.0
