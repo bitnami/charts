@@ -581,6 +581,9 @@ query:
     ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
     ##
     externalTrafficPolicy: Cluster
+    ## @param query.serviceGrpc.labels Labels for Thanos Query service GRPC
+    ##
+    labels: {}
     ## @param query.serviceGrpc.annotations Annotations for Thanos Query service
     ##
     annotations: {}
