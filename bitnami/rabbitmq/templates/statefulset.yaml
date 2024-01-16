@@ -233,7 +233,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "rabbitmq.secretPasswordName" . }}
-                  key: rabbitmq-password
+                  key: {{ template "rabbitmq.secretPasswordKey" . }}
             - name: RABBITMQ_PLUGINS
               value: {{ include "rabbitmq.plugins" . | quote }}
             {{- if .Values.communityPlugins }}
