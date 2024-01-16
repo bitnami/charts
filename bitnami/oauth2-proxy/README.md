@@ -369,9 +369,19 @@ This major updates the Redis&reg; subchart to its newest major, 18.0.0. [Here](h
 
 NOTE: Due to an error in our release process, Redis&reg;' chart versions higher or equal than 17.15.4 already use Redis&reg; 7.2 by default.
 
-### To any previous version
+### To 3.0.0
 
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/oauth2-proxy/administration/upgrade/).
+This major update the Redis&reg; subchart to its newest major, 17.0.0, which updates Redis&reg; from its version 6.2 to version 7.0.
+
+### To 2.0.0
+
+This major update the Redis&reg; subchart to its newest major, 16.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1600) you can find more info about the specific changes.
+
+Additionally, this chart has been standardised adding features from other charts.
+
+### To 1.0.0
+
+This major update the Redis&reg; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1500) you can find more info about the specific changes.
 
 ## License
 

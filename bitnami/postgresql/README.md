@@ -734,9 +734,168 @@ This major version changes the default PostgreSQL image from 15.x to 16.x. Follo
 
 This major version changes the default PostgreSQL image from 14.x to 15.x. Follow the [official instructions](https://www.postgresql.org/docs/15/upgrading.html) to upgrade to 15.x.
 
-### To any previous version
+### To 11.0.0
 
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/).
+In this version the application version was bumped to *14.x* series. Also, this major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+#### What changes were introduced in this major version?
+
+- *replication.enabled* parameter is deprecated in favor of *architecture* parameter that accepts two values: *standalone* and *replication*.
+- *replication.singleService* and *replication.uniqueServices* parameters are deprecated. When using replication, each statefulset (primary and read-only) has its own headless service & service allowing to connect to read-only replicas through the service (round-robin) or individually.
+- *postgresqlPostgresPassword*, *postgresqlUsername*, *postgresqlPassword*, *postgresqlDatabase*, *replication.user*, *replication.password*, and *existingSecret* parameters have been regrouped under the *auth* map. The *auth* map uses a new perspective to configure authentication, so please read carefully each sub-parameter description.
+- *extraEnv* has been deprecated in favor of *primary.extraEnvVars* and *readReplicas.extraEnvVars*.
+- *postgresqlConfiguration*, *pgHbaConfiguration*, *configurationConfigMap*, *postgresqlExtendedConf*, and *extendedConfConfigMap* have been deprecated in favor of *primary.configuration*, *primary.pgHbaConfiguration*, *primary.existingConfigmap*, *primary.extendedConfiguration*, and *primary.existingExtendedConfigmap*.
+- *postgresqlInitdbArgs*, *postgresqlInitdbWalDir*, *initdbScripts*, *initdbScriptsConfigMap*, *initdbScriptsSecret*, *initdbUser* and *initdbPassword* have been regrouped under the *primary.initdb* map.
+- *postgresqlMaxConnections*, *postgresqlPostgresConnectionLimit*, *postgresqlDbUserConnectionLimit*, *postgresqlTcpKeepalivesInterval*, *postgresqlTcpKeepalivesIdle*, *postgresqlTcpKeepalivesCount*, *postgresqlStatementTimeout* and *postgresqlPghbaRemoveFilters* parameters are deprecated. Use *XXX.extraEnvVars* instead.
+- *primaryAsStandBy* has been deprecated in favor of *primary.standby*.
+- *securityContext* and *containerSecurityContext* have been deprecated in favor of *primary.podSecurityContext*, *primary.containerSecurityContext*, *readReplicas.podSecurityContext*, and *readReplicas.containerSecurityContext*.
+- *livenessProbe* and *readinessProbe* maps have been deprecated in favor of *primary.livenessProbe*, *primary.readinessProbe*, *readReplicas.livenessProbe* and *readReplicas.readinessProbe* maps.
+- *persistence* map has been deprecated in favor of *primary.persistence* and *readReplicas.persistence* maps.
+- *networkPolicy* map has been completely refactored.
+- *service* map has been deprecated in favor of *primary.service* and *readReplicas.service* maps.
+- *metrics.service.port* has been regrouped under the *metrics.service.ports* map.
+- *serviceAccount.enabled* and *serviceAccount.autoMount* have been deprecated in favor of *serviceAccount.create* and *serviceAccount.automountServiceAccountToken*.
+
+#### Upgrading Instructions
+
+To upgrade to *11.0.0* from *10.x*, it should be done reusing the PVC(s) used to hold the PostgreSQL data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *postgresql*):
+
+> NOTE: Please, create a backup of your database before running any of these actions.
+
+1. Obtain the credentials and the names of the PVCs used to hold the PostgreSQL data on your current release:
+
+        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+
+2. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+
+        kubectl delete statefulsets.apps postgresql-postgresql --namespace default --cascade=false
+        kubectl delete secret postgresql --namespace default
+
+3. Upgrade your release using the same PostgreSQL version:
+
+        CURRENT_VERSION=$(kubectl exec postgresql-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+        helm upgrade postgresql bitnami/postgresql \
+          --set auth.postgresPassword=$POSTGRESQL_PASSWORD \
+          --set primary.persistence.existingClaim=$POSTGRESQL_PVC \
+          --set image.tag=$CURRENT_VERSION
+
+4. You will have to delete the existing PostgreSQL pod and the new statefulset is going to create a new one
+
+        kubectl delete pod postgresql-postgresql-0
+
+5. Finally, you should see the lines below in PostgreSQL container logs:
+
+        $ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+        ...
+        postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
+        ...
+
+> NOTE: the instructions above reuse the same PostgreSQL version you were using in your chart release. Otherwise, you will find an error such as the one below when upgrading since the new chart major version also bumps the application version. To workaround this issue you need to upgrade database, please refer to the [official PostgreSQL documentation](https://www.postgresql.org/docs/current/upgrading.html) for more information about this.
+
+```console
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+    ...
+postgresql 08:10:14.72 INFO  ==> ** Starting PostgreSQL **
+2022-02-01 08:10:14.734 GMT [1] FATAL:  database files are incompatible with server
+2022-02-01 08:10:14.734 GMT [1] DETAIL:  The data directory was initialized by PostgreSQL version 11, which is not compatible with this version 14.1.
+```
+
+### To 10.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+#### What changes were introduced in this major version?
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running *helm dependency update*, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Chart.
+- The term *master* has been replaced with *primary* and *slave* with *readReplicas* throughout the chart. Role names have changed from *master* and *slave* to *primary* and *read*.
+
+#### Considerations when upgrading to this version
+
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version does not support Helm v2 anymore.
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3.
+
+#### Useful links
+
+- [Bitnami Tutorial](https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues)
+- [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
+- [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
+
+#### Upgrading Instructions
+
+To upgrade to *10.0.0* from *9.x*, it should be done reusing the PVC(s) used to hold the PostgreSQL data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *postgresql*):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+1. Obtain the credentials and the names of the PVCs used to hold the PostgreSQL data on your current release:
+
+        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+
+2. Delete the PostgreSQL statefulset (notice the option *--cascade=false*):
+
+        kubectl delete statefulsets.apps postgresql-postgresql --namespace default --cascade=false
+
+3. Upgrade your release using the same PostgreSQL version:
+
+        helm upgrade postgresql bitnami/postgresql \
+          --set postgresqlPassword=$POSTGRESQL_PASSWORD \
+          --set persistence.existingClaim=$POSTGRESQL_PVC
+
+4. Delete the existing PostgreSQL pod and the new statefulset will create a new one:
+
+        kubectl delete pod postgresql-postgresql-0
+
+5. Finally, you should see the lines below in PostgreSQL container logs:
+
+        $ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+        ...
+        postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
+        ...
+
+### To 9.0.0
+
+In this version the chart was adapted to follow the [Helm standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
+
+#### What changes were introduced in this major version?
+
+- Some inmutable objects were modified to adopt Helm standard labels introducing backward incompatibilities.
+
+#### Upgrading Instructions
+
+To upgrade to *9.0.0* from *8.x*, it should be done reusing the PVC(s) used to hold the PostgreSQL data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *postgresql*):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+1. Obtain the credentials and the names of the PVCs used to hold the PostgreSQL data on your current release:
+
+        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+        export POSTGRESQL_PVC=$(kubectl get pvc -l app=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+
+2. Delete the PostgreSQL statefulset (notice the option *--cascade=false*):
+
+        kubectl delete statefulsets.apps postgresql-postgresql --namespace default --cascade=false
+
+3. Upgrade your release using the same PostgreSQL version:
+
+        helm upgrade postgresql bitnami/postgresql \
+          --set postgresqlPassword=$POSTGRESQL_PASSWORD \
+          --set persistence.existingClaim=$POSTGRESQL_PVC
+
+4. Delete the existing PostgreSQL pod and the new statefulset will create a new one:
+
+        kubectl delete pod postgresql-postgresql-0
+
+5. Finally, you should see the lines below in PostgreSQL container logs:
+
+
+        $ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+        ...
+        postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
+        ...
 
 ## License
 

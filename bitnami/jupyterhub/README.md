@@ -808,9 +808,37 @@ This major updates the PostgreSQL subchart to its newest major, 13.0.0. [Here](h
 
 This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
 
-### To any previous version
+### To 1.0.0
 
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/administration/upgrade/).
+This major release updates the PostgreSQL subchart to its newest major *11.x.x*, which contain several changes in the supported values (check the [upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1100) to obtain more information).
+
+#### Upgrading Instructions
+
+To upgrade to *1.0.0* from *0.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *jupyterhub* and the release namespace *default*):
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+
+        export JUPYTERHUB_PASSWORD=$(kubectl get secret --namespace default jupyterhub-hub -o jsonpath="{.data['values\.yaml']}" | base64 --decode | awk -F: '/password/ {gsub(/[ \t]+/, "", $2);print $2}' | tr -d '"')
+        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default jupyterhub-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=jupyterhub,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+
+2. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+
+        kubectl delete statefulsets.apps --cascade=false jupyterhub-postgresql
+        kubectl delete secret jupyterhub-postgresql --namespace default
+
+3. Upgrade your release using the same PostgreSQL version:
+
+        CURRENT_PG_VERSION=$(kubectl exec jupyterhub-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+        helm upgrade jupyterhub bitnami/jupyterhub \
+          --set hub.password=$JUPYTERHUB_PASSWORD \
+          --set postgresql.image.tag=$CURRENT_PG_VERSION \
+          --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+          --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+
+4. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+
+        kubectl delete pod jupyterhub-postgresql-0
 
 ## License
 

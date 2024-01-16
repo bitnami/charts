@@ -626,9 +626,77 @@ This major updates the default serviceType from `LoadBalancer` to `ClusterIP` to
 
 This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
 
-### To any previous version
+### To 10.0.0
 
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/apps/keycloak/administration/upgrade/).
+This major release updates Keycloak to its major version `19`. Please, refer to the official [Keycloak migration documentation](https://www.keycloak.org/docs/latest/upgrading/index.html#migrating-to-19-0-0) for a complete list of changes and further information.
+
+### To 9.0.0
+
+This major release updates Keycloak to its major version `18`. Please, refer to the official [Keycloak migration documentation](https://www.keycloak.org/docs/latest/upgrading/index.html#migrating-to-18-0-0) for a complete list of changes and further information.
+
+### To 8.0.0
+
+This major release updates Keycloak to its major version `17`. Among other features, this new version has deprecated WildFly in favor of Quarkus, which introduces breaking changes like:
+
+- Removal of `/auth` from the default context path.
+- Changes in the configuration and deployment of custom providers.
+- Significant changes in configuring Keycloak.
+
+Please, refer to the official [Keycloak migration documentation](https://www.keycloak.org/docs/latest/upgrading/index.html#migrating-to-17-0-0) and [Migrating to Quarkus distribution document](https://www.keycloak.org/migration/migrating-to-quarkus) for a complete list of changes and further information.
+
+### To 7.0.0
+
+This major release updates the PostgreSQL subchart to its newest major *11.x.x*, which contain several changes in the supported values (check the [upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1100) to obtain more information).
+
+#### Upgrading Instructions
+
+To upgrade to *7.0.0* from *6.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *keycloak* and the release namespace *default*):
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+
+        export KEYCLOAK_PASSWORD=$(kubectl get secret --namespace default keycloak -o jsonpath="{.data.admin-password}" | base64 --decode)
+        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default keycloak-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=keycloak,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+
+2. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+
+        kubectl delete statefulsets.apps --cascade=false keycloak-postgresql
+        kubectl delete secret keycloak-postgresql --namespace default
+
+3. Upgrade your release using the same PostgreSQL version:
+
+        CURRENT_PG_VERSION=$(kubectl exec keycloak-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+        helm upgrade keycloak bitnami/keycloak \
+          --set auth.adminPassword=$KEYCLOAK_PASSWORD \
+          --set postgresql.image.tag=$CURRENT_PG_VERSION \
+          --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+          --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+
+4. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+
+        kubectl delete pod keycloak-postgresql-0
+
+### To 1.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+#### What changes were introduced in this major version?
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running *helm dependency update*, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Chart.
+
+#### Considerations when upgrading to this version
+
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version does not support Helm v2 anymore.
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3.
+
+#### Useful links
+
+- [Bitnami Tutorial](https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues)
+- [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
+- [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
 
 ## License
 
