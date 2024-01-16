@@ -9,6 +9,7 @@ metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: apache
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -16,6 +17,7 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: apache
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   {{- if .Values.updateStrategy }}
@@ -24,6 +26,7 @@ spec:
   template:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: apache
       {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
       annotations:
         {{- if .Values.podAnnotations }}
@@ -221,7 +224,7 @@ spec:
               value: {{ ternary "true" "false" .Values.metrics.image.debug | quote }}
           ports:
             - name: metrics
-              containerPort: 9117
+              containerPort: {{ .Values.metrics.containerPort }}
           livenessProbe:
             httpGet:
               path: /metrics
