@@ -11,23 +11,3 @@ https://cert-manager.io/docs/configuration/
 To configure a new ingress to automatically provision certificates, you will find some information in the following link:
 
 https://cert-manager.io/docs/usage/ingress/
-
-{{- if .Values.rbac.create }}
-{{- if .Values.rbac.accessSecretsInAllNamespaces }}
-
-WARNING: Cert Manager can access all secrets in the cluster. This could pose a security risk if the application gets compromised.
-
-You can limit allowed namespaces by setting rbac.accessSecretsInAllNamespaces = false and configuring 
- rbac.allowedSecretNamespaces
-{{- else }}
-
-Cert Manager can ONLY access secrets in the following namespaces:
-{{ $namespaces := .Values.rbac.allowedSecretNamespaces | default (list (include "common.names.namespace" .)) }}
-{{- range $namespace := $namespaces }}
-  - {{ $namespace }}
-{{- end }}
-
-Cert Manager wont be able to access secrets in other namespaces. You can configure this behavior by setting rbac.allowedSecretNamespaces
-
-{{- end }}
-{{- end }}

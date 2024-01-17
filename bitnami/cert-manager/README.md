@@ -350,11 +350,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                | Description                                                                          | Value  |
-| ----------------------------------- | ------------------------------------------------------------------------------------ | ------ |
-| `rbac.create`                       | Specifies whether RBAC resources should be created                                   | `true` |
-| `rbac.accessSecretsInAllNamespaces` | Allow accessing secrets in all namespaces                                            | `true` |
-| `rbac.allowedSecretNamespaces`      | List of namespaces allowed to access secrets when accessSecretsInAllNamespaces=false | `[]`   |
+| Name          | Description                                        | Value  |
+| ------------- | -------------------------------------------------- | ------ |
+| `rbac.create` | Specifies whether RBAC resources should be created | `true` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
