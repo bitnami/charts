@@ -68,9 +68,11 @@ rules:
   - apiGroups: ["cert-manager.io"]
     resources: ["issuers"]
     verbs: ["get", "list", "watch"]
+  {{- if .Values.rbac.accessSecretsInAllNamespaces }}
   - apiGroups: [""]
     resources: ["secrets"]
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  {{- end }}
   - apiGroups: [""]
     resources: ["events"]
     verbs: ["create", "patch"]
@@ -91,9 +93,11 @@ rules:
   - apiGroups: ["cert-manager.io"]
     resources: ["clusterissuers"]
     verbs: ["get", "list", "watch"]
+  {{- if .Values.rbac.accessSecretsInAllNamespaces }}
   - apiGroups: [""]
     resources: ["secrets"]
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  {{- end }}
   - apiGroups: [""]
     resources: ["events"]
     verbs: ["create", "patch"]
@@ -120,9 +124,11 @@ rules:
   - apiGroups: ["acme.cert-manager.io"]
     resources: ["orders"]
     verbs: ["create", "delete", "get", "list", "watch"]
+  {{- if .Values.rbac.accessSecretsInAllNamespaces }}
   - apiGroups: [""]
     resources: ["secrets"]
     verbs: ["get", "list", "watch", "create", "update", "delete"]
+  {{- end }}
   - apiGroups: [""]
     resources: ["events"]
     verbs: ["create", "patch"]
@@ -152,9 +158,11 @@ rules:
   - apiGroups: ["acme.cert-manager.io"]
     resources: ["orders/finalizers"]
     verbs: ["update"]
+  {{- if .Values.rbac.accessSecretsInAllNamespaces }}
   - apiGroups: [""]
     resources: ["secrets"]
     verbs: ["get", "list", "watch"]
+  {{- end }}
   - apiGroups: [""]
     resources: ["events"]
     verbs: ["create", "patch"]
@@ -181,10 +189,12 @@ rules:
   - apiGroups: ["cert-manager.io"]
     resources: ["issuers", "clusterissuers"]
     verbs: ["get", "list", "watch"]
+  {{- if .Values.rbac.accessSecretsInAllNamespaces }}
   # Need to be able to retrieve ACME account private key to complete challenges
   - apiGroups: [""]
     resources: ["secrets"]
     verbs: ["get", "list", "watch"]
+  {{- end }}
   # Used to create events
   - apiGroups: [""]
     resources: ["events"]
@@ -202,10 +212,12 @@ rules:
   - apiGroups: ["acme.cert-manager.io"]
     resources: ["challenges/finalizers"]
     verbs: ["update"]
+  {{- if .Values.rbac.accessSecretsInAllNamespaces }}
   # DNS01 rules (duplicated above)
   - apiGroups: [""]
     resources: ["secrets"]
     verbs: ["get", "list", "watch"]
+  {{- end }}
   - apiGroups: [ "gateway.networking.k8s.io" ]
     resources: [ "httproutes" ]
     verbs: ["get", "list", "watch", "create", "delete", "update"]

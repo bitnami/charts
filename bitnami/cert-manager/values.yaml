@@ -1030,3 +1030,9 @@ metrics:
 ##
 rbac:
   create: true
+  ## @param rbac.accessSecretsInAllNamespaces Allow accessing secrets in all namespaces
+  ##
+  accessSecretsInAllNamespaces: true
+  ## @param rbac.allowedSecretNamespaces List of namespaces allowed to access secrets when accessSecretsInAllNamespaces=false
+  ##
+  allowedSecretNamespaces: []
