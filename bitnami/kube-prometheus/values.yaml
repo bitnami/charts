@@ -175,14 +175,21 @@ operator:
   ## Prometheus Operator pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param operator.podSecurityContext.enabled Enable pod security context
+  ## @param operator.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param operator.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param operator.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param operator.podSecurityContext.fsGroup Group ID for the container filesystem
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Prometheus Operator containers' Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param operator.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param operator.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param operator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param operator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param operator.containerSecurityContext.privileged Set container's Security Context privileged
@@ -193,6 +200,7 @@ operator:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -457,6 +465,7 @@ operator:
     ## Prometheus config reload container's securityContext
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param operator.prometheusConfigReloader.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.seLinuxOptions Set SELinux options in container
     ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param operator.prometheusConfigReloader.containerSecurityContext.privileged Set container's Security Context privileged
@@ -467,6 +476,7 @@ operator:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -566,14 +576,21 @@ prometheus:
   ## Prometheus pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param prometheus.podSecurityContext.enabled Enable security context
+  ## @param prometheus.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param prometheus.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param prometheus.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param prometheus.podSecurityContext.fsGroup Group ID for the container filesystem
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Prometheus containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param prometheus.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param prometheus.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param prometheus.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param prometheus.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param prometheus.containerSecurityContext.privileged Set container's Security Context privileged
@@ -584,6 +601,7 @@ prometheus:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1233,6 +1251,7 @@ prometheus:
     ## Thanos Sidecar container's securityContext
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param prometheus.thanos.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param prometheus.thanos.containerSecurityContext.seLinuxOptions Set SELinux options in container
     ## @param prometheus.thanos.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param prometheus.thanos.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param prometheus.thanos.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1243,6 +1262,7 @@ prometheus:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -1651,14 +1671,21 @@ alertmanager:
   ## Prometheus Alertmanager pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param alertmanager.podSecurityContext.enabled Enable security context
+  ## @param alertmanager.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param alertmanager.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param alertmanager.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param alertmanager.podSecurityContext.fsGroup Group ID for the container filesystem
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Prometheus Alertmanager container's securityContext
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param alertmanager.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param alertmanager.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param alertmanager.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param alertmanager.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param alertmanager.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1669,6 +1696,7 @@ alertmanager:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2395,14 +2423,21 @@ blackboxExporter:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param blackboxExporter.podSecurityContext.enabled Enabled Blackbox Exporter pods' Security Context
+  ## @param blackboxExporter.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param blackboxExporter.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param blackboxExporter.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param blackboxExporter.podSecurityContext.fsGroup Set Blackbox Exporter pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param blackboxExporter.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param blackboxExporter.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param blackboxExporter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param blackboxExporter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param blackboxExporter.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2413,6 +2448,7 @@ blackboxExporter:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
