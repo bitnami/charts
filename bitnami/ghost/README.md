@@ -148,8 +148,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.http`                               | Ghost HTTP container port                                                                 | `2368`           |
 | `containerPorts.https`                              | Ghost HTTPS container port                                                                | `2368`           |
 | `podSecurityContext.enabled`                        | Enabled Ghost pods' Security Context                                                      | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                        | `Always`         |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                            | `[]`             |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set Ghost pod's Security Context fsGroup                                                  | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`          |
@@ -212,24 +216,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                                          | Description                                                                                                        | Value                      |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
-| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                                                  | `true`                     |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                                    | `""`                       |
-| `persistence.annotations`                     | Additional custom annotations for the PVC                                                                          | `{}`                       |
-| `persistence.accessModes`                     | Persistent Volume access modes                                                                                     | `[]`                       |
-| `persistence.size`                            | Persistent Volume size                                                                                             | `8Gi`                      |
-| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                                                 | `""`                       |
-| `persistence.subPath`                         | The name of a volume's sub path to mount for persistence                                                           | `""`                       |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
-| `volumePermissions.image.registry`            | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`          | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.digest`              | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `volumePermissions.image.pullPolicy`          | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`         | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
-| `volumePermissions.resources.limits`          | The resources limits for the init container                                                                        | `{}`                       |
-| `volumePermissions.resources.requests`        | The requested resources for the init container                                                                     | `{}`                       |
-| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                        |
+| Name                                               | Description                                                                                                        | Value                      |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| `persistence.enabled`                              | Enable persistence using Persistent Volume Claims                                                                  | `true`                     |
+| `persistence.storageClass`                         | Persistent Volume storage class                                                                                    | `""`                       |
+| `persistence.annotations`                          | Additional custom annotations for the PVC                                                                          | `{}`                       |
+| `persistence.accessModes`                          | Persistent Volume access modes                                                                                     | `[]`                       |
+| `persistence.size`                                 | Persistent Volume size                                                                                             | `8Gi`                      |
+| `persistence.existingClaim`                        | The name of an existing PVC to use for persistence                                                                 | `""`                       |
+| `persistence.subPath`                              | The name of a volume's sub path to mount for persistence                                                           | `""`                       |
+| `volumePermissions.enabled`                        | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
+| `volumePermissions.image.registry`                 | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`               | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                   | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`               | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`              | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
+| `volumePermissions.resources.limits`               | The resources limits for the init container                                                                        | `{}`                       |
+| `volumePermissions.resources.requests`             | The requested resources for the init container                                                                     | `{}`                       |
+| `volumePermissions.securityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `{}`                       |
+| `volumePermissions.securityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                    | `0`                        |
 
 ### Database Parameters
 
