@@ -134,8 +134,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tolerations`                                       | Tolerations for pod assignment                                                            | `[]`             |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`             |
 | `podSecurityContext.enabled`                        | Enabled Cassandra pods' Security Context                                                  | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                        | `Always`         |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                            | `[]`             |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set Cassandra pod's Security Context fsGroup                                              | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled Cassandra containers' Security Context                                            | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set Cassandra containers' Security Context runAsUser                                      | `1001`           |
 | `containerSecurityContext.allowPrivilegeEscalation` | Set Cassandra containers' Security Context allowPrivilegeEscalation                       | `false`          |
 | `containerSecurityContext.capabilities.drop`        | Set Cassandra containers' Security Context capabilities to be dropped                     | `["ALL"]`        |
@@ -233,17 +237,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                          | Description                                                                                                           | Value                      |
-| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume                                       | `false`                    |
-| `volumePermissions.image.registry`            | Init container volume image registry                                                                                  | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`          | Init container volume image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.digest`              | Init container volume image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `volumePermissions.image.pullPolicy`          | Init container volume pull policy                                                                                     | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                      | `[]`                       |
-| `volumePermissions.resources.limits`          | The resources limits for the container                                                                                | `{}`                       |
-| `volumePermissions.resources.requests`        | The requested resources for the container                                                                             | `{}`                       |
-| `volumePermissions.securityContext.runAsUser` | User ID for the init container                                                                                        | `0`                        |
+| Name                                               | Description                                                                                                           | Value                      |
+| -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`                        | Enable init container that changes the owner and group of the persistent volume                                       | `false`                    |
+| `volumePermissions.image.registry`                 | Init container volume image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`               | Init container volume image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                   | Init container volume image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`               | Init container volume pull policy                                                                                     | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                      | `[]`                       |
+| `volumePermissions.resources.limits`               | The resources limits for the container                                                                                | `{}`                       |
+| `volumePermissions.resources.requests`             | The requested resources for the container                                                                             | `{}`                       |
+| `volumePermissions.securityContext.seLinuxOptions` | Set SELinux options in container                                                                                      | `{}`                       |
+| `volumePermissions.securityContext.runAsUser`      | User ID for the init container                                                                                        | `0`                        |
 
 ### Metrics parameters
 

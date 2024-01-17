@@ -93,8 +93,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------------- |
 | `daemonset.enabled`                                 | Use a daemonset instead of a deployment. `replicaCount` will not take effect.             | `false`                      |
 | `daemonset.podSecurityContext.enabled`              | Enable security context for daemonset pods                                                | `true`                       |
+| `daemonset.podSecurityContext.seLinuxOptions`       | Set SELinux options in container                                                          | `{}`                         |
 | `daemonset.podSecurityContext.runAsUser`            | User ID for daemonset containers                                                          | `0`                          |
 | `daemonset.podSecurityContext.runAsGroup`           | Group ID for daemonset containers                                                         | `0`                          |
+| `daemonset.podSecurityContext.fsGroupChangePolicy`  | Set filesystem group change policy                                                        | `Always`                     |
+| `daemonset.podSecurityContext.sysctls`              | Set kernel settings using the sysctl interface                                            | `[]`                         |
+| `daemonset.podSecurityContext.supplementalGroups`   | Set filesystem extra groups                                                               | `[]`                         |
 | `daemonset.podSecurityContext.fsGroup`              | Group ID for daemonset containers filesystem                                              | `0`                          |
 | `daemonset.hostPaths.logs`                          | Path to the node logs dir                                                                 | `/var/log`                   |
 | `daemonset.hostPaths.containerLogs`                 | Path to the container logs dir                                                            | `/var/lib/docker/containers` |
@@ -150,8 +154,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations`                        | Annotations to add to all deployed objects                                                | `{}`                         |
 | `serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                          | `true`                       |
 | `podSecurityContext.enabled`                        | Enabled Fluent Bit pods' Security Context                                                 | `true`                       |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                        | `Always`                     |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                            | `[]`                         |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`                         |
 | `podSecurityContext.fsGroup`                        | Set Fluent Bit pod's Security Context fsGroup                                             | `1001`                       |
 | `containerSecurityContext.enabled`                  | Enabled Fluent Bit containers' Security Context                                           | `true`                       |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`                         |
 | `containerSecurityContext.runAsUser`                | Set Fluent Bit containers' Security Context runAsUser                                     | `1001`                       |
 | `containerSecurityContext.runAsNonRoot`             | Set Fluent Bit container's Security Context runAsNonRoot                                  | `true`                       |
 | `containerSecurityContext.readOnlyRootFilesystem`   | Set Fluent Bit container's Security Context runAsNonRoot                                  | `false`                      |

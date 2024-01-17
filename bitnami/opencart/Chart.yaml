@@ -38,4 +38,4 @@ maintainers:
 name: opencart
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/opencart
-version: 17.0.0
+version: 17.1.0

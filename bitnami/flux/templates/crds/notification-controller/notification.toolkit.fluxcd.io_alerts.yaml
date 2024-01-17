@@ -25,7 +25,7 @@ spec:
     - jsonPath: .status.conditions[?(@.type=="Ready")].message
       name: Status
       type: string
-    name: v1beta1
+    name: v1beta3
     schema:
       openAPIV3Schema:
         description: Alert is the Schema for the alerts API
