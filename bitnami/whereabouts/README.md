@@ -116,8 +116,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.requests`                           | The requested resources for the init container                                                                        | `{}`                          |
 | `resources.limits`                             | The resources limits for the init container                                                                           | `{}`                          |
 | `podSecurityContext.enabled`                   | Enable Whereabouts pods' Security Context                                                                             | `true`                        |
+| `podSecurityContext.fsGroupChangePolicy`       | Set filesystem group change policy                                                                                    | `Always`                      |
+| `podSecurityContext.sysctls`                   | Set kernel settings using the sysctl interface                                                                        | `[]`                          |
+| `podSecurityContext.supplementalGroups`        | Set filesystem extra groups                                                                                           | `[]`                          |
 | `podSecurityContext.fsGroup`                   | Whereabouts pods' group ID                                                                                            | `0`                           |
 | `containerSecurityContext.enabled`             | Enable Whereabouts containers' Security Context                                                                       | `true`                        |
+| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                      | `{}`                          |
 | `containerSecurityContext.runAsUser`           | Whereabouts containers' Security Context                                                                              | `0`                           |
 | `containerSecurityContext.runAsNonRoot`        | Set Whereabouts container's Security Context runAsNonRoot                                                             | `false`                       |
 | `containerSecurityContext.privileged`          | Set Whereabouts container's Security Context privileged                                                               | `true`                        |

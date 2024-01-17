@@ -120,9 +120,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `terminationGracePeriodSeconds`                     | In seconds, time the given to the NGINX pod needs to terminate gracefully                 | `""`             |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`             |
 | `podSecurityContext.enabled`                        | Enabled NGINX pods' Security Context                                                      | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                        | `Always`         |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set NGINX pod's Security Context fsGroup                                                  | `1001`           |
 | `podSecurityContext.sysctls`                        | sysctl settings of the NGINX pods                                                         | `[]`             |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`          |
@@ -263,6 +266,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.containerPorts.metrics`           | Prometheus exporter container port                                                                                                        | `9113`                           |
 | `metrics.podAnnotations`                   | Additional annotations for NGINX Prometheus exporter pod(s)                                                                               | `{}`                             |
 | `metrics.securityContext.enabled`          | Enabled NGINX Exporter containers' Security Context                                                                                       | `false`                          |
+| `metrics.securityContext.seLinuxOptions`   | Set SELinux options in container                                                                                                          | `{}`                             |
 | `metrics.securityContext.runAsUser`        | Set NGINX Exporter container's Security Context runAsUser                                                                                 | `1001`                           |
 | `metrics.service.port`                     | NGINX Prometheus exporter service port                                                                                                    | `9113`                           |
 | `metrics.service.annotations`              | Annotations for the Prometheus exporter service                                                                                           | `{}`                             |

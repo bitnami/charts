@@ -185,14 +185,21 @@ dataPlane:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dataPlane.podSecurityContext.enabled Enabled APISIX pods' Security Context
+  ## @param dataPlane.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param dataPlane.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param dataPlane.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param dataPlane.podSecurityContext.fsGroup Set APISIX pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param dataPlane.containerSecurityContext.enabled Enabled APISIX containers' Security Context
+  ## @param dataPlane.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param dataPlane.containerSecurityContext.runAsUser Set APISIX containers' Security Context runAsUser
   ## @param dataPlane.containerSecurityContext.runAsNonRoot Set APISIX containers' Security Context runAsNonRoot
   ## @param dataPlane.containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context runAsNonRoot
@@ -202,6 +209,7 @@ dataPlane:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
@@ -879,14 +887,21 @@ controlPlane:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controlPlane.podSecurityContext.enabled Enabled APISIX pods' Security Context
+  ## @param controlPlane.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param controlPlane.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param controlPlane.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param controlPlane.podSecurityContext.fsGroup Set APISIX pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param controlPlane.containerSecurityContext.enabled Enabled APISIX containers' Security Context
+  ## @param controlPlane.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param controlPlane.containerSecurityContext.runAsUser Set APISIX containers' Security Context runAsUser
   ## @param controlPlane.containerSecurityContext.runAsNonRoot Set APISIX containers' Security Context runAsNonRoot
   ## @param controlPlane.containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context runAsNonRoot
@@ -896,6 +911,7 @@ controlPlane:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
@@ -1843,10 +1859,16 @@ dashboard:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dashboard.podSecurityContext.enabled Enabled Dashboard pods' Security Context
+  ## @param dashboard.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param dashboard.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param dashboard.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param dashboard.podSecurityContext.fsGroup Set Dashboard pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
 
   ## @param dashboard.containerPorts.http Dashboard http container port
@@ -1919,6 +1941,7 @@ dashboard:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param dashboard.containerSecurityContext.enabled Enabled Dashboard container' Security Context
+  ## @param dashboard.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param dashboard.containerSecurityContext.runAsUser Set Dashboard container' Security Context runAsUser
   ## @param dashboard.containerSecurityContext.runAsNonRoot Set Dashboard container' Security Context runAsNonRoot
   ## @param dashboard.containerSecurityContext.privileged Set Dashboard container' Security Context privileged
@@ -1929,6 +1952,7 @@ dashboard:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
@@ -2303,14 +2327,21 @@ ingressController:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param ingressController.podSecurityContext.enabled Enabled APISIX Ingress Controller pods' Security Context
+  ## @param ingressController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param ingressController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param ingressController.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param ingressController.podSecurityContext.fsGroup Set APISIX Ingress Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param ingressController.containerSecurityContext.enabled Enabled APISIX Ingress Controller containers' Security Context
+  ## @param ingressController.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param ingressController.containerSecurityContext.runAsUser Set APISIX Ingress Controller containers' Security Context runAsUser
   ## @param ingressController.containerSecurityContext.runAsNonRoot Set APISIX Ingress Controller containers' Security Context runAsNonRoot
   ## @param ingressController.containerSecurityContext.privileged Set APISIX Ingress Controller containers' Security Context privileged
@@ -2321,6 +2352,7 @@ ingressController:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2754,6 +2786,12 @@ ingressController:
     ## @param ingressController.rbac.create Specifies whether RBAC resources should be created
     ##
     create: true
+    ## @param ingressController.rbac.accessSecretsInAllNamespaces Allow accessing secrets in all namespaces
+    ##
+    accessSecretsInAllNamespaces: true
+    ## @param ingressController.rbac.allowedSecretNamespaces List of namespaces allowed to access secrets when accessSecretsInAllNamespaces=false
+    ##
+    allowedSecretNamespaces: []
     ## @param ingressController.rbac.rules Custom RBAC rules to set
     ## e.g:
     ## rules:
@@ -2869,6 +2907,7 @@ waitContainer:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param waitContainer.containerSecurityContext.enabled Enabled APISIX containers' Security Context
+  ## @param waitContainer.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param waitContainer.containerSecurityContext.runAsUser Set APISIX containers' Security Context runAsUser
   ## @param waitContainer.containerSecurityContext.runAsNonRoot Set APISIX containers' Security Context runAsNonRoot
   ## @param waitContainer.containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context runAsNonRoot
@@ -2879,6 +2918,7 @@ waitContainer:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false

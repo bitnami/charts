@@ -163,8 +163,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.resources.limits`                                  | The resources limits for the Redis&reg; master containers                                             | `{}`                     |
 | `master.resources.requests`                                | The requested resources for the Redis&reg; master containers                                          | `{}`                     |
 | `master.podSecurityContext.enabled`                        | Enabled Redis&reg; master pods' Security Context                                                      | `true`                   |
+| `master.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                    | `Always`                 |
+| `master.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                        | `[]`                     |
+| `master.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                           | `[]`                     |
 | `master.podSecurityContext.fsGroup`                        | Set Redis&reg; master pod's Security Context fsGroup                                                  | `1001`                   |
 | `master.containerSecurityContext.enabled`                  | Enabled Redis&reg; master containers' Security Context                                                | `true`                   |
+| `master.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                      | `{}`                     |
 | `master.containerSecurityContext.runAsUser`                | Set Redis&reg; master containers' Security Context runAsUser                                          | `1001`                   |
 | `master.containerSecurityContext.runAsGroup`               | Set Redis&reg; master containers' Security Context runAsGroup                                         | `0`                      |
 | `master.containerSecurityContext.runAsNonRoot`             | Set Redis&reg; master containers' Security Context runAsNonRoot                                       | `true`                   |
@@ -277,8 +281,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.resources.limits`                                  | The resources limits for the Redis&reg; replicas containers                                             | `{}`                     |
 | `replica.resources.requests`                                | The requested resources for the Redis&reg; replicas containers                                          | `{}`                     |
 | `replica.podSecurityContext.enabled`                        | Enabled Redis&reg; replicas pods' Security Context                                                      | `true`                   |
+| `replica.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                      | `Always`                 |
+| `replica.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                          | `[]`                     |
+| `replica.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                             | `[]`                     |
 | `replica.podSecurityContext.fsGroup`                        | Set Redis&reg; replicas pod's Security Context fsGroup                                                  | `1001`                   |
 | `replica.containerSecurityContext.enabled`                  | Enabled Redis&reg; replicas containers' Security Context                                                | `true`                   |
+| `replica.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `{}`                     |
 | `replica.containerSecurityContext.runAsUser`                | Set Redis&reg; replicas containers' Security Context runAsUser                                          | `1001`                   |
 | `replica.containerSecurityContext.runAsGroup`               | Set Redis&reg; replicas containers' Security Context runAsGroup                                         | `0`                      |
 | `replica.containerSecurityContext.runAsNonRoot`             | Set Redis&reg; replicas containers' Security Context runAsNonRoot                                       | `true`                   |
@@ -420,6 +428,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.resources.limits`                                  | The resources limits for the Redis&reg; Sentinel containers                                                                                 | `{}`                             |
 | `sentinel.resources.requests`                                | The requested resources for the Redis&reg; Sentinel containers                                                                              | `{}`                             |
 | `sentinel.containerSecurityContext.enabled`                  | Enabled Redis&reg; Sentinel containers' Security Context                                                                                    | `true`                           |
+| `sentinel.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                            | `{}`                             |
 | `sentinel.containerSecurityContext.runAsUser`                | Set Redis&reg; Sentinel containers' Security Context runAsUser                                                                              | `1001`                           |
 | `sentinel.containerSecurityContext.runAsGroup`               | Set Redis&reg; Sentinel containers' Security Context runAsGroup                                                                             | `0`                              |
 | `sentinel.containerSecurityContext.runAsNonRoot`             | Set Redis&reg; Sentinel containers' Security Context runAsNonRoot                                                                           | `true`                           |
@@ -517,6 +526,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.extraArgs`                                         | Extra arguments for Redis&reg; exporter, for example:                                                               | `{}`                             |
 | `metrics.extraEnvVars`                                      | Array with extra environment variables to add to Redis&reg; exporter                                                | `[]`                             |
 | `metrics.containerSecurityContext.enabled`                  | Enabled Redis&reg; exporter containers' Security Context                                                            | `true`                           |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                    | `{}`                             |
 | `metrics.containerSecurityContext.runAsUser`                | Set Redis&reg; exporter containers' Security Context runAsUser                                                      | `1001`                           |
 | `metrics.containerSecurityContext.runAsGroup`               | Set Redis&reg; exporter containers' Security Context runAsGroup                                                     | `0`                              |
 | `metrics.containerSecurityContext.runAsNonRoot`             | Set Redis&reg; exporter containers' Security Context runAsNonRoot                                                   | `true`                           |
@@ -567,27 +577,28 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init Container Parameters
 
-| Name                                                   | Description                                                                                                        | Value                      |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
-| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                        | `{}`                       |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                     | `{}`                       |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                        |
-| `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                                    | `false`                    |
-| `sysctl.image.registry`                                | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
-| `sysctl.image.repository`                              | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `sysctl.image.digest`                                  | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `sysctl.image.pullPolicy`                              | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
-| `sysctl.image.pullSecrets`                             | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
-| `sysctl.command`                                       | Override default init-sysctl container command (useful when using custom images)                                   | `[]`                       |
-| `sysctl.mountHostSys`                                  | Mount the host `/sys` folder to `/host-sys`                                                                        | `false`                    |
-| `sysctl.resources.limits`                              | The resources limits for the init container                                                                        | `{}`                       |
-| `sysctl.resources.requests`                            | The requested resources for the init container                                                                     | `{}`                       |
+| Name                                                        | Description                                                                                                        | Value                      |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| `volumePermissions.enabled`                                 | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
+| `volumePermissions.image.registry`                          | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                        | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                            | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`                        | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
+| `volumePermissions.resources.limits`                        | The resources limits for the init container                                                                        | `{}`                       |
+| `volumePermissions.resources.requests`                      | The requested resources for the init container                                                                     | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `{}`                       |
+| `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                    | `0`                        |
+| `sysctl.enabled`                                            | Enable init container to modify Kernel settings                                                                    | `false`                    |
+| `sysctl.image.registry`                                     | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
+| `sysctl.image.repository`                                   | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `sysctl.image.digest`                                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `sysctl.image.pullPolicy`                                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
+| `sysctl.image.pullSecrets`                                  | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
+| `sysctl.command`                                            | Override default init-sysctl container command (useful when using custom images)                                   | `[]`                       |
+| `sysctl.mountHostSys`                                       | Mount the host `/sys` folder to `/host-sys`                                                                        | `false`                    |
+| `sysctl.resources.limits`                                   | The resources limits for the init container                                                                        | `{}`                       |
+| `sysctl.resources.requests`                                 | The requested resources for the init container                                                                     | `{}`                       |
 
 ### useExternalDNS Parameters
 
