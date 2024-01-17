@@ -40,4 +40,4 @@ maintainers:
 name: ghost
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/ghost
-version: 19.6.18
+version: 19.7.0
