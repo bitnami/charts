@@ -143,8 +143,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `query.serviceAccount.annotations`                        | Annotations to add to all deployed objects                                                | `{}`             |
 | `query.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                          | `false`          |
 | `query.podSecurityContext.enabled`                        | Enabled Jaeger pods' Security Context                                                     | `true`           |
+| `query.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                        | `Always`         |
+| `query.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                            | `[]`             |
+| `query.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `query.podSecurityContext.fsGroup`                        | Set Jaeger pod's Security Context fsGroup                                                 | `1001`           |
 | `query.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`           |
+| `query.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
 | `query.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`           |
 | `query.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`           |
 | `query.containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`          |
@@ -239,8 +243,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.serviceAccount.annotations`                        | Annotations to add to all deployed objects                                                 | `{}`             |
 | `collector.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                           | `false`          |
 | `collector.podSecurityContext.enabled`                        | Enabled Jaeger pods' Security Context                                                      | `true`           |
+| `collector.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                         | `Always`         |
+| `collector.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                             | `[]`             |
+| `collector.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                | `[]`             |
 | `collector.podSecurityContext.fsGroup`                        | Set Jaeger pod's Security Context fsGroup                                                  | `1001`           |
 | `collector.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                       | `true`           |
+| `collector.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                           | `{}`             |
 | `collector.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                 | `1001`           |
 | `collector.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                              | `true`           |
 | `collector.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                | `false`          |
@@ -332,8 +340,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.serviceAccount.annotations`                            | Annotations to add to all deployed objects                                                                     | `{}`             |
 | `agent.serviceAccount.automountServiceAccountToken`           | Automount API credentials for a service account.                                                               | `false`          |
 | `agent.podSecurityContext.enabled`                            | Enabled Jaeger pods' Security Context                                                                          | `true`           |
+| `agent.podSecurityContext.fsGroupChangePolicy`                | Set filesystem group change policy                                                                             | `Always`         |
+| `agent.podSecurityContext.sysctls`                            | Set kernel settings using the sysctl interface                                                                 | `[]`             |
+| `agent.podSecurityContext.supplementalGroups`                 | Set filesystem extra groups                                                                                    | `[]`             |
 | `agent.podSecurityContext.fsGroup`                            | Set Jaeger pod's Security Context fsGroup                                                                      | `1001`           |
 | `agent.containerSecurityContext.enabled`                      | Enabled containers' Security Context                                                                           | `true`           |
+| `agent.containerSecurityContext.seLinuxOptions`               | Set SELinux options in container                                                                               | `{}`             |
 | `agent.containerSecurityContext.runAsUser`                    | Set containers' Security Context runAsUser                                                                     | `1001`           |
 | `agent.containerSecurityContext.runAsNonRoot`                 | Set container's Security Context runAsNonRoot                                                                  | `true`           |
 | `agent.containerSecurityContext.privileged`                   | Set container's Security Context privileged                                                                    | `false`          |
@@ -363,8 +375,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `migration.podAnnotations`                                    | Additional pod annotations                                                                                     | `{}`             |
 | `migration.annotations`                                       | Provide any additional annotations which may be required.                                                      | `{}`             |
 | `migration.podSecurityContext.enabled`                        | Enabled Jaeger pods' Security Context                                                                          | `true`           |
+| `migration.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                             | `Always`         |
+| `migration.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                 | `[]`             |
+| `migration.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                    | `[]`             |
 | `migration.podSecurityContext.fsGroup`                        | Set Jaeger pod's Security Context fsGroup                                                                      | `1001`           |
 | `migration.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                           | `true`           |
+| `migration.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                               | `{}`             |
 | `migration.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                     | `1001`           |
 | `migration.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                  | `true`           |
 | `migration.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                    | `false`          |

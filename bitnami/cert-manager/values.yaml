@@ -132,14 +132,21 @@ controller:
   ## controller pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.podSecurityContext.enabled Enabled Controller pods' Security Context
+  ## @param controller.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param controller.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param controller.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param controller.podSecurityContext.fsGroup Set Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## controller containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param controller.containerSecurityContext.enabled Enabled controller containers' Security Context
+  ## @param controller.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param controller.containerSecurityContext.runAsUser Set controller containers' Security Context runAsUser
   ## @param controller.containerSecurityContext.runAsNonRoot Set controller containers' Security Context runAsNonRoot
   ## @param controller.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
@@ -150,6 +157,7 @@ controller:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -426,14 +434,21 @@ webhook:
   ## webhook pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param webhook.podSecurityContext.enabled Enabled Webhook pods' Security Context
+  ## @param webhook.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param webhook.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param webhook.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param webhook.podSecurityContext.fsGroup Set Webhook pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## webhook containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param webhook.containerSecurityContext.enabled Enabled webhook containers' Security Context
+  ## @param webhook.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param webhook.containerSecurityContext.runAsUser Set webhook containers' Security Context runAsUser
   ## @param webhook.containerSecurityContext.runAsNonRoot Set webhook containers' Security Context runAsNonRoot
   ## @param webhook.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
@@ -444,6 +459,7 @@ webhook:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -704,14 +720,21 @@ cainjector:
   ## cainjector pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param cainjector.podSecurityContext.enabled Enabled CAInjector pods' Security Context
+  ## @param cainjector.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param cainjector.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param cainjector.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param cainjector.podSecurityContext.fsGroup Set CAInjector pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## cainjector containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param cainjector.containerSecurityContext.enabled Enabled cainjector containers' Security Context
+  ## @param cainjector.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param cainjector.containerSecurityContext.runAsUser Set cainjector containers' Security Context runAsUser
   ## @param cainjector.containerSecurityContext.runAsNonRoot Set cainjector containers' Security Context runAsNonRoot
   ## @param cainjector.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
@@ -722,6 +745,7 @@ cainjector:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false

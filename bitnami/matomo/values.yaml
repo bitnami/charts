@@ -332,14 +332,21 @@ resources:
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable Matomo pods' Security Context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Matomo pods' group ID
 ##
 podSecurityContext:
   enabled: true
+  fsGroupChangePolicy: Always
+  sysctls: []
+  supplementalGroups: []
   fsGroup: 1001
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
@@ -350,6 +357,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
+  seLinuxOptions: {}
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false
@@ -957,6 +965,7 @@ cronjobs:
     ## @param
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param cronjobs.taskScheduler.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param cronjobs.taskScheduler.containerSecurityContext.seLinuxOptions Set SELinux options in container
     ## @param cronjobs.taskScheduler.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param cronjobs.taskScheduler.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param cronjobs.taskScheduler.containerSecurityContext.privileged Set container's Security Context privileged
@@ -967,6 +976,7 @@ cronjobs:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -1006,6 +1016,7 @@ cronjobs:
     ## @param
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param cronjobs.archive.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param cronjobs.archive.containerSecurityContext.seLinuxOptions Set SELinux options in container
     ## @param cronjobs.archive.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param cronjobs.archive.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param cronjobs.archive.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1016,6 +1027,7 @@ cronjobs:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
