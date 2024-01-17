@@ -48,4 +48,4 @@ maintainers:
 name: magento
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/magento
-version: 25.0.1
+version: 25.1.0
