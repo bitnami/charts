@@ -294,14 +294,21 @@ query:
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param query.podSecurityContext.enabled Enabled Jaeger pods' Security Context
+  ## @param query.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param query.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param query.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param query.podSecurityContext.fsGroup Set Jaeger pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param query.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param query.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param query.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param query.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param query.containerSecurityContext.privileged Set container's Security Context privileged
@@ -312,6 +319,7 @@ query:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -648,14 +656,21 @@ collector:
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param collector.podSecurityContext.enabled Enabled Jaeger pods' Security Context
+  ## @param collector.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param collector.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param collector.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param collector.podSecurityContext.fsGroup Set Jaeger pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param collector.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param collector.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param collector.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param collector.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param collector.containerSecurityContext.privileged Set container's Security Context privileged
@@ -666,6 +681,7 @@ collector:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -984,14 +1000,21 @@ agent:
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param agent.podSecurityContext.enabled Enabled Jaeger pods' Security Context
+  ## @param agent.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param agent.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param agent.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param agent.podSecurityContext.fsGroup Set Jaeger pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param agent.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param agent.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param agent.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param agent.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param agent.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1002,6 +1025,7 @@ agent:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1105,13 +1129,20 @@ migration:
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param migration.podSecurityContext.enabled Enabled Jaeger pods' Security Context
+  ## @param migration.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param migration.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param migration.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param migration.podSecurityContext.fsGroup Set Jaeger pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
 
   ## @param migration.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param migration.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param migration.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param migration.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param migration.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1121,6 +1152,7 @@ migration:
   ## @param migration.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
