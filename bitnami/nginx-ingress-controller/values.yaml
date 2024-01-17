@@ -76,8 +76,8 @@ image:
 ## @param containerPorts [object] Controller container ports to open
 ##
 containerPorts:
-  http: 80
-  https: 443
+  http: 8080
+  https: 8443
   metrics: 10254
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
@@ -262,7 +262,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  allowPrivilegeEscalation: true
+  allowPrivilegeEscalation: false
   seLinuxOptions: {}
   runAsUser: 1001
   capabilities:
@@ -555,6 +555,8 @@ defaultBackend:
   ## Default backend containers' Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param defaultBackend.containerSecurityContext.enabled Enable Default backend containers' Security Context
+  ## @param defaultBackend.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities that should be dropped
+  ## @param defaultBackend.containerSecurityContext.allowPrivilegeEscalation Switch to allow priviledge escalation on the container
   ## @param defaultBackend.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param defaultBackend.containerSecurityContext.runAsUser User ID for the Default backend container
   ## @param defaultBackend.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
@@ -562,8 +564,11 @@ defaultBackend:
   ##
   containerSecurityContext:
     enabled: true
+    allowPrivilegeEscalation: false
     seLinuxOptions: {}
     runAsUser: 1001
+    capabilities:
+      drop: ["ALL"]
     runAsNonRoot: true
     seccompProfile:
       type: "RuntimeDefault"
