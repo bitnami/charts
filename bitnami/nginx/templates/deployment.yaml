@@ -179,8 +179,10 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            {{- if .Values.containerPorts.http }}
             - name: NGINX_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.http | quote }}
+            {{- end }}
             {{- if .Values.containerPorts.https }}
             - name: NGINX_HTTPS_PORT_NUMBER
               value: {{ .Values.containerPorts.https | quote }}
@@ -198,8 +200,10 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
+            {{- if .Values.containerPorts.http }}
             - name: http
               containerPort: {{ .Values.containerPorts.http }}
+            {{- end }}
             {{- if .Values.containerPorts.https }}
             - name: https
               containerPort: {{ .Values.containerPorts.https }}
@@ -213,21 +217,21 @@ spec:
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: http
+              port: {{ ternary "http" "https" (not .Values.containerPorts.https) }}
           {{- end }}
           {{- if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: http
+              port: {{ ternary "http" "https" (not .Values.containerPorts.https) }}
           {{- end }}
           {{- if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: http
+              port: {{ ternary "http" "https" (not .Values.containerPorts.https) }}
           {{- end }}
           {{- end }}
           {{- if .Values.resources }}
