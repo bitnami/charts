@@ -96,6 +96,9 @@ spec:
           {{- if .Values.publishService.enabled }}
             - --publish-service={{ include "nginx-ingress-controller.publishServicePath" . }}
           {{- end }}
+            - --http-port={{ .Values.containerPorts.http }}
+            - --https-port={{ .Values.containerPorts.https }}
+            - --healthz-port={{ .Values.containerPorts.metrics }}
             - --election-id={{ .Values.electionID }}
             - --controller-class={{ .Values.ingressClassResource.controllerClass }}
             - --configmap={{ default "$(POD_NAMESPACE)" .Values.configMapNamespace }}/{{ include "common.names.fullname" . }}
@@ -152,7 +155,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /healthz
-              port: 10254
+              port: metrics
               scheme: HTTP
           {{- end }}
           {{- if .Values.customReadinessProbe }}
@@ -161,7 +164,7 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /healthz
-              port: 10254
+              port: metrics
               scheme: HTTP
           {{- end }}
           {{- if .Values.customStartupProbe }}
@@ -169,7 +172,7 @@ spec:
           {{- else if .Values.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: 10254
+              port: metrics
           {{- end }}
           ports:
             - name: http
@@ -178,11 +181,9 @@ spec:
             - name: https
               containerPort: {{ .Values.containerPorts.https }}
               protocol: TCP
-            {{- if .Values.metrics.enabled }}
             - name: metrics
               containerPort: {{ .Values.containerPorts.metrics }}
               protocol: TCP
-            {{- end }}
             {{- range $key, $value := .Values.tcp }}
             - name: "{{ $key }}-tcp"
               containerPort: {{ $key }}

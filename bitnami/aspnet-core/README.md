@@ -121,8 +121,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.http`                          | Port to expose at ASP.NET Core container level                                            | `8080`           |
 | `podSecurityContext.enabled`                   | Enabled ASP.NET Core pods' Security Context                                               | `false`          |
 | `podSecurityContext.sysctls`                   | Set namespaced sysctls for the ASP.NET Core pods                                          | `[]`             |
+| `podSecurityContext.fsGroupChangePolicy`       | Set filesystem group change policy                                                        | `Always`         |
+| `podSecurityContext.supplementalGroups`        | Set filesystem extra groups                                                               | `[]`             |
 | `podSecurityContext.fsGroup`                   | Set Security Context fsGroup                                                              | `0`              |
 | `containerSecurityContext.enabled`             | Enabled ASP.NET Core containers' Security Context                                         | `true`           |
+| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                          | `{}`             |
 | `containerSecurityContext.runAsUser`           | Set ASP.NET Core container's Security Context runAsUser                                   | `0`              |
 | `containerSecurityContext.runAsNonRoot`        | Set container's Security Context runAsNonRoot                                             | `false`          |
 | `containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                          | `RuntimeDefault` |

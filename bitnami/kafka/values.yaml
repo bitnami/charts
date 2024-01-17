@@ -603,17 +603,24 @@ controller:
   ## Kafka pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.podSecurityContext.enabled Enable security context for the pods
+  ## @param controller.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param controller.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param controller.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param controller.podSecurityContext.fsGroup Set Kafka pod's Security Context fsGroup
   ## @param controller.podSecurityContext.seccompProfile.type Set Kafka pods's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
     seccompProfile:
       type: "RuntimeDefault"
   ## Kafka containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param controller.containerSecurityContext.enabled Enable Kafka containers' Security Context
+  ## @param controller.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param controller.containerSecurityContext.runAsUser Set Kafka containers' Security Context runAsUser
   ## @param controller.containerSecurityContext.runAsNonRoot Set Kafka containers' Security Context runAsNonRoot
   ## @param controller.containerSecurityContext.allowPrivilegeEscalation Force the child process to be run as non-privileged
@@ -628,6 +635,7 @@ controller:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
@@ -992,17 +1000,24 @@ broker:
   ## Kafka pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param broker.podSecurityContext.enabled Enable security context for the pods
+  ## @param broker.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param broker.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param broker.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param broker.podSecurityContext.fsGroup Set Kafka pod's Security Context fsGroup
   ## @param broker.podSecurityContext.seccompProfile.type Set Kafka pod's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
     seccompProfile:
       type: "RuntimeDefault"
   ## Kafka containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param broker.containerSecurityContext.enabled Enable Kafka containers' Security Context
+  ## @param broker.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param broker.containerSecurityContext.runAsUser Set Kafka containers' Security Context runAsUser
   ## @param broker.containerSecurityContext.runAsNonRoot Set Kafka containers' Security Context runAsNonRoot
   ## @param broker.containerSecurityContext.allowPrivilegeEscalation Force the child process to be run as non-privileged
@@ -1017,6 +1032,7 @@ broker:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
@@ -1375,6 +1391,7 @@ externalAccess:
     ## Kafka provisioning containers' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param externalAccess.autoDiscovery.containerSecurityContext.enabled Enable Kafka auto-discovery containers' Security Context
+    ## @param externalAccess.autoDiscovery.containerSecurityContext.seLinuxOptions Set SELinux options in container
     ## @param externalAccess.autoDiscovery.containerSecurityContext.runAsUser Set Kafka auto-discovery containers' Security Context runAsUser
     ## @param externalAccess.autoDiscovery.containerSecurityContext.runAsNonRoot Set Kafka auto-discovery containers' Security Context runAsNonRoot
     ## @param externalAccess.autoDiscovery.containerSecurityContext.allowPrivilegeEscalation Set Kafka auto-discovery containers' Security Context allowPrivilegeEscalation
@@ -1390,6 +1407,7 @@ externalAccess:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
       runAsNonRoot: true
       allowPrivilegeEscalation: false
@@ -1648,9 +1666,11 @@ volumePermissions:
   ## Init container' Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
   ##
   containerSecurityContext:
+    seLinuxOptions: {}
     runAsUser: 0
 
 ## @section Other Parameters
@@ -1821,17 +1841,24 @@ metrics:
     ## Kafka exporter pods' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
     ## @param metrics.kafka.podSecurityContext.enabled Enable security context for the pods
+    ## @param metrics.kafka.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param metrics.kafka.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param metrics.kafka.podSecurityContext.supplementalGroups Set filesystem extra groups
     ## @param metrics.kafka.podSecurityContext.fsGroup Set Kafka exporter pod's Security Context fsGroup
     ## @param metrics.kafka.podSecurityContext.seccompProfile.type Set Kafka exporter pod's Security Context seccomp profile
     ##
     podSecurityContext:
       enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
       fsGroup: 1001
       seccompProfile:
         type: "RuntimeDefault"
     ## Kafka exporter containers' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param metrics.kafka.containerSecurityContext.enabled Enable Kafka exporter containers' Security Context
+    ## @param metrics.kafka.containerSecurityContext.seLinuxOptions Set SELinux options in container
     ## @param metrics.kafka.containerSecurityContext.runAsUser Set Kafka exporter containers' Security Context runAsUser
     ## @param metrics.kafka.containerSecurityContext.runAsNonRoot Set Kafka exporter containers' Security Context runAsNonRoot
     ## @param metrics.kafka.containerSecurityContext.allowPrivilegeEscalation Set Kafka exporter containers' Security Context allowPrivilegeEscalation
@@ -1846,6 +1873,7 @@ metrics:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
       runAsNonRoot: true
       allowPrivilegeEscalation: false
@@ -2033,6 +2061,7 @@ metrics:
     ## Prometheus JMX exporter containers' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param metrics.jmx.containerSecurityContext.enabled Enable Prometheus JMX exporter containers' Security Context
+    ## @param metrics.jmx.containerSecurityContext.seLinuxOptions Set SELinux options in container
     ## @param metrics.jmx.containerSecurityContext.runAsUser Set Prometheus JMX exporter containers' Security Context runAsUser
     ## @param metrics.jmx.containerSecurityContext.runAsNonRoot Set Prometheus JMX exporter containers' Security Context runAsNonRoot
     ## @param metrics.jmx.containerSecurityContext.allowPrivilegeEscalation Set Prometheus JMX exporter containers' Security Context allowPrivilegeEscalation
@@ -2047,6 +2076,7 @@ metrics:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
       runAsNonRoot: true
       allowPrivilegeEscalation: false
@@ -2343,17 +2373,24 @@ provisioning:
   ## Kafka provisioning pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param provisioning.podSecurityContext.enabled Enable security context for the pods
+  ## @param provisioning.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param provisioning.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param provisioning.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param provisioning.podSecurityContext.fsGroup Set Kafka provisioning pod's Security Context fsGroup
   ## @param provisioning.podSecurityContext.seccompProfile.type Set Kafka provisioning pod's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
     seccompProfile:
       type: "RuntimeDefault"
   ## Kafka provisioning containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param provisioning.containerSecurityContext.enabled Enable Kafka provisioning containers' Security Context
+  ## @param provisioning.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param provisioning.containerSecurityContext.runAsUser Set Kafka provisioning containers' Security Context runAsUser
   ## @param provisioning.containerSecurityContext.runAsNonRoot Set Kafka provisioning containers' Security Context runAsNonRoot
   ## @param provisioning.containerSecurityContext.allowPrivilegeEscalation Set Kafka provisioning containers' Security Context allowPrivilegeEscalation
@@ -2368,6 +2405,7 @@ provisioning:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
