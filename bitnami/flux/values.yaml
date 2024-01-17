@@ -176,14 +176,21 @@ kustomizeController:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param kustomizeController.podSecurityContext.enabled Enabled Kustomize Controller pods' Security Context
+  ## @param kustomizeController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param kustomizeController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param kustomizeController.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param kustomizeController.podSecurityContext.fsGroup Set Kustomize Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param kustomizeController.containerSecurityContext.enabled Enabled Kustomize Controller containers' Security Context
+  ## @param kustomizeController.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param kustomizeController.containerSecurityContext.runAsUser Set Kustomize Controller containers' Security Context runAsUser
   ## @param kustomizeController.containerSecurityContext.runAsNonRoot Set Kustomize Controller containers' Security Context runAsNonRoot
   ## @param kustomizeController.containerSecurityContext.privileged Set Kustomize Controller containers' Security Context privileged
@@ -194,6 +201,7 @@ kustomizeController:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -614,14 +622,21 @@ helmController:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param helmController.podSecurityContext.enabled Enabled Helm Controller pods' Security Context
+  ## @param helmController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param helmController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param helmController.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param helmController.podSecurityContext.fsGroup Set Helm Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param helmController.containerSecurityContext.enabled Enabled Helm Controller containers' Security Context
+  ## @param helmController.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param helmController.containerSecurityContext.runAsUser Set Helm Controller containers' Security Context runAsUser
   ## @param helmController.containerSecurityContext.runAsNonRoot Set Helm Controller containers' Security Context runAsNonRoot
   ## @param helmController.containerSecurityContext.privileged Set Helm Controller containers' Security Context privileged
@@ -632,6 +647,7 @@ helmController:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1054,14 +1070,21 @@ sourceController:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param sourceController.podSecurityContext.enabled Enabled Source Controller pods' Security Context
+  ## @param sourceController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param sourceController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param sourceController.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param sourceController.podSecurityContext.fsGroup Set Source Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param sourceController.containerSecurityContext.enabled Enabled Source Controller containers' Security Context
+  ## @param sourceController.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param sourceController.containerSecurityContext.runAsUser Set Source Controller containers' Security Context runAsUser
   ## @param sourceController.containerSecurityContext.runAsNonRoot Set Source Controller containers' Security Context runAsNonRoot
   ## @param sourceController.containerSecurityContext.privileged Set Source Controller containers' Security Context privileged
@@ -1072,6 +1095,7 @@ sourceController:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
@@ -1650,14 +1674,21 @@ notificationController:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param notificationController.podSecurityContext.enabled Enabled Notification Controller pods' Security Context
+  ## @param notificationController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param notificationController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param notificationController.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param notificationController.podSecurityContext.fsGroup Set Notification Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param notificationController.containerSecurityContext.enabled Enabled Notification Controller containers' Security Context
+  ## @param notificationController.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param notificationController.containerSecurityContext.runAsUser Set Notification Controller containers' Security Context runAsUser
   ## @param notificationController.containerSecurityContext.runAsNonRoot Set Notification Controller containers' Security Context runAsNonRoot
   ## @param notificationController.containerSecurityContext.readOnlyRootFilesystem Set Notification Controller containers' Security Context runAsNonRoot
@@ -1668,6 +1699,7 @@ notificationController:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2088,14 +2120,21 @@ imageAutomationController:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param imageAutomationController.podSecurityContext.enabled Enabled Image Automation Controller pods' Security Context
+  ## @param imageAutomationController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param imageAutomationController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param imageAutomationController.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param imageAutomationController.podSecurityContext.fsGroup Set Image Automation Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param imageAutomationController.containerSecurityContext.enabled Enabled Image Automation Controller containers' Security Context
+  ## @param imageAutomationController.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param imageAutomationController.containerSecurityContext.runAsUser Set Image Automation Controller containers' Security Context runAsUser
   ## @param imageAutomationController.containerSecurityContext.runAsNonRoot Set Image Automation Controller containers' Security Context runAsNonRoot
   ## @param imageAutomationController.containerSecurityContext.readOnlyRootFilesystem Set Image Automation Controller containers' Security Context runAsNonRoot
@@ -2106,6 +2145,7 @@ imageAutomationController:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
@@ -2526,14 +2566,21 @@ imageReflectorController:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param imageReflectorController.podSecurityContext.enabled Enabled Image Reflector Controller pods' Security Context
+  ## @param imageReflectorController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param imageReflectorController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param imageReflectorController.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param imageReflectorController.podSecurityContext.fsGroup Set Image Reflector Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param imageReflectorController.containerSecurityContext.enabled Enabled Image Reflector Controller containers' Security Context
+  ## @param imageReflectorController.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param imageReflectorController.containerSecurityContext.runAsUser Set Image Reflector Controller containers' Security Context runAsUser
   ## @param imageReflectorController.containerSecurityContext.runAsNonRoot Set Image Reflector Controller containers' Security Context runAsNonRoot
   ## @param imageReflectorController.containerSecurityContext.privileged Set Image Reflector Controller containers' Security Context privileged
@@ -2544,6 +2591,7 @@ imageReflectorController:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2936,8 +2984,10 @@ volumePermissions:
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param volumePermissions.containerSecurityContext.enabled Enable init container's Security Context
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 0
