@@ -313,14 +313,21 @@ primary:
   ## MariaDB primary Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param primary.podSecurityContext.enabled Enable security context for MariaDB primary pods
+  ## @param primary.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param primary.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param primary.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param primary.podSecurityContext.fsGroup Group ID for the mounted volumes' filesystem
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## MariaDB primary container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param primary.containerSecurityContext.enabled MariaDB primary container securityContext
+  ## @param primary.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param primary.containerSecurityContext.runAsUser User ID for the MariaDB primary container
   ## @param primary.containerSecurityContext.runAsNonRoot Set primary container's Security Context runAsNonRoot
   ## @param primary.containerSecurityContext.privileged Set primary container's Security Context privileged
@@ -330,6 +337,7 @@ primary:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -715,14 +723,21 @@ secondary:
   ## MariaDB secondary Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param secondary.podSecurityContext.enabled Enable security context for MariaDB secondary pods
+  ## @param secondary.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param secondary.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param secondary.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param secondary.podSecurityContext.fsGroup Group ID for the mounted volumes' filesystem
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## MariaDB secondary container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param secondary.containerSecurityContext.enabled MariaDB secondary container securityContext
+  ## @param secondary.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param secondary.containerSecurityContext.runAsUser User ID for the MariaDB secondary container
   ## @param secondary.containerSecurityContext.runAsNonRoot Set secondary container's Security Context runAsNonRoot
   ## @param secondary.containerSecurityContext.privileged Set secondary container's Security Context privileged
@@ -732,6 +747,7 @@ secondary:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1116,6 +1132,7 @@ metrics:
   ## MariaDB metrics container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled Enable security context for MariaDB metrics container
+  ## @param metrics.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser User ID for the MariaDB metrics container
   ## @param metrics.containerSecurityContext.runAsNonRoot Set metrics container's Security Context runAsNonRoot
   ## @param metrics.containerSecurityContext.privileged Set metrics container's Security Context privileged
@@ -1133,6 +1150,7 @@ metrics:
     enabled: false
     privileged: false
     runAsNonRoot: true
+    seLinuxOptions: {}
     runAsUser: 1001
     allowPrivilegeEscalation: false
     capabilities:
