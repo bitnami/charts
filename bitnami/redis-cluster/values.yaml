@@ -142,11 +142,15 @@ rbac:
     rules: []
 ## Redis&reg; pod Security Context
 ## @param podSecurityContext.enabled Enable Redis&reg; pod Security Context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Group ID for the pods
 ## @param podSecurityContext.sysctls Set namespaced sysctls for the pods
 ##
 podSecurityContext:
   enabled: true
+  fsGroupChangePolicy: Always
+  supplementalGroups: []
   fsGroup: 1001
   ## Uncomment the setting below to increase the net.core.somaxconn value
   ## e.g:
@@ -167,6 +171,7 @@ minAvailable: ""
 maxUnavailable: ""
 ## Containers Security Context
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
@@ -177,6 +182,7 @@ maxUnavailable: ""
 ##
 containerSecurityContext:
   enabled: true
+  seLinuxOptions: {}
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false
@@ -382,11 +388,13 @@ volumePermissions:
     pullSecrets: []
   ## Containers Security Context
   ## @param volumePermissions.containerSecurityContext.enabled Enable Containers' Security Context
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the containers.
   ## @param volumePermissions.containerSecurityContext.privileged Run container as privileged
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 0
     privileged: false
   ## Container resource requests and limits
@@ -1044,11 +1052,13 @@ sysctlImage:
   mountHostSys: false
   ## Containers Security Context
   ## @param sysctlImage.containerSecurityContext.enabled Enable Containers' Security Context
+  ## @param sysctlImage.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param sysctlImage.containerSecurityContext.runAsUser User ID for the containers.
   ## @param sysctlImage.containerSecurityContext.privileged Run privileged as privileged
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 0
     privileged: true
   ## Container resource requests and limits
