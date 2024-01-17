@@ -64,11 +64,9 @@ rules:
   - apiGroups: ["cert-manager.io"]
     resources: ["certificates"]
     verbs: ["get", "list", "watch"]
-  {{- if .Values.rbac.accessSecretsInAllNamespaces }}
   - apiGroups: [""]
     resources: ["secrets"]
     verbs: ["get", "list", "watch"]
-  {{- end }}
   - apiGroups: [""]
     resources: ["events"]
     verbs: ["get", "create", "update", "patch"]
