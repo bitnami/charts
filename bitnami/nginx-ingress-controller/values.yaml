@@ -238,15 +238,22 @@ revisionHistoryLimit: 10
 ## Controller pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable Controller pods' Security Context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Group ID for the container filesystem
 ##
 podSecurityContext:
   enabled: true
+  fsGroupChangePolicy: Always
+  sysctls: []
+  supplementalGroups: []
   fsGroup: 1001
 ## Controller containers' Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable Controller containers' Security Context
 ## @param containerSecurityContext.allowPrivilegeEscalation Switch to allow priviledge escalation on the Controller container
+## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
 ## @param containerSecurityContext.runAsUser User ID for the Controller container
 ## @param containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities that should be dropped
 ## @param containerSecurityContext.capabilities.add [array] Linux Kernel capabilities that should be added
@@ -256,6 +263,7 @@ podSecurityContext:
 containerSecurityContext:
   enabled: true
   allowPrivilegeEscalation: true
+  seLinuxOptions: {}
   runAsUser: 1001
   capabilities:
     drop: ["ALL"]
@@ -533,20 +541,28 @@ defaultBackend:
   ## Default backend pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param defaultBackend.podSecurityContext.enabled Enable Default backend pods' Security Context
+  ## @param defaultBackend.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param defaultBackend.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param defaultBackend.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param defaultBackend.podSecurityContext.fsGroup Group ID for the container filesystem
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Default backend containers' Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param defaultBackend.containerSecurityContext.enabled Enable Default backend containers' Security Context
+  ## @param defaultBackend.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param defaultBackend.containerSecurityContext.runAsUser User ID for the Default backend container
   ## @param defaultBackend.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param defaultBackend.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     seccompProfile:
