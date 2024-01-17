@@ -2786,12 +2786,6 @@ ingressController:
     ## @param ingressController.rbac.create Specifies whether RBAC resources should be created
     ##
     create: true
-    ## @param ingressController.rbac.accessSecretsInAllNamespaces Allow accessing secrets in all namespaces
-    ##
-    accessSecretsInAllNamespaces: true
-    ## @param ingressController.rbac.allowedSecretNamespaces List of namespaces allowed to access secrets when accessSecretsInAllNamespaces=false
-    ##
-    allowedSecretNamespaces: []
     ## @param ingressController.rbac.rules Custom RBAC rules to set
     ## e.g:
     ## rules:
