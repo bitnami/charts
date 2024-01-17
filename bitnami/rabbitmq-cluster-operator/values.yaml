@@ -209,14 +209,21 @@ clusterOperator:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param clusterOperator.podSecurityContext.enabled Enabled RabbitMQ Cluster Operator pods' Security Context
+  ## @param clusterOperator.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param clusterOperator.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param clusterOperator.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param clusterOperator.podSecurityContext.fsGroup Set RabbitMQ Cluster Operator pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param clusterOperator.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param clusterOperator.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param clusterOperator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param clusterOperator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param clusterOperator.containerSecurityContext.privileged Set container's Security Context privileged
@@ -227,6 +234,7 @@ clusterOperator:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -671,14 +679,21 @@ msgTopologyOperator:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param msgTopologyOperator.podSecurityContext.enabled Enabled RabbitMQ Messaging Topology Operator pods' Security Context
+  ## @param msgTopologyOperator.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param msgTopologyOperator.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param msgTopologyOperator.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param msgTopologyOperator.podSecurityContext.fsGroup Set RabbitMQ Messaging Topology Operator pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param msgTopologyOperator.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param msgTopologyOperator.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param msgTopologyOperator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param msgTopologyOperator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param msgTopologyOperator.containerSecurityContext.privileged Set container's Security Context privileged
@@ -689,6 +704,7 @@ msgTopologyOperator:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
