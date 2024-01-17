@@ -94,8 +94,7 @@ jobs:
     needs: [get-chart]
     name: Automatically update README and CRDs
     permissions:
-      contents: read
-      pull-requests: write
+      contents: write
     outputs:
       result: ${{ steps.update-pr.outputs.result }}
     if: needs.get-chart.outputs.result == 'ok'
@@ -156,38 +155,35 @@ jobs:
       - id: update-crds
         name: 'Update CRDs'
         # To avoid malicious executions, only PRs performed by the bitnami-bot will perform the CRDs update
-        if: github.event.pull_request.user.login == 'migruiz4'
+        if: github.event.pull_request.user.login == 'bitnami-bot'
         env:
           CHART: ${{ needs.get-chart.outputs.chart }}
         run: |
           APP_VERSION="$(yq e '.appVersion' bitnami/${CHART}/Chart.yaml)"
-          # Chart CRDs can be stored at 'bitnami/$CHART/crds' or 'bitnami/$CHART/templates/crds'
-          mapfile -t crd_files < <(find "bitnami/${CHART}/crds" "bitnami/${CHART}/templates/crds" -name "*.yaml" -o -name "*.yml" 2>/dev/null || true)
+          # Updating CRDs stored at 'bitnami/$CHART/crds' (not 'bitnami/$CHART/templates/crds')
+          mapfile -t crd_files < <(find "bitnami/${CHART}/crds" -name "*.yaml" -o -name "*.yml" 2>/dev/null || true)
           for file in "${crd_files[@]}"; do
-            # Validate that the first line of the CRD file includes the entry "#Source: <url>"
+            # Automatically update CRDs that use the '# Source' header
             source_url_tpl="$(head -n 1 $file | grep -E "^# ?Source: ?" | sed -E 's|^# ?Source: ?||' || true)"
             if [[ -z "$source_url_tpl" ]]; then
-              echo "error=CRD file '${file}' does not include the '#Source: <url> header'"
-              exit 1
-            fi
-            # Validate that the source URL contains the '{version}' placeholder
-            if [[ "$source_url_tpl" =~ "{version}" ]]; then
-              source_url=$(echo "$source_url_tpl" | sed "s/{version}/${APP_VERSION}/")
+              # Replace version placeholder
+              if [[ "$source_url_tpl" =~ "{version}" ]]; then
+                source_url=$(echo "$source_url_tpl" | sed "s/{version}/${APP_VERSION}/")
+              fi
+              # Validate the second line of the CRD file includes the version of the CRD
+              crd_version="$(head -n 2 $file | tail -n 1 | grep -E "^# ?Version: ?" | sed -E 's|^# ?Version: ?||' || true)"
+              if [[ -z "$crd_version" ]]; then
+                echo "error=CRD file '${file}' does not include the '#Version: <version> header'"
+                exit 1
+              fi
+              # If the application version is newer, automatically update the CRD file
+              if [[ "$APP_VERSION" != "$crd_version" ]]; then
+                curl -Lks --fail -o $file "$source_url"
+                sed -i "1s|^|# Source: ${source_url_tpl}\n# Version: ${APP_VERSION}\n|" $file
+                echo "info=CRD file '${file}' automatically updated using source '$source_url'"
+              fi
             else
-              echo "error=Placeholder '{version}' not found in Source url"
-              exit 1
-            fi
-            # Validate Second line of the CRD file includes the version of the CRD
-            crd_version="$(head -n 2 $file | tail -n 1 | grep -E "^# ?Version: ?" | sed -E 's|^# ?Version: ?||' || true)"
-            if [[ -z "$crd_version" ]]; then
-              echo "error=CRD file '${file}' does not include the '#Version: <version> header'"
-              exit 1
-            fi
-            # If the application version is newer, automatically update the CRD file
-            if [[ "$APP_VERSION" != "$crd_version" ]]; then
-              curl -Lks --fail -o $file "$source_url"
-              sed -i "1s|^|# Source: ${source_url_tpl}\n# Version: ${APP_VERSION}\n|" $file
-              echo "info=CRD file '${file}' automatically updated using source '$source_url'"
+              echo "info=CRD file '$file' does not contain the '#Source' header. Skipping..."
             fi
           done
           # Commit all changes, if any
