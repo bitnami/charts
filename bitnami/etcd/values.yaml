@@ -295,14 +295,21 @@ containerPorts:
 ## etcd pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled etcd pods' Security Context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Set etcd pod's Security Context fsGroup
 ##
 podSecurityContext:
   enabled: true
+  fsGroupChangePolicy: Always
+  sysctls: []
+  supplementalGroups: []
   fsGroup: 1001
 ## etcd containers' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled etcd containers' Security Context
+## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set etcd containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set primary container's Security Context privileged
@@ -312,6 +319,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
+  seLinuxOptions: {}
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false
@@ -911,14 +919,14 @@ disasterRecovery:
 serviceAccount:
   ## @param serviceAccount.create Enable/disable service account creation
   ##
-  create: false
+  create: true
   ## @param serviceAccount.name Name of the service account to create or use
   ##
   name: ""
   ## @param serviceAccount.automountServiceAccountToken Enable/disable auto mounting of service account token
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   ## @param serviceAccount.annotations [object] Additional annotations to be included on the service account
   ##
   annotations: {}

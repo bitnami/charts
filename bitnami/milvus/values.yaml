@@ -319,6 +319,7 @@ initJob:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param initJob.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param initJob.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param initJob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param initJob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param initJob.containerSecurityContext.privileged Set container's Security Context privileged
@@ -329,6 +330,7 @@ initJob:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -341,10 +343,16 @@ initJob:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param initJob.podSecurityContext.enabled Enabled credential init job pods' Security Context
+  ## @param initJob.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param initJob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param initJob.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param initJob.podSecurityContext.fsGroup Set credential init job pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## @param initJob.extraEnvVars Array containing extra env vars to configure the credential init job
   ## For example:
@@ -505,14 +513,21 @@ dataCoord:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dataCoord.podSecurityContext.enabled Enabled Data Coordinator pods' Security Context
+  ## @param dataCoord.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param dataCoord.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param dataCoord.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param dataCoord.podSecurityContext.fsGroup Set Data Coordinator pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dataCoord.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param dataCoord.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param dataCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param dataCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param dataCoord.containerSecurityContext.privileged Set container's Security Context privileged
@@ -523,6 +538,7 @@ dataCoord:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -643,7 +659,7 @@ dataCoord:
   serviceAccount:
     ## @param dataCoord.serviceAccount.create Enable creation of ServiceAccount for Data Coordinator pods
     ##
-    create: false
+    create: true
     ## @param dataCoord.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -993,14 +1009,21 @@ rootCoord:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param rootCoord.podSecurityContext.enabled Enabled Root Coordinator pods' Security Context
+  ## @param rootCoord.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param rootCoord.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param rootCoord.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param rootCoord.podSecurityContext.fsGroup Set Root Coordinator pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param rootCoord.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param rootCoord.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param rootCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param rootCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param rootCoord.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1011,6 +1034,7 @@ rootCoord:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1131,7 +1155,7 @@ rootCoord:
   serviceAccount:
     ## @param rootCoord.serviceAccount.create Enable creation of ServiceAccount for Root Coordinator pods
     ##
-    create: false
+    create: true
     ## @param rootCoord.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -1480,14 +1504,21 @@ queryCoord:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryCoord.podSecurityContext.enabled Enabled Query Coordinator pods' Security Context
+  ## @param queryCoord.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param queryCoord.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param queryCoord.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param queryCoord.podSecurityContext.fsGroup Set Query Coordinator pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryCoord.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param queryCoord.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param queryCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param queryCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param queryCoord.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1498,6 +1529,7 @@ queryCoord:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1618,7 +1650,7 @@ queryCoord:
   serviceAccount:
     ## @param queryCoord.serviceAccount.create Enable creation of ServiceAccount for Query Coordinator pods
     ##
-    create: false
+    create: true
     ## @param queryCoord.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -1968,14 +2000,21 @@ indexCoord:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param indexCoord.podSecurityContext.enabled Enabled Index Coordinator pods' Security Context
+  ## @param indexCoord.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param indexCoord.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param indexCoord.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param indexCoord.podSecurityContext.fsGroup Set Index Coordinator pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param indexCoord.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param indexCoord.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param indexCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param indexCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param indexCoord.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1986,6 +2025,7 @@ indexCoord:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2106,7 +2146,7 @@ indexCoord:
   serviceAccount:
     ## @param indexCoord.serviceAccount.create Enable creation of ServiceAccount for Index Coordinator pods
     ##
-    create: false
+    create: true
     ## @param indexCoord.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -2456,14 +2496,21 @@ dataNode:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dataNode.podSecurityContext.enabled Enabled Data Node pods' Security Context
+  ## @param dataNode.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param dataNode.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param dataNode.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param dataNode.podSecurityContext.fsGroup Set Data Node pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dataNode.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param dataNode.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param dataNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param dataNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param dataNode.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2474,6 +2521,7 @@ dataNode:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2594,7 +2642,7 @@ dataNode:
   serviceAccount:
     ## @param dataNode.serviceAccount.create Enable creation of ServiceAccount for Data Node pods
     ##
-    create: false
+    create: true
     ## @param dataNode.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -2944,14 +2992,21 @@ queryNode:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryNode.podSecurityContext.enabled Enabled Query Node pods' Security Context
+  ## @param queryNode.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param queryNode.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param queryNode.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param queryNode.podSecurityContext.fsGroup Set Query Node pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryNode.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param queryNode.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param queryNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param queryNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param queryNode.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2962,6 +3017,7 @@ queryNode:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -3082,7 +3138,7 @@ queryNode:
   serviceAccount:
     ## @param queryNode.serviceAccount.create Enable creation of ServiceAccount for Query Node pods
     ##
-    create: false
+    create: true
     ## @param queryNode.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -3432,14 +3488,21 @@ indexNode:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param indexNode.podSecurityContext.enabled Enabled Index Node pods' Security Context
+  ## @param indexNode.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param indexNode.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param indexNode.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param indexNode.podSecurityContext.fsGroup Set Index Node pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param indexNode.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param indexNode.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param indexNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param indexNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param indexNode.containerSecurityContext.privileged Set container's Security Context privileged
@@ -3450,6 +3513,7 @@ indexNode:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -3570,7 +3634,7 @@ indexNode:
   serviceAccount:
     ## @param indexNode.serviceAccount.create Enable creation of ServiceAccount for Index Node pods
     ##
-    create: false
+    create: true
     ## @param indexNode.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -3949,14 +4013,21 @@ proxy:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param proxy.podSecurityContext.enabled Enabled Proxy pods' Security Context
+  ## @param proxy.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param proxy.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param proxy.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param proxy.podSecurityContext.fsGroup Set Proxy pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param proxy.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param proxy.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param proxy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param proxy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param proxy.containerSecurityContext.privileged Set container's Security Context privileged
@@ -3967,6 +4038,7 @@ proxy:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -4087,7 +4159,7 @@ proxy:
   serviceAccount:
     ## @param proxy.serviceAccount.create Enable creation of ServiceAccount for Proxy pods
     ##
-    create: false
+    create: true
     ## @param proxy.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -4449,14 +4521,21 @@ attu:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param attu.podSecurityContext.enabled Enabled Attu pods' Security Context
+  ## @param attu.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param attu.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param attu.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param attu.podSecurityContext.fsGroup Set Attu pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param attu.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param attu.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param attu.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param attu.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param attu.containerSecurityContext.privileged Set container's Security Context privileged
@@ -4467,6 +4546,7 @@ attu:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -4587,7 +4667,7 @@ attu:
   serviceAccount:
     ## @param attu.serviceAccount.create Enable creation of ServiceAccount for Attu pods
     ##
-    create: false
+    create: true
     ## @param attu.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -4901,6 +4981,7 @@ waitContainer:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param waitContainer.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param waitContainer.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param waitContainer.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param waitContainer.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param waitContainer.containerSecurityContext.privileged Set container's Security Context privileged
@@ -4911,6 +4992,7 @@ waitContainer:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false

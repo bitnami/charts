@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluent-bit
-  tag: 2.2.1-debian-11-r0
+  tag: 2.2.2-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -99,14 +99,22 @@ daemonset:
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param daemonset.podSecurityContext.enabled Enable security context for daemonset pods
+  ## @param daemonset.podSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param daemonset.podSecurityContext.runAsUser User ID for daemonset containers
   ## @param daemonset.podSecurityContext.runAsGroup Group ID for daemonset containers
+  ## @param daemonset.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param daemonset.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param daemonset.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param daemonset.podSecurityContext.fsGroup Group ID for daemonset containers filesystem
   ##
   podSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 0
     runAsGroup: 0
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 0
   ## Pod host paths
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -316,14 +324,21 @@ serviceAccount:
 ## Pod security context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled Fluent Bit pods' Security Context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Set Fluent Bit pod's Security Context fsGroup
 ##
 podSecurityContext:
   enabled: true
+  fsGroupChangePolicy: Always
+  sysctls: []
+  supplementalGroups: []
   fsGroup: 1001
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled Fluent Bit containers' Security Context
+## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set Fluent Bit containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set Fluent Bit container's Security Context runAsNonRoot
 ## @param containerSecurityContext.readOnlyRootFilesystem Set Fluent Bit container's Security Context runAsNonRoot
@@ -334,6 +349,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
+  seLinuxOptions: {}
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false

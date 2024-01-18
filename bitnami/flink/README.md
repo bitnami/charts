@@ -144,10 +144,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jobmanager.serviceAccount.create`                             | Enables ServiceAccount                                                                    | `true`           |
 | `jobmanager.serviceAccount.name`                               | ServiceAccount name                                                                       | `""`             |
 | `jobmanager.serviceAccount.annotations`                        | Annotations to add to all deployed objects                                                | `{}`             |
-| `jobmanager.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                          | `true`           |
+| `jobmanager.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                          | `false`          |
 | `jobmanager.podSecurityContext.enabled`                        | Enabled Apache Flink pods' Security Context                                               | `true`           |
+| `jobmanager.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                        | `Always`         |
+| `jobmanager.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                            | `[]`             |
+| `jobmanager.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `jobmanager.podSecurityContext.fsGroup`                        | Set Apache Flink pod's Security Context fsGroup                                           | `1001`           |
 | `jobmanager.containerSecurityContext.enabled`                  | Enabled Apache Flink containers' Security Context                                         | `true`           |
+| `jobmanager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
 | `jobmanager.containerSecurityContext.runAsUser`                | Set Apache Flink container's Security Context runAsUser                                   | `1001`           |
 | `jobmanager.containerSecurityContext.runAsNonRoot`             | Force the container to be run as non root                                                 | `true`           |
 | `jobmanager.containerSecurityContext.allowPrivilegeEscalation` | Allows privilege escalation                                                               | `false`          |
@@ -226,10 +230,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `taskmanager.serviceAccount.create`                             | Enables ServiceAccount                                                                    | `true`           |
 | `taskmanager.serviceAccount.name`                               | ServiceAccount name                                                                       | `""`             |
 | `taskmanager.serviceAccount.annotations`                        | Annotations to add to all deployed objects                                                | `{}`             |
-| `taskmanager.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                          | `true`           |
+| `taskmanager.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                          | `false`          |
 | `taskmanager.podSecurityContext.enabled`                        | Enabled Apache Flink pods' Security Context                                               | `true`           |
+| `taskmanager.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                        | `Always`         |
+| `taskmanager.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                            | `[]`             |
+| `taskmanager.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `taskmanager.podSecurityContext.fsGroup`                        | Set Apache Flink pod's Security Context fsGroup                                           | `1001`           |
 | `taskmanager.containerSecurityContext.enabled`                  | Enabled Apache Flink containers' Security Context                                         | `true`           |
+| `taskmanager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
 | `taskmanager.containerSecurityContext.runAsUser`                | Set Apache Flink container's Security Context runAsUser                                   | `1001`           |
 | `taskmanager.containerSecurityContext.runAsNonRoot`             | Force the container to be run as non root                                                 | `true`           |
 | `taskmanager.containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                       | `false`          |

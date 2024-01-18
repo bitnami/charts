@@ -92,8 +92,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.podLabels`                                         | Extra labels for Parse pods                                                                                              | `{}`                    |
 | `server.podAnnotations`                                    | Annotations for Parse pods                                                                                               | `{}`                    |
 | `server.podSecurityContext.enabled`                        | Enabled Parse Dashboard pods' Security Context                                                                           | `true`                  |
+| `server.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`                |
+| `server.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`                    |
+| `server.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                    |
 | `server.podSecurityContext.fsGroup`                        | Set Parse Dashboard pod's Security Context fsGroup                                                                       | `1001`                  |
 | `server.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`                  |
+| `server.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                    |
 | `server.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`                  |
 | `server.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`                  |
 | `server.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`                 |
@@ -180,8 +184,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.containerPorts.http`                               | Parse Dashboard HTTP container port                                                                                      | `4040`                            |
 | `dashboard.hostAliases`                                       | Deployment pod host aliases                                                                                              | `[]`                              |
 | `dashboard.podSecurityContext.enabled`                        | Enabled Parse Dashboard pods' Security Context                                                                           | `true`                            |
+| `dashboard.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`                          |
+| `dashboard.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`                              |
+| `dashboard.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                              |
 | `dashboard.podSecurityContext.fsGroup`                        | Set Parse Dashboard pod's Security Context fsGroup                                                                       | `1001`                            |
 | `dashboard.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`                            |
+| `dashboard.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                              |
 | `dashboard.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`                            |
 | `dashboard.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`                            |
 | `dashboard.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`                           |
@@ -302,7 +310,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                                      | `true`                     |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                                    | `""`                       |
 | `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)                                                                                          | `{}`                       |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                                            | `true`                     |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                                            | `false`                    |
 
 ### MongoDB&reg; Parameters
 

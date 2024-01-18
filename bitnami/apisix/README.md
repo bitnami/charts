@@ -117,8 +117,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataPlane.resources.limits`                                  | The resources limits for the APISIX containers                                                                           | `{}`             |
 | `dataPlane.resources.requests`                                | The requested resources for the APISIX containers                                                                        | `{}`             |
 | `dataPlane.podSecurityContext.enabled`                        | Enabled APISIX pods' Security Context                                                                                    | `true`           |
+| `dataPlane.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`         |
+| `dataPlane.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`             |
+| `dataPlane.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `dataPlane.podSecurityContext.fsGroup`                        | Set APISIX pod's Security Context fsGroup                                                                                | `1001`           |
 | `dataPlane.containerSecurityContext.enabled`                  | Enabled APISIX containers' Security Context                                                                              | `true`           |
+| `dataPlane.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
 | `dataPlane.containerSecurityContext.runAsUser`                | Set APISIX containers' Security Context runAsUser                                                                        | `1001`           |
 | `dataPlane.containerSecurityContext.runAsNonRoot`             | Set APISIX containers' Security Context runAsNonRoot                                                                     | `true`           |
 | `dataPlane.containerSecurityContext.readOnlyRootFilesystem`   | Set APISIX containers' Security Context runAsNonRoot                                                                     | `true`           |
@@ -283,8 +287,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controlPlane.resources.limits`                                  | The resources limits for the APISIX containers                                                                           | `{}`             |
 | `controlPlane.resources.requests`                                | The requested resources for the APISIX containers                                                                        | `{}`             |
 | `controlPlane.podSecurityContext.enabled`                        | Enabled APISIX pods' Security Context                                                                                    | `true`           |
+| `controlPlane.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`         |
+| `controlPlane.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`             |
+| `controlPlane.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `controlPlane.podSecurityContext.fsGroup`                        | Set APISIX pod's Security Context fsGroup                                                                                | `1001`           |
 | `controlPlane.containerSecurityContext.enabled`                  | Enabled APISIX containers' Security Context                                                                              | `true`           |
+| `controlPlane.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
 | `controlPlane.containerSecurityContext.runAsUser`                | Set APISIX containers' Security Context runAsUser                                                                        | `1001`           |
 | `controlPlane.containerSecurityContext.runAsNonRoot`             | Set APISIX containers' Security Context runAsNonRoot                                                                     | `true`           |
 | `controlPlane.containerSecurityContext.readOnlyRootFilesystem`   | Set APISIX containers' Security Context runAsNonRoot                                                                     | `true`           |
@@ -470,6 +478,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.sidecars`                                          | Add additional sidecar containers to the APISIX Dashboard pod(s)                                                                                            | `[]`                               |
 | `dashboard.initContainers`                                    | Add additional init containers to the APISIX Dashboard pod(s)                                                                                               | `[]`                               |
 | `dashboard.podSecurityContext.enabled`                        | Enabled Dashboard pods' Security Context                                                                                                                    | `true`                             |
+| `dashboard.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                          | `Always`                           |
+| `dashboard.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                              | `[]`                               |
+| `dashboard.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                 | `[]`                               |
 | `dashboard.podSecurityContext.fsGroup`                        | Set Dashboard pod's Security Context fsGroup                                                                                                                | `1001`                             |
 | `dashboard.containerPorts.http`                               | Dashboard http container port                                                                                                                               | `8080`                             |
 | `dashboard.containerPorts.https`                              | Dashboard https container port                                                                                                                              | `8443`                             |
@@ -497,6 +508,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.resources.limits`                                  | The resources limits for the Dashboard container                                                                                                            | `{}`                               |
 | `dashboard.resources.requests`                                | The requested resources for the Dashboard container                                                                                                         | `{}`                               |
 | `dashboard.containerSecurityContext.enabled`                  | Enabled Dashboard container' Security Context                                                                                                               | `true`                             |
+| `dashboard.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                            | `{}`                               |
 | `dashboard.containerSecurityContext.runAsUser`                | Set Dashboard container' Security Context runAsUser                                                                                                         | `1001`                             |
 | `dashboard.containerSecurityContext.runAsNonRoot`             | Set Dashboard container' Security Context runAsNonRoot                                                                                                      | `true`                             |
 | `dashboard.containerSecurityContext.privileged`               | Set Dashboard container' Security Context privileged                                                                                                        | `false`                            |
@@ -562,12 +574,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### APISIX Dashboard RBAC Parameters
 
-| Name                                                    | Description                                                      | Value  |
-| ------------------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `dashboard.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `dashboard.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `dashboard.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `dashboard.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                                    | Description                                                      | Value   |
+| ------------------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `dashboard.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `dashboard.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `dashboard.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `dashboard.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### APISIX Ingress Controller Parameters
 
@@ -607,8 +619,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingressController.resources.limits`                                  | The resources limits for the APISIX Ingress Controller containers                                                                                                    | `{}`                                        |
 | `ingressController.resources.requests`                                | The requested resources for the APISIX Ingress Controller containers                                                                                                 | `{}`                                        |
 | `ingressController.podSecurityContext.enabled`                        | Enabled APISIX Ingress Controller pods' Security Context                                                                                                             | `true`                                      |
+| `ingressController.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                   | `Always`                                    |
+| `ingressController.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                       | `[]`                                        |
+| `ingressController.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                          | `[]`                                        |
 | `ingressController.podSecurityContext.fsGroup`                        | Set APISIX Ingress Controller pod's Security Context fsGroup                                                                                                         | `1001`                                      |
 | `ingressController.containerSecurityContext.enabled`                  | Enabled APISIX Ingress Controller containers' Security Context                                                                                                       | `true`                                      |
+| `ingressController.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                     | `{}`                                        |
 | `ingressController.containerSecurityContext.runAsUser`                | Set APISIX Ingress Controller containers' Security Context runAsUser                                                                                                 | `1001`                                      |
 | `ingressController.containerSecurityContext.runAsNonRoot`             | Set APISIX Ingress Controller containers' Security Context runAsNonRoot                                                                                              | `true`                                      |
 | `ingressController.containerSecurityContext.privileged`               | Set APISIX Ingress Controller containers' Security Context privileged                                                                                                | `false`                                     |
@@ -741,6 +757,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `waitContainer.image.pullPolicy`                                  | Init container wait-container image pull policy                                                                               | `IfNotPresent`             |
 | `waitContainer.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                              | `[]`                       |
 | `waitContainer.containerSecurityContext.enabled`                  | Enabled APISIX containers' Security Context                                                                                   | `true`                     |
+| `waitContainer.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                              | `{}`                       |
 | `waitContainer.containerSecurityContext.runAsUser`                | Set APISIX containers' Security Context runAsUser                                                                             | `1001`                     |
 | `waitContainer.containerSecurityContext.runAsNonRoot`             | Set APISIX containers' Security Context runAsNonRoot                                                                          | `true`                     |
 | `waitContainer.containerSecurityContext.readOnlyRootFilesystem`   | Set APISIX containers' Security Context runAsNonRoot                                                                          | `true`                     |

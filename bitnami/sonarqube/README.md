@@ -163,8 +163,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.limits`                                  | The resources limits for the SonarQube&trade; containers                                       | `{}`             |
 | `resources.requests`                                | The requested resources for the SonarQube&trade; containers                                    | `{}`             |
 | `podSecurityContext.enabled`                        | Enabled SonarQube&trade; pods' Security Context                                                | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                             | `Always`         |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                 | `[]`             |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                    | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set SonarQube&trade; pod's Security Context fsGroup                                            | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                           | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                               | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                     | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                  | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                    | `false`          |
@@ -227,55 +231,58 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### SonarQube caCerts provisioning parameters
 
-| Name                                         | Description                                                                                                        | Value                      |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
-| `caCerts.enabled`                            | Enable the use of caCerts                                                                                          | `false`                    |
-| `caCerts.image.registry`                     | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
-| `caCerts.image.repository`                   | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `caCerts.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `caCerts.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
-| `caCerts.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
-| `caCerts.secret`                             | Name of the secret containing the certificates                                                                     | `ca-certs-secret`          |
-| `caCerts.resources.limits`                   | The resources limits for the init container                                                                        | `{}`                       |
-| `caCerts.resources.requests`                 | The requested resources for the init container                                                                     | `{}`                       |
-| `caCerts.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                        |
+| Name                                              | Description                                                                                                        | Value                      |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| `caCerts.enabled`                                 | Enable the use of caCerts                                                                                          | `false`                    |
+| `caCerts.image.registry`                          | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
+| `caCerts.image.repository`                        | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `caCerts.image.digest`                            | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `caCerts.image.pullPolicy`                        | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
+| `caCerts.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
+| `caCerts.secret`                                  | Name of the secret containing the certificates                                                                     | `ca-certs-secret`          |
+| `caCerts.resources.limits`                        | The resources limits for the init container                                                                        | `{}`                       |
+| `caCerts.resources.requests`                      | The requested resources for the init container                                                                     | `{}`                       |
+| `caCerts.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `{}`                       |
+| `caCerts.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                    | `0`                        |
 
 ### SonarQube plugin provisioning parameters
 
-| Name                                         | Description                                                                                                        | Value                      |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
-| `plugins.install`                            | List of plugin URLS to download and install                                                                        | `[]`                       |
-| `plugins.netrcCreds`                         | .netrc secret file with a key "netrc" to use basic auth while downloading plugins                                  | `""`                       |
-| `plugins.noCheckCertificate`                 | Set to true to not validate the server's certificate to download plugin                                            | `true`                     |
-| `plugins.image.registry`                     | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
-| `plugins.image.repository`                   | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `plugins.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `plugins.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
-| `plugins.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
-| `plugins.resources.limits`                   | The resources limits for the init container                                                                        | `{}`                       |
-| `plugins.resources.requests`                 | The requested resources for the init container                                                                     | `{}`                       |
-| `plugins.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                        |
+| Name                                              | Description                                                                                                        | Value                      |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| `plugins.install`                                 | List of plugin URLS to download and install                                                                        | `[]`                       |
+| `plugins.netrcCreds`                              | .netrc secret file with a key "netrc" to use basic auth while downloading plugins                                  | `""`                       |
+| `plugins.noCheckCertificate`                      | Set to true to not validate the server's certificate to download plugin                                            | `true`                     |
+| `plugins.image.registry`                          | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
+| `plugins.image.repository`                        | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `plugins.image.digest`                            | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `plugins.image.pullPolicy`                        | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
+| `plugins.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
+| `plugins.resources.limits`                        | The resources limits for the init container                                                                        | `{}`                       |
+| `plugins.resources.requests`                      | The requested resources for the init container                                                                     | `{}`                       |
+| `plugins.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `{}`                       |
+| `plugins.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                    | `0`                        |
 
 ### Persistence Parameters
 
-| Name                                                   | Description                                                                                                        | Value                      |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
-| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                                                  | `false`                    |
-| `persistence.storageClass`                             | Persistent Volume storage class                                                                                    | `""`                       |
-| `persistence.accessModes`                              | Persistent Volume access modes                                                                                     | `[]`                       |
-| `persistence.size`                                     | Persistent Volume size                                                                                             | `10Gi`                     |
-| `persistence.dataSource`                               | Custom PVC data source                                                                                             | `{}`                       |
-| `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                                                 | `""`                       |
-| `persistence.annotations`                              | Persistent Volume Claim annotations                                                                                | `{}`                       |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
-| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                        | `{}`                       |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                     | `{}`                       |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                        |
+| Name                                                        | Description                                                                                                        | Value                      |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| `persistence.enabled`                                       | Enable persistence using Persistent Volume Claims                                                                  | `false`                    |
+| `persistence.storageClass`                                  | Persistent Volume storage class                                                                                    | `""`                       |
+| `persistence.accessModes`                                   | Persistent Volume access modes                                                                                     | `[]`                       |
+| `persistence.size`                                          | Persistent Volume size                                                                                             | `10Gi`                     |
+| `persistence.dataSource`                                    | Custom PVC data source                                                                                             | `{}`                       |
+| `persistence.existingClaim`                                 | The name of an existing PVC to use for persistence                                                                 | `""`                       |
+| `persistence.annotations`                                   | Persistent Volume Claim annotations                                                                                | `{}`                       |
+| `volumePermissions.enabled`                                 | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
+| `volumePermissions.image.registry`                          | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                        | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                            | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`                        | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
+| `volumePermissions.resources.limits`                        | The resources limits for the init container                                                                        | `{}`                       |
+| `volumePermissions.resources.requests`                      | The requested resources for the init container                                                                     | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `{}`                       |
+| `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                    | `0`                        |
 
 ### Sysctl Image parameters
 
@@ -297,7 +304,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                  | `false` |
 | `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true`  |
 | `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `false` |
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`    |
 | `autoscaling.enabled`                         | Enable Horizontal POD autoscaling for SonarQube&trade;                                                              | `false` |
 | `autoscaling.minReplicas`                     | Minimum number of SonarQube&trade; replicas                                                                         | `1`     |
@@ -307,33 +314,34 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                                | Description                                                                                                  | Value                          |
-| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------ |
-| `metrics.jmx.enabled`                               | Whether or not to expose JMX metrics to Prometheus                                                           | `false`                        |
-| `metrics.jmx.image.registry`                        | JMX exporter image registry                                                                                  | `REGISTRY_NAME`                |
-| `metrics.jmx.image.repository`                      | JMX exporter image repository                                                                                | `REPOSITORY_NAME/jmx-exporter` |
-| `metrics.jmx.image.digest`                          | JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                           |
-| `metrics.jmx.image.pullPolicy`                      | JMX exporter image pull policy                                                                               | `IfNotPresent`                 |
-| `metrics.jmx.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                             | `[]`                           |
-| `metrics.jmx.containerPorts.metrics`                | JMX Exporter metrics container port                                                                          | `10445`                        |
-| `metrics.jmx.resources.limits`                      | The resources limits for the init container                                                                  | `{}`                           |
-| `metrics.jmx.resources.requests`                    | The requested resources for the init container                                                               | `{}`                           |
-| `metrics.jmx.containerSecurityContext.enabled`      | Enabled JMX Exporter containers' Security Context                                                            | `true`                         |
-| `metrics.jmx.containerSecurityContext.runAsUser`    | Set JMX Exporter containers' Security Context runAsUser                                                      | `1001`                         |
-| `metrics.jmx.containerSecurityContext.runAsNonRoot` | Set JMX Exporter containers' Security Context runAsNonRoot                                                   | `true`                         |
-| `metrics.jmx.whitelistObjectNames`                  | Allows setting which JMX objects you want to expose to via JMX stats to JMX Exporter                         | `[]`                           |
-| `metrics.jmx.configuration`                         | Configuration file for JMX exporter                                                                          | `""`                           |
-| `metrics.jmx.service.ports.metrics`                 | JMX Exporter Prometheus port                                                                                 | `10443`                        |
-| `metrics.jmx.service.annotations`                   | Annotations for the JMX Exporter Prometheus metrics service                                                  | `{}`                           |
-| `metrics.serviceMonitor.enabled`                    | if `true`, creates a Prometheus Operator ServiceMonitor (requires `metrics.jmx.enabled` to be `true`)        | `false`                        |
-| `metrics.serviceMonitor.namespace`                  | Namespace in which Prometheus is running                                                                     | `""`                           |
-| `metrics.serviceMonitor.labels`                     | Extra labels for the ServiceMonitor                                                                          | `{}`                           |
-| `metrics.serviceMonitor.jobLabel`                   | The name of the label on the target service to use as the job name in Prometheus                             | `""`                           |
-| `metrics.serviceMonitor.interval`                   | How frequently to scrape metrics                                                                             | `""`                           |
-| `metrics.serviceMonitor.scrapeTimeout`              | Timeout after which the scrape is ended                                                                      | `""`                           |
-| `metrics.serviceMonitor.metricRelabelings`          | Specify additional relabeling of metrics                                                                     | `[]`                           |
-| `metrics.serviceMonitor.relabelings`                | Specify general relabeling                                                                                   | `[]`                           |
-| `metrics.serviceMonitor.selector`                   | Prometheus instance selector labels                                                                          | `{}`                           |
+| Name                                                  | Description                                                                                                  | Value                          |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------ |
+| `metrics.jmx.enabled`                                 | Whether or not to expose JMX metrics to Prometheus                                                           | `false`                        |
+| `metrics.jmx.image.registry`                          | JMX exporter image registry                                                                                  | `REGISTRY_NAME`                |
+| `metrics.jmx.image.repository`                        | JMX exporter image repository                                                                                | `REPOSITORY_NAME/jmx-exporter` |
+| `metrics.jmx.image.digest`                            | JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                           |
+| `metrics.jmx.image.pullPolicy`                        | JMX exporter image pull policy                                                                               | `IfNotPresent`                 |
+| `metrics.jmx.image.pullSecrets`                       | Specify docker-registry secret names as an array                                                             | `[]`                           |
+| `metrics.jmx.containerPorts.metrics`                  | JMX Exporter metrics container port                                                                          | `10445`                        |
+| `metrics.jmx.resources.limits`                        | The resources limits for the init container                                                                  | `{}`                           |
+| `metrics.jmx.resources.requests`                      | The requested resources for the init container                                                               | `{}`                           |
+| `metrics.jmx.containerSecurityContext.enabled`        | Enabled JMX Exporter containers' Security Context                                                            | `true`                         |
+| `metrics.jmx.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                             | `{}`                           |
+| `metrics.jmx.containerSecurityContext.runAsUser`      | Set JMX Exporter containers' Security Context runAsUser                                                      | `1001`                         |
+| `metrics.jmx.containerSecurityContext.runAsNonRoot`   | Set JMX Exporter containers' Security Context runAsNonRoot                                                   | `true`                         |
+| `metrics.jmx.whitelistObjectNames`                    | Allows setting which JMX objects you want to expose to via JMX stats to JMX Exporter                         | `[]`                           |
+| `metrics.jmx.configuration`                           | Configuration file for JMX exporter                                                                          | `""`                           |
+| `metrics.jmx.service.ports.metrics`                   | JMX Exporter Prometheus port                                                                                 | `10443`                        |
+| `metrics.jmx.service.annotations`                     | Annotations for the JMX Exporter Prometheus metrics service                                                  | `{}`                           |
+| `metrics.serviceMonitor.enabled`                      | if `true`, creates a Prometheus Operator ServiceMonitor (requires `metrics.jmx.enabled` to be `true`)        | `false`                        |
+| `metrics.serviceMonitor.namespace`                    | Namespace in which Prometheus is running                                                                     | `""`                           |
+| `metrics.serviceMonitor.labels`                       | Extra labels for the ServiceMonitor                                                                          | `{}`                           |
+| `metrics.serviceMonitor.jobLabel`                     | The name of the label on the target service to use as the job name in Prometheus                             | `""`                           |
+| `metrics.serviceMonitor.interval`                     | How frequently to scrape metrics                                                                             | `""`                           |
+| `metrics.serviceMonitor.scrapeTimeout`                | Timeout after which the scrape is ended                                                                      | `""`                           |
+| `metrics.serviceMonitor.metricRelabelings`            | Specify additional relabeling of metrics                                                                     | `[]`                           |
+| `metrics.serviceMonitor.relabelings`                  | Specify general relabeling                                                                                   | `[]`                           |
+| `metrics.serviceMonitor.selector`                     | Prometheus instance selector labels                                                                          | `{}`                           |
 
 ### PostgreSQL subchart settings
 
