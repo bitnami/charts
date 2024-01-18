@@ -658,7 +658,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r94
     digest: ""
     ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
     ##
