@@ -728,8 +728,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                            | Description                                                                                            | Value   |
 | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------- |
 | `ingressController.rbac.create`                                 | Specifies whether RBAC resources should be created                                                     | `true`  |
-| `ingressController.rbac.accessSecretsInAllNamespaces`           | Allow accessing secrets in all namespaces                                                              | `true`  |
-| `ingressController.rbac.allowedSecretNamespaces`                | List of namespaces allowed to access secrets when accessSecretsInAllNamespaces=false                   | `[]`    |
 | `ingressController.rbac.rules`                                  | Custom RBAC rules to set                                                                               | `[]`    |
 | `ingressController.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                   | `true`  |
 | `ingressController.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                 | `""`    |
