@@ -1889,9 +1889,6 @@ metrics:
     ## @param metrics.kafka.automountServiceAccountToken Mount Service Account token in pod
     ##
     automountServiceAccountToken: false
-    ## @param metrics.kafka.automountServiceAccountToken Mount Service Account token in pod
-    ##
-    automountServiceAccountToken: false
     ## @param metrics.kafka.hostAliases Kafka exporter pods host aliases
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##

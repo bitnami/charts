@@ -39,6 +39,6 @@ controller:
   containerSecurityContext:
     enabled: true
     runAsUser: 1002
+  automountServiceAccountToken: true
 serviceAccount:
   create: true
-  automountServiceAccountToken: true
