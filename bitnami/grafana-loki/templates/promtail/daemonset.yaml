@@ -40,6 +40,7 @@ spec:
     spec:
       serviceAccountName: {{ template "grafana-loki.promtail.serviceAccountName" . }}
       {{- include "grafana-loki.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.promtail.automountServiceAccountToken }}
       {{- if .Values.promtail.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.promtail.hostAliases "context" $) | nindent 8 }}
       {{- end }}

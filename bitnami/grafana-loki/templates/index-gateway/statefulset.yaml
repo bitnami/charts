@@ -45,6 +45,7 @@ spec:
     spec:
       serviceAccountName: {{ template "grafana-loki.serviceAccountName" . }}
       {{- include "grafana-loki.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.indexGateway.automountServiceAccountToken }}
       {{- if .Values.indexGateway.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.hostAliases "context" $) | nindent 8 }}
       {{- end }}

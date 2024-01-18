@@ -39,6 +39,7 @@ spec:
         {{- end }}
     spec:
       {{- include "grafana-loki.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.gateway.automountServiceAccountToken }}
       {{- if .Values.gateway.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.gateway.hostAliases "context" $) | nindent 8 }}
       {{- end }}
