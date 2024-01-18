@@ -1,0 +1,490 @@
+# Source: https://raw.githubusercontent.com/vmware-tanzu/pinniped/v{version}/deploy/supervisor/config.supervisor.pinniped.dev_federationdomains.yaml
+# Version: 0.28.0
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.13.0
+  name: federationdomains.config.supervisor.pinniped.dev
+spec:
+  group: config.supervisor.pinniped.dev
+  names:
+    categories:
+    - pinniped
+    kind: FederationDomain
+    listKind: FederationDomainList
+    plural: federationdomains
+    singular: federationdomain
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .spec.issuer
+      name: Issuer
+      type: string
+    - jsonPath: .status.phase
+      name: Status
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: FederationDomain describes the configuration of an OIDC provider.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: Spec of the OIDC provider.
+            properties:
+              identityProviders:
+                description: "IdentityProviders is the list of identity providers
+                  available for use by this FederationDomain. \n An identity provider
+                  CR (e.g. OIDCIdentityProvider or LDAPIdentityProvider) describes
+                  how to connect to a server, how to talk in a specific protocol for
+                  authentication, and how to use the schema of that server/protocol
+                  to extract a normalized user identity. Normalized user identities
+                  include a username and a list of group names. In contrast, IdentityProviders
+                  describes how to use that normalized identity in those Kubernetes
+                  clusters which belong to this FederationDomain. Each entry in IdentityProviders
+                  can be configured with arbitrary transformations on that normalized
+                  identity. For example, a transformation can add a prefix to all
+                  usernames to help avoid accidental conflicts when multiple identity
+                  providers have different users with the same username (e.g. \"idp1:ryan\"
+                  versus \"idp2:ryan\"). Each entry in IdentityProviders can also
+                  implement arbitrary authentication rejection policies. Even though
+                  a user was able to authenticate with the identity provider, a policy
+                  can disallow the authentication to the Kubernetes clusters that
+                  belong to this FederationDomain. For example, a policy could disallow
+                  the authentication unless the user belongs to a specific group in
+                  the identity provider. \n For backwards compatibility with versions
+                  of Pinniped which predate support for multiple identity providers,
+                  an empty IdentityProviders list will cause the FederationDomain
+                  to use all available identity providers which exist in the same
+                  namespace, but also to reject all authentication requests when there
+                  is more than one identity provider currently defined. In this backwards
+                  compatibility mode, the name of the identity provider resource (e.g.
+                  the Name of an OIDCIdentityProvider resource) will be used as the
+                  name of the identity provider in this FederationDomain. This mode
+                  is provided to make upgrading from older versions easier. However,
+                  instead of relying on this backwards compatibility mode, please
+                  consider this mode to be deprecated and please instead explicitly
+                  list the identity provider using this IdentityProviders field."
+                items:
+                  description: FederationDomainIdentityProvider describes how an identity
+                    provider is made available in this FederationDomain.
+                  properties:
+                    displayName:
+                      description: DisplayName is the name of this identity provider
+                        as it will appear to clients. This name ends up in the kubeconfig
+                        of end users, so changing the name of an identity provider
+                        that is in use by end users will be a disruptive change for
+                        those users.
+                      minLength: 1
+                      type: string
+                    objectRef:
+                      description: ObjectRef is a reference to a Pinniped identity
+                        provider resource. A valid reference is required. If the reference
+                        cannot be resolved then the identity provider will not be
+                        made available. Must refer to a resource of one of the Pinniped
+                        identity provider types, e.g. OIDCIdentityProvider, LDAPIdentityProvider,
+                        ActiveDirectoryIdentityProvider.
+                      properties:
+                        apiGroup:
+                          description: APIGroup is the group for the resource being
+                            referenced. If APIGroup is not specified, the specified
+                            Kind must be in the core API group. For any other third-party
+                            types, APIGroup is required.
+                          type: string
+                        kind:
+                          description: Kind is the type of resource being referenced
+                          type: string
+                        name:
+                          description: Name is the name of resource being referenced
+                          type: string
+                      required:
+                      - kind
+                      - name
+                      type: object
+                      x-kubernetes-map-type: atomic
+                    transforms:
+                      description: Transforms is an optional way to specify transformations
+                        to be applied during user authentication and session refresh.
+                      properties:
+                        constants:
+                          description: Constants defines constant variables and their
+                            values which will be made available to the transform expressions.
+                          items:
+                            description: FederationDomainTransformsConstant defines
+                              a constant variable and its value which will be made
+                              available to the transform expressions. This is a union
+                              type, and Type is the discriminator field.
+                            properties:
+                              name:
+                                description: Name determines the name of the constant.
+                                  It must be a valid identifier name.
+                                maxLength: 64
+                                minLength: 1
+                                pattern: ^[a-zA-Z][_a-zA-Z0-9]*$
+                                type: string
+                              stringListValue:
+                                description: StringListValue should hold the value
+                                  when Type is "stringList", and is otherwise ignored.
+                                items:
+                                  type: string
+                                type: array
+                              stringValue:
+                                description: StringValue should hold the value when
+                                  Type is "string", and is otherwise ignored.
+                                type: string
+                              type:
+                                description: Type determines the type of the constant,
+                                  and indicates which other field should be non-empty.
+                                enum:
+                                - string
+                                - stringList
+                                type: string
+                            required:
+                            - name
+                            - type
+                            type: object
+                          type: array
+                          x-kubernetes-list-map-keys:
+                          - name
+                          x-kubernetes-list-type: map
+                        examples:
+                          description: Examples can optionally be used to ensure that
+                            the sequence of transformation expressions are working
+                            as expected. Examples define sample input identities which
+                            are then run through the expression list, and the results
+                            are compared to the expected results. If any example in
+                            this list fails, then this identity provider will not
+                            be available for use within this FederationDomain, and
+                            the error(s) will be added to the FederationDomain status.
+                            This can be used to help guard against programming mistakes
+                            in the expressions, and also act as living documentation
+                            for other administrators to better understand the expressions.
+                          items:
+                            description: FederationDomainTransformsExample defines
+                              a transform example.
+                            properties:
+                              expects:
+                                description: Expects is the expected output of the
+                                  entire sequence of transforms when they are run
+                                  against the input Username and Groups.
+                                properties:
+                                  groups:
+                                    description: Groups is the expected list of group
+                                      names after the transformations have been applied.
+                                    items:
+                                      type: string
+                                    type: array
+                                  message:
+                                    description: Message is the expected error message
+                                      of the transforms. When Rejected is true, then
+                                      Message is the expected message for the policy
+                                      which rejected the authentication attempt. When
+                                      Rejected is true and Message is blank, then
+                                      Message will be treated as the default error
+                                      message for authentication attempts which are
+                                      rejected by a policy. When Rejected is false,
+                                      then Message is the expected error message for
+                                      some other non-policy transformation error,
+                                      such as a runtime error. When Rejected is false,
+                                      there is no default expected Message.
+                                    type: string
+                                  rejected:
+                                    description: Rejected is a boolean that indicates
+                                      whether authentication is expected to be rejected
+                                      by a policy expression after the transformations
+                                      have been applied. True means that it is expected
+                                      that the authentication would be rejected. The
+                                      default value of false means that it is expected
+                                      that the authentication would not be rejected
+                                      by any policy expression.
+                                    type: boolean
+                                  username:
+                                    description: Username is the expected username
+                                      after the transformations have been applied.
+                                    type: string
+                                type: object
+                              groups:
+                                description: Groups is the input list of group names.
+                                items:
+                                  type: string
+                                type: array
+                              username:
+                                description: Username is the input username.
+                                minLength: 1
+                                type: string
+                            required:
+                            - expects
+                            - username
+                            type: object
+                          type: array
+                        expressions:
+                          description: "Expressions are an optional list of transforms
+                            and policies to be executed in the order given during
+                            every authentication attempt, including during every session
+                            refresh. Each is a CEL expression. It may use the basic
+                            CEL language as defined in https://github.com/google/cel-spec/blob/master/doc/langdef.md
+                            plus the CEL string extensions defined in https://github.com/google/cel-go/tree/master/ext#strings.
+                            \n The username and groups extracted from the identity
+                            provider, and the constants defined in this CR, are available
+                            as variables in all expressions. The username is provided
+                            via a variable called `username` and the list of group
+                            names is provided via a variable called `groups` (which
+                            may be an empty list). Each user-provided constants is
+                            provided via a variable named `strConst.varName` for string
+                            constants and `strListConst.varName` for string list constants.
+                            \n The only allowed types for expressions are currently
+                            policy/v1, username/v1, and groups/v1. Each policy/v1
+                            must return a boolean, and when it returns false, no more
+                            expressions from the list are evaluated and the authentication
+                            attempt is rejected. Transformations of type policy/v1
+                            do not return usernames or group names, and therefore
+                            cannot change the username or group names. Each username/v1
+                            transform must return the new username (a string), which
+                            can be the same as the old username. Transformations of
+                            type username/v1 do not return group names, and therefore
+                            cannot change the group names. Each groups/v1 transform
+                            must return the new groups list (list of strings), which
+                            can be the same as the old groups list. Transformations
+                            of type groups/v1 do not return usernames, and therefore
+                            cannot change the usernames. After each expression, the
+                            new (potentially changed) username or groups get passed
+                            to the following expression. \n Any compilation or static
+                            type-checking failure of any expression will cause an
+                            error status on the FederationDomain. During an authentication
+                            attempt, any unexpected runtime evaluation errors (e.g.
+                            division by zero) cause the authentication attempt to
+                            fail. When all expressions evaluate successfully, then
+                            the (potentially changed) username and group names have
+                            been decided for that authentication attempt."
+                          items:
+                            description: FederationDomainTransformsExpression defines
+                              a transform expression.
+                            properties:
+                              expression:
+                                description: Expression is a CEL expression that will
+                                  be evaluated based on the Type during an authentication.
+                                minLength: 1
+                                type: string
+                              message:
+                                description: Message is only used when Type is policy/v1.
+                                  It defines an error message to be used when the
+                                  policy rejects an authentication attempt. When empty,
+                                  a default message will be used.
+                                type: string
+                              type:
+                                description: Type determines the type of the expression.
+                                  It must be one of the supported types.
+                                enum:
+                                - policy/v1
+                                - username/v1
+                                - groups/v1
+                                type: string
+                            required:
+                            - expression
+                            - type
+                            type: object
+                          type: array
+                      type: object
+                  required:
+                  - displayName
+                  - objectRef
+                  type: object
+                type: array
+              issuer:
+                description: "Issuer is the OIDC Provider's issuer, per the OIDC Discovery
+                  Metadata document, as well as the identifier that it will use for
+                  the iss claim in issued JWTs. This field will also be used as the
+                  base URL for any endpoints used by the OIDC Provider (e.g., if your
+                  issuer is https://example.com/foo, then your authorization endpoint
+                  will look like https://example.com/foo/some/path/to/auth/endpoint).
+                  \n See https://openid.net/specs/openid-connect-discovery-1_0.html#rfc.section.3
+                  for more information."
+                minLength: 1
+                type: string
+              tls:
+                description: TLS specifies a secret which will contain Transport Layer
+                  Security (TLS) configuration for the FederationDomain.
+                properties:
+                  secretName:
+                    description: "SecretName is an optional name of a Secret in the
+                      same namespace, of type `kubernetes.io/tls`, which contains
+                      the TLS serving certificate for the HTTPS endpoints served by
+                      this FederationDomain. When provided, the TLS Secret named here
+                      must contain keys named `tls.crt` and `tls.key` that contain
+                      the certificate and private key to use for TLS. \n Server Name
+                      Indication (SNI) is an extension to the Transport Layer Security
+                      (TLS) supported by all major browsers. \n SecretName is required
+                      if you would like to use different TLS certificates for issuers
+                      of different hostnames. SNI requests do not include port numbers,
+                      so all issuers with the same DNS hostname must use the same
+                      SecretName value even if they have different port numbers. \n
+                      SecretName is not required when you would like to use only the
+                      HTTP endpoints (e.g. when the HTTP listener is configured to
+                      listen on loopback interfaces or UNIX domain sockets for traffic
+                      from a service mesh sidecar). It is also not required when you
+                      would like all requests to this OIDC Provider's HTTPS endpoints
+                      to use the default TLS certificate, which is configured elsewhere.
+                      \n When your Issuer URL's host is an IP address, then this field
+                      is ignored. SNI does not work for IP addresses."
+                    type: string
+                type: object
+            required:
+            - issuer
+            type: object
+          status:
+            description: Status of the OIDC provider.
+            properties:
+              conditions:
+                description: Conditions represent the observations of an FederationDomain's
+                  current state.
+                items:
+                  description: "Condition contains details for one aspect of the current
+                    state of this API Resource. --- This struct is intended for direct
+                    use as an array at the field path .status.conditions.  For example,
+                    \n type FooStatus struct{ // Represents the observations of a
+                    foo's current state. // Known .status.conditions.type are: \"Available\",
+                    \"Progressing\", and \"Degraded\" // +patchMergeKey=type // +patchStrategy=merge
+                    // +listType=map // +listMapKey=type Conditions []metav1.Condition
+                    `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\"
+                    protobuf:\"bytes,1,rep,name=conditions\"` \n // other fields }"
+                  properties:
+                    lastTransitionTime:
+                      description: lastTransitionTime is the last time the condition
+                        transitioned from one status to another. This should be when
+                        the underlying condition changed.  If that is not known, then
+                        using the time when the API field changed is acceptable.
+                      format: date-time
+                      type: string
+                    message:
+                      description: message is a human readable message indicating
+                        details about the transition. This may be an empty string.
+                      maxLength: 32768
+                      type: string
+                    observedGeneration:
+                      description: observedGeneration represents the .metadata.generation
+                        that the condition was set based upon. For instance, if .metadata.generation
+                        is currently 12, but the .status.conditions[x].observedGeneration
+                        is 9, the condition is out of date with respect to the current
+                        state of the instance.
+                      format: int64
+                      minimum: 0
+                      type: integer
+                    reason:
+                      description: reason contains a programmatic identifier indicating
+                        the reason for the condition's last transition. Producers
+                        of specific condition types may define expected values and
+                        meanings for this field, and whether the values are considered
+                        a guaranteed API. The value should be a CamelCase string.
+                        This field may not be empty.
+                      maxLength: 1024
+                      minLength: 1
+                      pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                      type: string
+                    status:
+                      description: status of the condition, one of True, False, Unknown.
+                      enum:
+                      - "True"
+                      - "False"
+                      - Unknown
+                      type: string
+                    type:
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
+                        --- Many .condition.type values are consistent across resources
+                        like Available, but because arbitrary conditions can be useful
+                        (see .node.status.conditions), the ability to deconflict is
+                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      maxLength: 316
+                      pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - message
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+              phase:
+                default: Pending
+                description: Phase summarizes the overall status of the FederationDomain.
+                enum:
+                - Pending
+                - Ready
+                - Error
+                type: string
+              secrets:
+                description: Secrets contains information about this OIDC Provider's
+                  secrets.
+                properties:
+                  jwks:
+                    description: JWKS holds the name of the corev1.Secret in which
+                      this OIDC Provider's signing/verification keys are stored. If
+                      it is empty, then the signing/verification keys are either unknown
+                      or they don't exist.
+                    properties:
+                      name:
+                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                          TODO: Add other useful fields. apiVersion, kind, uid?'
+                        type: string
+                    type: object
+                    x-kubernetes-map-type: atomic
+                  stateEncryptionKey:
+                    description: StateSigningKey holds the name of the corev1.Secret
+                      in which this OIDC Provider's key for encrypting state parameters
+                      is stored.
+                    properties:
+                      name:
+                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                          TODO: Add other useful fields. apiVersion, kind, uid?'
+                        type: string
+                    type: object
+                    x-kubernetes-map-type: atomic
+                  stateSigningKey:
+                    description: StateSigningKey holds the name of the corev1.Secret
+                      in which this OIDC Provider's key for signing state parameters
+                      is stored.
+                    properties:
+                      name:
+                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                          TODO: Add other useful fields. apiVersion, kind, uid?'
+                        type: string
+                    type: object
+                    x-kubernetes-map-type: atomic
+                  tokenSigningKey:
+                    description: TokenSigningKey holds the name of the corev1.Secret
+                      in which this OIDC Provider's key for signing tokens is stored.
+                    properties:
+                      name:
+                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                          TODO: Add other useful fields. apiVersion, kind, uid?'
+                        type: string
+                    type: object
+                    x-kubernetes-map-type: atomic
+                type: object
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
