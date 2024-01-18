@@ -1548,7 +1548,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/apisix-dashboard
-    tag: 3.0.1-debian-11-r140
+    tag: 3.0.1-debian-11-r141
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2236,7 +2236,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/apisix-ingress-controller
-    tag: 1.7.1-debian-11-r1
+    tag: 1.7.1-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2786,12 +2786,6 @@ ingressController:
     ## @param ingressController.rbac.create Specifies whether RBAC resources should be created
     ##
     create: true
-    ## @param ingressController.rbac.accessSecretsInAllNamespaces Allow accessing secrets in all namespaces
-    ##
-    accessSecretsInAllNamespaces: true
-    ## @param ingressController.rbac.allowedSecretNamespaces List of namespaces allowed to access secrets when accessSecretsInAllNamespaces=false
-    ##
-    allowedSecretNamespaces: []
     ## @param ingressController.rbac.rules Custom RBAC rules to set
     ## e.g:
     ## rules:
@@ -2889,7 +2883,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r94
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
