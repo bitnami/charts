@@ -24,8 +24,6 @@ This chart bootstraps a [HAProxy](https://github.com/haproxytech/haproxy) Deploy
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/haproxy/get-started/).
-
 ## Prerequisites
 
 - Kubernetes 1.23+

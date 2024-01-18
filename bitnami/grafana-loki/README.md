@@ -24,8 +24,6 @@ This chart bootstraps a [Grafana Loki](https://github.com/grafana/loki) Deployme
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/grafana-loki/get-started/).
-
 ## Prerequisites
 
 - Kubernetes 1.23+

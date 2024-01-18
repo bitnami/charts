@@ -24,8 +24,6 @@ This chart bootstraps an [Mastodon](https://www.mastodon.com/) Deployment in a [
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/apps/mastodon/get-started/).
-
 ## Prerequisites
 
 - Kubernetes 1.23+

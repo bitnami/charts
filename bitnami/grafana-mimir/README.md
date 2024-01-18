@@ -24,8 +24,6 @@ This chart bootstraps a [Grafana Mimir](https://github.com/grafana/mimir) Deploy
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/grafana-mimir/get-started/).
-
 ## Prerequisites
 
 - Kubernetes 1.23+
