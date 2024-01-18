@@ -39,6 +39,7 @@ spec:
       {{- if .Values.keycloakConfigCli.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.keycloakConfigCli.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.keycloakConfigCli.automountServiceAccountToken }}
       {{- if .Values.keycloakConfigCli.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.hostAliases "context" $) | nindent 8 }}
       {{- end }}
