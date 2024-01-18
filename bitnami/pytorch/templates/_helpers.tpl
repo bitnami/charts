@@ -61,6 +61,17 @@ Return the proper securityContext when enabled by the deprecated or new params
 {{- end -}}
 
 {{/*
+ Create the name of the service account to use
+ */}}
+{{- define "pytorch.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "pytorch.validateValues" -}}
