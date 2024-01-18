@@ -1,0 +1,222 @@
+# Source: https://raw.githubusercontent.com/vmware-tanzu/pinniped/v{version}/deploy/supervisor/config.supervisor.pinniped.dev_oidcclients.yaml
+# Version: 0.28.0
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.13.0
+  name: oidcclients.config.supervisor.pinniped.dev
+spec:
+  group: config.supervisor.pinniped.dev
+  names:
+    categories:
+    - pinniped
+    kind: OIDCClient
+    listKind: OIDCClientList
+    plural: oidcclients
+    singular: oidcclient
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .spec.allowedScopes[?(@ == "pinniped:request-audience")]
+      name: Privileged Scopes
+      type: string
+    - jsonPath: .status.totalClientSecrets
+      name: Client Secrets
+      type: integer
+    - jsonPath: .status.phase
+      name: Status
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: OIDCClient describes the configuration of an OIDC client.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: Spec of the OIDC client.
+            properties:
+              allowedGrantTypes:
+                description: "allowedGrantTypes is a list of the allowed grant_type
+                  param values that should be accepted during OIDC flows with this
+                  client. \n Must only contain the following values: - authorization_code:
+                  allows the client to perform the authorization code grant flow,
+                  i.e. allows the webapp to authenticate users. This grant must always
+                  be listed. - refresh_token: allows the client to perform refresh
+                  grants for the user to extend the user's session. This grant must
+                  be listed if allowedScopes lists offline_access. - urn:ietf:params:oauth:grant-type:token-exchange:
+                  allows the client to perform RFC8693 token exchange, which is a
+                  step in the process to be able to get a cluster credential for the
+                  user. This grant must be listed if allowedScopes lists pinniped:request-audience."
+                items:
+                  enum:
+                  - authorization_code
+                  - refresh_token
+                  - urn:ietf:params:oauth:grant-type:token-exchange
+                  type: string
+                minItems: 1
+                type: array
+                x-kubernetes-list-type: set
+              allowedRedirectURIs:
+                description: allowedRedirectURIs is a list of the allowed redirect_uri
+                  param values that should be accepted during OIDC flows with this
+                  client. Any other uris will be rejected. Must be a URI with the
+                  https scheme, unless the hostname is 127.0.0.1 or ::1 which may
+                  use the http scheme. Port numbers are not required for 127.0.0.1
+                  or ::1 and are ignored when checking for a matching redirect_uri.
+                items:
+                  pattern: ^https://.+|^http://(127\.0\.0\.1|\[::1\])(:\d+)?/
+                  type: string
+                minItems: 1
+                type: array
+                x-kubernetes-list-type: set
+              allowedScopes:
+                description: "allowedScopes is a list of the allowed scopes param
+                  values that should be accepted during OIDC flows with this client.
+                  \n Must only contain the following values: - openid: The client
+                  is allowed to request ID tokens. ID tokens only include the required
+                  claims by default (iss, sub, aud, exp, iat). This scope must always
+                  be listed. - offline_access: The client is allowed to request an
+                  initial refresh token during the authorization code grant flow.
+                  This scope must be listed if allowedGrantTypes lists refresh_token.
+                  - pinniped:request-audience: The client is allowed to request a
+                  new audience value during a RFC8693 token exchange, which is a step
+                  in the process to be able to get a cluster credential for the user.
+                  openid, username and groups scopes must be listed when this scope
+                  is present. This scope must be listed if allowedGrantTypes lists
+                  urn:ietf:params:oauth:grant-type:token-exchange. - username: The
+                  client is allowed to request that ID tokens contain the user's username.
+                  Without the username scope being requested and allowed, the ID token
+                  will not contain the user's username. - groups: The client is allowed
+                  to request that ID tokens contain the user's group membership, if
+                  their group membership is discoverable by the Supervisor. Without
+                  the groups scope being requested and allowed, the ID token will
+                  not contain groups."
+                items:
+                  enum:
+                  - openid
+                  - offline_access
+                  - username
+                  - groups
+                  - pinniped:request-audience
+                  type: string
+                minItems: 1
+                type: array
+                x-kubernetes-list-type: set
+            required:
+            - allowedGrantTypes
+            - allowedRedirectURIs
+            - allowedScopes
+            type: object
+          status:
+            description: Status of the OIDC client.
+            properties:
+              conditions:
+                description: conditions represent the observations of an OIDCClient's
+                  current state.
+                items:
+                  description: "Condition contains details for one aspect of the current
+                    state of this API Resource. --- This struct is intended for direct
+                    use as an array at the field path .status.conditions.  For example,
+                    \n type FooStatus struct{ // Represents the observations of a
+                    foo's current state. // Known .status.conditions.type are: \"Available\",
+                    \"Progressing\", and \"Degraded\" // +patchMergeKey=type // +patchStrategy=merge
+                    // +listType=map // +listMapKey=type Conditions []metav1.Condition
+                    `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\"
+                    protobuf:\"bytes,1,rep,name=conditions\"` \n // other fields }"
+                  properties:
+                    lastTransitionTime:
+                      description: lastTransitionTime is the last time the condition
+                        transitioned from one status to another. This should be when
+                        the underlying condition changed.  If that is not known, then
+                        using the time when the API field changed is acceptable.
+                      format: date-time
+                      type: string
+                    message:
+                      description: message is a human readable message indicating
+                        details about the transition. This may be an empty string.
+                      maxLength: 32768
+                      type: string
+                    observedGeneration:
+                      description: observedGeneration represents the .metadata.generation
+                        that the condition was set based upon. For instance, if .metadata.generation
+                        is currently 12, but the .status.conditions[x].observedGeneration
+                        is 9, the condition is out of date with respect to the current
+                        state of the instance.
+                      format: int64
+                      minimum: 0
+                      type: integer
+                    reason:
+                      description: reason contains a programmatic identifier indicating
+                        the reason for the condition's last transition. Producers
+                        of specific condition types may define expected values and
+                        meanings for this field, and whether the values are considered
+                        a guaranteed API. The value should be a CamelCase string.
+                        This field may not be empty.
+                      maxLength: 1024
+                      minLength: 1
+                      pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                      type: string
+                    status:
+                      description: status of the condition, one of True, False, Unknown.
+                      enum:
+                      - "True"
+                      - "False"
+                      - Unknown
+                      type: string
+                    type:
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
+                        --- Many .condition.type values are consistent across resources
+                        like Available, but because arbitrary conditions can be useful
+                        (see .node.status.conditions), the ability to deconflict is
+                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      maxLength: 316
+                      pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - message
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+              phase:
+                default: Pending
+                description: phase summarizes the overall status of the OIDCClient.
+                enum:
+                - Pending
+                - Ready
+                - Error
+                type: string
+              totalClientSecrets:
+                description: totalClientSecrets is the current number of client secrets
+                  that are detected for this OIDCClient.
+                format: int32
+                type: integer
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
