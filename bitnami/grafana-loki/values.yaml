@@ -606,7 +606,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r3
+    tag: 1.25.3-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3402,7 +3402,7 @@ promtail:
   image:
     registry: docker.io
     repository: bitnami/promtail
-    tag: 2.9.3-debian-11-r0
+    tag: 2.9.3-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3831,7 +3831,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r94
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3958,7 +3958,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.22-debian-11-r2
+    tag: 1.6.23-debian-11-r0
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -3999,7 +3999,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.22-debian-11-r2
+    tag: 1.6.23-debian-11-r0
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -4041,7 +4041,7 @@ memcachedindexqueries:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.22-debian-11-r2
+    tag: 1.6.23-debian-11-r0
     digest: ""
   ## @param memcachedindexqueries.architecture Memcached architecture
   ##
@@ -4082,7 +4082,7 @@ memcachedindexwrites:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.22-debian-11-r2
+    tag: 1.6.23-debian-11-r0
     digest: ""
   ## @param memcachedindexwrites.architecture Memcached architecture
   ##
