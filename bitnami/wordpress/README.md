@@ -147,6 +147,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `terminationGracePeriodSeconds`                     | In seconds, time given to the WordPress pod to terminate gracefully                                                      | `""`             |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`             |
 | `priorityClassName`                                 | Name of the existing priority class to be used by WordPress pods, priority class needs to be created beforehand          | `""`             |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `hostAliases`                                       | WordPress pod host aliases                                                                                               | `[]`             |
 | `extraVolumes`                                      | Optionally specify extra list of additional volumes for WordPress pods                                                   | `[]`             |
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for WordPress container(s)                                      | `[]`             |
