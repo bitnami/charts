@@ -928,9 +928,6 @@ metrics:
   ## @param metrics.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
-  ## @param metrics.automountServiceAccountToken Mount Service Account token in pod
-  ##
-  automountServiceAccountToken: false
   ## @param metrics.hostAliases Solr Prometheus exporter pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
