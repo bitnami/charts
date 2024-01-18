@@ -34,6 +34,7 @@ spec:
         app.kubernetes.io/component: envoy
     spec:
       {{- include "common.images.pullSecrets" ( dict "images" (list .Values.contour.image .Values.envoy.image) "global" .Values.global) | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.envoy.automountServiceAccountToken }}
       {{- if .Values.envoy.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.hostAliases "context" $) | nindent 8 }}
       {{- end }}
