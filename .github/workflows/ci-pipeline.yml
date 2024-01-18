@@ -165,10 +165,8 @@ jobs:
             # Automatically update CRDs that use the '# Source' header
             source_url_tpl="$(head -n 1 $file | grep -E "^# ?Source: ?" | sed -E 's|^# ?Source: ?||' || true)"
             if [[ -n "$source_url_tpl" ]]; then
-              # Replace version placeholder
-              if [[ "$source_url_tpl" =~ "{version}" ]]; then
-                source_url=$(echo "$source_url_tpl" | sed "s/{version}/${APP_VERSION}/")
-              fi
+              # Replace version placeholder, if present
+              source_url=$(echo "$source_url_tpl" | sed "s/{version}/${APP_VERSION}/")
               # Validate the second line of the CRD file includes the version of the CRD
               crd_version="$(head -n 2 $file | tail -n 1 | grep -E "^# ?Version: ?" | sed -E 's|^# ?Version: ?||' || true)"
               if [[ -z "$crd_version" ]]; then
