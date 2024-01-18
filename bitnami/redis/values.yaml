@@ -1830,7 +1830,7 @@ metrics:
     ##
     additionalEndpoints: []
       # uncomment in order to scrape sentinel metrics
-      # - port: http-metrics
+      # - port: metrics
       #   interval: 30s
       #   path: /scrape
       #   params:
