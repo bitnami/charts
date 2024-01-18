@@ -780,9 +780,6 @@ migration:
   ## @param migration.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: true
-  ## @param migration.automountServiceAccountToken Mount Service Account token in pod
-  ##
-  automountServiceAccountToken: true
   ## @param migration.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
