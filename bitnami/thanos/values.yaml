@@ -411,6 +411,9 @@ query:
   ## dnsPolicy: ClusterFirstWithHostNet
   ##
   dnsPolicy: ""
+  ## @param query.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param query.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -603,7 +606,7 @@ query:
   ## Autoscaling parameters
   ## @param query.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the deployment
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   ## ServiceAccount configuration
   ## @param query.serviceAccount.create Specifies whether a ServiceAccount should be created
   ## @param query.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
@@ -1098,6 +1101,9 @@ queryFrontend:
   ## dnsPolicy: ClusterFirstWithHostNet
   ##
   dnsPolicy: ""
+  ## @param queryFrontend.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param queryFrontend.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1167,7 +1173,7 @@ queryFrontend:
     labelSelectorsOverride: {}
   ## @param queryFrontend.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the deployment
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   ## ServiceAccount configuration
   ## @param queryFrontend.serviceAccount.create Specifies whether a ServiceAccount should be created
   ## @param queryFrontend.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
@@ -1561,6 +1567,9 @@ bucketweb:
   ## dnsPolicy: ClusterFirstWithHostNet
   ##
   dnsPolicy: ""
+  ## @param bucketweb.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param bucketweb.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1628,7 +1637,7 @@ bucketweb:
     labelSelectorsOverride: {}
   ## @param bucketweb.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the deployment
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   ## ServiceAccount configuration
   ## @param bucketweb.serviceAccount.create Specifies whether a ServiceAccount should be created
   ## @param bucketweb.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
@@ -2026,6 +2035,9 @@ compactor:
   ## dnsPolicy: ClusterFirstWithHostNet
   ##
   dnsPolicy: ""
+  ## @param compactor.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param compactor.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2095,7 +2107,7 @@ compactor:
     labelSelectorsOverride: {}
   ## @param compactor.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the deployment
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   ## ServiceAccount configuration
   ## @param compactor.serviceAccount.create Specifies whether a ServiceAccount should be created
   ## @param compactor.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
@@ -2507,6 +2519,9 @@ storegateway:
   ## dnsPolicy: ClusterFirstWithHostNet
   ##
   dnsPolicy: ""
+  ## @param storegateway.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param storegateway.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2619,7 +2634,7 @@ storegateway:
     existingClaim: ""
   ## @param storegateway.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the sts
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   ## ServiceAccount configuration
   ## @param storegateway.serviceAccount.create Specifies whether a ServiceAccount should be created
   ## @param storegateway.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
@@ -3166,6 +3181,9 @@ ruler:
   ## dnsPolicy: ClusterFirstWithHostNet
   ##
   dnsPolicy: ""
+  ## @param ruler.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param ruler.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -3275,7 +3293,7 @@ ruler:
     existingClaim: ""
   ## @param ruler.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the sts
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   ## ServiceAccount configuration
   ## @param ruler.serviceAccount.create Specifies whether a ServiceAccount should be created
   ## @param ruler.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
@@ -3694,6 +3712,9 @@ receive:
   ## dnsPolicy: ClusterFirstWithHostNet
   ##
   dnsPolicy: ""
+  ## @param receive.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param receive.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -3779,7 +3800,7 @@ receive:
       annotations: {}
   ## @param receive.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the sts
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   ## ServiceAccount configuration
   ## @param receive.serviceAccount.create Specifies whether a ServiceAccount should be created
   ## @param receive.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
@@ -4176,6 +4197,9 @@ receiveDistributor:
   ## dnsPolicy: ClusterFirstWithHostNet
   ##
   dnsPolicy: ""
+  ## @param receiveDistributor.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param receiveDistributor.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -4197,7 +4221,7 @@ receiveDistributor:
   topologySpreadConstraints: []
   ## @param receiveDistributor.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the deployment
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   ## ServiceAccount configuration
   ## @param receiveDistributor.serviceAccount.create Specifies whether a ServiceAccount should be created
   ## @param receiveDistributor.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
