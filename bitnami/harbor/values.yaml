@@ -1090,9 +1090,6 @@ portal:
   ## @param portal.lifecycleHooks LifecycleHook for the Harbor Portal container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param portal.automountServiceAccountToken Mount Service Account token in pod
-  ##
-  automountServiceAccountToken: false
   ## @param portal.hostAliases Harbor Portal pods host aliases
   ##
   hostAliases: []
@@ -1432,9 +1429,6 @@ core:
   ## @param core.lifecycleHooks LifecycleHook for the Harbor Core container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param core.automountServiceAccountToken Mount Service Account token in pod
-  ##
-  automountServiceAccountToken: false
   ## @param core.hostAliases Harbor Core pods host aliases
   ##
   hostAliases: []
@@ -1738,9 +1732,6 @@ jobservice:
   ## @param jobservice.lifecycleHooks LifecycleHook for the Harbor Jobservice container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param jobservice.automountServiceAccountToken Mount Service Account token in pod
-  ##
-  automountServiceAccountToken: false
   ## @param jobservice.hostAliases Harbor Jobservice pods host aliases
   ##
   hostAliases: []
@@ -1935,9 +1926,6 @@ registry:
   ##
   updateStrategy:
     type: RollingUpdate
-  ## @param registry.automountServiceAccountToken Mount Service Account token in pod
-  ##
-  automountServiceAccountToken: false
   ## @param registry.hostAliases Harbor Registry pods host aliases
   ##
   hostAliases: []
@@ -2570,9 +2558,6 @@ trivy:
   ## @param trivy.lifecycleHooks LifecycleHook for the Trivy container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param trivy.automountServiceAccountToken Mount Service Account token in pod
-  ##
-  automountServiceAccountToken: false
   ## @param trivy.hostAliases Trivy pods host aliases
   ##
   hostAliases: []
@@ -2848,9 +2833,6 @@ exporter:
   ## @param exporter.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
   ##
   lifecycleHooks: {}
-  ## @param exporter.automountServiceAccountToken Mount Service Account token in pod
-  ##
-  automountServiceAccountToken: false
   ## @param exporter.hostAliases Exporter pods host aliases
   ##
   hostAliases: []
