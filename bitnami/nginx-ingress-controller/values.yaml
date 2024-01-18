@@ -493,9 +493,6 @@ defaultBackend:
   ## @param defaultBackend.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: true
-  ## @param defaultBackend.automountServiceAccountToken Mount Service Account token in pod
-  ##
-  automountServiceAccountToken: true
   ## @param defaultBackend.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
