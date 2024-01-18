@@ -30,9 +30,7 @@ rules:
       - endpoints
       - pods
       - services
-      {{- if .Values.ingressController.rbac.accessSecretsInAllNamespaces }}
       - secrets
-      {{- end }}
     verbs:
       - get
       - list
