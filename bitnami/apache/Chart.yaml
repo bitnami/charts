@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.5-debian-11-r1
+      image: docker.io/bitnami/apache-exporter:1.0.5-debian-11-r2
     - name: apache
       image: docker.io/bitnami/apache:2.4.58-debian-11-r4
     - name: git
@@ -35,4 +35,4 @@ maintainers:
 name: apache
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/apache
-version: 10.3.0
+version: 10.3.1
