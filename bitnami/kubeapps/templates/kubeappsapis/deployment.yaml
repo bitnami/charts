@@ -34,6 +34,7 @@ spec:
     spec:
       {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       serviceAccountName: {{ template "kubeapps.kubeappsapis.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.kubeappsapis.automountServiceAccountToken }}
       {{- if .Values.kubeappsapis.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.hostAliases "context" $) | nindent 8 }}
       {{- end }}

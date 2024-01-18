@@ -35,6 +35,7 @@ spec:
         app.kubernetes.io/component: frontend
     spec:
       {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
+      automountServiceAccountToken: {{ .Values.frontend.automountServiceAccountToken }}
       {{- if .Values.frontend.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.hostAliases "context" $) | nindent 8 }}
       {{- end }}
