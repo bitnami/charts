@@ -41,6 +41,7 @@ spec:
     spec:
       serviceAccountName: {{ template "jupyterhub.hubServiceAccountName" . }}
       {{- include "jupyterhub.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.hub.automountServiceAccountToken }}
       {{- if .Values.hub.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hub.hostAliases "context" $) | nindent 8 }}
       {{- end }}

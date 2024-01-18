@@ -141,6 +141,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                         |
 | `hub.podSecurityContext.fsGroup`                        | Set Hub pod's Security Context fsGroup                                                                                   | `1001`                       |
 | `hub.lifecycleHooks`                                    | LifecycleHooks for the Hub container to automate configuration before or after startup                                   | `{}`                         |
+| `hub.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `true`                       |
 | `hub.hostAliases`                                       | Add deployment host aliases                                                                                              | `[]`                         |
 | `hub.podLabels`                                         | Add extra labels to the Hub pods                                                                                         | `{}`                         |
 | `hub.podAnnotations`                                    | Add extra annotations to the Hub pods                                                                                    | `{}`                         |
@@ -168,14 +169,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Hub RBAC parameters
 
-| Name                                              | Description                                                            | Value  |
-| ------------------------------------------------- | ---------------------------------------------------------------------- | ------ |
-| `hub.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true` |
-| `hub.serviceAccount.name`                         | Override Hub service account name                                      | `""`   |
-| `hub.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true` |
-| `hub.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
-| `hub.rbac.create`                                 | Specifies whether RBAC resources should be created                     | `true` |
-| `hub.rbac.rules`                                  | Custom RBAC rules to set                                               | `[]`   |
+| Name                                              | Description                                                            | Value   |
+| ------------------------------------------------- | ---------------------------------------------------------------------- | ------- |
+| `hub.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true`  |
+| `hub.serviceAccount.name`                         | Override Hub service account name                                      | `""`    |
+| `hub.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
+| `hub.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
+| `hub.rbac.create`                                 | Specifies whether RBAC resources should be created                     | `true`  |
+| `hub.rbac.rules`                                  | Custom RBAC rules to set                                               | `[]`    |
 
 ### Hub Traffic Exposure Parameters
 
@@ -271,6 +272,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                                      |
 | `proxy.podSecurityContext.fsGroup`                        | Set Proxy pod's Security Context fsGroup                                                                                 | `1001`                                    |
 | `proxy.lifecycleHooks`                                    | Add lifecycle hooks to the Proxy deployment                                                                              | `{}`                                      |
+| `proxy.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`                                   |
 | `proxy.hostAliases`                                       | Add deployment host aliases                                                                                              | `[]`                                      |
 | `proxy.podLabels`                                         | Add extra labels to the Proxy pods                                                                                       | `{}`                                      |
 | `proxy.podAnnotations`                                    | Add extra annotations to the Proxy pods                                                                                  | `{}`                                      |
