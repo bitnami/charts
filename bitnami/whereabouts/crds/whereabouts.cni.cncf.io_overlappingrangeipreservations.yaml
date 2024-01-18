@@ -1,4 +1,4 @@
-# Source: https://raw.githubusercontent.com/k8snetworkplumbingwg/whereabouts/v0.6.3/doc/crds/whereabouts.cni.cncf.io_overlappingrangeipreservations.yaml
+# Source: https://raw.githubusercontent.com/k8snetworkplumbingwg/whereabouts/v{version}/doc/crds/whereabouts.cni.cncf.io_overlappingrangeipreservations.yaml
 # Version: 0.6.3
 
 ---
@@ -8,20 +8,21 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.4.1
   creationTimestamp: null
-  name: ippools.whereabouts.cni.cncf.io
+  name: overlappingrangeipreservations.whereabouts.cni.cncf.io
 spec:
   group: whereabouts.cni.cncf.io
   names:
-    kind: IPPool
-    listKind: IPPoolList
-    plural: ippools
-    singular: ippool
+    kind: OverlappingRangeIPReservation
+    listKind: OverlappingRangeIPReservationList
+    plural: overlappingrangeipreservations
+    singular: overlappingrangeipreservation
   scope: Namespaced
   versions:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: IPPool is the Schema for the ippools API
+        description: OverlappingRangeIPReservation is the Schema for the OverlappingRangeIPReservations
+          API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -36,32 +37,18 @@ spec:
           metadata:
             type: object
           spec:
-            description: IPPoolSpec defines the desired state of IPPool
+            description: OverlappingRangeIPReservationSpec defines the desired state
+              of OverlappingRangeIPReservation
             properties:
-              allocations:
-                additionalProperties:
-                  description: IPAllocation represents metadata about the pod/container
-                    owner of a specific IP
-                  properties:
-                    id:
-                      type: string
-                    podref:
-                      type: string
-                  required:
-                  - id
-                  type: object
-                description: Allocations is the set of allocated IPs for the given
-                  range. Its` indices are a direct mapping to the IP with the same
-                  index/offset for the pool's range.
-                type: object
-              range:
-                description: Range is a RFC 4632/4291-style string that represents
-                  an IP address and prefix length in CIDR notation
+              containerid:
+                type: string
+              podref:
                 type: string
             required:
-            - allocations
-            - range
+            - containerid
             type: object
+        required:
+        - spec
         type: object
     served: true
     storage: true
