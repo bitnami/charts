@@ -817,7 +817,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.15.1-debian-11-r0
+    tag: 0.15.1-debian-11-r2
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
