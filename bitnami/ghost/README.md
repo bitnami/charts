@@ -127,6 +127,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `priorityClassName`                                 | Ghost pod priority class name                                                             | `""`             |
 | `schedulerName`                                     | Name of the k8s scheduler (other than default)                                            | `""`             |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`             |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                        | `false`          |
 | `hostAliases`                                       | Ghost pod host aliases                                                                    | `[]`             |
 | `extraVolumes`                                      | Optionally specify extra list of additional volumes for Ghost pods                        | `[]`             |
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Ghost container(s)           | `[]`             |
