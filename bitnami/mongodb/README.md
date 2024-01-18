@@ -189,9 +189,12 @@ Refer to the [chart documentation for more information on each of these architec
 | `priorityClassName`                                 | Name of the existing priority class to be used by MongoDB(&reg;) pod(s)                                         | `""`             |
 | `runtimeClassName`                                  | Name of the runtime class to be used by MongoDB(&reg;) pod(s)                                                   | `""`             |
 | `podSecurityContext.enabled`                        | Enable MongoDB(&reg;) pod(s)' Security Context                                                                  | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                              | `Always`         |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                     | `[]`             |
 | `podSecurityContext.fsGroup`                        | Group ID for the volumes of the MongoDB(&reg;) pod(s)                                                           | `1001`           |
 | `podSecurityContext.sysctls`                        | sysctl settings of the MongoDB(&reg;) pod(s)'                                                                   | `[]`             |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                            | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                      | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                   | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                     | `false`          |
@@ -309,6 +312,7 @@ Refer to the [chart documentation for more information on each of these architec
 | Name                                               | Description                                                                                                                           | Value               |
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | `persistence.enabled`                              | Enable MongoDB(&reg;) data persistence using PVC                                                                                      | `true`              |
+| `persistence.name`                                 | Name of the PVC and mounted volume                                                                                                    | `datadir`           |
 | `persistence.medium`                               | Provide a medium for `emptyDir` volumes.                                                                                              | `""`                |
 | `persistence.existingClaim`                        | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)                                                     | `""`                |
 | `persistence.resourcePolicy`                       | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`                |
@@ -338,6 +342,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `backup.cronjob.ttlSecondsAfterFinished`                           | Set the cronjob parameter ttlSecondsAfterFinished                                                                                     | `""`                |
 | `backup.cronjob.restartPolicy`                                     | Set the cronjob parameter restartPolicy                                                                                               | `OnFailure`         |
 | `backup.cronjob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                  | `true`              |
+| `backup.cronjob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                      | `{}`                |
 | `backup.cronjob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                            | `1001`              |
 | `backup.cronjob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                         | `true`              |
 | `backup.cronjob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                           | `false`             |
@@ -365,7 +370,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `serviceAccount.create`                       | Enable creation of ServiceAccount for MongoDB(&reg;) pods                                                                                   | `true`  |
 | `serviceAccount.name`                         | Name of the created serviceAccount                                                                                                          | `""`    |
 | `serviceAccount.annotations`                  | Additional Service Account annotations                                                                                                      | `{}`    |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `false` |
 | `rbac.create`                                 | Whether to create & use RBAC resources or not                                                                                               | `false` |
 | `rbac.rules`                                  | Custom rules to create following the role specification                                                                                     | `[]`    |
 | `podSecurityPolicy.create`                    | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
@@ -375,17 +380,18 @@ Refer to the [chart documentation for more information on each of these architec
 
 ### Volume Permissions parameters
 
-| Name                                          | Description                                                                                                                       | Value                      |
-| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                    |
-| `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
-| `volumePermissions.resources.limits`          | Init container volume-permissions resource limits                                                                                 | `{}`                       |
-| `volumePermissions.resources.requests`        | Init container volume-permissions resource requests                                                                               | `{}`                       |
-| `volumePermissions.securityContext.runAsUser` | User ID for the volumePermissions container                                                                                       | `0`                        |
+| Name                                               | Description                                                                                                                       | Value                      |
+| -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`                        | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                    |
+| `volumePermissions.image.registry`                 | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`               | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                   | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`               | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
+| `volumePermissions.resources.limits`               | Init container volume-permissions resource limits                                                                                 | `{}`                       |
+| `volumePermissions.resources.requests`             | Init container volume-permissions resource requests                                                                               | `{}`                       |
+| `volumePermissions.securityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `{}`                       |
+| `volumePermissions.securityContext.runAsUser`      | User ID for the volumePermissions container                                                                                       | `0`                        |
 
 ### Arbiter parameters
 
@@ -422,9 +428,12 @@ Refer to the [chart documentation for more information on each of these architec
 | `arbiter.priorityClassName`                                 | Name of the existing priority class to be used by Arbiter pod(s)                                  | `""`             |
 | `arbiter.runtimeClassName`                                  | Name of the runtime class to be used by Arbiter pod(s)                                            | `""`             |
 | `arbiter.podSecurityContext.enabled`                        | Enable Arbiter pod(s)' Security Context                                                           | `true`           |
+| `arbiter.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                | `Always`         |
+| `arbiter.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                       | `[]`             |
 | `arbiter.podSecurityContext.fsGroup`                        | Group ID for the volumes of the Arbiter pod(s)                                                    | `1001`           |
 | `arbiter.podSecurityContext.sysctls`                        | sysctl settings of the Arbiter pod(s)'                                                            | `[]`             |
 | `arbiter.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                              | `true`           |
+| `arbiter.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                  | `{}`             |
 | `arbiter.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                        | `1001`           |
 | `arbiter.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                     | `true`           |
 | `arbiter.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                       | `false`          |
@@ -505,9 +514,12 @@ Refer to the [chart documentation for more information on each of these architec
 | `hidden.priorityClassName`                                 | Name of the existing priority class to be used by hidden node pod(s)                                 | `""`                |
 | `hidden.runtimeClassName`                                  | Name of the runtime class to be used by hidden node pod(s)                                           | `""`                |
 | `hidden.podSecurityContext.enabled`                        | Enable Hidden pod(s)' Security Context                                                               | `true`              |
+| `hidden.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                   | `Always`            |
+| `hidden.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                          | `[]`                |
 | `hidden.podSecurityContext.fsGroup`                        | Group ID for the volumes of the Hidden pod(s)                                                        | `1001`              |
 | `hidden.podSecurityContext.sysctls`                        | sysctl settings of the Hidden pod(s)'                                                                | `[]`                |
 | `hidden.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                 | `true`              |
+| `hidden.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                     | `{}`                |
 | `hidden.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                           | `1001`              |
 | `hidden.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                        | `true`              |
 | `hidden.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                          | `false`             |
@@ -658,7 +670,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/mongo
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -869,7 +881,7 @@ extraDeploy:
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

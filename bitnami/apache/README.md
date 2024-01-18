@@ -120,8 +120,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `priorityClassName`                                 | Apache Server pods' priorityClassName                                                                                    | `""`                     |
 | `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                           | `""`                     |
 | `podSecurityContext.enabled`                        | Enabled Apache Server pods' Security Context                                                                             | `true`                   |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`                 |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`                     |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                     |
 | `podSecurityContext.fsGroup`                        | Set Apache Server pod's Security Context fsGroup                                                                         | `1001`                   |
 | `containerSecurityContext.enabled`                  | Enabled Apache Server containers' Security Context                                                                       | `true`                   |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                     |
 | `containerSecurityContext.runAsUser`                | Set Apache Server containers' Security Context runAsUser                                                                 | `1001`                   |
 | `containerSecurityContext.runAsNonRoot`             | Set Controller container's Security Context runAsNonRoot                                                                 | `true`                   |
 | `containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                                      | `false`                  |
@@ -230,6 +234,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.podAnnotations`                   | Additional custom annotations for Apache exporter service                                                                                 | `{}`                              |
 | `metrics.resources.limits`                 | The resources limits for the container                                                                                                    | `{}`                              |
 | `metrics.resources.requests`               | The requested resources for the container                                                                                                 | `{}`                              |
+| `metrics.containerPort`                    | Apache Prometheus Exporter container port                                                                                                 | `9141`                            |
 | `metrics.service.port`                     | Metrics service port                                                                                                                      | `9117`                            |
 | `metrics.service.annotations`              | Additional custom annotations for Metrics service                                                                                         | `{}`                              |
 | `metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator PodMonitor (also requires `metrics.enabled` to be `true`)                                        | `false`                           |
@@ -243,6 +248,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`                              |
 | `metrics.prometheusRule.labels`            | Labels that can be used so PrometheusRule will be discovered by Prometheus                                                                | `{}`                              |
 | `metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                               | `[]`                              |
+
+### Network policies section
+
+| Name                                    | Description                                                | Value   |
+| --------------------------------------- | ---------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `false` |
+| `networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolic                | `[]`    |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -267,7 +283,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/apach
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -340,7 +356,7 @@ kubectl patch deployment apache --type=json -p='[{"op": "remove", "path": "/spec
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

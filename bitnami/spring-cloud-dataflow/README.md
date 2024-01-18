@@ -116,8 +116,12 @@ helm uninstall my-release
 | `server.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                                             | `""`                                                         |
 | `server.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                                             | `[]`                                                         |
 | `server.podSecurityContext.enabled`                        | Enabled Dataflow Server pods' Security Context                                                                                             | `true`                                                       |
+| `server.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                         | `Always`                                                     |
+| `server.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                             | `[]`                                                         |
+| `server.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                | `[]`                                                         |
 | `server.podSecurityContext.fsGroup`                        | Group ID for the volumes of the pod                                                                                                        | `1001`                                                       |
 | `server.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                       | `true`                                                       |
+| `server.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                           | `{}`                                                         |
 | `server.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                 | `1001`                                                       |
 | `server.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                              | `true`                                                       |
 | `server.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                | `false`                                                      |
@@ -227,8 +231,12 @@ helm uninstall my-release
 | `skipper.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                       | `""`                                   |
 | `skipper.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                       | `[]`                                   |
 | `skipper.podSecurityContext.enabled`                        | Enabled Skipper pods' Security Context                                                                               | `true`                                 |
+| `skipper.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                   | `Always`                               |
+| `skipper.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                       | `[]`                                   |
+| `skipper.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                          | `[]`                                   |
 | `skipper.podSecurityContext.fsGroup`                        | Group ID for the volumes of the pod                                                                                  | `1001`                                 |
 | `skipper.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                 | `true`                                 |
+| `skipper.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                     | `{}`                                   |
 | `skipper.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                           | `1001`                                 |
 | `skipper.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                        | `true`                                 |
 | `skipper.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                          | `false`                                |
@@ -342,8 +350,12 @@ helm uninstall my-release
 | `metrics.podAnnotations`                                    | Annotations for Prometheus Rsocket Proxy pods                                                                              | `{}`                                       |
 | `metrics.podLabels`                                         | Extra labels for Prometheus Proxy pods                                                                                     | `{}`                                       |
 | `metrics.podSecurityContext.enabled`                        | Enabled Prometheus Proxy pods' Security Context                                                                            | `true`                                     |
+| `metrics.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                         | `Always`                                   |
+| `metrics.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                             | `[]`                                       |
+| `metrics.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                | `[]`                                       |
 | `metrics.podSecurityContext.fsGroup`                        | Set Prometheus Proxy pod's Security Context fsGroup                                                                        | `1001`                                     |
 | `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                       | `true`                                     |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                           | `{}`                                       |
 | `metrics.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                 | `1001`                                     |
 | `metrics.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                              | `true`                                     |
 | `metrics.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                | `false`                                    |
@@ -431,6 +443,7 @@ helm uninstall my-release
 | `waitForBackends.image.pullPolicy`                                  | Init container wait-for-backend image pull policy                                                                               | `IfNotPresent`            |
 | `waitForBackends.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                | `[]`                      |
 | `waitForBackends.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                            | `true`                    |
+| `waitForBackends.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                | `{}`                      |
 | `waitForBackends.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                      | `1001`                    |
 | `waitForBackends.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                   | `true`                    |
 | `waitForBackends.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                     | `false`                   |
@@ -519,7 +532,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/sprin
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -658,7 +671,7 @@ Most likely you will only want to have one hostname that maps to this Spring Clo
 
 For each host indicated at `server.ingress.extraHosts`, please indicate a `name`, `path`, and any `annotations` that you may want the ingress controller to know about.
 
-For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
+For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
 
 #### TLS
 
@@ -919,7 +932,7 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

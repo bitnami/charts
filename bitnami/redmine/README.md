@@ -121,62 +121,67 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redmine --set databa
 
 ### Redmine deployment parameters
 
-| Name                                 | Description                                                                                                              | Value           |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | --------------- |
-| `replicaCount`                       | Number of Redmine replicas to deploy                                                                                     | `1`             |
-| `containerPorts.http`                | Redmine HTTP container port                                                                                              | `3000`          |
-| `resources.limits`                   | The resources limits for the Redmine container                                                                           | `{}`            |
-| `resources.requests`                 | The requested resources for the Redmine container                                                                        | `{}`            |
-| `podSecurityContext.enabled`         | Enabled Redmine pods' Security Context                                                                                   | `false`         |
-| `podSecurityContext.fsGroup`         | Set Redmine pod's Security Context fsGroup                                                                               | `1001`          |
-| `containerSecurityContext.enabled`   | Enabled Redmine containers' Security Context                                                                             | `false`         |
-| `containerSecurityContext.runAsUser` | Set Redmine container's Security Context runAsUser                                                                       | `1001`          |
-| `livenessProbe.enabled`              | Enable livenessProbe on Redmine containers                                                                               | `true`          |
-| `livenessProbe.path`                 | Path for to check for livenessProbe                                                                                      | `/`             |
-| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                  | `300`           |
-| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                         | `10`            |
-| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                        | `5`             |
-| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                      | `6`             |
-| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                      | `1`             |
-| `readinessProbe.enabled`             | Enable readinessProbe on Redmine containers                                                                              | `true`          |
-| `readinessProbe.path`                | Path to check for readinessProbe                                                                                         | `/`             |
-| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                 | `5`             |
-| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                        | `10`            |
-| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                       | `5`             |
-| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                     | `6`             |
-| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                     | `1`             |
-| `startupProbe.enabled`               | Enable startupProbe on Redmine containers                                                                                | `false`         |
-| `startupProbe.path`                  | Path to check for startupProbe                                                                                           | `/`             |
-| `startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                   | `300`           |
-| `startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                          | `10`            |
-| `startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                         | `5`             |
-| `startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                       | `6`             |
-| `startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                       | `1`             |
-| `customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
-| `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
-| `customStartupProbe`                 | Custom startupProbe that overrides the default one                                                                       | `{}`            |
-| `lifecycleHooks`                     | LifecycleHooks to set additional configuration at startup                                                                | `{}`            |
-| `hostAliases`                        | Redmine pod host aliases                                                                                                 | `[]`            |
-| `podLabels`                          | Extra labels for Redmine pods                                                                                            | `{}`            |
-| `podAnnotations`                     | Annotations for Redmine pods                                                                                             | `{}`            |
-| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`            |
-| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`          |
-| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`            |
-| `nodeAffinityPreset.key`             | Node label key to match. Ignored if `affinity` is set                                                                    | `""`            |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set                                                                 | `[]`            |
-| `affinity`                           | Affinity for pod assignment                                                                                              | `{}`            |
-| `nodeSelector`                       | Node labels for pod assignment                                                                                           | `{}`            |
-| `tolerations`                        | Tolerations for pod assignment                                                                                           | `[]`            |
-| `priorityClassName`                  | Redmine pods' Priority Class Name                                                                                        | `""`            |
-| `schedulerName`                      | Alternate scheduler                                                                                                      | `""`            |
-| `terminationGracePeriodSeconds`      | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`            |
-| `topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
-| `updateStrategy.type`                | Redmine statefulset strategy type                                                                                        | `RollingUpdate` |
-| `updateStrategy.rollingUpdate`       | Redmine statefulset rolling update configuration parameters                                                              | `{}`            |
-| `extraVolumes`                       | Optionally specify extra list of additional volumes for Redmine pods                                                     | `[]`            |
-| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Redmine container(s)                                        | `[]`            |
-| `initContainers`                     | Add additional init containers to the Redmine pods                                                                       | `[]`            |
-| `sidecars`                           | Add additional sidecar containers to the Redmine pod                                                                     | `[]`            |
+| Name                                           | Description                                                                                                              | Value            |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------- |
+| `replicaCount`                                 | Number of Redmine replicas to deploy                                                                                     | `1`              |
+| `containerPorts.http`                          | Redmine HTTP container port                                                                                              | `3000`           |
+| `resources.limits`                             | The resources limits for the Redmine container                                                                           | `{}`             |
+| `resources.requests`                           | The requested resources for the Redmine container                                                                        | `{}`             |
+| `podSecurityContext.enabled`                   | Enabled Redmine pods' Security Context                                                                                   | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`       | Set filesystem group change policy                                                                                       | `Always`         |
+| `podSecurityContext.sysctls`                   | Set kernel settings using the sysctl interface                                                                           | `[]`             |
+| `podSecurityContext.supplementalGroups`        | Set filesystem extra groups                                                                                              | `[]`             |
+| `podSecurityContext.fsGroup`                   | Set Redmine pod's Security Context fsGroup                                                                               | `0`              |
+| `containerSecurityContext.enabled`             | Enabled Redmine containers' Security Context                                                                             | `true`           |
+| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                         | `{}`             |
+| `containerSecurityContext.runAsUser`           | Set Redmine container's Security Context runAsUser                                                                       | `0`              |
+| `containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
+| `livenessProbe.enabled`                        | Enable livenessProbe on Redmine containers                                                                               | `true`           |
+| `livenessProbe.path`                           | Path for to check for livenessProbe                                                                                      | `/`              |
+| `livenessProbe.initialDelaySeconds`            | Initial delay seconds for livenessProbe                                                                                  | `300`            |
+| `livenessProbe.periodSeconds`                  | Period seconds for livenessProbe                                                                                         | `10`             |
+| `livenessProbe.timeoutSeconds`                 | Timeout seconds for livenessProbe                                                                                        | `5`              |
+| `livenessProbe.failureThreshold`               | Failure threshold for livenessProbe                                                                                      | `6`              |
+| `livenessProbe.successThreshold`               | Success threshold for livenessProbe                                                                                      | `1`              |
+| `readinessProbe.enabled`                       | Enable readinessProbe on Redmine containers                                                                              | `true`           |
+| `readinessProbe.path`                          | Path to check for readinessProbe                                                                                         | `/`              |
+| `readinessProbe.initialDelaySeconds`           | Initial delay seconds for readinessProbe                                                                                 | `5`              |
+| `readinessProbe.periodSeconds`                 | Period seconds for readinessProbe                                                                                        | `10`             |
+| `readinessProbe.timeoutSeconds`                | Timeout seconds for readinessProbe                                                                                       | `5`              |
+| `readinessProbe.failureThreshold`              | Failure threshold for readinessProbe                                                                                     | `6`              |
+| `readinessProbe.successThreshold`              | Success threshold for readinessProbe                                                                                     | `1`              |
+| `startupProbe.enabled`                         | Enable startupProbe on Redmine containers                                                                                | `false`          |
+| `startupProbe.path`                            | Path to check for startupProbe                                                                                           | `/`              |
+| `startupProbe.initialDelaySeconds`             | Initial delay seconds for startupProbe                                                                                   | `300`            |
+| `startupProbe.periodSeconds`                   | Period seconds for startupProbe                                                                                          | `10`             |
+| `startupProbe.timeoutSeconds`                  | Timeout seconds for startupProbe                                                                                         | `5`              |
+| `startupProbe.failureThreshold`                | Failure threshold for startupProbe                                                                                       | `6`              |
+| `startupProbe.successThreshold`                | Success threshold for startupProbe                                                                                       | `1`              |
+| `customLivenessProbe`                          | Custom livenessProbe that overrides the default one                                                                      | `{}`             |
+| `customReadinessProbe`                         | Custom readinessProbe that overrides the default one                                                                     | `{}`             |
+| `customStartupProbe`                           | Custom startupProbe that overrides the default one                                                                       | `{}`             |
+| `lifecycleHooks`                               | LifecycleHooks to set additional configuration at startup                                                                | `{}`             |
+| `hostAliases`                                  | Redmine pod host aliases                                                                                                 | `[]`             |
+| `podLabels`                                    | Extra labels for Redmine pods                                                                                            | `{}`             |
+| `podAnnotations`                               | Annotations for Redmine pods                                                                                             | `{}`             |
+| `podAffinityPreset`                            | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`             |
+| `podAntiAffinityPreset`                        | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`           |
+| `nodeAffinityPreset.type`                      | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`             |
+| `nodeAffinityPreset.key`                       | Node label key to match. Ignored if `affinity` is set                                                                    | `""`             |
+| `nodeAffinityPreset.values`                    | Node label values to match. Ignored if `affinity` is set                                                                 | `[]`             |
+| `affinity`                                     | Affinity for pod assignment                                                                                              | `{}`             |
+| `nodeSelector`                                 | Node labels for pod assignment                                                                                           | `{}`             |
+| `tolerations`                                  | Tolerations for pod assignment                                                                                           | `[]`             |
+| `priorityClassName`                            | Redmine pods' Priority Class Name                                                                                        | `""`             |
+| `schedulerName`                                | Alternate scheduler                                                                                                      | `""`             |
+| `terminationGracePeriodSeconds`                | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`             |
+| `topologySpreadConstraints`                    | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`             |
+| `updateStrategy.type`                          | Redmine statefulset strategy type                                                                                        | `RollingUpdate`  |
+| `updateStrategy.rollingUpdate`                 | Redmine statefulset rolling update configuration parameters                                                              | `{}`             |
+| `extraVolumes`                                 | Optionally specify extra list of additional volumes for Redmine pods                                                     | `[]`             |
+| `extraVolumeMounts`                            | Optionally specify extra list of additional volumeMounts for Redmine container(s)                                        | `[]`             |
+| `initContainers`                               | Add additional init containers to the Redmine pods                                                                       | `[]`             |
+| `sidecars`                                     | Add additional sidecar containers to the Redmine pod                                                                     | `[]`             |
 
 ### Traffic Exposure Parameters
 
@@ -210,21 +215,22 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redmine --set databa
 
 ### Persistence Parameters
 
-| Name                                                   | Description                                                                                     | Value   |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ------- |
-| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                               | `true`  |
-| `persistence.storageClass`                             | Persistent Volume storage class                                                                 | `""`    |
-| `persistence.accessModes`                              | Persistent Volume access modes                                                                  | `[]`    |
-| `persistence.size`                                     | Persistent Volume size                                                                          | `8Gi`   |
-| `persistence.dataSource`                               | Custom PVC data source                                                                          | `{}`    |
-| `persistence.annotations`                              | Annotations for the PVC                                                                         | `{}`    |
-| `persistence.selector`                                 | Selector to match an existing Persistent Volume (this value is evaluated as a template)         | `{}`    |
-| `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                              | `""`    |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false` |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`    |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`    |
-| `volumePermissions.containerSecurityContext.enabled`   | Enable init container's Security Context                                                        | `true`  |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`     |
+| Name                                                        | Description                                                                                     | Value   |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------- |
+| `persistence.enabled`                                       | Enable persistence using Persistent Volume Claims                                               | `true`  |
+| `persistence.storageClass`                                  | Persistent Volume storage class                                                                 | `""`    |
+| `persistence.accessModes`                                   | Persistent Volume access modes                                                                  | `[]`    |
+| `persistence.size`                                          | Persistent Volume size                                                                          | `8Gi`   |
+| `persistence.dataSource`                                    | Custom PVC data source                                                                          | `{}`    |
+| `persistence.annotations`                                   | Annotations for the PVC                                                                         | `{}`    |
+| `persistence.selector`                                      | Selector to match an existing Persistent Volume (this value is evaluated as a template)         | `{}`    |
+| `persistence.existingClaim`                                 | The name of an existing PVC to use for persistence                                              | `""`    |
+| `volumePermissions.enabled`                                 | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false` |
+| `volumePermissions.resources.limits`                        | The resources limits for the init container                                                     | `{}`    |
+| `volumePermissions.resources.requests`                      | The requested resources for the init container                                                  | `{}`    |
+| `volumePermissions.containerSecurityContext.enabled`        | Enable init container's Security Context                                                        | `true`  |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `{}`    |
+| `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                 | `0`     |
 
 ### RBAC Parameters
 
@@ -275,58 +281,62 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redmine --set databa
 
 ### Mail Receiver/Cron Job Parameters
 
-| Name                                                 | Description                                                                                                                                   | Value         |
-| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| `mailReceiver.enabled`                               | Whether to enable scheduled mail-to-task CronJob                                                                                              | `false`       |
-| `mailReceiver.schedule`                              | Kubernetes CronJob schedule                                                                                                                   | `*/5 * * * *` |
-| `mailReceiver.suspend`                               | Whether to create suspended CronJob                                                                                                           | `true`        |
-| `mailReceiver.mailProtocol`                          | Mail protocol to use for reading emails. Allowed values: `IMAP` and `POP3`                                                                    | `IMAP`        |
-| `mailReceiver.host`                                  | Server to receive emails from                                                                                                                 | `""`          |
-| `mailReceiver.port`                                  | TCP port on the `host`                                                                                                                        | `993`         |
-| `mailReceiver.username`                              | Login to authenticate on the `host`                                                                                                           | `""`          |
-| `mailReceiver.password`                              | Password to authenticate on the `host`                                                                                                        | `""`          |
-| `mailReceiver.ssl`                                   | Whether use SSL/TLS to connect to the `host`                                                                                                  | `true`        |
-| `mailReceiver.startTLS`                              | Whether use StartTLS to connect to the `host`                                                                                                 | `false`       |
-| `mailReceiver.imapFolder`                            | IMAP only. Folder to read emails from                                                                                                         | `INBOX`       |
-| `mailReceiver.moveOnSuccess`                         | IMAP only. Folder to move processed emails to                                                                                                 | `""`          |
-| `mailReceiver.moveOnFailure`                         | IMAP only. Folder to move emails with processing errors to                                                                                    | `""`          |
-| `mailReceiver.unknownUserAction`                     | Action to perform is an email received from unregistered user                                                                                 | `ignore`      |
-| `mailReceiver.noPermissionCheck`                     | Whether skip permission check during creating a new task                                                                                      | `0`           |
-| `mailReceiver.noAccountNotice`                       | Whether send an email to an unregistered user created during a new task creation                                                              | `1`           |
-| `mailReceiver.defaultGroup`                          | Defines a group list to add created user to                                                                                                   | `""`          |
-| `mailReceiver.project`                               | Defines identifier of the target project for a new task                                                                                       | `""`          |
-| `mailReceiver.projectFromSubaddress`                 | Defines email address to select project from subaddress                                                                                       | `""`          |
-| `mailReceiver.status`                                | Defines a new task status                                                                                                                     | `""`          |
-| `mailReceiver.tracker`                               | Defines a new task tracker                                                                                                                    | `""`          |
-| `mailReceiver.category`                              | Defines a new task category                                                                                                                   | `""`          |
-| `mailReceiver.priority`                              | Defines a new task priority                                                                                                                   | `""`          |
-| `mailReceiver.assignedTo`                            | Defines a new task assignee                                                                                                                   | `""`          |
-| `mailReceiver.allowOverride`                         | Defines if email content is allowed to set attributes values. Values is a comma separated list of attributes or `all` to allow all attributes | `""`          |
-| `mailReceiver.command`                               | Override default container command (useful when using custom images)                                                                          | `[]`          |
-| `mailReceiver.args`                                  | Override default container args (useful when using custom images)                                                                             | `[]`          |
-| `mailReceiver.extraEnvVars`                          | Extra environment variables to be set on mailReceiver container                                                                               | `[]`          |
-| `mailReceiver.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                                                                          | `""`          |
-| `mailReceiver.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                                                                             | `""`          |
-| `mailReceiver.podSecurityContext.enabled`            | Enabled Redmine pods' Security Context                                                                                                        | `true`        |
-| `mailReceiver.podSecurityContext.fsGroup`            | Set Redmine pod's Security Context fsGroup                                                                                                    | `1001`        |
-| `mailReceiver.containerSecurityContext.enabled`      | mailReceiver Container securityContext                                                                                                        | `false`       |
-| `mailReceiver.containerSecurityContext.runAsUser`    | User ID for the mailReceiver container                                                                                                        | `1001`        |
-| `mailReceiver.containerSecurityContext.runAsNonRoot` | Whether to run the mailReceiver container as a non-root user                                                                                  | `true`        |
-| `mailReceiver.podAnnotations`                        | Additional pod annotations                                                                                                                    | `{}`          |
-| `mailReceiver.podLabels`                             | Additional pod labels                                                                                                                         | `{}`          |
-| `mailReceiver.podAffinityPreset`                     | Pod affinity preset. Ignored if `mailReceiver.affinity` is set. Allowed values: `soft` or `hard`                                              | `""`          |
-| `mailReceiver.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `mailReceiver.affinity` is set. Allowed values: `soft` or `hard`                                         | `soft`        |
-| `mailReceiver.nodeAffinityPreset.type`               | Node affinity preset. Ignored if `mailReceiver.affinity` is set. Allowed values: `soft` or `hard`                                             | `""`          |
-| `mailReceiver.nodeAffinityPreset.key`                | Node label key to match. Ignored if `mailReceiver.affinity` is set.                                                                           | `""`          |
-| `mailReceiver.nodeAffinityPreset.values`             | Node label values to match. Ignored if `mailReceiver.affinity` is set.                                                                        | `[]`          |
-| `mailReceiver.affinity`                              | Affinity for pod assignment                                                                                                                   | `{}`          |
-| `mailReceiver.nodeSelector`                          | Node labels for pod assignment                                                                                                                | `{}`          |
-| `mailReceiver.tolerations`                           | Tolerations for pod assignment                                                                                                                | `[]`          |
-| `mailReceiver.priorityClassName`                     | Redmine pods' priority.                                                                                                                       | `""`          |
-| `mailReceiver.initContainers`                        | Add additional init containers to the mailReceiver pods                                                                                       | `[]`          |
-| `mailReceiver.sidecars`                              | Add additional sidecar containers to the mailReceiver pods                                                                                    | `[]`          |
-| `mailReceiver.extraVolumes`                          | Optionally specify extra list of additional volumes for mailReceiver container                                                                | `[]`          |
-| `mailReceiver.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for mailReceiver container                                                           | `[]`          |
+| Name                                                   | Description                                                                                                                                   | Value         |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `mailReceiver.enabled`                                 | Whether to enable scheduled mail-to-task CronJob                                                                                              | `false`       |
+| `mailReceiver.schedule`                                | Kubernetes CronJob schedule                                                                                                                   | `*/5 * * * *` |
+| `mailReceiver.suspend`                                 | Whether to create suspended CronJob                                                                                                           | `true`        |
+| `mailReceiver.mailProtocol`                            | Mail protocol to use for reading emails. Allowed values: `IMAP` and `POP3`                                                                    | `IMAP`        |
+| `mailReceiver.host`                                    | Server to receive emails from                                                                                                                 | `""`          |
+| `mailReceiver.port`                                    | TCP port on the `host`                                                                                                                        | `993`         |
+| `mailReceiver.username`                                | Login to authenticate on the `host`                                                                                                           | `""`          |
+| `mailReceiver.password`                                | Password to authenticate on the `host`                                                                                                        | `""`          |
+| `mailReceiver.ssl`                                     | Whether use SSL/TLS to connect to the `host`                                                                                                  | `true`        |
+| `mailReceiver.startTLS`                                | Whether use StartTLS to connect to the `host`                                                                                                 | `false`       |
+| `mailReceiver.imapFolder`                              | IMAP only. Folder to read emails from                                                                                                         | `INBOX`       |
+| `mailReceiver.moveOnSuccess`                           | IMAP only. Folder to move processed emails to                                                                                                 | `""`          |
+| `mailReceiver.moveOnFailure`                           | IMAP only. Folder to move emails with processing errors to                                                                                    | `""`          |
+| `mailReceiver.unknownUserAction`                       | Action to perform is an email received from unregistered user                                                                                 | `ignore`      |
+| `mailReceiver.noPermissionCheck`                       | Whether skip permission check during creating a new task                                                                                      | `0`           |
+| `mailReceiver.noAccountNotice`                         | Whether send an email to an unregistered user created during a new task creation                                                              | `1`           |
+| `mailReceiver.defaultGroup`                            | Defines a group list to add created user to                                                                                                   | `""`          |
+| `mailReceiver.project`                                 | Defines identifier of the target project for a new task                                                                                       | `""`          |
+| `mailReceiver.projectFromSubaddress`                   | Defines email address to select project from subaddress                                                                                       | `""`          |
+| `mailReceiver.status`                                  | Defines a new task status                                                                                                                     | `""`          |
+| `mailReceiver.tracker`                                 | Defines a new task tracker                                                                                                                    | `""`          |
+| `mailReceiver.category`                                | Defines a new task category                                                                                                                   | `""`          |
+| `mailReceiver.priority`                                | Defines a new task priority                                                                                                                   | `""`          |
+| `mailReceiver.assignedTo`                              | Defines a new task assignee                                                                                                                   | `""`          |
+| `mailReceiver.allowOverride`                           | Defines if email content is allowed to set attributes values. Values is a comma separated list of attributes or `all` to allow all attributes | `""`          |
+| `mailReceiver.command`                                 | Override default container command (useful when using custom images)                                                                          | `[]`          |
+| `mailReceiver.args`                                    | Override default container args (useful when using custom images)                                                                             | `[]`          |
+| `mailReceiver.extraEnvVars`                            | Extra environment variables to be set on mailReceiver container                                                                               | `[]`          |
+| `mailReceiver.extraEnvVarsCM`                          | Name of existing ConfigMap containing extra env vars                                                                                          | `""`          |
+| `mailReceiver.extraEnvVarsSecret`                      | Name of existing Secret containing extra env vars                                                                                             | `""`          |
+| `mailReceiver.podSecurityContext.enabled`              | Enabled Redmine pods' Security Context                                                                                                        | `true`        |
+| `mailReceiver.podSecurityContext.fsGroupChangePolicy`  | Set filesystem group change policy                                                                                                            | `Always`      |
+| `mailReceiver.podSecurityContext.sysctls`              | Set kernel settings using the sysctl interface                                                                                                | `[]`          |
+| `mailReceiver.podSecurityContext.supplementalGroups`   | Set filesystem extra groups                                                                                                                   | `[]`          |
+| `mailReceiver.podSecurityContext.fsGroup`              | Set Redmine pod's Security Context fsGroup                                                                                                    | `1001`        |
+| `mailReceiver.containerSecurityContext.enabled`        | mailReceiver Container securityContext                                                                                                        | `false`       |
+| `mailReceiver.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                              | `{}`          |
+| `mailReceiver.containerSecurityContext.runAsUser`      | User ID for the mailReceiver container                                                                                                        | `1001`        |
+| `mailReceiver.containerSecurityContext.runAsNonRoot`   | Whether to run the mailReceiver container as a non-root user                                                                                  | `true`        |
+| `mailReceiver.podAnnotations`                          | Additional pod annotations                                                                                                                    | `{}`          |
+| `mailReceiver.podLabels`                               | Additional pod labels                                                                                                                         | `{}`          |
+| `mailReceiver.podAffinityPreset`                       | Pod affinity preset. Ignored if `mailReceiver.affinity` is set. Allowed values: `soft` or `hard`                                              | `""`          |
+| `mailReceiver.podAntiAffinityPreset`                   | Pod anti-affinity preset. Ignored if `mailReceiver.affinity` is set. Allowed values: `soft` or `hard`                                         | `soft`        |
+| `mailReceiver.nodeAffinityPreset.type`                 | Node affinity preset. Ignored if `mailReceiver.affinity` is set. Allowed values: `soft` or `hard`                                             | `""`          |
+| `mailReceiver.nodeAffinityPreset.key`                  | Node label key to match. Ignored if `mailReceiver.affinity` is set.                                                                           | `""`          |
+| `mailReceiver.nodeAffinityPreset.values`               | Node label values to match. Ignored if `mailReceiver.affinity` is set.                                                                        | `[]`          |
+| `mailReceiver.affinity`                                | Affinity for pod assignment                                                                                                                   | `{}`          |
+| `mailReceiver.nodeSelector`                            | Node labels for pod assignment                                                                                                                | `{}`          |
+| `mailReceiver.tolerations`                             | Tolerations for pod assignment                                                                                                                | `[]`          |
+| `mailReceiver.priorityClassName`                       | Redmine pods' priority.                                                                                                                       | `""`          |
+| `mailReceiver.initContainers`                          | Add additional init containers to the mailReceiver pods                                                                                       | `[]`          |
+| `mailReceiver.sidecars`                                | Add additional sidecar containers to the mailReceiver pods                                                                                    | `[]`          |
+| `mailReceiver.extraVolumes`                            | Optionally specify extra list of additional volumes for mailReceiver container                                                                | `[]`          |
+| `mailReceiver.extraVolumeMounts`                       | Optionally specify extra list of additional volumeMounts for mailReceiver container                                                           | `[]`          |
 
 ### Custom Certificates parameters
 
@@ -390,7 +400,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/redmi
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -593,7 +603,7 @@ Refer to the [chart documentation for more information about how to upgrade from
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

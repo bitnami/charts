@@ -102,7 +102,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumeMounts`                                 | Array to add extra mounts (normally used with extraVolumes, evaluated as a template)                                              | `[]`                       |
 | `serviceAccount.create`                             | Enable creation of ServiceAccount for Logstash pods                                                                               | `true`                     |
 | `serviceAccount.name`                               | The name of the service account to use. If not set and `create` is `true`, a name is generated                                    | `""`                       |
-| `serviceAccount.automountServiceAccountToken`       | Allows automount of ServiceAccountToken on the serviceAccount created                                                             | `true`                     |
+| `serviceAccount.automountServiceAccountToken`       | Allows automount of ServiceAccountToken on the serviceAccount created                                                             | `false`                    |
 | `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                              | `{}`                       |
 | `containerPorts`                                    | Array containing the ports to open in the Logstash container (evaluated as a template)                                            | `[]`                       |
 | `initContainers`                                    | Add additional init containers to the Logstash pod(s)                                                                             | `[]`                       |
@@ -125,8 +125,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `terminationGracePeriodSeconds`                     | In seconds, time the given to the Logstash pod needs to terminate gracefully                                                      | `""`                       |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                                    | `[]`                       |
 | `podSecurityContext.enabled`                        | Enabled Logstash pods' Security Context                                                                                           | `true`                     |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                | `Always`                   |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                    | `[]`                       |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                       | `[]`                       |
 | `podSecurityContext.fsGroup`                        | Set Logstash pod's Security Context fsGroup                                                                                       | `1001`                     |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                              | `true`                     |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                  | `{}`                       |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                        | `1001`                     |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                     | `true`                     |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                       | `false`                    |
@@ -179,6 +183,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.mountPath`                             | Mount path of the Logstash data volume                                                                                            | `/bitnami/logstash/data`   |
 | `persistence.selector`                              | Selector to match an existing Persistent Volume for WordPress data PVC                                                            | `{}`                       |
 | `volumePermissions.enabled`                         | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                    |
+| `volumePermissions.securityContext.seLinuxOptions`  | Set SELinux options in container                                                                                                  | `{}`                       |
 | `volumePermissions.securityContext.runAsUser`       | User ID for the volumePermissions init container                                                                                  | `0`                        |
 | `volumePermissions.image.registry`                  | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
 | `volumePermissions.image.repository`                | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
@@ -227,7 +232,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/logst
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -334,7 +339,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

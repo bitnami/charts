@@ -162,6 +162,8 @@ spec:
           imagePullPolicy: {{ .Values.externalAccess.autoDiscovery.image.pullPolicy | quote }}
           command:
             - /scripts/auto-discovery.sh
+          # We need the service account token for contacting the k8s API
+          automountServiceAccountToken: true
           env:
             - name: MY_POD_NAME
               valueFrom:

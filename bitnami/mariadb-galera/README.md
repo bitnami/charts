@@ -111,7 +111,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.sessionAffinityConfig`                             | Additional settings for the sessionAffinity                                                                                                                                                   | `{}`                              |
 | `service.headless.annotations`                              | Annotations for the headless service.                                                                                                                                                         | `{}`                              |
 | `service.headless.publishNotReadyAddresses`                 | Publish not Ready MariaDB Galera pods' IPs in the headless service.                                                                                                                           | `true`                            |
-| `serviceAccount.create`                                     | Specify whether a ServiceAccount should be created                                                                                                                                            | `false`                           |
+| `serviceAccount.create`                                     | Specify whether a ServiceAccount should be created                                                                                                                                            | `true`                            |
 | `serviceAccount.name`                                       | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                                                                           | `""`                              |
 | `serviceAccount.automountServiceAccountToken`               | Automount service account token for the server service account                                                                                                                                | `false`                           |
 | `serviceAccount.annotations`                                | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                                                    | `{}`                              |
@@ -122,8 +122,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsSecret`                                        | Secret containing extra env vars to configure MariaDB Galera replicas                                                                                                                         | `""`                              |
 | `rbac.create`                                               | Specify whether RBAC resources should be created and used                                                                                                                                     | `false`                           |
 | `podSecurityContext.enabled`                                | Enable security context                                                                                                                                                                       | `true`                            |
+| `podSecurityContext.fsGroupChangePolicy`                    | Set filesystem group change policy                                                                                                                                                            | `Always`                          |
+| `podSecurityContext.sysctls`                                | Set kernel settings using the sysctl interface                                                                                                                                                | `[]`                              |
+| `podSecurityContext.supplementalGroups`                     | Set filesystem extra groups                                                                                                                                                                   | `[]`                              |
 | `podSecurityContext.fsGroup`                                | Group ID for the container filesystem                                                                                                                                                         | `1001`                            |
 | `containerSecurityContext.enabled`                          | Enabled containers' Security Context                                                                                                                                                          | `true`                            |
+| `containerSecurityContext.seLinuxOptions`                   | Set SELinux options in container                                                                                                                                                              | `{}`                              |
 | `containerSecurityContext.runAsUser`                        | Set containers' Security Context runAsUser                                                                                                                                                    | `1001`                            |
 | `containerSecurityContext.runAsNonRoot`                     | Set container's Security Context runAsNonRoot                                                                                                                                                 | `true`                            |
 | `containerSecurityContext.privileged`                       | Set container's Security Context privileged                                                                                                                                                   | `false`                           |
@@ -239,6 +243,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.resources.limits`                                  | The resources limits for the container                                                                                                                                                        | `{}`                              |
 | `metrics.resources.requests`                                | The requested resources for the container                                                                                                                                                     | `{}`                              |
 | `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                          | `true`                            |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                              | `{}`                              |
 | `metrics.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                    | `1001`                            |
 | `metrics.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                 | `true`                            |
 | `metrics.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                   | `false`                           |
@@ -309,7 +314,7 @@ helm install my-release \
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -696,7 +701,7 @@ Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](htt
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -135,8 +135,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.priorityClassName`                                 | Priority class for MariaDB primary pods assignment                                                                | `""`                |
 | `primary.runtimeClassName`                                  | Runtime Class for MariaDB primary pods                                                                            | `""`                |
 | `primary.podSecurityContext.enabled`                        | Enable security context for MariaDB primary pods                                                                  | `true`              |
+| `primary.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                | `Always`            |
+| `primary.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                    | `[]`                |
+| `primary.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                       | `[]`                |
 | `primary.podSecurityContext.fsGroup`                        | Group ID for the mounted volumes' filesystem                                                                      | `1001`              |
 | `primary.containerSecurityContext.enabled`                  | MariaDB primary container securityContext                                                                         | `true`              |
+| `primary.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                  | `{}`                |
 | `primary.containerSecurityContext.runAsUser`                | User ID for the MariaDB primary container                                                                         | `1001`              |
 | `primary.containerSecurityContext.runAsNonRoot`             | Set primary container's Security Context runAsNonRoot                                                             | `true`              |
 | `primary.containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                               | `false`             |
@@ -231,8 +235,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                        | `""`                |
 | `secondary.podManagementPolicy`                               | podManagementPolicy to manage scaling operation of MariaDB secondary pods                                             | `""`                |
 | `secondary.podSecurityContext.enabled`                        | Enable security context for MariaDB secondary pods                                                                    | `true`              |
+| `secondary.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                    | `Always`            |
+| `secondary.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                        | `[]`                |
+| `secondary.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                           | `[]`                |
 | `secondary.podSecurityContext.fsGroup`                        | Group ID for the mounted volumes' filesystem                                                                          | `1001`              |
 | `secondary.containerSecurityContext.enabled`                  | MariaDB secondary container securityContext                                                                           | `true`              |
+| `secondary.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                      | `{}`                |
 | `secondary.containerSecurityContext.runAsUser`                | User ID for the MariaDB secondary container                                                                           | `1001`              |
 | `secondary.containerSecurityContext.runAsNonRoot`             | Set secondary container's Security Context runAsNonRoot                                                               | `true`              |
 | `secondary.containerSecurityContext.privileged`               | Set secondary container's Security Context privileged                                                                 | `false`             |
@@ -333,6 +341,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.extraArgs`                                         | Extra args to be passed to mysqld_exporter                                                                                                | `{}`                              |
 | `metrics.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the MariaDB metrics container(s)                                             | `{}`                              |
 | `metrics.containerSecurityContext.enabled`                  | Enable security context for MariaDB metrics container                                                                                     | `false`                           |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                          | `{}`                              |
 | `metrics.containerSecurityContext.runAsUser`                | User ID for the MariaDB metrics container                                                                                                 | `1001`                            |
 | `metrics.containerSecurityContext.runAsNonRoot`             | Set metrics container's Security Context runAsNonRoot                                                                                     | `true`                            |
 | `metrics.containerSecurityContext.privileged`               | Set metrics container's Security Context privileged                                                                                       | `false`                           |
@@ -414,7 +423,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/maria
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -567,7 +576,7 @@ kubectl delete statefulset opencart-mariadb --cascade=false
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

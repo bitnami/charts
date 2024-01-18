@@ -135,8 +135,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.limits`                                  | The resources limits for the Magento container                                                                       | `{}`                      |
 | `resources.requests`                                | The requested resourcesc for the Magento container                                                                   | `{}`                      |
 | `podSecurityContext.enabled`                        | Enable Magento pods' Security Context                                                                                | `true`                    |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                   | `Always`                  |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                       | `[]`                      |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                          | `[]`                      |
 | `podSecurityContext.fsGroup`                        | Magento pods' group ID                                                                                               | `1001`                    |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                 | `true`                    |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                     | `{}`                      |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                           | `1001`                    |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                        | `true`                    |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                          | `false`                   |
@@ -380,7 +384,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/magen
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -416,7 +420,7 @@ Most likely you will only want to have one hostname that maps to this Magento in
 
 For each host indicated at `ingress.extraHosts`, please indicate a `name`, `path`, and any `annotations` that you may want the ingress controller to know about.
 
-For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
+For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
 
 ### TLS Secrets
 
@@ -825,7 +829,7 @@ kubectl delete statefulset magento-mariadb --cascade=false
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

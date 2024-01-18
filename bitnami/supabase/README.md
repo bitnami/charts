@@ -106,7 +106,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jwt.autoGenerate.kubectlImage.pullSecrets`                          | Kubectl image pull secrets                                                                                                                         | `[]`                      |
 | `jwt.autoGenerate.backoffLimit`                                      | set backoff limit of the job                                                                                                                       | `10`                      |
 | `jwt.autoGenerate.extraVolumes`                                      | Optionally specify extra list of additional volumes for the jwt init job                                                                           | `[]`                      |
+| `jwt.autoGenerate.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                                               | `true`                    |
+| `jwt.autoGenerate.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                             | `""`                      |
+| `jwt.autoGenerate.serviceAccount.annotations`                        | Additional Service Account annotations (evaluated as a template)                                                                                   | `{}`                      |
+| `jwt.autoGenerate.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                     | `true`                    |
 | `jwt.autoGenerate.containerSecurityContext.enabled`                  | Enabled jwt init job containers' Security Context                                                                                                  | `true`                    |
+| `jwt.autoGenerate.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                   | `{}`                      |
 | `jwt.autoGenerate.containerSecurityContext.runAsUser`                | Set jwt init job containers' Security Context runAsUser                                                                                            | `1001`                    |
 | `jwt.autoGenerate.containerSecurityContext.runAsNonRoot`             | Set jwt init job container's Security Context runAsNonRoot                                                                                         | `true`                    |
 | `jwt.autoGenerate.containerSecurityContext.privileged`               | Set jwt init job container's Security Context privileged                                                                                           | `false`                   |
@@ -115,6 +120,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jwt.autoGenerate.containerSecurityContext.capabilities.drop`        | List of jwt init job capabilities to be dropped                                                                                                    | `["ALL"]`                 |
 | `jwt.autoGenerate.containerSecurityContext.seccompProfile.type`      | Set jwt init job container's Security Context seccomp profile                                                                                      | `RuntimeDefault`          |
 | `jwt.autoGenerate.podSecurityContext.enabled`                        | Enabled jwt init job pods' Security Context                                                                                                        | `true`                    |
+| `jwt.autoGenerate.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                 | `Always`                  |
+| `jwt.autoGenerate.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                     | `[]`                      |
+| `jwt.autoGenerate.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                        | `[]`                      |
 | `jwt.autoGenerate.podSecurityContext.fsGroup`                        | Set jwt init job pod's Security Context fsGroup                                                                                                    | `1001`                    |
 | `jwt.autoGenerate.extraEnvVars`                                      | Array containing extra env vars to configure the jwt init job                                                                                      | `[]`                      |
 | `jwt.autoGenerate.extraEnvVarsCM`                                    | ConfigMap containing extra env vars to configure the jwt init job                                                                                  | `""`                      |
@@ -169,8 +177,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.resources.limits`                                  | The resources limits for the Supabase auth containers                                                                                             | `{}`                     |
 | `auth.resources.requests`                                | The requested resources for the Supabase auth containers                                                                                          | `{}`                     |
 | `auth.podSecurityContext.enabled`                        | Enabled Supabase auth pods' Security Context                                                                                                      | `true`                   |
+| `auth.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                | `Always`                 |
+| `auth.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                    | `[]`                     |
+| `auth.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                       | `[]`                     |
 | `auth.podSecurityContext.fsGroup`                        | Set Supabase auth pod's Security Context fsGroup                                                                                                  | `1001`                   |
 | `auth.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                              | `true`                   |
+| `auth.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                  | `{}`                     |
 | `auth.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                        | `1001`                   |
 | `auth.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                     | `true`                   |
 | `auth.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                       | `false`                  |
@@ -261,8 +273,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `meta.resources.limits`                                  | The resources limits for the Supabase Postgres Meta containers                                                                                                    | `{}`                                     |
 | `meta.resources.requests`                                | The requested resources for the Supabase Postgres Meta containers                                                                                                 | `{}`                                     |
 | `meta.podSecurityContext.enabled`                        | Enabled Supabase Postgres Meta pods' Security Context                                                                                                             | `true`                                   |
+| `meta.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                | `Always`                                 |
+| `meta.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                    | `[]`                                     |
+| `meta.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                       | `[]`                                     |
 | `meta.podSecurityContext.fsGroup`                        | Set Supabase Postgres Meta pod's Security Context fsGroup                                                                                                         | `1001`                                   |
 | `meta.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                              | `true`                                   |
+| `meta.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                  | `{}`                                     |
 | `meta.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                        | `1001`                                   |
 | `meta.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                     | `true`                                   |
 | `meta.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                       | `false`                                  |
@@ -356,8 +372,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `realtime.resources.limits`                                  | The resources limits for the Supabase realtime containers                                                                                           | `{}`                                |
 | `realtime.resources.requests`                                | The requested resources for the Supabase realtime containers                                                                                        | `{}`                                |
 | `realtime.podSecurityContext.enabled`                        | Enabled Supabase realtime pods' Security Context                                                                                                    | `true`                              |
+| `realtime.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                  | `Always`                            |
+| `realtime.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                      | `[]`                                |
+| `realtime.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                         | `[]`                                |
 | `realtime.podSecurityContext.fsGroup`                        | Set Supabase realtime pod's Security Context fsGroup                                                                                                | `1001`                              |
 | `realtime.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                | `true`                              |
+| `realtime.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                    | `{}`                                |
 | `realtime.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                          | `1001`                              |
 | `realtime.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                       | `true`                              |
 | `realtime.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                         | `false`                             |
@@ -448,8 +468,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rest.resources.limits`                                  | The resources limits for the Supabase rest containers                                                                                                | `{}`                        |
 | `rest.resources.requests`                                | The requested resources for the Supabase rest containers                                                                                             | `{}`                        |
 | `rest.podSecurityContext.enabled`                        | Enabled Supabase rest pods' Security Context                                                                                                         | `true`                      |
+| `rest.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                   | `Always`                    |
+| `rest.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                       | `[]`                        |
+| `rest.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                          | `[]`                        |
 | `rest.podSecurityContext.fsGroup`                        | Set Supabase rest pod's Security Context fsGroup                                                                                                     | `1001`                      |
 | `rest.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                 | `true`                      |
+| `rest.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                     | `{}`                        |
 | `rest.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                           | `1001`                      |
 | `rest.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                        | `true`                      |
 | `rest.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                          | `false`                     |
@@ -540,8 +564,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `storage.resources.limits`                                  | The resources limits for the Supabase storage containers                                                                                           | `{}`                               |
 | `storage.resources.requests`                                | The requested resources for the Supabase storage containers                                                                                        | `{}`                               |
 | `storage.podSecurityContext.enabled`                        | Enabled Supabase storage pods' Security Context                                                                                                    | `true`                             |
+| `storage.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                 | `Always`                           |
+| `storage.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                     | `[]`                               |
+| `storage.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                        | `[]`                               |
 | `storage.podSecurityContext.fsGroup`                        | Set Supabase storage pod's Security Context fsGroup                                                                                                | `1001`                             |
 | `storage.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                               | `true`                             |
+| `storage.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                   | `{}`                               |
 | `storage.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                         | `1001`                             |
 | `storage.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                      | `true`                             |
 | `storage.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                        | `false`                            |
@@ -648,8 +676,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `studio.resources.limits`                                  | The resources limits for the Supabase studio containers                                                                                           | `{}`                              |
 | `studio.resources.requests`                                | The requested resources for the Supabase studio containers                                                                                        | `{}`                              |
 | `studio.podSecurityContext.enabled`                        | Enabled Supabase studio pods' Security Context                                                                                                    | `true`                            |
+| `studio.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                | `Always`                          |
+| `studio.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                    | `[]`                              |
+| `studio.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                       | `[]`                              |
 | `studio.podSecurityContext.fsGroup`                        | Set Supabase studio pod's Security Context fsGroup                                                                                                | `1001`                            |
 | `studio.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                              | `true`                            |
+| `studio.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                  | `{}`                              |
 | `studio.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                        | `1001`                            |
 | `studio.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                     | `true`                            |
 | `studio.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                       | `false`                           |
@@ -715,32 +747,33 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init Container Parameters
 
-| Name                                                   | Description                                                                                     | Value                               |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ----------------------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                             |
-| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `REGISTRY_NAME`                     |
-| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `REPOSITORY_NAME/os-shell`          |
-| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`                      |
-| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`                                |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                                |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                                |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                                 |
-| `psqlImage.registry`                                   | PostgreSQL client image registry                                                                | `REGISTRY_NAME`                     |
-| `psqlImage.repository`                                 | PostgreSQL client image repository                                                              | `REPOSITORY_NAME/supabase-postgres` |
-| `psqlImage.digest`                                     | PostgreSQL client image digest (overrides image tag)                                            | `""`                                |
-| `psqlImage.pullPolicy`                                 | PostgreSQL client image pull policy                                                             | `IfNotPresent`                      |
-| `psqlImage.pullSecrets`                                | PostgreSQL client image pull secrets                                                            | `[]`                                |
-| `psqlImage.debug`                                      | Enable PostgreSQL client image debug mode                                                       | `false`                             |
+| Name                                                        | Description                                                                                     | Value                               |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------- |
+| `volumePermissions.enabled`                                 | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                             |
+| `volumePermissions.image.registry`                          | OS Shell + Utility image registry                                                               | `REGISTRY_NAME`                     |
+| `volumePermissions.image.repository`                        | OS Shell + Utility image repository                                                             | `REPOSITORY_NAME/os-shell`          |
+| `volumePermissions.image.pullPolicy`                        | OS Shell + Utility image pull policy                                                            | `IfNotPresent`                      |
+| `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                           | `[]`                                |
+| `volumePermissions.resources.limits`                        | The resources limits for the init container                                                     | `{}`                                |
+| `volumePermissions.resources.requests`                      | The requested resources for the init container                                                  | `{}`                                |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `{}`                                |
+| `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                 | `0`                                 |
+| `psqlImage.registry`                                        | PostgreSQL client image registry                                                                | `REGISTRY_NAME`                     |
+| `psqlImage.repository`                                      | PostgreSQL client image repository                                                              | `REPOSITORY_NAME/supabase-postgres` |
+| `psqlImage.digest`                                          | PostgreSQL client image digest (overrides image tag)                                            | `""`                                |
+| `psqlImage.pullPolicy`                                      | PostgreSQL client image pull policy                                                             | `IfNotPresent`                      |
+| `psqlImage.pullSecrets`                                     | PostgreSQL client image pull secrets                                                            | `[]`                                |
+| `psqlImage.debug`                                           | Enable PostgreSQL client image debug mode                                                       | `false`                             |
 
 ### Other Parameters
 
-| Name                                          | Description                                                      | Value  |
-| --------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                          | Description                                                      | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Kong sub-chart parameters
 
@@ -815,7 +848,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/supab
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -865,7 +898,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as supabase (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the component specific sections. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/supabase/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as supabase (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the component specific sections. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/supabase/configuration/configure-sidecar-init-containers/).
 
 ### Pod affinity
 
@@ -889,7 +922,7 @@ This major updates the PostgreSQL subchart to its newest major, 13.0.0. [Here](h
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

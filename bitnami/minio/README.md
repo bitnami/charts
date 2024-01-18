@@ -138,8 +138,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `provisioning.buckets`                                           | MinIO&reg; buckets, versioning, lifecycle, quota and tags provisioning                                                                                                                        | `[]`             |
 | `provisioning.config`                                            | MinIO&reg; config provisioning                                                                                                                                                                | `[]`             |
 | `provisioning.podSecurityContext.enabled`                        | Enable pod Security Context                                                                                                                                                                   | `true`           |
+| `provisioning.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                            | `Always`         |
+| `provisioning.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                | `[]`             |
+| `provisioning.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                   | `[]`             |
 | `provisioning.podSecurityContext.fsGroup`                        | Group ID for the container                                                                                                                                                                    | `1001`           |
 | `provisioning.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                          | `true`           |
+| `provisioning.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                              | `{}`             |
 | `provisioning.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                    | `1001`           |
 | `provisioning.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                 | `true`           |
 | `provisioning.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                   | `false`          |
@@ -153,9 +157,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.api`                                             | MinIO&reg; container port to open for MinIO&reg; API                                                                                                                                          | `9000`           |
 | `containerPorts.console`                                         | MinIO&reg; container port to open for MinIO&reg; Console                                                                                                                                      | `9001`           |
 | `podSecurityContext.enabled`                                     | Enable pod Security Context                                                                                                                                                                   | `true`           |
+| `podSecurityContext.sysctls`                                     | Set kernel settings using the sysctl interface                                                                                                                                                | `[]`             |
+| `podSecurityContext.supplementalGroups`                          | Set filesystem extra groups                                                                                                                                                                   | `[]`             |
 | `podSecurityContext.fsGroup`                                     | Group ID for the container                                                                                                                                                                    | `1001`           |
+| `podSecurityContext.fsGroupChangePolicy`                         | Set filesystem group change policy                                                                                                                                                            | `OnRootMismatch` |
+| `podSecurityContext.sysctls`                                     | Set kernel settings using the sysctl interface                                                                                                                                                | `[]`             |
+| `podSecurityContext.supplementalGroups`                          | Set filesystem extra groups                                                                                                                                                                   | `[]`             |
 | `podSecurityContext.fsGroupChangePolicy`                         | When K8s should preform chown on attached volumes                                                                                                                                             | `OnRootMismatch` |
 | `containerSecurityContext.enabled`                               | Enabled containers' Security Context                                                                                                                                                          | `true`           |
+| `containerSecurityContext.seLinuxOptions`                        | Set SELinux options in container                                                                                                                                                              | `{}`             |
 | `containerSecurityContext.runAsUser`                             | Set containers' Security Context runAsUser                                                                                                                                                    | `1001`           |
 | `containerSecurityContext.runAsNonRoot`                          | Set container's Security Context runAsNonRoot                                                                                                                                                 | `true`           |
 | `containerSecurityContext.privileged`                            | Set container's Security Context privileged                                                                                                                                                   | `false`          |
@@ -268,26 +278,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                                   | Description                                                                                                                       | Value                      |
-| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                    |
-| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
-| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`                       |
-| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                       |
-| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                        |
+| Name                                                        | Description                                                                                                                       | Value                      |
+| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`                                 | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                    |
+| `volumePermissions.image.registry`                          | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                        | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                            | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`                        | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                       | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
+| `volumePermissions.resources.limits`                        | Init container volume-permissions resource limits                                                                                 | `{}`                       |
+| `volumePermissions.resources.requests`                      | Init container volume-permissions resource requests                                                                               | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `{}`                       |
+| `volumePermissions.containerSecurityContext.runAsUser`      | User ID for the init container                                                                                                    | `0`                        |
 
 ### RBAC parameters
 
-| Name                                          | Description                                                 | Value  |
-| --------------------------------------------- | ----------------------------------------------------------- | ------ |
-| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for MinIO&reg; pods | `true` |
-| `serviceAccount.name`                         | Name of the created ServiceAccount                          | `""`   |
-| `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of the service account token   | `true` |
-| `serviceAccount.annotations`                  | Custom annotations for MinIO&reg; ServiceAccount            | `{}`   |
+| Name                                          | Description                                                 | Value   |
+| --------------------------------------------- | ----------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for MinIO&reg; pods | `true`  |
+| `serviceAccount.name`                         | Name of the created ServiceAccount                          | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of the service account token   | `false` |
+| `serviceAccount.annotations`                  | Custom annotations for MinIO&reg; ServiceAccount            | `{}`    |
 
 ### Other parameters
 
@@ -344,7 +355,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/minio
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -531,7 +542,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -121,8 +121,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `concierge.resources.limits`                                  | The resources limits for the Concierge containers                                                                        | `{}`             |
 | `concierge.resources.requests`                                | The requested resources for the Concierge containers                                                                     | `{}`             |
 | `concierge.podSecurityContext.enabled`                        | Enabled Concierge pods' Security Context                                                                                 | `true`           |
+| `concierge.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`         |
+| `concierge.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`             |
+| `concierge.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `concierge.podSecurityContext.fsGroup`                        | Set Concierge pod's Security Context fsGroup                                                                             | `1001`           |
 | `concierge.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `concierge.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
 | `concierge.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `concierge.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `concierge.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -227,8 +231,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.resources.limits`                                  | The resources limits for the Supervisor containers                                                                       | `{}`             |
 | `supervisor.resources.requests`                                | The requested resources for the Supervisor containers                                                                    | `{}`             |
 | `supervisor.podSecurityContext.enabled`                        | Enabled Supervisor pods' Security Context                                                                                | `true`           |
+| `supervisor.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`         |
+| `supervisor.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`             |
+| `supervisor.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `supervisor.podSecurityContext.fsGroup`                        | Set Supervisor pod's Security Context fsGroup                                                                            | `1001`           |
 | `supervisor.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `supervisor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
 | `supervisor.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `supervisor.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `supervisor.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -345,7 +353,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/pinni
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -396,7 +404,7 @@ This version updates Pinniped to its newest version, 0.20.x. For more informatio
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

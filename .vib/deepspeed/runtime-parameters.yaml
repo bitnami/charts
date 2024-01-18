@@ -2,7 +2,7 @@ source:
   type: "git"
   git:
     repository: https://github.com/microsoft/DeepSpeedExamples
-    revision: master
+    revision: add-benchmarks
 client:
   podSecurityContext:
     enabled: true

@@ -130,13 +130,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                | Description                                                                                                              | Value            |
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------- |
 | `replicaCount`                                      | Number of Keycloak replicas to deploy                                                                                    | `1`              |
+| `revisionHistoryLimitCount`                         | Number of controller revisions to keep                                                                                   | `10`             |
 | `containerPorts.http`                               | Keycloak HTTP container port                                                                                             | `8080`           |
 | `containerPorts.https`                              | Keycloak HTTPS container port                                                                                            | `8443`           |
 | `containerPorts.infinispan`                         | Keycloak infinispan container port                                                                                       | `7800`           |
 | `extraContainerPorts`                               | Optionally specify extra list of additional port-mappings for Keycloak container                                         | `[]`             |
 | `podSecurityContext.enabled`                        | Enabled Keycloak pods' Security Context                                                                                  | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`         |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`             |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set Keycloak pod's Security Context fsGroup                                                                              | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -299,6 +304,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.resources.limits`                                  | The resources limits for the keycloak-config-cli container                                                                    | `{}`                                  |
 | `keycloakConfigCli.resources.requests`                                | The requested resources for the keycloak-config-cli container                                                                 | `{}`                                  |
 | `keycloakConfigCli.containerSecurityContext.enabled`                  | Enabled keycloak-config-cli Security Context                                                                                  | `true`                                |
+| `keycloakConfigCli.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                              | `{}`                                  |
 | `keycloakConfigCli.containerSecurityContext.runAsUser`                | Set keycloak-config-cli Security Context runAsUser                                                                            | `1001`                                |
 | `keycloakConfigCli.containerSecurityContext.runAsNonRoot`             | Set keycloak-config-cli Security Context runAsNonRoot                                                                         | `true`                                |
 | `keycloakConfigCli.containerSecurityContext.privileged`               | Set keycloak-config-cli Security Context privileged                                                                           | `false`                               |
@@ -307,6 +313,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                            | `["ALL"]`                             |
 | `keycloakConfigCli.containerSecurityContext.seccompProfile.type`      | Set keycloak-config-cli Security Context seccomp profile                                                                      | `RuntimeDefault`                      |
 | `keycloakConfigCli.podSecurityContext.enabled`                        | Enabled keycloak-config-cli pods' Security Context                                                                            | `true`                                |
+| `keycloakConfigCli.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                            | `Always`                              |
+| `keycloakConfigCli.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                | `[]`                                  |
+| `keycloakConfigCli.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                   | `[]`                                  |
 | `keycloakConfigCli.podSecurityContext.fsGroup`                        | Set keycloak-config-cli pod's Security Context fsGroup                                                                        | `1001`                                |
 | `keycloakConfigCli.backoffLimit`                                      | Number of retries before considering a Job as failed                                                                          | `1`                                   |
 | `keycloakConfigCli.podLabels`                                         | Pod extra labels                                                                                                              | `{}`                                  |
@@ -389,7 +398,7 @@ Keycloak realms, users and clients can be created from the Keycloak administrati
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -542,7 +551,7 @@ Refer to the [chart documentation for more information about how to upgrade from
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

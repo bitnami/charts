@@ -142,8 +142,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.limits`                                  | The resources limits for Matomo containers                                                                            | `{}`                     |
 | `resources.requests`                                | The requested resources for Matomo containers                                                                         | `{}`                     |
 | `podSecurityContext.enabled`                        | Enable Matomo pods' Security Context                                                                                  | `true`                   |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                    | `Always`                 |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                        | `[]`                     |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                           | `[]`                     |
 | `podSecurityContext.fsGroup`                        | Matomo pods' group ID                                                                                                 | `1001`                   |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                  | `true`                   |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                      | `{}`                     |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                            | `1001`                   |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                         | `true`                   |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                           | `false`                  |
@@ -312,6 +316,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cronjobs.taskScheduler.command`                                           | Override default container command (useful when using custom images) | `[]`             |
 | `cronjobs.taskScheduler.args`                                              | Override default container args (useful when using custom images)    | `[]`             |
 | `cronjobs.taskScheduler.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                 | `true`           |
+| `cronjobs.taskScheduler.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                     | `{}`             |
 | `cronjobs.taskScheduler.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                           | `1001`           |
 | `cronjobs.taskScheduler.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                        | `true`           |
 | `cronjobs.taskScheduler.containerSecurityContext.privileged`               | Set container's Security Context privileged                          | `false`          |
@@ -328,6 +333,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cronjobs.archive.command`                                                 | Override default container command (useful when using custom images) | `[]`             |
 | `cronjobs.archive.args`                                                    | Override default container args (useful when using custom images)    | `[]`             |
 | `cronjobs.archive.containerSecurityContext.enabled`                        | Enabled containers' Security Context                                 | `true`           |
+| `cronjobs.archive.containerSecurityContext.seLinuxOptions`                 | Set SELinux options in container                                     | `{}`             |
 | `cronjobs.archive.containerSecurityContext.runAsUser`                      | Set containers' Security Context runAsUser                           | `1001`           |
 | `cronjobs.archive.containerSecurityContext.runAsNonRoot`                   | Set container's Security Context runAsNonRoot                        | `true`           |
 | `cronjobs.archive.containerSecurityContext.privileged`                     | Set container's Security Context privileged                          | `false`          |
@@ -363,7 +369,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/matom
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -461,7 +467,7 @@ This major release bumps the MariaDB version to 10.11. Follow the [upstream inst
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

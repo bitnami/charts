@@ -171,8 +171,10 @@ spec:
               mountPath: /usr/local/apisix
             - name: tmp
               mountPath: /tmp
+            {{- if .Values.controlPlane.tls.enabled }}
             - name: certs
               mountPath: /bitnami/certs
+            {{- end }}
           {{- if .Values.controlPlane.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}

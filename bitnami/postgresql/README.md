@@ -208,8 +208,12 @@ kubectl delete pvc -l release=my-release
 | `primary.resources.requests.memory`                         | The requested memory for the PostgreSQL Primary containers                                                               | `256Mi`               |
 | `primary.resources.requests.cpu`                            | The requested cpu for the PostgreSQL Primary containers                                                                  | `250m`                |
 | `primary.podSecurityContext.enabled`                        | Enable security context                                                                                                  | `true`                |
+| `primary.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`              |
+| `primary.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`                  |
+| `primary.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                  |
 | `primary.podSecurityContext.fsGroup`                        | Group ID for the pod                                                                                                     | `1001`                |
 | `primary.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`                |
+| `primary.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                  |
 | `primary.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`                |
 | `primary.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`                |
 | `primary.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`               |
@@ -308,8 +312,12 @@ kubectl delete pvc -l release=my-release
 | `readReplicas.resources.requests.memory`                         | The requested memory for the PostgreSQL read only containers                                                             | `256Mi`               |
 | `readReplicas.resources.requests.cpu`                            | The requested cpu for the PostgreSQL read only containers                                                                | `250m`                |
 | `readReplicas.podSecurityContext.enabled`                        | Enable security context                                                                                                  | `true`                |
+| `readReplicas.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`              |
+| `readReplicas.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`                  |
+| `readReplicas.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                  |
 | `readReplicas.podSecurityContext.fsGroup`                        | Group ID for the pod                                                                                                     | `1001`                |
 | `readReplicas.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`                |
+| `readReplicas.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                  |
 | `readReplicas.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`                |
 | `readReplicas.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`                |
 | `readReplicas.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`               |
@@ -384,8 +392,12 @@ kubectl delete pvc -l release=my-release
 | `backup.cronjob.ttlSecondsAfterFinished`                           | Set the cronjob parameter ttlSecondsAfterFinished                                                                                     | `""`                                                                                                                                                                                 |
 | `backup.cronjob.restartPolicy`                                     | Set the cronjob parameter restartPolicy                                                                                               | `OnFailure`                                                                                                                                                                          |
 | `backup.cronjob.podSecurityContext.enabled`                        | Enable PodSecurityContext for CronJob/Backup                                                                                          | `true`                                                                                                                                                                               |
+| `backup.cronjob.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                    | `Always`                                                                                                                                                                             |
+| `backup.cronjob.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                        | `[]`                                                                                                                                                                                 |
+| `backup.cronjob.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                           | `[]`                                                                                                                                                                                 |
 | `backup.cronjob.podSecurityContext.fsGroup`                        | Group ID for the CronJob                                                                                                              | `1001`                                                                                                                                                                               |
 | `backup.cronjob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                  | `true`                                                                                                                                                                               |
+| `backup.cronjob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                      | `{}`                                                                                                                                                                                 |
 | `backup.cronjob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                            | `1001`                                                                                                                                                                               |
 | `backup.cronjob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                         | `true`                                                                                                                                                                               |
 | `backup.cronjob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                           | `false`                                                                                                                                                                              |
@@ -438,6 +450,7 @@ kubectl delete pvc -l release=my-release
 | `volumePermissions.image.pullSecrets`                            | Init container volume-permissions image pull secrets                                                                              | `[]`                       |
 | `volumePermissions.resources.limits`                             | Init container volume-permissions resource limits                                                                                 | `{}`                       |
 | `volumePermissions.resources.requests`                           | Init container volume-permissions resource requests                                                                               | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                  | `{}`                       |
 | `volumePermissions.containerSecurityContext.runAsUser`           | User ID for the init container                                                                                                    | `0`                        |
 | `volumePermissions.containerSecurityContext.runAsGroup`          | Group ID for the init container                                                                                                   | `0`                        |
 | `volumePermissions.containerSecurityContext.runAsNonRoot`        | runAsNonRoot for the init container                                                                                               | `false`                    |
@@ -448,9 +461,9 @@ kubectl delete pvc -l release=my-release
 | Name                                          | Description                                                                                                                                 | Value   |
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `serviceBindings.enabled`                     | Create secret for service binding (Experimental)                                                                                            | `false` |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for PostgreSQL pod                                                                                        | `false` |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for PostgreSQL pod                                                                                        | `true`  |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                      | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `false` |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                        | `{}`    |
 | `rbac.create`                                 | Create Role and RoleBinding (required for PSP to work)                                                                                      | `false` |
 | `rbac.rules`                                  | Custom RBAC rules to set                                                                                                                    | `[]`    |
@@ -470,6 +483,7 @@ kubectl delete pvc -l release=my-release
 | `metrics.customMetrics`                                     | Define additional custom metrics                                                                           | `{}`                                |
 | `metrics.extraEnvVars`                                      | Extra environment variables to add to PostgreSQL Prometheus exporter                                       | `[]`                                |
 | `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                       | `true`                              |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `{}`                                |
 | `metrics.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                 | `1001`                              |
 | `metrics.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                              | `true`                              |
 | `metrics.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                | `false`                             |
@@ -546,7 +560,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/postg
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -740,7 +754,7 @@ Refer to the [chart documentation for more information about how to upgrade from
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

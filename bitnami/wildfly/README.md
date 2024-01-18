@@ -136,8 +136,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.mgmt`                               | WildFly HTTPS container port                                                              | `9990`           |
 | `extraContainerPorts`                               | Array with extra container ports to add to the WildFly container                          | `[]`             |
 | `podSecurityContext.enabled`                        | Enabled WildFly pods' Security Context                                                    | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                        | `Always`         |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                            | `[]`             |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set WildFly pod's Security Context fsGroup                                                | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`          |
@@ -210,23 +214,24 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                                          | Description                                                                                                        | Value                      |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
-| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                                                  | `true`                     |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                                    | `""`                       |
-| `persistence.existingClaim`                   | Use a existing PVC which must be created manually before bound                                                     | `""`                       |
-| `persistence.accessModes`                     | Persistent Volume access modes                                                                                     | `[]`                       |
-| `persistence.size`                            | Persistent Volume size                                                                                             | `8Gi`                      |
-| `persistence.annotations`                     | Persistent Volume Claim annotations                                                                                | `{}`                       |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
-| `volumePermissions.image.registry`            | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`          | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.digest`              | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `volumePermissions.image.pullPolicy`          | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`         | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
-| `volumePermissions.resources.limits`          | The resources limits for the init container                                                                        | `{}`                       |
-| `volumePermissions.resources.requests`        | The requested resources for the init container                                                                     | `{}`                       |
-| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                        |
+| Name                                               | Description                                                                                                        | Value                      |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| `persistence.enabled`                              | Enable persistence using Persistent Volume Claims                                                                  | `true`                     |
+| `persistence.storageClass`                         | Persistent Volume storage class                                                                                    | `""`                       |
+| `persistence.existingClaim`                        | Use a existing PVC which must be created manually before bound                                                     | `""`                       |
+| `persistence.accessModes`                          | Persistent Volume access modes                                                                                     | `[]`                       |
+| `persistence.size`                                 | Persistent Volume size                                                                                             | `8Gi`                      |
+| `persistence.annotations`                          | Persistent Volume Claim annotations                                                                                | `{}`                       |
+| `volumePermissions.enabled`                        | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
+| `volumePermissions.image.registry`                 | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`               | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                   | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`               | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`              | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
+| `volumePermissions.resources.limits`               | The resources limits for the init container                                                                        | `{}`                       |
+| `volumePermissions.resources.requests`             | The requested resources for the init container                                                                     | `{}`                       |
+| `volumePermissions.securityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `{}`                       |
+| `volumePermissions.securityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                    | `0`                        |
 
 The above parameters map to the env variables defined in [bitnami/wildfly](https://github.com/bitnami/containers/tree/main/bitnami/wildfly). For more information please refer to the [bitnami/wildfly](https://github.com/bitnami/containers/tree/main/bitnami/wildfly) image documentation.
 
@@ -255,7 +260,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/wildf
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -366,7 +371,7 @@ kubectl patch deployment wildfly --type=json -p='[{"op": "remove", "path": "/spe
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -120,9 +120,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `terminationGracePeriodSeconds`                     | In seconds, time the given to the NGINX pod needs to terminate gracefully                 | `""`             |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`             |
 | `podSecurityContext.enabled`                        | Enabled NGINX pods' Security Context                                                      | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                        | `Always`         |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set NGINX pod's Security Context fsGroup                                                  | `1001`           |
 | `podSecurityContext.sysctls`                        | sysctl settings of the NGINX pods                                                         | `[]`             |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`          |
@@ -164,7 +167,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.targetMemory`                          | Target Memory utilization percentage                                                      | `""`             |
 | `extraVolumes`                                      | Array to add extra volumes                                                                | `[]`             |
 | `extraVolumeMounts`                                 | Array to add extra mount                                                                  | `[]`             |
-| `serviceAccount.create`                             | Enable creation of ServiceAccount for nginx pod                                           | `false`          |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for nginx pod                                           | `true`           |
 | `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                    | `""`             |
 | `serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template.                                 | `{}`             |
 | `serviceAccount.automountServiceAccountToken`       | Auto-mount the service account token in the pod                                           | `false`          |
@@ -253,14 +256,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                       | Description                                                                                                                               | Value                            |
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
 | `metrics.enabled`                          | Start a Prometheus exporter sidecar container                                                                                             | `false`                          |
-| `metrics.port`                             | NGINX Container Status Port scraped by Prometheus Exporter                                                                                | `""`                             |
 | `metrics.image.registry`                   | NGINX Prometheus exporter image registry                                                                                                  | `REGISTRY_NAME`                  |
 | `metrics.image.repository`                 | NGINX Prometheus exporter image repository                                                                                                | `REPOSITORY_NAME/nginx-exporter` |
 | `metrics.image.digest`                     | NGINX Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                             |
 | `metrics.image.pullPolicy`                 | NGINX Prometheus exporter image pull policy                                                                                               | `IfNotPresent`                   |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                          | `[]`                             |
+| `metrics.port`                             | NGINX Container Status Port scraped by Prometheus Exporter                                                                                | `""`                             |
+| `metrics.extraArgs`                        | Extra arguments for Prometheus exporter                                                                                                   | `[]`                             |
+| `metrics.containerPorts.metrics`           | Prometheus exporter container port                                                                                                        | `9113`                           |
 | `metrics.podAnnotations`                   | Additional annotations for NGINX Prometheus exporter pod(s)                                                                               | `{}`                             |
 | `metrics.securityContext.enabled`          | Enabled NGINX Exporter containers' Security Context                                                                                       | `false`                          |
+| `metrics.securityContext.seLinuxOptions`   | Set SELinux options in container                                                                                                          | `{}`                             |
 | `metrics.securityContext.runAsUser`        | Set NGINX Exporter container's Security Context runAsUser                                                                                 | `1001`                           |
 | `metrics.service.port`                     | NGINX Prometheus exporter service port                                                                                                    | `9113`                           |
 | `metrics.service.annotations`              | Annotations for the Prometheus exporter service                                                                                           | `{}`                             |
@@ -304,7 +310,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/nginx
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -384,7 +390,7 @@ Most likely you will only want to have one hostname that maps to this NGINX inst
 
 For each host indicated at `ingress.extraHosts`, please indicate a `name`, `path`, and any `annotations` that you may want the ingress controller to know about.
 
-For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
+For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
 
 ## Troubleshooting
 
@@ -480,7 +486,7 @@ Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](htt
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

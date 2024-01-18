@@ -139,8 +139,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.limits`                                  | The resources limits for the container                                                                                   | `{}`             |
 | `resources.requests`                                | The requested resources for the container                                                                                | `{}`             |
 | `podSecurityContext.enabled`                        | Enable Solr pods' Security Context                                                                                       | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`         |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`             |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set Solr pod's Security Context fsGroup                                                                                  | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -222,25 +226,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                                   | Description                                                                                                                       | Value                      |
-| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                    |
-| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                       |
-| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`                       |
-| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                       |
-| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                        |
+| Name                                                        | Description                                                                                                                       | Value                      |
+| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`                                 | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                    |
+| `volumePermissions.image.registry`                          | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                        | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                            | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`                        | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                       | Init container volume-permissions image pull secrets                                                                              | `[]`                       |
+| `volumePermissions.resources.limits`                        | Init container volume-permissions resource limits                                                                                 | `{}`                       |
+| `volumePermissions.resources.requests`                      | Init container volume-permissions resource requests                                                                               | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `{}`                       |
+| `volumePermissions.containerSecurityContext.runAsUser`      | User ID for the init container                                                                                                    | `0`                        |
 
 ### Other Parameters
 
 | Name                                          | Description                                                            | Value   |
 | --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for Solr pod                         | `false` |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for Solr pod                         | `true`  |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
 
 ### Solr TLS parameters
@@ -293,6 +298,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.resources.limits`                                  | The resources limits for the container                                                                                         | `{}`                                                                  |
 | `metrics.resources.requests`                                | The requested resources for the container                                                                                      | `{}`                                                                  |
 | `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                           | `true`                                                                |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                               | `{}`                                                                  |
 | `metrics.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                     | `1001`                                                                |
 | `metrics.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                  | `true`                                                                |
 | `metrics.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                    | `false`                                                               |
@@ -301,6 +307,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                             | `["ALL"]`                                                             |
 | `metrics.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                               | `RuntimeDefault`                                                      |
 | `metrics.podSecurityContext.enabled`                        | Enable Solr Prometheus exporter pods' Security Context                                                                         | `true`                                                                |
+| `metrics.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                             | `Always`                                                              |
+| `metrics.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                 | `[]`                                                                  |
+| `metrics.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                    | `[]`                                                                  |
 | `metrics.podSecurityContext.fsGroup`                        | Group ID for the pods.                                                                                                         | `1001`                                                                |
 | `metrics.podLabels`                                         | Additional labels for Solr Prometheus exporter pod(s)                                                                          | `{}`                                                                  |
 | `metrics.podAnnotations`                                    | Additional annotations for Solr Prometheus exporter pod(s)                                                                     | `{}`                                                                  |
@@ -379,7 +388,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/solr
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -500,7 +509,7 @@ This major updates the Zookeeper subchart to it newest major, 7.0.0, which renam
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

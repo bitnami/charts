@@ -110,11 +110,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for master nodes                                                    | `""`             |
 | `master.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for master nodes                                                       | `""`             |
 | `master.podSecurityContext.enabled`                        | Enable security context                                                                                                  | `true`           |
+| `master.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`         |
+| `master.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`             |
+| `master.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `master.podSecurityContext.fsGroup`                        | Set master pod's Security Context Group ID                                                                               | `1001`           |
 | `master.podSecurityContext.runAsUser`                      | Set master pod's Security Context User ID                                                                                | `1001`           |
 | `master.podSecurityContext.runAsGroup`                     | Set master pod's Security Context Group ID                                                                               | `0`              |
 | `master.podSecurityContext.seLinuxOptions`                 | Set master pod's Security Context SELinux options                                                                        | `{}`             |
 | `master.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `master.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
 | `master.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `master.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `master.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -190,9 +194,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for worker nodes                                                       | `""`             |
 | `worker.replicaCount`                                      | Number of spark workers (will be the minimum number when autoscaling is enabled)                                         | `2`              |
 | `worker.podSecurityContext.enabled`                        | Enable security context                                                                                                  | `true`           |
+| `worker.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`         |
+| `worker.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`             |
+| `worker.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `worker.podSecurityContext.fsGroup`                        | Group ID for the container                                                                                               | `1001`           |
 | `worker.podSecurityContext.seLinuxOptions`                 | SELinux options for the container                                                                                        | `{}`             |
 | `worker.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `worker.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
 | `worker.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `worker.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `worker.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -309,12 +317,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other parameters
 
-| Name                                          | Description                                            | Value  |
-| --------------------------------------------- | ------------------------------------------------------ | ------ |
-| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Spark pods | `true` |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                 | `""`   |
-| `serviceAccount.annotations`                  | Annotations for Spark Service Account                  | `{}`   |
-| `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.       | `true` |
+| Name                                          | Description                                            | Value   |
+| --------------------------------------------- | ------------------------------------------------------ | ------- |
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Spark pods | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                 | `""`    |
+| `serviceAccount.annotations`                  | Annotations for Spark Service Account                  | `{}`    |
+| `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.       | `false` |
 
 ### Metrics parameters
 
@@ -356,7 +364,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/spark
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -478,7 +486,7 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

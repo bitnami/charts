@@ -135,8 +135,12 @@ helm delete --purge my-release
 | `nodeSelector`                                      | Node labels for pod assignment                                                            | `{}`             |
 | `tolerations`                                       | Tolerations for pod assignment                                                            | `[]`             |
 | `podSecurityContext.enabled`                        | Enable security context for HashiCorp Consul pods                                         | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                        | `Always`         |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                            | `[]`             |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `podSecurityContext.fsGroup`                        | Group ID for the volumes of the pod                                                       | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled Consul containers' Security Context                                               | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set Consul containers' Security Context runAsUser                                         | `1001`           |
 | `containerSecurityContext.allowPrivilegeEscalation` | Set Consul containers' Security Context allowPrivilegeEscalation                          | `false`          |
 | `containerSecurityContext.capabilities.drop`        | Set Argo CD containers' repo server Security Context capabilities to be dropped           | `["ALL"]`        |
@@ -233,33 +237,34 @@ helm delete --purge my-release
 
 ### Metrics parameters
 
-| Name                                            | Description                                                                                                                          | Value                             |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------- |
-| `metrics.enabled`                               | Start a side-car prometheus exporter                                                                                                 | `false`                           |
-| `metrics.image.registry`                        | HashiCorp Consul Prometheus Exporter image registry                                                                                  | `REGISTRY_NAME`                   |
-| `metrics.image.repository`                      | HashiCorp Consul Prometheus Exporter image repository                                                                                | `REPOSITORY_NAME/consul-exporter` |
-| `metrics.image.digest`                          | HashiCorp Consul Prometheus Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                              |
-| `metrics.image.pullPolicy`                      | HashiCorp Consul Prometheus Exporter image pull policy                                                                               | `IfNotPresent`                    |
-| `metrics.image.pullSecrets`                     | HashiCorp Consul Prometheus Exporter image pull secrets                                                                              | `[]`                              |
-| `metrics.containerSecurityContext.enabled`      | HashiCorp Consul Prometheus Exporter securityContext                                                                                 | `true`                            |
-| `metrics.containerSecurityContext.runAsUser`    | User ID for the HashiCorp Consul Prometheus Exporter                                                                                 | `1001`                            |
-| `metrics.containerSecurityContext.runAsNonRoot` | Force the container to be run as non root                                                                                            | `true`                            |
-| `metrics.service.type`                          | Kubernetes Service type                                                                                                              | `ClusterIP`                       |
-| `metrics.service.loadBalancerIP`                | Service Load Balancer IP                                                                                                             | `""`                              |
-| `metrics.service.annotations`                   | Provide any additional annotations which may be required.                                                                            | `{}`                              |
-| `metrics.podAnnotations`                        | Metrics exporter pod Annotation and Labels                                                                                           | `{}`                              |
-| `metrics.resources.limits`                      | The resources limits for the container                                                                                               | `{}`                              |
-| `metrics.resources.requests`                    | The requested resources for the container                                                                                            | `{}`                              |
-| `metrics.serviceMonitor.enabled`                | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator, set to true to create a Service Monitor Entry          | `false`                           |
-| `metrics.serviceMonitor.namespace`              | The namespace in which the ServiceMonitor will be created                                                                            | `""`                              |
-| `metrics.serviceMonitor.interval`               | Interval at which metrics should be scraped                                                                                          | `30s`                             |
-| `metrics.serviceMonitor.scrapeTimeout`          | The timeout after which the scrape is ended                                                                                          | `""`                              |
-| `metrics.serviceMonitor.metricRelabelings`      | Metrics relabelings to add to the scrape endpoint                                                                                    | `[]`                              |
-| `metrics.serviceMonitor.relabelings`            | RelabelConfigs to apply to samples before scraping                                                                                   | `[]`                              |
-| `metrics.serviceMonitor.honorLabels`            | Specify honorLabels parameter to add the scrape endpoint                                                                             | `false`                           |
-| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                                    | `""`                              |
-| `metrics.serviceMonitor.selector`               | ServiceMonitor selector labels                                                                                                       | `{}`                              |
-| `metrics.serviceMonitor.labels`                 | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with                | `{}`                              |
+| Name                                              | Description                                                                                                                          | Value                             |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------- |
+| `metrics.enabled`                                 | Start a side-car prometheus exporter                                                                                                 | `false`                           |
+| `metrics.image.registry`                          | HashiCorp Consul Prometheus Exporter image registry                                                                                  | `REGISTRY_NAME`                   |
+| `metrics.image.repository`                        | HashiCorp Consul Prometheus Exporter image repository                                                                                | `REPOSITORY_NAME/consul-exporter` |
+| `metrics.image.digest`                            | HashiCorp Consul Prometheus Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                              |
+| `metrics.image.pullPolicy`                        | HashiCorp Consul Prometheus Exporter image pull policy                                                                               | `IfNotPresent`                    |
+| `metrics.image.pullSecrets`                       | HashiCorp Consul Prometheus Exporter image pull secrets                                                                              | `[]`                              |
+| `metrics.containerSecurityContext.enabled`        | HashiCorp Consul Prometheus Exporter securityContext                                                                                 | `true`                            |
+| `metrics.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                     | `{}`                              |
+| `metrics.containerSecurityContext.runAsUser`      | User ID for the HashiCorp Consul Prometheus Exporter                                                                                 | `1001`                            |
+| `metrics.containerSecurityContext.runAsNonRoot`   | Force the container to be run as non root                                                                                            | `true`                            |
+| `metrics.service.type`                            | Kubernetes Service type                                                                                                              | `ClusterIP`                       |
+| `metrics.service.loadBalancerIP`                  | Service Load Balancer IP                                                                                                             | `""`                              |
+| `metrics.service.annotations`                     | Provide any additional annotations which may be required.                                                                            | `{}`                              |
+| `metrics.podAnnotations`                          | Metrics exporter pod Annotation and Labels                                                                                           | `{}`                              |
+| `metrics.resources.limits`                        | The resources limits for the container                                                                                               | `{}`                              |
+| `metrics.resources.requests`                      | The requested resources for the container                                                                                            | `{}`                              |
+| `metrics.serviceMonitor.enabled`                  | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator, set to true to create a Service Monitor Entry          | `false`                           |
+| `metrics.serviceMonitor.namespace`                | The namespace in which the ServiceMonitor will be created                                                                            | `""`                              |
+| `metrics.serviceMonitor.interval`                 | Interval at which metrics should be scraped                                                                                          | `30s`                             |
+| `metrics.serviceMonitor.scrapeTimeout`            | The timeout after which the scrape is ended                                                                                          | `""`                              |
+| `metrics.serviceMonitor.metricRelabelings`        | Metrics relabelings to add to the scrape endpoint                                                                                    | `[]`                              |
+| `metrics.serviceMonitor.relabelings`              | RelabelConfigs to apply to samples before scraping                                                                                   | `[]`                              |
+| `metrics.serviceMonitor.honorLabels`              | Specify honorLabels parameter to add the scrape endpoint                                                                             | `false`                           |
+| `metrics.serviceMonitor.jobLabel`                 | The name of the label on the target service to use as the job name in prometheus.                                                    | `""`                              |
+| `metrics.serviceMonitor.selector`                 | ServiceMonitor selector labels                                                                                                       | `{}`                              |
+| `metrics.serviceMonitor.labels`                   | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with                | `{}`                              |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -284,7 +289,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/consu
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -310,7 +315,7 @@ Most likely you will only want to have one hostname that maps to this ASP.NET Co
 
 For each host indicated at `ingress.extraHosts`, please indicate a `name`, `path`, and any `annotations` that you may want the ingress controller to know about.
 
-For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
+For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
 
 ### TLS Secrets
 
@@ -526,7 +531,7 @@ kubectl delete statefulset consul --cascade=false
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

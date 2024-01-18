@@ -129,8 +129,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.requests.memory`                         | The requested memory for the Memcached containers                                                                                                                                                 | `256Mi`          |
 | `resources.requests.cpu`                            | The requested cpu for the Memcached containers                                                                                                                                                    | `250m`           |
 | `podSecurityContext.enabled`                        | Enabled Memcached pods' Security Context                                                                                                                                                          | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                | `Always`         |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                    | `[]`             |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                       | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set Memcached pod's Security Context fsGroup                                                                                                                                                      | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                              | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                  | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                        | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                     | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                       | `false`          |
@@ -189,9 +193,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                          | Description                                                            | Value   |
 | --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for Memcached pod                    | `false` |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for Memcached pod                    | `true`  |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
 
 ### Persistence parameters
@@ -218,6 +222,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                       | Init container volume-permissions image pull secrets                                                                              | `[]`                                 |
 | `volumePermissions.resources.limits`                        | Init container volume-permissions resource limits                                                                                 | `{}`                                 |
 | `volumePermissions.resources.requests`                      | Init container volume-permissions resource requests                                                                               | `{}`                                 |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `{}`                                 |
 | `volumePermissions.containerSecurityContext.runAsUser`      | User ID for the init container                                                                                                    | `0`                                  |
 | `metrics.enabled`                                           | Start a side-car prometheus exporter                                                                                              | `false`                              |
 | `metrics.image.registry`                                    | Memcached exporter image registry                                                                                                 | `REGISTRY_NAME`                      |
@@ -229,6 +234,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.resources.limits`                                  | Init container volume-permissions resource limits                                                                                 | `{}`                                 |
 | `metrics.resources.requests`                                | Init container volume-permissions resource requests                                                                               | `{}`                                 |
 | `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                              | `true`                               |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                  | `{}`                                 |
 | `metrics.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                        | `1001`                               |
 | `metrics.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                     | `true`                               |
 | `metrics.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                       | `false`                              |
@@ -298,7 +304,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/memca
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -383,7 +389,7 @@ kubectl patch deployment memcached --type=json -p='[{"op": "remove", "path": "/s
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

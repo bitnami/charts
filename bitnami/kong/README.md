@@ -96,6 +96,7 @@ helm delete my-release
 | `useDaemonset`                                      | Use a daemonset instead of a deployment. `replicaCount` will not take effect.                                                      | `false`          |
 | `replicaCount`                                      | Number of Kong replicas                                                                                                            | `2`              |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                               | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                   | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                         | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                      | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                        | `false`          |
@@ -104,6 +105,9 @@ helm delete my-release
 | `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                 | `["ALL"]`        |
 | `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                   | `RuntimeDefault` |
 | `podSecurityContext.enabled`                        | Enabled Kong pods' Security Context                                                                                                | `false`          |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                 | `Always`         |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                     | `[]`             |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                        | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set Kong pod's Security Context fsGroup                                                                                            | `1001`           |
 | `updateStrategy.type`                               | Kong update strategy                                                                                                               | `RollingUpdate`  |
 | `updateStrategy.rollingUpdate`                      | Kong deployment rolling update configuration parameters                                                                            | `{}`             |
@@ -366,7 +370,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/kong
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -646,7 +650,7 @@ In order to properly migrate your data to this new version:
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

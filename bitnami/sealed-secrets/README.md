@@ -124,6 +124,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`                             |
 | `customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`                             |
 | `podSecurityContext.enabled`                        | Enabled Sealed Secret pods' Security Context                                                                             | `true`                           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`                         |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`                             |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                             |
 | `podSecurityContext.fsGroup`                        | Set Sealed Secret pod's Security Context fsGroup                                                                         | `1001`                           |
 | `podSecurityContext.seccompProfile.type`            | Set Sealed Secret pod's Security Context seccompProfile type                                                             | `RuntimeDefault`                 |
 | `containerSecurityContext.enabled`                  | Enabled Sealed Secret containers' Security Context                                                                       | `true`                           |
@@ -131,6 +134,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.capabilities.drop`        | Which privileges to drop in the Sealed Secret container                                                                  | `["ALL"]`                        |
 | `containerSecurityContext.readOnlyRootFilesystem`   | Whether the Sealed Secret container has a read-only root filesystem                                                      | `true`                           |
 | `containerSecurityContext.runAsNonRoot`             | Indicates that the Sealed Secret container must run as a non-root user                                                   | `true`                           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                             |
 | `containerSecurityContext.runAsUser`                | Set Sealed Secret containers' Security Context runAsUser                                                                 | `1001`                           |
 | `containerSecurityContext.seccompProfile.type`      | Set Sealed Secret container's Security Context seccompProfile type                                                       | `RuntimeDefault`                 |
 | `hostAliases`                                       | Sealed Secret pods host aliases                                                                                          | `[]`                             |
@@ -267,7 +271,7 @@ $ kubeseal --fetch-cert \
 
 Refer to Sealed Secrets documentation for more information about [kubeseal usage](https://github.com/bitnami-labs/sealed-secrets#usage).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -310,7 +314,7 @@ This major release renames several values in this chart and adds missing feature
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

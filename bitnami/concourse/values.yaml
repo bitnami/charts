@@ -71,11 +71,11 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/concourse
-  tag: 7.11.0-debian-11-r7
+  tag: 7.11.0-debian-11-r11
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -438,7 +438,7 @@ web:
   ##
   customStartupProbe: {}
   ## Concourse web resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param web.resources.limits The resources limits for the Concourse web containers
   ## @param web.resources.requests The requested resources for the Concourse web containers
   ##
@@ -448,19 +448,30 @@ web:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param web.podSecurityContext.enabled Enabled web pods' Security Context
+  ## @param web.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param web.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param web.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param web.podSecurityContext.fsGroup Set web pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param web.containerSecurityContext.enabled Enabled web containers' Security Context
+  ## @param web.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param web.containerSecurityContext.runAsUser Set web containers' Security Context runAsUser
+  ## @param web.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param web.hostAliases Concourse web pod host aliases
   ##
   hostAliases: []
@@ -503,7 +514,7 @@ web:
   ##
   affinity: {}
   ## @param web.nodeSelector Node labels for web pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param web.tolerations Tolerations for web pods assignment
@@ -723,7 +734,7 @@ worker:
   ##
   customStartupProbe: {}
   ## Concourse worker resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param worker.resources.limits The resources limits for the Concourse worker containers
   ## @param worker.resources.requests The requested resources for the Concourse worker containers
   ##
@@ -733,21 +744,32 @@ worker:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param worker.podSecurityContext.enabled Enabled worker pods' Security Context
+  ## @param worker.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param worker.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param worker.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param worker.podSecurityContext.fsGroup Set worker pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param worker.containerSecurityContext.enabled Enabled worker containers' Security Context
   ## @param worker.containerSecurityContext.privileged Set worker containers' Security Context with privileged or not
+  ## @param worker.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param worker.containerSecurityContext.runAsUser Set worker containers' Security Context user
+  ## @param worker.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     privileged: true
+    seLinuxOptions: {}
     runAsUser: 0
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param worker.hostAliases Concourse worker pod host aliases
   ##
   hostAliases: []
@@ -798,7 +820,7 @@ worker:
   ##
   affinity: {}
   ## @param worker.nodeSelector Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param worker.tolerations Tolerations for worker pod assignment
@@ -1000,7 +1022,7 @@ service:
       https: ""
     ## @param service.web.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param service.web.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1053,7 +1075,7 @@ service:
       tsa: ""
     ## @param service.workerGateway.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param service.workerGateway.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1089,7 +1111,7 @@ service:
     ##
     extraPorts: []
 ## Concourse ingress parameters
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for Concourse
@@ -1212,7 +1234,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r93
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1224,7 +1246,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
   ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
   ##
@@ -1233,11 +1255,16 @@ volumePermissions:
     requests: {}
   ## Init container' Security Context
   ## @param volumePermissions.containerSecurityContext.enabled Enabled init container Security Context
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
+  ## @param volumePermissions.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 0
+    seccompProfile:
+      type: "RuntimeDefault"
 
 ## @section Concourse database parameters
 

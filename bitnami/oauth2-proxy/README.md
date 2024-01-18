@@ -182,8 +182,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                   | `1`              |
 | `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                   | `""`             |
 | `podSecurityContext.enabled`                        | Enabled OAuth2 Proxy pods' Security Context                                                      | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                               | `Always`         |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                   | `[]`             |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                      | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set OAuth2 Proxy pod's Security Context fsGroup                                                  | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                             | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                 | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                       | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                    | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                      | `false`          |
@@ -220,7 +224,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dnsConfig`                                         | Pod DNS configuration.                                                                           | `{}`             |
 | `serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                             | `true`           |
 | `serviceAccount.name`                               | The name of the ServiceAccount to use                                                            | `""`             |
-| `serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                   | `true`           |
+| `serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                   | `false`          |
 | `serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.       | `{}`             |
 
 ### External Redis&reg; parameters
@@ -279,7 +283,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/oauth
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -339,7 +343,7 @@ Refer to the [chart documentation for more information about how to upgrade from
 
 ## License
 
-Copyright &copy; 2023 VMware, Inc.
+Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
