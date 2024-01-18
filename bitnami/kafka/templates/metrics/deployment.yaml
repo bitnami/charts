@@ -35,6 +35,7 @@ spec:
       {{- end }}
     spec:
       {{- include "kafka.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.metrics.kafka.automountServiceAccountToken }}
       {{- if .Values.metrics.kafka.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.hostAliases "context" $) | nindent 8 }}
       {{- end }}
