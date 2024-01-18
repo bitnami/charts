@@ -218,6 +218,9 @@ kustomizeController:
   ## @param kustomizeController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param kustomizeController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param kustomizeController.hostAliases Kustomize Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -397,7 +400,7 @@ kustomizeController:
     annotations: {}
     ## @param kustomizeController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Kustomize Controller Metrics Parameters
   ##
@@ -664,6 +667,9 @@ helmController:
   ## @param helmController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param helmController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param helmController.hostAliases Helm Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -843,7 +849,7 @@ helmController:
     annotations: {}
     ## @param helmController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Helm Controller Metrics Parameters
   ##
@@ -1112,6 +1118,9 @@ sourceController:
   ## @param sourceController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param sourceController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param sourceController.hostAliases Source Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1449,7 +1458,7 @@ sourceController:
     annotations: {}
     ## @param sourceController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Source Controller Metrics Parameters
   ##
@@ -1716,6 +1725,9 @@ notificationController:
   ## @param notificationController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param notificationController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param notificationController.hostAliases Notification Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1895,7 +1907,7 @@ notificationController:
     annotations: {}
     ## @param notificationController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Notification Controller Metrics Parameters
   ##
@@ -2162,6 +2174,9 @@ imageAutomationController:
   ## @param imageAutomationController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param imageAutomationController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param imageAutomationController.hostAliases Image Automation Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2341,7 +2356,7 @@ imageAutomationController:
     annotations: {}
     ## @param imageAutomationController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Image Automation Controller Metrics Parameters
   ##
@@ -2608,6 +2623,9 @@ imageReflectorController:
   ## @param imageReflectorController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param imageReflectorController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param imageReflectorController.hostAliases Image Reflector Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2830,7 +2848,7 @@ imageReflectorController:
     annotations: {}
     ## @param imageReflectorController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Image Reflector Controller Metrics Parameters
   ##
