@@ -8,8 +8,7 @@ rts:
   service:
     ports:
       http: 8085
-serviceAccount:
-  automountServiceAccountToken: true
+automountServiceAccountToken: true
 client:
   service:
     type: LoadBalancer
