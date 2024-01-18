@@ -116,7 +116,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `httpdConfConfigMap`                                | Name of a config map with the httpd.conf file contents                                                                   | `""`                     |
 | `podLabels`                                         | Extra labels for Apache pods                                                                                             | `{}`                     |
 | `podAnnotations`                                    | Pod annotations                                                                                                          | `{}`                     |
-| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `true`                   |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`                  |
 | `hostAliases`                                       | Add deployment host aliases                                                                                              | `[]`                     |
 | `priorityClassName`                                 | Apache Server pods' priorityClassName                                                                                    | `""`                     |
 | `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                           | `""`                     |
