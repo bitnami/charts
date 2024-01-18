@@ -149,7 +149,7 @@ loki:
         object_store: filesystem
         schema: v12
         store: tsdb
-      
+
     storage_config:
       boltdb_shipper:
         shared_store: filesystem
