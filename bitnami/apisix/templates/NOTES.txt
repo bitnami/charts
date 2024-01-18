@@ -191,25 +191,6 @@ APISIX Data Plane:
     {{- end }}
     {{- end }}
 {{- end }}
-{{- if and .Values.ingressController.enabled .Values.ingressController.rbac.create }}
-{{- if .Values.ingressController.rbac.accessSecretsInAllNamespaces }}
-
-WARNING: APISIX Ingress Controller can access all secrets in the cluster. This could pose a security risk if the application gets compromised.
-
-We recommend limiting allowed namespaces by setting ingressController.rbac.accessSecretsInAllNamespaces = false and configuring 
-ingressController.rbac.allowedSecretNamespaces
-{{- else }}
-
-APISIX Ingress Controller can ONLY access secrets in the following namespaces:
-{{ $namespaces := .Values.ingressController.rbac.allowedSecretNamespaces | default (list (include "common.names.namespace" .)) }}
-{{- range $namespace := $namespaces }}
-  - {{ $namespace }}
-{{- end }}
-
-Configuring any ingress rule to access secrets in other namespaces will not be allowed. You can configure this behavior by setting  ingressController.rbac.allowedSecretNamespaces
-
-{{- end }}
-{{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.dashboard.image }}
