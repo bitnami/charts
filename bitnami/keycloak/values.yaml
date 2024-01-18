@@ -924,9 +924,6 @@ keycloakConfigCli:
   ## @param keycloakConfigCli.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: true
-  ## @param keycloakConfigCli.automountServiceAccountToken Mount Service Account token in pod
-  ##
-  automountServiceAccountToken: true
   ## @param keycloakConfigCli.hostAliases Job pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

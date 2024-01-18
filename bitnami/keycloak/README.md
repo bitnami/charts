@@ -173,6 +173,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customReadinessProbe`                              | Custom Rediness probes Keycloak                                                                                          | `{}`             |
 | `customStartupProbe`                                | Custom Startup probes for Keycloak                                                                                       | `{}`             |
 | `lifecycleHooks`                                    | LifecycleHooks to set additional configuration at startup                                                                | `{}`             |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `true`           |
 | `hostAliases`                                       | Deployment pod host aliases                                                                                              | `[]`             |
 | `podLabels`                                         | Extra labels for Keycloak pods                                                                                           | `{}`             |
 | `podAnnotations`                                    | Annotations for Keycloak pods                                                                                            | `{}`             |
@@ -242,7 +243,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | --------------------------------------------------------- | ------- |
 | `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Keycloak pods | `true`  |
 | `serviceAccount.name`                         | Name of the created ServiceAccount                        | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod           | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod           | `false` |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount      | `{}`    |
 | `serviceAccount.extraLabels`                  | Additional labels for the ServiceAccount                  | `{}`    |
 | `rbac.create`                                 | Whether to create and use RBAC resources or not           | `false` |
@@ -300,6 +301,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.annotations`                                       | Annotations for keycloak-config-cli job                                                                                       | `{}`                                  |
 | `keycloakConfigCli.command`                                           | Command for running the container (set to default if not set). Use array form                                                 | `[]`                                  |
 | `keycloakConfigCli.args`                                              | Args for running the container (set to default if not set). Use array form                                                    | `[]`                                  |
+| `keycloakConfigCli.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                            | `true`                                |
 | `keycloakConfigCli.hostAliases`                                       | Job pod host aliases                                                                                                          | `[]`                                  |
 | `keycloakConfigCli.resources.limits`                                  | The resources limits for the keycloak-config-cli container                                                                    | `{}`                                  |
 | `keycloakConfigCli.resources.requests`                                | The requested resources for the keycloak-config-cli container                                                                 | `{}`                                  |
