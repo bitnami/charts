@@ -142,7 +142,7 @@ loki:
           prefix: index_
           period: 24h
       # New TSDB schema below
-      - from: "2024-01-19" # <---- A date in the future
+      - from: "2024-01-20" # <---- A date in the future
         index:
           period: 24h
           prefix: index_
