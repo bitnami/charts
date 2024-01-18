@@ -186,6 +186,8 @@ Return the name of the Secret used to store the passwords
 {{- .Values.ns1.secretName }}
 {{- else if and (eq .Values.provider "civo") .Values.civo.secretName }}
 {{- .Values.civo.secretName }}
+{{- else if and (eq .Values.provider "pihole") .Values.pihole.secretName }}
+{{- .Values.pihole.secretName }}
 {{- else -}}
 {{- template "external-dns.fullname" . }}
 {{- end -}}
