@@ -99,6 +99,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `schedulerName`                                | Name of the k8s scheduler (other than default)                                            | `""`             |
 | `priorityClassName`                            | ASP.NET Core pod priority class name                                                      | `""`             |
 | `topologySpreadConstraints`                    | Topology Spread Constraints for pod assignment                                            | `[]`             |
+| `automountServiceAccountToken`                 | Mount Service Account token in pod                                                        | `false`          |
 | `hostAliases`                                  | ASP.NET Core pod host aliases                                                             | `[]`             |
 | `extraVolumes`                                 | Optionally specify extra list of additional volumes for ASP.NET Core pods                 | `[]`             |
 | `extraVolumeMounts`                            | Optionally specify extra list of additional volumeMounts for ASP.NET Core container(s)    | `[]`             |
