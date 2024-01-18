@@ -76,11 +76,11 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/appsmith
-  tag: 1.9.57-debian-11-r0
+  tag: 1.9.58-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -160,7 +160,7 @@ client:
   ##
   customStartupProbe: {}
   ## Appsmith client resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param client.resources.limits The resources limits for the Appsmith client containers
   ## @param client.resources.requests The requested resources for the Appsmith client containers
   ##
@@ -170,14 +170,21 @@ client:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param client.podSecurityContext.enabled Enabled Appsmith client pods' Security Context
+  ## @param client.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param client.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param client.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param client.podSecurityContext.fsGroup Set Appsmith client pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param client.containerSecurityContext.enabled Enabled Appsmith client containers' Security Context
+  ## @param client.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param client.containerSecurityContext.runAsUser Set Appsmith client containers' Security Context runAsUser
   ## @param client.containerSecurityContext.runAsNonRoot Set Appsmith client containers' Security Context runAsNonRoot
   ## @param client.containerSecurityContext.readOnlyRootFilesystem Set Appsmith client containers' Security Context runAsNonRoot
@@ -188,6 +195,7 @@ client:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -247,7 +255,7 @@ client:
   ##
   affinity: {}
   ## @param client.nodeSelector Node labels for Appsmith client pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param client.tolerations Tolerations for Appsmith client pods assignment
@@ -366,7 +374,7 @@ client:
     extraPorts: []
     ## @param client.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param client.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -376,7 +384,7 @@ client:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param client.ingress.enabled Enable ingress record generation for Appsmith
@@ -575,7 +583,7 @@ backend:
   ##
   customStartupProbe: {}
   ## Appsmith backend resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param backend.resources.limits The resources limits for the Appsmith backend containers
   ## @param backend.resources.requests The requested resources for the Appsmith backend containers
   ##
@@ -585,14 +593,21 @@ backend:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param backend.podSecurityContext.enabled Enabled Appsmith backend pods' Security Context
+  ## @param backend.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param backend.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param backend.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param backend.podSecurityContext.fsGroup Set Appsmith backend pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param backend.containerSecurityContext.enabled Enabled Appsmith backend containers' Security Context
+  ## @param backend.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param backend.containerSecurityContext.runAsUser Set Appsmith backend containers' Security Context runAsUser
   ## @param backend.containerSecurityContext.runAsNonRoot Set Appsmith backend containers' Security Context runAsNonRoot
   ## @param backend.containerSecurityContext.readOnlyRootFilesystem Set Appsmith backend containers' Security Context runAsNonRoot
@@ -603,6 +618,7 @@ backend:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -662,7 +678,7 @@ backend:
   ##
   affinity: {}
   ## @param backend.nodeSelector Node labels for Appsmith backend pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param backend.tolerations Tolerations for Appsmith backend pods assignment
@@ -781,7 +797,7 @@ backend:
     extraPorts: []
     ## @param backend.service.sessionAffinity Control where backend requests go, to the same pod or round-robin
     ## Values: BackendIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param backend.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -795,7 +811,7 @@ backend:
   ##
 
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param backend.persistence.enabled Enable persistence using Persistent Volume Claims
@@ -909,7 +925,7 @@ rts:
   ##
   customStartupProbe: {}
   ## Appsmith rts resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param rts.resources.limits The resources limits for the Appsmith rts containers
   ## @param rts.resources.requests The requested resources for the Appsmith rts containers
   ##
@@ -919,14 +935,21 @@ rts:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param rts.podSecurityContext.enabled Enabled Appsmith rts pods' Security Context
+  ## @param rts.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param rts.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param rts.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param rts.podSecurityContext.fsGroup Set Appsmith rts pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param rts.containerSecurityContext.enabled Enabled Appsmith rts containers' Security Context
+  ## @param rts.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param rts.containerSecurityContext.runAsUser Set Appsmith rts containers' Security Context runAsUser
   ## @param rts.containerSecurityContext.runAsNonRoot Set Appsmith rts containers' Security Context runAsNonRoot
   ## @param rts.containerSecurityContext.readOnlyRootFilesystem Set Appsmith rts containers' Security Context runAsNonRoot
@@ -937,6 +960,7 @@ rts:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -996,7 +1020,7 @@ rts:
   ##
   affinity: {}
   ## @param rts.nodeSelector Node labels for Appsmith rts pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param rts.tolerations Tolerations for Appsmith rts pods assignment
@@ -1115,7 +1139,7 @@ rts:
     extraPorts: []
     ## @param rts.service.sessionAffinity Control where rts requests go, to the same pod or round-robin
     ## Values: RTSIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param rts.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1147,7 +1171,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r93
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1158,7 +1182,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -1167,12 +1191,14 @@ volumePermissions:
     requests: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
+    seLinuxOptions: {}
     runAsUser: 0
 
 ## @section Other Parameters
@@ -1193,7 +1219,7 @@ serviceAccount:
   annotations: {}
   ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
 
 ## @section External MongoDB parameters
 ## All of these values are only used when mongodb.enabled is set to false

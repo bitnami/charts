@@ -79,7 +79,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -226,7 +226,7 @@ customStartupProbe: {}
 ##
 lifecycleHooks: {}
 ## Solr resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resources.limits The resources limits for the container
 ## @param resources.requests The requested resources for the container
 ##
@@ -236,14 +236,21 @@ resources:
 ## Solr pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable Solr pods' Security Context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Set Solr pod's Security Context fsGroup
 ##
 podSecurityContext:
   enabled: true
+  fsGroupChangePolicy: Always
+  sysctls: []
+  supplementalGroups: []
   fsGroup: 1001
 ## Solr containers' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
@@ -254,6 +261,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
+  seLinuxOptions: {}
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false
@@ -307,7 +315,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector Node labels for Solr pods assignment. Evaluated as a template
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations Tolerations for Solr pods assignment. Evaluated as a template
@@ -403,7 +411,7 @@ service:
     http: ""
   ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
-  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   ##
   sessionAffinity: None
   ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -418,7 +426,7 @@ service:
   ##
   clusterIP: ""
   ## @param service.loadBalancerIP Solr service Load Balancer IP
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges Solr service Load Balancer sources
@@ -445,7 +453,7 @@ service:
     ##
     annotations: {}
 ## Solr ingress parameters
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for Apache Geode
@@ -547,7 +555,7 @@ ingress:
 ##
 
 ## Enable persistence using Persistent Volume Claims
-## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Use a PVC to persist data.
@@ -617,7 +625,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r94
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -629,7 +637,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
   ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
   ##
@@ -639,9 +647,11 @@ volumePermissions:
   ## Init container' Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
   ##
   containerSecurityContext:
+    seLinuxOptions: {}
     runAsUser: 0
 
 ## @section Other Parameters
@@ -653,7 +663,7 @@ volumePermissions:
 serviceAccount:
   ## @param serviceAccount.create Enable creation of ServiceAccount for Solr pod
   ##
-  create: false
+  create: true
   ## @param serviceAccount.name The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the common.names.fullname template
   ##
@@ -661,7 +671,7 @@ serviceAccount:
   ## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
   ## Can be set to false if pods using this serviceAccount do not need to use K8s API
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
   ##
   annotations: {}
@@ -808,7 +818,7 @@ metrics:
   ##
   customStartupProbe: {}
   ## Solr Prometheus exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param metrics.resources.limits The resources limits for the container
   ## @param metrics.resources.requests The requested resources for the container
   ##
@@ -818,6 +828,7 @@ metrics:
   ## Solr Prometheus exporter containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param metrics.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param metrics.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
@@ -828,6 +839,7 @@ metrics:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -840,10 +852,16 @@ metrics:
   ## Solr Prometheus exporter pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param metrics.podSecurityContext.enabled Enable Solr Prometheus exporter pods' Security Context
+  ## @param metrics.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param metrics.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param metrics.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param metrics.podSecurityContext.fsGroup Group ID for the pods.
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## @param metrics.podLabels Additional labels for Solr Prometheus exporter pod(s)
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
@@ -885,7 +903,7 @@ metrics:
   ##
   affinity: {}
   ## @param metrics.nodeSelector Node labels for Solr Prometheus exporter pods assignment. Evaluated as a template
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param metrics.tolerations Tolerations for Solr Prometheus exporter pods assignment. Evaluated as a template
@@ -955,7 +973,7 @@ metrics:
       http: 9231
     ## @param metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param metrics.service.clusterIP Solr Prometheus exporter service Cluster IP
@@ -1053,7 +1071,7 @@ zookeeper:
   ##
   replicaCount: 3
   ## ZooKeeper Persistence parameters
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ## @param zookeeper.persistence.enabled Enable persistence on ZooKeeper using PVC(s)
   ## @param zookeeper.persistence.storageClass Persistent Volume storage class
   ## @param zookeeper.persistence.accessModes Persistent Volume access modes

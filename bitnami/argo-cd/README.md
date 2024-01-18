@@ -115,8 +115,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.resources.limits`                                  | The resources limits for the Argo CD containers                                                      | `{}`             |
 | `controller.resources.requests`                                | The requested resources for the Argo CD containers                                                   | `{}`             |
 | `controller.podSecurityContext.enabled`                        | Enabled Argo CD pods' Security Context                                                               | `true`           |
+| `controller.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                   | `Always`         |
+| `controller.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                       | `[]`             |
+| `controller.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                          | `[]`             |
 | `controller.podSecurityContext.fsGroup`                        | Set Argo CD pod's Security Context fsGroup                                                           | `1001`           |
 | `controller.containerSecurityContext.enabled`                  | Enabled Argo CD containers' Security Context                                                         | `true`           |
+| `controller.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                     | `{}`             |
 | `controller.containerSecurityContext.runAsUser`                | Set Argo CD containers' Security Context runAsUser                                                   | `1001`           |
 | `controller.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD containers' Security Context allowPrivilegeEscalation                                    | `false`          |
 | `controller.containerSecurityContext.capabilities.drop`        | Set Argo CD containers' Security Context capabilities to be dropped                                  | `["ALL"]`        |
@@ -264,6 +268,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `applicationSet.podAnnotations`                                    | Annotations for Argo CD applicationSet controller pods                                                          | `{}`             |
 | `applicationSet.podLabels`                                         | Extra labels for Argo CD applicationSet controller pods                                                         | `{}`             |
 | `applicationSet.containerSecurityContext.enabled`                  | Enabled Argo CD applicationSet controller containers' Security Context                                          | `true`           |
+| `applicationSet.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `{}`             |
 | `applicationSet.containerSecurityContext.runAsUser`                | Set Argo CD applicationSet controller containers' Security Context runAsUser                                    | `1001`           |
 | `applicationSet.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD applicationSet controller containers' Security Context allowPrivilegeEscalation                     | `false`          |
 | `applicationSet.containerSecurityContext.capabilities.drop`        | Set Argo CD applicationSet controller containers' Security Context capabilities to be dropped                   | `["ALL"]`        |
@@ -288,6 +293,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `applicationSet.resources.limits`                                  | The resources limits for the Argo CD applicationSet controller containers                                       | `{}`             |
 | `applicationSet.resources.requests`                                | The requested resources for the Argo CD applicationSet controller containers                                    | `{}`             |
 | `applicationSet.podSecurityContext.enabled`                        | Enabled Argo CD applicationSet controller pods' Security Context                                                | `true`           |
+| `applicationSet.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                              | `Always`         |
+| `applicationSet.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                  | `[]`             |
+| `applicationSet.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                     | `[]`             |
 | `applicationSet.podSecurityContext.fsGroup`                        | Set Argo CD applicationSet controller pod's Security Context fsGroup                                            | `1001`           |
 | `applicationSet.nodeSelector`                                      | Node labels for Argo CD applicationSet controller pods assignment                                               | `{}`             |
 | `applicationSet.tolerations`                                       | Tolerations for Argo CD applicationSet controller pods assignment                                               | `[]`             |
@@ -365,6 +373,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `notifications.podAnnotations`                                               | Annotations for Argo CD notifications controller pods                                                              | `{}`             |
 | `notifications.podLabels`                                                    | Extra labels for Argo CD notifications controller pods                                                             | `{}`             |
 | `notifications.containerSecurityContext.enabled`                             | Enabled Argo CD notifications controller containers' Security Context                                              | `true`           |
+| `notifications.containerSecurityContext.seLinuxOptions`                      | Set SELinux options in container                                                                                   | `{}`             |
 | `notifications.containerSecurityContext.runAsUser`                           | Set Argo CD notifications controller containers' Security Context runAsUser                                        | `1001`           |
 | `notifications.containerSecurityContext.allowPrivilegeEscalation`            | Set Argo CD notifications controller containers' Security Context allowPrivilegeEscalation                         | `false`          |
 | `notifications.containerSecurityContext.capabilities.drop`                   | Set Argo CD notifications controller containers' Security Context capabilities to be dropped                       | `["ALL"]`        |
@@ -375,6 +384,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `notifications.resources.limits`                                             | The resources limits for the Argo CD notifications controller containers                                           | `{}`             |
 | `notifications.resources.requests`                                           | The requested resources for the Argo CD notifications controller containers                                        | `{}`             |
 | `notifications.podSecurityContext.enabled`                                   | Enabled Argo CD notifications controller pods' Security Context                                                    | `true`           |
+| `notifications.podSecurityContext.fsGroupChangePolicy`                       | Set filesystem group change policy                                                                                 | `Always`         |
+| `notifications.podSecurityContext.sysctls`                                   | Set kernel settings using the sysctl interface                                                                     | `[]`             |
+| `notifications.podSecurityContext.supplementalGroups`                        | Set filesystem extra groups                                                                                        | `[]`             |
 | `notifications.podSecurityContext.fsGroup`                                   | Set Argo CD notifications controller pod's Security Context fsGroup                                                | `1001`           |
 | `notifications.nodeSelector`                                                 | Node labels for Argo CD notifications controller pods assignment                                                   | `{}`             |
 | `notifications.tolerations`                                                  | Tolerations for Argo CD notifications controller pods assignment                                                   | `[]`             |
@@ -384,6 +396,27 @@ The command removes all the Kubernetes components associated with the chart and 
 | `notifications.extraEnvVars`                                                 | Array with extra environment variables to add to Argo CD notifications controller nodes                            | `[]`             |
 | `notifications.extraEnvVarsCM`                                               | Name of existing ConfigMap containing extra env vars for Argo CD notifications controller nodes                    | `""`             |
 | `notifications.extraEnvVarsSecret`                                           | Name of existing Secret containing extra env vars for Argo CD notifications controller nodes                       | `""`             |
+| `notifications.startupProbe.enabled`                                         | Enable startupProbe on Notification nodes                                                                          | `false`          |
+| `notifications.startupProbe.initialDelaySeconds`                             | Initial delay seconds for startupProbe                                                                             | `10`             |
+| `notifications.startupProbe.periodSeconds`                                   | Period seconds for startupProbe                                                                                    | `10`             |
+| `notifications.startupProbe.timeoutSeconds`                                  | Timeout seconds for startupProbe                                                                                   | `1`              |
+| `notifications.startupProbe.failureThreshold`                                | Failure threshold for startupProbe                                                                                 | `3`              |
+| `notifications.startupProbe.successThreshold`                                | Success threshold for startupProbe                                                                                 | `1`              |
+| `notifications.livenessProbe.enabled`                                        | Enable livenessProbe on Notification nodes                                                                         | `true`           |
+| `notifications.livenessProbe.initialDelaySeconds`                            | Initial delay seconds for livenessProbe                                                                            | `10`             |
+| `notifications.livenessProbe.periodSeconds`                                  | Period seconds for livenessProbe                                                                                   | `10`             |
+| `notifications.livenessProbe.timeoutSeconds`                                 | Timeout seconds for livenessProbe                                                                                  | `1`              |
+| `notifications.livenessProbe.failureThreshold`                               | Failure threshold for livenessProbe                                                                                | `3`              |
+| `notifications.livenessProbe.successThreshold`                               | Success threshold for livenessProbe                                                                                | `1`              |
+| `notifications.readinessProbe.enabled`                                       | Enable readinessProbe on Notification nodes                                                                        | `true`           |
+| `notifications.readinessProbe.initialDelaySeconds`                           | Initial delay seconds for readinessProbe                                                                           | `10`             |
+| `notifications.readinessProbe.periodSeconds`                                 | Period seconds for readinessProbe                                                                                  | `10`             |
+| `notifications.readinessProbe.timeoutSeconds`                                | Timeout seconds for readinessProbe                                                                                 | `1`              |
+| `notifications.readinessProbe.failureThreshold`                              | Failure threshold for readinessProbe                                                                               | `3`              |
+| `notifications.readinessProbe.successThreshold`                              | Success threshold for readinessProbe                                                                               | `1`              |
+| `notifications.customStartupProbe`                                           | Custom startupProbe that overrides the default one                                                                 | `{}`             |
+| `notifications.customLivenessProbe`                                          | Custom livenessProbe that overrides the default one                                                                | `{}`             |
+| `notifications.customReadinessProbe`                                         | Custom readinessProbe that overrides the default one                                                               | `{}`             |
 | `notifications.webhook.ingress.enabled`                                      | Enable an ingress resource for Webhooks                                                                            | `false`          |
 | `notifications.webhook.ingress.annotations`                                  | Additional ingress annotations                                                                                     | `{}`             |
 | `notifications.webhook.ingress.labels`                                       | Additional ingress labels                                                                                          | `{}`             |
@@ -419,10 +452,33 @@ The command removes all the Kubernetes components associated with the chart and 
 | `notifications.bots.slack.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `notifications.bots.slack.affinity` is set. Allowed values: `soft` or `hard` | `""`             |
 | `notifications.bots.slack.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `notifications.bots.slack.affinity` is set                                     | `""`             |
 | `notifications.bots.slack.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `notifications.bots.slack.affinity` is set                                  | `[]`             |
+| `notifications.bots.slack.containerPorts.metrics`                            | Slack Bot controller metrics port number                                                                           | `9001`           |
+| `notifications.bots.slack.startupProbe.enabled`                              | Enable startupProbe on Slack Bot nodes                                                                             | `false`          |
+| `notifications.bots.slack.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                             | `10`             |
+| `notifications.bots.slack.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                    | `10`             |
+| `notifications.bots.slack.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                   | `1`              |
+| `notifications.bots.slack.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                 | `3`              |
+| `notifications.bots.slack.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                 | `1`              |
+| `notifications.bots.slack.livenessProbe.enabled`                             | Enable livenessProbe on Slack Bot nodes                                                                            | `true`           |
+| `notifications.bots.slack.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                            | `10`             |
+| `notifications.bots.slack.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                   | `10`             |
+| `notifications.bots.slack.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                  | `1`              |
+| `notifications.bots.slack.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                | `3`              |
+| `notifications.bots.slack.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                | `1`              |
+| `notifications.bots.slack.readinessProbe.enabled`                            | Enable readinessProbe on Slack Bot nodes                                                                           | `true`           |
+| `notifications.bots.slack.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                           | `10`             |
+| `notifications.bots.slack.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                  | `10`             |
+| `notifications.bots.slack.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                 | `1`              |
+| `notifications.bots.slack.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                               | `3`              |
+| `notifications.bots.slack.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                               | `1`              |
+| `notifications.bots.slack.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                 | `{}`             |
+| `notifications.bots.slack.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                | `{}`             |
+| `notifications.bots.slack.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                               | `{}`             |
 | `notifications.bots.slack.affinity`                                          | Affinity for Argo CD Slack bot pods assignment                                                                     | `{}`             |
 | `notifications.bots.slack.podAnnotations`                                    | Annotations for Argo CD Slack bot pods                                                                             | `{}`             |
 | `notifications.bots.slack.podLabels`                                         | Extra labels for Argo CD Slack bot pods                                                                            | `{}`             |
 | `notifications.bots.slack.containerSecurityContext.enabled`                  | Enabled Argo CD Slack bot containers' Security Context                                                             | `true`           |
+| `notifications.bots.slack.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                   | `{}`             |
 | `notifications.bots.slack.containerSecurityContext.runAsUser`                | Set Argo CD Slack bot containers' Security Context runAsUser                                                       | `1001`           |
 | `notifications.bots.slack.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD Slack bot containers' Security Context allowPrivilegeEscalation                                        | `false`          |
 | `notifications.bots.slack.containerSecurityContext.capabilities.drop`        | Set Argo CD Slack bot containers' Security Context capabilities to be dropped                                      | `["ALL"]`        |
@@ -433,6 +489,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `notifications.bots.slack.resources.limits`                                  | The resources limits for the Argo CD Slack bot containers                                                          | `{}`             |
 | `notifications.bots.slack.resources.requests`                                | The requested resources for the Argo CD Slack bot containers                                                       | `{}`             |
 | `notifications.bots.slack.podSecurityContext.enabled`                        | Enabled Argo CD Slack bot pods' Security Context                                                                   | `true`           |
+| `notifications.bots.slack.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                 | `Always`         |
+| `notifications.bots.slack.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                     | `[]`             |
+| `notifications.bots.slack.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                        | `[]`             |
 | `notifications.bots.slack.podSecurityContext.fsGroup`                        | Set Argo CD Slack bot pod's Security Context fsGroup                                                               | `1001`           |
 | `notifications.bots.slack.nodeSelector`                                      | Node labels for Argo CD Slack bot pods assignment                                                                  | `{}`             |
 | `notifications.bots.slack.tolerations`                                       | Tolerations for Argo CD Slack bot pods assignment                                                                  | `[]`             |
@@ -472,8 +531,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.resources.limits`                                  | The resources limits for the Argo CD server containers                                                                          | `{}`                     |
 | `server.resources.requests`                                | The requested resources for the Argo CD server containers                                                                       | `{}`                     |
 | `server.podSecurityContext.enabled`                        | Enabled Argo CD server pods' Security Context                                                                                   | `true`                   |
+| `server.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                              | `Always`                 |
+| `server.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                  | `[]`                     |
+| `server.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                     | `[]`                     |
 | `server.podSecurityContext.fsGroup`                        | Set Argo CD server pod's Security Context fsGroup                                                                               | `1001`                   |
 | `server.containerSecurityContext.enabled`                  | Enabled Argo CD server containers' Security Context                                                                             | `true`                   |
+| `server.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                | `{}`                     |
 | `server.containerSecurityContext.runAsUser`                | Set Argo CD server containers' Security Context runAsUser                                                                       | `1001`                   |
 | `server.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD server containers' Security Context allowPrivilegeEscalation                                                        | `false`                  |
 | `server.containerSecurityContext.capabilities.drop`        | Set Argo CD containers' server Security Context capabilities to be dropped                                                      | `["ALL"]`                |
@@ -618,8 +681,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `repoServer.resources.limits`                                  | The resources limits for the Argo CD repo server containers                                          | `{}`             |
 | `repoServer.resources.requests`                                | The requested resources for the Argo CD repo server containers                                       | `{}`             |
 | `repoServer.podSecurityContext.enabled`                        | Enabled Argo CD repo server pods' Security Context                                                   | `true`           |
+| `repoServer.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                   | `Always`         |
+| `repoServer.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                       | `[]`             |
+| `repoServer.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                          | `[]`             |
 | `repoServer.podSecurityContext.fsGroup`                        | Set Argo CD repo server pod's Security Context fsGroup                                               | `1001`           |
 | `repoServer.containerSecurityContext.enabled`                  | Enabled Argo CD repo server containers' Security Context                                             | `true`           |
+| `repoServer.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                     | `{}`             |
 | `repoServer.containerSecurityContext.runAsUser`                | Set Argo CD repo server containers' Security Context runAsUser                                       | `1001`           |
 | `repoServer.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD repo server containers' Security Context allowPrivilegeEscalation                        | `false`          |
 | `repoServer.containerSecurityContext.capabilities.drop`        | Set Argo CD containers' repo server Security Context capabilities to be dropped                      | `["ALL"]`        |
@@ -736,8 +803,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dex.resources.limits`                                  | The resources limits for the Dex containers                                                         | `{}`                  |
 | `dex.resources.requests`                                | The requested resources for the Dex containers                                                      | `{}`                  |
 | `dex.podSecurityContext.enabled`                        | Enabled Dex pods' Security Context                                                                  | `true`                |
+| `dex.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                  | `Always`              |
+| `dex.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                      | `[]`                  |
+| `dex.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                         | `[]`                  |
 | `dex.podSecurityContext.fsGroup`                        | Set Dex pod's Security Context fsGroup                                                              | `1001`                |
 | `dex.containerSecurityContext.enabled`                  | Enabled Dex containers' Security Context                                                            | `true`                |
+| `dex.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `{}`                  |
 | `dex.containerSecurityContext.runAsUser`                | Set Dex containers' Security Context runAsUser                                                      | `1001`                |
 | `dex.containerSecurityContext.allowPrivilegeEscalation` | Set Dex containers' Security Context allowPrivilegeEscalation                                       | `false`               |
 | `dex.containerSecurityContext.readOnlyRootFilesystem`   | Set Dex containers' server Security Context readOnlyRootFilesystem                                  | `false`               |
@@ -843,17 +914,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init Container Parameters
 
-| Name                                                   | Description                                                                                                        | Value                      |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
-| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                        | `{}`                       |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                     | `{}`                       |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                        |
+| Name                                                        | Description                                                                                                        | Value                      |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| `volumePermissions.enabled`                                 | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
+| `volumePermissions.image.registry`                          | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                        | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                            | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`                        | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
+| `volumePermissions.resources.limits`                        | The resources limits for the init container                                                                        | `{}`                       |
+| `volumePermissions.resources.requests`                      | The requested resources for the init container                                                                     | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `{}`                       |
+| `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                    | `0`                        |
 
 ### Other Parameters
 
@@ -880,6 +952,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redisWait.enabled`                                           | Enables waiting for redis                                                                             | `true`                  |
 | `redisWait.extraArgs`                                         | Additional arguments for the redis-cli call, such as TLS                                              | `""`                    |
 | `redisWait.containerSecurityContext.enabled`                  | Enabled Argo CD repo server containers' Security Context                                              | `true`                  |
+| `redisWait.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                      | `{}`                    |
 | `redisWait.containerSecurityContext.runAsUser`                | Set Argo CD repo server containers' Security Context runAsUser                                        | `1001`                  |
 | `redisWait.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD repo server containers' Security Context allowPrivilegeEscalation                         | `false`                 |
 | `redisWait.containerSecurityContext.capabilities.drop`        | Set Argo CD containers' repo server Security Context capabilities to be dropped                       | `["ALL"]`               |
@@ -916,7 +989,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/argo-
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 

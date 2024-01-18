@@ -1,6 +1,6 @@
 <!--- app-name: Joomla! -->
 
-<!-- markdownlint-disable-file MD026 -->
+<!-- markdownlint-disable-next-line MD026 -->
 # Bitnami package for Joomla!
 
 Joomla! is an award winning open source CMS platform for building websites and applications. It includes page caching, page compression and Let's Encrypt auto-configuration support.
@@ -130,8 +130,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.limits`                                  | The resources limits for the container                                                                               | `{}`                     |
 | `resources.requests`                                | The requested resources for the container                                                                            | `{}`                     |
 | `podSecurityContext.enabled`                        | Enable Joomla! pods' Security Context                                                                                | `true`                   |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                   | `Always`                 |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                       | `[]`                     |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                          | `[]`                     |
 | `podSecurityContext.fsGroup`                        | Joomla! pods' group ID                                                                                               | `1001`                   |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                 | `true`                   |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                     | `{}`                     |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                           | `1001`                   |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                        | `true`                   |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                          | `false`                  |
@@ -281,7 +285,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/jooml
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -408,6 +412,7 @@ Please read the update notes carefully.
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
+<!-- markdownlint-disable-next-line MD026 -->
 ##### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.

@@ -112,7 +112,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.create`                             | Specifies whether a service account should be created                                                                  | `true`                   |
 | `serviceAccount.name`                               | The name of the service account to use. If not set and create is true, a name is generated using the fullname template | `""`                     |
 | `serviceAccount.annotations`                        | Add annotations                                                                                                        | `{}`                     |
-| `serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                                                       | `true`                   |
+| `serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                                                       | `false`                  |
 | `existingSecret`                                    | Name of a secret with the application password                                                                         | `""`                     |
 | `smtpHost`                                          | SMTP host                                                                                                              | `""`                     |
 | `smtpPort`                                          | SMTP port                                                                                                              | `""`                     |
@@ -138,8 +138,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.limits`                                  | The resources limits for Matomo containers                                                                             | `{}`                     |
 | `resources.requests`                                | The requested resources for Matomo containers                                                                          | `{}`                     |
 | `podSecurityContext.enabled`                        | Enable Drupal pods' Security Context                                                                                   | `true`                   |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                     | `Always`                 |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                         | `[]`                     |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                            | `[]`                     |
 | `podSecurityContext.fsGroup`                        | Drupal pods' group ID                                                                                                  | `1001`                   |
 | `containerSecurityContext.enabled`                  | Enabled Drupal containers' Security Context                                                                            | `true`                   |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                       | `{}`                     |
 | `containerSecurityContext.runAsUser`                | Set Drupal containers' Security Context runAsUser                                                                      | `1001`                   |
 | `containerSecurityContext.runAsNonRoot`             | Set Controller container's Security Context runAsNonRoot                                                               | `true`                   |
 | `containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                                    | `false`                  |
@@ -341,7 +345,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/drupa
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 

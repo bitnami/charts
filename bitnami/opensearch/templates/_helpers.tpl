@@ -59,7 +59,6 @@ Return the proper image name (for the init container volume-permissions image)
 {{/*
 Name for the Opensearch service
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-Required for the Kibana subchart to find Opensearch service.
 */}}
 {{- define "opensearch.service.name" -}}
     {{- printf "%s" ( include "common.names.fullname" . )  | trunc 63 | trimSuffix "-" -}}
@@ -67,7 +66,6 @@ Required for the Kibana subchart to find Opensearch service.
 
 {{/*
 Port number for the Opensearch service REST API port
-Required for the Kibana subchart to find Opensearch service.
 */}}
 {{- define "opensearch.service.ports.restAPI" -}}
 {{- printf "%d" (int .Values.service.ports.restAPI) -}}
