@@ -212,6 +212,9 @@ client:
   ## @param client.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param client.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param client.hostAliases Appsmith client pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -635,6 +638,9 @@ backend:
   ## @param backend.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param backend.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param backend.hostAliases Appsmith backend pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -977,6 +983,9 @@ rts:
   ## @param rts.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param rts.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param rts.hostAliases Appsmith rts pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
