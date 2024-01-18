@@ -40,7 +40,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" (ternary "http" "https" (not .Values.containerPorts.https)) "context" $) | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" (ternary "http" "https" (not $.Values.containerPorts.https)) "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.healthIngress.extraRules }}
     {{- include "common.tplvalues.render" (dict "value" .Values.healthIngress.extraRules "context" $) | nindent 4 }}
