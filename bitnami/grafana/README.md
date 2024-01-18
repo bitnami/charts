@@ -222,6 +222,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------- |
 | `grafana.replicaCount`                                      | Number of Grafana nodes                                                                                 | `1`              |
 | `grafana.updateStrategy.type`                               | Set up update strategy for Grafana installation.                                                        | `RollingUpdate`  |
+| `grafana.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                      | `false`          |
 | `grafana.hostAliases`                                       | Add deployment host aliases                                                                             | `[]`             |
 | `grafana.schedulerName`                                     | Alternative scheduler                                                                                   | `""`             |
 | `grafana.terminationGracePeriodSeconds`                     | In seconds, time the given to the Grafana pod needs to terminate gracefully                             | `""`             |
