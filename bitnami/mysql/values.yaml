@@ -85,7 +85,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 8.0.35-debian-11-r2
+  tag: 8.0.36-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -310,14 +310,21 @@ primary:
   ## MySQL primary Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param primary.podSecurityContext.enabled Enable security context for MySQL primary pods
+  ## @param primary.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param primary.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param primary.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param primary.podSecurityContext.fsGroup Group ID for the mounted volumes' filesystem
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## MySQL primary container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param primary.containerSecurityContext.enabled MySQL primary container securityContext
+  ## @param primary.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param primary.containerSecurityContext.runAsUser User ID for the MySQL primary container
   ## @param primary.containerSecurityContext.runAsNonRoot Set MySQL primary container's Security Context runAsNonRoot
   ## @param primary.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
@@ -326,6 +333,7 @@ primary:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
@@ -712,14 +720,21 @@ secondary:
   ## MySQL secondary Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param secondary.podSecurityContext.enabled Enable security context for MySQL secondary pods
+  ## @param secondary.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param secondary.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param secondary.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param secondary.podSecurityContext.fsGroup Group ID for the mounted volumes' filesystem
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## MySQL secondary container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param secondary.containerSecurityContext.enabled MySQL secondary container securityContext
+  ## @param secondary.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param secondary.containerSecurityContext.runAsUser User ID for the MySQL secondary container
   ## @param secondary.containerSecurityContext.runAsNonRoot Set MySQL secondary container's Security Context runAsNonRoot
   ## @param secondary.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
@@ -728,6 +743,7 @@ secondary:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
@@ -1071,7 +1087,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r94
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1105,7 +1121,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.15.1-debian-11-r0
+    tag: 0.15.1-debian-11-r2
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1119,11 +1135,13 @@ metrics:
   ## MySQL metrics container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled MySQL metrics container securityContext
+  ## @param metrics.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser User ID for the MySQL metrics container
   ## @param metrics.containerSecurityContext.runAsNonRoot Set MySQL metrics container's Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
   ## MySQL Prometheus exporter service parameters

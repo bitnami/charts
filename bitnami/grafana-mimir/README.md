@@ -142,8 +142,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.resources.limits`                                  | The resources limits for the alertmanager containers                                                   | `{}`                |
 | `alertmanager.resources.requests`                                | The requested resources for the alertmanager containers                                                | `{}`                |
 | `alertmanager.podSecurityContext.enabled`                        | Enabled Alertmanager pods' Security Context                                                            | `true`              |
+| `alertmanager.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                     | `Always`            |
+| `alertmanager.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                         | `[]`                |
+| `alertmanager.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                            | `[]`                |
 | `alertmanager.podSecurityContext.fsGroup`                        | Set Alertmanager pod's Security Context fsGroup                                                        | `1001`              |
 | `alertmanager.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                   | `true`              |
+| `alertmanager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                       | `{}`                |
 | `alertmanager.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                             | `1001`              |
 | `alertmanager.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                          | `true`              |
 | `alertmanager.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                            | `false`             |
@@ -241,8 +245,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.resources.limits`                                  | The resources limits for the compactor containers                                                   | `{}`                |
 | `compactor.resources.requests`                                | The requested resources for the compactor containers                                                | `{}`                |
 | `compactor.podSecurityContext.enabled`                        | Enabled Compactor pods' Security Context                                                            | `true`              |
+| `compactor.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                  | `Always`            |
+| `compactor.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                      | `[]`                |
+| `compactor.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                         | `[]`                |
 | `compactor.podSecurityContext.fsGroup`                        | Set Compactor pod's Security Context fsGroup                                                        | `1001`              |
 | `compactor.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                | `true`              |
+| `compactor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `{}`                |
 | `compactor.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                          | `1001`              |
 | `compactor.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                       | `true`              |
 | `compactor.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                         | `false`             |
@@ -336,8 +344,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.resources.limits`                                  | The resources limits for the distributor containers                                                   | `{}`             |
 | `distributor.resources.requests`                                | The requested resources for the distributor containers                                                | `{}`             |
 | `distributor.podSecurityContext.enabled`                        | Enabled Distributor pods' Security Context                                                            | `true`           |
+| `distributor.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                    | `Always`         |
+| `distributor.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                        | `[]`             |
+| `distributor.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                           | `[]`             |
 | `distributor.podSecurityContext.fsGroup`                        | Set Distributor pod's Security Context fsGroup                                                        | `1001`           |
 | `distributor.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                  | `true`           |
+| `distributor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                      | `{}`             |
 | `distributor.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                            | `1001`           |
 | `distributor.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                         | `true`           |
 | `distributor.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                           | `false`          |
@@ -437,8 +449,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.resources.limits`                                  | The resources limits for the gateway containers                                                       | `{}`                    |
 | `gateway.resources.requests`                                | The requested resources for the gateway containers                                                    | `{}`                    |
 | `gateway.podSecurityContext.enabled`                        | Enabled Gateway pods' Security Context                                                                | `true`                  |
+| `gateway.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                    | `Always`                |
+| `gateway.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                        | `[]`                    |
+| `gateway.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                           | `[]`                    |
 | `gateway.podSecurityContext.fsGroup`                        | Set Gateway pod's Security Context fsGroup                                                            | `1001`                  |
 | `gateway.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                  | `true`                  |
+| `gateway.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                      | `{}`                    |
 | `gateway.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                            | `1001`                  |
 | `gateway.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                         | `true`                  |
 | `gateway.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                           | `false`                 |
@@ -536,8 +552,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.resources.limits`                                  | The resources limits for the ingester containers                                                   | `{}`                |
 | `ingester.resources.requests`                                | The requested resources for the ingester containers                                                | `{}`                |
 | `ingester.podSecurityContext.enabled`                        | Enabled Ingester pods' Security Context                                                            | `true`              |
+| `ingester.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                 | `Always`            |
+| `ingester.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                     | `[]`                |
+| `ingester.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                        | `[]`                |
 | `ingester.podSecurityContext.fsGroup`                        | Set Ingester pod's Security Context fsGroup                                                        | `1001`              |
 | `ingester.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                               | `true`              |
+| `ingester.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                   | `{}`                |
 | `ingester.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                         | `1001`              |
 | `ingester.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                      | `true`              |
 | `ingester.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                        | `false`             |
@@ -628,8 +648,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `overridesExporter.resources.limits`                                  | The resources limits for the overrides-exporter containers                                                  | `{}`             |
 | `overridesExporter.resources.requests`                                | The requested resources for the overrides-exporter containers                                               | `{}`             |
 | `overridesExporter.podSecurityContext.enabled`                        | Enabled Overrides Exporter pods' Security Context                                                           | `true`           |
+| `overridesExporter.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                          | `Always`         |
+| `overridesExporter.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                              | `[]`             |
+| `overridesExporter.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                 | `[]`             |
 | `overridesExporter.podSecurityContext.fsGroup`                        | Set Overrides Exporter pod's Security Context fsGroup                                                       | `1001`           |
 | `overridesExporter.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                        | `true`           |
+| `overridesExporter.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                            | `{}`             |
 | `overridesExporter.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                  | `1001`           |
 | `overridesExporter.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                               | `true`           |
 | `overridesExporter.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                 | `false`          |
@@ -717,8 +741,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.resources.limits`                                  | The resources limits for the querier containers                                                   | `{}`             |
 | `querier.resources.requests`                                | The requested resources for the querier containers                                                | `{}`             |
 | `querier.podSecurityContext.enabled`                        | Enabled Querier pods' Security Context                                                            | `true`           |
+| `querier.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                | `Always`         |
+| `querier.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                    | `[]`             |
+| `querier.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                       | `[]`             |
 | `querier.podSecurityContext.fsGroup`                        | Set Querier pod's Security Context fsGroup                                                        | `1001`           |
 | `querier.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                              | `true`           |
+| `querier.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                  | `{}`             |
 | `querier.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                        | `1001`           |
 | `querier.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                     | `true`           |
 | `querier.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                       | `false`          |
@@ -806,8 +834,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.resources.limits`                                  | The resources limits for the ingester containers                                                        | `{}`             |
 | `queryFrontend.resources.requests`                                | The requested resources for the ingester containers                                                     | `{}`             |
 | `queryFrontend.podSecurityContext.enabled`                        | Enabled Query Frontend pods' Security Context                                                           | `true`           |
+| `queryFrontend.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                      | `Always`         |
+| `queryFrontend.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                          | `[]`             |
+| `queryFrontend.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                             | `[]`             |
 | `queryFrontend.podSecurityContext.fsGroup`                        | Set Query Frontend pod's Security Context fsGroup                                                       | `1001`           |
 | `queryFrontend.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                    | `true`           |
+| `queryFrontend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `{}`             |
 | `queryFrontend.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                              | `1001`           |
 | `queryFrontend.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                           | `true`           |
 | `queryFrontend.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                             | `false`          |
@@ -891,8 +923,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryScheduler.resources.limits`                                  | The resources limits for the query-scheduler containers                                                  | `{}`             |
 | `queryScheduler.resources.requests`                                | The requested resources for the query-scheduler containers                                               | `{}`             |
 | `queryScheduler.podSecurityContext.enabled`                        | Enabled Query Scheduler pods' Security Context                                                           | `true`           |
+| `queryScheduler.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                       | `Always`         |
+| `queryScheduler.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                           | `[]`             |
+| `queryScheduler.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                              | `[]`             |
 | `queryScheduler.podSecurityContext.fsGroup`                        | Set Query Scheduler pod's Security Context fsGroup                                                       | `1001`           |
 | `queryScheduler.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                     | `true`           |
+| `queryScheduler.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                         | `{}`             |
 | `queryScheduler.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                               | `1001`           |
 | `queryScheduler.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                            | `true`           |
 | `queryScheduler.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                              | `false`          |
@@ -981,8 +1017,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `storeGateway.resources.limits`                                  | The resources limits for the ingester containers                                                       | `{}`                |
 | `storeGateway.resources.requests`                                | The requested resources for the ingester containers                                                    | `{}`                |
 | `storeGateway.podSecurityContext.enabled`                        | Enabled Store Gateway pods' Security Context                                                           | `true`              |
+| `storeGateway.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                     | `Always`            |
+| `storeGateway.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                         | `[]`                |
+| `storeGateway.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                            | `[]`                |
 | `storeGateway.podSecurityContext.fsGroup`                        | Set Store Gateway pod's Security Context fsGroup                                                       | `1001`              |
 | `storeGateway.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                   | `true`              |
+| `storeGateway.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                       | `{}`                |
 | `storeGateway.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                             | `1001`              |
 | `storeGateway.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                          | `true`              |
 | `storeGateway.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                            | `false`             |
@@ -1081,8 +1121,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.resources.limits`                                  | The resources limits for the Ruler containers                                                   | `{}`             |
 | `ruler.resources.requests`                                | The requested resources for the Ruler containers                                                | `{}`             |
 | `ruler.podSecurityContext.enabled`                        | Enabled Ruler pods' Security Context                                                            | `true`           |
+| `ruler.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                              | `Always`         |
+| `ruler.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                  | `[]`             |
+| `ruler.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                     | `[]`             |
 | `ruler.podSecurityContext.fsGroup`                        | Set Ruler pod's Security Context fsGroup                                                        | `1001`           |
 | `ruler.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                            | `true`           |
+| `ruler.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                | `{}`             |
 | `ruler.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                      | `1001`           |
 | `ruler.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                   | `true`           |
 | `ruler.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                     | `false`          |
@@ -1148,16 +1192,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init Container Parameters
 
-| Name                                                   | Description                                                                                     | Value                      |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | -------------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                    |
-| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`                       |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                       |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                       |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                        |
+| Name                                                        | Description                                                                                     | Value                      |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`                                 | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                    |
+| `volumePermissions.image.registry`                          | OS Shell + Utility image registry                                                               | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                        | OS Shell + Utility image repository                                                             | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.pullPolicy`                        | OS Shell + Utility image pull policy                                                            | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                           | `[]`                       |
+| `volumePermissions.resources.limits`                        | The resources limits for the init container                                                     | `{}`                       |
+| `volumePermissions.resources.requests`                      | The requested resources for the init container                                                  | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `{}`                       |
+| `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                 | `0`                        |
 
 ### Other Parameters
 
@@ -1168,7 +1213,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                              | `true`                                                                                                                                                  |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                            | `""`                                                                                                                                                    |
 | `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)                                                                  | `{}`                                                                                                                                                    |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                    | `true`                                                                                                                                                  |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                    | `false`                                                                                                                                                 |
 | `metrics.enabled`                             | Enable the export of Prometheus metrics                                                                                           | `false`                                                                                                                                                 |
 | `metrics.serviceMonitor.enabled`              | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                            | `false`                                                                                                                                                 |
 | `metrics.serviceMonitor.namespace`            | Namespace in which Prometheus is running                                                                                          | `""`                                                                                                                                                    |

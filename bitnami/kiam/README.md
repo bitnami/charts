@@ -149,6 +149,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.containerSecurityContext.seLinuxOptions`      | Set kiam server container's Security Context SE Linux options                                                                               | `{}`             |
 | `server.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                            | `RuntimeDefault` |
 | `server.podSecurityContext.enabled`                   | Enabled kiam server pods' Security Context                                                                                                  | `true`           |
+| `server.podSecurityContext.fsGroupChangePolicy`       | Set filesystem group change policy                                                                                                          | `Always`         |
+| `server.podSecurityContext.sysctls`                   | Set kernel settings using the sysctl interface                                                                                              | `[]`             |
+| `server.podSecurityContext.supplementalGroups`        | Set filesystem extra groups                                                                                                                 | `[]`             |
 | `server.podSecurityContext.fsGroup`                   | Set kiam server pod's Security Context fsGroup                                                                                              | `1001`           |
 | `server.podAffinityPreset`                            | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                         | `""`             |
 | `server.podAntiAffinityPreset`                        | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                    | `soft`           |
@@ -276,6 +279,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.containerSecurityContext.capabilities.add`    | Add capabilities for the securityContext                                                                                                    | `["NET_ADMIN"]`           |
 | `agent.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                            | `RuntimeDefault`          |
 | `agent.podSecurityContext.enabled`                   | Enabled agent pods' Security Context                                                                                                        | `true`                    |
+| `agent.podSecurityContext.fsGroupChangePolicy`       | Set filesystem group change policy                                                                                                          | `Always`                  |
+| `agent.podSecurityContext.sysctls`                   | Set kernel settings using the sysctl interface                                                                                              | `[]`                      |
+| `agent.podSecurityContext.supplementalGroups`        | Set filesystem extra groups                                                                                                                 | `[]`                      |
 | `agent.podSecurityContext.fsGroup`                   | Set agent pod's Security Context fsGroup                                                                                                    | `1001`                    |
 | `agent.podAffinityPreset`                            | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                         | `""`                      |
 | `agent.podAntiAffinityPreset`                        | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                    | `soft`                    |
@@ -314,12 +320,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### kiam agent Service Account parameters
 
-| Name                                                | Description                                                                                                         | Value  |
-| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------ |
-| `agent.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true` |
-| `agent.serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
-| `agent.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true` |
-| `agent.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`   |
+| Name                                                | Description                                                                                                         | Value   |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
+| `agent.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true`  |
+| `agent.serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
+| `agent.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `false` |
+| `agent.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`    |
 
 ### kiam agent metrics parameters
 

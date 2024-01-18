@@ -221,14 +221,21 @@ postgresql:
   ## K8s Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param postgresql.podSecurityContext.enabled Enable security context for PostgreSQL with Repmgr
+  ## @param postgresql.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param postgresql.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param postgresql.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param postgresql.podSecurityContext.fsGroup Group ID for the PostgreSQL with Repmgr filesystem
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Container Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param postgresql.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param postgresql.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param postgresql.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param postgresql.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param postgresql.containerSecurityContext.privileged Set container's Security Context privileged
@@ -245,6 +252,7 @@ postgresql:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -717,14 +725,21 @@ witness:
   ## K8s Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param witness.podSecurityContext.enabled Enable security context for PostgreSQL witness with Repmgr
+  ## @param witness.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param witness.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param witness.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param witness.podSecurityContext.fsGroup Group ID for the PostgreSQL witness with Repmgr filesystem
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Container Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param witness.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param witness.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param witness.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param witness.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param witness.containerSecurityContext.privileged Set container's Security Context privileged
@@ -741,6 +756,7 @@ witness:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1202,14 +1218,21 @@ pgpool:
   ## K8s Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param pgpool.podSecurityContext.enabled Enable security context for Pgpool
+  ## @param pgpool.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param pgpool.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param pgpool.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param pgpool.podSecurityContext.fsGroup Group ID for the Pgpool filesystem
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Container Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param pgpool.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param pgpool.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param pgpool.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param pgpool.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param pgpool.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1226,6 +1249,7 @@ pgpool:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1518,7 +1542,7 @@ rbac:
 serviceAccount:
   ## @param serviceAccount.create Enable creation of ServiceAccount for Airflow pods
   ##
-  create: false
+  create: true
   ## @param serviceAccount.name The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the common.names.fullname template
   ##
@@ -1529,7 +1553,7 @@ serviceAccount:
   ## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
   ## Can be set to false if pods using this serviceAccount do not need to use K8s API
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
 
 ## Pod Security Policy configuration
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
@@ -1579,6 +1603,7 @@ metrics:
   ## K8s Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param metrics.podSecurityContext.enabled Enable security context for PostgreSQL Prometheus exporter
+  ## @param metrics.podSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param metrics.podSecurityContext.runAsUser User ID for the PostgreSQL Prometheus exporter container
   ## @param metrics.podSecurityContext.runAsGroup Group ID for the PostgreSQL Prometheus exporter container
   ## @param metrics.podSecurityContext.runAsNonRoot Set PostgreSQL Prometheus exporter container's Security Context runAsNonRoot
@@ -1586,6 +1611,7 @@ metrics:
   ##
   podSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 0
     runAsNonRoot: true
@@ -1827,12 +1853,14 @@ volumePermissions:
     pullSecrets: []
   ## K8s Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param volumePermissions.podSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param volumePermissions.podSecurityContext.runAsUser Init container volume-permissions User ID
   ## @param volumePermissions.podSecurityContext.runAsGroup Group ID for the init container volume-permissions container
   ## @param volumePermissions.podSecurityContext.runAsNonRoot Set Security Context runAsNonRoot for the init container volume-permissions container
   ## @param volumePermissions.podSecurityContext.seccompProfile.type Set Security Context seccompProfile for the init container volume-permissions container
   ##
   podSecurityContext:
+    seLinuxOptions: {}
     runAsUser: 0
     runAsGroup: 0
     runAsNonRoot: false
@@ -2016,13 +2044,20 @@ backup:
     ## @param backup.cronjob.restartPolicy Set the cronjob parameter restartPolicy
     restartPolicy: OnFailure
     ## @param backup.cronjob.podSecurityContext.enabled Enable PodSecurityContext for CronJob/Backup
+    ## @param backup.cronjob.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param backup.cronjob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param backup.cronjob.podSecurityContext.supplementalGroups Set filesystem extra groups
     ## @param backup.cronjob.podSecurityContext.fsGroup Group ID for the CronJob
     podSecurityContext:
       enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
       fsGroup: 1001
     ## backup container's Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param backup.cronjob.containerSecurityContext.enabled Enable container security context
+    ## @param backup.cronjob.containerSecurityContext.seLinuxOptions Set SELinux options in container
     ## @param backup.cronjob.containerSecurityContext.runAsUser User ID for the backup container
     ## @param backup.cronjob.containerSecurityContext.runAsGroup Group ID for the backup container
     ## @param backup.cronjob.containerSecurityContext.runAsNonRoot Set backup container's Security Context runAsNonRoot
@@ -2032,6 +2067,7 @@ backup:
     ## @param backup.cronjob.containerSecurityContext.capabilities.drop Set backup container's Security Context capabilities to drop
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
       runAsGroup: 0
       runAsNonRoot: true

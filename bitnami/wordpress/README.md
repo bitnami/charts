@@ -169,8 +169,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.https`                              | WordPress HTTPS container port                                                                                           | `8443`           |
 | `extraContainerPorts`                               | Optionally specify extra list of additional ports for WordPress container(s)                                             | `[]`             |
 | `podSecurityContext.enabled`                        | Enabled WordPress pods' Security Context                                                                                 | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`         |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`             |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set WordPress pod's Security Context fsGroup                                                                             | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -237,34 +241,35 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                                                   | Description                                                                                                        | Value                      |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
-| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                                                  | `true`                     |
-| `persistence.storageClass`                             | Persistent Volume storage class                                                                                    | `""`                       |
-| `persistence.accessModes`                              | Persistent Volume access modes                                                                                     | `[]`                       |
-| `persistence.accessMode`                               | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)                                  | `ReadWriteOnce`            |
-| `persistence.size`                                     | Persistent Volume size                                                                                             | `10Gi`                     |
-| `persistence.dataSource`                               | Custom PVC data source                                                                                             | `{}`                       |
-| `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                                                 | `""`                       |
-| `persistence.selector`                                 | Selector to match an existing Persistent Volume for WordPress data PVC                                             | `{}`                       |
-| `persistence.annotations`                              | Persistent Volume Claim annotations                                                                                | `{}`                       |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
-| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                        | `{}`                       |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                     | `{}`                       |
-| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                     | `0`                        |
+| Name                                                        | Description                                                                                                        | Value                      |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| `persistence.enabled`                                       | Enable persistence using Persistent Volume Claims                                                                  | `true`                     |
+| `persistence.storageClass`                                  | Persistent Volume storage class                                                                                    | `""`                       |
+| `persistence.accessModes`                                   | Persistent Volume access modes                                                                                     | `[]`                       |
+| `persistence.accessMode`                                    | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)                                  | `ReadWriteOnce`            |
+| `persistence.size`                                          | Persistent Volume size                                                                                             | `10Gi`                     |
+| `persistence.dataSource`                                    | Custom PVC data source                                                                                             | `{}`                       |
+| `persistence.existingClaim`                                 | The name of an existing PVC to use for persistence                                                                 | `""`                       |
+| `persistence.selector`                                      | Selector to match an existing Persistent Volume for WordPress data PVC                                             | `{}`                       |
+| `persistence.annotations`                                   | Persistent Volume Claim annotations                                                                                | `{}`                       |
+| `volumePermissions.enabled`                                 | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
+| `volumePermissions.image.registry`                          | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                        | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                            | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`                        | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
+| `volumePermissions.resources.limits`                        | The resources limits for the init container                                                                        | `{}`                       |
+| `volumePermissions.resources.requests`                      | The requested resources for the init container                                                                     | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `{}`                       |
+| `volumePermissions.containerSecurityContext.runAsUser`      | User ID for the init container                                                                                     | `0`                        |
 
 ### Other Parameters
 
 | Name                                          | Description                                                            | Value   |
 | --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for WordPress pod                    | `false` |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for WordPress pod                    | `true`  |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
 | `pdb.create`                                  | Enable a Pod Disruption Budget creation                                | `false` |
 | `pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled         | `1`     |
@@ -310,6 +315,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.resources.limits`                                  | The resources limits for the Prometheus exporter container                                                      | `{}`                              |
 | `metrics.resources.requests`                                | The requested resources for the Prometheus exporter container                                                   | `{}`                              |
 | `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                            | `true`                            |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `{}`                              |
 | `metrics.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                      | `1001`                            |
 | `metrics.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                   | `true`                            |
 | `metrics.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                     | `false`                           |

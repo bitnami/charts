@@ -282,14 +282,21 @@ client:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param client.podSecurityContext.enabled Enabled Client pods' Security Context
+  ## @param client.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param client.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param client.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param client.podSecurityContext.fsGroup Set Client pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param client.containerSecurityContext.enabled Enabled Client containers' Security Context
+  ## @param client.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param client.containerSecurityContext.runAsUser Set Client containers' Security Context runAsUser
   ## @param client.containerSecurityContext.runAsGroup Set Client containers' Security Context runAsGroup
   ## @param client.containerSecurityContext.runAsNonRoot Set Client containers' Security Context runAsNonRoot
@@ -301,6 +308,7 @@ client:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -467,7 +475,7 @@ client:
   serviceAccount:
     ## @param client.serviceAccount.create Enable creation of ServiceAccount for Client pods
     ##
-    create: false
+    create: true
     ## @param client.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -629,14 +637,21 @@ worker:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param worker.podSecurityContext.enabled Enabled Worker pods' Security Context
+  ## @param worker.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param worker.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param worker.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param worker.podSecurityContext.fsGroup Set Worker pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param worker.containerSecurityContext.enabled Enabled Worker containers' Security Context
+  ## @param worker.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param worker.containerSecurityContext.runAsUser Set Worker containers' Security Context runAsUser
   ## @param worker.containerSecurityContext.runAsGroup Set Worker containers' Security Context runAsGroup
   ## @param worker.containerSecurityContext.runAsNonRoot Set Worker containers' Security Context runAsNonRoot
@@ -648,6 +663,7 @@ worker:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -858,7 +874,7 @@ worker:
   serviceAccount:
     ## @param worker.serviceAccount.create Enable creation of ServiceAccount for Data Coordinator pods
     ##
-    create: false
+    create: true
     ## @param worker.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##

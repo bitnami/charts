@@ -271,10 +271,16 @@ server:
     seccompProfile:
       type: "RuntimeDefault"
   ## @param server.podSecurityContext.enabled Enabled kiam server pods' Security Context
+  ## @param server.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param server.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param server.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param server.podSecurityContext.fsGroup Set kiam server pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## @param server.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -699,10 +705,16 @@ agent:
     seccompProfile:
       type: "RuntimeDefault"
   ## @param agent.podSecurityContext.enabled Enabled agent pods' Security Context
+  ## @param agent.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param agent.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param agent.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param agent.podSecurityContext.fsGroup Set agent pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## @param agent.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -862,7 +874,7 @@ agent:
   serviceAccount:
     create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
 
   ## @section kiam agent metrics parameters

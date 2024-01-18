@@ -156,14 +156,21 @@ server:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param server.podSecurityContext.enabled Enabled server pods' Security Context
+  ## @param server.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param server.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param server.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param server.podSecurityContext.fsGroup Set server pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param server.containerSecurityContext.enabled Enabled server containers' Security Context
+  ## @param server.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param server.containerSecurityContext.runAsUser Set server containers' Security Context runAsUser
   ## @param server.containerSecurityContext.runAsNonRoot Set server containers' Security Context runAsNonRoot
   ## @param server.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
@@ -174,6 +181,7 @@ server:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -572,14 +580,21 @@ controller:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.podSecurityContext.enabled Enabled controller pods' Security Context
+  ## @param controller.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param controller.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param controller.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param controller.podSecurityContext.fsGroup Set controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.containerSecurityContext.enabled Enabled controller containers' Security Context
+  ## @param controller.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param controller.containerSecurityContext.runAsUser Set controller containers' Security Context runAsUser
   ## @param controller.containerSecurityContext.runAsNonRoot Set controller containers' Security Context runAsNonRoot
   ## @param controller.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
@@ -590,6 +605,7 @@ controller:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1009,6 +1025,7 @@ executor:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param executor.containerSecurityContext.enabled Enabled executor containers' Security Context
+  ## @param executor.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param executor.containerSecurityContext.runAsUser Set executor containers' Security Context runAsUser
   ## @param executor.containerSecurityContext.runAsNonRoot Set executor containers' Security Context runAsNonRoot
   ## @param executor.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
@@ -1019,6 +1036,7 @@ executor:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1155,7 +1173,7 @@ workflows:
   ## @param workflows.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   serviceAccount:
-    create: false
+    create: true
     name: ""
     automountServiceAccountToken: true
     annotations: {}
