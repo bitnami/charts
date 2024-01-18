@@ -182,8 +182,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                   | `1`              |
 | `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                   | `""`             |
 | `podSecurityContext.enabled`                        | Enabled OAuth2 Proxy pods' Security Context                                                      | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                               | `Always`         |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                   | `[]`             |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                      | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set OAuth2 Proxy pod's Security Context fsGroup                                                  | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                             | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                 | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                       | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                    | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                      | `false`          |
