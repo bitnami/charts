@@ -78,6 +78,7 @@ spec:
           resources: {{ toYaml .Values.contour.resources | nindent 12 }}
       restartPolicy: Never
       serviceAccountName: {{ include "contour.contourCertGenServiceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.contour.certgen.automountServiceAccountToken }}
   parallelism: 1
   completions: 1
   backoffLimit: 1

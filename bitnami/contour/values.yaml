@@ -368,6 +368,9 @@ contour:
     ## @param contour.certgen.certificateLifetime Generated certificate lifetime (in days).
     ##
     certificateLifetime: 365
+    ## @param contour.certgen.automountServiceAccountToken Mount Service Account token in pod
+    ##
+    automountServiceAccountToken: true
   ## @param contour.tlsExistingSecret Name of the existingSecret to be use in Contour deployment. If it is not nil `contour.certgen` will be disabled.
   ## It will override `tlsExistingSecret`
   ##
