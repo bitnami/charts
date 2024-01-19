@@ -39,6 +39,7 @@ spec:
       {{- end }}
     spec:
       {{- include "postgresql-ha.image.pullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.pgpool.automountServiceAccountToken }}
       {{- if .Values.pgpool.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.hostAliases "context" $) | nindent 8 }}
       {{- end }}

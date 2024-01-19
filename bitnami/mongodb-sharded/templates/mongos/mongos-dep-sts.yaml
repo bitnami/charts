@@ -46,6 +46,7 @@ spec:
       schedulerName: {{ .Values.mongos.schedulerName | quote }}
       {{- end }}
       serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "component" "mongos" "value" $.Values.mongos.serviceAccount "context" $) }}
+      automountServiceAccountToken: {{ .Values.mongos.automountServiceAccountToken }}
       {{- if .Values.mongos.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.hostAliases "context" $) | nindent 8 }}
       {{- end }}
