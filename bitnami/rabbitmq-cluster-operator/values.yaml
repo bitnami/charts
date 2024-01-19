@@ -252,6 +252,9 @@ clusterOperator:
   ## @param clusterOperator.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param clusterOperator.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param clusterOperator.hostAliases RabbitMQ Cluster Operator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -396,7 +399,7 @@ clusterOperator:
     annotations: {}
     ## @param clusterOperator.serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section RabbitMQ Cluster Operator Metrics parameters
   ##
@@ -725,6 +728,9 @@ msgTopologyOperator:
   ## @param msgTopologyOperator.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param msgTopologyOperator.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param msgTopologyOperator.hostAliases RabbitMQ Messaging Topology Operator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -912,7 +918,7 @@ msgTopologyOperator:
     annotations: {}
     ## @param msgTopologyOperator.serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section RabbitMQ Messaging Topology Operator parameters
   ##
