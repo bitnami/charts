@@ -225,6 +225,9 @@ controller:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## @param controller.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param controller.hostAliases Custom host aliases for Controller pods
   ## ref: https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -380,7 +383,7 @@ controller:
     annotations: {}
     ## @param controller.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
 ## @section Webhook deployment parameters
 
@@ -575,6 +578,9 @@ webhook:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## @param webhook.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param webhook.hostAliases Custom host aliases for Webhook pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -663,7 +669,7 @@ webhook:
     annotations: {}
     ## @param webhook.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   ##  @param webhook.hostNetwork Specifies hostNetwork value
   ##
   hostNetwork: false
@@ -809,6 +815,9 @@ cainjector:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## @param cainjector.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param cainjector.hostAliases Custom host aliases for CAInjector pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -950,7 +959,7 @@ cainjector:
     annotations: {}
     ## @param cainjector.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
 ## @section Metrics Parameters
 
