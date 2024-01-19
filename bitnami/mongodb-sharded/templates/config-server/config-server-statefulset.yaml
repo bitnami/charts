@@ -42,6 +42,7 @@ spec:
       schedulerName: {{ .Values.configsvr.schedulerName | quote }}
       {{- end }}
       serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "component" "configsvr" "value" .Values.configsvr.serviceAccount "context" $) }}
+      automountServiceAccountToken: {{ .Values.configsvr.automountServiceAccountToken }}
       {{- if .Values.configsvr.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.configsvr.hostAliases "context" $) | nindent 8 }}
       {{- end }}

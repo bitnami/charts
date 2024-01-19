@@ -62,6 +62,7 @@ spec:
       {{- if .Values.cainjector.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.cainjector.automountServiceAccountToken }}
       {{- if .Values.cainjector.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.hostAliases "context" $) | nindent 8 }}
       {{- end }}
