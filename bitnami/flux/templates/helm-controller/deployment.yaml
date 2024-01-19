@@ -92,7 +92,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.helmController.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - --watch-all-namespaces
+            - --watch-all-namespaces={{ .Values.helmController.watchAllNamespaces }}
             {{- if .Values.helmController.image.debug }}
             - --log-level=debug
             {{- else }}
