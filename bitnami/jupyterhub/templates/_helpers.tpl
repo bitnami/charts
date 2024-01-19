@@ -175,6 +175,17 @@ Return the proper Docker Image Registry Secret Names list
 {{/*
 Create the name of the service account to use
 */}}
+{{- define "jupyterhub.imagePullerServiceAccountName" -}}
+{{- if .Values.hub.serviceAccount.create -}}
+    {{ default (printf "%s-image-puller" (include "common.names.fullname" .)) .Values.imagePuller.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.imagePuller.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use
+*/}}
 {{- define "jupyterhub.hubServiceAccountName" -}}
 {{- if .Values.hub.serviceAccount.create -}}
     {{ default (printf "%s-hub" (include "common.names.fullname" .)) .Values.hub.serviceAccount.name }}

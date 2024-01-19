@@ -38,7 +38,6 @@ spec:
       serviceAccountName: {{ template "jupyterhub.proxyServiceAccountName" . }}
       automountServiceAccountToken: {{ .Values.proxy.automountServiceAccountToken }}
       {{- include "jupyterhub.imagePullSecrets" . | nindent 6 }}
-      automountServiceAccountToken: {{ .Values.proxy.automountServiceAccountToken }}
       {{- if .Values.proxy.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.hostAliases "context" $) | nindent 8 }}
       {{- end }}

@@ -430,6 +430,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `imagePuller.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for ImagePuller container(s)                                    | `[]`             |
 | `imagePuller.initContainers`                                    | Add additional init containers to the ImagePuller pods                                                                   | `[]`             |
 | `imagePuller.sidecars`                                          | Add additional sidecar containers to the ImagePuller pod                                                                 | `[]`             |
+| `imagePuller.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                     | `true`           |
+| `imagePuller.serviceAccount.name`                               | Override image puller service account name                                                                               | `""`             |
+| `imagePuller.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                   | `false`          |
+| `imagePuller.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                     | `{}`             |
 
 ### Singleuser deployment parameters
 
@@ -442,6 +446,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `singleuser.image.pullSecrets`                                 | Single User image pull secrets                                                                              | `[]`                                    |
 | `singleuser.notebookDir`                                       | Notebook directory (it will be the same as the PVC volume mount)                                            | `/opt/bitnami/jupyterhub-singleuser`    |
 | `singleuser.allowPrivilegeEscalation`                          | Controls whether a process can gain more privileges than its parent process                                 | `false`                                 |
+| `singleuser.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                          | `false`                                 |
 | `singleuser.command`                                           | Override Single User default command                                                                        | `[]`                                    |
 | `singleuser.extraEnvVars`                                      | Extra environment variables that should be set for the user pods                                            | `[]`                                    |
 | `singleuser.containerPort`                                     | Single User container port                                                                                  | `8888`                                  |

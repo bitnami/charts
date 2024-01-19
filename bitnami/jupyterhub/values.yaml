@@ -197,6 +197,7 @@ hub:
       fsGid: {{ .Values.singleuser.podSecurityContext.fsGroup }}
       {{- end }}
       serviceAccountName: {{ template "jupyterhub.singleuserServiceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.singleuser.automountServiceAccountToken }}
       storage:
         {{- if .Values.singleuser.persistence.enabled }}
         type: dynamic
@@ -1472,6 +1473,23 @@ imagePuller:
   ##         containerPort: 1234
   ##
   sidecars: []
+  ## ServiceAccount parameters
+  ##
+  serviceAccount:
+    ## @param imagePuller.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param imagePuller.serviceAccount.name Override image puller service account name
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    name: ""
+    ## @param imagePuller.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+    ##
+    automountServiceAccountToken: false
+    ## @param imagePuller.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
 
 ## @section Singleuser deployment parameters
 ##
@@ -1513,6 +1531,9 @@ singleuser:
   ##
   allowPrivilegeEscalation: false
   ## Command for running the container (set to default if not set). Use array form
+  ## @param singleuser.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param singleuser.command Override Single User default command
   ##
   command: []
