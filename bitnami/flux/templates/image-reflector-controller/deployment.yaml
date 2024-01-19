@@ -115,7 +115,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - --watch-all-namespaces
+            - --watch-all-namespaces={{ .Values.imageReflectorController.watchAllNamespaces }}
             {{- if .Values.imageReflectorController.image.debug }}
             - --log-level=debug
             {{- else }}
