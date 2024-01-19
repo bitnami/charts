@@ -1,3 +1,5 @@
+# Source: https://raw.githubusercontent.com/ray-project/kuberay/v{version}/ray-operator/config/crd/bases/ray.io_rayservices.yaml
+# Version: 1.0.0
 
 ---
 apiVersion: apiextensions.k8s.io/v1
@@ -428,6 +430,9 @@ spec:
                         additionalProperties:
                           type: string
                         type: object
+                      replicas:
+                        format: int32
+                        type: integer
                       serviceType:
                         type: string
                       template:
@@ -6898,12 +6903,18 @@ spec:
                         healthLastUpdateTime:
                           format: date-time
                           type: string
+                        lastUpdateTime:
+                          format: date-time
+                          type: string
                         message:
                           type: string
                         serveDeploymentStatuses:
                           additionalProperties:
                             properties:
                               healthLastUpdateTime:
+                                format: date-time
+                                type: string
+                              lastUpdateTime:
                                 format: date-time
                                 type: string
                               message:
@@ -6923,6 +6934,9 @@ spec:
                         type: string
                       isHealthy:
                         type: boolean
+                      lastUpdateTime:
+                        format: date-time
+                        type: string
                     type: object
                   rayClusterName:
                     type: string
@@ -6964,9 +6978,6 @@ spec:
                         type: string
                     type: object
                 type: object
-              lastUpdateTime:
-                format: date-time
-                type: string
               observedGeneration:
                 format: int64
                 type: integer
@@ -6978,12 +6989,18 @@ spec:
                         healthLastUpdateTime:
                           format: date-time
                           type: string
+                        lastUpdateTime:
+                          format: date-time
+                          type: string
                         message:
                           type: string
                         serveDeploymentStatuses:
                           additionalProperties:
                             properties:
                               healthLastUpdateTime:
+                                format: date-time
+                                type: string
+                              lastUpdateTime:
                                 format: date-time
                                 type: string
                               message:
@@ -7003,6 +7020,9 @@ spec:
                         type: string
                       isHealthy:
                         type: boolean
+                      lastUpdateTime:
+                        format: date-time
+                        type: string
                     type: object
                   rayClusterName:
                     type: string
@@ -7464,6 +7484,9 @@ spec:
                         additionalProperties:
                           type: string
                         type: object
+                      replicas:
+                        format: int32
+                        type: integer
                       serviceType:
                         type: string
                       template:
@@ -13934,12 +13957,18 @@ spec:
                         healthLastUpdateTime:
                           format: date-time
                           type: string
+                        lastUpdateTime:
+                          format: date-time
+                          type: string
                         message:
                           type: string
                         serveDeploymentStatuses:
                           additionalProperties:
                             properties:
                               healthLastUpdateTime:
+                                format: date-time
+                                type: string
+                              lastUpdateTime:
                                 format: date-time
                                 type: string
                               message:
@@ -13959,6 +13988,9 @@ spec:
                         type: string
                       isHealthy:
                         type: boolean
+                      lastUpdateTime:
+                        format: date-time
+                        type: string
                     type: object
                   rayClusterName:
                     type: string
@@ -14000,9 +14032,6 @@ spec:
                         type: string
                     type: object
                 type: object
-              lastUpdateTime:
-                format: date-time
-                type: string
               observedGeneration:
                 format: int64
                 type: integer
@@ -14014,12 +14043,18 @@ spec:
                         healthLastUpdateTime:
                           format: date-time
                           type: string
+                        lastUpdateTime:
+                          format: date-time
+                          type: string
                         message:
                           type: string
                         serveDeploymentStatuses:
                           additionalProperties:
                             properties:
                               healthLastUpdateTime:
+                                format: date-time
+                                type: string
+                              lastUpdateTime:
                                 format: date-time
                                 type: string
                               message:
@@ -14039,6 +14074,9 @@ spec:
                         type: string
                       isHealthy:
                         type: boolean
+                      lastUpdateTime:
+                        format: date-time
+                        type: string
                     type: object
                   rayClusterName:
                     type: string
