@@ -104,6 +104,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            {{- if not .Values.msgTopologyOperator.watchAllNamespaces }}      
+            {{- $watchNamespaces := default (list (include "common.names.namespace" .)) .Values.msgTopologyOperator.watchNamespaces }}
+            - name: OPERATOR_SCOPE_NAMESPACE
+              value: {{ join "," $watchNamespaces | quote }}
+            {{- end }}
             {{- if .Values.msgTopologyOperator.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
