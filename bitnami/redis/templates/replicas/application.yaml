@@ -56,7 +56,6 @@ spec:
         {{- end }}
     spec:
       {{- include "redis.imagePullSecrets" . | nindent 6 }}
-      automountServiceAccountToken: {{ .Values.replica.automountServiceAccountToken }}
       {{- if .Values.replica.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.replica.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -64,7 +63,7 @@ spec:
       securityContext: {{- omit .Values.replica.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "redis.replicaServiceAccountName" . }}
-      automountServiceAccountToken: {{ .Values.replica.serviceAccount.automountServiceAccountToken }}
+      automountServiceAccountToken: {{ .Values.replica.automountServiceAccountToken }}
       {{- if .Values.replica.priorityClassName }}
       priorityClassName: {{ .Values.replica.priorityClassName | quote }}
       {{- end }}
