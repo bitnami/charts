@@ -116,12 +116,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `httpdConfConfigMap`                                | Name of a config map with the httpd.conf file contents                                                                   | `""`                     |
 | `podLabels`                                         | Extra labels for Apache pods                                                                                             | `{}`                     |
 | `podAnnotations`                                    | Pod annotations                                                                                                          | `{}`                     |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`                  |
 | `hostAliases`                                       | Add deployment host aliases                                                                                              | `[]`                     |
 | `priorityClassName`                                 | Apache Server pods' priorityClassName                                                                                    | `""`                     |
 | `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                           | `""`                     |
 | `podSecurityContext.enabled`                        | Enabled Apache Server pods' Security Context                                                                             | `true`                   |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`                 |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`                     |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                     |
 | `podSecurityContext.fsGroup`                        | Set Apache Server pod's Security Context fsGroup                                                                         | `1001`                   |
 | `containerSecurityContext.enabled`                  | Enabled Apache Server containers' Security Context                                                                       | `true`                   |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                     |
 | `containerSecurityContext.runAsUser`                | Set Apache Server containers' Security Context runAsUser                                                                 | `1001`                   |
 | `containerSecurityContext.runAsNonRoot`             | Set Controller container's Security Context runAsNonRoot                                                                 | `true`                   |
 | `containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                                      | `false`                  |
@@ -218,31 +223,47 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics Parameters
 
-| Name                                       | Description                                                                                                                               | Value                             |
-| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
-| `metrics.enabled`                          | Start a sidecar prometheus exporter to expose Apache metrics                                                                              | `false`                           |
-| `metrics.image.registry`                   | Apache Exporter image registry                                                                                                            | `REGISTRY_NAME`                   |
-| `metrics.image.repository`                 | Apache Exporter image repository                                                                                                          | `REPOSITORY_NAME/apache-exporter` |
-| `metrics.image.digest`                     | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                           | `""`                              |
-| `metrics.image.pullPolicy`                 | Apache Exporter image pull policy                                                                                                         | `IfNotPresent`                    |
-| `metrics.image.pullSecrets`                | Apache Exporter image pull secrets                                                                                                        | `[]`                              |
-| `metrics.image.debug`                      | Apache Exporter image debug mode                                                                                                          | `false`                           |
-| `metrics.podAnnotations`                   | Additional custom annotations for Apache exporter service                                                                                 | `{}`                              |
-| `metrics.resources.limits`                 | The resources limits for the container                                                                                                    | `{}`                              |
-| `metrics.resources.requests`               | The requested resources for the container                                                                                                 | `{}`                              |
-| `metrics.service.port`                     | Metrics service port                                                                                                                      | `9117`                            |
-| `metrics.service.annotations`              | Additional custom annotations for Metrics service                                                                                         | `{}`                              |
-| `metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator PodMonitor (also requires `metrics.enabled` to be `true`)                                        | `false`                           |
-| `metrics.serviceMonitor.namespace`         | Namespace for the PodMonitor Resource (defaults to the Release Namespace)                                                                 | `""`                              |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                                                              | `""`                              |
-| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                                                   | `""`                              |
-| `metrics.serviceMonitor.labels`            | Labels that can be used so PodMonitor will be discovered by Prometheus                                                                    | `{}`                              |
-| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                                        | `[]`                              |
-| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                                 | `[]`                              |
-| `metrics.prometheusRule.enabled`           | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                           |
-| `metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`                              |
-| `metrics.prometheusRule.labels`            | Labels that can be used so PrometheusRule will be discovered by Prometheus                                                                | `{}`                              |
-| `metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                               | `[]`                              |
+| Name                                          | Description                                                                                                                               | Value                             |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `metrics.enabled`                             | Start a sidecar prometheus exporter to expose Apache metrics                                                                              | `false`                           |
+| `metrics.image.registry`                      | Apache Exporter image registry                                                                                                            | `REGISTRY_NAME`                   |
+| `metrics.image.repository`                    | Apache Exporter image repository                                                                                                          | `REPOSITORY_NAME/apache-exporter` |
+| `metrics.image.digest`                        | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                           | `""`                              |
+| `metrics.image.pullPolicy`                    | Apache Exporter image pull policy                                                                                                         | `IfNotPresent`                    |
+| `metrics.image.pullSecrets`                   | Apache Exporter image pull secrets                                                                                                        | `[]`                              |
+| `metrics.image.debug`                         | Apache Exporter image debug mode                                                                                                          | `false`                           |
+| `metrics.podAnnotations`                      | Additional custom annotations for Apache exporter service                                                                                 | `{}`                              |
+| `metrics.resources.limits`                    | The resources limits for the container                                                                                                    | `{}`                              |
+| `metrics.resources.requests`                  | The requested resources for the container                                                                                                 | `{}`                              |
+| `metrics.containerPort`                       | Apache Prometheus Exporter container port                                                                                                 | `9141`                            |
+| `metrics.service.port`                        | Metrics service port                                                                                                                      | `9117`                            |
+| `metrics.service.annotations`                 | Additional custom annotations for Metrics service                                                                                         | `{}`                              |
+| `metrics.serviceMonitor.enabled`              | if `true`, creates a Prometheus Operator PodMonitor (also requires `metrics.enabled` to be `true`)                                        | `false`                           |
+| `metrics.serviceMonitor.namespace`            | Namespace for the PodMonitor Resource (defaults to the Release Namespace)                                                                 | `""`                              |
+| `metrics.serviceMonitor.interval`             | Interval at which metrics should be scraped.                                                                                              | `""`                              |
+| `metrics.serviceMonitor.scrapeTimeout`        | Timeout after which the scrape is ended                                                                                                   | `""`                              |
+| `metrics.serviceMonitor.labels`               | Labels that can be used so PodMonitor will be discovered by Prometheus                                                                    | `{}`                              |
+| `metrics.serviceMonitor.relabelings`          | RelabelConfigs to apply to samples before scraping                                                                                        | `[]`                              |
+| `metrics.serviceMonitor.metricRelabelings`    | MetricRelabelConfigs to apply to samples before ingestion                                                                                 | `[]`                              |
+| `metrics.prometheusRule.enabled`              | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                           |
+| `metrics.prometheusRule.namespace`            | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`                              |
+| `metrics.prometheusRule.labels`               | Labels that can be used so PrometheusRule will be discovered by Prometheus                                                                | `{}`                              |
+| `metrics.prometheusRule.rules`                | Prometheus Rule definitions                                                                                                               | `[]`                              |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for WordPress pod                                                                                       | `true`                            |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                    | `""`                              |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                    | `false`                           |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                      | `{}`                              |
+
+### Network policies section
+
+| Name                                    | Description                                                | Value   |
+| --------------------------------------- | ---------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `false` |
+| `networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolic                | `[]`    |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

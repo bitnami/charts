@@ -134,6 +134,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replicaCount`                                      | Number of etcd replicas to deploy                                                         | `1`              |
 | `updateStrategy.type`                               | Update strategy type, can be set to RollingUpdate or OnDelete.                            | `RollingUpdate`  |
 | `podManagementPolicy`                               | Pod management policy for the etcd statefulset                                            | `Parallel`       |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                        | `false`          |
 | `hostAliases`                                       | etcd pod host aliases                                                                     | `[]`             |
 | `lifecycleHooks`                                    | Override default etcd container hooks                                                     | `{}`             |
 | `containerPorts.client`                             | Client port to expose at container level                                                  | `2379`           |
