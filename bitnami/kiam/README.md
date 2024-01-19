@@ -97,6 +97,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.enabled`                                      | Deploy the kiam server                                                                                                                      | `true`           |
 | `server.containerPort`                                | HTTPS port to expose at container level                                                                                                     | `8443`           |
 | `server.resourceType`                                 | Specify how to deploy the server (allowed values: `daemonset` and `deployment`)                                                             | `daemonset`      |
+| `server.automountServiceAccountToken`                 | Mount Service Account token in pod                                                                                                          | `true`           |
 | `server.hostAliases`                                  | Add deployment host aliases                                                                                                                 | `[]`             |
 | `server.useHostNetwork`                               | Use host networking (ports will be directly exposed in the host)                                                                            | `false`          |
 | `server.replicaCount`                                 | Number of replicas to deploy (when `server.resourceType` is `daemonset`)                                                                    | `1`              |
@@ -191,12 +192,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### kiam server Service Account parameters
 
-| Name                                                 | Description                                                                                                         | Value  |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------ |
-| `server.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true` |
-| `server.serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
-| `server.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true` |
-| `server.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`   |
+| Name                                                 | Description                                                                                                         | Value   |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
+| `server.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true`  |
+| `server.serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
+| `server.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `false` |
+| `server.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`    |
 
 ### kiam server metrics parameters
 
@@ -228,6 +229,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.schedulerName`                                | Name of the k8s scheduler (other than default)                                                                                              | `""`                      |
 | `agent.topologySpreadConstraints`                    | Topology Spread Constraints for pod assignment                                                                                              | `[]`                      |
 | `agent.allowRouteRegExp`                             | Regexp with the allowed paths for agents to redirect                                                                                        | `""`                      |
+| `agent.automountServiceAccountToken`                 | Mount Service Account token in pod                                                                                                          | `false`                   |
 | `agent.hostAliases`                                  | Add deployment host aliases                                                                                                                 | `[]`                      |
 | `agent.containerPort`                                | HTTPS port to expose at container level                                                                                                     | `8183`                    |
 | `agent.iptables`                                     | Have the agent modify the host iptables rules                                                                                               | `false`                   |
