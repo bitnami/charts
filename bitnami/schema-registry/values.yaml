@@ -94,6 +94,9 @@ command: []
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases Schema Registry pods host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -284,11 +287,15 @@ lifecycleHooks: {}
 ## Schema Registry pods' Security Context.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled Controller pods' Security Context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Set Controller pod's Security Context fsGroup
 ## @param podSecurityContext.sysctls sysctl settings of the Schema Registry pods
 ##
 podSecurityContext:
   enabled: true
+  fsGroupChangePolicy: Always
+  supplementalGroups: []
   fsGroup: 1001
   ## sysctl settings
   ## Example:
@@ -300,6 +307,7 @@ podSecurityContext:
 ## Schema Registry containers' Security Context (only main container).
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
@@ -310,6 +318,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
+  seLinuxOptions: {}
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false

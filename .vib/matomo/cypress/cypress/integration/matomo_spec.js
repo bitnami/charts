@@ -43,6 +43,7 @@ it('allows to use the API to retrieve analytics', () => {
   cy.get('#login_form_password').type(Cypress.env('password'));
   cy.get('[type="submit"]').click();
   cy.get('#description').type(random);
+  cy.get('input[id="secure_only"]').click({ force: true });
   cy.get('[type="submit"]').click();
   cy.contains('Token successfully generated');
   cy.get('code')

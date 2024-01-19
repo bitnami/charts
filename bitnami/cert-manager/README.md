@@ -97,8 +97,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.resources.limits`                                  | The resources limits for the Controller container                                                          | `{}`                           |
 | `controller.resources.requests`                                | The requested resources for the Controller container                                                       | `{}`                           |
 | `controller.podSecurityContext.enabled`                        | Enabled Controller pods' Security Context                                                                  | `true`                         |
+| `controller.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                         | `Always`                       |
+| `controller.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                             | `[]`                           |
+| `controller.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                | `[]`                           |
 | `controller.podSecurityContext.fsGroup`                        | Set Controller pod's Security Context fsGroup                                                              | `1001`                         |
 | `controller.containerSecurityContext.enabled`                  | Enabled controller containers' Security Context                                                            | `true`                         |
+| `controller.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `{}`                           |
 | `controller.containerSecurityContext.runAsUser`                | Set controller containers' Security Context runAsUser                                                      | `1001`                         |
 | `controller.containerSecurityContext.runAsNonRoot`             | Set controller containers' Security Context runAsNonRoot                                                   | `true`                         |
 | `controller.containerSecurityContext.readOnlyRootFilesystem`   | Set read only root file system pod's Security Conte                                                        | `false`                        |
@@ -120,6 +124,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                             | `""`                           |
 | `controller.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                             | `""`                           |
 | `controller.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                             | `[]`                           |
+| `controller.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                         | `true`                         |
 | `controller.hostAliases`                                       | Custom host aliases for Controller pods                                                                    | `[]`                           |
 | `controller.tolerations`                                       | Tolerations for pod assignment                                                                             | `[]`                           |
 | `controller.podLabels`                                         | Extra labels for Controller pods                                                                           | `{}`                           |
@@ -161,7 +166,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                       | `true`                         |
 | `controller.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                     | `""`                           |
 | `controller.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                       | `{}`                           |
-| `controller.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                             | `true`                         |
+| `controller.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                             | `false`                        |
+| `controller.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                        | `false`                        |
+| `controller.networkPolicy.allowExternal`                       | Don't require client label for connections                                                                 | `true`                         |
+| `controller.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                               | `[]`                           |
+| `controller.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                               | `[]`                           |
+| `controller.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                     | `{}`                           |
+| `controller.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                 | `{}`                           |
 
 ### Webhook deployment parameters
 
@@ -177,8 +188,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.resources.limits`                                  | The resources limits for the Webhook container                                                          | `{}`                                   |
 | `webhook.resources.requests`                                | The requested resources for the Webhook container                                                       | `{}`                                   |
 | `webhook.podSecurityContext.enabled`                        | Enabled Webhook pods' Security Context                                                                  | `true`                                 |
+| `webhook.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                      | `Always`                               |
+| `webhook.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                          | `[]`                                   |
+| `webhook.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                             | `[]`                                   |
 | `webhook.podSecurityContext.fsGroup`                        | Set Webhook pod's Security Context fsGroup                                                              | `1001`                                 |
 | `webhook.containerSecurityContext.enabled`                  | Enabled webhook containers' Security Context                                                            | `true`                                 |
+| `webhook.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `{}`                                   |
 | `webhook.containerSecurityContext.runAsUser`                | Set webhook containers' Security Context runAsUser                                                      | `1001`                                 |
 | `webhook.containerSecurityContext.runAsNonRoot`             | Set webhook containers' Security Context runAsNonRoot                                                   | `true`                                 |
 | `webhook.containerSecurityContext.readOnlyRootFilesystem`   | Set read only root file system pod's Security Conte                                                     | `false`                                |
@@ -218,6 +233,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                          | `""`                                   |
 | `webhook.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                          | `""`                                   |
 | `webhook.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                          | `[]`                                   |
+| `webhook.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                      | `true`                                 |
 | `webhook.hostAliases`                                       | Custom host aliases for Webhook pods                                                                    | `[]`                                   |
 | `webhook.tolerations`                                       | Tolerations for pod assignment                                                                          | `[]`                                   |
 | `webhook.podLabels`                                         | Extra labels for Webhook pods                                                                           | `{}`                                   |
@@ -236,8 +252,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                    | `true`                                 |
 | `webhook.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                  | `""`                                   |
 | `webhook.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                    | `{}`                                   |
-| `webhook.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                          | `true`                                 |
+| `webhook.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                          | `false`                                |
 | `webhook.hostNetwork`                                       | Specifies hostNetwork value                                                                             | `false`                                |
+| `webhook.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                     | `false`                                |
+| `webhook.networkPolicy.allowExternal`                       | Don't require client label for connections                                                              | `true`                                 |
+| `webhook.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                            | `[]`                                   |
+| `webhook.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                            | `[]`                                   |
+| `webhook.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                  | `{}`                                   |
+| `webhook.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                              | `{}`                                   |
 
 ### CAInjector deployment parameters
 
@@ -253,8 +275,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.resources.limits`                                  | The resources limits for the CAInjector container                                                          | `{}`                         |
 | `cainjector.resources.requests`                                | The requested resources for the CAInjector container                                                       | `{}`                         |
 | `cainjector.podSecurityContext.enabled`                        | Enabled CAInjector pods' Security Context                                                                  | `true`                       |
+| `cainjector.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                         | `Always`                     |
+| `cainjector.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                             | `[]`                         |
+| `cainjector.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                | `[]`                         |
 | `cainjector.podSecurityContext.fsGroup`                        | Set CAInjector pod's Security Context fsGroup                                                              | `1001`                       |
 | `cainjector.containerSecurityContext.enabled`                  | Enabled cainjector containers' Security Context                                                            | `true`                       |
+| `cainjector.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `{}`                         |
 | `cainjector.containerSecurityContext.runAsUser`                | Set cainjector containers' Security Context runAsUser                                                      | `1001`                       |
 | `cainjector.containerSecurityContext.runAsNonRoot`             | Set cainjector containers' Security Context runAsNonRoot                                                   | `true`                       |
 | `cainjector.containerSecurityContext.readOnlyRootFilesystem`   | Set read only root file system pod's Security Conte                                                        | `false`                      |
@@ -275,6 +301,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                             | `""`                         |
 | `cainjector.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                             | `""`                         |
 | `cainjector.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                             | `[]`                         |
+| `cainjector.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                         | `true`                       |
 | `cainjector.hostAliases`                                       | Custom host aliases for CAInjector pods                                                                    | `[]`                         |
 | `cainjector.tolerations`                                       | Tolerations for pod assignment                                                                             | `[]`                         |
 | `cainjector.podLabels`                                         | Extra labels for CAInjector pods                                                                           | `{}`                         |
@@ -314,7 +341,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                       | `true`                       |
 | `cainjector.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                     | `""`                         |
 | `cainjector.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                       | `{}`                         |
-| `cainjector.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                             | `true`                       |
+| `cainjector.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                             | `false`                      |
 
 ### Metrics Parameters
 

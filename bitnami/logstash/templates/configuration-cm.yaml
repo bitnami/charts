@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{ if and (or .Values.input .Values.filter .Values.output) (not .Values.existingConfiguration) }}
+{{ if and (or .Values.input .Values.filter .Values.output .Values.extraConfigurationFiles) (not .Values.existingConfiguration) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -32,4 +32,7 @@ data:
     }
 {{- end }}
 {{- end }}
+{{- if .Values.extraConfigurationFiles -}}
+{{- include "common.tplvalues.render" (dict "value" .Values.extraConfigurationFiles "context" $) | nindent 2 }}
+{{- end -}}
 {{- end }}
