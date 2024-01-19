@@ -80,6 +80,7 @@ helm uninstall my-release
 | `server.image.pullPolicy`                                  | Spring Cloud Dataflow image pull policy                                                                                                    | `IfNotPresent`                                               |
 | `server.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                           | `[]`                                                         |
 | `server.image.debug`                                       | Enable image debug mode                                                                                                                    | `false`                                                      |
+| `server.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                         | `true`                                                       |
 | `server.hostAliases`                                       | Deployment pod host aliases                                                                                                                | `[]`                                                         |
 | `server.composedTaskRunner.image.registry`                 | Spring Cloud Dataflow Composed Task Runner image registry                                                                                  | `REGISTRY_NAME`                                              |
 | `server.composedTaskRunner.image.repository`               | Spring Cloud Dataflow Composed Task Runner image repository                                                                                | `REPOSITORY_NAME/spring-cloud-dataflow-composed-task-runner` |
@@ -199,6 +200,7 @@ helm uninstall my-release
 | Name                                                        | Description                                                                                                          | Value                                  |
 | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
 | `skipper.enabled`                                           | Enable Spring Cloud Skipper component                                                                                | `true`                                 |
+| `skipper.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                   | `true`                                 |
 | `skipper.hostAliases`                                       | Deployment pod host aliases                                                                                          | `[]`                                   |
 | `skipper.image.registry`                                    | Spring Cloud Skipper image registry                                                                                  | `REGISTRY_NAME`                        |
 | `skipper.image.repository`                                  | Spring Cloud Skipper image repository                                                                                | `REPOSITORY_NAME/spring-cloud-skipper` |
@@ -317,13 +319,13 @@ helm uninstall my-release
 
 ### RBAC parameters
 
-| Name                                          | Description                                                                                                             | Value  |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------ |
-| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Dataflow server and Skipper server pods                                     | `true` |
-| `serviceAccount.name`                         | Name of the created serviceAccount. If not set and create is true, a name is generated using the scdf.fullname template | `""`   |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                          | `true` |
-| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                              | `{}`   |
-| `rbac.create`                                 | Whether to create and use RBAC resources or not                                                                         | `true` |
+| Name                                          | Description                                                                                                             | Value   |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Dataflow server and Skipper server pods                                     | `true`  |
+| `serviceAccount.name`                         | Name of the created serviceAccount. If not set and create is true, a name is generated using the scdf.fullname template | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                          | `false` |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                              | `{}`    |
+| `rbac.create`                                 | Whether to create and use RBAC resources or not                                                                         | `true`  |
 
 ### Metrics parameters
 
@@ -345,6 +347,7 @@ helm uninstall my-release
 | `metrics.nodeAffinityPreset.values`                         | Prometheus Rsocket Proxy node label values to match. Ignored if `metrics.affinity` is set.                                 | `[]`                                       |
 | `metrics.affinity`                                          | Prometheus Rsocket Proxy affinity for pod assignment                                                                       | `{}`                                       |
 | `metrics.nodeSelector`                                      | Prometheus Rsocket Proxy node labels for pod assignment                                                                    | `{}`                                       |
+| `metrics.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                         | `true`                                     |
 | `metrics.hostAliases`                                       | Prometheus Proxy pods host aliases                                                                                         | `[]`                                       |
 | `metrics.tolerations`                                       | Prometheus Rsocket Proxy tolerations for pod assignment                                                                    | `[]`                                       |
 | `metrics.podAnnotations`                                    | Annotations for Prometheus Rsocket Proxy pods                                                                              | `{}`                                       |
