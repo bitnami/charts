@@ -19,7 +19,6 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingest.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
-      app.kubernetes.io/part-of: opensearch
       app.kubernetes.io/component: ingest
   policyTypes:
     - Ingress
@@ -51,7 +50,8 @@ spec:
         - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
-      {{- end }}
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
         {{- if .Values.ingest.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
@@ -66,6 +66,7 @@ spec:
               {{- end }}
           {{- end }}
         {{- end }}
+      {{- end }}
     {{- if .Values.ingest.networkPolicy.extraIngress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.ingest.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}

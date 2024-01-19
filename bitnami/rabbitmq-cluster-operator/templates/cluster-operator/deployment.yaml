@@ -37,6 +37,7 @@ spec:
       {{- if .Values.clusterOperator.schedulerName }}
       schedulerName: {{ .Values.clusterOperator.schedulerName | quote }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.clusterOperator.automountServiceAccountToken }}
       {{- if .Values.clusterOperator.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.hostAliases "context" $) | nindent 8 }}
       {{- end }}
