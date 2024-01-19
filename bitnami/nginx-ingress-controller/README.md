@@ -85,6 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`                     | Nginx Ingress Controller image pull policy                                                                                                         | `IfNotPresent`                             |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                   | `[]`                                       |
 | `containerPorts`                       | Controller container ports to open                                                                                                                 | `{}`                                       |
+| `automountServiceAccountToken`         | Mount Service Account token in pod                                                                                                                 | `true`                                     |
 | `hostAliases`                          | Deployment pod host aliases                                                                                                                        | `[]`                                       |
 | `config`                               | Custom configuration options for NGINX                                                                                                             | `{}`                                       |
 | `proxySetHeaders`                      | Custom headers before sending traffic to backends                                                                                                  | `{}`                                       |
@@ -195,6 +196,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                               | Description                                                                                                     | Value                   |
 | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `defaultBackend.enabled`                                           | Enable a default backend based on NGINX                                                                         | `true`                  |
+| `defaultBackend.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                              | `true`                  |
 | `defaultBackend.hostAliases`                                       | Add deployment host aliases                                                                                     | `[]`                    |
 | `defaultBackend.image.registry`                                    | Default backend image registry                                                                                  | `REGISTRY_NAME`         |
 | `defaultBackend.image.repository`                                  | Default backend image repository                                                                                | `REPOSITORY_NAME/nginx` |
@@ -295,14 +297,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### RBAC parameters
 
-| Name                                          | Description                                                    | Value  |
-| --------------------------------------------- | -------------------------------------------------------------- | ------ |
-| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Controller pods    | `true` |
-| `serviceAccount.name`                         | Name of the created ServiceAccount                             | `""`   |
-| `serviceAccount.annotations`                  | Annotations for service account.                               | `{}`   |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account | `true` |
-| `rbac.create`                                 | Specifies whether RBAC rules should be created                 | `true` |
-| `rbac.rules`                                  | Custom RBAC rules                                              | `[]`   |
+| Name                                          | Description                                                    | Value   |
+| --------------------------------------------- | -------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Controller pods    | `true`  |
+| `serviceAccount.name`                         | Name of the created ServiceAccount                             | `""`    |
+| `serviceAccount.annotations`                  | Annotations for service account.                               | `{}`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account | `false` |
+| `rbac.create`                                 | Specifies whether RBAC rules should be created                 | `true`  |
+| `rbac.rules`                                  | Custom RBAC rules                                              | `[]`    |
 
 ### Other parameters
 
