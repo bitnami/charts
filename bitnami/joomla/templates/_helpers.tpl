@@ -35,7 +35,7 @@ Return the proper Docker Image Registry Secret Names
 {{/*
  Create the name of the service account to use
  */}}
-{{- define "jasperreports.serviceAccountName" -}}
+{{- define "joomla.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
     {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
