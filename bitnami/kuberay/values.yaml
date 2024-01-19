@@ -258,7 +258,7 @@ operator:
   args: []
   ## @param operator.automountServiceAccountToken Mount Service Account token in pod
   ##
-  automountServiceAccountToken: false
+  automountServiceAccountToken: true
   ## @param operator.hostAliases Kuberay Operator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -847,7 +847,7 @@ apiserver:
   args: []
   ## @param apiserver.automountServiceAccountToken Mount Service Account token in pod
   ##
-  automountServiceAccountToken: false
+  automountServiceAccountToken: true
   ## @param apiserver.hostAliases Kuberay API Server pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
