@@ -124,6 +124,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                             | `""`                           |
 | `controller.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                             | `""`                           |
 | `controller.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                             | `[]`                           |
+| `controller.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                         | `true`                         |
 | `controller.hostAliases`                                       | Custom host aliases for Controller pods                                                                    | `[]`                           |
 | `controller.tolerations`                                       | Tolerations for pod assignment                                                                             | `[]`                           |
 | `controller.podLabels`                                         | Extra labels for Controller pods                                                                           | `{}`                           |
@@ -165,7 +166,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                       | `true`                         |
 | `controller.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                     | `""`                           |
 | `controller.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                       | `{}`                           |
-| `controller.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                             | `true`                         |
+| `controller.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                             | `false`                        |
 
 ### Webhook deployment parameters
 
@@ -226,6 +227,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                          | `""`                                   |
 | `webhook.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                          | `""`                                   |
 | `webhook.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                          | `[]`                                   |
+| `webhook.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                      | `true`                                 |
 | `webhook.hostAliases`                                       | Custom host aliases for Webhook pods                                                                    | `[]`                                   |
 | `webhook.tolerations`                                       | Tolerations for pod assignment                                                                          | `[]`                                   |
 | `webhook.podLabels`                                         | Extra labels for Webhook pods                                                                           | `{}`                                   |
@@ -244,7 +246,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                    | `true`                                 |
 | `webhook.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                  | `""`                                   |
 | `webhook.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                    | `{}`                                   |
-| `webhook.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                          | `true`                                 |
+| `webhook.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                          | `false`                                |
 | `webhook.hostNetwork`                                       | Specifies hostNetwork value                                                                             | `false`                                |
 
 ### CAInjector deployment parameters
@@ -287,6 +289,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                             | `""`                         |
 | `cainjector.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                             | `""`                         |
 | `cainjector.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                             | `[]`                         |
+| `cainjector.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                         | `true`                       |
 | `cainjector.hostAliases`                                       | Custom host aliases for CAInjector pods                                                                    | `[]`                         |
 | `cainjector.tolerations`                                       | Tolerations for pod assignment                                                                             | `[]`                         |
 | `cainjector.podLabels`                                         | Extra labels for CAInjector pods                                                                           | `{}`                         |
@@ -326,7 +329,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                       | `true`                       |
 | `cainjector.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                     | `""`                         |
 | `cainjector.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                       | `{}`                         |
-| `cainjector.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                             | `true`                       |
+| `cainjector.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                             | `false`                      |
 
 ### Metrics Parameters
 
