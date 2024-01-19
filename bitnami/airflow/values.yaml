@@ -337,6 +337,9 @@ web:
   ## @param web.lifecycleHooks for the Airflow web container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param web.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param web.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -559,6 +562,9 @@ scheduler:
   ## @param scheduler.lifecycleHooks for the Airflow scheduler container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param scheduler.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param scheduler.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -829,6 +835,9 @@ worker:
   ## @param worker.lifecycleHooks for the Airflow worker container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param worker.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param worker.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1417,6 +1426,9 @@ metrics:
   ## @param metrics.lifecycleHooks for the Airflow exporter container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param metrics.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param metrics.hostAliases Airflow exporter pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
