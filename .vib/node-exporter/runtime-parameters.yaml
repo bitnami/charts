@@ -3,7 +3,7 @@ rbac:
   pspEnabled: true
 serviceAccount:
   create: true
-  automountServiceAccountToken: true
+automountServiceAccountToken: true
 containerPorts:
   metrics: 9101
 podSecurityContext:
