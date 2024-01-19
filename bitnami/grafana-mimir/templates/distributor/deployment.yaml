@@ -36,6 +36,7 @@ spec:
     spec:
       serviceAccountName: {{ template "grafana-mimir.serviceAccountName" . }}
       {{- include "grafana-mimir.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.distributor.automountServiceAccountToken }}
       {{- if .Values.distributor.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.hostAliases "context" $) | nindent 8 }}
       {{- end }}
