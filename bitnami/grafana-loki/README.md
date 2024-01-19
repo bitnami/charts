@@ -1077,7 +1077,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.containerSecurityContext.runAsUser`           | Set Promtail containers' Security Context runAsUser                                                              | `0`                        |
 | `promtail.containerSecurityContext.runAsNonRoot`        | Set Promtail containers' Security Context runAsNonRoot                                                           | `false`                    |
 | `promtail.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                 | `RuntimeDefault`           |
-| `promtail.automountServiceAccountToken`                 | Mount Service Account token in pod                                                                               | `false`                    |
+| `promtail.automountServiceAccountToken`                 | Mount Service Account token in pod                                                                               | `true`                     |
 | `promtail.hostAliases`                                  | promtail pods host aliases                                                                                       | `[]`                       |
 | `promtail.podLabels`                                    | Extra labels for promtail pods                                                                                   | `{}`                       |
 | `promtail.podAnnotations`                               | Annotations for promtail pods                                                                                    | `{}`                       |

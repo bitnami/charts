@@ -3571,7 +3571,7 @@ promtail:
       type: "RuntimeDefault"
   ## @param promtail.automountServiceAccountToken Mount Service Account token in pod
   ##
-  automountServiceAccountToken: false
+  automountServiceAccountToken: true
   ## @param promtail.hostAliases promtail pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
