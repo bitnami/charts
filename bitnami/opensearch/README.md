@@ -207,8 +207,12 @@ helm delete --purge my-release
 | `master.resources.requests`                                | The requested resources for opensearch containers                                                                                                                      | `{}`                |
 | `master.heapSize`                                          | OpenSearch master-eligible node heap size.                                                                                                                             | `128m`              |
 | `master.podSecurityContext.enabled`                        | Enabled master-eligible pods' Security Context                                                                                                                         | `true`              |
+| `master.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                     | `Always`            |
+| `master.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                         | `[]`                |
+| `master.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                            | `[]`                |
 | `master.podSecurityContext.fsGroup`                        | Set master-eligible pod's Security Context fsGroup                                                                                                                     | `1001`              |
 | `master.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                   | `true`              |
+| `master.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                       | `{}`                |
 | `master.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                             | `1001`              |
 | `master.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                          | `true`              |
 | `master.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                            | `false`             |
@@ -216,6 +220,7 @@ helm delete --purge my-release
 | `master.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                              | `false`             |
 | `master.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                     | `["ALL"]`           |
 | `master.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                       | `RuntimeDefault`    |
+| `master.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                     | `false`             |
 | `master.hostAliases`                                       | master-eligible pods host aliases                                                                                                                                      | `[]`                |
 | `master.podLabels`                                         | Extra labels for master-eligible pods                                                                                                                                  | `{}`                |
 | `master.podAnnotations`                                    | Annotations for master-eligible pods                                                                                                                                   | `{}`                |
@@ -311,8 +316,12 @@ helm delete --purge my-release
 | `data.resources.requests`                                | The requested resources for the data containers                                                                                                                        | `{}`                |
 | `data.heapSize`                                          | OpenSearch data node heap size.                                                                                                                                        | `1024m`             |
 | `data.podSecurityContext.enabled`                        | Enabled data pods' Security Context                                                                                                                                    | `true`              |
+| `data.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                     | `Always`            |
+| `data.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                         | `[]`                |
+| `data.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                            | `[]`                |
 | `data.podSecurityContext.fsGroup`                        | Set data pod's Security Context fsGroup                                                                                                                                | `1001`              |
 | `data.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                   | `true`              |
+| `data.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                       | `{}`                |
 | `data.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                             | `1001`              |
 | `data.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                          | `true`              |
 | `data.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                            | `false`             |
@@ -320,6 +329,7 @@ helm delete --purge my-release
 | `data.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                              | `false`             |
 | `data.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                     | `["ALL"]`           |
 | `data.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                       | `RuntimeDefault`    |
+| `data.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                     | `false`             |
 | `data.hostAliases`                                       | data pods host aliases                                                                                                                                                 | `[]`                |
 | `data.podLabels`                                         | Extra labels for data pods                                                                                                                                             | `{}`                |
 | `data.podAnnotations`                                    | Annotations for data pods                                                                                                                                              | `{}`                |
@@ -415,8 +425,12 @@ helm delete --purge my-release
 | `coordinating.resources.requests`                                | The requested resources for the coordinating-only containers                                                                                                           | `{}`             |
 | `coordinating.heapSize`                                          | OpenSearch coordinating node heap size.                                                                                                                                | `128m`           |
 | `coordinating.podSecurityContext.enabled`                        | Enabled coordinating-only pods' Security Context                                                                                                                       | `true`           |
+| `coordinating.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                     | `Always`         |
+| `coordinating.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                         | `[]`             |
+| `coordinating.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                            | `[]`             |
 | `coordinating.podSecurityContext.fsGroup`                        | Set coordinating-only pod's Security Context fsGroup                                                                                                                   | `1001`           |
 | `coordinating.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                   | `true`           |
+| `coordinating.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                       | `{}`             |
 | `coordinating.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                             | `1001`           |
 | `coordinating.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                          | `true`           |
 | `coordinating.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                            | `false`          |
@@ -424,6 +438,7 @@ helm delete --purge my-release
 | `coordinating.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                              | `false`          |
 | `coordinating.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                     | `["ALL"]`        |
 | `coordinating.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                       | `RuntimeDefault` |
+| `coordinating.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                     | `false`          |
 | `coordinating.hostAliases`                                       | coordinating-only pods host aliases                                                                                                                                    | `[]`             |
 | `coordinating.podLabels`                                         | Extra labels for coordinating-only pods                                                                                                                                | `{}`             |
 | `coordinating.podAnnotations`                                    | Annotations for coordinating-only pods                                                                                                                                 | `{}`             |
@@ -512,8 +527,12 @@ helm delete --purge my-release
 | `ingest.resources.requests`                                | The requested resources for the ingest-only containers                                                                                                                 | `{}`                      |
 | `ingest.heapSize`                                          | OpenSearch ingest-only node heap size.                                                                                                                                 | `128m`                    |
 | `ingest.podSecurityContext.enabled`                        | Enabled ingest-only pods' Security Context                                                                                                                             | `true`                    |
+| `ingest.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                     | `Always`                  |
+| `ingest.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                         | `[]`                      |
+| `ingest.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                            | `[]`                      |
 | `ingest.podSecurityContext.fsGroup`                        | Set ingest-only pod's Security Context fsGroup                                                                                                                         | `1001`                    |
 | `ingest.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                   | `true`                    |
+| `ingest.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                       | `{}`                      |
 | `ingest.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                             | `1001`                    |
 | `ingest.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                          | `true`                    |
 | `ingest.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                            | `false`                   |
@@ -521,6 +540,7 @@ helm delete --purge my-release
 | `ingest.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                              | `false`                   |
 | `ingest.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                     | `["ALL"]`                 |
 | `ingest.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                       | `RuntimeDefault`          |
+| `ingest.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                     | `false`                   |
 | `ingest.hostAliases`                                       | ingest-only pods host aliases                                                                                                                                          | `[]`                      |
 | `ingest.podLabels`                                         | Extra labels for ingest-only pods                                                                                                                                      | `{}`                      |
 | `ingest.podAnnotations`                                    | Annotations for ingest-only pods                                                                                                                                       | `{}`                      |
@@ -689,8 +709,12 @@ helm delete --purge my-release
 | `dashboards.resources.requests`                                | The requested resources for the data containers                                                                                                                        | `{}`                                    |
 | `dashboards.heapSize`                                          | OpenSearch data node heap size.                                                                                                                                        | `1024m`                                 |
 | `dashboards.podSecurityContext.enabled`                        | Enabled data pods' Security Context                                                                                                                                    | `true`                                  |
+| `dashboards.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                     | `Always`                                |
+| `dashboards.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                         | `[]`                                    |
+| `dashboards.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                            | `[]`                                    |
 | `dashboards.podSecurityContext.fsGroup`                        | Set dashboards pod's Security Context fsGroup                                                                                                                          | `1001`                                  |
 | `dashboards.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                   | `true`                                  |
+| `dashboards.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                       | `{}`                                    |
 | `dashboards.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                             | `1001`                                  |
 | `dashboards.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                          | `true`                                  |
 | `dashboards.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                            | `false`                                 |
@@ -698,6 +722,7 @@ helm delete --purge my-release
 | `dashboards.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                              | `false`                                 |
 | `dashboards.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                     | `["ALL"]`                               |
 | `dashboards.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                       | `RuntimeDefault`                        |
+| `dashboards.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                     | `false`                                 |
 | `dashboards.hostAliases`                                       | data pods host aliases                                                                                                                                                 | `[]`                                    |
 | `dashboards.podLabels`                                         | Extra labels for data pods                                                                                                                                             | `{}`                                    |
 | `dashboards.podAnnotations`                                    | Annotations for data pods                                                                                                                                              | `{}`                                    |
@@ -811,58 +836,6 @@ Currently, OpenSearch requires some changes in the kernel of the host machine to
 
 This chart uses a **privileged** initContainer to change those settings in the Kernel by running: `sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536`.
 You can disable the initContainer using the `sysctlImage.enabled=false` parameter.
-
-### Enable bundled Kibana
-
-This OpenSearch chart contains Kibana as subchart, you can enable it just setting the `global.kibanaEnabled=true` parameter.
-To see the notes with some operational instructions from the Kibana chart, please use the `--render-subchart-notes` as part of your `helm install` command, in this way you can see the Kibana and OS notes in your terminal.
-
-When enabling the bundled kibana subchart, there are a few gotchas that you should be aware of listed below.
-
-#### OpenSearch rest Encryption
-
-When enabling opensearch' rest endpoint encryption you will also need to set `kibana.opensearch.security.tls.enabled` to the SAME value along with some additional values shown below for an "out of the box experience":
-
-```yaml
-security:
-  enabled: true
-  # PASSWORD must be the same value passed to opensearch to get an "out of the box" experience
-  openPassword: "<PASSWORD>"
-  tls:
-    # AutoGenerate TLS certs for open
-    autoGenerated: true
-
-kibana:
-  opensearch:
-    security:
-      auth:
-        enabled: true
-        # default in the opensearch chart is open
-        kibanaUsername: "<USERNAME>"
-        kibanaPassword: "<PASSWORD>"
-      tls:
-        # Instruct kibana to connect to open over https
-        enabled: true
-        # Bit of a catch 22, as you will need to know the name upfront of your release
-        existingSecret: RELEASENAME-opensearch-coordinating-crt # or just 'opensearch-coordinating-crt' if the release name happens to be 'opensearch'
-        # As the certs are auto-generated, they are pemCerts so set to true
-        usePemCerts: true
-```
-
-At a bare-minimum, when working with kibana and opensearch together the following values MUST be the same, otherwise things will fail:
-
-```yaml
-security:
-  tls:
-    restEncryption: true
-
-# assumes global.kibanaEnabled=true
-kibana:
-  opensearch:
-    security:
-      tls:
-        enabled: true
-```
 
 ### Adding extra environment variables
 

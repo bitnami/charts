@@ -145,8 +145,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.resources.limits`                                  | The resources limits for the client containers                                                   | `{}`             |
 | `client.resources.requests`                                | The requested resources for the client containers                                                | `{}`             |
 | `client.podSecurityContext.enabled`                        | Enabled Client pods' Security Context                                                            | `true`           |
+| `client.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                               | `Always`         |
+| `client.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                   | `[]`             |
+| `client.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                      | `[]`             |
 | `client.podSecurityContext.fsGroup`                        | Set Client pod's Security Context fsGroup                                                        | `1001`           |
 | `client.containerSecurityContext.enabled`                  | Enabled Client containers' Security Context                                                      | `true`           |
+| `client.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                 | `{}`             |
 | `client.containerSecurityContext.runAsUser`                | Set Client containers' Security Context runAsUser                                                | `1001`           |
 | `client.containerSecurityContext.runAsGroup`               | Set Client containers' Security Context runAsGroup                                               | `1001`           |
 | `client.containerSecurityContext.runAsNonRoot`             | Set Client containers' Security Context runAsNonRoot                                             | `true`           |
@@ -157,6 +161,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.containerSecurityContext.seccompProfile.type`      | Set Client container's Security Context seccomp profile                                          | `RuntimeDefault` |
 | `client.lifecycleHooks`                                    | for the client container(s) to automate configuration before or after startup                    | `{}`             |
 | `client.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                   | `""`             |
+| `client.automountServiceAccountToken`                      | Mount Service Account token in pod                                                               | `false`          |
 | `client.hostAliases`                                       | client pods host aliases                                                                         | `[]`             |
 | `client.labels`                                            | Extra labels for the client deployment                                                           | `{}`             |
 | `client.podLabels`                                         | Extra labels for client pods                                                                     | `{}`             |
@@ -182,7 +187,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources                                                       | `false`          |
 | `client.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                     | `[]`             |
 | `client.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                     | `[]`             |
-| `client.serviceAccount.create`                             | Enable creation of ServiceAccount for Client pods                                                | `false`          |
+| `client.serviceAccount.create`                             | Enable creation of ServiceAccount for Client pods                                                | `true`           |
 | `client.serviceAccount.name`                               | The name of the ServiceAccount to use                                                            | `""`             |
 | `client.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                           | `false`          |
 | `client.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                             | `{}`             |
@@ -240,8 +245,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.resources.limits`                                  | The resources limits for the client containers                                                     | `{}`             |
 | `worker.resources.requests`                                | The requested resources for the client containers                                                  | `{}`             |
 | `worker.podSecurityContext.enabled`                        | Enabled Worker pods' Security Context                                                              | `true`           |
+| `worker.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                 | `Always`         |
+| `worker.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                     | `[]`             |
+| `worker.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                        | `[]`             |
 | `worker.podSecurityContext.fsGroup`                        | Set Worker pod's Security Context fsGroup                                                          | `1001`           |
 | `worker.containerSecurityContext.enabled`                  | Enabled Worker containers' Security Context                                                        | `true`           |
+| `worker.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                   | `{}`             |
 | `worker.containerSecurityContext.runAsUser`                | Set Worker containers' Security Context runAsUser                                                  | `1001`           |
 | `worker.containerSecurityContext.runAsGroup`               | Set Worker containers' Security Context runAsGroup                                                 | `1001`           |
 | `worker.containerSecurityContext.runAsNonRoot`             | Set Worker containers' Security Context runAsNonRoot                                               | `true`           |
@@ -252,6 +261,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.containerSecurityContext.privileged`               | Set Worker container's Security Context privileged                                                 | `false`          |
 | `worker.lifecycleHooks`                                    | for the client container(s) to automate configuration before or after startup                      | `{}`             |
 | `worker.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                     | `""`             |
+| `worker.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                 | `false`          |
 | `worker.hostAliases`                                       | client pods host aliases                                                                           | `[]`             |
 | `worker.labels`                                            | Labels for the worker deployment                                                                   | `{}`             |
 | `worker.annotations`                                       | Annotations for the worker deployment                                                              | `{}`             |
@@ -297,7 +307,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.externalAccess.service.labels`                   | Additional custom labels for Worker service                                                                                               | `{}`        |
 | `worker.externalAccess.service.annotations`              | Additional custom annotations for Worker service                                                                                          | `{}`        |
 | `worker.externalAccess.service.extraPorts`               | Extra ports to expose in the Worker service                                                                                               | `[]`        |
-| `worker.serviceAccount.create`                           | Enable creation of ServiceAccount for Data Coordinator pods                                                                               | `false`     |
+| `worker.serviceAccount.create`                           | Enable creation of ServiceAccount for Data Coordinator pods                                                                               | `true`      |
 | `worker.serviceAccount.name`                             | The name of the ServiceAccount to use                                                                                                     | `""`        |
 | `worker.serviceAccount.automountServiceAccountToken`     | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                    | `false`     |
 | `worker.serviceAccount.annotations`                      | Additional custom annotations for the ServiceAccount                                                                                      | `{}`        |

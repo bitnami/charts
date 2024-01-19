@@ -79,24 +79,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Tomcat parameters
 
-| Name                          | Description                                                                                            | Value                    |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------ |
-| `image.registry`              | Tomcat image registry                                                                                  | `REGISTRY_NAME`          |
-| `image.repository`            | Tomcat image repository                                                                                | `REPOSITORY_NAME/tomcat` |
-| `image.digest`                | Tomcat image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
-| `image.pullPolicy`            | Tomcat image pull policy                                                                               | `IfNotPresent`           |
-| `image.pullSecrets`           | Specify docker-registry secret names as an array                                                       | `[]`                     |
-| `image.debug`                 | Specify if debug logs should be enabled                                                                | `false`                  |
-| `hostAliases`                 | Deployment pod host aliases                                                                            | `[]`                     |
-| `tomcatUsername`              | Tomcat admin user                                                                                      | `user`                   |
-| `tomcatPassword`              | Tomcat admin password                                                                                  | `""`                     |
-| `tomcatAllowRemoteManagement` | Enable remote access to management interface                                                           | `0`                      |
-| `catalinaOpts`                | Java runtime option used by tomcat JVM                                                                 | `""`                     |
-| `command`                     | Override default container command (useful when using custom images)                                   | `[]`                     |
-| `args`                        | Override default container args (useful when using custom images)                                      | `[]`                     |
-| `extraEnvVars`                | Extra environment variables to be set on Tomcat container                                              | `[]`                     |
-| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra environment variables                                      | `""`                     |
-| `extraEnvVarsSecret`          | Name of existing Secret containing extra environment variables                                         | `""`                     |
+| Name                           | Description                                                                                            | Value                    |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------------ |
+| `image.registry`               | Tomcat image registry                                                                                  | `REGISTRY_NAME`          |
+| `image.repository`             | Tomcat image repository                                                                                | `REPOSITORY_NAME/tomcat` |
+| `image.digest`                 | Tomcat image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
+| `image.pullPolicy`             | Tomcat image pull policy                                                                               | `IfNotPresent`           |
+| `image.pullSecrets`            | Specify docker-registry secret names as an array                                                       | `[]`                     |
+| `image.debug`                  | Specify if debug logs should be enabled                                                                | `false`                  |
+| `automountServiceAccountToken` | Mount Service Account token in pod                                                                     | `false`                  |
+| `hostAliases`                  | Deployment pod host aliases                                                                            | `[]`                     |
+| `tomcatUsername`               | Tomcat admin user                                                                                      | `user`                   |
+| `tomcatPassword`               | Tomcat admin password                                                                                  | `""`                     |
+| `tomcatAllowRemoteManagement`  | Enable remote access to management interface                                                           | `0`                      |
+| `catalinaOpts`                 | Java runtime option used by tomcat JVM                                                                 | `""`                     |
+| `command`                      | Override default container command (useful when using custom images)                                   | `[]`                     |
+| `args`                         | Override default container args (useful when using custom images)                                      | `[]`                     |
+| `extraEnvVars`                 | Extra environment variables to be set on Tomcat container                                              | `[]`                     |
+| `extraEnvVarsCM`               | Name of existing ConfigMap containing extra environment variables                                      | `""`                     |
+| `extraEnvVarsSecret`           | Name of existing Secret containing extra environment variables                                         | `""`                     |
 
 ### Tomcat deployment parameters
 
@@ -108,8 +109,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.http`                               | HTTP port to expose at container level                                                                                   | `8080`              |
 | `containerExtraPorts`                               | Extra ports to expose at container level                                                                                 | `[]`                |
 | `podSecurityContext.enabled`                        | Enable Tomcat pods' Security Context                                                                                     | `true`              |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`            |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`                |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                |
 | `podSecurityContext.fsGroup`                        | Set Tomcat pod's Security Context fsGroup                                                                                | `1001`              |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`              |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`              |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`              |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`             |
@@ -170,6 +175,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources. Only Ingress traffic is filtered for now.                                    | `false`             |
 | `networkPolicy.allowExternal`                       | Don't require client label for connections                                                                               | `true`              |
 | `networkPolicy.explicitNamespacesSelector`          | A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed                           | `{}`                |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for Tomcat pod                                                                         | `true`              |
+| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                   | `""`                |
+| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                   | `false`             |
+| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                     | `{}`                |
 
 ### Traffic Exposure parameters
 
@@ -228,6 +237,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                             | `[]`                                                                                                                                                                                                                |
 | `metrics.jmx.config`                                            | Configuration file for JMX exporter                                                                          | `""`                                                                                                                                                                                                                |
 | `metrics.jmx.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                         | `true`                                                                                                                                                                                                              |
+| `metrics.jmx.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                             | `{}`                                                                                                                                                                                                                |
 | `metrics.jmx.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                   | `1001`                                                                                                                                                                                                              |
 | `metrics.jmx.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                | `true`                                                                                                                                                                                                              |
 | `metrics.jmx.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                  | `false`                                                                                                                                                                                                             |
