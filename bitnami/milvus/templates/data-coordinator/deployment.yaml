@@ -45,6 +45,7 @@ spec:
       {{- end }}
       serviceAccountName: {{ template "milvus.data-coordinator.serviceAccountName" . }}
       {{- include "milvus.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.dataCoord.automountServiceAccountToken }}
       {{- if .Values.dataCoord.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dataCoord.hostAliases "context" $) | nindent 8 }}
       {{- end }}

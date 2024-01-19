@@ -50,6 +50,7 @@ spec:
     spec:
       serviceAccountName: {{ template "opensearch.ingest.serviceAccountName" . }}
       {{- include "opensearch.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.ingest.automountServiceAccountToken }}
       {{- if .Values.ingest.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.hostAliases "context" $) | nindent 8 }}
       {{- end }}
