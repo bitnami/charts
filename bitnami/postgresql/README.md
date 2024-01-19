@@ -560,6 +560,38 @@ At the top level, there is a service object which defines the services for both 
 
 To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
 
+### LDAP
+
+LDAP support can be enabled in the chart by specifying the `ldap.` parameters while creating a release. The following parameters should be configured to properly enable the LDAP support in the chart.
+
+- **ldap.enabled**: Enable LDAP support. Defaults to `false`.
+- **ldap.uri**: LDAP URL beginning in the form `ldap[s]://<hostname>:<port>`. No defaults.
+- **ldap.base**: LDAP base DN. No defaults.
+- **ldap.binddn**: LDAP bind DN. No defaults.
+- **ldap.bindpw**: LDAP bind password. No defaults.
+- **ldap.bslookup**: LDAP base lookup. No defaults.
+- **ldap.nss_initgroups_ignoreusers**: LDAP ignored users. `root,nslcd`.
+- **ldap.scope**: LDAP search scope. No defaults.
+- **ldap.tls_reqcert**: LDAP TLS check on server certificates. No defaults.
+
+For example:
+
+```text
+ldap.enabled="true"
+ldap.uri="ldap://my_ldap_server"
+ldap.base="dc=example\,dc=org"
+ldap.binddn="cn=admin\,dc=example\,dc=org"
+ldap.bindpw="admin"
+ldap.bslookup="ou=group-ok\,dc=example\,dc=org"
+ldap.nss_initgroups_ignoreusers="root\,nslcd"
+ldap.scope="sub"
+ldap.tls_reqcert="demand"
+```
+
+Next, login to the PostgreSQL server using the `psql` client and add the PAM authenticated LDAP users.
+
+> Note: Parameters including commas must be escaped as shown in the above example.
+
 ### postgresql.conf / pg_hba.conf files as configMap
 
 This helm chart also supports to customize the PostgreSQL configuration file. You can add additional PostgreSQL configuration parameters using the `primary.extendedConfiguration`/`readReplicas.extendedConfiguration` parameters as a string. Alternatively, to replace the entire default configuration use `primary.configuration`.
@@ -682,7 +714,7 @@ global.postgresql.auth.database=testdb
 
 This way, the credentials will be available in all of the subcharts.
 
-## Persistence
+### Persistence
 
 The [Bitnami PostgreSQL](https://github.com/bitnami/containers/tree/main/bitnami/postgresql) image stores the PostgreSQL data and configurations at the `/bitnami/postgresql` path of the container.
 
@@ -691,7 +723,20 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 If you already have data in it, you will fail to sync to standby nodes for all commits, details can refer to the [code present in the container repository](https://github.com/bitnami/containers/tree/main/bitnami/postgresql). If you need to use those data, please covert them to sql and import after `helm install` finished.
 
-## NetworkPolicy
+### Backup and restore PostgreSQL deployments
+
+To back up and restore Bitnami PostgreSQL Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool.
+
+These are the steps you will usually follow to back up and restore your PostgreSQL cluster data:
+
+- Install Velero on the source and destination clusters.
+- Use Velero to back up the PersistentVolumes (PVs) used by the deployment on the source cluster.
+- Use Velero to restore the backed-up PVs on the destination cluster.
+- Create a new deployment on the destination cluster with the same chart, deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
+
+Refer to our detailed [tutorial on backing up and restoring PostgreSQL deployments on Kubernetes](https://docs.bitnami.com/tutorials/migrate-data-bitnami-velero/) for more information.
+
+### NetworkPolicy
 
 To enable network policy for PostgreSQL, install [a networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy#before-you-begin), and set `networkPolicy.enabled` to `true`.
 
@@ -706,7 +751,7 @@ With NetworkPolicy enabled, traffic will be limited to just port 5432.
 For more precise policy, set `networkPolicy.allowExternal=false`. This will only allow pods with the generated client label to connect to PostgreSQL.
 This label will be displayed in the output of a successful install.
 
-## Differences between Bitnami PostgreSQL image and [Docker Official](https://hub.docker.com/_/postgres) image
+### Differences between Bitnami PostgreSQL image and [Docker Official](https://hub.docker.com/_/postgres) image
 
 - The Docker Official PostgreSQL image does not support replication. If you pass any replication environment variable, this would be ignored. The only environment variables supported by the Docker Official image are POSTGRES_USER, POSTGRES_DB, POSTGRES_PASSWORD, POSTGRES_INITDB_ARGS, POSTGRES_INITDB_WALDIR and PGDATA. All the remaining environment variables are specific to the Bitnami PostgreSQL image.
 - The Bitnami PostgreSQL image is non-root by default. This requires that you run the pod with `securityContext` and updates the permissions of the volume with an `initContainer`. A key benefit of this configuration is that the pod follows security best practices and is prepared to run on Kubernetes distributions with hard security constraints like OpenShift.

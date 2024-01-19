@@ -473,6 +473,23 @@ The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/stora
 
 If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
+### Enable disaster recovery features
+
+The Bitnami etcd Helm chart supports automatic disaster recovery by periodically snapshotting the keyspace. If the cluster permanently loses more than (N-1)/2 members, it tries to recover the cluster from a previous snapshot.
+
+Enable this feature with the following parameters:
+
+```
+persistence.enabled=true
+disasterRecovery.enabled=true
+disasterRecovery.pvc.size=2Gi
+disasterRecovery.pvc.storageClassName=nfs
+```
+
+If the `startFromSnapshot.*` parameters are used at the same time as the `disasterRecovery.*` parameters, the PVC provided via the `startFromSnapshot.existingClaim` parameter will be used to store the periodical snapshots.
+
+> NOTE: The disaster recovery feature requires volumes with ReadWriteMany access mode.
+
 ### Backup and restore the etcd keyspace
 
 Two different approaches are available to back up and restore this Helm Chart:

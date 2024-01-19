@@ -937,6 +937,25 @@ externalAccess:
       external-dns.alpha.kubernetes.io/hostname: "{{ .targetPod }}.example.com"
 ```
 
+### Enable metrics
+
+The chart can optionally start two metrics exporters:
+
+- Kafka exporter, to expose Kafka metrics. By default, it uses port 9308.
+- JMX exporter, to expose JMX metrics. By default, it uses port 5556.
+
+To create a separate Kafka exporter, use the parameter below:
+
+    metrics.kafka.enabled: true
+
+To expose JMX metrics to Prometheus, use the parameter below:
+
+    metrics.jmx.enabled: true
+
+- To enable Zookeeper chart metrics, use the parameter below:
+
+    zookeeper.metrics.enabled: true
+
 ### Sidecars
 
 If you have a need for additional containers to run within the same pod as Kafka (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.

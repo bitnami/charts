@@ -793,6 +793,34 @@ tls-client-cert-file
 tls-ca-cert-file
 ```
 
+### Deploy a custom metrics script in the sidecar
+
+A custom Lua script can be added to the `redis-exporter` sidecar by way of the `metrics.extraArgs.script` parameter.  The pathname of the script must exist on the container, or the `redis_exporter` process (and therefore the whole pod) will refuse to start.  The script can be provided to the sidecar containers via the `metrics.extraVolumes` and `metrics.extraVolumeMounts` parameters:
+
+    metrics:
+      extraVolumeMounts:
+        - name: '{{ printf "%s-metrics-script-file" (include "common.names.fullname" .) }}'
+          mountPath: '{{ printf "/mnt/%s/" (include "common.names.name" .) }}'
+          readOnly: true
+      extraVolumes:
+        - name: '{{ printf "%s-metrics-script-file" (include "common.names.fullname" .) }}'
+          configMap:
+            name: '{{ printf "%s-metrics-script" (include "common.names.fullname" .) }}'
+      extraArgs:
+        script: '{{ printf "/mnt/%s/my_custom_metrics.lua" (include "common.names.name" .) }}'
+
+Then deploy the script into the correct location via `extraDeploy`:
+
+    extraDeploy:
+      - apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: '{{ printf "%s-metrics-script" (include "common.names.fullname" .) }}'
+        data:
+          my_custom_metrics.lua: |
+            -- LUA SCRIPT CODE HERE, e.g.,
+            return {'bitnami_makes_the_best_charts', '1'}
+
 ### Host Kernel Settings
 
 Redis&reg; may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages. To do so, you can set up a privileged `initContainer` with the `sysctlImage` config values, for example:

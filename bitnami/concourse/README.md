@@ -577,6 +577,44 @@ This major updates the PostgreSQL subchart to its newest major, 13.0.0. [Here](h
 
 This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
 
+### To 1.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository. Additionally updates the PostgreSQL subchart to its newest major 11.x.x which contains similar changes.
+
+#### What changes were introduced in this major version?
+
+- *web.containerPort*, *web.tsa.containerPort*, *web.tsa.debugContainerPort* and *web.tls.containerPort* have been regrouped under the *web.containerPorts*.
+- *worker.containerPort*, *worker.healthCheckContainerPort*, *worker.baggageclaim.containerPort* and *worker.baggageclaim.debugContainerPort* have been regrouped under the *worker.containerPorts*.
+- *service.web.port* and *service.web.tlsPort* have been regrouped under the *web.service.ports* map.
+- *service.workerGateway.port* has been regrouped under the *service.workerGateway.port* map.
+
+#### Upgrading Instructions
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+
+        export CONCOURSE_LOCAL_USERS=$(kubectl get secret --namespace default concourse-web -o jsonpath="{.data.local-users}" | base64 --decode)
+        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default concourse-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=concourse,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+
+2. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+
+        kubectl delete statefulsets.apps --cascade=false concourse-postgresql
+        kubectl delete secret postgresql --namespace default
+
+3. Upgrade your release using the same PostgreSQL version:
+
+        CURRENT_PG_VERSION=$(kubectl exec concourse-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+        helm upgrade concourse bitnami/concourse \
+          --set loadExamples=true \
+          --set secrets.localUsers=$CONCOURSE_LOCAL_USERS \
+          --set postgresql.image.tag=$CURRENT_VERSION \
+          --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+          --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+
+4. Delete the existing PostgreSQL pod and the new statefulset will create a new one:
+
+        kubectl delete pod concourse-postgresql-0
+
 ## License
 
 Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.

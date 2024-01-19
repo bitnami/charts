@@ -443,7 +443,9 @@ externalDatabase.database=mydatabase
 externalDatabase.port=3306
 ```
 
-Refer to the [tutorial on integrating WordPress with a managed cloud database](https://docs.bitnami.com/tutorials/secure-wordpress-kubernetes-managed-database-ssl-upgrades/) for more information.
+If the database already contains data from a previous WordPress installation, set the `wordpressSkipInstall` parameter to `true`. This parameter forces the container to skip the WordPress installation wizard. Otherwise, the container will assume it is a fresh installation and execute the installation wizard, potentially modifying or resetting the data in the existing database.
+
+[Refer to the container documentation for more information](https://github.com/bitnami/containers/tree/main/bitnami/wordpress#connect-wordpress-container-to-an-existing-database).
 
 ### Memcached
 
