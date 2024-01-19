@@ -88,6 +88,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.debug`                                   | Enable image debug mode                                                                                         | `false`                           |
 | `command`                                       | Override default container command (useful when using custom images)                                            | `[]`                              |
 | `args`                                          | Override default container args (useful when using custom images)                                               | `[]`                              |
+| `automountServiceAccountToken`                  | Mount Service Account token in pod                                                                              | `false`                           |
 | `hostAliases`                                   | Schema Registry pods host aliases                                                                               | `[]`                              |
 | `podLabels`                                     | Extra labels for Schema Registry pods                                                                           | `{}`                              |
 | `configuration`                                 | Specify content for schema-registry.properties. Auto-generated based on other parameters when not specified     | `{}`                              |

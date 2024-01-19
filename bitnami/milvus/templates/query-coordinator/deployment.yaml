@@ -45,6 +45,7 @@ spec:
       {{- end }}
       serviceAccountName: {{ template "milvus.query-coordinator.serviceAccountName" . }}
       {{- include "milvus.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.queryCoord.automountServiceAccountToken }}
       {{- if .Values.queryCoord.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.queryCoord.hostAliases "context" $) | nindent 8 }}
       {{- end }}

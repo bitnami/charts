@@ -2,6 +2,7 @@ server:
   host: parse.local
   appId: testApp
   masterKey: M4ster#K3y
+  automountServiceAccountToken: true
   service:
     type: LoadBalancer
     ports:
@@ -16,6 +17,7 @@ server:
     runAsUser: 1002
 dashboard:
   enabled: true
+  automountServiceAccountToken: true
   containerPorts:
     http: 4040
   podSecurityContext:
@@ -33,7 +35,6 @@ dashboard:
       http: 80
 serviceAccount:
   create: true
-  automountServiceAccountToken: true
 mongodb:
   enabled: true
   auth: 
