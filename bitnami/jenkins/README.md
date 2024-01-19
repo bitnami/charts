@@ -196,6 +196,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `priorityClassName`                                 | Jenkins pod priority class name                                                           | `""`             |
 | `schedulerName`                                     | Name of the k8s scheduler (other than default)                                            | `""`             |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`             |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                        | `true`           |
 | `hostAliases`                                       | Jenkins pod host aliases                                                                  | `[]`             |
 | `extraVolumes`                                      | Optionally specify extra list of additional volumes for Jenkins pods                      | `[]`             |
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Jenkins container(s)         | `[]`             |
@@ -321,14 +322,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                          | Description                                                      | Value  |
-| --------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`   |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                          | Description                                                      | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`    |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 The above parameters map to the env variables defined in [bitnami/jenkins](https://github.com/bitnami/containers/tree/main/bitnami/jenkins). For more information please refer to the [bitnami/jenkins](https://github.com/bitnami/containers/tree/main/bitnami/jenkins) image documentation.
 
