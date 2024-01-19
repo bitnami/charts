@@ -114,6 +114,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.command`                                           | Override default container command on MariaDB Primary container(s) (useful when using custom images)              | `[]`                |
 | `primary.args`                                              | Override default container args on MariaDB Primary container(s) (useful when using custom images)                 | `[]`                |
 | `primary.lifecycleHooks`                                    | for the MariaDB Primary container(s) to automate configuration before or after startup                            | `{}`                |
+| `primary.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                | `false`             |
 | `primary.hostAliases`                                       | Add deployment host aliases                                                                                       | `[]`                |
 | `primary.configuration`                                     | MariaDB Primary configuration to be injected as ConfigMap                                                         | `""`                |
 | `primary.existingConfigmap`                                 | Name of existing ConfigMap with MariaDB Primary configuration.                                                    | `""`                |
@@ -214,6 +215,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.command`                                           | Override default container command on MariaDB Secondary container(s) (useful when using custom images)                | `[]`                |
 | `secondary.args`                                              | Override default container args on MariaDB Secondary container(s) (useful when using custom images)                   | `[]`                |
 | `secondary.lifecycleHooks`                                    | for the MariaDB Secondary container(s) to automate configuration before or after startup                              | `{}`                |
+| `secondary.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                    | `false`             |
 | `secondary.hostAliases`                                       | Add deployment host aliases                                                                                           | `[]`                |
 | `secondary.configuration`                                     | MariaDB Secondary configuration to be injected as ConfigMap                                                           | `""`                |
 | `secondary.existingConfigmap`                                 | Name of existing ConfigMap with MariaDB Secondary configuration.                                                      | `""`                |
