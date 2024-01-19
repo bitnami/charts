@@ -102,6 +102,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.containerPorts.http`                               | Specify the port where the web interface will listen on the master over HTTP                                             | `8080`           |
 | `master.containerPorts.https`                              | Specify the port where the web interface will listen on the master over HTTPS                                            | `8480`           |
 | `master.containerPorts.cluster`                            | Specify the port where the master listens to communicate with workers                                                    | `7077`           |
+| `master.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `master.hostAliases`                                       | Deployment pod host aliases                                                                                              | `[]`             |
 | `master.extraContainerPorts`                               | Specify the port where the running jobs inside the masters listens                                                       | `[]`             |
 | `master.daemonMemoryLimit`                                 | Set the memory limit for the master daemon                                                                               | `""`             |
@@ -181,6 +182,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.containerPorts.http`                               | Specify the port where the web interface will listen on the worker over HTTP                                             | `8080`           |
 | `worker.containerPorts.https`                              | Specify the port where the web interface will listen on the worker over HTTPS                                            | `8480`           |
 | `worker.containerPorts.cluster`                            | Specify the port where the worker listens to communicate with workers                                                    | `""`             |
+| `worker.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `worker.hostAliases`                                       | Add deployment host aliases                                                                                              | `[]`             |
 | `worker.extraContainerPorts`                               | Specify the port where the running jobs inside the workers listens                                                       | `[]`             |
 | `worker.daemonMemoryLimit`                                 | Set the memory limit for the worker daemon                                                                               | `""`             |
