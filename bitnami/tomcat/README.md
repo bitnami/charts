@@ -175,7 +175,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources. Only Ingress traffic is filtered for now.                                    | `false`             |
 | `networkPolicy.allowExternal`                       | Don't require client label for connections                                                                               | `true`              |
 | `networkPolicy.explicitNamespacesSelector`          | A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed                           | `{}`                |
-| `serviceAccount.create`                             | Enable creation of ServiceAccount for WordPress pod                                                                      | `true`              |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for Tomcat pod                                                                         | `true`              |
 | `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                   | `""`                |
 | `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                   | `false`             |
 | `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                     | `{}`                |
