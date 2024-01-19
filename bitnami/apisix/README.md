@@ -93,7 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataPlane.containerPorts.https`                              | APISIX HTTPS container port                                                                                              | `9443`           |
 | `dataPlane.containerPorts.control`                            | APISIX control container port                                                                                            | `9090`           |
 | `dataPlane.containerPorts.metrics`                            | APISIX metrics container port                                                                                            | `9099`           |
-| `dataPlane.livenessProbe.enabled`                             | Enable livenessProbe on APISIX containers                                                                                | `false`          |
+| `dataPlane.livenessProbe.enabled`                             | Enable livenessProbe on APISIX containers                                                                                | `true`           |
 | `dataPlane.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `5`              |
 | `dataPlane.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `10`             |
 | `dataPlane.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `5`              |
@@ -264,7 +264,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controlPlane.containerPorts.configServer`                       | APISIX config port                                                                                                       | `9280`           |
 | `controlPlane.containerPorts.control`                            | APISIX control port                                                                                                      | `9090`           |
 | `controlPlane.containerPorts.metrics`                            | APISIX metrics port                                                                                                      | `9099`           |
-| `controlPlane.livenessProbe.enabled`                             | Enable livenessProbe on APISIX containers                                                                                | `false`          |
+| `controlPlane.livenessProbe.enabled`                             | Enable livenessProbe on APISIX containers                                                                                | `true`           |
 | `controlPlane.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `5`              |
 | `controlPlane.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `10`             |
 | `controlPlane.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `5`              |
