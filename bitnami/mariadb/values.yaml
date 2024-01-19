@@ -185,6 +185,9 @@ primary:
   ## @param primary.lifecycleHooks for the MariaDB Primary container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param primary.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param primary.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -597,6 +600,9 @@ secondary:
   ## @param secondary.lifecycleHooks for the MariaDB Secondary container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param secondary.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param secondary.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

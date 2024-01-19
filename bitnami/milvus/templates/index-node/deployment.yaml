@@ -45,6 +45,7 @@ spec:
       {{- end }}
       serviceAccountName: {{ template "milvus.index-node.serviceAccountName" . }}
       {{- include "milvus.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.indexNode.automountServiceAccountToken }}
       {{- if .Values.indexNode.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.indexNode.hostAliases "context" $) | nindent 8 }}
       {{- end }}
