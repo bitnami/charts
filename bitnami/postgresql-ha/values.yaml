@@ -320,6 +320,10 @@ postgresql:
     ##    memory: 256Mi
     ##
     requests: {}
+  ## The pod management policy of the statefulset. 
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ## @param postgresql.podManagementPolicy sets the pod management policy
+  podManagementPolicy: Parallel
   ## PostgreSQL container's liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param postgresql.livenessProbe.enabled Enable livenessProbe
