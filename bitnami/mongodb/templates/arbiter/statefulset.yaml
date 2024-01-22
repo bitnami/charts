@@ -56,6 +56,7 @@ spec:
       {{- if .Values.arbiter.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.arbiter.automountServiceAccountToken }}
       {{- if .Values.arbiter.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.hostAliases "context" $) | nindent 8 }}
       {{- end }}
