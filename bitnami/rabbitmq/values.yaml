@@ -112,6 +112,9 @@ diagnosticMode:
   args:
     - infinity
 
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: true
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -919,7 +922,7 @@ serviceAccount:
   name: ""
   ## @param serviceAccount.automountServiceAccountToken Auto-mount the service account token in the pod
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   ## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   annotations: {}

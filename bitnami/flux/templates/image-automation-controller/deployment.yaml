@@ -92,7 +92,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.imageAutomationController.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - --watch-all-namespaces
+            - --watch-all-namespaces={{ .Values.imageAutomationController.watchAllNamespaces }}
             {{- if .Values.imageAutomationController.image.debug }}
             - --log-level=debug
             {{- else }}
