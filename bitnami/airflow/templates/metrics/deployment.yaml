@@ -32,6 +32,7 @@ spec:
         app.kubernetes.io/component: metrics
     spec:
       {{- include "airflow.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.metrics.automountServiceAccountToken }}
       {{- if .Values.metrics.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.hostAliases "context" $) | nindent 8 }}
       {{- end }}

@@ -45,6 +45,7 @@ spec:
       {{- if $.Values.shardsvr.arbiter.schedulerName }}
       schedulerName: {{ $.Values.shardsvr.arbiter.schedulerName | quote }}
       {{- end }}
+      automountServiceAccountToken: {{ $.Values.shardsvr.arbiter.automountServiceAccountToken }}
       {{- if $.Values.shardsvr.arbiter.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.hostAliases "context" $) | nindent 8 }}
       {{- end }}

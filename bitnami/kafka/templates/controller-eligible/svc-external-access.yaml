@@ -31,6 +31,7 @@ metadata:
 spec:
   type: {{ $.Values.externalAccess.controller.service.type }}
   {{- if eq $.Values.externalAccess.controller.service.type "LoadBalancer" }}
+  allocateLoadBalancerNodePorts: {{  $.Values.externalAccess.controller.service.allocateLoadBalancerNodePorts }}
   {{- if and (not (empty $.Values.externalAccess.controller.service.loadBalancerIPs)) (eq (len $.Values.externalAccess.controller.service.loadBalancerIPs) $replicaCount) }}
   loadBalancerIP: {{ index $.Values.externalAccess.controller.service.loadBalancerIPs $i }}
   {{- end }}

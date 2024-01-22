@@ -442,6 +442,9 @@ frontend:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## @param frontend.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param frontend.hostAliases Custom host aliases for frontend pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -815,6 +818,9 @@ dashboard:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## @param dashboard.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param dashboard.hostAliases Custom host aliases for Dashboard pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1146,6 +1152,9 @@ apprepository:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## @param apprepository.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param apprepository.hostAliases Custom host aliases for AppRepository Controller pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1181,7 +1190,7 @@ apprepository:
   serviceAccount:
     create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
 
 ## @section Auth Proxy parameters
@@ -1903,6 +1912,9 @@ kubeappsapis:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## @param kubeappsapis.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param kubeappsapis.hostAliases Custom host aliases for KubeappsAPIs pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1948,7 +1960,7 @@ kubeappsapis:
   serviceAccount:
     create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
 
 ## @section OCI Catalog chart configuration

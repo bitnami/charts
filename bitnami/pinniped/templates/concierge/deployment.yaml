@@ -36,6 +36,7 @@ spec:
     spec:
       serviceAccountName: {{ template "pinniped.concierge.serviceAccountName" . }}
       {{- include "pinniped.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.concierge.automountServiceAccountToken }}
       {{- if .Values.concierge.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.concierge.hostAliases "context" $) | nindent 8 }}
       {{- end }}
