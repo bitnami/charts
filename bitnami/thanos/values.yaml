@@ -220,14 +220,21 @@ query:
   ## K8s Pod Security Context for Thanos Query pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param query.podSecurityContext.enabled Enable security context for the Thanos Query pods
+  ## @param query.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param query.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param query.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param query.podSecurityContext.fsGroup Group ID for the filesystem used by Thanos Query pods
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Query containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param query.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param query.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param query.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param query.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param query.containerSecurityContext.privileged Set container's Security Context privileged
@@ -238,6 +245,7 @@ query:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -573,6 +581,9 @@ query:
     ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
     ##
     externalTrafficPolicy: Cluster
+    ## @param query.serviceGrpc.labels Labels for Thanos Query service GRPC
+    ##
+    labels: {}
     ## @param query.serviceGrpc.annotations Annotations for Thanos Query service
     ##
     annotations: {}
@@ -903,14 +914,21 @@ queryFrontend:
   ## K8s Pod Security Context for Thanos Query Frontend pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param queryFrontend.podSecurityContext.enabled Enable security context for the Thanos Query Frontend pods
+  ## @param queryFrontend.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param queryFrontend.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param queryFrontend.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param queryFrontend.podSecurityContext.fsGroup Group ID for the filesystem used by Thanos Query Frontend pods
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Query Frontend containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param queryFrontend.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param queryFrontend.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param queryFrontend.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param queryFrontend.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param queryFrontend.containerSecurityContext.privileged Set container's Security Context privileged
@@ -921,6 +939,7 @@ queryFrontend:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1358,14 +1377,21 @@ bucketweb:
   ## K8s Pod Security Context for Thanos Bucket Web pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param bucketweb.podSecurityContext.enabled Enable security context for the Thanos Bucket Web pods
+  ## @param bucketweb.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param bucketweb.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param bucketweb.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param bucketweb.podSecurityContext.fsGroup Group ID for the filesystem used by Thanos Bucket Web pods
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Bucket Web containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param bucketweb.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param bucketweb.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param bucketweb.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param bucketweb.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param bucketweb.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1376,6 +1402,7 @@ bucketweb:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1815,14 +1842,21 @@ compactor:
   ## K8s Pod Security Context for Thanos Compactor pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param compactor.podSecurityContext.enabled Enable security context for the Thanos Compactor pods
+  ## @param compactor.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param compactor.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param compactor.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param compactor.podSecurityContext.fsGroup Group ID for the filesystem used by Thanos Compactor pods
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Compactor containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param compactor.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param compactor.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param compactor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param compactor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param compactor.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1833,6 +1867,7 @@ compactor:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2288,14 +2323,21 @@ storegateway:
   ## K8s Pod Security Context for Thanos Store Gateway pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param storegateway.podSecurityContext.enabled Enable security context for the Thanos Store Gateway pods
+  ## @param storegateway.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param storegateway.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param storegateway.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param storegateway.podSecurityContext.fsGroup Group ID for the filesystem used by Thanos Store Gateway pods
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Store Gateway containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param storegateway.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param storegateway.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param storegateway.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param storegateway.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param storegateway.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2306,6 +2348,7 @@ storegateway:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2939,14 +2982,21 @@ ruler:
   ## K8s Pod Security Context for Thanos Ruler pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param ruler.podSecurityContext.enabled Enable security context for the Thanos Ruler pods
+  ## @param ruler.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param ruler.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param ruler.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param ruler.podSecurityContext.fsGroup Group ID for the filesystem used by Thanos Ruler pods
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Ruler containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param ruler.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param ruler.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param ruler.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param ruler.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param ruler.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2957,6 +3007,7 @@ ruler:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -3454,14 +3505,21 @@ receive:
   ## K8s Pod Security Context for Thanos Receive pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param receive.podSecurityContext.enabled Enable security context for the Thanos Receive pods
+  ## @param receive.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param receive.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param receive.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param receive.podSecurityContext.fsGroup Group ID for the filesystem used by Thanos Receive pods
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Receive containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param receive.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param receive.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param receive.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param receive.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param receive.containerSecurityContext.privileged Set container's Security Context privileged
@@ -3472,6 +3530,7 @@ receive:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -3932,14 +3991,21 @@ receiveDistributor:
   ## K8s Pod Security Context for Thanos Receive Distributor pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param receiveDistributor.podSecurityContext.enabled Enable security context for the Thanos Receive Distributor pods
+  ## @param receiveDistributor.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param receiveDistributor.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param receiveDistributor.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param receiveDistributor.podSecurityContext.fsGroup Group ID for the filesystem used by Thanos Receive Distributor pods
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## K8s containers' Security Context for Thanos Receive Distributor containers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param receiveDistributor.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param receiveDistributor.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param receiveDistributor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param receiveDistributor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param receiveDistributor.containerSecurityContext.privileged Set container's Security Context privileged
@@ -3950,6 +4016,7 @@ receiveDistributor:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -4338,7 +4405,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r94
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

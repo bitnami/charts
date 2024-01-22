@@ -179,14 +179,21 @@ server:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param server.podSecurityContext.enabled Enabled Vault Server pods' Security Context
+  ## @param server.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param server.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param server.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param server.podSecurityContext.fsGroup Set Vault Server pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param server.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
@@ -197,6 +204,7 @@ server:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -213,6 +221,9 @@ server:
   ## @param server.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param server.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param server.hostAliases Vault Server pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -612,7 +623,7 @@ server:
     annotations: {}
     ## @param server.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Source Conttroller Persistence Parameters
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
@@ -775,6 +786,9 @@ csiProvider:
   ##
   secretStoreHostPath: "/etc/kubernetes/secrets-store-csi-providers"
 
+  ## @param csiProvider.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param csiProvider.hostAliases Vault CSI Provider pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -877,10 +891,16 @@ csiProvider:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param csiProvider.podSecurityContext.enabled Enabled CSI Provider pods' Security Context
+  ## @param csiProvider.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param csiProvider.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param csiProvider.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param csiProvider.podSecurityContext.fsGroup Set CSI Provider pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
 
   provider:
@@ -952,6 +972,7 @@ csiProvider:
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param csiProvider.provider.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param csiProvider.provider.containerSecurityContext.seLinuxOptions Set SELinux options in container
     ## @param csiProvider.provider.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param csiProvider.provider.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param csiProvider.provider.containerSecurityContext.privileged Set container's Security Context privileged
@@ -962,6 +983,7 @@ csiProvider:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -1061,6 +1083,7 @@ csiProvider:
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param csiProvider.agent.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param csiProvider.agent.containerSecurityContext.seLinuxOptions Set SELinux options in container
     ## @param csiProvider.agent.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param csiProvider.agent.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param csiProvider.agent.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1071,6 +1094,7 @@ csiProvider:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -1154,7 +1178,7 @@ csiProvider:
     annotations: {}
     ## @param csiProvider.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
 
 ## @section Vault Kubernetes Injector Parameters
@@ -1265,14 +1289,21 @@ injector:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param injector.podSecurityContext.enabled Enabled Vault Kubernetes Injector pods' Security Context
+  ## @param injector.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param injector.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param injector.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param injector.podSecurityContext.fsGroup Set Vault Kubernetes Injector pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param injector.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param injector.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param injector.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param injector.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param injector.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1283,6 +1314,7 @@ injector:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1299,6 +1331,9 @@ injector:
   ## @param injector.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param injector.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param injector.hostAliases Vault Kubernetes Injector pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1533,7 +1568,7 @@ injector:
     annotations: {}
     ## @param injector.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
 ## 'volumePermissions' init container parameters
 ## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
@@ -1555,7 +1590,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r94
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1577,8 +1612,10 @@ volumePermissions:
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param volumePermissions.containerSecurityContext.enabled Enable init container's Security Context
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 0

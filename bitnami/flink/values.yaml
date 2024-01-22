@@ -104,6 +104,13 @@ jobmanager:
   ## @param jobmanager.lifecycleHooks [object] Override default etcd container hooks
   ##
   lifecycleHooks: {}
+  ## @param jobmanager.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param jobmanager.hostAliases Set pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## @param jobmanager.extraEnvVars Extra environment variables to be set on flink container
   ## For example:
   ##  - name: FOO
@@ -301,14 +308,21 @@ jobmanager:
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param jobmanager.podSecurityContext.enabled Enabled Apache Flink pods' Security Context
+  ## @param jobmanager.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param jobmanager.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param jobmanager.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param jobmanager.podSecurityContext.fsGroup Set Apache Flink pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param jobmanager.containerSecurityContext.enabled Enabled Apache Flink containers' Security Context
+  ## @param jobmanager.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param jobmanager.containerSecurityContext.runAsUser Set Apache Flink container's Security Context runAsUser
   ## @param jobmanager.containerSecurityContext.runAsNonRoot Force the container to be run as non root
   ## @param jobmanager.containerSecurityContext.allowPrivilegeEscalation Allows privilege escalation
@@ -318,6 +332,7 @@ jobmanager:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
@@ -415,6 +430,13 @@ taskmanager:
   ## @param taskmanager.lifecycleHooks [object] Override default etcd container hooks
   ##
   lifecycleHooks: {}
+  ## @param taskmanager.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param taskmanager.hostAliases Set pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## @param taskmanager.extraEnvVars Extra environment variables to be set on flink container
   ## For example:
   ##  - name: FOO
@@ -602,14 +624,21 @@ taskmanager:
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param taskmanager.podSecurityContext.enabled Enabled Apache Flink pods' Security Context
+  ## @param taskmanager.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param taskmanager.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param taskmanager.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param taskmanager.podSecurityContext.fsGroup Set Apache Flink pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param taskmanager.containerSecurityContext.enabled Enabled Apache Flink containers' Security Context
+  ## @param taskmanager.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param taskmanager.containerSecurityContext.runAsUser Set Apache Flink container's Security Context runAsUser
   ## @param taskmanager.containerSecurityContext.runAsNonRoot Force the container to be run as non root
   ## @param taskmanager.containerSecurityContext.privileged Set primary container's Security Context privileged
@@ -619,6 +648,7 @@ taskmanager:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false

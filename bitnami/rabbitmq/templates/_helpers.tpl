@@ -38,7 +38,7 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Get the password secret.
+Get RabbitMQ password secret name.
 */}}
 {{- define "rabbitmq.secretPasswordName" -}}
     {{- if .Values.auth.existingPasswordSecret -}}
@@ -47,6 +47,28 @@ Get the password secret.
         {{- printf "%s" (include "common.names.fullname" .) -}}
     {{- end -}}
 {{- end -}}
+
+{{/*
+Get the password key to be retrieved from RabbitMQ secret.
+*/}}
+{{- define "rabbitmq.secretPasswordKey" -}}
+    {{- if and .Values.auth.existingSecret .Values.auth.existingSecretPasswordKey -}}
+        {{- printf "%s" (tpl .Values.auth.existingSecretPasswordKey $) -}}
+    {{- else -}}
+        {{- printf "rabbitmq-password" -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Return RabbitMQ password
+*/}}
+{{- define "rabbitmq.password" -}}
+    {{- if not (empty .Values.auth.password) -}}
+        {{- .Values.auth.password -}}
+    {{- else -}}
+        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (include "rabbitmq.secretPasswordName" .) "Length" 16 "Key" (include "rabbitmq.secretPasswordKey" .))  -}}
+    {{- end -}}
+{{- end }}
 
 {{/*
 Get the erlang secret.
@@ -240,7 +262,7 @@ otherwise it generates a random value.
     {{- $len := (default 16 .Length) | int -}}
     {{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
     {{- if $obj }}
-        {{- index $obj .Key | b64dec -}}
+        {{- index $obj .Key | trimAll "\"" | b64dec -}}
     {{- else -}}
         {{- randAlphaNum $len -}}
     {{- end -}}

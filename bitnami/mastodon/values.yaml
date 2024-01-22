@@ -314,14 +314,21 @@ web:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param web.podSecurityContext.enabled Enabled Mastodon web pods' Security Context
+  ## @param web.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param web.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param web.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param web.podSecurityContext.fsGroup Set Mastodon web pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param web.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param web.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param web.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param web.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param web.containerSecurityContext.privileged Set container's Security Context privileged
@@ -332,6 +339,7 @@ web:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -348,6 +356,9 @@ web:
   ## @param web.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param web.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param web.hostAliases Mastodon web pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -592,14 +603,21 @@ sidekiq:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param sidekiq.podSecurityContext.enabled Enabled Mastodon sidekiq pods' Security Context
+  ## @param sidekiq.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param sidekiq.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param sidekiq.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param sidekiq.podSecurityContext.fsGroup Set Mastodon sidekiq pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param sidekiq.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param sidekiq.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param sidekiq.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param sidekiq.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param sidekiq.containerSecurityContext.privileged Set container's Security Context privileged
@@ -610,6 +628,7 @@ sidekiq:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -626,6 +645,9 @@ sidekiq:
   ## @param sidekiq.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param sidekiq.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param sidekiq.hostAliases Mastodon sidekiq pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -820,14 +842,21 @@ streaming:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param streaming.podSecurityContext.enabled Enabled Mastodon streaming pods' Security Context
+  ## @param streaming.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param streaming.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param streaming.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param streaming.podSecurityContext.fsGroup Set Mastodon streaming pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param streaming.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param streaming.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param streaming.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param streaming.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param streaming.containerSecurityContext.privileged Set container's Security Context privileged
@@ -838,6 +867,7 @@ streaming:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -854,6 +884,9 @@ streaming:
   ## @param streaming.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param streaming.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param streaming.hostAliases Mastodon streaming pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1090,6 +1123,7 @@ initJob:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param initJob.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param initJob.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param initJob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param initJob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param initJob.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1100,6 +1134,7 @@ initJob:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1112,10 +1147,16 @@ initJob:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param initJob.podSecurityContext.enabled Enabled Mastodon init job pods' Security Context
+  ## @param initJob.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param initJob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param initJob.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param initJob.podSecurityContext.fsGroup Set Mastodon init job pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## @param initJob.extraEnvVars Array containing extra env vars to configure the Mastodon init job
   ## For example:
@@ -1141,6 +1182,9 @@ initJob:
   resources:
     limits: {}
     requests: {}
+  ## @param initJob.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param initJob.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1230,7 +1274,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r94
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1250,12 +1294,14 @@ volumePermissions:
     requests: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
+    seLinuxOptions: {}
     runAsUser: 0
 
 ## @section Other Parameters

@@ -163,8 +163,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.resources.limits`                                  | The resources limits for the Mastodon web containers                                                                     | `{}`             |
 | `web.resources.requests`                                | The requested resources for the Mastodon web containers                                                                  | `{}`             |
 | `web.podSecurityContext.enabled`                        | Enabled Mastodon web pods' Security Context                                                                              | `true`           |
+| `web.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`         |
+| `web.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`             |
+| `web.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `web.podSecurityContext.fsGroup`                        | Set Mastodon web pod's Security Context fsGroup                                                                          | `1001`           |
 | `web.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `web.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
 | `web.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `web.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `web.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -174,6 +178,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `web.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `web.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `web.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `web.hostAliases`                                       | Mastodon web pods host aliases                                                                                           | `[]`             |
 | `web.podLabels`                                         | Extra labels for Mastodon web pods                                                                                       | `{}`             |
 | `web.podAnnotations`                                    | Annotations for Mastodon web pods                                                                                        | `{}`             |
@@ -244,8 +249,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidekiq.resources.limits`                                  | The resources limits for the Mastodon sidekiq containers                                                                 | `{}`             |
 | `sidekiq.resources.requests`                                | The requested resources for the Mastodon sidekiq containers                                                              | `{}`             |
 | `sidekiq.podSecurityContext.enabled`                        | Enabled Mastodon sidekiq pods' Security Context                                                                          | `true`           |
+| `sidekiq.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`         |
+| `sidekiq.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`             |
+| `sidekiq.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `sidekiq.podSecurityContext.fsGroup`                        | Set Mastodon sidekiq pod's Security Context fsGroup                                                                      | `1001`           |
 | `sidekiq.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `sidekiq.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
 | `sidekiq.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `sidekiq.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `sidekiq.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -255,6 +264,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidekiq.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `sidekiq.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `sidekiq.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `sidekiq.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `sidekiq.hostAliases`                                       | Mastodon sidekiq pods host aliases                                                                                       | `[]`             |
 | `sidekiq.podLabels`                                         | Extra labels for Mastodon sidekiq pods                                                                                   | `{}`             |
 | `sidekiq.podAnnotations`                                    | Annotations for Mastodon sidekiq pods                                                                                    | `{}`             |
@@ -310,8 +320,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `streaming.resources.limits`                                  | The resources limits for the Mastodon streaming containers                                                               | `{}`             |
 | `streaming.resources.requests`                                | The requested resources for the Mastodon streaming containers                                                            | `{}`             |
 | `streaming.podSecurityContext.enabled`                        | Enabled Mastodon streaming pods' Security Context                                                                        | `true`           |
+| `streaming.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`         |
+| `streaming.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`             |
+| `streaming.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `streaming.podSecurityContext.fsGroup`                        | Set Mastodon streaming pod's Security Context fsGroup                                                                    | `1001`           |
 | `streaming.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `streaming.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
 | `streaming.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `streaming.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `streaming.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -321,6 +335,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `streaming.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `streaming.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `streaming.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `streaming.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `streaming.hostAliases`                                       | Mastodon streaming pods host aliases                                                                                     | `[]`             |
 | `streaming.podLabels`                                         | Extra labels for Mastodon streaming pods                                                                                 | `{}`             |
 | `streaming.podAnnotations`                                    | Annotations for Mastodon streaming pods                                                                                  | `{}`             |
@@ -394,6 +409,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.backoffLimit`                                      | set backoff limit of the job                                                                                                   | `10`             |
 | `initJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Mastodon init job                                                  | `[]`             |
 | `initJob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                           | `true`           |
+| `initJob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                               | `{}`             |
 | `initJob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                     | `1001`           |
 | `initJob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                  | `true`           |
 | `initJob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                    | `false`          |
@@ -402,6 +418,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                             | `["ALL"]`        |
 | `initJob.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                               | `RuntimeDefault` |
 | `initJob.podSecurityContext.enabled`                        | Enabled Mastodon init job pods' Security Context                                                                               | `true`           |
+| `initJob.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                             | `Always`         |
+| `initJob.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                 | `[]`             |
+| `initJob.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                    | `[]`             |
 | `initJob.podSecurityContext.fsGroup`                        | Set Mastodon init job pod's Security Context fsGroup                                                                           | `1001`           |
 | `initJob.extraEnvVars`                                      | Array containing extra env vars to configure the Mastodon init job                                                             | `[]`             |
 | `initJob.extraEnvVarsCM`                                    | ConfigMap containing extra env vars to configure the Mastodon init job                                                         | `""`             |
@@ -409,6 +428,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.extraVolumeMounts`                                 | Array of extra volume mounts to be added to the Mastodon Container (evaluated as template). Normally used with `extraVolumes`. | `[]`             |
 | `initJob.resources.limits`                                  | The resources limits for the container                                                                                         | `{}`             |
 | `initJob.resources.requests`                                | The requested resources for the container                                                                                      | `{}`             |
+| `initJob.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                             | `false`          |
 | `initJob.hostAliases`                                       | Add deployment host aliases                                                                                                    | `[]`             |
 | `initJob.annotations`                                       | Add annotations to the job                                                                                                     | `{}`             |
 | `initJob.podLabels`                                         | Additional pod labels                                                                                                          | `{}`             |
@@ -431,16 +451,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init Container Parameters
 
-| Name                                                   | Description                                                                                     | Value                      |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | -------------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                    |
-| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`                       |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                       |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                       |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                        |
+| Name                                                        | Description                                                                                     | Value                      |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`                                 | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                    |
+| `volumePermissions.image.registry`                          | OS Shell + Utility image registry                                                               | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                        | OS Shell + Utility image repository                                                             | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.pullPolicy`                        | OS Shell + Utility image pull policy                                                            | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                           | `[]`                       |
+| `volumePermissions.resources.limits`                        | The resources limits for the init container                                                     | `{}`                       |
+| `volumePermissions.resources.requests`                      | The requested resources for the init container                                                  | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `{}`                       |
+| `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                 | `0`                        |
 
 ### Other Parameters
 

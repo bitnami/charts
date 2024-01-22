@@ -175,6 +175,8 @@ data:
         ("pod_affinity_preferred", "extraPodAffinity.preferred"),
         ("pod_anti_affinity_required", "extraPodAntiAffinity.required"),
         ("pod_anti_affinity_preferred", "extraPodAntiAffinity.preferred"),
+        ("pod_security_context", None),
+        ("container_security_context", None),
         ("lifecycle_hooks", None),
         ("init_containers", None),
         ("extra_containers", None),

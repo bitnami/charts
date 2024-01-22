@@ -136,8 +136,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.infinispan`                         | Keycloak infinispan container port                                                                                       | `7800`           |
 | `extraContainerPorts`                               | Optionally specify extra list of additional port-mappings for Keycloak container                                         | `[]`             |
 | `podSecurityContext.enabled`                        | Enabled Keycloak pods' Security Context                                                                                  | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`         |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`             |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set Keycloak pod's Security Context fsGroup                                                                              | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -169,6 +173,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customReadinessProbe`                              | Custom Rediness probes Keycloak                                                                                          | `{}`             |
 | `customStartupProbe`                                | Custom Startup probes for Keycloak                                                                                       | `{}`             |
 | `lifecycleHooks`                                    | LifecycleHooks to set additional configuration at startup                                                                | `{}`             |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `true`           |
 | `hostAliases`                                       | Deployment pod host aliases                                                                                              | `[]`             |
 | `podLabels`                                         | Extra labels for Keycloak pods                                                                                           | `{}`             |
 | `podAnnotations`                                    | Annotations for Keycloak pods                                                                                            | `{}`             |
@@ -238,7 +243,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | --------------------------------------------------------- | ------- |
 | `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Keycloak pods | `true`  |
 | `serviceAccount.name`                         | Name of the created ServiceAccount                        | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod           | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod           | `false` |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount      | `{}`    |
 | `serviceAccount.extraLabels`                  | Additional labels for the ServiceAccount                  | `{}`    |
 | `rbac.create`                                 | Whether to create and use RBAC resources or not           | `false` |
@@ -296,10 +301,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.annotations`                                       | Annotations for keycloak-config-cli job                                                                                       | `{}`                                  |
 | `keycloakConfigCli.command`                                           | Command for running the container (set to default if not set). Use array form                                                 | `[]`                                  |
 | `keycloakConfigCli.args`                                              | Args for running the container (set to default if not set). Use array form                                                    | `[]`                                  |
+| `keycloakConfigCli.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                            | `true`                                |
 | `keycloakConfigCli.hostAliases`                                       | Job pod host aliases                                                                                                          | `[]`                                  |
 | `keycloakConfigCli.resources.limits`                                  | The resources limits for the keycloak-config-cli container                                                                    | `{}`                                  |
 | `keycloakConfigCli.resources.requests`                                | The requested resources for the keycloak-config-cli container                                                                 | `{}`                                  |
 | `keycloakConfigCli.containerSecurityContext.enabled`                  | Enabled keycloak-config-cli Security Context                                                                                  | `true`                                |
+| `keycloakConfigCli.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                              | `{}`                                  |
 | `keycloakConfigCli.containerSecurityContext.runAsUser`                | Set keycloak-config-cli Security Context runAsUser                                                                            | `1001`                                |
 | `keycloakConfigCli.containerSecurityContext.runAsNonRoot`             | Set keycloak-config-cli Security Context runAsNonRoot                                                                         | `true`                                |
 | `keycloakConfigCli.containerSecurityContext.privileged`               | Set keycloak-config-cli Security Context privileged                                                                           | `false`                               |
@@ -308,6 +315,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                            | `["ALL"]`                             |
 | `keycloakConfigCli.containerSecurityContext.seccompProfile.type`      | Set keycloak-config-cli Security Context seccomp profile                                                                      | `RuntimeDefault`                      |
 | `keycloakConfigCli.podSecurityContext.enabled`                        | Enabled keycloak-config-cli pods' Security Context                                                                            | `true`                                |
+| `keycloakConfigCli.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                            | `Always`                              |
+| `keycloakConfigCli.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                | `[]`                                  |
+| `keycloakConfigCli.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                   | `[]`                                  |
 | `keycloakConfigCli.podSecurityContext.fsGroup`                        | Set keycloak-config-cli pod's Security Context fsGroup                                                                        | `1001`                                |
 | `keycloakConfigCli.backoffLimit`                                      | Number of retries before considering a Job as failed                                                                          | `1`                                   |
 | `keycloakConfigCli.podLabels`                                         | Pod extra labels                                                                                                              | `{}`                                  |

@@ -114,8 +114,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replicaCount`                                      | Number of Mediawiki replicas to deploy                                                    | `1`                                               |
 | `updateStrategy.type`                               | StrategyType can be set to RollingUpdate or OnDelete                                      | `RollingUpdate`                                   |
 | `podSecurityContext.enabled`                        | Enable Mediawiki pods' Security Context                                                   | `true`                                            |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                        | `Always`                                          |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                            | `[]`                                              |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`                                              |
 | `podSecurityContext.fsGroup`                        | Group ID for the volumes of the pod                                                       | `1001`                                            |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`                                            |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`                                              |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`                                            |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`                                            |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`                                           |

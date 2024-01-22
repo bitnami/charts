@@ -114,8 +114,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.resources.limits`                                  | The resources limits for the Vault Server containers                                                                                                    | `{}`                    |
 | `server.resources.requests`                                | The requested resources for the Vault Server containers                                                                                                 | `{}`                    |
 | `server.podSecurityContext.enabled`                        | Enabled Vault Server pods' Security Context                                                                                                             | `true`                  |
+| `server.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                      | `Always`                |
+| `server.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                          | `[]`                    |
+| `server.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                             | `[]`                    |
 | `server.podSecurityContext.fsGroup`                        | Set Vault Server pod's Security Context fsGroup                                                                                                         | `1001`                  |
 | `server.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                    | `true`                  |
+| `server.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                        | `{}`                    |
 | `server.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                              | `1001`                  |
 | `server.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                           | `true`                  |
 | `server.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                             | `false`                 |
@@ -125,6 +129,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                        | `RuntimeDefault`        |
 | `server.command`                                           | Override default container command (useful when using custom images)                                                                                    | `[]`                    |
 | `server.args`                                              | Override default container args (useful when using custom images)                                                                                       | `[]`                    |
+| `server.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                      | `true`                  |
 | `server.hostAliases`                                       | Vault Server pods host aliases                                                                                                                          | `[]`                    |
 | `server.config`                                            | Vault server configuration (evaluated as a template)                                                                                                    | `""`                    |
 | `server.existingConfigMap`                                 | name of a ConfigMap with existing configuration for the server                                                                                          | `""`                    |
@@ -202,13 +207,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Vault Server RBAC Parameters
 
-| Name                                                 | Description                                                      | Value  |
-| ---------------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `server.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `server.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `server.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `server.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `server.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                                 | Description                                                      | Value   |
+| ---------------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `server.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `server.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `server.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `server.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `server.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Source Conttroller Persistence Parameters
 
@@ -256,6 +261,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `csiProvider.config`                                                     | Vault CSI Provider configuration (evaluated as a template)                                                                                                    | `""`                                          |
 | `csiProvider.existingConfigMap`                                          | name of a ConfigMap with existing configuration for the CSI Provider                                                                                          | `""`                                          |
 | `csiProvider.secretStoreHostPath`                                        | Path to the host CSI Provider folder                                                                                                                          | `/etc/kubernetes/secrets-store-csi-providers` |
+| `csiProvider.automountServiceAccountToken`                               | Mount Service Account token in pod                                                                                                                            | `true`                                        |
 | `csiProvider.hostAliases`                                                | Vault CSI Provider pods host aliases                                                                                                                          | `[]`                                          |
 | `csiProvider.podLabels`                                                  | Extra labels for Vault CSI Provider pods                                                                                                                      | `{}`                                          |
 | `csiProvider.podAnnotations`                                             | Annotations for Vault CSI Provider pods                                                                                                                       | `{}`                                          |
@@ -276,6 +282,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `csiProvider.sidecars`                                                   | Add additional sidecar containers to the Vault CSI Provider pod(s)                                                                                            | `[]`                                          |
 | `csiProvider.initContainers`                                             | Add additional init containers to the Vault CSI Provider pod(s)                                                                                               | `[]`                                          |
 | `csiProvider.podSecurityContext.enabled`                                 | Enabled CSI Provider pods' Security Context                                                                                                                   | `true`                                        |
+| `csiProvider.podSecurityContext.fsGroupChangePolicy`                     | Set filesystem group change policy                                                                                                                            | `Always`                                      |
+| `csiProvider.podSecurityContext.sysctls`                                 | Set kernel settings using the sysctl interface                                                                                                                | `[]`                                          |
+| `csiProvider.podSecurityContext.supplementalGroups`                      | Set filesystem extra groups                                                                                                                                   | `[]`                                          |
 | `csiProvider.podSecurityContext.fsGroup`                                 | Set CSI Provider pod's Security Context fsGroup                                                                                                               | `1001`                                        |
 | `csiProvider.provider.containerPorts.health`                             | CSI Provider health container port                                                                                                                            | `8080`                                        |
 | `csiProvider.provider.livenessProbe.enabled`                             | Enable livenessProbe on CSI Provider container                                                                                                                | `true`                                        |
@@ -302,6 +311,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `csiProvider.provider.resources.limits`                                  | The resources limits for the CSI Provider container                                                                                                           | `{}`                                          |
 | `csiProvider.provider.resources.requests`                                | The requested resources for the CSI Provider container                                                                                                        | `{}`                                          |
 | `csiProvider.provider.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                          | `true`                                        |
+| `csiProvider.provider.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                              | `{}`                                          |
 | `csiProvider.provider.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                    | `1001`                                        |
 | `csiProvider.provider.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                 | `true`                                        |
 | `csiProvider.provider.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                   | `false`                                       |
@@ -339,6 +349,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `csiProvider.agent.customReadinessProbe`                                 | Custom readinessProbe that overrides the default one                                                                                                          | `{}`                                          |
 | `csiProvider.agent.customStartupProbe`                                   | Custom startupProbe that overrides the default one                                                                                                            | `{}`                                          |
 | `csiProvider.agent.containerSecurityContext.enabled`                     | Enabled containers' Security Context                                                                                                                          | `true`                                        |
+| `csiProvider.agent.containerSecurityContext.seLinuxOptions`              | Set SELinux options in container                                                                                                                              | `{}`                                          |
 | `csiProvider.agent.containerSecurityContext.runAsUser`                   | Set containers' Security Context runAsUser                                                                                                                    | `1001`                                        |
 | `csiProvider.agent.containerSecurityContext.runAsNonRoot`                | Set container's Security Context runAsNonRoot                                                                                                                 | `true`                                        |
 | `csiProvider.agent.containerSecurityContext.privileged`                  | Set container's Security Context privileged                                                                                                                   | `false`                                       |
@@ -358,14 +369,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Vault CSI Provider RBAC Parameters
 
-| Name                                                      | Description                                                      | Value  |
-| --------------------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `csiProvider.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `csiProvider.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`   |
-| `csiProvider.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `csiProvider.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `csiProvider.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `csiProvider.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                                      | Description                                                      | Value   |
+| --------------------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `csiProvider.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `csiProvider.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`    |
+| `csiProvider.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `csiProvider.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `csiProvider.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `csiProvider.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Vault Kubernetes Injector Parameters
 
@@ -404,8 +415,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `injector.resources.limits`                                  | The resources limits for the Vault Kubernetes Injector containers                                                                                                    | `{}`                        |
 | `injector.resources.requests`                                | The requested resources for the Vault Kubernetes Injector containers                                                                                                 | `{}`                        |
 | `injector.podSecurityContext.enabled`                        | Enabled Vault Kubernetes Injector pods' Security Context                                                                                                             | `true`                      |
+| `injector.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                   | `Always`                    |
+| `injector.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                       | `[]`                        |
+| `injector.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                          | `[]`                        |
 | `injector.podSecurityContext.fsGroup`                        | Set Vault Kubernetes Injector pod's Security Context fsGroup                                                                                                         | `1001`                      |
 | `injector.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                 | `true`                      |
+| `injector.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                     | `{}`                        |
 | `injector.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                           | `1001`                      |
 | `injector.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                        | `true`                      |
 | `injector.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                          | `false`                     |
@@ -415,6 +430,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `injector.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                     | `RuntimeDefault`            |
 | `injector.command`                                           | Override default container command (useful when using custom images)                                                                                                 | `[]`                        |
 | `injector.args`                                              | Override default container args (useful when using custom images)                                                                                                    | `[]`                        |
+| `injector.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                   | `true`                      |
 | `injector.hostAliases`                                       | Vault Kubernetes Injector pods host aliases                                                                                                                          | `[]`                        |
 | `injector.podLabels`                                         | Extra labels for Vault Kubernetes Injector pods                                                                                                                      | `{}`                        |
 | `injector.podAnnotations`                                    | Annotations for Vault Kubernetes Injector pods                                                                                                                       | `{}`                        |
@@ -466,24 +482,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Vault Kubernetes Injector RBAC Parameters
 
-| Name                                                   | Description                                                                                                        | Value                      |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
-| `injector.rbac.create`                                 | Specifies whether RBAC resources should be created                                                                 | `true`                     |
-| `injector.rbac.rules`                                  | Custom RBAC rules to set                                                                                           | `[]`                       |
-| `injector.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                               | `true`                     |
-| `injector.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                             | `""`                       |
-| `injector.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)                                                   | `{}`                       |
-| `injector.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                     | `true`                     |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
-| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                        | `{}`                       |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                     | `{}`                       |
-| `volumePermissions.containerSecurityContext.enabled`   | Enable init container's Security Context                                                                           | `true`                     |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                        |
+| Name                                                        | Description                                                                                                        | Value                      |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| `injector.rbac.create`                                      | Specifies whether RBAC resources should be created                                                                 | `true`                     |
+| `injector.rbac.rules`                                       | Custom RBAC rules to set                                                                                           | `[]`                       |
+| `injector.serviceAccount.create`                            | Specifies whether a ServiceAccount should be created                                                               | `true`                     |
+| `injector.serviceAccount.name`                              | The name of the ServiceAccount to use.                                                                             | `""`                       |
+| `injector.serviceAccount.annotations`                       | Additional Service Account annotations (evaluated as a template)                                                   | `{}`                       |
+| `injector.serviceAccount.automountServiceAccountToken`      | Automount service account token for the server service account                                                     | `false`                    |
+| `volumePermissions.enabled`                                 | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
+| `volumePermissions.image.registry`                          | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                        | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                            | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`                        | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
+| `volumePermissions.resources.limits`                        | The resources limits for the init container                                                                        | `{}`                       |
+| `volumePermissions.resources.requests`                      | The requested resources for the init container                                                                     | `{}`                       |
+| `volumePermissions.containerSecurityContext.enabled`        | Enable init container's Security Context                                                                           | `true`                     |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `{}`                       |
+| `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                    | `0`                        |
 
 The above parameters map to the env variables defined in [bitnami/vault](https://github.com/bitnami/containers/tree/main/bitnami/vault). For more information please refer to the [bitnami/vault](https://github.com/bitnami/containers/tree/main/bitnami/vault) image documentation.
 
