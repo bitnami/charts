@@ -43,6 +43,7 @@ spec:
         {{- end }}
     spec:
       {{- include "grafana.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.grafana.automountServiceAccountToken }}
       {{- if .Values.grafana.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.hostAliases "context" $) | nindent 8 }}
       {{- end }}
