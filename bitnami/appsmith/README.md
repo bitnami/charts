@@ -159,6 +159,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.sidecars`                                          | Add additional sidecar containers to the Appsmith client pod(s)                                                          | `[]`             |
 | `client.initContainers`                                    | Add additional init containers to the Appsmith client pod(s)                                                             | `[]`             |
 
+### Appsmith Client Network Policies
+
+| Name                                           | Description                                                | Value   |
+| ---------------------------------------------- | ---------------------------------------------------------- | ------- |
+| `client.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `false` |
+| `client.networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
+| `client.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice               | `[]`    |
+| `client.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
+| `client.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
+| `client.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
+
 ### Appsmith Client Traffic Exposure Parameters
 
 | Name                                      | Description                                                                                                                      | Value                    |
@@ -268,6 +279,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.sidecars`                                          | Add additional sidecar containers to the Appsmith backend pod(s)                                                         | `[]`                  |
 | `backend.initContainers`                                    | Add additional init containers to the Appsmith backend pod(s)                                                            | `[]`                  |
 
+### Appsmith Backend Network Policies
+
+| Name                                            | Description                                                | Value   |
+| ----------------------------------------------- | ---------------------------------------------------------- | ------- |
+| `backend.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `false` |
+| `backend.networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
+| `backend.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolic                | `[]`    |
+| `backend.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
+| `backend.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
+| `backend.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
+
 ### Appsmith Backend Traffic Exposure Parameters
 
 | Name                                       | Description                                                                                 | Value       |
@@ -369,6 +391,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rts.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Appsmith rts container(s)                               | `[]`             |
 | `rts.sidecars`                                          | Add additional sidecar containers to the Appsmith rts pod(s)                                                             | `[]`             |
 | `rts.initContainers`                                    | Add additional init containers to the Appsmith rts pod(s)                                                                | `[]`             |
+
+### Appsmith RTS Network Policies
+
+| Name                                        | Description                                                | Value   |
+| ------------------------------------------- | ---------------------------------------------------------- | ------- |
+| `rts.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `false` |
+| `rts.networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
+| `rts.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice               | `[]`    |
+| `rts.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
+| `rts.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
+| `rts.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
 
 ### Appsmith RTS Traffic Exposure Parameters
 
