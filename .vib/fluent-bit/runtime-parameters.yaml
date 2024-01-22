@@ -8,7 +8,7 @@ containerSecurityContext:
   runAsUser: 1002
 serviceAccount:
   create: true
-  automountServiceAccountToken: true
+automountServiceAccountToken: true
 service:
   type: LoadBalancer
   ports:

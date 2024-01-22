@@ -142,6 +142,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.extraVolumeMounts`                                 | Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`. | `[]`             |
 | `initJob.resources.limits`                                  | The resources limits for the container                                                                                    | `{}`             |
 | `initJob.resources.requests`                                | The requested resources for the container                                                                                 | `{}`             |
+| `initJob.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                        | `false`          |
 | `initJob.hostAliases`                                       | Add deployment host aliases                                                                                               | `[]`             |
 | `initJob.annotations`                                       | Add annotations to the job                                                                                                | `{}`             |
 | `initJob.podLabels`                                         | Additional pod labels                                                                                                     | `{}`             |
@@ -203,6 +204,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataCoord.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                           | `RuntimeDefault` |
 | `dataCoord.lifecycleHooks`                                    | for the data coordinator container(s) to automate configuration before or after startup                    | `{}`             |
 | `dataCoord.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                             | `""`             |
+| `dataCoord.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                         | `false`          |
 | `dataCoord.hostAliases`                                       | data coordinator pods host aliases                                                                         | `[]`             |
 | `dataCoord.podLabels`                                         | Extra labels for data coordinator pods                                                                     | `{}`             |
 | `dataCoord.podAnnotations`                                    | Annotations for data coordinator pods                                                                      | `{}`             |
@@ -347,6 +349,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rootCoord.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                           | `RuntimeDefault` |
 | `rootCoord.lifecycleHooks`                                    | for the data coordinator container(s) to automate configuration before or after startup                    | `{}`             |
 | `rootCoord.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                             | `""`             |
+| `rootCoord.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                         | `false`          |
 | `rootCoord.hostAliases`                                       | data coordinator pods host aliases                                                                         | `[]`             |
 | `rootCoord.podLabels`                                         | Extra labels for data coordinator pods                                                                     | `{}`             |
 | `rootCoord.podAnnotations`                                    | Annotations for data coordinator pods                                                                      | `{}`             |
@@ -491,6 +494,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryCoord.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                           | `RuntimeDefault` |
 | `queryCoord.lifecycleHooks`                                    | for the data coordinator container(s) to automate configuration before or after startup                    | `{}`             |
 | `queryCoord.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                             | `""`             |
+| `queryCoord.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                         | `false`          |
 | `queryCoord.hostAliases`                                       | data coordinator pods host aliases                                                                         | `[]`             |
 | `queryCoord.podLabels`                                         | Extra labels for data coordinator pods                                                                     | `{}`             |
 | `queryCoord.podAnnotations`                                    | Annotations for data coordinator pods                                                                      | `{}`             |
@@ -635,6 +639,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexCoord.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                           | `RuntimeDefault` |
 | `indexCoord.lifecycleHooks`                                    | for the data coordinator container(s) to automate configuration before or after startup                    | `{}`             |
 | `indexCoord.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                             | `""`             |
+| `indexCoord.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                         | `false`          |
 | `indexCoord.hostAliases`                                       | data coordinator pods host aliases                                                                         | `[]`             |
 | `indexCoord.podLabels`                                         | Extra labels for data coordinator pods                                                                     | `{}`             |
 | `indexCoord.podAnnotations`                                    | Annotations for data coordinator pods                                                                      | `{}`             |
@@ -779,6 +784,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataNode.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                    | `RuntimeDefault` |
 | `dataNode.lifecycleHooks`                                    | for the data node container(s) to automate configuration before or after startup                    | `{}`             |
 | `dataNode.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                      | `""`             |
+| `dataNode.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                  | `false`          |
 | `dataNode.hostAliases`                                       | data node pods host aliases                                                                         | `[]`             |
 | `dataNode.podLabels`                                         | Extra labels for data node pods                                                                     | `{}`             |
 | `dataNode.podAnnotations`                                    | Annotations for data node pods                                                                      | `{}`             |
@@ -923,6 +929,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryNode.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                    | `RuntimeDefault` |
 | `queryNode.lifecycleHooks`                                    | for the data node container(s) to automate configuration before or after startup                    | `{}`             |
 | `queryNode.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                      | `""`             |
+| `queryNode.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                  | `false`          |
 | `queryNode.hostAliases`                                       | data node pods host aliases                                                                         | `[]`             |
 | `queryNode.podLabels`                                         | Extra labels for data node pods                                                                     | `{}`             |
 | `queryNode.podAnnotations`                                    | Annotations for data node pods                                                                      | `{}`             |
@@ -1067,6 +1074,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexNode.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                    | `RuntimeDefault` |
 | `indexNode.lifecycleHooks`                                    | for the data node container(s) to automate configuration before or after startup                    | `{}`             |
 | `indexNode.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                      | `""`             |
+| `indexNode.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                  | `false`          |
 | `indexNode.hostAliases`                                       | data node pods host aliases                                                                         | `[]`             |
 | `indexNode.podLabels`                                         | Extra labels for data node pods                                                                     | `{}`             |
 | `indexNode.podAnnotations`                                    | Annotations for data node pods                                                                      | `{}`             |
@@ -1223,6 +1231,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                | `RuntimeDefault` |
 | `proxy.lifecycleHooks`                                    | for the proxy container(s) to automate configuration before or after startup                    | `{}`             |
 | `proxy.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                  | `""`             |
+| `proxy.automountServiceAccountToken`                      | Mount Service Account token in pod                                                              | `false`          |
 | `proxy.hostAliases`                                       | proxy pods host aliases                                                                         | `[]`             |
 | `proxy.podLabels`                                         | Extra labels for proxy pods                                                                     | `{}`             |
 | `proxy.podAnnotations`                                    | Annotations for proxy pods                                                                      | `{}`             |
@@ -1368,6 +1377,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `attu.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                     | `RuntimeDefault`       |
 | `attu.lifecycleHooks`                                    | for the attu container(s) to automate configuration before or after startup                          | `{}`                   |
 | `attu.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                       | `""`                   |
+| `attu.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                   | `false`                |
 | `attu.hostAliases`                                       | attu pods host aliases                                                                               | `[]`                   |
 | `attu.podLabels`                                         | Extra labels for attu pods                                                                           | `{}`                   |
 | `attu.podAnnotations`                                    | Annotations for attu pods                                                                            | `{}`                   |

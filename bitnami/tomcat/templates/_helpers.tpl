@@ -56,6 +56,17 @@ Check if there are rolling tags in the images
 {{- end -}}
 
 {{/*
+ Create the name of the service account to use
+ */}}
+{{- define "tomcat.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Expand the name of the chart.
 */}}
 {{- define "tomcat.pvc" -}}

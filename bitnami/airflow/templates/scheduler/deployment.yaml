@@ -36,6 +36,7 @@ spec:
         {{- end }}
     spec:
       {{- include "airflow.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.scheduler.automountServiceAccountToken }}
       {{- if .Values.scheduler.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.hostAliases "context" $) | nindent 8 }}
       {{- end }}
