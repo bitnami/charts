@@ -197,6 +197,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                 | `RuntimeDefault` |
 | `command`                                           | Override default container command (useful when using custom images)                             | `[]`             |
 | `args`                                              | Override default container args (useful when using custom images)                                | `[]`             |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                               | `false`          |
 | `hostAliases`                                       | OAuth2 Proxy pods host aliases                                                                   | `[]`             |
 | `podLabels`                                         | Extra labels for OAuth2 Proxy pods                                                               | `{}`             |
 | `podAnnotations`                                    | Annotations for OAuth2 Proxy pods                                                                | `{}`             |
