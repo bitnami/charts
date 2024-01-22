@@ -41,6 +41,7 @@ spec:
     spec:
       serviceAccountName: {{ template "prometheus.alertmanager.serviceAccountName" . }}
       {{- include "prometheus.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.alertmanager.automountServiceAccountToken }}
       {{- if .Values.alertmanager.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.hostAliases "context" $) | nindent 8 }}
       {{- end }}
