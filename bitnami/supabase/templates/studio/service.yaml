@@ -36,12 +36,12 @@ spec:
   loadBalancerIP: {{ .Values.studio.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - name: http
+    - name: http-studio
       port: {{ .Values.studio.service.ports.http }}
       protocol: TCP
       {{- if and (or (eq .Values.studio.service.type "NodePort") (eq .Values.studio.service.type "LoadBalancer")) (not (empty .Values.studio.service.nodePorts.http)) }}
       nodePort: {{ .Values.studio.service.nodePorts.http }}
-      targetPort: http
+      targetPort: http-studio
       {{- else if eq .Values.studio.service.type "ClusterIP" }}
       nodePort: null
       targetPort: {{ .Values.studio.containerPorts.http }}
