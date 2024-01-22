@@ -97,6 +97,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `priorityClassName`                            | Whereabouts pods' priorityClassName                                                                                   | `""`                          |
 | `schedulerName`                                | Name of the k8s scheduler (other than default)                                                                        | `""`                          |
 | `topologySpreadConstraints`                    | Topology Spread Constraints for pod assignment                                                                        | `[]`                          |
+| `automountServiceAccountToken`                 | Mount Service Account token in pod                                                                                    | `true`                        |
 | `hostAliases`                                  | Add deployment host aliases                                                                                           | `[]`                          |
 | `extraEnvVars`                                 | Extra environment variables                                                                                           | `[]`                          |
 | `extraEnvVarsCM`                               | ConfigMap containing extra env vars                                                                                   | `""`                          |
@@ -153,13 +154,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                          | Description                                                            | Value  |
-| --------------------------------------------- | ---------------------------------------------------------------------- | ------ |
-| `rbac.create`                                 | Specifies whether RBAC resources should be created                     | `true` |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for Whereabouts pod                  | `true` |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`   |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true` |
-| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
+| Name                                          | Description                                                            | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created                     | `true`  |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for Whereabouts pod                  | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
