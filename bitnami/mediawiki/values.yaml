@@ -431,7 +431,7 @@ persistence:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
 serviceAccount:
-  ## @param serviceAccount.create Enable creation of ServiceAccount for WordPress pod
+  ## @param serviceAccount.create Enable creation of ServiceAccount for Dokuwiki pod
   ##
   create: true
   ## @param serviceAccount.name The name of the ServiceAccount to use.
