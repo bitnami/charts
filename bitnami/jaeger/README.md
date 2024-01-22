@@ -93,6 +93,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------- |
 | `query.command`                                           | Command for running the container (set to default if not set). Use array form             | `[]`             |
 | `query.args`                                              | Args for running the container (set to default if not set). Use array form                | `[]`             |
+| `query.automountServiceAccountToken`                      | Mount Service Account token in pod                                                        | `false`          |
+| `query.hostAliases`                                       | Set pod host aliases                                                                      | `[]`             |
 | `query.lifecycleHooks`                                    | Override default etcd container hooks                                                     | `{}`             |
 | `query.extraEnvVars`                                      | Extra environment variables to be set on jaeger container                                 | `[]`             |
 | `query.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars                                      | `""`             |
@@ -181,6 +183,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ---------------- |
 | `collector.command`                                           | Command for running the container (set to default if not set). Use array form              | `[]`             |
 | `collector.args`                                              | Args for running the container (set to default if not set). Use array form                 | `[]`             |
+| `collector.automountServiceAccountToken`                      | Mount Service Account token in pod                                                         | `false`          |
+| `collector.hostAliases`                                       | Set pod host aliases                                                                       | `[]`             |
 | `collector.lifecycleHooks`                                    | Override default etcd container hooks                                                      | `{}`             |
 | `collector.extraEnvVars`                                      | Extra environment variables to be set on jaeger container                                  | `[]`             |
 | `collector.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars                                       | `""`             |
@@ -281,6 +285,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `agent.command`                                               | Command for running the container (set to default if not set). Use array form                                  | `[]`             |
 | `agent.args`                                                  | Args for running the container (set to default if not set). Use array form                                     | `[]`             |
+| `agent.automountServiceAccountToken`                          | Mount Service Account token in pod                                                                             | `false`          |
+| `agent.hostAliases`                                           | Set pod host aliases                                                                                           | `[]`             |
 | `agent.lifecycleHooks`                                        | Override default etcd container hooks                                                                          | `{}`             |
 | `agent.extraEnvVars`                                          | Extra environment variables to be set on jaeger container                                                      | `[]`             |
 | `agent.extraEnvVarsCM`                                        | Name of existing ConfigMap containing extra env vars                                                           | `""`             |
