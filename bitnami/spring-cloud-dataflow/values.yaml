@@ -78,6 +78,9 @@ server:
     ## Set to true if you would like to see extra information on logs
     ##
     debug: false
+  ## @param server.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param server.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -601,6 +604,9 @@ skipper:
   ## Note: it'll be also enabled if streams are enabled in Dataflow server configuration.
   ##
   enabled: true
+  ## @param skipper.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param skipper.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1079,7 +1085,7 @@ deployer:
 serviceAccount:
   create: true
   name: ""
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   annotations: {}
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
@@ -1184,6 +1190,9 @@ metrics:
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
+  ## @param metrics.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param metrics.hostAliases Prometheus Proxy pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

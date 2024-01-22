@@ -134,6 +134,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `client.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `client.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `client.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `client.hostAliases`                                       | Appsmith client pods host aliases                                                                                        | `[]`             |
 | `client.podLabels`                                         | Extra labels for Appsmith client pods                                                                                    | `{}`             |
 | `client.podAnnotations`                                    | Annotations for Appsmith client pods                                                                                     | `{}`             |
@@ -158,6 +159,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Appsmith client container(s)                            | `[]`             |
 | `client.sidecars`                                          | Add additional sidecar containers to the Appsmith client pod(s)                                                          | `[]`             |
 | `client.initContainers`                                    | Add additional init containers to the Appsmith client pod(s)                                                             | `[]`             |
+
+### Appsmith Client Network Policies
+
+| Name                                           | Description                                                | Value   |
+| ---------------------------------------------- | ---------------------------------------------------------- | ------- |
+| `client.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `false` |
+| `client.networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
+| `client.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice               | `[]`    |
+| `client.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
+| `client.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
+| `client.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
 
 ### Appsmith Client Traffic Exposure Parameters
 
@@ -243,6 +255,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault`      |
 | `backend.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`                  |
 | `backend.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`                  |
+| `backend.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`               |
 | `backend.hostAliases`                                       | Appsmith backend pods host aliases                                                                                       | `[]`                  |
 | `backend.podLabels`                                         | Extra labels for Appsmith backend pods                                                                                   | `{}`                  |
 | `backend.podAnnotations`                                    | Annotations for Appsmith backend pods                                                                                    | `{}`                  |
@@ -267,6 +280,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Appsmith backend container(s)                           | `[]`                  |
 | `backend.sidecars`                                          | Add additional sidecar containers to the Appsmith backend pod(s)                                                         | `[]`                  |
 | `backend.initContainers`                                    | Add additional init containers to the Appsmith backend pod(s)                                                            | `[]`                  |
+
+### Appsmith Backend Network Policies
+
+| Name                                            | Description                                                | Value   |
+| ----------------------------------------------- | ---------------------------------------------------------- | ------- |
+| `backend.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `false` |
+| `backend.networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
+| `backend.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolic                | `[]`    |
+| `backend.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
+| `backend.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
+| `backend.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
 
 ### Appsmith Backend Traffic Exposure Parameters
 
@@ -345,6 +369,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rts.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `rts.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `rts.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `rts.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `rts.hostAliases`                                       | Appsmith rts pods host aliases                                                                                           | `[]`             |
 | `rts.podLabels`                                         | Extra labels for Appsmith rts pods                                                                                       | `{}`             |
 | `rts.podAnnotations`                                    | Annotations for Appsmith rts pods                                                                                        | `{}`             |
@@ -369,6 +394,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rts.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Appsmith rts container(s)                               | `[]`             |
 | `rts.sidecars`                                          | Add additional sidecar containers to the Appsmith rts pod(s)                                                             | `[]`             |
 | `rts.initContainers`                                    | Add additional init containers to the Appsmith rts pod(s)                                                                | `[]`             |
+
+### Appsmith RTS Network Policies
+
+| Name                                        | Description                                                | Value   |
+| ------------------------------------------- | ---------------------------------------------------------- | ------- |
+| `rts.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `false` |
+| `rts.networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
+| `rts.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice               | `[]`    |
+| `rts.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
+| `rts.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
+| `rts.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
 
 ### Appsmith RTS Traffic Exposure Parameters
 

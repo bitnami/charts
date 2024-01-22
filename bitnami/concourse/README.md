@@ -178,6 +178,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                            | `{}`                                            |
 | `web.containerSecurityContext.runAsUser`           | Set web containers' Security Context runAsUser                                                                                              | `1001`                                          |
 | `web.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                            | `RuntimeDefault`                                |
+| `web.automountServiceAccountToken`                 | Mount Service Account token in pod                                                                                                          | `true`                                          |
 | `web.hostAliases`                                  | Concourse web pod host aliases                                                                                                              | `[]`                                            |
 | `web.podLabels`                                    | Extra labels for Concourse web pods                                                                                                         | `{}`                                            |
 | `web.podAnnotations`                               | Annotations for Concourse web pods                                                                                                          | `{}`                                            |
@@ -205,7 +206,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.rbac.rules`                                   | Custom RBAC rules to set                                                                                                                    | `[]`                                            |
 | `web.serviceAccount.create`                        | Specifies whether a ServiceAccount should be created                                                                                        | `true`                                          |
 | `web.serviceAccount.name`                          | Override Web service account name                                                                                                           | `""`                                            |
-| `web.serviceAccount.automountServiceAccountToken`  | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`                                          |
+| `web.serviceAccount.automountServiceAccountToken`  | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `false`                                         |
 | `web.serviceAccount.annotations`                   | Additional custom annotations for the ServiceAccount                                                                                        | `{}`                                            |
 
 ### Concourse Worker parameters
@@ -268,6 +269,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                            | `{}`                |
 | `worker.containerSecurityContext.runAsUser`           | Set worker containers' Security Context user                                                                                                | `0`                 |
 | `worker.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                            | `RuntimeDefault`    |
+| `worker.automountServiceAccountToken`                 | Mount Service Account token in pod                                                                                                          | `true`              |
 | `worker.hostAliases`                                  | Concourse worker pod host aliases                                                                                                           | `[]`                |
 | `worker.podLabels`                                    | Custom labels for Concourse worker pods                                                                                                     | `{}`                |
 | `worker.podAnnotations`                               | Annotations for Concourse worker pods                                                                                                       | `{}`                |
@@ -314,7 +316,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.rbac.rules`                                   | Custom RBAC rules to set                                                                                                                    | `[]`                |
 | `worker.serviceAccount.create`                        | Specifies whether a ServiceAccount should be created                                                                                        | `true`              |
 | `worker.serviceAccount.name`                          | Override worker service account name                                                                                                        | `""`                |
-| `worker.serviceAccount.automountServiceAccountToken`  | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`              |
+| `worker.serviceAccount.automountServiceAccountToken`  | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `false`             |
 | `worker.serviceAccount.annotations`                   | Additional custom annotations for the ServiceAccount                                                                                        | `{}`                |
 
 ### Traffic exposure parameters

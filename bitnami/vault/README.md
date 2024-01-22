@@ -129,6 +129,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                        | `RuntimeDefault`        |
 | `server.command`                                           | Override default container command (useful when using custom images)                                                                                    | `[]`                    |
 | `server.args`                                              | Override default container args (useful when using custom images)                                                                                       | `[]`                    |
+| `server.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                      | `true`                  |
 | `server.hostAliases`                                       | Vault Server pods host aliases                                                                                                                          | `[]`                    |
 | `server.config`                                            | Vault server configuration (evaluated as a template)                                                                                                    | `""`                    |
 | `server.existingConfigMap`                                 | name of a ConfigMap with existing configuration for the server                                                                                          | `""`                    |
@@ -206,13 +207,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Vault Server RBAC Parameters
 
-| Name                                                 | Description                                                      | Value  |
-| ---------------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `server.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `server.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `server.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `server.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `server.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                                 | Description                                                      | Value   |
+| ---------------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `server.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `server.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `server.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `server.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `server.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Source Conttroller Persistence Parameters
 
@@ -260,6 +261,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `csiProvider.config`                                                     | Vault CSI Provider configuration (evaluated as a template)                                                                                                    | `""`                                          |
 | `csiProvider.existingConfigMap`                                          | name of a ConfigMap with existing configuration for the CSI Provider                                                                                          | `""`                                          |
 | `csiProvider.secretStoreHostPath`                                        | Path to the host CSI Provider folder                                                                                                                          | `/etc/kubernetes/secrets-store-csi-providers` |
+| `csiProvider.automountServiceAccountToken`                               | Mount Service Account token in pod                                                                                                                            | `true`                                        |
 | `csiProvider.hostAliases`                                                | Vault CSI Provider pods host aliases                                                                                                                          | `[]`                                          |
 | `csiProvider.podLabels`                                                  | Extra labels for Vault CSI Provider pods                                                                                                                      | `{}`                                          |
 | `csiProvider.podAnnotations`                                             | Annotations for Vault CSI Provider pods                                                                                                                       | `{}`                                          |
@@ -367,14 +369,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Vault CSI Provider RBAC Parameters
 
-| Name                                                      | Description                                                      | Value  |
-| --------------------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `csiProvider.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `csiProvider.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`   |
-| `csiProvider.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `csiProvider.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `csiProvider.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `csiProvider.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                                      | Description                                                      | Value   |
+| --------------------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `csiProvider.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `csiProvider.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`    |
+| `csiProvider.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `csiProvider.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `csiProvider.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `csiProvider.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Vault Kubernetes Injector Parameters
 
@@ -428,6 +430,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `injector.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                     | `RuntimeDefault`            |
 | `injector.command`                                           | Override default container command (useful when using custom images)                                                                                                 | `[]`                        |
 | `injector.args`                                              | Override default container args (useful when using custom images)                                                                                                    | `[]`                        |
+| `injector.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                   | `true`                      |
 | `injector.hostAliases`                                       | Vault Kubernetes Injector pods host aliases                                                                                                                          | `[]`                        |
 | `injector.podLabels`                                         | Extra labels for Vault Kubernetes Injector pods                                                                                                                      | `{}`                        |
 | `injector.podAnnotations`                                    | Annotations for Vault Kubernetes Injector pods                                                                                                                       | `{}`                        |
@@ -486,7 +489,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `injector.serviceAccount.create`                            | Specifies whether a ServiceAccount should be created                                                               | `true`                     |
 | `injector.serviceAccount.name`                              | The name of the ServiceAccount to use.                                                                             | `""`                       |
 | `injector.serviceAccount.annotations`                       | Additional Service Account annotations (evaluated as a template)                                                   | `{}`                       |
-| `injector.serviceAccount.automountServiceAccountToken`      | Automount service account token for the server service account                                                     | `true`                     |
+| `injector.serviceAccount.automountServiceAccountToken`      | Automount service account token for the server service account                                                     | `false`                    |
 | `volumePermissions.enabled`                                 | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
 | `volumePermissions.image.registry`                          | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
 | `volumePermissions.image.repository`                        | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |

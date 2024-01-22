@@ -40,6 +40,7 @@ spec:
     spec:
       serviceAccountName: {{ template "kuberay.apiserver.serviceAccountName" . }}
       {{- include "kuberay.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.apiserver.automountServiceAccountToken }}
       {{- if .Values.apiserver.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.apiserver.hostAliases "context" $) | nindent 8 }}
       {{- end }}

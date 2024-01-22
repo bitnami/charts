@@ -100,6 +100,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `priorityClassName`                                 | Drupal pods' priorityClassName                                                                                         | `""`                     |
 | `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                         | `""`                     |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                         | `[]`                     |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                     | `false`                  |
 | `hostAliases`                                       | Add deployment host aliases                                                                                            | `[]`                     |
 | `extraEnvVars`                                      | Extra environment variables                                                                                            | `[]`                     |
 | `extraEnvVarsCM`                                    | ConfigMap containing extra env vars                                                                                    | `""`                     |
