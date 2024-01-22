@@ -95,6 +95,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jobmanager.command`                                           | Command for running the container (set to default if not set). Use array form             | `[]`             |
 | `jobmanager.args`                                              | Args for running the container (set to default if not set). Use array form                | `[]`             |
 | `jobmanager.lifecycleHooks`                                    | Override default etcd container hooks                                                     | `{}`             |
+| `jobmanager.automountServiceAccountToken`                      | Mount Service Account token in pod                                                        | `false`          |
+| `jobmanager.hostAliases`                                       | Set pod host aliases                                                                      | `[]`             |
 | `jobmanager.extraEnvVars`                                      | Extra environment variables to be set on flink container                                  | `[]`             |
 | `jobmanager.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars                                      | `""`             |
 | `jobmanager.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars                                         | `""`             |
@@ -184,6 +186,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `taskmanager.command`                                           | Command for running the container (set to default if not set). Use array form             | `[]`             |
 | `taskmanager.args`                                              | Args for running the container (set to default if not set). Use array form                | `[]`             |
 | `taskmanager.lifecycleHooks`                                    | Override default etcd container hooks                                                     | `{}`             |
+| `taskmanager.automountServiceAccountToken`                      | Mount Service Account token in pod                                                        | `false`          |
+| `taskmanager.hostAliases`                                       | Set pod host aliases                                                                      | `[]`             |
 | `taskmanager.extraEnvVars`                                      | Extra environment variables to be set on flink container                                  | `[]`             |
 | `taskmanager.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars                                      | `""`             |
 | `taskmanager.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars                                         | `""`             |
