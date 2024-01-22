@@ -119,6 +119,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------- |
 | `replicaCount`                                      | Number of Cassandra replicas                                                              | `1`              |
 | `updateStrategy.type`                               | updateStrategy for Cassandra statefulset                                                  | `RollingUpdate`  |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                        | `false`          |
 | `hostAliases`                                       | Add deployment host aliases                                                               | `[]`             |
 | `podManagementPolicy`                               | StatefulSet pod management policy                                                         | `OrderedReady`   |
 | `priorityClassName`                                 | Cassandra pods' priority.                                                                 | `""`             |

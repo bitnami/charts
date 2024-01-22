@@ -169,7 +169,7 @@ jwt:
       annotations: {}
       ## @param jwt.autoGenerate.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
       ##
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
 
     ## Configure Container Security Context
     ## @param jwt.autoGenerate.containerSecurityContext.enabled Enabled jwt init job containers' Security Context
@@ -232,6 +232,9 @@ jwt:
     resources:
       limits: {}
       requests: {}
+    ## @param jwt.autoGenerate.automountServiceAccountToken Mount Service Account token in pod
+    ##
+    automountServiceAccountToken: true
     ## @param jwt.autoGenerate.hostAliases Add deployment host aliases
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##
@@ -447,6 +450,9 @@ auth:
   ## @param auth.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param auth.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param auth.hostAliases Supabase auth pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -789,6 +795,9 @@ meta:
   ## @param meta.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param meta.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param meta.hostAliases Supabase Postgres Meta pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1150,6 +1159,9 @@ realtime:
   ## @param realtime.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param realtime.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param realtime.hostAliases Supabase realtime pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1490,6 +1502,9 @@ rest:
   ## @param rest.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param rest.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param rest.hostAliases Supabase rest pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1836,6 +1851,9 @@ storage:
   ## @param storage.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param storage.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param storage.hostAliases Supabase storage pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2228,6 +2246,9 @@ studio:
   ## @param studio.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param studio.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param studio.hostAliases Supabase studio pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

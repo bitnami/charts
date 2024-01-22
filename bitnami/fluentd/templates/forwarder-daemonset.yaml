@@ -35,6 +35,7 @@ spec:
         {{- end }}
     spec:
       {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.forwarder.automountServiceAccountToken }}
       {{- if .Values.forwarder.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.hostAliases "context" $) | nindent 8 }}
       {{- end }}

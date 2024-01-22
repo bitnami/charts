@@ -42,6 +42,7 @@ spec:
     spec:
       serviceAccountName: {{ template "supabase.serviceAccountName" . }}
       {{- include "supabase.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.auth.automountServiceAccountToken }}
       {{- if .Values.auth.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.auth.hostAliases "context" $) | nindent 8 }}
       {{- end }}

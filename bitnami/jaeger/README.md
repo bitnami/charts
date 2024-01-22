@@ -110,7 +110,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `query.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                          | `1`              |
 | `query.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                        | `15`             |
 | `query.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                        | `1`              |
-| `query.readinessProbe.enabled`                            | Enable readinessProbe                                                                     | `false`          |
+| `query.readinessProbe.enabled`                            | Enable readinessProbe                                                                     | `true`           |
 | `query.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                  | `10`             |
 | `query.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                         | `10`             |
 | `query.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                        | `1`              |
@@ -198,7 +198,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                           | `1`              |
 | `collector.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                         | `15`             |
 | `collector.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                         | `1`              |
-| `collector.readinessProbe.enabled`                            | Enable readinessProbe                                                                      | `false`          |
+| `collector.readinessProbe.enabled`                            | Enable readinessProbe                                                                      | `true`           |
 | `collector.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                   | `10`             |
 | `collector.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                          | `10`             |
 | `collector.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                         | `1`              |
@@ -298,7 +298,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.startupProbe.timeoutSeconds`                           | Timeout seconds for startupProbe                                                                               | `1`              |
 | `agent.startupProbe.failureThreshold`                         | Failure threshold for startupProbe                                                                             | `15`             |
 | `agent.startupProbe.successThreshold`                         | Success threshold for startupProbe                                                                             | `1`              |
-| `agent.readinessProbe.enabled`                                | Enable readinessProbe                                                                                          | `false`          |
+| `agent.readinessProbe.enabled`                                | Enable readinessProbe                                                                                          | `true`           |
 | `agent.readinessProbe.initialDelaySeconds`                    | Initial delay seconds for readinessProbe                                                                       | `10`             |
 | `agent.readinessProbe.periodSeconds`                          | Period seconds for readinessProbe                                                                              | `10`             |
 | `agent.readinessProbe.timeoutSeconds`                         | Timeout seconds for readinessProbe                                                                             | `1`              |
