@@ -104,7 +104,7 @@ jobs:
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
-          token: ${{ github.actor == 'bitnami-bot' && secrets.GITHUB_TOKEN || secrets.BITNAMI_BOT_TOKEN }}
+          token: ${{ secrets.BITNAMI_BOT_TOKEN }}
       - name: Setup git configuration
         run: |
           git config user.name "Bitnami Containers"
