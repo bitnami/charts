@@ -98,6 +98,13 @@ query:
   ## @param query.args Args for running the container (set to default if not set). Use array form
   ##
   args: []
+  ## @param query.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param query.hostAliases Set pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## @param query.lifecycleHooks [object] Override default etcd container hooks
   ##
   lifecycleHooks: {}
@@ -415,6 +422,13 @@ collector:
   ## @param collector.args Args for running the container (set to default if not set). Use array form
   ##
   args: []
+  ## @param collector.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param collector.hostAliases Set pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## @param collector.lifecycleHooks [object] Override default etcd container hooks
   ##
   lifecycleHooks: {}
@@ -777,6 +791,13 @@ agent:
   ## @param agent.args Args for running the container (set to default if not set). Use array form
   ##
   args: []
+  ## @param agent.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param agent.hostAliases Set pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## @param agent.lifecycleHooks [object] Override default etcd container hooks
   ##
   lifecycleHooks: {}

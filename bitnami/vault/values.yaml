@@ -221,6 +221,9 @@ server:
   ## @param server.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param server.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param server.hostAliases Vault Server pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -620,7 +623,7 @@ server:
     annotations: {}
     ## @param server.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Source Conttroller Persistence Parameters
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
@@ -783,6 +786,9 @@ csiProvider:
   ##
   secretStoreHostPath: "/etc/kubernetes/secrets-store-csi-providers"
 
+  ## @param csiProvider.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param csiProvider.hostAliases Vault CSI Provider pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1172,7 +1178,7 @@ csiProvider:
     annotations: {}
     ## @param csiProvider.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
 
 ## @section Vault Kubernetes Injector Parameters
@@ -1325,6 +1331,9 @@ injector:
   ## @param injector.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param injector.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param injector.hostAliases Vault Kubernetes Injector pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1559,7 +1568,7 @@ injector:
     annotations: {}
     ## @param injector.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
 ## 'volumePermissions' init container parameters
 ## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values

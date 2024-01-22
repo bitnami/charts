@@ -130,8 +130,7 @@ dataPlane:
   ## @param dataPlane.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
-    # As the user needs to manually unseal the apisix, we don't want Apisix to restart
-    enabled: false
+    enabled: true
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 5
@@ -835,8 +834,7 @@ controlPlane:
   ## @param controlPlane.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
-    # As the user needs to manually unseal the apisix, we don't want Apisix to restart
-    enabled: false
+    enabled: true
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 5
@@ -2233,7 +2231,7 @@ ingressController:
   ##
   enabled: true
   ## Bitnami APISIX Ingress Controller image
-  ## ref: https://hub.docker.com/r/bitnami/vault-k8s/tags/
+  ## ref: https://hub.docker.com/r/bitnami/apisix-ingress-controller/tags/
   ## @param ingressController.image.registry [default: REGISTRY_NAME] APISIX Ingress Controller image registry
   ## @param ingressController.image.repository [default: REPOSITORY_NAME/apisix-ingress-controller] APISIX Ingress Controller image repository
   ## @skip ingressController.image.tag APISIX Ingress Controller image tag (immutable tags are recommended)

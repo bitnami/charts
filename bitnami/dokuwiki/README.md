@@ -85,6 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`                                  | Image pull policy                                                                                                     | `IfNotPresent`             |
 | `image.pullSecrets`                                 | Image pull policy                                                                                                     | `[]`                       |
 | `image.debug`                                       | Enable image debugging                                                                                                | `false`                    |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                    | `false`                    |
 | `hostAliases`                                       | Add deployment host aliases                                                                                           | `[]`                       |
 | `dokuwikiUsername`                                  | User of the application                                                                                               | `user`                     |
 | `dokuwikiPassword`                                  | Application password                                                                                                  | `""`                       |
@@ -163,6 +164,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `terminationGracePeriodSeconds`                     | In seconds, time the given to the pod to terminate gracefully                                                         | `""`                       |
 | `containerPorts.http`                               | Container HTTP port                                                                                                   | `8080`                     |
 | `containerPorts.https`                              | Container HTTPS port                                                                                                  | `8443`                     |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for WordPress pod                                                                   | `true`                     |
+| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                | `""`                       |
+| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                | `false`                    |
+| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                  | `{}`                       |
 
 ### Traffic Exposure Parameters
 

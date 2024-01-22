@@ -486,6 +486,9 @@ primary:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param primary.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param primary.hostAliases PostgreSQL primary pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -858,6 +861,9 @@ readReplicas:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param readReplicas.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param readReplicas.hostAliases PostgreSQL read only pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

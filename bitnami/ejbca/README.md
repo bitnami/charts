@@ -116,6 +116,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.annotations`                           | Persistent Volume Claim annotations                                                                         | `{}`                    |
 | `sidecars`                                          | Attach additional sidecar containers to the pod                                                             | `[]`                    |
 | `initContainers`                                    | Additional init containers to add to the pods                                                               | `[]`                    |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                          | `false`                 |
 | `hostAliases`                                       | Add deployment host aliases                                                                                 | `[]`                    |
 | `priorityClassName`                                 | EJBCA pods' priorityClassName                                                                               | `""`                    |
 | `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                              | `""`                    |
@@ -167,6 +168,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                               | Custom liveness probe to execute (when the main one is disabled)                                            | `{}`                    |
 | `customReadinessProbe`                              | Custom readiness probe to execute (when the main one is disabled)                                           | `{}`                    |
 | `containerPorts`                                    | EJBCA Container ports to open                                                                               | `{}`                    |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for WordPress pod                                                         | `true`                  |
+| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                      | `""`                    |
+| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                      | `false`                 |
+| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                        | `{}`                    |
 
 ### Service parameters
 

@@ -146,6 +146,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.containerSecurityContext.runAsNonRoot`        | Set Compactor containers' Security Context runAsNonRoot                                             | `true`              |
 | `compactor.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                    | `RuntimeDefault`    |
 | `compactor.lifecycleHooks`                               | for the compactor container(s) to automate configuration before or after startup                    | `{}`                |
+| `compactor.automountServiceAccountToken`                 | Mount Service Account token in pod                                                                  | `false`             |
 | `compactor.hostAliases`                                  | compactor pods host aliases                                                                         | `[]`                |
 | `compactor.podLabels`                                    | Extra labels for compactor pods                                                                     | `{}`                |
 | `compactor.podAnnotations`                               | Annotations for compactor pods                                                                      | `{}`                |
@@ -249,6 +250,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.containerSecurityContext.runAsNonRoot`        | Set Gateway containers' Security Context runAsNonRoot                                                 | `true`                  |
 | `gateway.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                      | `RuntimeDefault`        |
 | `gateway.lifecycleHooks`                               | for the gateway container(s) to automate configuration before or after startup                        | `{}`                    |
+| `gateway.automountServiceAccountToken`                 | Mount Service Account token in pod                                                                    | `false`                 |
 | `gateway.hostAliases`                                  | gateway pods host aliases                                                                             | `[]`                    |
 | `gateway.podLabels`                                    | Extra labels for gateway pods                                                                         | `{}`                    |
 | `gateway.podAnnotations`                               | Annotations for gateway pods                                                                          | `{}`                    |
@@ -346,6 +348,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexGateway.containerSecurityContext.runAsNonRoot`        | Set index-gateway containers' Security Context runAsNonRoot                                            | `true`           |
 | `indexGateway.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                       | `RuntimeDefault` |
 | `indexGateway.lifecycleHooks`                               | for the indexGateway container(s) to automate configuration before or after startup                    | `{}`             |
+| `indexGateway.automountServiceAccountToken`                 | Mount Service Account token in pod                                                                     | `false`          |
 | `indexGateway.hostAliases`                                  | indexGateway pods host aliases                                                                         | `[]`             |
 | `indexGateway.podLabels`                                    | Extra labels for indexGateway pods                                                                     | `{}`             |
 | `indexGateway.podAnnotations`                               | Annotations for indexGateway pods                                                                      | `{}`             |
@@ -430,6 +433,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.containerSecurityContext.runAsNonRoot`        | Set Distributor containers' Security Context runAsNonRoot                                             | `true`           |
 | `distributor.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                      | `RuntimeDefault` |
 | `distributor.lifecycleHooks`                               | for the distributor container(s) to automate configuration before or after startup                    | `{}`             |
+| `distributor.automountServiceAccountToken`                 | Mount Service Account token in pod                                                                    | `false`          |
 | `distributor.hostAliases`                                  | distributor pods host aliases                                                                         | `[]`             |
 | `distributor.podLabels`                                    | Extra labels for distributor pods                                                                     | `{}`             |
 | `distributor.podAnnotations`                               | Annotations for distributor pods                                                                      | `{}`             |
@@ -514,6 +518,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.containerSecurityContext.runAsUser`           | Set Ingester containers' Security Context runAsUser                                                | `1001`           |
 | `ingester.containerSecurityContext.runAsNonRoot`        | Set Ingester containers' Security Context runAsNonRoot                                             | `true`           |
 | `ingester.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                   | `RuntimeDefault` |
+| `ingester.automountServiceAccountToken`                 | Mount Service Account token in pod                                                                 | `false`          |
 | `ingester.hostAliases`                                  | ingester pods host aliases                                                                         | `[]`             |
 | `ingester.podLabels`                                    | Extra labels for ingester pods                                                                     | `{}`             |
 | `ingester.podAnnotations`                               | Annotations for ingester pods                                                                      | `{}`             |
@@ -612,6 +617,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.containerSecurityContext.runAsNonRoot`        | Set Querier containers' Security Context runAsNonRoot                                             | `true`           |
 | `querier.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                  | `RuntimeDefault` |
 | `querier.lifecycleHooks`                               | for the Querier container(s) to automate configuration before or after startup                    | `{}`             |
+| `querier.automountServiceAccountToken`                 | Mount Service Account token in pod                                                                | `false`          |
 | `querier.hostAliases`                                  | querier pods host aliases                                                                         | `[]`             |
 | `querier.podLabels`                                    | Extra labels for querier pods                                                                     | `{}`             |
 | `querier.podAnnotations`                               | Annotations for querier pods                                                                      | `{}`             |
@@ -708,6 +714,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.containerSecurityContext.runAsNonRoot`        | Set queryFrontend containers' Security Context runAsNonRoot                                             | `true`           |
 | `queryFrontend.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                        | `RuntimeDefault` |
 | `queryFrontend.lifecycleHooks`                               | for the queryFrontend container(s) to automate configuration before or after startup                    | `{}`             |
+| `queryFrontend.automountServiceAccountToken`                 | Mount Service Account token in pod                                                                      | `false`          |
 | `queryFrontend.hostAliases`                                  | queryFrontend pods host aliases                                                                         | `[]`             |
 | `queryFrontend.podLabels`                                    | Extra labels for queryFrontend pods                                                                     | `{}`             |
 | `queryFrontend.podAnnotations`                               | Annotations for queryFrontend pods                                                                      | `{}`             |
@@ -794,6 +801,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryScheduler.containerSecurityContext.runAsNonRoot`        | Set queryScheduler containers' Security Context runAsNonRoot                                             | `true`           |
 | `queryScheduler.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                         | `RuntimeDefault` |
 | `queryScheduler.lifecycleHooks`                               | for the queryScheduler container(s) to automate configuration before or after startup                    | `{}`             |
+| `queryScheduler.automountServiceAccountToken`                 | Mount Service Account token in pod                                                                       | `false`          |
 | `queryScheduler.hostAliases`                                  | queryScheduler pods host aliases                                                                         | `[]`             |
 | `queryScheduler.podLabels`                                    | Extra labels for queryScheduler pods                                                                     | `{}`             |
 | `queryScheduler.podAnnotations`                               | Annotations for queryScheduler pods                                                                      | `{}`             |
@@ -880,6 +888,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.containerSecurityContext.runAsUser`           | Set Ruler containers' Security Context runAsUser                                                | `1001`           |
 | `ruler.containerSecurityContext.runAsNonRoot`        | Set Ruler containers' Security Context runAsNonRoot                                             | `true`           |
 | `ruler.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                | `RuntimeDefault` |
+| `ruler.automountServiceAccountToken`                 | Mount Service Account token in pod                                                              | `false`          |
 | `ruler.hostAliases`                                  | ruler pods host aliases                                                                         | `[]`             |
 | `ruler.podLabels`                                    | Extra labels for ruler pods                                                                     | `{}`             |
 | `ruler.podAnnotations`                               | Annotations for ruler pods                                                                      | `{}`             |
@@ -977,6 +986,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tableManager.containerSecurityContext.runAsNonRoot`        | Set table-manager containers' Security Context runAsNonRoot                                            | `true`           |
 | `tableManager.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                       | `RuntimeDefault` |
 | `tableManager.lifecycleHooks`                               | for the tableManager container(s) to automate configuration before or after startup                    | `{}`             |
+| `tableManager.automountServiceAccountToken`                 | Mount Service Account token in pod                                                                     | `false`          |
 | `tableManager.hostAliases`                                  | tableManager pods host aliases                                                                         | `[]`             |
 | `tableManager.podLabels`                                    | Extra labels for tableManager pods                                                                     | `{}`             |
 | `tableManager.podAnnotations`                               | Annotations for tableManager pods                                                                      | `{}`             |
@@ -1067,6 +1077,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.containerSecurityContext.runAsUser`           | Set Promtail containers' Security Context runAsUser                                                              | `0`                        |
 | `promtail.containerSecurityContext.runAsNonRoot`        | Set Promtail containers' Security Context runAsNonRoot                                                           | `false`                    |
 | `promtail.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                 | `RuntimeDefault`           |
+| `promtail.automountServiceAccountToken`                 | Mount Service Account token in pod                                                                               | `true`                     |
 | `promtail.hostAliases`                                  | promtail pods host aliases                                                                                       | `[]`                       |
 | `promtail.podLabels`                                    | Extra labels for promtail pods                                                                                   | `{}`                       |
 | `promtail.podAnnotations`                               | Annotations for promtail pods                                                                                    | `{}`                       |
@@ -1109,7 +1120,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.rbac.create`                                 | Create RBAC rules                                                               | `true`      |
 | `promtail.serviceAccount.create`                       | Enable creation of ServiceAccount for Promtail pods                             | `true`      |
 | `promtail.serviceAccount.name`                         | The name of the ServiceAccount to use                                           | `""`        |
-| `promtail.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the promtail.serviceAccount.created | `true`      |
+| `promtail.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the promtail.serviceAccount.created | `false`     |
 | `promtail.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                            | `{}`        |
 
 ### Init Container Parameters

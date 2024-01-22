@@ -96,6 +96,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `allowEmptyPassword`                                | Allow DB blank passwords                                                                                                                                  | `no`                       |
 | `command`                                           | Override default container command (useful when using custom images)                                                                                      | `[]`                       |
 | `args`                                              | Override default container args (useful when using custom images)                                                                                         | `[]`                       |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                        | `false`                    |
 | `hostAliases`                                       | Add deployment host aliases                                                                                                                               | `[]`                       |
 | `updateStrategy.type`                               | Update strategy - only really applicable for deployments with RWO PVs attached                                                                            | `RollingUpdate`            |
 | `extraEnvVars`                                      | An array to add extra env vars                                                                                                                            | `[]`                       |
@@ -178,6 +179,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `lifecycleHooks`                                    | LifecycleHook to set additional configuration before or after startup                                                                                     | `{}`                       |
 | `podAnnotations`                                    | Pod annotations                                                                                                                                           | `{}`                       |
 | `podLabels`                                         | Pod extra labels                                                                                                                                          | `{}`                       |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for pod                                                                                                                 | `true`                     |
+| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                                    | `""`                       |
+| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                                    | `false`                    |
+| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                                                      | `{}`                       |
 
 ### Traffic Exposure Parameters
 
