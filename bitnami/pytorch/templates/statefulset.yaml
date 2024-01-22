@@ -32,6 +32,8 @@ spec:
         app.kubernetes.io/component: worker
     spec:
       {{- include "pytorch.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ include "pytorch.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
