@@ -91,6 +91,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled`                     | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                                                 | `false`                                           |
 | `diagnosticMode.command`                     | Command to override all containers in the deployment                                                                                                                    | `["sleep"]`                                       |
 | `diagnosticMode.args`                        | Args to override all containers in the deployment                                                                                                                       | `["infinity"]`                                    |
+| `automountServiceAccountToken`               | Mount Service Account token in pod                                                                                                                                      | `true`                                            |
 | `hostAliases`                                | Deployment pod host aliases                                                                                                                                             | `[]`                                              |
 | `dnsPolicy`                                  | DNS Policy for pod                                                                                                                                                      | `""`                                              |
 | `dnsConfig`                                  | DNS Configuration pod                                                                                                                                                   | `{}`                                              |
@@ -254,13 +255,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### RBAC parameters
 
-| Name                                          | Description                                                                                | Value  |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------ | ------ |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for RabbitMQ pods                                        | `true` |
-| `serviceAccount.name`                         | Name of the created serviceAccount                                                         | `""`   |
-| `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod                                            | `true` |
-| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`. | `{}`   |
-| `rbac.create`                                 | Whether RBAC rules should be created                                                       | `true` |
+| Name                                          | Description                                                                                | Value   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------ | ------- |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for RabbitMQ pods                                        | `true`  |
+| `serviceAccount.name`                         | Name of the created serviceAccount                                                         | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod                                            | `false` |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`. | `{}`    |
+| `rbac.create`                                 | Whether RBAC rules should be created                                                       | `true`  |
 
 ### Persistence parameters
 

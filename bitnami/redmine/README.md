@@ -161,6 +161,7 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redmine --set databa
 | `customReadinessProbe`                         | Custom readinessProbe that overrides the default one                                                                     | `{}`             |
 | `customStartupProbe`                           | Custom startupProbe that overrides the default one                                                                       | `{}`             |
 | `lifecycleHooks`                               | LifecycleHooks to set additional configuration at startup                                                                | `{}`             |
+| `automountServiceAccountToken`                 | Mount Service Account token in pod                                                                                       | `false`          |
 | `hostAliases`                                  | Redmine pod host aliases                                                                                                 | `[]`             |
 | `podLabels`                                    | Extra labels for Redmine pods                                                                                            | `{}`             |
 | `podAnnotations`                               | Annotations for Redmine pods                                                                                             | `{}`             |

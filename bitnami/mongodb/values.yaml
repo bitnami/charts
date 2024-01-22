@@ -296,6 +296,9 @@ tls:
     ##   memory: 128Mi
     ##
     requests: {}
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -1441,6 +1444,9 @@ arbiter:
   ##   https://docs.mongodb.com/manual/tutorial/add-replica-set-arbiter/
   ##
   enabled: true
+  ## @param arbiter.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param arbiter.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1778,6 +1784,9 @@ hidden:
   ##   https://docs.mongodb.com/manual/tutorial/configure-a-hidden-replica-set-member/
   ##
   enabled: false
+  ## @param hidden.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param hidden.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

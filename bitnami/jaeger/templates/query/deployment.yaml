@@ -32,6 +32,10 @@ spec:
       {{- end }}
     spec:
       {{- include "jaeger.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.query.automountServiceAccountToken }}
+      {{- if .Values.query.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.query.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.query.schedulerName }}
       schedulerName: {{ .Values.query.schedulerName }}
       {{- end }}

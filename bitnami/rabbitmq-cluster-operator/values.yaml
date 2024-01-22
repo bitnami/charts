@@ -127,6 +127,12 @@ clusterOperator:
     ##
     pullSecrets: []
 
+  ## @param clusterOperator.watchAllNamespaces Watch for resources in all namespaces
+  ##
+  watchAllNamespaces: true
+  ## @param clusterOperator.watchNamespaces [array] Watch for resources in the given namespaces (ignored if watchAllNamespaces=true)
+  ##
+  watchNamespaces: []
   ## @param clusterOperator.replicaCount Number of RabbitMQ Cluster Operator replicas to deploy
   ##
   replicaCount: 1
@@ -252,6 +258,9 @@ clusterOperator:
   ## @param clusterOperator.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param clusterOperator.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param clusterOperator.hostAliases RabbitMQ Cluster Operator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -396,7 +405,7 @@ clusterOperator:
     annotations: {}
     ## @param clusterOperator.serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section RabbitMQ Cluster Operator Metrics parameters
   ##
@@ -583,6 +592,12 @@ msgTopologyOperator:
     ##
     pullSecrets: []
 
+  ## @param msgTopologyOperator.watchAllNamespaces Watch for resources in all namespaces
+  ##
+  watchAllNamespaces: true
+  ## @param msgTopologyOperator.watchNamespaces [array] Watch for resources in the given namespaces   ## @param clusterOperator.watchNamespaces [array] Watch for resources in the given namespaces (ignored if watchAllNamespaces=true)
+  ##
+  watchNamespaces: []
   ## @param msgTopologyOperator.replicaCount Number of RabbitMQ Messaging Topology Operator replicas to deploy
   ##
   replicaCount: 1
@@ -725,6 +740,9 @@ msgTopologyOperator:
   ## @param msgTopologyOperator.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param msgTopologyOperator.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param msgTopologyOperator.hostAliases RabbitMQ Messaging Topology Operator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -912,7 +930,7 @@ msgTopologyOperator:
     annotations: {}
     ## @param msgTopologyOperator.serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section RabbitMQ Messaging Topology Operator parameters
   ##

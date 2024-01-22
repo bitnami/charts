@@ -164,6 +164,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                               | Override default liveness probe                                                                       | `{}`             |
 | `customReadinessProbe`                              | Override default readiness probe                                                                      | `{}`             |
 | `customStartupProbe`                                | Custom startupProbe that overrides the default one                                                    | `{}`             |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                    | `false`          |
 | `hostAliases`                                       | Deployment pod host aliases                                                                           | `[]`             |
 | `podLabels`                                         | Extra labels for NATS pods                                                                            | `{}`             |
 | `podAnnotations`                                    | Annotations for NATS pods                                                                             | `{}`             |
@@ -181,6 +182,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for NATS container(s)                        | `[]`             |
 | `initContainers`                                    | Add additional init containers to the NATS pods                                                       | `[]`             |
 | `sidecars`                                          | Add additional sidecar containers to the NATS pods                                                    | `[]`             |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for WordPress pod                                                   | `true`           |
+| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                | `""`             |
+| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                | `false`          |
+| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                  | `{}`             |
 
 ### Traffic Exposure parameters
 
