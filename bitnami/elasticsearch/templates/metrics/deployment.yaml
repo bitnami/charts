@@ -39,6 +39,7 @@ spec:
     spec:
       {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ template "elasticsearch.metrics.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.metrics.automountServiceAccountToken }}
       {{- if .Values.metrics.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.hostAliases "context" $) | nindent 8 }}
       {{- end }}

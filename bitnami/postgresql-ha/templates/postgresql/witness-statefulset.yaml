@@ -42,6 +42,7 @@ spec:
       {{- end }}
     spec:
       {{- include "postgresql-ha.image.pullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.witness.automountServiceAccountToken }}
       {{- if .Values.witness.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.witness.hostAliases "context" $) | nindent 8 }}
       {{- end }}
