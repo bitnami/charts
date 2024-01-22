@@ -151,6 +151,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `lifecycleHooks`                               | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | `{}`                          |
 | `podAnnotations`                               | Pod annotations                                                                                                       | `{}`                          |
 | `podLabels`                                    | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                          |
+| `networkPolicy.enabled`                        | Specifies whether a NetworkPolicy should be created                                                                   | `true`                        |
+| `networkPolicy.extraIngress`                   | Add extra ingress rules to the NetworkPolice                                                                          | `[]`                          |
+| `networkPolicy.extraEgress`                    | Add extra ingress rules to the NetworkPolicy                                                                          | `[]`                          |
 
 ### Other Parameters
 
