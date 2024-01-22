@@ -33,6 +33,7 @@ spec:
       {{- end }}
     spec:
       {{- include "common.images.renderPullSecrets" (dict "images" (list .Values.speaker.image .Values.controller.image) "context" $) | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.speaker.automountServiceAccountToken }}
       {{- if .Values.speaker.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.hostAliases "context" $) | nindent 8 }}
       {{- end }}
