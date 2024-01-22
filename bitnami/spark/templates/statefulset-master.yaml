@@ -47,6 +47,7 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.master.podAntiAffinityPreset "component" "master" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.master.nodeAffinityPreset.type "key" .Values.master.nodeAffinityPreset.key "values" .Values.master.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.master.automountServiceAccountToken }}
       {{- if .Values.master.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.master.hostAliases "context" $) | nindent 8 }}
       {{- end }}

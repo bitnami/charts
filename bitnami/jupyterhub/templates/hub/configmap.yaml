@@ -166,6 +166,7 @@ data:
         ("uid", None),
         ("fs_gid", None),
         ("service_account", "serviceAccountName"),
+        ("automount_service_account_token", None),
         ("storage_extra_labels", "storage.extraLabels"),
         # ("tolerations", "extraTolerations"), # Managed manually below
         ("node_selector", None),
@@ -175,6 +176,8 @@ data:
         ("pod_affinity_preferred", "extraPodAffinity.preferred"),
         ("pod_anti_affinity_required", "extraPodAntiAffinity.required"),
         ("pod_anti_affinity_preferred", "extraPodAntiAffinity.preferred"),
+        ("pod_security_context", None),
+        ("container_security_context", None),
         ("lifecycle_hooks", None),
         ("init_containers", None),
         ("extra_containers", None),

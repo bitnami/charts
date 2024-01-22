@@ -8,6 +8,7 @@ Pod Spec
 */}}
 {{- define "tomcat.pod" -}}
 {{- include "tomcat.imagePullSecrets" . }}
+automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
 {{- if .Values.hostAliases }}
 hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 2 }}
 {{- end }}
@@ -20,6 +21,7 @@ affinity:
   podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "customLabels" $podLabels "context" $) | nindent 4 }}
   nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 4 }}
 {{- end }}
+serviceAccountName: {{ include "tomcat.serviceAccountName" . }}
 {{- if .Values.schedulerName }}
 schedulerName: {{ .Values.schedulerName | quote }}
 {{- end }}

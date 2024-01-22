@@ -290,6 +290,9 @@ tracking:
   ## @param tracking.runUpgradeDB Add an init container to run mlflow db upgrade
   ##
   runUpgradeDB: false
+  ## @param tracking.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param tracking.hostAliases mlflow pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -955,6 +958,9 @@ run:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##https://github.com/microsoft/MlflowExamples
   runtimeClassName: ""
+  ## @param run.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param run.hostAliases run pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

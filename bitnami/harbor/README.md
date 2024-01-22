@@ -316,6 +316,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `nginx.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault`        |
 | `nginx.updateStrategy.type`                               | NGINX deployment strategy type - only really applicable for deployments with RWO PVs attached                            | `RollingUpdate`         |
 | `nginx.lifecycleHooks`                                    | LifecycleHook for the NGINX container(s) to automate configuration before or after startup                               | `{}`                    |
+| `nginx.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`                 |
 | `nginx.hostAliases`                                       | NGINX pods host aliases                                                                                                  | `[]`                    |
 | `nginx.podLabels`                                         | Add additional labels to the NGINX pods (evaluated as a template)                                                        | `{}`                    |
 | `nginx.podAnnotations`                                    | Annotations to add to the NGINX pods (evaluated as a template)                                                           | `{}`                    |

@@ -178,6 +178,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `web.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `web.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `web.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `web.hostAliases`                                       | Mastodon web pods host aliases                                                                                           | `[]`             |
 | `web.podLabels`                                         | Extra labels for Mastodon web pods                                                                                       | `{}`             |
 | `web.podAnnotations`                                    | Annotations for Mastodon web pods                                                                                        | `{}`             |
@@ -263,6 +264,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidekiq.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `sidekiq.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `sidekiq.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `sidekiq.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `sidekiq.hostAliases`                                       | Mastodon sidekiq pods host aliases                                                                                       | `[]`             |
 | `sidekiq.podLabels`                                         | Extra labels for Mastodon sidekiq pods                                                                                   | `{}`             |
 | `sidekiq.podAnnotations`                                    | Annotations for Mastodon sidekiq pods                                                                                    | `{}`             |
@@ -333,6 +335,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `streaming.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `streaming.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `streaming.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `streaming.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `streaming.hostAliases`                                       | Mastodon streaming pods host aliases                                                                                     | `[]`             |
 | `streaming.podLabels`                                         | Extra labels for Mastodon streaming pods                                                                                 | `{}`             |
 | `streaming.podAnnotations`                                    | Annotations for Mastodon streaming pods                                                                                  | `{}`             |
@@ -425,6 +428,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.extraVolumeMounts`                                 | Array of extra volume mounts to be added to the Mastodon Container (evaluated as template). Normally used with `extraVolumes`. | `[]`             |
 | `initJob.resources.limits`                                  | The resources limits for the container                                                                                         | `{}`             |
 | `initJob.resources.requests`                                | The requested resources for the container                                                                                      | `{}`             |
+| `initJob.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                             | `false`          |
 | `initJob.hostAliases`                                       | Add deployment host aliases                                                                                                    | `[]`             |
 | `initJob.annotations`                                       | Add annotations to the job                                                                                                     | `{}`             |
 | `initJob.podLabels`                                         | Additional pod labels                                                                                                          | `{}`             |

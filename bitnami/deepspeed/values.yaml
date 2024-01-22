@@ -326,6 +326,9 @@ client:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##https://github.com/microsoft/DeepSpeedExamples
   runtimeClassName: ""
+  ## @param client.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param client.hostAliases client pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -681,6 +684,9 @@ worker:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param worker.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param worker.hostAliases client pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
