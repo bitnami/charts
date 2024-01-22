@@ -63,6 +63,9 @@ diagnosticMode:
 ## @section kube-state-metrics parameters
 ##
 
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: true
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -87,7 +90,7 @@ rbac:
 serviceAccount:
   create: true
   name: ""
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   annotations: {}
 ## Bitnami kube-state-metrics image version
 ## ref: https://hub.docker.com/r/bitnami/kube-state-metrics/tags/
