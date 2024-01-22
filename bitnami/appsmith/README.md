@@ -134,6 +134,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `client.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `client.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `client.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `client.hostAliases`                                       | Appsmith client pods host aliases                                                                                        | `[]`             |
 | `client.podLabels`                                         | Extra labels for Appsmith client pods                                                                                    | `{}`             |
 | `client.podAnnotations`                                    | Annotations for Appsmith client pods                                                                                     | `{}`             |
@@ -254,6 +255,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault`      |
 | `backend.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`                  |
 | `backend.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`                  |
+| `backend.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`               |
 | `backend.hostAliases`                                       | Appsmith backend pods host aliases                                                                                       | `[]`                  |
 | `backend.podLabels`                                         | Extra labels for Appsmith backend pods                                                                                   | `{}`                  |
 | `backend.podAnnotations`                                    | Annotations for Appsmith backend pods                                                                                    | `{}`                  |
@@ -367,6 +369,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rts.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `rts.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `rts.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `rts.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `rts.hostAliases`                                       | Appsmith rts pods host aliases                                                                                           | `[]`             |
 | `rts.podLabels`                                         | Extra labels for Appsmith rts pods                                                                                       | `{}`             |
 | `rts.podAnnotations`                                    | Annotations for Appsmith rts pods                                                                                        | `{}`             |
