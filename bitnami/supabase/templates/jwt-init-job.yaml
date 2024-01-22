@@ -32,6 +32,7 @@ spec:
       {{- if .Values.jwt.autoGenerate.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.jwt.autoGenerate.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.jwt.autoGenerate.automountServiceAccountToken }}
       {{- if .Values.jwt.autoGenerate.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.jwt.autoGenerate.hostAliases "context" $) | nindent 8 }}
       {{- end }}

@@ -93,7 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataPlane.containerPorts.https`                              | APISIX HTTPS container port                                                                                              | `9443`           |
 | `dataPlane.containerPorts.control`                            | APISIX control container port                                                                                            | `9090`           |
 | `dataPlane.containerPorts.metrics`                            | APISIX metrics container port                                                                                            | `9099`           |
-| `dataPlane.livenessProbe.enabled`                             | Enable livenessProbe on APISIX containers                                                                                | `false`          |
+| `dataPlane.livenessProbe.enabled`                             | Enable livenessProbe on APISIX containers                                                                                | `true`           |
 | `dataPlane.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `5`              |
 | `dataPlane.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `10`             |
 | `dataPlane.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `5`              |
@@ -131,6 +131,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataPlane.containerSecurityContext.seccompProfile.type`      | Set APISIX container's Security Context seccomp profile                                                                  | `RuntimeDefault` |
 | `dataPlane.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `dataPlane.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `dataPlane.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `true`           |
 | `dataPlane.hostAliases`                                       | APISIX pods host aliases                                                                                                 | `[]`             |
 | `dataPlane.defaultConfig`                                     | Apisix apisix configuration (evaluated as a template)                                                                    | `""`             |
 | `dataPlane.extraConfig`                                       | extra configuration parameters to add to the config.yaml file in APISIX Data plane                                       | `{}`             |
@@ -224,14 +225,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### APISIX Data Plane RBAC Parameters
 
-| Name                                                    | Description                                                      | Value  |
-| ------------------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `dataPlane.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `dataPlane.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`   |
-| `dataPlane.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `dataPlane.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `dataPlane.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `dataPlane.serviceAccount.automountServiceAccountToken` | Automount service account token for the apisix service account   | `true` |
+| Name                                                    | Description                                                      | Value   |
+| ------------------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `dataPlane.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `dataPlane.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`    |
+| `dataPlane.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `dataPlane.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `dataPlane.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `dataPlane.serviceAccount.automountServiceAccountToken` | Automount service account token for the apisix service account   | `false` |
 
 ### APISIX Data Plane Metrics Parameters
 
@@ -263,7 +264,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controlPlane.containerPorts.configServer`                       | APISIX config port                                                                                                       | `9280`           |
 | `controlPlane.containerPorts.control`                            | APISIX control port                                                                                                      | `9090`           |
 | `controlPlane.containerPorts.metrics`                            | APISIX metrics port                                                                                                      | `9099`           |
-| `controlPlane.livenessProbe.enabled`                             | Enable livenessProbe on APISIX containers                                                                                | `false`          |
+| `controlPlane.livenessProbe.enabled`                             | Enable livenessProbe on APISIX containers                                                                                | `true`           |
 | `controlPlane.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `5`              |
 | `controlPlane.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `10`             |
 | `controlPlane.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `5`              |
@@ -301,6 +302,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controlPlane.containerSecurityContext.seccompProfile.type`      | Set APISIX container's Security Context seccomp profile                                                                  | `RuntimeDefault` |
 | `controlPlane.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `controlPlane.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `controlPlane.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `true`           |
 | `controlPlane.hostAliases`                                       | APISIX pods host aliases                                                                                                 | `[]`             |
 | `controlPlane.apiTokenAdmin`                                     | Admin API Token for APISIX control plane                                                                                 | `""`             |
 | `controlPlane.apiTokenViewer`                                    | Viewer API Token for APISIX control plane                                                                                | `""`             |
@@ -399,14 +401,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### APISIX Control Plane RBAC parameters
 
-| Name                                                       | Description                                                      | Value  |
-| ---------------------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `controlPlane.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `controlPlane.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`   |
-| `controlPlane.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `controlPlane.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `controlPlane.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `controlPlane.serviceAccount.automountServiceAccountToken` | Automount service account token for the apisix service account   | `true` |
+| Name                                                       | Description                                                      | Value   |
+| ---------------------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `controlPlane.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `controlPlane.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`    |
+| `controlPlane.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `controlPlane.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `controlPlane.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `controlPlane.serviceAccount.automountServiceAccountToken` | Automount service account token for the apisix service account   | `false` |
 
 ### APISIX Control Plane Metrics Parameters
 
@@ -455,6 +457,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.tls.cert`                                          | Content of the certificate to be added to the secret                                                                                                        | `""`                               |
 | `dashboard.tls.key`                                           | Content of the certificate key to be added to the secret                                                                                                    | `""`                               |
 | `dashboard.tls.ca`                                            | Content of the certificate CA to be added to the secret                                                                                                     | `""`                               |
+| `dashboard.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                          | `false`                            |
 | `dashboard.hostAliases`                                       | APISIX Dashboard pods host aliases                                                                                                                          | `[]`                               |
 | `dashboard.podLabels`                                         | Extra labels for APISIX Dashboard pods                                                                                                                      | `{}`                               |
 | `dashboard.podAnnotations`                                    | Annotations for APISIX Dashboard pods                                                                                                                       | `{}`                               |
@@ -634,6 +637,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingressController.containerSecurityContext.seccompProfile.type`      | Set APISIX Ingress Controller container's Security Context seccomp profile                                                                                           | `RuntimeDefault`                            |
 | `ingressController.command`                                           | Override default container command (useful when using custom images)                                                                                                 | `[]`                                        |
 | `ingressController.args`                                              | Override default container args (useful when using custom images)                                                                                                    | `[]`                                        |
+| `ingressController.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                   | `true`                                      |
 | `ingressController.hostAliases`                                       | APISIX Ingress Controller pods host aliases                                                                                                                          | `[]`                                        |
 | `ingressController.podLabels`                                         | Extra labels for APISIX Ingress Controller pods                                                                                                                      | `{}`                                        |
 | `ingressController.podAnnotations`                                    | Annotations for APISIX Ingress Controller pods                                                                                                                       | `{}`                                        |
@@ -732,7 +736,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingressController.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                   | `true`  |
 | `ingressController.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                 | `""`    |
 | `ingressController.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)                                       | `{}`    |
-| `ingressController.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                         | `true`  |
+| `ingressController.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                         | `false` |
 | `ingressController.metrics.enabled`                             | Enable the export of Prometheus metrics                                                                | `false` |
 | `ingressController.metrics.annotations`                         | Annotations for the apisix service in order to scrape metrics                                          | `{}`    |
 | `ingressController.metrics.serviceMonitor.enabled`              | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false` |
