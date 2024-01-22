@@ -153,6 +153,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customReadinessProbe`                         | Custom readinessProbe that overrides the default one                                                                     | `{}`             |
 | `customStartupProbe`                           | Custom startupProbe that overrides the default one                                                                       | `{}`             |
 | `lifecycleHooks`                               | LifecycleHooks to set additional configuration at startup                                                                | `{}`             |
+| `automountServiceAccountToken`                 | Mount Service Account token in pod                                                                                       | `false`          |
 | `hostAliases`                                  | Odoo pod host aliases                                                                                                    | `[]`             |
 | `podLabels`                                    | Extra labels for Odoo pods                                                                                               | `{}`             |
 | `podAnnotations`                               | Annotations for Odoo pods                                                                                                | `{}`             |

@@ -127,6 +127,12 @@ clusterOperator:
     ##
     pullSecrets: []
 
+  ## @param clusterOperator.watchAllNamespaces Watch for resources in all namespaces
+  ##
+  watchAllNamespaces: true
+  ## @param clusterOperator.watchNamespaces [array] Watch for resources in the given namespaces (ignored if watchAllNamespaces=true)
+  ##
+  watchNamespaces: []
   ## @param clusterOperator.replicaCount Number of RabbitMQ Cluster Operator replicas to deploy
   ##
   replicaCount: 1
@@ -586,6 +592,12 @@ msgTopologyOperator:
     ##
     pullSecrets: []
 
+  ## @param msgTopologyOperator.watchAllNamespaces Watch for resources in all namespaces
+  ##
+  watchAllNamespaces: true
+  ## @param msgTopologyOperator.watchNamespaces [array] Watch for resources in the given namespaces   ## @param clusterOperator.watchNamespaces [array] Watch for resources in the given namespaces (ignored if watchAllNamespaces=true)
+  ##
+  watchNamespaces: []
   ## @param msgTopologyOperator.replicaCount Number of RabbitMQ Messaging Topology Operator replicas to deploy
   ##
   replicaCount: 1

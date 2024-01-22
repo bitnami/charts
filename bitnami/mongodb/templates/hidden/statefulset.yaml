@@ -49,6 +49,7 @@ spec:
       schedulerName: {{ .Values.hidden.schedulerName | quote }}
       {{- end }}
       serviceAccountName: {{ template "mongodb.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.hidden.automountServiceAccountToken }}
       {{- if .Values.hidden.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.hostAliases "context" $) | nindent 8 }}
       {{- end }}

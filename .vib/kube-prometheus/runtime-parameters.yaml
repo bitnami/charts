@@ -2,7 +2,7 @@ operator:
   enabled: true
   serviceAccount:
     create: true
-    automountServiceAccountToken: true
+  automountServiceAccountToken: true
   podSecurityContext:
     enabled: true
     fsGroup: 1002

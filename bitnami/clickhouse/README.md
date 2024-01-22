@@ -173,6 +173,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `startdbScriptsSecret`          | ConfigMap with the startdb scripts (Note: Overrides `startdbScripts`)                                                    | `""`                    |
 | `command`                       | Override default container command (useful when using custom images)                                                     | `["/scripts/setup.sh"]` |
 | `args`                          | Override default container args (useful when using custom images)                                                        | `[]`                    |
+| `automountServiceAccountToken`  | Mount Service Account token in pod                                                                                       | `false`                 |
 | `hostAliases`                   | ClickHouse pods host aliases                                                                                             | `[]`                    |
 | `podLabels`                     | Extra labels for ClickHouse pods                                                                                         | `{}`                    |
 | `podAnnotations`                | Annotations for ClickHouse pods                                                                                          | `{}`                    |

@@ -89,6 +89,9 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -157,6 +160,16 @@ output: |-
 ## @param existingConfiguration Name of existing ConfigMap object with the Logstash configuration (`input`, `filter`, and `output` will be ignored).
 ##
 existingConfiguration: ""
+## @param extraConfigurationFiles Extra configuration files to be added to the configuration ConfigMap and mounted at /bitnami/logstash/config. Rendered as a template.
+## NOTE: Mounting logstash.yml may cause other settings to be ignored
+## E.g.:
+## extraConfigurationFiles:
+##   logstash.yml: |
+##     path.data: {{ .Values.persistence.mountPath }}
+##     api.http.host: 0.0.0.0
+##     api.http.port: {{ .Values.monitoringAPIPort | quote }}
+##
+extraConfigurationFiles: {}
 ## @param enableMultiplePipelines Allows user to use multiple pipelines
 ## ref: https://www.elastic.co/guide/en/logstash/master/multiple-pipelines.html
 ##

@@ -38,6 +38,7 @@ spec:
     spec:
       serviceAccountName: {{ template "flux.kustomize-controller.serviceAccountName" . }}
       {{- include "flux.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.kustomizeController.automountServiceAccountToken }}
       {{- if .Values.kustomizeController.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.hostAliases "context" $) | nindent 8 }}
       {{- end }}

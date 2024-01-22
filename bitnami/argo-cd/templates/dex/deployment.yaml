@@ -35,6 +35,7 @@ spec:
     spec:
       serviceAccountName: {{ include "argocd.dex.serviceAccountName" . }}
       {{- include "argocd.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.dex.automountServiceAccountToken }}
       {{- if .Values.dex.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dex.hostAliases "context" $) | nindent 8 }}
       {{- end }}

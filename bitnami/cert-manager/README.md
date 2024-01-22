@@ -167,6 +167,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                     | `""`                           |
 | `controller.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                       | `{}`                           |
 | `controller.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                             | `false`                        |
+| `controller.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                        | `false`                        |
+| `controller.networkPolicy.allowExternal`                       | Don't require client label for connections                                                                 | `true`                         |
+| `controller.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                               | `[]`                           |
+| `controller.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                               | `[]`                           |
+| `controller.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                     | `{}`                           |
+| `controller.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                 | `{}`                           |
 
 ### Webhook deployment parameters
 
@@ -248,6 +254,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                    | `{}`                                   |
 | `webhook.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                          | `false`                                |
 | `webhook.hostNetwork`                                       | Specifies hostNetwork value                                                                             | `false`                                |
+| `webhook.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                     | `false`                                |
+| `webhook.networkPolicy.allowExternal`                       | Don't require client label for connections                                                              | `true`                                 |
+| `webhook.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                            | `[]`                                   |
+| `webhook.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                            | `[]`                                   |
+| `webhook.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                  | `{}`                                   |
+| `webhook.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                              | `{}`                                   |
 
 ### CAInjector deployment parameters
 

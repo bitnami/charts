@@ -28,6 +28,7 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
     spec:
       {{- include "kube-state-metrics.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}

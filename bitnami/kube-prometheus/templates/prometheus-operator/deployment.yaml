@@ -35,6 +35,7 @@ spec:
       {{- if .Values.operator.priorityClassName }}
       priorityClassName: {{ .Values.operator.priorityClassName }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.operator.automountServiceAccountToken }}
       {{- if .Values.operator.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.operator.hostAliases "context" $) | nindent 8 }}
       {{- end }}

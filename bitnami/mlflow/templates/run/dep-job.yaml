@@ -46,6 +46,7 @@ spec:
     spec:
       {{- include "mlflow.v0.imagePullSecrets" . | indent 6 }}
       serviceAccountName: {{ template "mlflow.v0.run.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.run.automountServiceAccountToken }}
       {{- if .Values.run.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.run.hostAliases "context" $) | nindent 8 }}
       {{- end }}
