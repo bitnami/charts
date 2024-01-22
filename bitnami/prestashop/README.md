@@ -181,7 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `lifecycleHooks`                                    | LifecycleHook to set additional configuration at startup Evaluated as a template                           | `{}`                         |
 | `podAnnotations`                                    | Pod annotations                                                                                            | `{}`                         |
 | `podLabels`                                         | Pod extra labels                                                                                           | `{}`                         |
-| `serviceAccount.create`                             | Enable creation of ServiceAccount for WordPress pod                                                        | `true`                       |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for Prestashop pod                                                       | `true`                       |
 | `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                     | `""`                         |
 | `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                     | `false`                      |
 | `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                       | `{}`                         |
