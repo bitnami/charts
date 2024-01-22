@@ -114,6 +114,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.command`                                           | Override default container command on MySQL Primary container(s) (useful when using custom images)              | `[]`                |
 | `primary.args`                                              | Override default container args on MySQL Primary container(s) (useful when using custom images)                 | `[]`                |
 | `primary.lifecycleHooks`                                    | for the MySQL Primary container(s) to automate configuration before or after startup                            | `{}`                |
+| `primary.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                              | `false`             |
 | `primary.hostAliases`                                       | Deployment pod host aliases                                                                                     | `[]`                |
 | `primary.configuration`                                     | Configure MySQL Primary with a custom my.cnf file                                                               | `""`                |
 | `primary.existingConfigmap`                                 | Name of existing ConfigMap with MySQL Primary configuration.                                                    | `""`                |
@@ -212,6 +213,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | `secondary.name`                                              | Name of the secondary database (eg secondary, slave, ...)                                                           | `secondary`         |
 | `secondary.replicaCount`                                      | Number of MySQL secondary replicas                                                                                  | `1`                 |
+| `secondary.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                  | `false`             |
 | `secondary.hostAliases`                                       | Deployment pod host aliases                                                                                         | `[]`                |
 | `secondary.command`                                           | Override default container command on MySQL Secondary container(s) (useful when using custom images)                | `[]`                |
 | `secondary.args`                                              | Override default container args on MySQL Secondary container(s) (useful when using custom images)                   | `[]`                |

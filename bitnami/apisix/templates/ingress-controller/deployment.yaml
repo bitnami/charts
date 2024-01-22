@@ -47,6 +47,7 @@ spec:
     spec:
       serviceAccountName: {{ template "apisix.ingress-controller.serviceAccountName" . }}
       {{- include "apisix.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.ingressController.automountServiceAccountToken }}
       {{- if .Values.ingressController.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.hostAliases "context" $) | nindent 8 }}
       {{- end }}
