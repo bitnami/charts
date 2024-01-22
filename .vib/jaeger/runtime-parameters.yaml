@@ -26,9 +26,15 @@ agent:
     automountServiceAccountToken: true
   sidecars:
     - name: hotrod-example
-      image: davidbhlm/example-hotrod:1.39
-      args:
-        - all
+      image: bitnami/golang:1.20
+      command:
+        - /bin/bash
+        - -ec
+        - |
+          #!/bin/bash
+          git clone git@github.com:jaegertracing/jaeger.git jaeger
+          cd jaeger
+          go run ./examples/hotrod/main.go all
       securityContext:
         runAsNonRoot: true
         privileged: false
