@@ -163,7 +163,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Pytorch container(s)                                    | `[]`                      |
 | `sidecars`                                          | Add additional sidecar containers to the Pytorch pod(s)                                                                  | `[]`                      |
 | `initContainers`                                    | Add additional init containers to the %%MAIN_CONTAINER_NAME%% pod(s)                                                     | `[]`                      |
-| `serviceAccount.create`                             | Enable creation of ServiceAccount for WordPress pod                                                                      | `true`                    |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for Pytorch pod                                                                        | `true`                    |
 | `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                   | `""`                      |
 | `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                   | `false`                   |
 | `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                     | `{}`                      |
