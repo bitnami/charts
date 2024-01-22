@@ -32,6 +32,7 @@ spec:
         app.kubernetes.io/component: web
     spec:
       {{- include "concourse.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.web.automountServiceAccountToken }}
       {{- if .Values.web.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.web.hostAliases "context" $) | nindent 8 }}
       {{- end }}
