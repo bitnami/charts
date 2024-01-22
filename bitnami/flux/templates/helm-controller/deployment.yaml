@@ -38,6 +38,7 @@ spec:
     spec:
       serviceAccountName: {{ template "flux.helm-controller.serviceAccountName" . }}
       {{- include "flux.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.helmController.automountServiceAccountToken }}
       {{- if .Values.helmController.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.helmController.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -92,7 +93,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.helmController.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - --watch-all-namespaces
+            - --watch-all-namespaces={{ .Values.helmController.watchAllNamespaces }}
             {{- if .Values.helmController.image.debug }}
             - --log-level=debug
             {{- else }}

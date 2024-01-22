@@ -24,4 +24,5 @@ hostAliases:
     hostnames:
       - status.testhost
 serviceAccount:
-  automountServiceAccountToken: true
+  create: true
+automountServiceAccountToken: true
