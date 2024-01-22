@@ -196,6 +196,8 @@ hub:
       {{- if .Values.singleuser.podSecurityContext.enabled }}
       fsGid: {{ .Values.singleuser.podSecurityContext.fsGroup }}
       {{- end }}
+      containerSecurityContext: {{- omit .Values.singleuser.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+      podSecurityContext: {{- omit .Values.singleuser.podSecurityContext "enabled" | toYaml | nindent 4 }}
       serviceAccountName: {{ template "jupyterhub.singleuserServiceAccountName" . }}
       storage:
         {{- if .Values.singleuser.persistence.enabled }}

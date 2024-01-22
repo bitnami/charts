@@ -37,6 +37,7 @@ spec:
     spec:
       serviceAccountName: {{ template "vault.csi-provider.serviceAccountName" . }}
       {{- include "vault.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.csiProvider.automountServiceAccountToken }}
       {{- if .Values.csiProvider.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.csiProvider.hostAliases "context" $) | nindent 8 }}
       {{- end }}

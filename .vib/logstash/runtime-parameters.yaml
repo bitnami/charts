@@ -20,7 +20,7 @@ output: |-
   }
 serviceAccount:
   create: true
-  automountServiceAccountToken: true
+automountServiceAccountToken: true
 containerPorts:
   - name: http
     containerPort: 8081

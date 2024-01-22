@@ -138,6 +138,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `concierge.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `concierge.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
 | `concierge.deployAPIService`                                  | Deploy the APIService objects                                                                                            | `true`           |
+| `concierge.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `true`           |
 | `concierge.hostAliases`                                       | Concierge pods host aliases                                                                                              | `[]`             |
 | `concierge.podLabels`                                         | Extra labels for Concierge pods                                                                                          | `{}`             |
 | `concierge.podAnnotations`                                    | Annotations for Concierge pods                                                                                           | `{}`             |
@@ -165,21 +166,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Concierge RBAC settings
 
-| Name                                                                         | Description                                                                   | Value  |
-| ---------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ------ |
-| `concierge.rbac.create`                                                      | Create Concierge RBAC objects                                                 | `true` |
-| `concierge.serviceAccount.concierge.name`                                    | Name of an existing Service Account for the Concierge Deployment              | `""`   |
-| `concierge.serviceAccount.concierge.create`                                  | Create a Service Account for the Concierge Deployment                         | `true` |
-| `concierge.serviceAccount.concierge.automountServiceAccountToken`            | Auto mount token for the Concierge Deployment Service Account                 | `true` |
-| `concierge.serviceAccount.concierge.annotations`                             | Annotations for the Concierge Service Account                                 | `{}`   |
-| `concierge.serviceAccount.impersonationProxy.name`                           | Name of an existing Service Account for the Concierge Impersonator            | `""`   |
-| `concierge.serviceAccount.impersonationProxy.create`                         | Create a Service Account for the Concierge Impersonator                       | `true` |
-| `concierge.serviceAccount.impersonationProxy.automountServiceAccountToken`   | Auto mount token for the Concierge Impersonator Service Account               | `true` |
-| `concierge.serviceAccount.impersonationProxy.annotations`                    | Annotations for the Concierge Service Account                                 | `{}`   |
-| `concierge.serviceAccount.kubeCertAgentService.name`                         | Name of an existing Service Account for the Concierge kube-cert-agent-service | `""`   |
-| `concierge.serviceAccount.kubeCertAgentService.create`                       | Create a Service Account for the Concierge kube-cert-agent-service            | `true` |
-| `concierge.serviceAccount.kubeCertAgentService.automountServiceAccountToken` | Auto mount token for the Concierge kube-cert-agent-service Service Account    | `true` |
-| `concierge.serviceAccount.kubeCertAgentService.annotations`                  | Annotations for the Concierge Service Account                                 | `{}`   |
+| Name                                                                         | Description                                                                   | Value   |
+| ---------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ------- |
+| `concierge.rbac.create`                                                      | Create Concierge RBAC objects                                                 | `true`  |
+| `concierge.serviceAccount.concierge.name`                                    | Name of an existing Service Account for the Concierge Deployment              | `""`    |
+| `concierge.serviceAccount.concierge.create`                                  | Create a Service Account for the Concierge Deployment                         | `true`  |
+| `concierge.serviceAccount.concierge.automountServiceAccountToken`            | Auto mount token for the Concierge Deployment Service Account                 | `false` |
+| `concierge.serviceAccount.concierge.annotations`                             | Annotations for the Concierge Service Account                                 | `{}`    |
+| `concierge.serviceAccount.impersonationProxy.name`                           | Name of an existing Service Account for the Concierge Impersonator            | `""`    |
+| `concierge.serviceAccount.impersonationProxy.create`                         | Create a Service Account for the Concierge Impersonator                       | `true`  |
+| `concierge.serviceAccount.impersonationProxy.automountServiceAccountToken`   | Auto mount token for the Concierge Impersonator Service Account               | `false` |
+| `concierge.serviceAccount.impersonationProxy.annotations`                    | Annotations for the Concierge Service Account                                 | `{}`    |
+| `concierge.serviceAccount.kubeCertAgentService.name`                         | Name of an existing Service Account for the Concierge kube-cert-agent-service | `""`    |
+| `concierge.serviceAccount.kubeCertAgentService.create`                       | Create a Service Account for the Concierge kube-cert-agent-service            | `true`  |
+| `concierge.serviceAccount.kubeCertAgentService.automountServiceAccountToken` | Auto mount token for the Concierge kube-cert-agent-service Service Account    | `false` |
+| `concierge.serviceAccount.kubeCertAgentService.annotations`                  | Annotations for the Concierge Service Account                                 | `{}`    |
 
 ### Concierge Traffic Exposure Parameters
 
@@ -247,6 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.existingConfigmap`                                 | The name of an existing ConfigMap with your custom configuration for Supervisor                                          | `""`             |
 | `supervisor.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `supervisor.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `supervisor.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `true`           |
 | `supervisor.hostAliases`                                       | Supervisor pods host aliases                                                                                             | `[]`             |
 | `supervisor.podLabels`                                         | Extra labels for Supervisor pods                                                                                         | `{}`             |
 | `supervisor.podAnnotations`                                    | Annotations for Supervisor pods                                                                                          | `{}`             |
@@ -274,13 +276,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Supervisor RBAC settings
 
-| Name                                                     | Description                                                       | Value  |
-| -------------------------------------------------------- | ----------------------------------------------------------------- | ------ |
-| `supervisor.rbac.create`                                 | Create Supervisor RBAC objects                                    | `true` |
-| `supervisor.serviceAccount.name`                         | Name of an existing Service Account for the Supervisor Deployment | `""`   |
-| `supervisor.serviceAccount.create`                       | Create a Service Account for the Supervisor Deployment            | `true` |
-| `supervisor.serviceAccount.automountServiceAccountToken` | Auto mount token for the Supervisor Deployment Service Account    | `true` |
-| `supervisor.serviceAccount.annotations`                  | Annotations for the Supervisor Service Account                    | `{}`   |
+| Name                                                     | Description                                                       | Value   |
+| -------------------------------------------------------- | ----------------------------------------------------------------- | ------- |
+| `supervisor.rbac.create`                                 | Create Supervisor RBAC objects                                    | `true`  |
+| `supervisor.serviceAccount.name`                         | Name of an existing Service Account for the Supervisor Deployment | `""`    |
+| `supervisor.serviceAccount.create`                       | Create a Service Account for the Supervisor Deployment            | `true`  |
+| `supervisor.serviceAccount.automountServiceAccountToken` | Auto mount token for the Supervisor Deployment Service Account    | `false` |
+| `supervisor.serviceAccount.annotations`                  | Annotations for the Supervisor Service Account                    | `{}`    |
 
 ### Supervisor Traffic Exposure Parameters
 

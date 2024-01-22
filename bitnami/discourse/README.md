@@ -110,6 +110,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.sysctls`             | Set kernel settings using the sysctl interface                                                                           | `[]`                        |
 | `podSecurityContext.supplementalGroups`  | Set filesystem extra groups                                                                                              | `[]`                        |
 | `podSecurityContext.fsGroup`             | Set Discourse pod's Security Context fsGroup                                                                             | `0`                         |
+| `automountServiceAccountToken`           | Mount Service Account token in pod                                                                                       | `false`                     |
 | `hostAliases`                            | Add deployment host aliases                                                                                              | `[]`                        |
 | `podAnnotations`                         | Additional pod annotations                                                                                               | `{}`                        |
 | `podLabels`                              | Additional pod labels                                                                                                    | `{}`                        |

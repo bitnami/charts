@@ -32,6 +32,7 @@ spec:
     spec:
       serviceAccountName: {{ include "argocd.repo-server.serviceAccountName" . }}
       {{- include "argocd.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.repoServer.automountServiceAccountToken }}
       {{- if .Values.repoServer.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.hostAliases "context" $) | nindent 8 }}
       {{- end }}

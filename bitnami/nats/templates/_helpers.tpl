@@ -44,6 +44,17 @@ Return true if a NATS configuration secret object should be created
 {{- end -}}
 
 {{/*
+ Create the name of the service account to use
+ */}}
+{{- define "nats.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the NATS configuration secret name
 */}}
 {{- define "nats.secretName" -}}

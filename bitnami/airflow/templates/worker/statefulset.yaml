@@ -40,6 +40,7 @@ spec:
         app.kubernetes.io/component: worker
     spec:
       {{- include "airflow.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.worker.automountServiceAccountToken }}
       {{- if .Values.worker.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.worker.hostAliases "context" $) | nindent 8 }}
       {{- end }}
