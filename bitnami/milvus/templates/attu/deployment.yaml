@@ -43,6 +43,7 @@ spec:
       {{- end }}
       serviceAccountName: {{ template "milvus.attu.serviceAccountName" . }}
       {{- include "milvus.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.attu.automountServiceAccountToken }}
       {{- if .Values.attu.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.attu.hostAliases "context" $) | nindent 8 }}
       {{- end }}

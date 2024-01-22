@@ -65,7 +65,7 @@ spec:
       securityContext: {{- omit .Values.master.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "redis.masterServiceAccountName" . }}
-      automountServiceAccountToken: {{ .Values.master.serviceAccount.automountServiceAccountToken }}
+      automountServiceAccountToken: {{ .Values.master.automountServiceAccountToken }}
       {{- if .Values.master.priorityClassName }}
       priorityClassName: {{ .Values.master.priorityClassName | quote }}
       {{- end }}

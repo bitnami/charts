@@ -159,6 +159,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                  | `["ALL"]`        |
 | `compactor.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                    | `RuntimeDefault` |
 | `compactor.lifecycleHooks`                                    | for the compactor container(s) to automate configuration before or after startup                    | `{}`             |
+| `compactor.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                  | `false`          |
 | `compactor.hostAliases`                                       | compactor pods host aliases                                                                         | `[]`             |
 | `compactor.podLabels`                                         | Extra labels for compactor pods                                                                     | `{}`             |
 | `compactor.podAnnotations`                                    | Annotations for compactor pods                                                                      | `{}`             |
@@ -244,6 +245,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                    | `["ALL"]`        |
 | `distributor.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                      | `RuntimeDefault` |
 | `distributor.lifecycleHooks`                                    | for the distributor container(s) to automate configuration before or after startup                    | `{}`             |
+| `distributor.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                    | `false`          |
 | `distributor.hostAliases`                                       | distributor pods host aliases                                                                         | `[]`             |
 | `distributor.podLabels`                                         | Extra labels for distributor pods                                                                     | `{}`             |
 | `distributor.podAnnotations`                                    | Annotations for distributor pods                                                                      | `{}`             |
@@ -332,6 +334,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metricsGenerator.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                         | `["ALL"]`        |
 | `metricsGenerator.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                           | `RuntimeDefault` |
 | `metricsGenerator.lifecycleHooks`                                    | for the metricsGenerator container(s) to automate configuration before or after startup                    | `{}`             |
+| `metricsGenerator.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                         | `false`          |
 | `metricsGenerator.hostAliases`                                       | metricsGenerator pods host aliases                                                                         | `[]`             |
 | `metricsGenerator.podLabels`                                         | Extra labels for metricsGenerator pods                                                                     | `{}`             |
 | `metricsGenerator.podAnnotations`                                    | Annotations for metricsGenerator pods                                                                      | `{}`             |
@@ -418,6 +421,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                          | `false`          |
 | `ingester.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                 | `["ALL"]`        |
 | `ingester.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                   | `RuntimeDefault` |
+| `ingester.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                 | `false`          |
 | `ingester.hostAliases`                                       | ingester pods host aliases                                                                         | `[]`             |
 | `ingester.podLabels`                                         | Extra labels for ingester pods                                                                     | `{}`             |
 | `ingester.podAnnotations`                                    | Annotations for ingester pods                                                                      | `{}`             |
@@ -518,6 +522,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                | `["ALL"]`        |
 | `querier.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                  | `RuntimeDefault` |
 | `querier.lifecycleHooks`                                    | for the Querier container(s) to automate configuration before or after startup                    | `{}`             |
+| `querier.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                | `false`          |
 | `querier.hostAliases`                                       | querier pods host aliases                                                                         | `[]`             |
 | `querier.podLabels`                                         | Extra labels for querier pods                                                                     | `{}`             |
 | `querier.podAnnotations`                                    | Annotations for querier pods                                                                      | `{}`             |
@@ -605,6 +610,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.containerSecurityContext.capabilities.drop`              | List of capabilities to be dropped                                                                                  | `["ALL"]`                             |
 | `queryFrontend.containerSecurityContext.seccompProfile.type`            | Set container's Security Context seccomp profile                                                                    | `RuntimeDefault`                      |
 | `queryFrontend.lifecycleHooks`                                          | for the queryFrontend container(s) to automate configuration before or after startup                                | `{}`                                  |
+| `queryFrontend.automountServiceAccountToken`                            | Mount Service Account token in pod                                                                                  | `false`                               |
 | `queryFrontend.hostAliases`                                             | queryFrontend pods host aliases                                                                                     | `[]`                                  |
 | `queryFrontend.podLabels`                                               | Extra labels for queryFrontend pods                                                                                 | `{}`                                  |
 | `queryFrontend.podAnnotations`                                          | Annotations for queryFrontend pods                                                                                  | `{}`                                  |
@@ -747,6 +753,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `vulture.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                              | `["ALL"]`                               |
 | `vulture.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                | `RuntimeDefault`                        |
 | `vulture.lifecycleHooks`                                    | for the vulture container(s) to automate configuration before or after startup                                  | `{}`                                    |
+| `vulture.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                              | `false`                                 |
 | `vulture.hostAliases`                                       | vulture pods host aliases                                                                                       | `[]`                                    |
 | `vulture.podLabels`                                         | Extra labels for vulture pods                                                                                   | `{}`                                    |
 | `vulture.podAnnotations`                                    | Annotations for vulture pods                                                                                    | `{}`                                    |

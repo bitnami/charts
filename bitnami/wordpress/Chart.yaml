@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.5-debian-11-r1
+      image: docker.io/bitnami/apache-exporter:1.0.5-debian-11-r2
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r93
+      image: docker.io/bitnami/os-shell:11-debian-11-r94
     - name: wordpress
-      image: docker.io/bitnami/wordpress:6.4.2-debian-11-r14
+      image: docker.io/bitnami/wordpress:6.4.2-debian-11-r16
 apiVersion: v2
 appVersion: 6.4.2
 dependencies:

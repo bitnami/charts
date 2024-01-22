@@ -1,3 +1,4 @@
+# Taken from https://github.com/fluxcd/flux2/releases/download/v2.2.2/install.yaml
 {{- if .Values.sourceController.installCRDs }}
 ---
 apiVersion: apiextensions.k8s.io/v1

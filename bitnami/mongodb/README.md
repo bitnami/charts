@@ -137,6 +137,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `tls.mode`                       | Allows to set the tls mode which should be used when tls is enabled (options: `allowTLS`, `preferTLS`, `requireTLS`)                                        | `requireTLS`              |
 | `tls.resources.limits`           | Init container generate-tls-certs resource limits                                                                                                           | `{}`                      |
 | `tls.resources.requests`         | Init container generate-tls-certs resource requests                                                                                                         | `{}`                      |
+| `automountServiceAccountToken`   | Mount Service Account token in pod                                                                                                                          | `false`                   |
 | `hostAliases`                    | Add deployment host aliases                                                                                                                                 | `[]`                      |
 | `replicaSetName`                 | Name of the replica set (only when `architecture=replicaset`)                                                                                               | `rs0`                     |
 | `replicaSetHostnames`            | Enable DNS hostnames in the replicaset config (only when `architecture=replicaset`)                                                                         | `true`                    |
@@ -398,6 +399,7 @@ Refer to the [chart documentation for more information on each of these architec
 | Name                                                        | Description                                                                                       | Value            |
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ---------------- |
 | `arbiter.enabled`                                           | Enable deploying the arbiter                                                                      | `true`           |
+| `arbiter.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                | `false`          |
 | `arbiter.hostAliases`                                       | Add deployment host aliases                                                                       | `[]`             |
 | `arbiter.configuration`                                     | Arbiter configuration file to be used                                                             | `""`             |
 | `arbiter.existingConfigmap`                                 | Name of existing ConfigMap with Arbiter configuration                                             | `""`             |
@@ -483,6 +485,7 @@ Refer to the [chart documentation for more information on each of these architec
 | Name                                                       | Description                                                                                          | Value               |
 | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------- |
 | `hidden.enabled`                                           | Enable deploying the hidden nodes                                                                    | `false`             |
+| `hidden.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                   | `false`             |
 | `hidden.hostAliases`                                       | Add deployment host aliases                                                                          | `[]`                |
 | `hidden.configuration`                                     | Hidden node configuration file to be used                                                            | `""`                |
 | `hidden.existingConfigmap`                                 | Name of existing ConfigMap with Hidden node configuration                                            | `""`                |

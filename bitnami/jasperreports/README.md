@@ -109,6 +109,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                                | Description                                                                               | Value                      |
 | --------------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------- |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                        | `false`                    |
 | `hostAliases`                                       | Add deployment host aliases                                                               | `[]`                       |
 | `containerPorts.http`                               | HTTP port to expose at container level                                                    | `8080`                     |
 | `dnsConfig`                                         | Pod DNS configuration.                                                                    | `{}`                       |
@@ -176,6 +177,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                                  | PVC Storage Request for Jasperreports volume                                              | `8Gi`                      |
 | `persistence.existingClaim`                         | An Existing PVC name for Jasperreports volume                                             | `""`                       |
 | `persistence.annotations`                           | Persistent Volume Claim annotations                                                       | `{}`                       |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for JasperReports pod                                   | `true`                     |
+| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                    | `""`                       |
+| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                    | `false`                    |
+| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                      | `{}`                       |
 
 ### Exposure parameters
 

@@ -72,6 +72,9 @@ kustomizeController:
   ## @param kustomizeController.installCRDs Flag to install Kustomize Controller CRDs
   ##
   installCRDs: true
+  ## @param kustomizeController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
   ## Bitnami Kustomize Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-kustomize-controller/tags/
   ## @param kustomizeController.image.registry [default: REGISTRY_NAME] Kustomize Controller image registry
@@ -218,6 +221,9 @@ kustomizeController:
   ## @param kustomizeController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param kustomizeController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param kustomizeController.hostAliases Kustomize Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -397,7 +403,7 @@ kustomizeController:
     annotations: {}
     ## @param kustomizeController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Kustomize Controller Metrics Parameters
   ##
@@ -518,6 +524,9 @@ helmController:
   ## @param helmController.installCRDs Flag to install Helm Controller CRDs
   ##
   installCRDs: true
+  ## @param helmController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
   ## Bitnami Helm Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
   ## @param helmController.image.registry [default: REGISTRY_NAME] Helm Controller image registry
@@ -664,6 +673,9 @@ helmController:
   ## @param helmController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param helmController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param helmController.hostAliases Helm Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -843,7 +855,7 @@ helmController:
     annotations: {}
     ## @param helmController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Helm Controller Metrics Parameters
   ##
@@ -964,6 +976,9 @@ sourceController:
   ## @param sourceController.installCRDs Flag to install Source Controller CRDs
   ##
   installCRDs: true
+  ## @param sourceController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
   ## Bitnami Source Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
   ## @param sourceController.image.registry [default: REGISTRY_NAME] Source Controller image registry
@@ -1112,6 +1127,9 @@ sourceController:
   ## @param sourceController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param sourceController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param sourceController.hostAliases Source Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1449,7 +1467,7 @@ sourceController:
     annotations: {}
     ## @param sourceController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Source Controller Metrics Parameters
   ##
@@ -1570,6 +1588,9 @@ notificationController:
   ## @param notificationController.installCRDs Flag to install Notification Controller CRDs
   ##
   installCRDs: true
+  ## @param notificationController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
   ## Bitnami Notification Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-notification-controller/tags/
   ## @param notificationController.image.registry [default: REGISTRY_NAME] Notification Controller image registry
@@ -1716,6 +1737,9 @@ notificationController:
   ## @param notificationController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param notificationController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param notificationController.hostAliases Notification Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1895,7 +1919,7 @@ notificationController:
     annotations: {}
     ## @param notificationController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Notification Controller Metrics Parameters
   ##
@@ -2016,6 +2040,9 @@ imageAutomationController:
   ## @param imageAutomationController.installCRDs Flag to install Image Automation Controller CRDs
   ##
   installCRDs: true
+  ## @param imageAutomationController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
   ## Bitnami Image Automation Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-image-automation-controller/tags/
   ## @param imageAutomationController.image.registry [default: REGISTRY_NAME] Image Automation Controller image registry
@@ -2162,6 +2189,9 @@ imageAutomationController:
   ## @param imageAutomationController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param imageAutomationController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param imageAutomationController.hostAliases Image Automation Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2341,7 +2371,7 @@ imageAutomationController:
     annotations: {}
     ## @param imageAutomationController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Image Automation Controller Metrics Parameters
   ##
@@ -2462,6 +2492,9 @@ imageReflectorController:
   ## @param imageReflectorController.installCRDs Flag to install Image Reflector Controller CRDs
   ##
   installCRDs: true
+  ## @param imageReflectorController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
   ## Bitnami Image Reflector Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
   ## @param imageReflectorController.image.registry [default: REGISTRY_NAME] Image Reflector Controller image registry
@@ -2608,6 +2641,9 @@ imageReflectorController:
   ## @param imageReflectorController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param imageReflectorController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param imageReflectorController.hostAliases Image Reflector Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2830,7 +2866,7 @@ imageReflectorController:
     annotations: {}
     ## @param imageReflectorController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Image Reflector Controller Metrics Parameters
   ##

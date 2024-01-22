@@ -33,6 +33,17 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+ Create the name of the service account to use
+ */}}
+{{- define "joomla.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return  the proper Storage Class
 */}}
 {{- define "joomla.storageClass" -}}
