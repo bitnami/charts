@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis-cluster
-  tag: 7.2.4-debian-11-r0
+  tag: 7.2.4-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -375,7 +375,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r94
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -867,7 +867,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.56.0-debian-11-r0
+    tag: 1.56.0-debian-11-r1
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1036,7 +1036,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 11-debian-11-r93
+  tag: 11-debian-11-r94
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

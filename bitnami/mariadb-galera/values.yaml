@@ -101,6 +101,9 @@ image:
 ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
 ##
 podManagementPolicy: OrderedReady
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -817,7 +820,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.15.1-debian-11-r0
+    tag: 0.15.1-debian-11-r2
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)

@@ -35,6 +35,7 @@ spec:
     spec:
       serviceAccountName: {{ template "pinniped.supervisor.serviceAccountName" . }}
       {{- include "pinniped.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.supervisor.automountServiceAccountToken }}
       {{- if .Values.supervisor.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.hostAliases "context" $) | nindent 8 }}
       {{- end }}

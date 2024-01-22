@@ -95,7 +95,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/spark
-  tag: 3.5.0-debian-11-r17
+  tag: 3.5.0-debian-11-r18
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -136,6 +136,9 @@ master:
     http: 8080
     https: 8480
     cluster: 7077
+  ## @param master.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param master.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -419,6 +422,9 @@ worker:
     http: 8080
     https: 8480
     cluster: ""
+  ## @param worker.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param worker.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

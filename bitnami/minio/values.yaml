@@ -89,7 +89,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2024.1.13-debian-11-r0
+  tag: 2024.1.16-debian-11-r0
   digest: ""
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
@@ -441,6 +441,9 @@ provisioning:
   cleanupAfterFinished:
     enabled: false
     seconds: 600
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases MinIO&reg; pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
