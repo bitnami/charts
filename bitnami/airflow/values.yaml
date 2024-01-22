@@ -506,6 +506,36 @@ scheduler:
   ## @param scheduler.extraEnvVarsSecrets List of secrets with extra environment variables for Airflow scheduler pods
   ##
   extraEnvVarsSecrets: []
+  ## Configure extra options for Airflow scheduler containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param scheduler.livenessProbe.enabled Enable livenessProbe on Airflow scheduler containers
+  ## @param scheduler.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param scheduler.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param scheduler.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param scheduler.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param scheduler.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 180
+    periodSeconds: 20
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param scheduler.readinessProbe.enabled Enable readinessProbe on Airflow scheduler containers
+  ## @param scheduler.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param scheduler.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param scheduler.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param scheduler.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param scheduler.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
   ## @param scheduler.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
