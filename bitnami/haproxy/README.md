@@ -167,6 +167,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                    | `50`                      |
 | `command`                                           | Override default container command (useful when using custom images)                                    | `[]`                      |
 | `args`                                              | Override default container args (useful when using custom images)                                       | `[]`                      |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                      | `false`                   |
 | `hostAliases`                                       | haproxy pods host aliases                                                                               | `[]`                      |
 | `podLabels`                                         | Extra labels for haproxy pods                                                                           | `{}`                      |
 | `podAnnotations`                                    | Annotations for haproxy pods                                                                            | `{}`                      |

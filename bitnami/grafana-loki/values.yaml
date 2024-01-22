@@ -393,6 +393,9 @@ compactor:
   ## @param compactor.lifecycleHooks for the compactor container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param compactor.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param compactor.hostAliases compactor pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -606,7 +609,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r3
+    tag: 1.25.3-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -758,6 +761,9 @@ gateway:
   ## @param gateway.lifecycleHooks for the gateway container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param gateway.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param gateway.hostAliases gateway pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1133,6 +1139,9 @@ indexGateway:
   ## @param indexGateway.lifecycleHooks for the indexGateway container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param indexGateway.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param indexGateway.hostAliases indexGateway pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1411,6 +1420,9 @@ distributor:
   ## @param distributor.lifecycleHooks for the distributor container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param distributor.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param distributor.hostAliases distributor pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1689,6 +1701,9 @@ ingester:
     runAsNonRoot: true
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param ingester.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param ingester.hostAliases ingester pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2015,6 +2030,9 @@ querier:
   ## @param querier.lifecycleHooks for the Querier container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param querier.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param querier.hostAliases querier pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2333,6 +2351,9 @@ queryFrontend:
   ## @param queryFrontend.lifecycleHooks for the queryFrontend container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param queryFrontend.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param queryFrontend.hostAliases queryFrontend pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2621,6 +2642,9 @@ queryScheduler:
   ## @param queryScheduler.lifecycleHooks for the queryScheduler container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param queryScheduler.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param queryScheduler.hostAliases queryScheduler pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2906,6 +2930,9 @@ ruler:
     runAsNonRoot: true
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param ruler.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param ruler.hostAliases ruler pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -3227,6 +3254,9 @@ tableManager:
   ## @param tableManager.lifecycleHooks for the tableManager container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param tableManager.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param tableManager.hostAliases tableManager pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -3402,7 +3432,7 @@ promtail:
   image:
     registry: docker.io
     repository: bitnami/promtail
-    tag: 2.9.3-debian-11-r0
+    tag: 2.9.3-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3539,6 +3569,9 @@ promtail:
     runAsNonRoot: false
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param promtail.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param promtail.hostAliases promtail pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -3803,7 +3836,7 @@ promtail:
     ## @param promtail.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the promtail.serviceAccount.created
     ## Can be set to false if pods using this promtail.serviceAccount.do not need to use K8s API
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param promtail.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
@@ -3831,7 +3864,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r94
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3958,7 +3991,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.22-debian-11-r2
+    tag: 1.6.23-debian-11-r0
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -3999,7 +4032,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.22-debian-11-r2
+    tag: 1.6.23-debian-11-r0
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -4041,7 +4074,7 @@ memcachedindexqueries:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.22-debian-11-r2
+    tag: 1.6.23-debian-11-r0
     digest: ""
   ## @param memcachedindexqueries.architecture Memcached architecture
   ##
@@ -4082,7 +4115,7 @@ memcachedindexwrites:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.22-debian-11-r2
+    tag: 1.6.23-debian-11-r0
     digest: ""
   ## @param memcachedindexwrites.architecture Memcached architecture
   ##

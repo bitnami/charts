@@ -80,7 +80,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.6.1-debian-11-r0
+  tag: 3.6.1-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -642,6 +642,9 @@ controller:
     readOnlyRootFilesystem: true
     capabilities:
       drop: ["ALL"]
+  ## @param controller.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param controller.hostAliases Kafka pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1039,6 +1042,9 @@ broker:
     readOnlyRootFilesystem: true
     capabilities:
       drop: ["ALL"]
+  ## @param broker.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param broker.hostAliases Kafka pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1316,6 +1322,10 @@ service:
   ##   - 10.10.10.0/24
   ##
   loadBalancerSourceRanges: []
+  ## @param service.allocateLoadBalancerNodePorts Whether to allocate node ports when service type is LoadBalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
+  ##
+  allocateLoadBalancerNodePorts: true 
   ## @param service.externalTrafficPolicy Kafka service external traffic policy
   ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
@@ -1366,7 +1376,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.29.0-debian-11-r0
+      tag: 1.29.0-debian-11-r2
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1460,6 +1470,10 @@ externalAccess:
       ## - 10.10.10.0/24
       ##
       loadBalancerSourceRanges: []
+      ## @param externalAccess.controller.service.allocateLoadBalancerNodePorts Whether to allocate node ports when service type is LoadBalancer
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
+      ##
+      allocateLoadBalancerNodePorts: true 
       ## @param externalAccess.controller.service.nodePorts Array of node ports used for each Kafka broker. Length must be the same as replicaCount
       ## e.g:
       ## nodePorts:
@@ -1538,6 +1552,10 @@ externalAccess:
       ## - 10.10.10.0/24
       ##
       loadBalancerSourceRanges: []
+      ## @param externalAccess.broker.service.allocateLoadBalancerNodePorts Whether to allocate node ports when service type is LoadBalancer
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
+      ##
+      allocateLoadBalancerNodePorts: true 
       ## @param externalAccess.broker.service.nodePorts Array of node ports used for each Kafka broker. Length must be the same as replicaCount
       ## e.g:
       ## nodePorts:
@@ -1644,7 +1662,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r94
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1728,7 +1746,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.7.0-debian-11-r134
+      tag: 1.7.0-debian-11-r136
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1880,6 +1898,9 @@ metrics:
       readOnlyRootFilesystem: true
       capabilities:
         drop: ["ALL"]
+    ## @param metrics.kafka.automountServiceAccountToken Mount Service Account token in pod
+    ##
+    automountServiceAccountToken: false
     ## @param metrics.kafka.hostAliases Kafka exporter pods host aliases
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##
@@ -2044,7 +2065,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.20.0-debian-11-r2
+      tag: 0.20.0-debian-11-r3
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2215,6 +2236,9 @@ provisioning:
   ## @param provisioning.enabled Enable kafka provisioning Job
   ##
   enabled: false
+  ## @param provisioning.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param provisioning.numPartitions Default number of partitions for topics when unspecified
   ##
   numPartitions: 1

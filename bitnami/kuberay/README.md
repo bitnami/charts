@@ -139,6 +139,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                       | `RuntimeDefault`                   |
 | `operator.command`                                           | Override default container command (useful when using custom images)                                                                                                   | `[]`                               |
 | `operator.args`                                              | Override default container args (useful when using custom images)                                                                                                      | `[]`                               |
+| `operator.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                     | `true`                             |
 | `operator.hostAliases`                                       | Kuberay Operator pods host aliases                                                                                                                                     | `[]`                               |
 | `operator.podLabels`                                         | Extra labels for Kuberay Operator pods                                                                                                                                 | `{}`                               |
 | `operator.podAnnotations`                                    | Annotations for Kuberay Operator pods                                                                                                                                  | `{}`                               |
@@ -210,14 +211,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kuberay Operator RBAC Parameters
 
-| Name                                                   | Description                                                      | Value  |
-| ------------------------------------------------------ | ---------------------------------------------------------------- | ------ |
-| `operator.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `operator.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`   |
-| `operator.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `operator.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `operator.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `operator.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                                   | Description                                                      | Value   |
+| ------------------------------------------------------ | ---------------------------------------------------------------- | ------- |
+| `operator.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `operator.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`    |
+| `operator.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `operator.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `operator.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `operator.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Kuberay Operator Metrics Parameters
 
@@ -292,6 +293,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `apiserver.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                       | `RuntimeDefault`                    |
 | `apiserver.command`                                           | Override default container command (useful when using custom images)                                                                                                   | `[]`                                |
 | `apiserver.args`                                              | Override default container args (useful when using custom images)                                                                                                      | `[]`                                |
+| `apiserver.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                     | `true`                              |
 | `apiserver.hostAliases`                                       | Kuberay API Server pods host aliases                                                                                                                                   | `[]`                                |
 | `apiserver.podLabels`                                         | Extra labels for Kuberay API Server pods                                                                                                                               | `{}`                                |
 | `apiserver.podAnnotations`                                    | Annotations for Kuberay API Server pods                                                                                                                                | `{}`                                |
@@ -365,14 +367,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kuberay API Server RBAC Parameters
 
-| Name                                                    | Description                                                      | Value  |
-| ------------------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `apiserver.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `apiserver.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`   |
-| `apiserver.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `apiserver.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `apiserver.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `apiserver.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                                    | Description                                                      | Value   |
+| ------------------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `apiserver.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `apiserver.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`    |
+| `apiserver.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `apiserver.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `apiserver.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `apiserver.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Kuberay API Server Metrics Parameters
 
@@ -422,6 +424,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.head.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `cluster.head.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `cluster.head.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `cluster.head.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `cluster.head.hostAliases`                                       | Ray Cluster Worker (common) pods host aliases                                                                            | `[]`             |
 | `cluster.head.podLabels`                                         | Extra labels for Ray Cluster Worker (common) pods                                                                        | `{}`             |
 | `cluster.head.podAnnotations`                                    | Annotations for Ray Cluster Worker (common) pods                                                                         | `{}`             |
@@ -476,6 +479,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.worker.common.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `cluster.worker.common.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `cluster.worker.common.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `cluster.worker.common.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `cluster.worker.common.hostAliases`                                       | Ray Cluster Worker (common) pods host aliases                                                                            | `[]`             |
 | `cluster.worker.common.podLabels`                                         | Extra labels for Ray Cluster Worker (common) pods                                                                        | `{}`             |
 | `cluster.worker.common.podAnnotations`                                    | Annotations for Ray Cluster Worker (common) pods                                                                         | `{}`             |

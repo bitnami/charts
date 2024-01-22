@@ -50,6 +50,7 @@ spec:
     spec:
       serviceAccountName: {{ template "elasticsearch.coordinating.serviceAccountName" . }}
       {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.coordinating.automountServiceAccountToken }}
       {{- if .Values.coordinating.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.hostAliases "context" $) | nindent 8 }}
       {{- end }}

@@ -208,7 +208,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r3
+    tag: 1.25.3-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -442,6 +442,9 @@ frontend:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## @param frontend.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param frontend.hostAliases Custom host aliases for frontend pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -815,6 +818,9 @@ dashboard:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## @param dashboard.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param dashboard.hostAliases Custom host aliases for Dashboard pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -874,7 +880,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.9.0-debian-11-r13
+    tag: 2.9.0-debian-11-r15
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -901,7 +907,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.9.0-debian-11-r14
+    tag: 2.9.0-debian-11-r16
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1146,6 +1152,9 @@ apprepository:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## @param apprepository.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param apprepository.hostAliases Custom host aliases for AppRepository Controller pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1181,7 +1190,7 @@ apprepository:
   serviceAccount:
     create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
 
 ## @section Auth Proxy parameters
@@ -1205,7 +1214,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 7.5.1-debian-11-r12
+    tag: 7.5.1-debian-11-r14
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1664,7 +1673,7 @@ kubeappsapis:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apis
-    tag: 2.9.0-debian-11-r14
+    tag: 2.9.0-debian-11-r16
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1903,6 +1912,9 @@ kubeappsapis:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## @param kubeappsapis.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param kubeappsapis.hostAliases Custom host aliases for KubeappsAPIs pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1948,7 +1960,7 @@ kubeappsapis:
   serviceAccount:
     create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
 
 ## @section OCI Catalog chart configuration

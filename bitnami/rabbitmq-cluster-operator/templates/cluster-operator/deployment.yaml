@@ -37,6 +37,7 @@ spec:
       {{- if .Values.clusterOperator.schedulerName }}
       schedulerName: {{ .Values.clusterOperator.schedulerName | quote }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.clusterOperator.automountServiceAccountToken }}
       {{- if .Values.clusterOperator.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -94,6 +95,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            {{- if not .Values.clusterOperator.watchAllNamespaces }}      
+            {{- $watchNamespaces := default (list (include "common.names.namespace" .)) .Values.clusterOperator.watchNamespaces }}
+            - name: OPERATOR_SCOPE_NAMESPACE
+              value: {{ join "," $watchNamespaces | quote }}
+            {{- end }}
             - name: DEFAULT_RABBITMQ_IMAGE
               value: {{ include "rmqco.rabbitmq.image" . }}
             - name: DEFAULT_USER_UPDATER_IMAGE

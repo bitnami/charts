@@ -356,6 +356,9 @@ web:
   ## @param web.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param web.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param web.hostAliases Mastodon web pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -642,6 +645,9 @@ sidekiq:
   ## @param sidekiq.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param sidekiq.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param sidekiq.hostAliases Mastodon sidekiq pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -878,6 +884,9 @@ streaming:
   ## @param streaming.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param streaming.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param streaming.hostAliases Mastodon streaming pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1173,6 +1182,9 @@ initJob:
   resources:
     limits: {}
     requests: {}
+  ## @param initJob.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param initJob.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1262,7 +1274,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r94
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

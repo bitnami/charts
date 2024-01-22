@@ -38,6 +38,7 @@ spec:
       {{- end }}
     spec:
       {{- include "apache.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       # yamllint disable rule:indentation
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
@@ -47,6 +48,7 @@ spec:
       schedulerName: {{ .Values.schedulerName }}
       {{- end }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
+      serviceAccountName: {{ include "apache.serviceAccountName" .}}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}

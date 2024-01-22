@@ -107,6 +107,9 @@ forwarder:
   ## @param forwarder.daemonGroup Fluentd forwarder daemon system group
   ##
   daemonGroup: root
+  ## @param forwarder.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param forwarder.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -556,7 +559,7 @@ forwarder:
     annotations: {}
     ## @param forwarder.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## Role Based Access
   ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
@@ -685,6 +688,9 @@ aggregator:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
+  ## @param aggregator.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param aggregator.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
