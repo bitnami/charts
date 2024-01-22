@@ -32,6 +32,7 @@ spec:
     spec:
       serviceAccountName: {{ template "appsmith.serviceAccountName" . }}
       {{- include "appsmith.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.rts.automountServiceAccountToken }}
       {{- if .Values.rts.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.rts.hostAliases "context" $) | nindent 8 }}
       {{- end }}

@@ -221,6 +221,7 @@ kubectl delete pvc -l release=my-release
 | `primary.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                | `false`               |
 | `primary.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`             |
 | `primary.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault`      |
+| `primary.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`               |
 | `primary.hostAliases`                                       | PostgreSQL primary pods host aliases                                                                                     | `[]`                  |
 | `primary.hostNetwork`                                       | Specify if host network should be enabled for PostgreSQL pod (postgresql primary)                                        | `false`               |
 | `primary.hostIPC`                                           | Specify if host IPC should be enabled for PostgreSQL pod (postgresql primary)                                            | `false`               |
@@ -325,6 +326,7 @@ kubectl delete pvc -l release=my-release
 | `readReplicas.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                | `false`               |
 | `readReplicas.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`             |
 | `readReplicas.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault`      |
+| `readReplicas.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`               |
 | `readReplicas.hostAliases`                                       | PostgreSQL read only pods host aliases                                                                                   | `[]`                  |
 | `readReplicas.hostNetwork`                                       | Specify if host network should be enabled for PostgreSQL pod (PostgreSQL read only)                                      | `false`               |
 | `readReplicas.hostIPC`                                           | Specify if host IPC should be enabled for PostgreSQL pod (postgresql primary)                                            | `false`               |

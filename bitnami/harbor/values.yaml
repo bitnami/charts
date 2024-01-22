@@ -818,6 +818,9 @@ nginx:
   ## @param nginx.lifecycleHooks LifecycleHook for the NGINX container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param nginx.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param nginx.hostAliases NGINX pods host aliases
   ##
   hostAliases: []

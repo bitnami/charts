@@ -95,6 +95,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                                | Description                                                                               | Value            |
 | --------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------- |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                        | `false`          |
 | `hostAliases`                                       | Deployment pod host aliases                                                               | `[]`             |
 | `containerPorts.http`                               | HTTP port to expose at container level                                                    | `8080`           |
 | `containerPorts.https`                              | HTTPS port to expose at container level                                                   | `8443`           |

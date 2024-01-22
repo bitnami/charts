@@ -104,6 +104,13 @@ jobmanager:
   ## @param jobmanager.lifecycleHooks [object] Override default etcd container hooks
   ##
   lifecycleHooks: {}
+  ## @param jobmanager.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param jobmanager.hostAliases Set pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## @param jobmanager.extraEnvVars Extra environment variables to be set on flink container
   ## For example:
   ##  - name: FOO
@@ -423,6 +430,13 @@ taskmanager:
   ## @param taskmanager.lifecycleHooks [object] Override default etcd container hooks
   ##
   lifecycleHooks: {}
+  ## @param taskmanager.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param taskmanager.hostAliases Set pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## @param taskmanager.extraEnvVars Extra environment variables to be set on flink container
   ## For example:
   ##  - name: FOO

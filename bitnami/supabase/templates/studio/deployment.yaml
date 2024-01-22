@@ -40,6 +40,7 @@ spec:
     spec:
       serviceAccountName: {{ template "supabase.serviceAccountName" . }}
       {{- include "supabase.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.studio.automountServiceAccountToken }}
       {{- if .Values.studio.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.studio.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -134,7 +135,7 @@ spec:
           resources: {{- toYaml .Values.studio.resources | nindent 12 }}
           {{- end }}
           ports:
-            - name: http
+            - name: http-studio
               containerPort: {{ .Values.studio.containerPorts.http }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.studio.customLivenessProbe }}
@@ -143,7 +144,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.studio.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
-              port: http
+              port: http-studio
           {{- end }}
           {{- if .Values.studio.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.studio.customReadinessProbe "context" $) | nindent 12 }}
@@ -151,7 +152,7 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.studio.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
-              port: http
+              port: http-studio
           {{- end }}
           {{- if .Values.studio.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.studio.customStartupProbe "context" $) | nindent 12 }}
@@ -159,7 +160,7 @@ spec:
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.studio.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
-              port: http
+              port: http-studio
           {{- end }}
           {{- end }}
           {{- if .Values.studio.lifecycleHooks }}

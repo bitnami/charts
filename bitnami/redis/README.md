@@ -180,6 +180,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.updateStrategy.type`                               | Redis&reg; master statefulset strategy type                                                           | `RollingUpdate`          |
 | `master.minReadySeconds`                                   | How many seconds a pod needs to be ready before killing the next, during update                       | `0`                      |
 | `master.priorityClassName`                                 | Redis&reg; master pods' priorityClassName                                                             | `""`                     |
+| `master.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                    | `false`                  |
 | `master.hostAliases`                                       | Redis&reg; master pods host aliases                                                                   | `[]`                     |
 | `master.podLabels`                                         | Extra labels for Redis&reg; master pods                                                               | `{}`                     |
 | `master.podAnnotations`                                    | Annotations for Redis&reg; master pods                                                                | `{}`                     |
@@ -298,6 +299,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.minReadySeconds`                                   | How many seconds a pod needs to be ready before killing the next, during update                         | `0`                      |
 | `replica.priorityClassName`                                 | Redis&reg; replicas pods' priorityClassName                                                             | `""`                     |
 | `replica.podManagementPolicy`                               | podManagementPolicy to manage scaling operation of %%MAIN_CONTAINER_NAME%% pods                         | `""`                     |
+| `replica.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                      | `false`                  |
 | `replica.hostAliases`                                       | Redis&reg; replicas pods host aliases                                                                   | `[]`                     |
 | `replica.podLabels`                                         | Extra labels for Redis&reg; replicas pods                                                               | `{}`                     |
 | `replica.podAnnotations`                                    | Annotations for Redis&reg; replicas pods                                                                | `{}`                     |
