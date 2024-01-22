@@ -20,6 +20,17 @@ Return the proper tensorflow-resnet client image name
 {{- end -}}
 
 {{/*
+ Create the name of the service account to use
+ */}}
+{{- define "tensorflow-resnet.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "tensorflow-resnet.imagePullSecrets" -}}

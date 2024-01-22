@@ -48,6 +48,7 @@ spec:
       hostNetwork: {{ .Values.controlPlane.hostNetwork }}
       {{- end }}
       {{- include "apisix.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.controlPlane.automountServiceAccountToken }}
       {{- if .Values.controlPlane.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.hostAliases "context" $) | nindent 8 }}
       {{- end }}

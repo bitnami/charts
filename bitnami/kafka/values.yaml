@@ -1316,6 +1316,10 @@ service:
   ##   - 10.10.10.0/24
   ##
   loadBalancerSourceRanges: []
+  ## @param service.allocateLoadBalancerNodePorts Whether to allocate node ports when service type is LoadBalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
+  ##
+  allocateLoadBalancerNodePorts: true 
   ## @param service.externalTrafficPolicy Kafka service external traffic policy
   ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
@@ -1460,6 +1464,10 @@ externalAccess:
       ## - 10.10.10.0/24
       ##
       loadBalancerSourceRanges: []
+      ## @param externalAccess.controller.service.allocateLoadBalancerNodePorts Whether to allocate node ports when service type is LoadBalancer
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
+      ##
+      allocateLoadBalancerNodePorts: true 
       ## @param externalAccess.controller.service.nodePorts Array of node ports used for each Kafka broker. Length must be the same as replicaCount
       ## e.g:
       ## nodePorts:
@@ -1538,6 +1546,10 @@ externalAccess:
       ## - 10.10.10.0/24
       ##
       loadBalancerSourceRanges: []
+      ## @param externalAccess.broker.service.allocateLoadBalancerNodePorts Whether to allocate node ports when service type is LoadBalancer
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
+      ##
+      allocateLoadBalancerNodePorts: true 
       ## @param externalAccess.broker.service.nodePorts Array of node ports used for each Kafka broker. Length must be the same as replicaCount
       ## e.g:
       ## nodePorts:
