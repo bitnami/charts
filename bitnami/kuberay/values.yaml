@@ -256,6 +256,9 @@ operator:
   ## @param operator.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param operator.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param operator.hostAliases Kuberay Operator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -623,7 +626,7 @@ operator:
     annotations: {}
     ## @param operator.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Kuberay Operator Metrics Parameters
   ##
@@ -842,6 +845,9 @@ apiserver:
   ## @param apiserver.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param apiserver.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param apiserver.hostAliases Kuberay API Server pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1212,7 +1218,7 @@ apiserver:
     annotations: {}
     ## @param apiserver.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Kuberay API Server Metrics Parameters
   ##
@@ -1341,6 +1347,9 @@ cluster:
     ## @param cluster.head.args Override default container args (useful when using custom images)
     ##
     args: []
+    ## @param cluster.head.automountServiceAccountToken Mount Service Account token in pod
+    ##
+    automountServiceAccountToken: false
     ## @param cluster.head.hostAliases Ray Cluster Worker (common) pods host aliases
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##
@@ -1530,6 +1539,9 @@ cluster:
       ## @param cluster.worker.common.args Override default container args (useful when using custom images)
       ##
       args: []
+      ## @param cluster.worker.common.automountServiceAccountToken Mount Service Account token in pod
+      ##
+      automountServiceAccountToken: false
       ## @param cluster.worker.common.hostAliases Ray Cluster Worker (common) pods host aliases
       ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
       ##
