@@ -170,7 +170,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `discourse.resources.limits`                             | The resources limits for the Discourse containers                                            | `{}`             |
 | `discourse.resources.requests`                           | The requested resources for the Discourse containers                                         | `{}`             |
 | `discourse.containerSecurityContext.enabled`             | Enabled Discourse containers' Security Context                                               | `true`           |
-| `discourse.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                             | `{}`             |
+| `discourse.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                             | `nil`            |
 | `discourse.containerSecurityContext.runAsUser`           | Set Discourse containers' Security Context runAsUser                                         | `0`              |
 | `discourse.containerSecurityContext.runAsNonRoot`        | Set Discourse containers' Security Context runAsNonRoot                                      | `false`          |
 | `discourse.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                             | `RuntimeDefault` |
@@ -218,7 +218,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidekiq.resources.limits`                             | The resources limits for the Sidekiq containers                                            | `{}`                                                |
 | `sidekiq.resources.requests`                           | The requested resources for the Sidekiq containers                                         | `{}`                                                |
 | `sidekiq.containerSecurityContext.enabled`             | Enabled Sidekiq containers' Security Context                                               | `true`                                              |
-| `sidekiq.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                           | `{}`                                                |
+| `sidekiq.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                           | `nil`                                               |
 | `sidekiq.containerSecurityContext.runAsUser`           | Set Sidekiq containers' Security Context runAsUser                                         | `0`                                                 |
 | `sidekiq.containerSecurityContext.runAsNonRoot`        | Set Sidekiq containers' Security Context runAsNonRoot                                      | `false`                                             |
 | `sidekiq.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                           | `RuntimeDefault`                                    |
@@ -267,7 +267,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                            | Init container volume-permissions image pull secrets                                                                              | `[]`                       |
 | `volumePermissions.resources.limits`                             | Init container volume-permissions resource limits                                                                                 | `{}`                       |
 | `volumePermissions.resources.requests`                           | Init container volume-permissions resource requests                                                                               | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                  | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                  | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`           | User ID for the init container                                                                                                    | `0`                        |
 | `volumePermissions.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                  | `RuntimeDefault`           |
 
