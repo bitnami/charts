@@ -168,7 +168,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `web.podSecurityContext.fsGroup`                        | Set Mastodon web pod's Security Context fsGroup                                                                          | `1001`           |
 | `web.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `web.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `web.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `web.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `web.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `web.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -254,7 +254,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidekiq.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `sidekiq.podSecurityContext.fsGroup`                        | Set Mastodon sidekiq pod's Security Context fsGroup                                                                      | `1001`           |
 | `sidekiq.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `sidekiq.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `sidekiq.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `sidekiq.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `sidekiq.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `sidekiq.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -325,7 +325,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `streaming.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `streaming.podSecurityContext.fsGroup`                        | Set Mastodon streaming pod's Security Context fsGroup                                                                    | `1001`           |
 | `streaming.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `streaming.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `streaming.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `streaming.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `streaming.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `streaming.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -409,7 +409,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.backoffLimit`                                      | set backoff limit of the job                                                                                                   | `10`             |
 | `initJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Mastodon init job                                                  | `[]`             |
 | `initJob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                           | `true`           |
-| `initJob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                               | `{}`             |
+| `initJob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                               | `nil`            |
 | `initJob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                     | `1001`           |
 | `initJob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                  | `true`           |
 | `initJob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                    | `false`          |
@@ -460,7 +460,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                           | `[]`                       |
 | `volumePermissions.resources.limits`                        | The resources limits for the init container                                                     | `{}`                       |
 | `volumePermissions.resources.requests`                      | The requested resources for the init container                                                  | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                 | `0`                        |
 
 ### Other Parameters
