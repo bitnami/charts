@@ -168,7 +168,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                    | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set SonarQube&trade; pod's Security Context fsGroup                                            | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                           | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                               | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                               | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                     | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                  | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                    | `false`          |
@@ -243,7 +243,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `caCerts.secret`                                  | Name of the secret containing the certificates                                                                     | `ca-certs-secret`          |
 | `caCerts.resources.limits`                        | The resources limits for the init container                                                                        | `{}`                       |
 | `caCerts.resources.requests`                      | The requested resources for the init container                                                                     | `{}`                       |
-| `caCerts.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `{}`                       |
+| `caCerts.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `nil`                      |
 | `caCerts.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                    | `0`                        |
 
 ### SonarQube plugin provisioning parameters
@@ -260,7 +260,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `plugins.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
 | `plugins.resources.limits`                        | The resources limits for the init container                                                                        | `{}`                       |
 | `plugins.resources.requests`                      | The requested resources for the init container                                                                     | `{}`                       |
-| `plugins.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `{}`                       |
+| `plugins.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `nil`                      |
 | `plugins.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                    | `0`                        |
 
 ### Persistence Parameters
@@ -282,7 +282,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
 | `volumePermissions.resources.limits`                        | The resources limits for the init container                                                                        | `{}`                       |
 | `volumePermissions.resources.requests`                      | The requested resources for the init container                                                                     | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                    | `0`                        |
 
 ### Sysctl Image parameters
@@ -327,7 +327,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.resources.limits`                        | The resources limits for the init container                                                                  | `{}`                           |
 | `metrics.jmx.resources.requests`                      | The requested resources for the init container                                                               | `{}`                           |
 | `metrics.jmx.containerSecurityContext.enabled`        | Enabled JMX Exporter containers' Security Context                                                            | `true`                         |
-| `metrics.jmx.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                             | `{}`                           |
+| `metrics.jmx.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                             | `nil`                          |
 | `metrics.jmx.containerSecurityContext.runAsUser`      | Set JMX Exporter containers' Security Context runAsUser                                                      | `1001`                         |
 | `metrics.jmx.containerSecurityContext.runAsNonRoot`   | Set JMX Exporter containers' Security Context runAsNonRoot                                                   | `true`                         |
 | `metrics.jmx.whitelistObjectNames`                    | Allows setting which JMX objects you want to expose to via JMX stats to JMX Exporter                         | `[]`                           |
