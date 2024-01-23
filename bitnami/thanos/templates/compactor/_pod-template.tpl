@@ -20,7 +20,7 @@ metadata:
     {{- end }}
 spec:
   {{- include "thanos.imagePullSecrets" . | nindent 2 }}
-  serviceAccountName: {{ include "thanos.serviceAccountName" (dict "component" "compactor" "context" $) }}
+  serviceAccountName: {{ include "thanos.compactor.serviceAccountName" . }}
   automountServiceAccountToken: {{ .Values.compactor.automountServiceAccountToken }}
   {{- if .Values.compactor.hostAliases }}
   hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.hostAliases "context" $) | nindent 4 }}
@@ -104,7 +104,7 @@ spec:
         - compact
         - --log.level={{ .Values.compactor.logLevel }}
         - --log.format={{ .Values.compactor.logFormat }}
-        - --http-address=0.0.0.0:10902
+        - --http-address=0.0.0.0:{{ .Values.compactor.containerPorts.http }}
         - --data-dir=/data
         - --retention.resolution-raw={{ .Values.compactor.retentionResolutionRaw }}
         - --retention.resolution-5m={{ .Values.compactor.retentionResolution5m }}
@@ -137,7 +137,7 @@ spec:
       {{- end }}
       ports:
         - name: http
-          containerPort: 10902
+          containerPort: {{ .Values.compactor.containerPorts.http }}
           protocol: TCP
       {{- if .Values.compactor.customLivenessProbe }}
       livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.customLivenessProbe "context" $) | nindent 8 }}
