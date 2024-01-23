@@ -399,7 +399,7 @@ grafana:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param grafana.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param grafana.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param grafana.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param grafana.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param grafana.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param grafana.containerSecurityContext.privileged Set container's Security Context privileged
@@ -410,7 +410,7 @@ grafana:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -904,14 +904,14 @@ volumePermissions:
     requests: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
 
 ## @section Diagnostic Mode Parameters
