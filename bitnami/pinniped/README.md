@@ -126,7 +126,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `concierge.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `concierge.podSecurityContext.fsGroup`                        | Set Concierge pod's Security Context fsGroup                                                                             | `1001`           |
 | `concierge.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `concierge.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `concierge.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `concierge.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `concierge.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `concierge.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -237,7 +237,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `supervisor.podSecurityContext.fsGroup`                        | Set Supervisor pod's Security Context fsGroup                                                                            | `1001`           |
 | `supervisor.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `supervisor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `supervisor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `supervisor.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `supervisor.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `supervisor.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
