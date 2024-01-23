@@ -126,7 +126,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.fsGroup`                        | Set NGINX pod's Security Context fsGroup                                                  | `1001`           |
 | `podSecurityContext.sysctls`                        | sysctl settings of the NGINX pods                                                         | `[]`             |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`          |
@@ -267,7 +267,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.containerPorts.metrics`           | Prometheus exporter container port                                                                                                        | `9113`                           |
 | `metrics.podAnnotations`                   | Additional annotations for NGINX Prometheus exporter pod(s)                                                                               | `{}`                             |
 | `metrics.securityContext.enabled`          | Enabled NGINX Exporter containers' Security Context                                                                                       | `false`                          |
-| `metrics.securityContext.seLinuxOptions`   | Set SELinux options in container                                                                                                          | `{}`                             |
+| `metrics.securityContext.seLinuxOptions`   | Set SELinux options in container                                                                                                          | `nil`                            |
 | `metrics.securityContext.runAsUser`        | Set NGINX Exporter container's Security Context runAsUser                                                                                 | `1001`                           |
 | `metrics.service.port`                     | NGINX Prometheus exporter service port                                                                                                    | `9113`                           |
 | `metrics.service.annotations`              | Annotations for the Prometheus exporter service                                                                                           | `{}`                             |
