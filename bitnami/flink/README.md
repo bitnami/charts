@@ -153,7 +153,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jobmanager.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `jobmanager.podSecurityContext.fsGroup`                        | Set Apache Flink pod's Security Context fsGroup                                           | `1001`           |
 | `jobmanager.containerSecurityContext.enabled`                  | Enabled Apache Flink containers' Security Context                                         | `true`           |
-| `jobmanager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
+| `jobmanager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`            |
 | `jobmanager.containerSecurityContext.runAsUser`                | Set Apache Flink container's Security Context runAsUser                                   | `1001`           |
 | `jobmanager.containerSecurityContext.runAsNonRoot`             | Force the container to be run as non root                                                 | `true`           |
 | `jobmanager.containerSecurityContext.allowPrivilegeEscalation` | Allows privilege escalation                                                               | `false`          |
@@ -241,7 +241,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `taskmanager.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `taskmanager.podSecurityContext.fsGroup`                        | Set Apache Flink pod's Security Context fsGroup                                           | `1001`           |
 | `taskmanager.containerSecurityContext.enabled`                  | Enabled Apache Flink containers' Security Context                                         | `true`           |
-| `taskmanager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
+| `taskmanager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`            |
 | `taskmanager.containerSecurityContext.runAsUser`                | Set Apache Flink container's Security Context runAsUser                                   | `1001`           |
 | `taskmanager.containerSecurityContext.runAsNonRoot`             | Force the container to be run as non root                                                 | `true`           |
 | `taskmanager.containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                       | `false`          |
