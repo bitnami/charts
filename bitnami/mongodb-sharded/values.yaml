@@ -568,7 +568,7 @@ configsvr:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param configsvr.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param configsvr.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param configsvr.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param configsvr.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param configsvr.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param configsvr.containerSecurityContext.privileged Set container's Security Context privileged
@@ -579,7 +579,7 @@ configsvr:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -913,7 +913,7 @@ mongos:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param mongos.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param mongos.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param mongos.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param mongos.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param mongos.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param mongos.containerSecurityContext.privileged Set container's Security Context privileged
@@ -924,7 +924,7 @@ mongos:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1210,7 +1210,7 @@ shardsvr:
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param shardsvr.dataNode.containerSecurityContext.enabled Enabled containers' Security Context
-    ## @param shardsvr.dataNode.containerSecurityContext.seLinuxOptions Set SELinux options in container
+    ## @param shardsvr.dataNode.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param shardsvr.dataNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param shardsvr.dataNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param shardsvr.dataNode.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1221,7 +1221,7 @@ shardsvr:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: {}
+      seLinuxOptions: null
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -1526,7 +1526,7 @@ shardsvr:
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param shardsvr.arbiter.containerSecurityContext.enabled Enabled containers' Security Context
-    ## @param shardsvr.arbiter.containerSecurityContext.seLinuxOptions Set SELinux options in container
+    ## @param shardsvr.arbiter.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param shardsvr.arbiter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param shardsvr.arbiter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param shardsvr.arbiter.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1537,7 +1537,7 @@ shardsvr:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: {}
+      seLinuxOptions: null
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -1661,7 +1661,7 @@ metrics:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param metrics.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param metrics.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1672,7 +1672,7 @@ metrics:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
