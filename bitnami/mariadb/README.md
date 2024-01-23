@@ -445,7 +445,7 @@ These scripts are treated differently depending on their extension. While `.sh` 
 
 When using a `.sh` script, you may wish to perform a "one-time" action like creating a database. This can be achieved by adding a condition in the script to ensure that it is executed only on one node, as shown in the example below:
 
-```
+```yaml
 initdbScripts:
   my_init_script.sh: |
     #!/bin/sh
@@ -485,7 +485,7 @@ service:
 
 If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
 
-```
+```yaml
 initContainers:
   - name: your-image-name
     image: your-image

@@ -835,7 +835,7 @@ prometheus.additionalScrapeConfigsExternal.key
 
 It is possible to inject externally managed scrape configurations via a Secret by setting `prometheus.additionalScrapeConfigs.enabled` to `true` and `prometheus.additionalScrapeConfigs.type` to `external`. The secret must exist in the same namespace as the chart deployment. Set the secret name using the parameter `prometheus.additionalScrapeConfigs.external.name`, and the key containing the additional scrape configuration using the `prometheus.additionalScrapeConfigs.external.key`.
 
-```
+```text
 prometheus.additionalScrapeConfigs.enabled=true
 prometheus.additionalScrapeConfigs.type=external
 prometheus.additionalScrapeConfigs.external.name=kube-prometheus-prometheus-scrape-config
@@ -844,7 +844,7 @@ prometheus.additionalScrapeConfigs.external.key=additional-scrape-configs.yaml
 
 It is also possible to define scrape configuratios to be managed by the Helm chart by setting `prometheus.additionalScrapeConfigs.enabled` to `true` and `prometheus.additionalScrapeConfigs.type` to `internal`. You can then use `prometheus.additionalScrapeConfigs.internal.jobList` to define a list of additional scrape jobs for Prometheus.
 
-```
+```text
 prometheus.additionalScrapeConfigs.enabled=true
 prometheus.additionalScrapeConfigs.type=internal
 prometheus.additionalScrapeConfigs.internal.jobList=
@@ -863,7 +863,7 @@ It is possible to inject externally managed Prometheus alert relabel configurati
 
 Set the secret name using the parameter `prometheus.additionalAlertRelabelConfigsExternal.name`, and the key containing the additional alert relabel configuration using the `prometheus.additionalAlertRelabelConfigsExternal.key`. For instance, if you created a secret named `kube-prometheus-prometheus-alert-relabel-config` and it contains a file named `additional-alert-relabel-configs.yaml`, use the parameters below:
 
-```
+```text
 prometheus.additionalAlertRelabelConfigsExternal.enabled=true
 prometheus.additionalAlertRelabelConfigsExternal.name=kube-prometheus-prometheus-alert-relabel-config
 prometheus.additionalAlertRelabelConfigsExternal.key=additional-alert-relabel-configs.yaml

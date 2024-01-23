@@ -59,7 +59,7 @@ The Bitnami catalog offers both the `bitnami/grafana` and `bitnami/grafana-opera
 
 - The `bitnami/grafana` chart deploys a single Grafana installation (with Grafana Image Renderer) using a Kubernetes Deployment object (together with Services, PVCs, ConfigMaps, etc.). Its lifecycle is managed using Helm and, at the Grafana container level, the following operations are automated: persistence management, configuration based on environment variables and plugin initialization. The chart also allows deploying dashboards and data sources using ConfigMaps. The Deployments do not require any ServiceAccounts with special RBAC privileges so this solution would fit better in more restricted Kubernetes installations.
 
-```
+```text
                     +--------------+             +-----+
                     |              |             |     |
  Service & Ingress  |    Grafana   +<------------+ PVC |
@@ -80,7 +80,7 @@ Its lifecycle is managed using Helm and, at the Grafana container level, the fol
 
 - The `bitnami/grafana-operator` chart deploys a Grafana Operator installation using a Kubernetes Deployment. The operator will extend the Kubernetes API with the following objects: `Grafana`, `GrafanaDashboard` and `GrafanaDataSource`. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Grafana instance. Its lifecycle is managed using _kubectl_ on the Grafana, GrafanaDashboard and GrafanaDataSource objects.
 
-```
+```text
 +--------------------+
 |                    |      +---------------+
 |  Grafana Operator  |      |               |
@@ -96,7 +96,7 @@ Its lifecycle is managed using Helm and, at the Grafana container level, the fol
 
 The Operator will extend the Kubernetes API with the following objects: _Grafana_, _GrafanaDashboard_ and _GrafanaDataSource_. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Grafana instance. Its lifecycle is managed using _kubectl_ on the Grafana, GrafanaDashboard and GrafanaDataSource objects. The following figure shows the deployed objects after deploying a Grafana object using _kubectl_:
 
-```
+```text
 +--------------------+
 |                    |      +---------------+
 |  Grafana Operator  |      |               |

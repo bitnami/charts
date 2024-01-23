@@ -759,7 +759,7 @@ service:
 
 If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
 
-```
+```yaml
 initContainers:
   - name: your-image-name
     image: your-image

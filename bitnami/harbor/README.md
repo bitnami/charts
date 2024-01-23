@@ -1186,8 +1186,6 @@ The upgrade process to *13.x.x* from *12.x.x* should be done by reusing the PVC(
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository. Additionally updates the PostgreSQL & Redis subcharts to their newest major 11.x.x and 16.x.x, respectively, which contain similar changes.
 
-#### What changes were introduced in this major version?
-
 - `harborAdminPassword` was renamed to `adminPassword`
 - `forcePassword` was deprecated
 - Traffic exposure was completely redesigned:
@@ -1203,7 +1201,7 @@ This major release renames several values in this chart and adds missing feature
 - `persistence.imageChartStorage.caBundleSecretName` was renamed to `persistence.imageChartStorage.caBundleSecret`
 - `core.uaaSecretName` was renamed to `core.uaaSecret`
 
-#### Upgrading Instructions
+#### How to upgrade to version 12.0.0
 
 To upgrade to *12.x.x* from *11.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `harbor`):
 
@@ -1275,8 +1273,6 @@ Please note that Clair might be fully deprecated from this chart in following up
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-#### What changes were introduced in this major version?
-
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running *helm dependency update*, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
@@ -1294,7 +1290,7 @@ Please note that Clair might be fully deprecated from this chart in following up
 - [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
 - [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
 
-#### Upgrading Instructions
+#### How to upgrade to version 9.0.0
 
 To upgrade to *9.0.0* from *8.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `harbor` and the release namespace `default`):
 
@@ -1302,25 +1298,33 @@ To upgrade to *9.0.0* from *8.x*, it should be done reusing the PVC(s) used to h
 
 1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
 
-        export HARBOR_PASSWORD=$(kubectl get secret --namespace default harbor-core-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
-        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default harbor-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=harbor,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+```console
+export HARBOR_PASSWORD=$(kubectl get secret --namespace default harbor-core-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default harbor-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=harbor,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+```
 
-2. Delete the PostgreSQL statefulset (notice the option *--cascade=false*)
+1. Delete the PostgreSQL statefulset (notice the option *--cascade=false*)
 
-        kubectl delete statefulsets.apps --cascade=false harbor-postgresql
+```console
+kubectl delete statefulsets.apps --cascade=false harbor-postgresql
+```
 
-3. Upgrade your release:
+1. Upgrade your release:
 
-        helm upgrade harbor bitnami/harbor \
-          --set harborAdminPassword=$HARBOR_PASSWORD \
-          --set postgresql.image.tag=$CURRENT_PG_VERSION \
-          --set postgresql.postgresqlPassword$POSTGRESQL_PASSWORD \
-          --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```console
+helm upgrade harbor bitnami/harbor \
+  --set harborAdminPassword=$HARBOR_PASSWORD \
+  --set postgresql.image.tag=$CURRENT_PG_VERSION \
+  --set postgresql.postgresqlPassword$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
 
-4. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
 
-        kubectl delete pod harbor-postgresql-0
+```console
+kubectl delete pod harbor-postgresql-0
+```
 
 ## License
 

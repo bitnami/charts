@@ -304,7 +304,7 @@ The Apache chart allows you to deploy a custom web application using one of the 
 
 Here is an example of deploying a web application from a Git repository using the first method:
 
-```
+```text
 cloneHtdocsFromGit.enabled=true
 cloneHtdocsFromGit.repository=https://github.com/mdn/beginner-html-site-styled.git
 cloneHtdocsFromGit.branch=master

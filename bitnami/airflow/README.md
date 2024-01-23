@@ -751,8 +751,6 @@ This major update the Redis&reg; subchart to its newest major, 17.0.0, which upd
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository. Additionally updates the PostgreSQL & Redis subcharts to their newest major 11.x.x and 16.x.x, respectively, which contain similar changes.
 
-#### What changes were introduced in this major version?
-
 - *auth.forcePassword* parameter is deprecated. The new version uses Helm's lookup functionalities and forcing passwords isn't required anymore.
 - *config* and *configurationConfigMap* have been renamed to *configuration* and *existingConfigmap*, respectively.
 - *dags.configMap* and *web.configMap* have been renamed to *dags.existingConfigmap* and *web.existingConfigmap*, respectively.
@@ -765,7 +763,7 @@ This major release renames several values in this chart and adds missing feature
 - Support for Network Policies is dropped and it'll be properly added in the future.
 - The secret keys *airflow-fernetKey* and *airflow-secretKey* were renamed to *airflow-fernet-key* and *airflow-secret-key*, respectively.
 
-#### Upgrading Instructions
+#### How to upgrade to version 12.0.0
 
 To upgrade to *12.0.0* from *11.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *airflow* and the release namespace *default*):
 
@@ -782,7 +780,7 @@ To upgrade to *12.0.0* from *11.x*, it should be done reusing the PVC(s) used to
         export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=airflow,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
 ```
 
-2. Delete the Airflow worker & PostgreSQL statefulset (notice the option *--cascade=false*) and secrets:
+1. Delete the Airflow worker & PostgreSQL statefulset (notice the option *--cascade=false*) and secrets:
 
 ```console
         kubectl delete statefulsets.apps --cascade=false airflow-postgresql
@@ -791,7 +789,7 @@ To upgrade to *12.0.0* from *11.x*, it should be done reusing the PVC(s) used to
         kubectl delete secret airflow --namespace default
 ```
 
-3. Upgrade your release using the same PostgreSQL version:
+1. Upgrade your release using the same PostgreSQL version:
 
 ```console
         CURRENT_PG_VERSION=$(kubectl exec airflow-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
@@ -808,7 +806,7 @@ To upgrade to *12.0.0* from *11.x*, it should be done reusing the PVC(s) used to
           --set redis.cluster.enabled=true
 ```
 
-4. Delete the existing Airflow worker & PostgreSQL pods and the new statefulset will create a new one:
+1. Delete the existing Airflow worker & PostgreSQL pods and the new statefulset will create a new one:
 
 ```console
         kubectl delete pod airflow-postgresql-0
@@ -825,9 +823,7 @@ This major updates the Redis&reg; subchart to it newest major, 14.0.0, which con
 
 ### To 7.0.0
 
-[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-#### What changes were introduced in this major version?
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL. The following changes were introduced in this version:
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
@@ -857,7 +853,7 @@ This major updates the Redis&reg; subchart to it newest major, 14.0.0, which con
 - [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
 - [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
 
-#### Upgrading Instructions
+#### How to upgrade to version 7.0.0
 
 To upgrade to *7.0.0* from *6.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *airflow* and the release namespace *default*):
 
@@ -874,14 +870,14 @@ To upgrade to *7.0.0* from *6.x*, it should be done reusing the PVC(s) used to h
         export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=airflow,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
 ```
 
-2. Delete the Airflow worker & PostgreSQL statefulset (notice the option *--cascade=false*):
+1. Delete the Airflow worker & PostgreSQL statefulset (notice the option *--cascade=false*):
 
 ```console
         kubectl delete statefulsets.apps --cascade=false airflow-postgresql
         kubectl delete statefulsets.apps --cascade=false airflow-worker
 ```
 
-3. Upgrade your release:
+1. Upgrade your release:
 
 > NOTE: Please remember to migrate all the values to its new path following the above notes, e.g: `airflow.loadExamples` -> `loadExamples` or `airflow.baseUrl=http://127.0.0.1:8080` -> `web.baseUrl=http://127.0.0.1:8080`.
 
@@ -898,7 +894,7 @@ To upgrade to *7.0.0* from *6.x*, it should be done reusing the PVC(s) used to h
           --set redis.cluster.enabled=true
 ```
 
-4. Delete the existing Airflow worker & PostgreSQL pods and the new statefulset will create a new one:
+1. Delete the existing Airflow worker & PostgreSQL pods and the new statefulset will create a new one:
 
 ```console
         kubectl delete pod airflow-postgresql-0

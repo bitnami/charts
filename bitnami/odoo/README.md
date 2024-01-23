@@ -394,49 +394,61 @@ To upgrade to *21.0.0* from *20.x*, it should be done reusing the PVC(s) used to
 
 1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
 
-        export ODOO_PASSWORD=$(kubectl get secret --namespace default odoo -o jsonpath="{.data.odoo-password}" | base64 --decode)
-        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default odoo-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=odoo,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```console
+export ODOO_PASSWORD=$(kubectl get secret --namespace default odoo -o jsonpath="{.data.odoo-password}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default odoo-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=odoo,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
 
-2. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+1. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
 
-        kubectl delete statefulsets.apps --cascade=false odoo-postgresql
-        kubectl delete secret odoo-postgresql --namespace default
+```console
+kubectl delete statefulsets.apps --cascade=false odoo-postgresql
+kubectl delete secret odoo-postgresql --namespace default
+```
 
-3. Upgrade your release using the same PostgreSQL version:
+1. Upgrade your release using the same PostgreSQL version:
 
-        CURRENT_PG_VERSION=$(kubectl exec odoo-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
-        helm upgrade odoo bitnami/odoo \
-          --set odooPassword=$ODOO_PASSWORD \
-          --set postgresql.image.tag=$CURRENT_PG_VERSION \
-          --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
-          --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```console
+CURRENT_PG_VERSION=$(kubectl exec odoo-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+helm upgrade odoo bitnami/odoo \
+  --set odooPassword=$ODOO_PASSWORD \
+  --set postgresql.image.tag=$CURRENT_PG_VERSION \
+  --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
 
-4. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
 
-        kubectl delete pod odoo-postgresql-0
+```console
+kubectl delete pod odoo-postgresql-0
+```
 
 ### 19.0.0
 
 The [Bitnami Odoo](https://github.com/bitnami/containers/tree/main/bitnami/odoo) image was refactored and now the source code is published in GitHub in the `rootfs` folder of the container image repository.
 
-#### Upgrading Instructions
+#### How to upgrade to version 19.0.0
 
 To upgrade to *19.0.0* from *18.x*, it should be done enabling the "volumePermissions" init container. To do so, follow the instructions below (the following example assumes that the release name is *odoo* and the release namespace *default*):
 
 1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
 
-        export ODOO_PASSWORD=$(kubectl get secret --namespace default odoo -o jsonpath="{.data.odoo-password}" | base64 --decode)
-        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default odoo-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=odoo,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```console
+export ODOO_PASSWORD=$(kubectl get secret --namespace default odoo -o jsonpath="{.data.odoo-password}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default odoo-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=odoo,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
 
-2. Upgrade your release:
+1. Upgrade your release:
 
-        helm upgrade odoo bitnami/odoo \
-          --set odooPassword=$ODOO_PASSWORD \
-          --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
-          --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
-          --set volumePermissions.enabled=true
+```console
+helm upgrade odoo bitnami/odoo \
+  --set odooPassword=$ODOO_PASSWORD \
+  --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
+  --set volumePermissions.enabled=true
+```
 
 Full compatibility is not guaranteed due to the amount of involved changes, however no breaking changes are expected aside from the ones mentioned above.
 
@@ -467,30 +479,38 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 - [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
 - [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
 
-#### Upgrading Instructions
+#### How to upgrade to version 17.0.0
 
 To upgrade to *17.0.0* from *16.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *odoo* and the release namespace *default*):
 
 1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
 
-        export ODOO_PASSWORD=$(kubectl get secret --namespace default odoo -o jsonpath="{.data.odoo-password}" | base64 --decode)
-        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default odoo-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=odoo,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+```console
+export ODOO_PASSWORD=$(kubectl get secret --namespace default odoo -o jsonpath="{.data.odoo-password}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default odoo-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=odoo,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+```
 
-2. Delete the PostgreSQL statefulset (notice the option *--cascade=false*):
+1. Delete the PostgreSQL statefulset (notice the option *--cascade=false*):
 
-        kubectl delete statefulsets.apps --cascade=false odoo-postgresql
+```console
+kubectl delete statefulsets.apps --cascade=false odoo-postgresql
+```
 
-3. Upgrade your release:
+1. Upgrade your release:
 
-        helm upgrade odoo bitnami/odoo \
-          --set odooPassword=$ODOO_PASSWORD \
-          --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
-          --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```console
+helm upgrade odoo bitnami/odoo \
+  --set odooPassword=$ODOO_PASSWORD \
+  --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
 
-4. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
 
-        kubectl delete pod odoo-postgresql-0
+```console
+kubectl delete pod odoo-postgresql-0
+```
 
 ## License
 

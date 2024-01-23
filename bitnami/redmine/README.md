@@ -606,34 +606,42 @@ The MariaDB subchart has been updated to the latest version (now it uses 10.6). 
 
 This major release updates the PostgreSQL subchart to its newest major *11.x.x*, which contain several changes in the supported values (check the [upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1100) to obtain more information).
 
-#### Upgrading Instructions
+#### How to upgrade to version 18.0.0
 
 To upgrade to *18.0.0* from *17.x* using PostgreSQL as database, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *redmine* and the release namespace *default*):
 
 1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
 
-        export REDMINE_PASSWORD=$(kubectl get secret --namespace default redmine -o jsonpath="{.data.redmine-password}" | base64 --decode)
-        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default redmine-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=redmine,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```console
+export REDMINE_PASSWORD=$(kubectl get secret --namespace default redmine -o jsonpath="{.data.redmine-password}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default redmine-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=redmine,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
 
-2. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+1. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
 
-        kubectl delete statefulsets.apps --cascade=false redmine-postgresql
-        kubectl delete secret redmine-postgresql --namespace default
+```console
+kubectl delete statefulsets.apps --cascade=false redmine-postgresql
+kubectl delete secret redmine-postgresql --namespace default
+```
 
-3. Upgrade your release using the same PostgreSQL version:
+1. Upgrade your release using the same PostgreSQL version:
 
-        CURRENT_PG_VERSION=$(kubectl exec redmine-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
-        helm upgrade redmine bitnami/redmine \
-          --set databaseType=postgresql \
-          --set redminePassword=$REDMINE_PASSWORD \
-          --set postgresql.image.tag=$CURRENT_PG_VERSION \
-          --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
-          --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```console
+CURRENT_PG_VERSION=$(kubectl exec redmine-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+helm upgrade redmine bitnami/redmine \
+  --set databaseType=postgresql \
+  --set redminePassword=$REDMINE_PASSWORD \
+  --set postgresql.image.tag=$CURRENT_PG_VERSION \
+  --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
 
-4. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
 
-        kubectl delete pod redmine-postgresql-0
+```console
+kubectl delete pod redmine-postgresql-0
+```
 
 ### 17.0.0
 
@@ -673,17 +681,21 @@ To upgrade to *16.0.0* from *15.x*, it should be done enabling the "volumePermis
 
 1. Obtain the credentials on your current release:
 
-        export REDMINE_PASSWORD=$(kubectl get secret --namespace default redmine -o jsonpath="{.data.redmine-password}" | base64 --decode)
-        export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-        export MARIADB_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+```console
+export REDMINE_PASSWORD=$(kubectl get secret --namespace default redmine -o jsonpath="{.data.redmine-password}" | base64 --decode)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+```
 
-2. Upgrade your release:
+1. Upgrade your release:
 
-        helm upgrade redmine bitnami/redmine \
-          --set redminePassword=$REDMINE_PASSWORD \
-          --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD \
-          --set mariadb.auth.password=$MARIADB_PASSWORD \
-          --set volumePermissions.enabled=true
+```console
+helm upgrade redmine bitnami/redmine \
+  --set redminePassword=$REDMINE_PASSWORD \
+  --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD \
+  --set mariadb.auth.password=$MARIADB_PASSWORD \
+  --set volumePermissions.enabled=true
+```
 
 ### To 15.0.0
 
@@ -708,22 +720,26 @@ To upgrade to *16.0.0* from *15.x*, it should be done enabling the "volumePermis
 - [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
 - [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
 
-#### Upgrading Instructions
+#### How to upgrade to version 15.0.0
 
 To upgrade to *15.0.0* from *14.x*, it should be done reusing the credentials on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *redmine* and the release namespace *default*):
 
 1. Obtain the credentials on your current release:
 
-        export REDMINE_PASSWORD=$(kubectl get secret --namespace default redmine -o jsonpath="{.data.redmine-password}" | base64 --decode)
-        export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-        export MARIADB_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+```console
+export REDMINE_PASSWORD=$(kubectl get secret --namespace default redmine -o jsonpath="{.data.redmine-password}" | base64 --decode)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+```
 
-2. Upgrade your release:
+1. Upgrade your release:
 
-        helm upgrade redmine bitnami/redmine \
-          --set redminePassword=$REDMINE_PASSWORD \
-          --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD \
-          --set mariadb.auth.password=$MARIADB_PASSWORD
+```console
+helm upgrade redmine bitnami/redmine \
+  --set redminePassword=$REDMINE_PASSWORD \
+  --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD \
+  --set mariadb.auth.password=$MARIADB_PASSWORD
+```
 
 ## License
 

@@ -579,23 +579,27 @@ To upgrade to _7.0.0_ from _6.x_, follow these steps below:
 
 1. Upgrade to the latest version of the _bitnami/discourse_ chart with Diagnostics mode:
 
-        helm upgrade --set diagnosticMode.enabled=true [...] bitnami/discourse
+```console
+helm upgrade --set diagnosticMode.enabled=true [...] bitnami/discourse
+```
 
-2. Remove or upgrade the _lazy-yt_ plugin. To remove it, execute the following command inside the _discourse_ container's shell:
+1. Remove or upgrade the _lazy-yt_ plugin. To remove it, execute the following command inside the _discourse_ container's shell:
 
-        rm -rf /bitnami/discourse/plugins/lazy-yt
+```console
+rm -rf /bitnami/discourse/plugins/lazy-yt
+```
 
-3. Ensure that the initialization scripts work:
+1. Ensure that the initialization scripts work:
 
-        /opt/bitnami/scripts/discourse/entrypoint.sh /opt/bitnami/scripts/discourse/setup.sh
+```console
+/opt/bitnami/scripts/discourse/entrypoint.sh /opt/bitnami/scripts/discourse/setup.sh
+```
 
-4. Upgrade the Helm deployment without Diagnostics mode.
+1. Upgrade the Helm deployment without Diagnostics mode.
 
 ### To 6.0.0
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository. Additionally updates the PostgreSQL & Redis subcharts to their newest major 11.x.x and 16.x.x, respectively, which contain similar changes.
-
-#### What changes were introduced in this major version?
 
 - _discourse.host_ and _discourse.siteName_ were renamed to _host_ and _siteName_, respectively.
 - _discourse.username_, _discourse.email_, _discourse.password_ and _discourse.existingSecret_ were regrouped under the _discourse.auth_ map.
@@ -603,7 +607,7 @@ This major release renames several values in this chart and adds missing feature
 - _service.port_ and _service.nodePort_ were regrouped under the _service.ports_ and _service.nodePorts_ maps, respectively.
 - _ingress_ map is completely redefined.
 
-#### Upgrading Instructions
+#### How to upgrade to version 6.0.0
 
 To upgrade to _6.0.0_ from _5.x_, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is _discourse_ and the release namespace _default_):
 
@@ -611,31 +615,39 @@ To upgrade to _6.0.0_ from _5.x_, it should be done reusing the PVC(s) used to h
 
 1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
 
-        export DISCOURSE_PASSWORD=$(kubectl get secret --namespace default discourse -o jsonpath="{.data.discourse-password}" | base64 --decode)
-        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default discourse-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-        export REDIS_PASSWORD=$(kubectl get secret --namespace default discourse-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
-        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=discourse,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```console
+export DISCOURSE_PASSWORD=$(kubectl get secret --namespace default discourse -o jsonpath="{.data.discourse-password}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default discourse-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export REDIS_PASSWORD=$(kubectl get secret --namespace default discourse-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=discourse,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
 
-2. Delete the PostgreSQL statefulset (notice the option _--cascade=false_) and secret:
+1. Delete the PostgreSQL statefulset (notice the option _--cascade=false_) and secret:
 
-        kubectl delete statefulsets.apps --cascade=false discourse-postgresql
-        kubectl delete secret postgresql --namespace default
+```console
+kubectl delete statefulsets.apps --cascade=false discourse-postgresql
+kubectl delete secret postgresql --namespace default
+```
 
-3. Upgrade your release using the same PostgreSQL version:
+1. Upgrade your release using the same PostgreSQL version:
 
-        CURRENT_PG_VERSION=$(kubectl exec discourse-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
-        helm upgrade discourse bitnami/discourse \
-          --set loadExamples=true \
-          --set web.baseUrl=http://127.0.0.1:8080 \
-          --set auth.password=$DISCOURSE_PASSWORD \
-          --set postgresql.image.tag=$CURRENT_VERSION \
-          --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
-          --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
-          --set redis.password=$REDIS_PASSWORD
+```console
+CURRENT_PG_VERSION=$(kubectl exec discourse-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+helm upgrade discourse bitnami/discourse \
+  --set loadExamples=true \
+  --set web.baseUrl=http://127.0.0.1:8080 \
+  --set auth.password=$DISCOURSE_PASSWORD \
+  --set postgresql.image.tag=$CURRENT_VERSION \
+  --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
+  --set redis.password=$REDIS_PASSWORD
+```
 
-4. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
 
-        kubectl delete pod discourse-postgresql-0
+```console
+kubectl delete pod discourse-postgresql-0
+```
 
 ### To 5.0.0
 
@@ -643,16 +655,14 @@ This major update the Redis&reg; subchart to its newest major, 15.0.0. For more 
 
 ### To 4.0.0
 
-#### What changes were introduced in this major version?
-
 The [Bitnami Discourse](https://github.com/bitnami/containers/tree/main/bitnami/discourse) image was refactored and now the source code is published in GitHub in the `rootfs` folder of the container image repository.
 
-#### Upgrading Instructions
+#### How to upgrade to version 4.0.0
 
 Upgrades from previous versions require to specify `--set volumePermissions.enabled=true` in order for all features to work properly:
 
 ```console
-$ helm upgrade discourse bitnami/discourse \
+helm upgrade discourse bitnami/discourse \
     --set discourse.host=$DISCOURSE_HOST \
     --set discourse.password=$DISCOURSE_PASSWORD \
     --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
@@ -670,8 +680,6 @@ This major updates the Redis&reg; subchart to it newest major, 14.0.0, which con
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-#### What changes were introduced in this major version?
-
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
 - After running _helm dependency update_, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
@@ -688,7 +696,7 @@ This major updates the Redis&reg; subchart to it newest major, 14.0.0, which con
 - [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
 - [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
 
-#### Upgrading Instructions
+#### How to upgrade to version 2.0.0
 
 To upgrade to _2.0.0_ from _1.x_, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is _discourse_ and the release namespace _default_):
 
@@ -696,37 +704,45 @@ To upgrade to _2.0.0_ from _1.x_, it should be done reusing the PVC(s) used to h
 
 1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
 
-        export DISCOURSE_PASSWORD=$(kubectl get secret --namespace default discourse -o jsonpath="{.data.discourse-password}" | base64 --decode)
-        export DISCOURSE_FERNET_KEY=$(kubectl get secret --namespace default discourse -o jsonpath="{.data.discourse-fernetKey}" | base64 --decode)
-        export DISCOURSE_SECRET_KEY=$(kubectl get secret --namespace default discourse -o jsonpath="{.data.discourse-secretKey}" | base64 --decode)
-        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default discourse-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-        export REDIS_PASSWORD=$(kubectl get secret --namespace default discourse-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
-        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=discourse,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```console
+export DISCOURSE_PASSWORD=$(kubectl get secret --namespace default discourse -o jsonpath="{.data.discourse-password}" | base64 --decode)
+export DISCOURSE_FERNET_KEY=$(kubectl get secret --namespace default discourse -o jsonpath="{.data.discourse-fernetKey}" | base64 --decode)
+export DISCOURSE_SECRET_KEY=$(kubectl get secret --namespace default discourse -o jsonpath="{.data.discourse-secretKey}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default discourse-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export REDIS_PASSWORD=$(kubectl get secret --namespace default discourse-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=discourse,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
 
-2. Delete the Airflow worker & PostgreSQL statefulset (notice the option _--cascade=false_):
+1. Delete the Airflow worker & PostgreSQL statefulset (notice the option _--cascade=false_):
 
-        kubectl delete statefulsets.apps --cascade=false discourse-postgresql
-        kubectl delete statefulsets.apps --cascade=false discourse-worker
+```console
+kubectl delete statefulsets.apps --cascade=false discourse-postgresql
+kubectl delete statefulsets.apps --cascade=false discourse-worker
+```
 
-3. Upgrade your release:
+1. Upgrade your release:
 
 > NOTE: Please remember to migrate all the values to its new path following the above notes, e.g: `discourse.loadExamples` -> `loadExamples` or `discourse.baseUrl=http://127.0.0.1:8080` -> `web.baseUrl=http://127.0.0.1:8080`.
 
-        helm upgrade discourse bitnami/discourse \
-          --set loadExamples=true \
-          --set web.baseUrl=http://127.0.0.1:8080 \
-          --set auth.password=$DISCOURSE_PASSWORD \
-          --set auth.fernetKey=$DISCOURSE_FERNET_KEY \
-          --set auth.secretKey=$DISCOURSE_SECRET_KEY \
-          --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
-          --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
-          --set redis.password=$REDIS_PASSWORD \
-          --set redis.cluster.enabled=true
+```console
+helm upgrade discourse bitnami/discourse \
+  --set loadExamples=true \
+  --set web.baseUrl=http://127.0.0.1:8080 \
+  --set auth.password=$DISCOURSE_PASSWORD \
+  --set auth.fernetKey=$DISCOURSE_FERNET_KEY \
+  --set auth.secretKey=$DISCOURSE_SECRET_KEY \
+  --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
+  --set redis.password=$REDIS_PASSWORD \
+  --set redis.cluster.enabled=true
+```
 
-4. Delete the existing Airflow worker & PostgreSQL pods and the new statefulset will create a new one:
+1. Delete the existing Airflow worker & PostgreSQL pods and the new statefulset will create a new one:
 
-        kubectl delete pod discourse-postgresql-0
-        kubectl delete pod discourse-worker-0
+```console
+kubectl delete pod discourse-postgresql-0
+kubectl delete pod discourse-worker-0
+```
 
 ## License
 

@@ -679,7 +679,7 @@ The chart configures the Hub [DummyAuthenticator](https://github.com/jupyterhub/
 
 The following example sets the [NativeAuthenticator](https://github.com/jupyterhub/nativeauthenticator) authenticator, and configures an admin user called *test*.
 
-```
+```yaml
 hub:
   configuration: |
     ...
@@ -741,7 +741,7 @@ service:
 
 Similarly, extra init containers can be added using the `hub.initContainers`, `proxy.initContainers` and `singleuser.initContainers` parameters.
 
-```
+```yaml
 initContainers:
   - name: your-image-name
     image: your-image
@@ -841,27 +841,35 @@ To upgrade to *1.0.0* from *0.x*, it should be done reusing the PVC(s) used to h
 
 1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
 
-        export JUPYTERHUB_PASSWORD=$(kubectl get secret --namespace default jupyterhub-hub -o jsonpath="{.data['values\.yaml']}" | base64 --decode | awk -F: '/password/ {gsub(/[ \t]+/, "", $2);print $2}' | tr -d '"')
-        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default jupyterhub-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=jupyterhub,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```console
+export JUPYTERHUB_PASSWORD=$(kubectl get secret --namespace default jupyterhub-hub -o jsonpath="{.data['values\.yaml']}" | base64 --decode | awk -F: '/password/ {gsub(/[ \t]+/, "", $2);print $2}' | tr -d '"')
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default jupyterhub-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=jupyterhub,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
 
-2. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+1. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
 
-        kubectl delete statefulsets.apps --cascade=false jupyterhub-postgresql
-        kubectl delete secret jupyterhub-postgresql --namespace default
+```console
+kubectl delete statefulsets.apps --cascade=false jupyterhub-postgresql
+kubectl delete secret jupyterhub-postgresql --namespace default
+```
 
-3. Upgrade your release using the same PostgreSQL version:
+1. Upgrade your release using the same PostgreSQL version:
 
-        CURRENT_PG_VERSION=$(kubectl exec jupyterhub-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
-        helm upgrade jupyterhub bitnami/jupyterhub \
-          --set hub.password=$JUPYTERHUB_PASSWORD \
-          --set postgresql.image.tag=$CURRENT_PG_VERSION \
-          --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
-          --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```console
+CURRENT_PG_VERSION=$(kubectl exec jupyterhub-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+helm upgrade jupyterhub bitnami/jupyterhub \
+  --set hub.password=$JUPYTERHUB_PASSWORD \
+  --set postgresql.image.tag=$CURRENT_PG_VERSION \
+  --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
 
-4. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
 
-        kubectl delete pod jupyterhub-postgresql-0
+```console
+kubectl delete pod jupyterhub-postgresql-0
+```
 
 ## License
 

@@ -516,7 +516,7 @@ service:
 
 If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
 
-```
+```yaml
 initContainers:
   - name: your-image-name
     image: your-image
@@ -608,12 +608,12 @@ This chart provides several ways to manage passwords:
 
 - Values passed to the chart: In this scenario, a new secret including all the passwords will be created during the chart installation. When upgrading, it is necessary to provide the secrets to the chart as shown below. Replace the KEYCLOAK_ADMIN_PASSWORD, KEYCLOAK_MANAGEMENT_PASSWORD, POSTGRESQL_PASSWORD and POSTGRESQL_PVC placeholders with the correct passwords and PVC name.
 
-```
-    $ helm upgrade keycloak bitnami/keycloak \
-        --set auth.adminPassword=KEYCLOAK_ADMIN_PASSWORD \
-        --set auth.managementPassword=KEYCLOAK_MANAGEMENT_PASSWORD \
-        --set postgresql.postgresqlPassword=POSTGRESQL_PASSWORD \
-        --set postgresql.persistence.existingClaim=POSTGRESQL_PVC
+```console
+helm upgrade keycloak bitnami/keycloak \
+  --set auth.adminPassword=KEYCLOAK_ADMIN_PASSWORD \
+  --set auth.managementPassword=KEYCLOAK_MANAGEMENT_PASSWORD \
+  --set postgresql.postgresqlPassword=POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=POSTGRESQL_PVC
 ```
 
 - An existing secret with all the passwords via the `existingSecret` parameter.
@@ -664,27 +664,35 @@ To upgrade to *7.0.0* from *6.x*, it should be done reusing the PVC(s) used to h
 
 1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
 
-        export KEYCLOAK_PASSWORD=$(kubectl get secret --namespace default keycloak -o jsonpath="{.data.admin-password}" | base64 --decode)
-        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default keycloak-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=keycloak,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```console
+export KEYCLOAK_PASSWORD=$(kubectl get secret --namespace default keycloak -o jsonpath="{.data.admin-password}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default keycloak-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=keycloak,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
 
-2. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+1. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
 
-        kubectl delete statefulsets.apps --cascade=false keycloak-postgresql
-        kubectl delete secret keycloak-postgresql --namespace default
+```console
+kubectl delete statefulsets.apps --cascade=false keycloak-postgresql
+kubectl delete secret keycloak-postgresql --namespace default
+```
 
-3. Upgrade your release using the same PostgreSQL version:
+1. Upgrade your release using the same PostgreSQL version:
 
-        CURRENT_PG_VERSION=$(kubectl exec keycloak-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
-        helm upgrade keycloak bitnami/keycloak \
-          --set auth.adminPassword=$KEYCLOAK_PASSWORD \
-          --set postgresql.image.tag=$CURRENT_PG_VERSION \
-          --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
-          --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```console
+CURRENT_PG_VERSION=$(kubectl exec keycloak-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+helm upgrade keycloak bitnami/keycloak \
+  --set auth.adminPassword=$KEYCLOAK_PASSWORD \
+  --set postgresql.image.tag=$CURRENT_PG_VERSION \
+  --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
 
-4. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
 
-        kubectl delete pod keycloak-postgresql-0
+```console
+kubectl delete pod keycloak-postgresql-0
+```
 
 ### To 1.0.0
 

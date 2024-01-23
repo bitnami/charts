@@ -547,7 +547,7 @@ service:
 
 If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
 
-```
+```yaml
 initContainers:
   - name: your-image-name
     image: your-image
@@ -594,28 +594,36 @@ This major release renames several values in this chart and adds missing feature
 
 1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
 
-        export CONCOURSE_LOCAL_USERS=$(kubectl get secret --namespace default concourse-web -o jsonpath="{.data.local-users}" | base64 --decode)
-        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default concourse-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=concourse,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```console
+export CONCOURSE_LOCAL_USERS=$(kubectl get secret --namespace default concourse-web -o jsonpath="{.data.local-users}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default concourse-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=concourse,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
 
-2. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+1. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
 
-        kubectl delete statefulsets.apps --cascade=false concourse-postgresql
-        kubectl delete secret postgresql --namespace default
+```console
+kubectl delete statefulsets.apps --cascade=false concourse-postgresql
+kubectl delete secret postgresql --namespace default
+```
 
-3. Upgrade your release using the same PostgreSQL version:
+1. Upgrade your release using the same PostgreSQL version:
 
-        CURRENT_PG_VERSION=$(kubectl exec concourse-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
-        helm upgrade concourse bitnami/concourse \
-          --set loadExamples=true \
-          --set secrets.localUsers=$CONCOURSE_LOCAL_USERS \
-          --set postgresql.image.tag=$CURRENT_VERSION \
-          --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
-          --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```console
+CURRENT_PG_VERSION=$(kubectl exec concourse-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+helm upgrade concourse bitnami/concourse \
+  --set loadExamples=true \
+  --set secrets.localUsers=$CONCOURSE_LOCAL_USERS \
+  --set postgresql.image.tag=$CURRENT_VERSION \
+  --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
 
-4. Delete the existing PostgreSQL pod and the new statefulset will create a new one:
+1. Delete the existing PostgreSQL pod and the new statefulset will create a new one:
 
-        kubectl delete pod concourse-postgresql-0
+```console
+kubectl delete pod concourse-postgresql-0
+```
 
 ## License
 

@@ -972,15 +972,21 @@ The chart can optionally start two metrics exporters:
 
 To create a separate Kafka exporter, use the parameter below:
 
-    metrics.kafka.enabled: true
+```text
+metrics.kafka.enabled: true
+```
 
 To expose JMX metrics to Prometheus, use the parameter below:
 
-    metrics.jmx.enabled: true
+```text
+metrics.jmx.enabled: true
+```
 
 - To enable Zookeeper chart metrics, use the parameter below:
 
-    zookeeper.metrics.enabled: true
+```text
+zookeeper.metrics.enabled: true
+```
 
 ### Sidecars
 

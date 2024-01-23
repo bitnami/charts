@@ -445,7 +445,7 @@ To configure Cert Manager, create an Issuer object. The structure of this object
 
 To create a self signed issuer to generate a self signed certificate, declare an Issuer, a ClusterIssuer and a Certificate, as shown below:
 
-```
+```yaml
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
@@ -481,7 +481,7 @@ Next, use the ClusterIssuer to generate certificates for the applications in you
 
 After the Ingress resource is ready, Cert Manager will create a secret. This secret contains the generated TLS certificate. This can be checked as shown below:
 
-```
+```text
 $ kubectl get secret --namespace=sandbox
 NAME                  TYPE                                  DATA   AGE
 letsencrypt-ca        kubernetes.io/tls                     3      Xs
@@ -527,7 +527,7 @@ Next, use the ClusterIssuer to generate certificates for the applications in you
 
 After the Ingress resource is ready, Cert Manager verifies the domain using HTTP01/DNS01 challenges. During this verification process, the controller log can be used to check the status, as shown below:
 
-```
+```text
 $ kubectl get certificates
 NAME                     READY   SECRET                   AGE
 letencrypt-ca            False   letencrypt-ca             X
@@ -535,7 +535,7 @@ letencrypt-ca            False   letencrypt-ca             X
 
 The status remains *False* whilst verification is in progress. This status will change to *True* when the HTTP01 verification is completed successfully.
 
-```
+```text
 $ kubectl get certificates
 NAME                     READY   SECRET                   AGE
 letencrypt-ca            True    letencrypt-ca             X
@@ -553,7 +553,7 @@ There are two options to expose your application through an Ingress Controller u
 
 - Deploy another Helm chart which supports exposing the application through an Ingress controller. For instance, use the [Bitnami Helm Chart for WordPress](https://github.com/bitnami/charts/tree/main/bitnami/wordpress) and [configure Ingress for WordPress](https://github.com/bitnami/charts/tree/main/bitnami/wordpress#ingress). To enable the integration with CertManager, add the annotations below to the *ingress.annotations* parameter:
 
-   ```
+   ```text
    # Set up your ingress.class below (in this example, we are using nginx ingress controller)
    kubernetes.io/ingress.class: nginx
    cert-manager.io/cluster-issuer: letsencrypt-prod
@@ -561,7 +561,7 @@ There are two options to expose your application through an Ingress Controller u
 
 - Create your own Ingress resource as shown in the example below:
 
-   ```
+   ```yaml
    apiVersion: networking.k8s.io/v1
    kind: Ingress
    metadata:

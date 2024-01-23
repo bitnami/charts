@@ -351,13 +351,13 @@ plugins[0]=https://github.com/fbaligand/kibana-enhanced-table/releases/download/
 
 If you have visualizations and dashboards (in NDJSON format) to import to Kibana, create a ConfigMap that includes them and then install the chart with the `savedObjects.configmap` chart parameter, as shown below:
 
-```
+```text
 savedObjects.configmap=my-import
 ```
 
 Alternatively, if the saved objects are available at a URL, import them with the `savedObjects.urls` chart parameter, as shown below:
 
-```
+```text
 savedObjects.urls[0]=www.my-site.com/import.ndjson
 ```
 
@@ -389,7 +389,7 @@ service:
 
 If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
 
-```
+```yaml
 initContainers:
   - name: your-image-name
     image: your-image

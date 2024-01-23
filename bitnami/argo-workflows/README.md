@@ -538,7 +538,7 @@ service:
 
 If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
 
-```
+```yaml
 initContainers:
   - name: your-image-name
     image: your-image
@@ -593,14 +593,14 @@ To upgrade to *1.0.0* from *0.x*, it should be done reusing the PVC(s) used to h
         export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=argo-workflows,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
 ```
 
-2. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+1. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
 
 ```console
         kubectl delete statefulsets.apps --cascade=false argo-workflows-postgresql
         kubectl delete secret argo-workflows-postgresql --namespace default
 ```
 
-3. Upgrade your release using the same PostgreSQL version:
+1. Upgrade your release using the same PostgreSQL version:
 
 ```console
         CURRENT_PG_VERSION=$(kubectl exec argo-workflows-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
@@ -610,7 +610,7 @@ To upgrade to *1.0.0* from *0.x*, it should be done reusing the PVC(s) used to h
           --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
 ```
 
-4. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
 
 ```console
         kubectl delete pod argo-workflows-postgresql-0

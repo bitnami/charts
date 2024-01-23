@@ -504,13 +504,15 @@ Metrics can be scraped from within the cluster using any of the following approa
 
 - Adding the required annotations in the service for Prometheus to discover the metrics endpoints, as in the example below:
 
-        metrics:
-          jmx:
-            service:
-              annotations:
-                prometheus.io/scrape: "true"
-                prometheus.io/port: "10443"
-                prometheus.io/path: "/"
+    ```yaml
+    metrics:
+      jmx:
+        service:
+          annotations:
+            prometheus.io/scrape: "true"
+            prometheus.io/port: "10443"
+            prometheus.io/path: "/"
+    ```
 
 - Creating a ServiceMonitor (when the Prometheus Operator is available in the cluster). You can do this setting the *metrics.serviceMonitor.enabled* parameter to *true* when deploying the chart.
 - Using something similar to the [example Prometheus scrape configuration](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml).
@@ -599,27 +601,35 @@ To upgrade to *1.0.0* from *0.x*, it should be done reusing the PVC(s) used to h
 
 1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
 
-        export SONARQUBE_PASSWORD=$(kubectl get secret --namespace default sonarqube -o jsonpath="{.data.sonarqube-password}" | base64 --decode)
-        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default sonarqube-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=sonarqube,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```console
+export SONARQUBE_PASSWORD=$(kubectl get secret --namespace default sonarqube -o jsonpath="{.data.sonarqube-password}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default sonarqube-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=sonarqube,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
 
-2. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+1. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
 
-        kubectl delete statefulsets.apps --cascade=false sonarqube-postgresql
-        kubectl delete secret sonarqube-postgresql --namespace default
+```console
+kubectl delete statefulsets.apps --cascade=false sonarqube-postgresql
+kubectl delete secret sonarqube-postgresql --namespace default
+```
 
-3. Upgrade your release using the same PostgreSQL version:
+1. Upgrade your release using the same PostgreSQL version:
 
-        CURRENT_PG_VERSION=$(kubectl exec sonarqube-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
-        helm upgrade sonarqube bitnami/sonarqube \
-          --set sonarqubePassword=$SONARQUBE_PASSWORD \
-          --set postgresql.image.tag=$CURRENT_PG_VERSION \
-          --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
-          --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```console
+CURRENT_PG_VERSION=$(kubectl exec sonarqube-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+helm upgrade sonarqube bitnami/sonarqube \
+  --set sonarqubePassword=$SONARQUBE_PASSWORD \
+  --set postgresql.image.tag=$CURRENT_PG_VERSION \
+  --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
 
-4. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
 
-        kubectl delete pod sonarqube-postgresql-0
+```console
+kubectl delete pod sonarqube-postgresql-0
+```
 
 ## License
 

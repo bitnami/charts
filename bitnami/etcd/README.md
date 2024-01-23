@@ -400,7 +400,7 @@ Here is an example to explain how this works:
 
 If, for whatever reason, the "pre-stop" hook fails at removing the member, the initialization logic is able to detect that something went wrong by checking the `etcdctl member remove` command output that was stored in the persistent volume. It then uses the `etcdctl member update` command to add back the member. In this case, the cluster isn't automatically scaled down/up while the pod is recovered. Therefore, when other members attempt to connect to the pod, it may cause warnings or errors like the one below:
 
-```
+```text
 E | rafthttp: failed to dial XXXXXXXX on stream Message (peer XXXXXXXX failed to find local node YYYYYYYYY)
 I | rafthttp: peer XXXXXXXX became inactive (message send to peer failed)
 W | rafthttp: health check for peer XXXXXXXX could not connect: dial tcp A.B.C.D:2380: i/o timeout
@@ -438,7 +438,7 @@ The etcd chart can be configured with Role-based access control and TLS encrypti
 
 In order to enable Role-Based Access Control for etcd, set the following parameters:
 
-```
+```text
 auth.rbac.enabled=true
 auth.rbac.rootPassword=ETCD_ROOT_PASSWORD
 ```
@@ -449,7 +449,7 @@ These parameters create a `root` user with an associate `root` role with access 
 
 In order to enable secure transport between peer nodes deploy the helm chart with these options:
 
-```
+```text
 auth.peer.secureTransport=true
 auth.peer.useAutoTLS=true
 ```
@@ -458,7 +458,7 @@ auth.peer.useAutoTLS=true
 
 In order to enable secure transport between client and server, create a secret containing the certificate and key files and the CA used to sign the client certificates. In this case, create the secret and then deploy the chart with these options:
 
-```
+```text
 auth.client.secureTransport=true
 auth.client.enableAuthentication=true
 auth.client.existingSecret=etcd-client-certs
@@ -480,7 +480,7 @@ The Bitnami etcd Helm chart supports automatic disaster recovery by periodically
 
 Enable this feature with the following parameters:
 
-```
+```text
 persistence.enabled=true
 disasterRecovery.enabled=true
 disasterRecovery.pvc.size=2Gi
@@ -529,10 +529,12 @@ The metrics exposed by etcd can be exposed to be scraped by Prometheus. Metrics 
 
 - Adding the required annotations for Prometheus to discover the metrics endpoints, as in the example below:
 
-        podAnnotations:
-          prometheus.io/scrape: "true"
-          prometheus.io/path: "/metrics/cluster"
-          prometheus.io/port: "9000"
+```yaml
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/path: "/metrics/cluster"
+  prometheus.io/port: "9000"
+```
 
 - Creating a ServiceMonitor or PodMonitor entry (when the Prometheus Operator is available in the cluster)
 - Using something similar to the [example Prometheus scrape configuration](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml).

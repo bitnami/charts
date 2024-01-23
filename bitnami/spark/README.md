@@ -448,13 +448,15 @@ The secret for passwords should have three keys: `rpc-authentication-secret`, `s
 
 Once the secrets are created, configure the chart and set the various security-related parameters, including the `security.certificatesSecretName` and  `security.passwordsSecretName` parameters referencing the secrets created previously. Here is an example configuration for chart deployment:
 
-    security.certificatesSecretName=my-secret
-    security.passwordsSecretName=my-passwords-secret
-    security.rpc.authenticationEnabled=true
-    security.rpc.encryptionEnabled=true
-    security.storageEncrytionEnabled=true
-    security.ssl.enabled=true
-    security.ssl.needClientAuth=true
+```text
+security.certificatesSecretName=my-secret
+security.passwordsSecretName=my-passwords-secret
+security.rpc.authenticationEnabled=true
+security.rpc.encryptionEnabled=true
+security.storageEncrytionEnabled=true
+security.ssl.enabled=true
+security.ssl.needClientAuth=true
+```
 
 > NOTE: It is currently not possible to submit an application to a standalone cluster if RPC authentication is configured. [Learn more about this issue](https://issues.apache.org/jira/browse/SPARK-25078).
 

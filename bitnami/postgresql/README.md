@@ -799,8 +799,6 @@ This major version changes the default PostgreSQL image from 14.x to 15.x. Follo
 
 In this version the application version was bumped to _14.x_ series. Also, this major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
 
-#### What changes were introduced in this major version?
-
 - _replication.enabled_ parameter is deprecated in favor of _architecture_ parameter that accepts two values: _standalone_ and _replication_.
 - _replication.singleService_ and _replication.uniqueServices_ parameters are deprecated. When using replication, each statefulset (primary and read-only) has its own headless service & service allowing to connect to read-only replicas through the service (round-robin) or individually.
 - _postgresqlPostgresPassword_, _postgresqlUsername_, _postgresqlPassword_, _postgresqlDatabase_, _replication.user_, _replication.password_, and _existingSecret_ parameters have been regrouped under the _auth_ map. The _auth_ map uses a new perspective to configure authentication, so please read carefully each sub-parameter description.
@@ -817,7 +815,7 @@ In this version the application version was bumped to _14.x_ series. Also, this 
 - _metrics.service.port_ has been regrouped under the _metrics.service.ports_ map.
 - _serviceAccount.enabled_ and _serviceAccount.autoMount_ have been deprecated in favor of _serviceAccount.create_ and _serviceAccount.automountServiceAccountToken_.
 
-#### Upgrading Instructions
+#### How to upgrade to version 11.0.0
 
 To upgrade to _11.0.0_ from _10.x_, it should be done reusing the PVC(s) used to hold the PostgreSQL data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is _postgresql_):
 
@@ -825,32 +823,42 @@ To upgrade to _11.0.0_ from _10.x_, it should be done reusing the PVC(s) used to
 
 1. Obtain the credentials and the names of the PVCs used to hold the PostgreSQL data on your current release:
 
-        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```console
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
 
-2. Delete the PostgreSQL statefulset (notice the option _--cascade=false_) and secret:
+1. Delete the PostgreSQL statefulset (notice the option _--cascade=false_) and secret:
 
-        kubectl delete statefulsets.apps postgresql-postgresql --namespace default --cascade=false
-        kubectl delete secret postgresql --namespace default
+```console
+kubectl delete statefulsets.apps postgresql-postgresql --namespace default --cascade=false
+kubectl delete secret postgresql --namespace default
+```
 
-3. Upgrade your release using the same PostgreSQL version:
+1. Upgrade your release using the same PostgreSQL version:
 
-        CURRENT_VERSION=$(kubectl exec postgresql-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
-        helm upgrade postgresql bitnami/postgresql \
-          --set auth.postgresPassword=$POSTGRESQL_PASSWORD \
-          --set primary.persistence.existingClaim=$POSTGRESQL_PVC \
-          --set image.tag=$CURRENT_VERSION
+```console
+CURRENT_VERSION=$(kubectl exec postgresql-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+helm upgrade postgresql bitnami/postgresql \
+  --set auth.postgresPassword=$POSTGRESQL_PASSWORD \
+  --set primary.persistence.existingClaim=$POSTGRESQL_PVC \
+  --set image.tag=$CURRENT_VERSION
+```
 
-4. You will have to delete the existing PostgreSQL pod and the new statefulset is going to create a new one
+1. You will have to delete the existing PostgreSQL pod and the new statefulset is going to create a new one
 
-        kubectl delete pod postgresql-postgresql-0
+```console
+kubectl delete pod postgresql-postgresql-0
+```
 
-5. Finally, you should see the lines below in PostgreSQL container logs:
+1. Finally, you should see the lines below in PostgreSQL container logs:
 
-        $ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
-        ...
-        postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
-        ...
+```text
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+...
+postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
+...
+```
 
 > NOTE: the instructions above reuse the same PostgreSQL version you were using in your chart release. Otherwise, you will find an error such as the one below when upgrading since the new chart major version also bumps the application version. To workaround this issue you need to upgrade database, please refer to the [official PostgreSQL documentation](https://www.postgresql.org/docs/current/upgrading.html) for more information about this.
 
@@ -865,8 +873,6 @@ postgresql 08:10:14.72 INFO  ==> ** Starting PostgreSQL **
 ### To 10.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
@@ -885,7 +891,7 @@ postgresql 08:10:14.72 INFO  ==> ** Starting PostgreSQL **
 - [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
 - [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
 
-#### Upgrading Instructions
+#### How to upgrade to version 10.0.0
 
 To upgrade to _10.0.0_ from _9.x_, it should be done reusing the PVC(s) used to hold the PostgreSQL data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is _postgresql_):
 
@@ -893,39 +899,47 @@ To upgrade to _10.0.0_ from _9.x_, it should be done reusing the PVC(s) used to 
 
 1. Obtain the credentials and the names of the PVCs used to hold the PostgreSQL data on your current release:
 
-        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```console
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
 
-2. Delete the PostgreSQL statefulset (notice the option _--cascade=false_):
+1. Delete the PostgreSQL statefulset (notice the option _--cascade=false_):
 
-        kubectl delete statefulsets.apps postgresql-postgresql --namespace default --cascade=false
+```console
+kubectl delete statefulsets.apps postgresql-postgresql --namespace default --cascade=false
+```
 
-3. Upgrade your release using the same PostgreSQL version:
+1. Upgrade your release using the same PostgreSQL version:
 
-        helm upgrade postgresql bitnami/postgresql \
-          --set postgresqlPassword=$POSTGRESQL_PASSWORD \
-          --set persistence.existingClaim=$POSTGRESQL_PVC
+```console
+helm upgrade postgresql bitnami/postgresql \
+  --set postgresqlPassword=$POSTGRESQL_PASSWORD \
+  --set persistence.existingClaim=$POSTGRESQL_PVC
+```
 
-4. Delete the existing PostgreSQL pod and the new statefulset will create a new one:
+1. Delete the existing PostgreSQL pod and the new statefulset will create a new one:
 
-        kubectl delete pod postgresql-postgresql-0
+```console
+kubectl delete pod postgresql-postgresql-0
+```
 
-5. Finally, you should see the lines below in PostgreSQL container logs:
+1. Finally, you should see the lines below in PostgreSQL container logs:
 
-        $ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
-        ...
-        postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
-        ...
+```text
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+...
+postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
+...
+```
 
 ### To 9.0.0
 
 In this version the chart was adapted to follow the [Helm standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
 
-#### What changes were introduced in this major version?
-
 - Some inmutable objects were modified to adopt Helm standard labels introducing backward incompatibilities.
 
-#### Upgrading Instructions
+#### How to upgrade to version 9.0.0
 
 To upgrade to _9.0.0_ from _8.x_, it should be done reusing the PVC(s) used to hold the PostgreSQL data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is _postgresql_):
 
@@ -933,29 +947,39 @@ To upgrade to _9.0.0_ from _8.x_, it should be done reusing the PVC(s) used to h
 
 1. Obtain the credentials and the names of the PVCs used to hold the PostgreSQL data on your current release:
 
-        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-        export POSTGRESQL_PVC=$(kubectl get pvc -l app=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+```console
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+```
 
-2. Delete the PostgreSQL statefulset (notice the option _--cascade=false_):
+1. Delete the PostgreSQL statefulset (notice the option _--cascade=false_):
 
-        kubectl delete statefulsets.apps postgresql-postgresql --namespace default --cascade=false
+```console
+kubectl delete statefulsets.apps postgresql-postgresql --namespace default --cascade=false
+```
 
-3. Upgrade your release using the same PostgreSQL version:
+1. Upgrade your release using the same PostgreSQL version:
 
-        helm upgrade postgresql bitnami/postgresql \
-          --set postgresqlPassword=$POSTGRESQL_PASSWORD \
-          --set persistence.existingClaim=$POSTGRESQL_PVC
+```console
+helm upgrade postgresql bitnami/postgresql \
+  --set postgresqlPassword=$POSTGRESQL_PASSWORD \
+  --set persistence.existingClaim=$POSTGRESQL_PVC
+```
 
-4. Delete the existing PostgreSQL pod and the new statefulset will create a new one:
+1. Delete the existing PostgreSQL pod and the new statefulset will create a new one:
 
-        kubectl delete pod postgresql-postgresql-0
+```console
+kubectl delete pod postgresql-postgresql-0
+```
 
-5. Finally, you should see the lines below in PostgreSQL container logs:
+1. Finally, you should see the lines below in PostgreSQL container logs:
 
-        $ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
-        ...
-        postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
-        ...
+```text
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+...
+postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
+...
+```
 
 ## License
 

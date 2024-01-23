@@ -763,26 +763,30 @@ Two alternatives are available to use *LoadBalancer* services:
 
 - Use random load balancer IP addresses using an *initContainer* that waits for the IP addresses to be ready and discovers them automatically. An example deployment configuration is shown below:
 
-        architecture=replicaset
-        replicaCount=2
-        externalAccess.enabled=true
-        externalAccess.service.type=LoadBalancer
-        externalAccess.service.port=27017
-        externalAccess.autoDiscovery.enabled=true
-        serviceAccount.create=true
-        rbac.create=true
+    ```text
+    architecture=replicaset
+    replicaCount=2
+    externalAccess.enabled=true
+    externalAccess.service.type=LoadBalancer
+    externalAccess.service.port=27017
+    externalAccess.autoDiscovery.enabled=true
+    serviceAccount.create=true
+    rbac.create=true
+    ```
 
     > NOTE: This option requires creating RBAC rules on clusters where RBAC policies are enabled.
 
 - Manually specify the load balancer IP addresses. An example deployment configuration is shown below, with the placeholder EXTERNAL-IP-ADDRESS-X used in place of the load balancer IP addresses:
 
-        architecture=replicaset
-        replicaCount=2
-        externalAccess.enabled=true
-        externalAccess.service.type=LoadBalancer
-        externalAccess.service.port=27017
-        externalAccess.service.loadBalancerIPs[0]='EXTERNAL-IP-ADDRESS-1'
-        externalAccess.service.loadBalancerIPs[1]='EXTERNAL-IP-ADDRESS-2'
+    ```text
+    architecture=replicaset
+    replicaCount=2
+    externalAccess.enabled=true
+    externalAccess.service.type=LoadBalancer
+    externalAccess.service.port=27017
+    externalAccess.service.loadBalancerIPs[0]='EXTERNAL-IP-ADDRESS-1'
+    externalAccess.service.loadBalancerIPs[1]='EXTERNAL-IP-ADDRESS-2'
+    ```
 
     > NOTE: This option requires knowing the load balancer IP addresses, so that each MongoDB&reg; node's advertised hostname is configured with it.
 
@@ -790,14 +794,16 @@ Two alternatives are available to use *LoadBalancer* services:
 
 Manually specify the node ports to use. An example deployment configuration is shown below, with the placeholder NODE-PORT-X used in place of the node ports:
 
-        architecture=replicaset
-        replicaCount=2
-        externalAccess.enabled=true
-        externalAccess.service.type=NodePort
-        externalAccess.service.nodePorts[0]='NODE-PORT-1'
-        externalAccess.service.nodePorts[1]='NODE-PORT-2'
+```text
+architecture=replicaset
+replicaCount=2
+externalAccess.enabled=true
+externalAccess.service.type=NodePort
+externalAccess.service.nodePorts[0]='NODE-PORT-1'
+externalAccess.service.nodePorts[1]='NODE-PORT-2'
+```
 
-    > NOTE: This option requires knowing the node ports that will be exposed, so each MongoDB&reg; node's advertised hostname is configured with it.
+> NOTE: This option requires knowing the node ports that will be exposed, so each MongoDB&reg; node's advertised hostname is configured with it.
 
 The pod will try to get the external IP address of the node using the command `curl -s https://ipinfo.io/IP-ADDRESS` unless the `externalAccess.service.domain` parameter is set.
 
@@ -854,7 +860,7 @@ service:
 
 If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
 
-```
+```yaml
 initContainers:
   - name: your-image-name
     image: your-image

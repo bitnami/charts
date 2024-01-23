@@ -427,7 +427,7 @@ To horizontally scale this chart once it has been deployed, two options are avai
 - Use the `kubectl scale` command.
 - Upgrade the chart modifying the `replicaCount` parameter.
 
-```
+```text
     replicaCount=3
     auth.password="$RABBITMQ_PASSWORD"
     auth.erlangCookie="$RABBITMQ_ERLANG_COOKIE"
@@ -439,7 +439,7 @@ When scaling down the solution, unnecessary RabbitMQ nodes are automatically sto
 
 For instance, if RabbitMQ was initially installed with three replicas and then scaled down to two replicas, run the commands below (assuming that the release name is `rabbitmq` and the clustering type is `hostname`):
 
-```
+```console
     kubectl exec rabbitmq-0 --container rabbitmq -- rabbitmqctl forget_cluster_node rabbit@rabbitmq-2.rabbitmq-headless.default.svc.cluster.local
     kubectl delete pvc data-rabbitmq-2
 ```
@@ -507,7 +507,7 @@ Next, specify the `load_definitions` property as an `extraConfiguration` pointin
 
 If needed, you can use `extraSecrets` to let the chart create the secret for you. This way, you don't need to manually create it before deploying a release. These secrets can also be templated to use supplied chart values. Here is an example:
 
-```
+```yaml
 auth:
   password: CHANGEME
 extraSecrets:
@@ -538,7 +538,7 @@ extraConfiguration: |
 
 LDAP support can be enabled in the chart by specifying the `ldap.*` parameters while creating a release. For example:
 
-```
+```text
 ldap.enabled="true"
 ldap.server="my-ldap-server"
 ldap.port="389"

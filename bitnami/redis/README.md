@@ -810,35 +810,39 @@ tls-ca-cert-file
 
 A custom Lua script can be added to the `redis-exporter` sidecar by way of the `metrics.extraArgs.script` parameter.  The pathname of the script must exist on the container, or the `redis_exporter` process (and therefore the whole pod) will refuse to start.  The script can be provided to the sidecar containers via the `metrics.extraVolumes` and `metrics.extraVolumeMounts` parameters:
 
-    metrics:
-      extraVolumeMounts:
-        - name: '{{ printf "%s-metrics-script-file" (include "common.names.fullname" .) }}'
-          mountPath: '{{ printf "/mnt/%s/" (include "common.names.name" .) }}'
-          readOnly: true
-      extraVolumes:
-        - name: '{{ printf "%s-metrics-script-file" (include "common.names.fullname" .) }}'
-          configMap:
-            name: '{{ printf "%s-metrics-script" (include "common.names.fullname" .) }}'
-      extraArgs:
-        script: '{{ printf "/mnt/%s/my_custom_metrics.lua" (include "common.names.name" .) }}'
+```yaml
+metrics:
+  extraVolumeMounts:
+    - name: '{{ printf "%s-metrics-script-file" (include "common.names.fullname" .) }}'
+      mountPath: '{{ printf "/mnt/%s/" (include "common.names.name" .) }}'
+      readOnly: true
+  extraVolumes:
+    - name: '{{ printf "%s-metrics-script-file" (include "common.names.fullname" .) }}'
+      configMap:
+        name: '{{ printf "%s-metrics-script" (include "common.names.fullname" .) }}'
+  extraArgs:
+    script: '{{ printf "/mnt/%s/my_custom_metrics.lua" (include "common.names.name" .) }}'
+```
 
 Then deploy the script into the correct location via `extraDeploy`:
 
-    extraDeploy:
-      - apiVersion: v1
-        kind: ConfigMap
-        metadata:
-          name: '{{ printf "%s-metrics-script" (include "common.names.fullname" .) }}'
-        data:
-          my_custom_metrics.lua: |
-            -- LUA SCRIPT CODE HERE, e.g.,
-            return {'bitnami_makes_the_best_charts', '1'}
+```yaml
+extraDeploy:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: '{{ printf "%s-metrics-script" (include "common.names.fullname" .) }}'
+    data:
+      my_custom_metrics.lua: |
+        -- LUA SCRIPT CODE HERE, e.g.,
+        return {'bitnami_makes_the_best_charts', '1'}
+```
 
 ### Host Kernel Settings
 
 Redis&reg; may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages. To do so, you can set up a privileged `initContainer` with the `sysctlImage` config values, for example:
 
-```
+```yaml
 sysctlImage:
   enabled: true
   mountHostSys: true
@@ -853,7 +857,7 @@ sysctlImage:
 
 Alternatively, for Kubernetes 1.12+ you can set `securityContext.sysctls` which will configure `sysctls` for master and slave pods. Example:
 
-```
+```yaml
 securityContext:
   sysctls:
   - name: net.core.somaxconn
@@ -886,16 +890,20 @@ To backup and restore Redis deployments on Kubernetes, you will need to create a
 
 - Connect to one of the nodes and start the Redis CLI tool. Then, run the commands below:
 
-        $ kubectl exec -it my-release-master-0 bash
-        $ redis-cli
-        127.0.0.1:6379> auth your_current_redis_password
-        OK
-        127.0.0.1:6379> save
-        OK
+    ```text
+    $ kubectl exec -it my-release-master-0 bash
+    $ redis-cli
+    127.0.0.1:6379> auth your_current_redis_password
+    OK
+    127.0.0.1:6379> save
+    OK
+    ```
 
 - Copy the dump file from the Redis node:
 
-        kubectl cp my-release-master-0:/data/dump.rdb dump.rdb -c redis
+    ```console
+    kubectl cp my-release-master-0:/data/dump.rdb dump.rdb -c redis
+    ```
 
 ### Step 2: Restore the data on the destination cluster
 
@@ -905,61 +913,69 @@ Follow the following steps:
 
 - In the [*values.yaml*](https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml) file set the *appendonly* parameter to *no*. You can skip this step if it is already configured as *no*
 
-        commonConfiguration: |-
-           # Enable AOF https://redis.io/topics/persistence#append-only-file
-           appendonly no
-           # Disable RDB persistence, AOF persistence already enabled.
-           save ""
+    ```yaml
+    commonConfiguration: |-
+       # Enable AOF https://redis.io/topics/persistence#append-only-file
+       appendonly no
+       # Disable RDB persistence, AOF persistence already enabled.
+       save ""
+    ```
 
     > *Note that the `Enable AOF` comment belongs to the original config file and what you're actually doing is disabling it. This change will only be neccessary for the temporal cluster you're creating to upload the dump.*
 
 - Start the new cluster to create the PVCs. Use the command below as an example:
 
-        helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
+    ```console
+    helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
+    ```
 
 - Now that the PVC were created, stop it and copy the *dump.rdp* file on the persisted data by using a helping pod.
 
-        $ helm delete new-redis
+    ```text
+    $ helm delete new-redis
 
-        $ kubectl run --generator=run-pod/v1 -i --rm --tty volpod --overrides='
-        {
-            "apiVersion": "v1",
-            "kind": "Pod",
-            "metadata": {
-                "name": "redisvolpod"
-            },
-            "spec": {
-                "containers": [{
-                   "command": [
-                        "tail",
-                        "-f",
-                        "/dev/null"
-                   ],
-                   "image": "bitnami/minideb",
-                   "name": "mycontainer",
-                   "volumeMounts": [{
-                       "mountPath": "/mnt",
-                       "name": "redisdata"
-                    }]
-                }],
-                "restartPolicy": "Never",
-                "volumes": [{
-                    "name": "redisdata",
-                    "persistentVolumeClaim": {
-                        "claimName": "redis-data-new-redis-master-0"
-                    }
+    $ kubectl run --generator=run-pod/v1 -i --rm --tty volpod --overrides='
+    {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "metadata": {
+            "name": "redisvolpod"
+        },
+        "spec": {
+            "containers": [{
+               "command": [
+                    "tail",
+                    "-f",
+                    "/dev/null"
+               ],
+               "image": "bitnami/minideb",
+               "name": "mycontainer",
+               "volumeMounts": [{
+                   "mountPath": "/mnt",
+                   "name": "redisdata"
                 }]
-            }
-        }' --image="bitnami/minideb"
+            }],
+            "restartPolicy": "Never",
+            "volumes": [{
+                "name": "redisdata",
+                "persistentVolumeClaim": {
+                    "claimName": "redis-data-new-redis-master-0"
+                }
+            }]
+        }
+    }' --image="bitnami/minideb"
 
-        $ kubectl cp dump.rdb redisvolpod:/mnt/dump.rdb
-        $ kubectl delete pod volpod
+    $ kubectl cp dump.rdb redisvolpod:/mnt/dump.rdb
+    $ kubectl delete pod volpod
+    ```
 
 - Restart the cluster:
 
     > **INFO:** The *appendonly* parameter can be safely restored to your desired value.
 
-        helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
+    ```console
+    helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
+    ```
 
 ## NetworkPolicy
 
@@ -969,7 +985,7 @@ With NetworkPolicy enabled, only pods with the generated client label will be ab
 
 With `networkPolicy.ingressNSMatchLabels` pods from other namespaces can connect to Redis. Set `networkPolicy.ingressNSPodMatchLabels` to match pod labels in matched namespace. For example, for a namespace labeled `redis=external` and pods in that namespace labeled `redis-client=true` the fields should be set:
 
-```
+```yaml
 networkPolicy:
   enabled: true
   ingressNSMatchLabels:
