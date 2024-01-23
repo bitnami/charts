@@ -139,7 +139,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.limits`                                  | The resources limits for Ejbca containers                                                                   | `{}`                    |
 | `resources.requests`                                | The requested resources for Ejbca containers                                                                | `{}`                    |
 | `containerSecurityContext.enabled`                  | Enabled EJBCA containers' Security Context                                                                  | `true`                  |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                            | `{}`                    |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                            | `nil`                   |
 | `containerSecurityContext.runAsUser`                | Set EJBCA containers' Security Context runAsUser                                                            | `1001`                  |
 | `containerSecurityContext.runAsNonRoot`             | Set Controller container's Security Context runAsNonRoot                                                    | `true`                  |
 | `containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                         | `false`                 |
