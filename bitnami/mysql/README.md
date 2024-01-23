@@ -140,7 +140,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                     | `[]`                |
 | `primary.podSecurityContext.fsGroup`                        | Group ID for the mounted volumes' filesystem                                                                    | `1001`              |
 | `primary.containerSecurityContext.enabled`                  | MySQL primary container securityContext                                                                         | `true`              |
-| `primary.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `{}`                |
+| `primary.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `nil`               |
 | `primary.containerSecurityContext.runAsUser`                | User ID for the MySQL primary container                                                                         | `1001`              |
 | `primary.containerSecurityContext.runAsNonRoot`             | Set MySQL primary container's Security Context runAsNonRoot                                                     | `true`              |
 | `primary.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                            | `false`             |
@@ -242,7 +242,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                         | `[]`                |
 | `secondary.podSecurityContext.fsGroup`                        | Group ID for the mounted volumes' filesystem                                                                        | `1001`              |
 | `secondary.containerSecurityContext.enabled`                  | MySQL secondary container securityContext                                                                           | `true`              |
-| `secondary.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                    | `{}`                |
+| `secondary.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                    | `nil`               |
 | `secondary.containerSecurityContext.runAsUser`                | User ID for the MySQL secondary container                                                                           | `1001`              |
 | `secondary.containerSecurityContext.runAsNonRoot`             | Set MySQL secondary container's Security Context runAsNonRoot                                                       | `true`              |
 | `secondary.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                | `false`             |
@@ -351,7 +351,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.image.pullPolicy`                        | Exporter image pull policy                                                                                                     | `IfNotPresent`                    |
 | `metrics.image.pullSecrets`                       | Specify docker-registry secret names as an array                                                                               | `[]`                              |
 | `metrics.containerSecurityContext.enabled`        | MySQL metrics container securityContext                                                                                        | `true`                            |
-| `metrics.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                               | `{}`                              |
+| `metrics.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                               | `nil`                             |
 | `metrics.containerSecurityContext.runAsUser`      | User ID for the MySQL metrics container                                                                                        | `1001`                            |
 | `metrics.containerSecurityContext.runAsNonRoot`   | Set MySQL metrics container's Security Context runAsNonRoot                                                                    | `true`                            |
 | `metrics.service.type`                            | Kubernetes service type for MySQL Prometheus Exporter                                                                          | `ClusterIP`                       |
