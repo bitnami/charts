@@ -92,6 +92,9 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -204,11 +207,15 @@ topologySpreadConstraints: []
 ## NGINX pods' Security Context.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled NGINX pods' Security Context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Set NGINX pod's Security Context fsGroup
 ## @param podSecurityContext.sysctls sysctl settings of the NGINX pods
 ##
 podSecurityContext:
   enabled: true
+  fsGroupChangePolicy: Always
+  supplementalGroups: []
   fsGroup: 1001
   ## sysctl settings
   ## Example:
@@ -220,6 +227,7 @@ podSecurityContext:
 ## NGINX containers' Security Context.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
+## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
@@ -230,6 +238,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
+  seLinuxOptions: {}
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false
@@ -837,10 +846,12 @@ metrics:
   ## Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param metrics.securityContext.enabled Enabled NGINX Exporter containers' Security Context
+  ## @param metrics.securityContext.seLinuxOptions Set SELinux options in container
   ## @param metrics.securityContext.runAsUser Set NGINX Exporter container's Security Context runAsUser
   ##
   securityContext:
     enabled: false
+    seLinuxOptions: {}
     runAsUser: 1001
   ## Prometheus exporter service parameters
   ##

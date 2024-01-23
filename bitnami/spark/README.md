@@ -102,6 +102,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.containerPorts.http`                               | Specify the port where the web interface will listen on the master over HTTP                                             | `8080`           |
 | `master.containerPorts.https`                              | Specify the port where the web interface will listen on the master over HTTPS                                            | `8480`           |
 | `master.containerPorts.cluster`                            | Specify the port where the master listens to communicate with workers                                                    | `7077`           |
+| `master.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `master.hostAliases`                                       | Deployment pod host aliases                                                                                              | `[]`             |
 | `master.extraContainerPorts`                               | Specify the port where the running jobs inside the masters listens                                                       | `[]`             |
 | `master.daemonMemoryLimit`                                 | Set the memory limit for the master daemon                                                                               | `""`             |
@@ -110,11 +111,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for master nodes                                                    | `""`             |
 | `master.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for master nodes                                                       | `""`             |
 | `master.podSecurityContext.enabled`                        | Enable security context                                                                                                  | `true`           |
+| `master.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`         |
+| `master.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`             |
+| `master.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `master.podSecurityContext.fsGroup`                        | Set master pod's Security Context Group ID                                                                               | `1001`           |
 | `master.podSecurityContext.runAsUser`                      | Set master pod's Security Context User ID                                                                                | `1001`           |
 | `master.podSecurityContext.runAsGroup`                     | Set master pod's Security Context Group ID                                                                               | `0`              |
 | `master.podSecurityContext.seLinuxOptions`                 | Set master pod's Security Context SELinux options                                                                        | `{}`             |
 | `master.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `master.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
 | `master.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `master.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `master.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -177,6 +182,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.containerPorts.http`                               | Specify the port where the web interface will listen on the worker over HTTP                                             | `8080`           |
 | `worker.containerPorts.https`                              | Specify the port where the web interface will listen on the worker over HTTPS                                            | `8480`           |
 | `worker.containerPorts.cluster`                            | Specify the port where the worker listens to communicate with workers                                                    | `""`             |
+| `worker.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `worker.hostAliases`                                       | Add deployment host aliases                                                                                              | `[]`             |
 | `worker.extraContainerPorts`                               | Specify the port where the running jobs inside the workers listens                                                       | `[]`             |
 | `worker.daemonMemoryLimit`                                 | Set the memory limit for the worker daemon                                                                               | `""`             |
@@ -190,9 +196,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for worker nodes                                                       | `""`             |
 | `worker.replicaCount`                                      | Number of spark workers (will be the minimum number when autoscaling is enabled)                                         | `2`              |
 | `worker.podSecurityContext.enabled`                        | Enable security context                                                                                                  | `true`           |
+| `worker.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`         |
+| `worker.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`             |
+| `worker.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `worker.podSecurityContext.fsGroup`                        | Group ID for the container                                                                                               | `1001`           |
 | `worker.podSecurityContext.seLinuxOptions`                 | SELinux options for the container                                                                                        | `{}`             |
 | `worker.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `worker.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
 | `worker.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `worker.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `worker.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |

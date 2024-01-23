@@ -30,7 +30,7 @@ proxy:
       metrics: 8003
   serviceAccount:
     create: true
-    automountServiceAccountToken: true
+  automountServiceAccountToken: true
 
 dataCoord:
   enabled: true

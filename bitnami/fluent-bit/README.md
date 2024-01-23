@@ -111,6 +111,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars                                      | `""`                         |
 | `extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars                                         | `""`                         |
 | `existingConfigMap`                                 | Name of an existing ConfigMap with the Fluent Bit config file                             | `""`                         |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                        | `true`                       |
 | `hostAliases`                                       | Deployment pod host aliases                                                               | `[]`                         |
 | `replicaCount`                                      | Number of Fluent Bit replicas                                                             | `1`                          |
 | `livenessProbe.enabled`                             | Enable livenessProbe on nodes                                                             | `true`                       |
@@ -152,7 +153,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.create`                             | Enables ServiceAccount                                                                    | `true`                       |
 | `serviceAccount.name`                               | ServiceAccount name                                                                       | `""`                         |
 | `serviceAccount.annotations`                        | Annotations to add to all deployed objects                                                | `{}`                         |
-| `serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                          | `true`                       |
+| `serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                          | `false`                      |
 | `podSecurityContext.enabled`                        | Enabled Fluent Bit pods' Security Context                                                 | `true`                       |
 | `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                        | `Always`                     |
 | `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                            | `[]`                         |

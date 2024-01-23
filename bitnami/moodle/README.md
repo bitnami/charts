@@ -104,6 +104,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumeMounts`                                 | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                     |
 | `initContainers`                                    | Extra init containers to add to the deployment                                                                        | `[]`                     |
 | `sidecars`                                          | Extra sidecar containers to add to the deployment                                                                     | `[]`                     |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                    | `false`                  |
 | `hostAliases`                                       | Moodle&trade; pods host aliases                                                                                       | `[]`                     |
 | `tolerations`                                       | Tolerations for pod assignment                                                                                        | `[]`                     |
 | `priorityClassName`                                 | Moodle&trade; pods' priorityClassName                                                                                 | `""`                     |
@@ -175,6 +176,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `lifecycleHooks`                                    | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | `""`                     |
 | `podAnnotations`                                    | Pod annotations                                                                                                       | `{}`                     |
 | `podLabels`                                         | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                     |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for Moodle pod                                                                      | `true`                   |
+| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                | `""`                     |
+| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                | `false`                  |
+| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                  | `{}`                     |
 
 ### Traffic Exposure Parameters
 

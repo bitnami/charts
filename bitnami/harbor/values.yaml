@@ -597,7 +597,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r94
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -620,10 +620,12 @@ volumePermissions:
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
   ## @param volumePermissions.containerSecurityContext.enabled Enable init container Security Context
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 0
 
 ## @section NGINX Parameters
@@ -643,7 +645,7 @@ nginx:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r2
+    tag: 1.25.3-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -771,14 +773,21 @@ nginx:
   ## Configure NGINX pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param nginx.podSecurityContext.enabled Enabled NGINX pods' Security Context
+  ## @param nginx.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param nginx.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param nginx.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param nginx.podSecurityContext.fsGroup Set NGINX pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure NGINX containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param nginx.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param nginx.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param nginx.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param nginx.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param nginx.containerSecurityContext.privileged Set container's Security Context privileged
@@ -789,6 +798,7 @@ nginx:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -808,6 +818,9 @@ nginx:
   ## @param nginx.lifecycleHooks LifecycleHook for the NGINX container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param nginx.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param nginx.hostAliases NGINX pods host aliases
   ##
   hostAliases: []
@@ -1032,14 +1045,21 @@ portal:
   ## Configure Harbor Portal pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param portal.podSecurityContext.enabled Enabled Harbor Portal pods' Security Context
+  ## @param portal.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param portal.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param portal.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param portal.podSecurityContext.fsGroup Set Harbor Portal pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Harbor Portal containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param portal.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param portal.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param portal.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param portal.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param portal.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1050,6 +1070,7 @@ portal:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1190,7 +1211,7 @@ core:
   image:
     registry: docker.io
     repository: bitnami/harbor-core
-    tag: 2.10.0-debian-11-r0
+    tag: 2.10.0-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1363,14 +1384,21 @@ core:
   ## Configure Harbor Core pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param core.podSecurityContext.enabled Enabled Harbor Core pods' Security Context
+  ## @param core.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param core.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param core.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param core.podSecurityContext.fsGroup Set Harbor Core pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Harbor Core containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param core.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param core.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param core.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param core.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param core.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1381,6 +1409,7 @@ core:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1523,7 +1552,7 @@ jobservice:
   image:
     registry: docker.io
     repository: bitnami/harbor-jobservice
-    tag: 2.10.0-debian-11-r0
+    tag: 2.10.0-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1658,14 +1687,21 @@ jobservice:
   ## Configure Harbor Jobservice pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param jobservice.podSecurityContext.enabled Enabled Harbor Jobservice pods' Security Context
+  ## @param jobservice.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param jobservice.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param jobservice.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param jobservice.podSecurityContext.fsGroup Set Harbor Jobservice pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Harbor Jobservice containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param jobservice.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param jobservice.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param jobservice.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param jobservice.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param jobservice.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1676,6 +1712,7 @@ jobservice:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1871,10 +1908,16 @@ registry:
   ## Configure Harbor Registry pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param registry.podSecurityContext.enabled Enabled Harbor Registry pods' Security Context
+  ## @param registry.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param registry.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param registry.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param registry.podSecurityContext.fsGroup Set Harbor Registry pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## @param registry.updateStrategy.type Harbor Registry deployment strategy type - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
@@ -1990,7 +2033,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registry
-      tag: 2.10.0-debian-11-r0
+      tag: 2.10.0-debian-11-r1
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2097,6 +2140,7 @@ registry:
     ## Configure Harbor Registry main containers (only main one) Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param registry.server.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param registry.server.containerSecurityContext.seLinuxOptions Set SELinux options in container
     ## @param registry.server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param registry.server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param registry.server.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2107,6 +2151,7 @@ registry:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -2149,7 +2194,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registryctl
-      tag: 2.10.0-debian-11-r0
+      tag: 2.10.0-debian-11-r1
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2252,6 +2297,7 @@ registry:
     ## Configure Harbor Registryctl containers (only main one) Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param registry.controller.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param registry.controller.containerSecurityContext.seLinuxOptions Set SELinux options in container
     ## @param registry.controller.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param registry.controller.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param registry.controller.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2262,6 +2308,7 @@ registry:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: {}
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -2304,7 +2351,7 @@ trivy:
   image:
     registry: docker.io
     repository: bitnami/harbor-adapter-trivy
-    tag: 2.10.0-debian-11-r0
+    tag: 2.10.0-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2466,14 +2513,21 @@ trivy:
   ## Configure Trivy pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param trivy.podSecurityContext.enabled Enabled Trivy pods' Security Context
+  ## @param trivy.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param trivy.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param trivy.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param trivy.podSecurityContext.fsGroup Set Trivy pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Trivy containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param trivy.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param trivy.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param trivy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param trivy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param trivy.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2484,6 +2538,7 @@ trivy:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2624,7 +2679,7 @@ exporter:
   image:
     registry: docker.io
     repository: bitnami/harbor-exporter
-    tag: 2.10.0-debian-11-r0
+    tag: 2.10.0-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2733,14 +2788,21 @@ exporter:
   ## Configure Exporter pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param exporter.podSecurityContext.enabled Enabled Exporter pods' Security Context
+  ## @param exporter.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param exporter.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param exporter.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param exporter.podSecurityContext.fsGroup Set Exporter pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Exporter containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param exporter.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param exporter.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param exporter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param exporter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param exporter.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2751,6 +2813,7 @@ exporter:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2885,7 +2948,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 13.13.0-debian-11-r16
+    tag: 13.13.0-debian-11-r22
     digest: ""
   auth:
     enablePostgresUser: true

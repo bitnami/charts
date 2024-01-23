@@ -115,8 +115,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.resources.limits`                                  | The resources limits for the Argo CD containers                                                      | `{}`             |
 | `controller.resources.requests`                                | The requested resources for the Argo CD containers                                                   | `{}`             |
 | `controller.podSecurityContext.enabled`                        | Enabled Argo CD pods' Security Context                                                               | `true`           |
+| `controller.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                   | `Always`         |
+| `controller.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                       | `[]`             |
+| `controller.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                          | `[]`             |
 | `controller.podSecurityContext.fsGroup`                        | Set Argo CD pod's Security Context fsGroup                                                           | `1001`           |
 | `controller.containerSecurityContext.enabled`                  | Enabled Argo CD containers' Security Context                                                         | `true`           |
+| `controller.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                     | `{}`             |
 | `controller.containerSecurityContext.runAsUser`                | Set Argo CD containers' Security Context runAsUser                                                   | `1001`           |
 | `controller.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD containers' Security Context allowPrivilegeEscalation                                    | `false`          |
 | `controller.containerSecurityContext.capabilities.drop`        | Set Argo CD containers' Security Context capabilities to be dropped                                  | `["ALL"]`        |
@@ -126,7 +130,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                     | `RuntimeDefault` |
 | `controller.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                 | `true`           |
 | `controller.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                               | `""`             |
-| `controller.serviceAccount.automountServiceAccountToken`       | Automount service account token for the application controller service account                       | `true`           |
+| `controller.serviceAccount.automountServiceAccountToken`       | Automount service account token for the application controller service account                       | `false`          |
 | `controller.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.           | `{}`             |
 | `controller.clusterAdminAccess`                                | Enable K8s cluster admin access for the application controller                                       | `true`           |
 | `controller.clusterRoleRules`                                  | Use custom rules for the application controller's cluster role                                       | `[]`             |
@@ -177,6 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.defaultArgs.selfHealTimeout`                       | Default self heal timeout for Argo CD controller                                                     | `5`              |
 | `controller.args`                                              | Override default container args (useful when using custom images). Overrides the defaultArgs.        | `[]`             |
 | `controller.extraArgs`                                         | Add extra arguments to the default arguments for the Argo CD controller                              | `[]`             |
+| `controller.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                   | `true`           |
 | `controller.hostAliases`                                       | Argo CD pods host aliases                                                                            | `[]`             |
 | `controller.podLabels`                                         | Extra labels for Argo CD pods                                                                        | `{}`             |
 | `controller.podAnnotations`                                    | Annotations for Argo CD pods                                                                         | `{}`             |
@@ -253,7 +258,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `applicationSet.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                     | `{}`             |
 | `applicationSet.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                            | `true`           |
 | `applicationSet.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                          | `""`             |
-| `applicationSet.serviceAccount.automountServiceAccountToken`       | Automount service account token for the applicationSet controller service account                               | `true`           |
+| `applicationSet.serviceAccount.automountServiceAccountToken`       | Automount service account token for the applicationSet controller service account                               | `false`          |
 | `applicationSet.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                      | `{}`             |
 | `applicationSet.podAffinityPreset`                                 | Pod affinity preset. Ignored if `applicationSet.affinity` is set. Allowed values: `soft` or `hard`              | `""`             |
 | `applicationSet.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `applicationSet.affinity` is set. Allowed values: `soft` or `hard`         | `soft`           |
@@ -264,6 +269,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `applicationSet.podAnnotations`                                    | Annotations for Argo CD applicationSet controller pods                                                          | `{}`             |
 | `applicationSet.podLabels`                                         | Extra labels for Argo CD applicationSet controller pods                                                         | `{}`             |
 | `applicationSet.containerSecurityContext.enabled`                  | Enabled Argo CD applicationSet controller containers' Security Context                                          | `true`           |
+| `applicationSet.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `{}`             |
 | `applicationSet.containerSecurityContext.runAsUser`                | Set Argo CD applicationSet controller containers' Security Context runAsUser                                    | `1001`           |
 | `applicationSet.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD applicationSet controller containers' Security Context allowPrivilegeEscalation                     | `false`          |
 | `applicationSet.containerSecurityContext.capabilities.drop`        | Set Argo CD applicationSet controller containers' Security Context capabilities to be dropped                   | `["ALL"]`        |
@@ -288,6 +294,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `applicationSet.resources.limits`                                  | The resources limits for the Argo CD applicationSet controller containers                                       | `{}`             |
 | `applicationSet.resources.requests`                                | The requested resources for the Argo CD applicationSet controller containers                                    | `{}`             |
 | `applicationSet.podSecurityContext.enabled`                        | Enabled Argo CD applicationSet controller pods' Security Context                                                | `true`           |
+| `applicationSet.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                              | `Always`         |
+| `applicationSet.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                  | `[]`             |
+| `applicationSet.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                     | `[]`             |
 | `applicationSet.podSecurityContext.fsGroup`                        | Set Argo CD applicationSet controller pod's Security Context fsGroup                                            | `1001`           |
 | `applicationSet.nodeSelector`                                      | Node labels for Argo CD applicationSet controller pods assignment                                               | `{}`             |
 | `applicationSet.tolerations`                                       | Tolerations for Argo CD applicationSet controller pods assignment                                               | `[]`             |
@@ -354,7 +363,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `notifications.service.sessionAffinityConfig`                                | Additional settings for the sessionAffinity                                                                        | `{}`             |
 | `notifications.serviceAccount.create`                                        | Specifies whether a ServiceAccount should be created                                                               | `true`           |
 | `notifications.serviceAccount.name`                                          | The name of the ServiceAccount to use.                                                                             | `""`             |
-| `notifications.serviceAccount.automountServiceAccountToken`                  | Automount service account token for the notifications controller service account                                   | `true`           |
+| `notifications.serviceAccount.automountServiceAccountToken`                  | Automount service account token for the notifications controller service account                                   | `false`          |
 | `notifications.serviceAccount.annotations`                                   | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                         | `{}`             |
 | `notifications.podAffinityPreset`                                            | Pod affinity preset. Ignored if `notifications.affinity` is set. Allowed values: `soft` or `hard`                  | `""`             |
 | `notifications.podAntiAffinityPreset`                                        | Pod anti-affinity preset. Ignored if `notifications.affinity` is set. Allowed values: `soft` or `hard`             | `soft`           |
@@ -365,6 +374,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `notifications.podAnnotations`                                               | Annotations for Argo CD notifications controller pods                                                              | `{}`             |
 | `notifications.podLabels`                                                    | Extra labels for Argo CD notifications controller pods                                                             | `{}`             |
 | `notifications.containerSecurityContext.enabled`                             | Enabled Argo CD notifications controller containers' Security Context                                              | `true`           |
+| `notifications.containerSecurityContext.seLinuxOptions`                      | Set SELinux options in container                                                                                   | `{}`             |
 | `notifications.containerSecurityContext.runAsUser`                           | Set Argo CD notifications controller containers' Security Context runAsUser                                        | `1001`           |
 | `notifications.containerSecurityContext.allowPrivilegeEscalation`            | Set Argo CD notifications controller containers' Security Context allowPrivilegeEscalation                         | `false`          |
 | `notifications.containerSecurityContext.capabilities.drop`                   | Set Argo CD notifications controller containers' Security Context capabilities to be dropped                       | `["ALL"]`        |
@@ -375,6 +385,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `notifications.resources.limits`                                             | The resources limits for the Argo CD notifications controller containers                                           | `{}`             |
 | `notifications.resources.requests`                                           | The requested resources for the Argo CD notifications controller containers                                        | `{}`             |
 | `notifications.podSecurityContext.enabled`                                   | Enabled Argo CD notifications controller pods' Security Context                                                    | `true`           |
+| `notifications.podSecurityContext.fsGroupChangePolicy`                       | Set filesystem group change policy                                                                                 | `Always`         |
+| `notifications.podSecurityContext.sysctls`                                   | Set kernel settings using the sysctl interface                                                                     | `[]`             |
+| `notifications.podSecurityContext.supplementalGroups`                        | Set filesystem extra groups                                                                                        | `[]`             |
 | `notifications.podSecurityContext.fsGroup`                                   | Set Argo CD notifications controller pod's Security Context fsGroup                                                | `1001`           |
 | `notifications.nodeSelector`                                                 | Node labels for Argo CD notifications controller pods assignment                                                   | `{}`             |
 | `notifications.tolerations`                                                  | Tolerations for Argo CD notifications controller pods assignment                                                   | `[]`             |
@@ -433,7 +446,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `notifications.bots.slack.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                        | `{}`             |
 | `notifications.bots.slack.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                               | `true`           |
 | `notifications.bots.slack.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                             | `""`             |
-| `notifications.bots.slack.serviceAccount.automountServiceAccountToken`       | Automount service account token for the notifications controller service account                                   | `true`           |
+| `notifications.bots.slack.serviceAccount.automountServiceAccountToken`       | Automount service account token for the notifications controller service account                                   | `false`          |
 | `notifications.bots.slack.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                         | `{}`             |
 | `notifications.bots.slack.podAffinityPreset`                                 | Pod affinity preset. Ignored if `notifications.bots.slack.affinity` is set. Allowed values: `soft` or `hard`       | `""`             |
 | `notifications.bots.slack.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `notifications.bots.slack.affinity` is set. Allowed values: `soft` or `hard`  | `soft`           |
@@ -466,6 +479,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `notifications.bots.slack.podAnnotations`                                    | Annotations for Argo CD Slack bot pods                                                                             | `{}`             |
 | `notifications.bots.slack.podLabels`                                         | Extra labels for Argo CD Slack bot pods                                                                            | `{}`             |
 | `notifications.bots.slack.containerSecurityContext.enabled`                  | Enabled Argo CD Slack bot containers' Security Context                                                             | `true`           |
+| `notifications.bots.slack.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                   | `{}`             |
 | `notifications.bots.slack.containerSecurityContext.runAsUser`                | Set Argo CD Slack bot containers' Security Context runAsUser                                                       | `1001`           |
 | `notifications.bots.slack.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD Slack bot containers' Security Context allowPrivilegeEscalation                                        | `false`          |
 | `notifications.bots.slack.containerSecurityContext.capabilities.drop`        | Set Argo CD Slack bot containers' Security Context capabilities to be dropped                                      | `["ALL"]`        |
@@ -476,6 +490,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `notifications.bots.slack.resources.limits`                                  | The resources limits for the Argo CD Slack bot containers                                                          | `{}`             |
 | `notifications.bots.slack.resources.requests`                                | The requested resources for the Argo CD Slack bot containers                                                       | `{}`             |
 | `notifications.bots.slack.podSecurityContext.enabled`                        | Enabled Argo CD Slack bot pods' Security Context                                                                   | `true`           |
+| `notifications.bots.slack.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                 | `Always`         |
+| `notifications.bots.slack.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                     | `[]`             |
+| `notifications.bots.slack.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                        | `[]`             |
 | `notifications.bots.slack.podSecurityContext.fsGroup`                        | Set Argo CD Slack bot pod's Security Context fsGroup                                                               | `1001`           |
 | `notifications.bots.slack.nodeSelector`                                      | Node labels for Argo CD Slack bot pods assignment                                                                  | `{}`             |
 | `notifications.bots.slack.tolerations`                                       | Tolerations for Argo CD Slack bot pods assignment                                                                  | `[]`             |
@@ -515,8 +532,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.resources.limits`                                  | The resources limits for the Argo CD server containers                                                                          | `{}`                     |
 | `server.resources.requests`                                | The requested resources for the Argo CD server containers                                                                       | `{}`                     |
 | `server.podSecurityContext.enabled`                        | Enabled Argo CD server pods' Security Context                                                                                   | `true`                   |
+| `server.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                              | `Always`                 |
+| `server.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                  | `[]`                     |
+| `server.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                     | `[]`                     |
 | `server.podSecurityContext.fsGroup`                        | Set Argo CD server pod's Security Context fsGroup                                                                               | `1001`                   |
 | `server.containerSecurityContext.enabled`                  | Enabled Argo CD server containers' Security Context                                                                             | `true`                   |
+| `server.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                | `{}`                     |
 | `server.containerSecurityContext.runAsUser`                | Set Argo CD server containers' Security Context runAsUser                                                                       | `1001`                   |
 | `server.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD server containers' Security Context allowPrivilegeEscalation                                                        | `false`                  |
 | `server.containerSecurityContext.capabilities.drop`        | Set Argo CD containers' server Security Context capabilities to be dropped                                                      | `["ALL"]`                |
@@ -602,6 +623,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.command`                                           | Override default container command (useful when using custom images)                                                            | `[]`                     |
 | `server.args`                                              | Override default container args (useful when using custom images)                                                               | `[]`                     |
 | `server.extraArgs`                                         | concat to the default args                                                                                                      | `[]`                     |
+| `server.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                              | `true`                   |
 | `server.hostAliases`                                       | Argo CD server pods host aliases                                                                                                | `[]`                     |
 | `server.podLabels`                                         | Extra labels for Argo CD server pods                                                                                            | `{}`                     |
 | `server.podAnnotations`                                    | Annotations for Argo CD server pods                                                                                             | `{}`                     |
@@ -629,7 +651,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.initContainers`                                    | Add additional init containers to the Argo CD server pod(s)                                                                     | `[]`                     |
 | `server.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                            | `true`                   |
 | `server.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                          | `""`                     |
-| `server.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                  | `true`                   |
+| `server.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                  | `false`                  |
 | `server.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                      | `{}`                     |
 
 ### Argo CD repo server Parameters
@@ -661,8 +683,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `repoServer.resources.limits`                                  | The resources limits for the Argo CD repo server containers                                          | `{}`             |
 | `repoServer.resources.requests`                                | The requested resources for the Argo CD repo server containers                                       | `{}`             |
 | `repoServer.podSecurityContext.enabled`                        | Enabled Argo CD repo server pods' Security Context                                                   | `true`           |
+| `repoServer.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                   | `Always`         |
+| `repoServer.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                       | `[]`             |
+| `repoServer.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                          | `[]`             |
 | `repoServer.podSecurityContext.fsGroup`                        | Set Argo CD repo server pod's Security Context fsGroup                                               | `1001`           |
 | `repoServer.containerSecurityContext.enabled`                  | Enabled Argo CD repo server containers' Security Context                                             | `true`           |
+| `repoServer.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                     | `{}`             |
 | `repoServer.containerSecurityContext.runAsUser`                | Set Argo CD repo server containers' Security Context runAsUser                                       | `1001`           |
 | `repoServer.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD repo server containers' Security Context allowPrivilegeEscalation                        | `false`          |
 | `repoServer.containerSecurityContext.capabilities.drop`        | Set Argo CD containers' repo server Security Context capabilities to be dropped                      | `["ALL"]`        |
@@ -712,11 +738,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `repoServer.autoscaling.targetMemory`                          | Argo CD repo server deployment autoscaling target CPU memory                                         | `50`             |
 | `repoServer.serviceAccount.create`                             | Specifies whether a ServiceAccount for repo server should be created                                 | `true`           |
 | `repoServer.serviceAccount.name`                               | The name of the ServiceAccount for repo server to use.                                               | `""`             |
-| `repoServer.serviceAccount.automountServiceAccountToken`       | Automount service account token for the repo server service account                                  | `true`           |
+| `repoServer.serviceAccount.automountServiceAccountToken`       | Automount service account token for the repo server service account                                  | `false`          |
 | `repoServer.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.           | `{}`             |
 | `repoServer.command`                                           | Override default container command (useful when using custom images)                                 | `[]`             |
 | `repoServer.args`                                              | Override default container args (useful when using custom images)                                    | `[]`             |
 | `repoServer.extraArgs`                                         | Add extra args to the default repo server args                                                       | `[]`             |
+| `repoServer.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                   | `true`           |
 | `repoServer.hostAliases`                                       | Argo CD repo server pods host aliases                                                                | `[]`             |
 | `repoServer.podLabels`                                         | Extra labels for Argo CD repo server pods                                                            | `{}`             |
 | `repoServer.podAnnotations`                                    | Annotations for Argo CD repo server pods                                                             | `{}`             |
@@ -779,8 +806,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dex.resources.limits`                                  | The resources limits for the Dex containers                                                         | `{}`                  |
 | `dex.resources.requests`                                | The requested resources for the Dex containers                                                      | `{}`                  |
 | `dex.podSecurityContext.enabled`                        | Enabled Dex pods' Security Context                                                                  | `true`                |
+| `dex.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                  | `Always`              |
+| `dex.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                      | `[]`                  |
+| `dex.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                         | `[]`                  |
 | `dex.podSecurityContext.fsGroup`                        | Set Dex pod's Security Context fsGroup                                                              | `1001`                |
 | `dex.containerSecurityContext.enabled`                  | Enabled Dex containers' Security Context                                                            | `true`                |
+| `dex.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `{}`                  |
 | `dex.containerSecurityContext.runAsUser`                | Set Dex containers' Security Context runAsUser                                                      | `1001`                |
 | `dex.containerSecurityContext.allowPrivilegeEscalation` | Set Dex containers' Security Context allowPrivilegeEscalation                                       | `false`               |
 | `dex.containerSecurityContext.readOnlyRootFilesystem`   | Set Dex containers' server Security Context readOnlyRootFilesystem                                  | `false`               |
@@ -826,11 +857,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dex.metrics.serviceMonitor.honorLabels`                | honorLabels chooses the metric's labels on collisions with target labels                            | `false`               |
 | `dex.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created for Dex                                        | `true`                |
 | `dex.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                              | `""`                  |
-| `dex.serviceAccount.automountServiceAccountToken`       | Automount service account token for the Dex service account                                         | `true`                |
+| `dex.serviceAccount.automountServiceAccountToken`       | Automount service account token for the Dex service account                                         | `false`               |
 | `dex.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.          | `{}`                  |
 | `dex.command`                                           | Override default container command (useful when using custom images)                                | `[]`                  |
 | `dex.args`                                              | Override default container args (useful when using custom images)                                   | `[]`                  |
 | `dex.extraArgs`                                         | Add extra args to the default args for Dex                                                          | `[]`                  |
+| `dex.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                  | `true`                |
 | `dex.hostAliases`                                       | Dex pods host aliases                                                                               | `[]`                  |
 | `dex.podLabels`                                         | Extra labels for Dex pods                                                                           | `{}`                  |
 | `dex.podAnnotations`                                    | Annotations for Dex pods                                                                            | `{}`                  |
@@ -886,17 +918,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init Container Parameters
 
-| Name                                                   | Description                                                                                                        | Value                      |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
-| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                        | `{}`                       |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                     | `{}`                       |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                        |
+| Name                                                        | Description                                                                                                        | Value                      |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| `volumePermissions.enabled`                                 | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
+| `volumePermissions.image.registry`                          | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                        | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                            | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`                        | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
+| `volumePermissions.resources.limits`                        | The resources limits for the init container                                                                        | `{}`                       |
+| `volumePermissions.resources.requests`                      | The requested resources for the init container                                                                     | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `{}`                       |
+| `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                    | `0`                        |
 
 ### Other Parameters
 
@@ -923,6 +956,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redisWait.enabled`                                           | Enables waiting for redis                                                                             | `true`                  |
 | `redisWait.extraArgs`                                         | Additional arguments for the redis-cli call, such as TLS                                              | `""`                    |
 | `redisWait.containerSecurityContext.enabled`                  | Enabled Argo CD repo server containers' Security Context                                              | `true`                  |
+| `redisWait.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                      | `{}`                    |
 | `redisWait.containerSecurityContext.runAsUser`                | Set Argo CD repo server containers' Security Context runAsUser                                        | `1001`                  |
 | `redisWait.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD repo server containers' Security Context allowPrivilegeEscalation                         | `false`                 |
 | `redisWait.containerSecurityContext.capabilities.drop`        | Set Argo CD containers' repo server Security Context capabilities to be dropped                       | `["ALL"]`               |

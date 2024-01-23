@@ -196,7 +196,10 @@ hub:
       {{- if .Values.singleuser.podSecurityContext.enabled }}
       fsGid: {{ .Values.singleuser.podSecurityContext.fsGroup }}
       {{- end }}
+      containerSecurityContext: {{- omit .Values.singleuser.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+      podSecurityContext: {{- omit .Values.singleuser.podSecurityContext "enabled" | toYaml | nindent 4 }}
       serviceAccountName: {{ template "jupyterhub.singleuserServiceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.singleuser.automountServiceAccountToken }}
       storage:
         {{- if .Values.singleuser.persistence.enabled }}
         type: dynamic
@@ -343,6 +346,7 @@ hub:
   ## hub containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param hub.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param hub.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param hub.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param hub.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param hub.containerSecurityContext.privileged Set container's Security Context privileged
@@ -353,6 +357,7 @@ hub:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -365,14 +370,23 @@ hub:
   ## hub pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param hub.podSecurityContext.enabled Enabled Hub pods' Security Context
+  ## @param hub.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param hub.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param hub.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param hub.podSecurityContext.fsGroup Set Hub pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## @param hub.lifecycleHooks LifecycleHooks for the Hub container to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param hub.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param hub.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -503,7 +517,7 @@ hub:
     ## @param hub.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ## Can be set to false if pods using this serviceAccount do not need to use K8s API
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param hub.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
@@ -772,6 +786,7 @@ proxy:
   ## Proxy containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param proxy.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param proxy.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param proxy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param proxy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param proxy.containerSecurityContext.privileged Set container's Security Context privileged
@@ -782,6 +797,7 @@ proxy:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -794,16 +810,25 @@ proxy:
   ## Proxy pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param proxy.podSecurityContext.enabled Enabled Proxy pods' Security Context
+  ## @param proxy.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param proxy.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param proxy.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param proxy.podSecurityContext.fsGroup Set Proxy pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## @param proxy.lifecycleHooks Add lifecycle hooks to the Proxy deployment
   ##
   lifecycleHooks: {}
   ## Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ## @param proxy.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param proxy.hostAliases Add deployment host aliases
   ##
   hostAliases: []
@@ -1309,6 +1334,7 @@ imagePuller:
   ## ImagePuller containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param imagePuller.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param imagePuller.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param imagePuller.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param imagePuller.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param imagePuller.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1319,6 +1345,7 @@ imagePuller:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1331,10 +1358,16 @@ imagePuller:
   ## ImagePuller pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param imagePuller.podSecurityContext.enabled Enabled ImagePuller pods' Security Context
+  ## @param imagePuller.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param imagePuller.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param imagePuller.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param imagePuller.podSecurityContext.fsGroup Set ImagePuller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## @param imagePuller.lifecycleHooks Add lifecycle hooks to the ImagePuller deployment
   ##
@@ -1442,6 +1475,23 @@ imagePuller:
   ##         containerPort: 1234
   ##
   sidecars: []
+  ## ServiceAccount parameters
+  ##
+  serviceAccount:
+    ## @param imagePuller.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param imagePuller.serviceAccount.name Override image puller service account name
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    name: ""
+    ## @param imagePuller.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+    ##
+    automountServiceAccountToken: false
+    ## @param imagePuller.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
 
 ## @section Singleuser deployment parameters
 ##
@@ -1483,6 +1533,9 @@ singleuser:
   ##
   allowPrivilegeEscalation: false
   ## Command for running the container (set to default if not set). Use array form
+  ## @param singleuser.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param singleuser.command Override Single User default command
   ##
   command: []
@@ -1504,6 +1557,7 @@ singleuser:
   ## singleuser containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param singleuser.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param singleuser.containerSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param singleuser.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param singleuser.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param singleuser.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1514,6 +1568,7 @@ singleuser:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1526,10 +1581,16 @@ singleuser:
   ## singleuser pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param singleuser.podSecurityContext.enabled Enabled Single User pods' Security Context
+  ## @param singleuser.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param singleuser.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param singleuser.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param singleuser.podSecurityContext.fsGroup Set Single User pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## @param singleuser.podLabels Extra labels for Single User pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
@@ -1668,7 +1729,7 @@ singleuser:
 auxiliaryImage:
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 11-debian-11-r93
+  tag: 11-debian-11-r94
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

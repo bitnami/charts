@@ -182,8 +182,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                   | `1`              |
 | `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                   | `""`             |
 | `podSecurityContext.enabled`                        | Enabled OAuth2 Proxy pods' Security Context                                                      | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                               | `Always`         |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                   | `[]`             |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                      | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set OAuth2 Proxy pod's Security Context fsGroup                                                  | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                             | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                 | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                       | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                    | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                      | `false`          |
@@ -193,6 +197,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                 | `RuntimeDefault` |
 | `command`                                           | Override default container command (useful when using custom images)                             | `[]`             |
 | `args`                                              | Override default container args (useful when using custom images)                                | `[]`             |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                               | `false`          |
 | `hostAliases`                                       | OAuth2 Proxy pods host aliases                                                                   | `[]`             |
 | `podLabels`                                         | Extra labels for OAuth2 Proxy pods                                                               | `{}`             |
 | `podAnnotations`                                    | Annotations for OAuth2 Proxy pods                                                                | `{}`             |

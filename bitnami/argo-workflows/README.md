@@ -150,10 +150,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.containerPorts.web`                                | argo Server container port                                                                                          | `2746`                              |
 | `server.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                | `true`                              |
 | `server.serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`                                |
-| `server.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                      | `true`                              |
+| `server.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                      | `false`                             |
 | `server.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`                                |
 | `server.command`                                           | Override default container command (useful when using custom images)                                                | `[]`                                |
 | `server.args`                                              | Override default container args (useful when using custom images)                                                   | `[]`                                |
+| `server.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                  | `true`                              |
 | `server.hostAliases`                                       | server pods host aliases                                                                                            | `[]`                                |
 | `server.podLabels`                                         | Extra labels for server pods                                                                                        | `{}`                                |
 | `server.podAnnotations`                                    | Annotations for server pods                                                                                         | `{}`                                |
@@ -261,10 +262,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.pdb.maxUnavailable`                                | Sets the max number of pods unavailable for the Pod Disruption Budget                                                         | `1`                                        |
 | `controller.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                          | `true`                                     |
 | `controller.serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.           | `""`                                       |
-| `controller.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                | `true`                                     |
+| `controller.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                | `false`                                    |
 | `controller.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                    | `{}`                                       |
 | `controller.command`                                           | Override default container command (useful when using custom images)                                                          | `[]`                                       |
 | `controller.args`                                              | Override default container args (useful when using custom images)                                                             | `[]`                                       |
+| `controller.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                            | `true`                                     |
 | `controller.hostAliases`                                       | controller pods host aliases                                                                                                  | `[]`                                       |
 | `controller.podLabels`                                         | Extra labels for controller pods                                                                                              | `{}`                                       |
 | `controller.podAnnotations`                                    | Annotations for controller pods                                                                                               | `{}`                                       |
@@ -343,13 +345,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Workflows configuration
 
-| Name                                                    | Description                                                                                | Value  |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ------ |
-| `workflows.serviceAccount.create`                       | Whether to create a service account to run workflows                                       | `true` |
-| `workflows.serviceAccount.name`                         | Service account name to run workflows                                                      | `""`   |
-| `workflows.serviceAccount.automountServiceAccountToken` | Automount service account token for the workflows service account                          | `true` |
-| `workflows.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`. | `{}`   |
-| `workflows.rbac.create`                                 | Whether to create RBAC resource to run workflows                                           | `true` |
+| Name                                                    | Description                                                                                | Value   |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ------- |
+| `workflows.serviceAccount.create`                       | Whether to create a service account to run workflows                                       | `true`  |
+| `workflows.serviceAccount.name`                         | Service account name to run workflows                                                      | `""`    |
+| `workflows.serviceAccount.automountServiceAccountToken` | Automount service account token for the workflows service account                          | `false` |
+| `workflows.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`. | `{}`    |
+| `workflows.rbac.create`                                 | Whether to create RBAC resource to run workflows                                           | `true`  |
 
 ### PostgreSQL subchart
 

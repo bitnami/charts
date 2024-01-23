@@ -142,8 +142,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.limits`                                  | The resources limits for the haproxy containers                                                         | `{}`                      |
 | `resources.requests`                                | The requested resources for the haproxy containers                                                      | `{}`                      |
 | `podSecurityContext.enabled`                        | Enabled haproxy pods' Security Context                                                                  | `true`                    |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                      | `Always`                  |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                          | `[]`                      |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                             | `[]`                      |
 | `podSecurityContext.fsGroup`                        | Set haproxy pod's Security Context fsGroup                                                              | `1001`                    |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                    | `true`                    |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `{}`                      |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                              | `1001`                    |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                           | `true`                    |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                             | `false`                   |
@@ -161,6 +165,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                    | `50`                      |
 | `command`                                           | Override default container command (useful when using custom images)                                    | `[]`                      |
 | `args`                                              | Override default container args (useful when using custom images)                                       | `[]`                      |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                      | `false`                   |
 | `hostAliases`                                       | haproxy pods host aliases                                                                               | `[]`                      |
 | `podLabels`                                         | Extra labels for haproxy pods                                                                           | `{}`                      |
 | `podAnnotations`                                    | Annotations for haproxy pods                                                                            | `{}`                      |

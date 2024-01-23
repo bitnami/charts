@@ -176,6 +176,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                      | `false`          |
 | `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                             | `["ALL"]`        |
 | `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                               | `RuntimeDefault` |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                             | `false`          |
 | `hostAliases`                                       | SonarQube&trade; pods host aliases                                                             | `[]`             |
 | `podLabels`                                         | Extra labels for SonarQube&trade; pods                                                         | `{}`             |
 | `podAnnotations`                                    | Annotations for SonarQube&trade; pods                                                          | `{}`             |

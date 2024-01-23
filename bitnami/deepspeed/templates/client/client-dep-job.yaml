@@ -49,6 +49,7 @@ spec:
     spec:
       {{- include "deepspeed.v0.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ template "deepspeed.v0.client.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.client.automountServiceAccountToken }}
       {{- if .Values.client.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.client.hostAliases "context" $) | nindent 8 }}
       {{- end }}

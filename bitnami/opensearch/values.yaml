@@ -179,7 +179,7 @@ useIstioLabels: true
 image:
   registry: docker.io
   repository: bitnami/opensearch
-  tag: 2.11.1-debian-11-r2
+  tag: 2.11.1-debian-11-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -609,6 +609,9 @@ master:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param master.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param master.hostAliases master-eligible pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1017,6 +1020,9 @@ data:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param data.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param data.hostAliases data pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1426,6 +1432,9 @@ coordinating:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param coordinating.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param coordinating.hostAliases coordinating-only pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1798,6 +1807,9 @@ ingest:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param ingest.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param ingest.hostAliases ingest-only pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2260,7 +2272,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r94
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2307,7 +2319,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 11-debian-11-r92
+  tag: 11-debian-11-r94
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2361,7 +2373,7 @@ dashboards:
   image:
     registry: docker.io
     repository: bitnami/opensearch-dashboards
-    tag: 2.11.0-debian-11-r2
+    tag: 2.11.1-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2625,6 +2637,9 @@ dashboards:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param dashboards.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param dashboards.hostAliases data pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

@@ -58,6 +58,10 @@ spec:
       {{- if .Values.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       initContainers:
       {{- if .Values.initContainers }}
       {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}

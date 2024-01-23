@@ -469,6 +469,9 @@ alertmanager:
   ## @param alertmanager.lifecycleHooks for the ingester container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param alertmanager.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param alertmanager.hostAliases ingester pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -836,6 +839,9 @@ compactor:
   ## @param compactor.lifecycleHooks for the compactor container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param compactor.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param compactor.hostAliases compactor pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1177,6 +1183,9 @@ distributor:
   ## @param distributor.lifecycleHooks for the distributor container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param distributor.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param distributor.hostAliases distributor pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1533,6 +1542,9 @@ gateway:
   ## @param gateway.lifecycleHooks for the gateway container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param gateway.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param gateway.hostAliases gateway pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1926,6 +1938,9 @@ ingester:
   ## @param ingester.lifecycleHooks for the ingester container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param ingester.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param ingester.hostAliases ingester pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2276,6 +2291,9 @@ overridesExporter:
   ## @param overridesExporter.lifecycleHooks for the ingester container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param overridesExporter.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param overridesExporter.hostAliases ingester pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2586,6 +2604,9 @@ querier:
   ## @param querier.lifecycleHooks for the ingester container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param querier.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param querier.hostAliases ingester pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2896,6 +2917,9 @@ queryFrontend:
   ## @param queryFrontend.lifecycleHooks for the ingester container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param queryFrontend.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param queryFrontend.hostAliases ingester pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -3209,6 +3233,9 @@ queryScheduler:
   ## @param queryScheduler.lifecycleHooks for the ingester container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param queryScheduler.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param queryScheduler.hostAliases ingester pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -3523,6 +3550,9 @@ storeGateway:
   ## @param storeGateway.lifecycleHooks for the ingester container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param storeGateway.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param storeGateway.hostAliases ingester pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -3880,6 +3910,9 @@ ruler:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param ruler.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param ruler.hostAliases ruler pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -4127,7 +4160,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r94
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

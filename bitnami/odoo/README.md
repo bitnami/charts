@@ -120,8 +120,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.limits`                             | The resources limits for the Odoo container                                                                              | `{}`             |
 | `resources.requests`                           | The requested resources for the Odoo container                                                                           | `{}`             |
 | `podSecurityContext.enabled`                   | Enabled Odoo pods' Security Context                                                                                      | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`       | Set filesystem group change policy                                                                                       | `Always`         |
+| `podSecurityContext.sysctls`                   | Set kernel settings using the sysctl interface                                                                           | `[]`             |
+| `podSecurityContext.supplementalGroups`        | Set filesystem extra groups                                                                                              | `[]`             |
 | `podSecurityContext.fsGroup`                   | Set Odoo pod's Security Context fsGroup                                                                                  | `0`              |
 | `containerSecurityContext.enabled`             | Enabled Odoo containers' Security Context                                                                                | `true`           |
+| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                         | `{}`             |
 | `containerSecurityContext.runAsUser`           | Set Odoo container's Security Context runAsUser                                                                          | `0`              |
 | `containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `livenessProbe.enabled`                        | Enable livenessProbe                                                                                                     | `true`           |
@@ -149,6 +153,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customReadinessProbe`                         | Custom readinessProbe that overrides the default one                                                                     | `{}`             |
 | `customStartupProbe`                           | Custom startupProbe that overrides the default one                                                                       | `{}`             |
 | `lifecycleHooks`                               | LifecycleHooks to set additional configuration at startup                                                                | `{}`             |
+| `automountServiceAccountToken`                 | Mount Service Account token in pod                                                                                       | `false`          |
 | `hostAliases`                                  | Odoo pod host aliases                                                                                                    | `[]`             |
 | `podLabels`                                    | Extra labels for Odoo pods                                                                                               | `{}`             |
 | `podAnnotations`                               | Annotations for Odoo pods                                                                                                | `{}`             |
@@ -220,6 +225,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`                             | The resources limits for the init container                                                                                           | `{}`             |
 | `volumePermissions.resources.requests`                           | The requested resources for the init container                                                                                        | `{}`             |
 | `volumePermissions.containerSecurityContext.enabled`             | Enable init container's Security Context                                                                                              | `true`           |
+| `volumePermissions.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                      | `{}`             |
 | `volumePermissions.containerSecurityContext.runAsUser`           | Set init container's Security Context runAsUser                                                                                       | `0`              |
 | `volumePermissions.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                      | `RuntimeDefault` |
 

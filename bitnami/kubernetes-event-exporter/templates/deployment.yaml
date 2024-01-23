@@ -35,6 +35,7 @@ spec:
     spec:
       serviceAccountName: {{ include "kubernetes-event-exporter.serviceAccountName" . }}
       {{- include "common.images.pullSecrets" ( dict "images" (list .Values.image) "global" .Values.global) | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}

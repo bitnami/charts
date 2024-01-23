@@ -111,6 +111,7 @@ helm delete my-release
 | `podSecurityContext.fsGroup`                        | Set Kong pod's Security Context fsGroup                                                                                            | `1001`           |
 | `updateStrategy.type`                               | Kong update strategy                                                                                                               | `RollingUpdate`  |
 | `updateStrategy.rollingUpdate`                      | Kong deployment rolling update configuration parameters                                                                            | `{}`             |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                 | `true`           |
 | `hostAliases`                                       | Add deployment host aliases                                                                                                        | `[]`             |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template           | `[]`             |
 | `priorityClassName`                                 | Priority Class Name                                                                                                                | `""`             |
@@ -263,27 +264,28 @@ helm delete my-release
 | `ingressController.lifecycleHooks`                              | Lifecycle hooks (Kong Ingress Controller container)                                                                                           | `{}`                                      |
 | `ingressController.serviceAccount.create`                       | Enable the creation of a ServiceAccount for Keycloak pods                                                                                     | `true`                                    |
 | `ingressController.serviceAccount.name`                         | Name of the created ServiceAccount (name generated using common.names.fullname template otherwise)                                            | `""`                                      |
-| `ingressController.serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod                                                                                               | `true`                                    |
+| `ingressController.serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod                                                                                               | `false`                                   |
 | `ingressController.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                          | `{}`                                      |
 | `ingressController.rbac.create`                                 | Create the necessary RBAC resources for the Ingress Controller to work                                                                        | `true`                                    |
 | `ingressController.rbac.rules`                                  | Custom RBAC rules                                                                                                                             | `[]`                                      |
 
 ### Kong Migration job Parameters
 
-| Name                           | Description                                                                                                                | Value |
-| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `migration.command`            | Override default container command (useful when using custom images)                                                       | `[]`  |
-| `migration.args`               | Override default container args (useful when using custom images)                                                          | `[]`  |
-| `migration.extraEnvVars`       | Array containing extra env vars to configure the Kong migration job                                                        | `[]`  |
-| `migration.extraEnvVarsCM`     | ConfigMap containing extra env vars to configure the Kong migration job                                                    | `""`  |
-| `migration.extraEnvVarsSecret` | Secret containing extra env vars to configure the Kong migration job (in case of sensitive data)                           | `""`  |
-| `migration.extraVolumeMounts`  | Array of extra volume mounts to be added to the Kong Container (evaluated as template). Normally used with `extraVolumes`. | `[]`  |
-| `migration.resources.limits`   | The resources limits for the container                                                                                     | `{}`  |
-| `migration.resources.requests` | The requested resources for the container                                                                                  | `{}`  |
-| `migration.hostAliases`        | Add deployment host aliases                                                                                                | `[]`  |
-| `migration.annotations`        | Add annotations to the job                                                                                                 | `{}`  |
-| `migration.podLabels`          | Additional pod labels                                                                                                      | `{}`  |
-| `migration.podAnnotations`     | Additional pod annotations                                                                                                 | `{}`  |
+| Name                                     | Description                                                                                                                | Value  |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `migration.command`                      | Override default container command (useful when using custom images)                                                       | `[]`   |
+| `migration.args`                         | Override default container args (useful when using custom images)                                                          | `[]`   |
+| `migration.extraEnvVars`                 | Array containing extra env vars to configure the Kong migration job                                                        | `[]`   |
+| `migration.extraEnvVarsCM`               | ConfigMap containing extra env vars to configure the Kong migration job                                                    | `""`   |
+| `migration.extraEnvVarsSecret`           | Secret containing extra env vars to configure the Kong migration job (in case of sensitive data)                           | `""`   |
+| `migration.extraVolumeMounts`            | Array of extra volume mounts to be added to the Kong Container (evaluated as template). Normally used with `extraVolumes`. | `[]`   |
+| `migration.resources.limits`             | The resources limits for the container                                                                                     | `{}`   |
+| `migration.resources.requests`           | The requested resources for the container                                                                                  | `{}`   |
+| `migration.automountServiceAccountToken` | Mount Service Account token in pod                                                                                         | `true` |
+| `migration.hostAliases`                  | Add deployment host aliases                                                                                                | `[]`   |
+| `migration.annotations`                  | Add annotations to the job                                                                                                 | `{}`   |
+| `migration.podLabels`                    | Additional pod labels                                                                                                      | `{}`   |
+| `migration.podAnnotations`               | Additional pod annotations                                                                                                 | `{}`   |
 
 ### PostgreSQL Parameters
 

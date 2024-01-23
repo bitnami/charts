@@ -95,6 +95,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                                    | Additional pod annotations                                                                                  | `{}`                    |
 | `podLabels`                                         | Additional pod labels                                                                                       | `{}`                    |
 | `podSecurityContext.enabled`                        | Enable security context for EJBCA container                                                                 | `true`                  |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                          | `Always`                |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                              | `[]`                    |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                 | `[]`                    |
 | `podSecurityContext.fsGroup`                        | Group ID for the volumes of the pod                                                                         | `1001`                  |
 | `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                         | `""`                    |
 | `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                    | `soft`                  |
@@ -113,6 +116,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.annotations`                           | Persistent Volume Claim annotations                                                                         | `{}`                    |
 | `sidecars`                                          | Attach additional sidecar containers to the pod                                                             | `[]`                    |
 | `initContainers`                                    | Additional init containers to add to the pods                                                               | `[]`                    |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                          | `false`                 |
 | `hostAliases`                                       | Add deployment host aliases                                                                                 | `[]`                    |
 | `priorityClassName`                                 | EJBCA pods' priorityClassName                                                                               | `""`                    |
 | `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                              | `""`                    |
@@ -135,6 +139,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.limits`                                  | The resources limits for Ejbca containers                                                                   | `{}`                    |
 | `resources.requests`                                | The requested resources for Ejbca containers                                                                | `{}`                    |
 | `containerSecurityContext.enabled`                  | Enabled EJBCA containers' Security Context                                                                  | `true`                  |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                            | `{}`                    |
 | `containerSecurityContext.runAsUser`                | Set EJBCA containers' Security Context runAsUser                                                            | `1001`                  |
 | `containerSecurityContext.runAsNonRoot`             | Set Controller container's Security Context runAsNonRoot                                                    | `true`                  |
 | `containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                         | `false`                 |
@@ -163,6 +168,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                               | Custom liveness probe to execute (when the main one is disabled)                                            | `{}`                    |
 | `customReadinessProbe`                              | Custom readiness probe to execute (when the main one is disabled)                                           | `{}`                    |
 | `containerPorts`                                    | EJBCA Container ports to open                                                                               | `{}`                    |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for WordPress pod                                                         | `true`                  |
+| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                      | `""`                    |
+| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                      | `false`                 |
+| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                        | `{}`                    |
 
 ### Service parameters
 

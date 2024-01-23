@@ -117,8 +117,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.resources.limits`                                  | The resources limits for the Appsmith client containers                                                                  | `{}`             |
 | `client.resources.requests`                                | The requested resources for the Appsmith client containers                                                               | `{}`             |
 | `client.podSecurityContext.enabled`                        | Enabled Appsmith client pods' Security Context                                                                           | `true`           |
+| `client.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`         |
+| `client.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`             |
+| `client.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `client.podSecurityContext.fsGroup`                        | Set Appsmith client pod's Security Context fsGroup                                                                       | `1001`           |
 | `client.containerSecurityContext.enabled`                  | Enabled Appsmith client containers' Security Context                                                                     | `true`           |
+| `client.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
 | `client.containerSecurityContext.runAsUser`                | Set Appsmith client containers' Security Context runAsUser                                                               | `1001`           |
 | `client.containerSecurityContext.runAsNonRoot`             | Set Appsmith client containers' Security Context runAsNonRoot                                                            | `true`           |
 | `client.containerSecurityContext.readOnlyRootFilesystem`   | Set Appsmith client containers' Security Context runAsNonRoot                                                            | `false`          |
@@ -128,6 +132,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `client.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `client.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `client.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `client.hostAliases`                                       | Appsmith client pods host aliases                                                                                        | `[]`             |
 | `client.podLabels`                                         | Extra labels for Appsmith client pods                                                                                    | `{}`             |
 | `client.podAnnotations`                                    | Annotations for Appsmith client pods                                                                                     | `{}`             |
@@ -152,6 +157,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Appsmith client container(s)                            | `[]`             |
 | `client.sidecars`                                          | Add additional sidecar containers to the Appsmith client pod(s)                                                          | `[]`             |
 | `client.initContainers`                                    | Add additional init containers to the Appsmith client pod(s)                                                             | `[]`             |
+
+### Appsmith Client Network Policies
+
+| Name                                           | Description                                                | Value   |
+| ---------------------------------------------- | ---------------------------------------------------------- | ------- |
+| `client.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `false` |
+| `client.networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
+| `client.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice               | `[]`    |
+| `client.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
+| `client.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
+| `client.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
 
 ### Appsmith Client Traffic Exposure Parameters
 
@@ -222,8 +238,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.resources.limits`                                  | The resources limits for the Appsmith backend containers                                                                 | `{}`                  |
 | `backend.resources.requests`                                | The requested resources for the Appsmith backend containers                                                              | `{}`                  |
 | `backend.podSecurityContext.enabled`                        | Enabled Appsmith backend pods' Security Context                                                                          | `true`                |
+| `backend.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`              |
+| `backend.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`                  |
+| `backend.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                  |
 | `backend.podSecurityContext.fsGroup`                        | Set Appsmith backend pod's Security Context fsGroup                                                                      | `1001`                |
 | `backend.containerSecurityContext.enabled`                  | Enabled Appsmith backend containers' Security Context                                                                    | `true`                |
+| `backend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                  |
 | `backend.containerSecurityContext.runAsUser`                | Set Appsmith backend containers' Security Context runAsUser                                                              | `1001`                |
 | `backend.containerSecurityContext.runAsNonRoot`             | Set Appsmith backend containers' Security Context runAsNonRoot                                                           | `true`                |
 | `backend.containerSecurityContext.readOnlyRootFilesystem`   | Set Appsmith backend containers' Security Context runAsNonRoot                                                           | `false`               |
@@ -233,6 +253,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault`      |
 | `backend.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`                  |
 | `backend.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`                  |
+| `backend.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`               |
 | `backend.hostAliases`                                       | Appsmith backend pods host aliases                                                                                       | `[]`                  |
 | `backend.podLabels`                                         | Extra labels for Appsmith backend pods                                                                                   | `{}`                  |
 | `backend.podAnnotations`                                    | Annotations for Appsmith backend pods                                                                                    | `{}`                  |
@@ -257,6 +278,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Appsmith backend container(s)                           | `[]`                  |
 | `backend.sidecars`                                          | Add additional sidecar containers to the Appsmith backend pod(s)                                                         | `[]`                  |
 | `backend.initContainers`                                    | Add additional init containers to the Appsmith backend pod(s)                                                            | `[]`                  |
+
+### Appsmith Backend Network Policies
+
+| Name                                            | Description                                                | Value   |
+| ----------------------------------------------- | ---------------------------------------------------------- | ------- |
+| `backend.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `false` |
+| `backend.networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
+| `backend.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolic                | `[]`    |
+| `backend.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
+| `backend.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
+| `backend.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
 
 ### Appsmith Backend Traffic Exposure Parameters
 
@@ -320,8 +352,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rts.resources.limits`                                  | The resources limits for the Appsmith rts containers                                                                     | `{}`             |
 | `rts.resources.requests`                                | The requested resources for the Appsmith rts containers                                                                  | `{}`             |
 | `rts.podSecurityContext.enabled`                        | Enabled Appsmith rts pods' Security Context                                                                              | `true`           |
+| `rts.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`         |
+| `rts.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`             |
+| `rts.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `rts.podSecurityContext.fsGroup`                        | Set Appsmith rts pod's Security Context fsGroup                                                                          | `1001`           |
 | `rts.containerSecurityContext.enabled`                  | Enabled Appsmith rts containers' Security Context                                                                        | `true`           |
+| `rts.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
 | `rts.containerSecurityContext.runAsUser`                | Set Appsmith rts containers' Security Context runAsUser                                                                  | `1001`           |
 | `rts.containerSecurityContext.runAsNonRoot`             | Set Appsmith rts containers' Security Context runAsNonRoot                                                               | `true`           |
 | `rts.containerSecurityContext.readOnlyRootFilesystem`   | Set Appsmith rts containers' Security Context runAsNonRoot                                                               | `false`          |
@@ -331,6 +367,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rts.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `rts.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `rts.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `rts.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `rts.hostAliases`                                       | Appsmith rts pods host aliases                                                                                           | `[]`             |
 | `rts.podLabels`                                         | Extra labels for Appsmith rts pods                                                                                       | `{}`             |
 | `rts.podAnnotations`                                    | Annotations for Appsmith rts pods                                                                                        | `{}`             |
@@ -356,6 +393,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rts.sidecars`                                          | Add additional sidecar containers to the Appsmith rts pod(s)                                                             | `[]`             |
 | `rts.initContainers`                                    | Add additional init containers to the Appsmith rts pod(s)                                                                | `[]`             |
 
+### Appsmith RTS Network Policies
+
+| Name                                        | Description                                                | Value   |
+| ------------------------------------------- | ---------------------------------------------------------- | ------- |
+| `rts.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `false` |
+| `rts.networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
+| `rts.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice               | `[]`    |
+| `rts.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
+| `rts.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
+| `rts.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
+
 ### Appsmith RTS Traffic Exposure Parameters
 
 | Name                                   | Description                                                                             | Value       |
@@ -374,16 +422,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init Container Parameters
 
-| Name                                                   | Description                                                                                     | Value                      |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | -------------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                    |
-| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`                       |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                       |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                       |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                        |
+| Name                                                        | Description                                                                                     | Value                      |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`                                 | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                    |
+| `volumePermissions.image.registry`                          | OS Shell + Utility image registry                                                               | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                        | OS Shell + Utility image repository                                                             | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.pullPolicy`                        | OS Shell + Utility image pull policy                                                            | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                           | `[]`                       |
+| `volumePermissions.resources.limits`                        | The resources limits for the init container                                                     | `{}`                       |
+| `volumePermissions.resources.requests`                      | The requested resources for the init container                                                  | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `{}`                       |
+| `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                 | `0`                        |
 
 ### Other Parameters
 
