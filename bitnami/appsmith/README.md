@@ -124,7 +124,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `client.podSecurityContext.fsGroup`                        | Set Appsmith client pod's Security Context fsGroup                                                                       | `1001`           |
 | `client.containerSecurityContext.enabled`                  | Enabled Appsmith client containers' Security Context                                                                     | `true`           |
-| `client.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `client.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `client.containerSecurityContext.runAsUser`                | Set Appsmith client containers' Security Context runAsUser                                                               | `1001`           |
 | `client.containerSecurityContext.runAsNonRoot`             | Set Appsmith client containers' Security Context runAsNonRoot                                                            | `true`           |
 | `client.containerSecurityContext.readOnlyRootFilesystem`   | Set Appsmith client containers' Security Context runAsNonRoot                                                            | `false`          |
@@ -245,7 +245,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                  |
 | `backend.podSecurityContext.fsGroup`                        | Set Appsmith backend pod's Security Context fsGroup                                                                      | `1001`                |
 | `backend.containerSecurityContext.enabled`                  | Enabled Appsmith backend containers' Security Context                                                                    | `true`                |
-| `backend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                  |
+| `backend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`                 |
 | `backend.containerSecurityContext.runAsUser`                | Set Appsmith backend containers' Security Context runAsUser                                                              | `1001`                |
 | `backend.containerSecurityContext.runAsNonRoot`             | Set Appsmith backend containers' Security Context runAsNonRoot                                                           | `true`                |
 | `backend.containerSecurityContext.readOnlyRootFilesystem`   | Set Appsmith backend containers' Security Context runAsNonRoot                                                           | `false`               |
@@ -359,7 +359,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rts.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `rts.podSecurityContext.fsGroup`                        | Set Appsmith rts pod's Security Context fsGroup                                                                          | `1001`           |
 | `rts.containerSecurityContext.enabled`                  | Enabled Appsmith rts containers' Security Context                                                                        | `true`           |
-| `rts.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `rts.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `rts.containerSecurityContext.runAsUser`                | Set Appsmith rts containers' Security Context runAsUser                                                                  | `1001`           |
 | `rts.containerSecurityContext.runAsNonRoot`             | Set Appsmith rts containers' Security Context runAsNonRoot                                                               | `true`           |
 | `rts.containerSecurityContext.readOnlyRootFilesystem`   | Set Appsmith rts containers' Security Context runAsNonRoot                                                               | `false`          |
@@ -433,7 +433,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                           | `[]`                       |
 | `volumePermissions.resources.limits`                        | The resources limits for the init container                                                     | `{}`                       |
 | `volumePermissions.resources.requests`                      | The requested resources for the init container                                                  | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                 | `0`                        |
 
 ### Other Parameters
