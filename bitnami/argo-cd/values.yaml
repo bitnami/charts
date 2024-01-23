@@ -58,7 +58,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/argo-cd
-  tag: 2.9.3-debian-11-r5
+  tag: 2.9.5-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -198,7 +198,7 @@ controller:
     name: ""
     ## @param controller.serviceAccount.automountServiceAccountToken Automount service account token for the application controller service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param controller.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -444,6 +444,9 @@ controller:
   ## @param controller.extraArgs Add extra arguments to the default arguments for the Argo CD controller
   ##
   extraArgs: []
+  ## @param controller.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param controller.hostAliases Argo CD pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -772,7 +775,7 @@ applicationSet:
     name: ""
     ## @param applicationSet.serviceAccount.automountServiceAccountToken Automount service account token for the applicationSet controller service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param applicationSet.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -1176,7 +1179,7 @@ notifications:
     name: ""
     ## @param notifications.serviceAccount.automountServiceAccountToken Automount service account token for the notifications controller service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param notifications.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -1490,7 +1493,7 @@ notifications:
         name: ""
         ## @param notifications.bots.slack.serviceAccount.automountServiceAccountToken Automount service account token for the notifications controller service account
         ##
-        automountServiceAccountToken: true
+        automountServiceAccountToken: false
         ## @param notifications.bots.slack.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
         ##
         annotations: {}
@@ -2287,6 +2290,9 @@ server:
   ## @param server.extraArgs concat to the default args
   ##
   extraArgs: []
+  ## @param server.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param server.hostAliases Argo CD server pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2425,7 +2431,7 @@ server:
     name: ""
     ## @param server.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param server.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -2729,7 +2735,7 @@ repoServer:
     name: ""
     ## @param repoServer.serviceAccount.automountServiceAccountToken Automount service account token for the repo server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param repoServer.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -2743,6 +2749,9 @@ repoServer:
   ## @param repoServer.extraArgs Add extra args to the default repo server args
   ##
   extraArgs: []
+  ## @param repoServer.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param repoServer.hostAliases Argo CD repo server pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2887,7 +2896,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.37.0-debian-11-r102
+    tag: 2.37.0-debian-11-r103
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3190,7 +3199,7 @@ dex:
     name: ""
     ## @param dex.serviceAccount.automountServiceAccountToken Automount service account token for the Dex service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param dex.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -3204,6 +3213,9 @@ dex:
   ## @param dex.extraArgs Add extra args to the default args for Dex
   ##
   extraArgs: []
+  ## @param dex.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param dex.hostAliases Dex pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -3526,7 +3538,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r94
+    tag: 11-debian-11-r95
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

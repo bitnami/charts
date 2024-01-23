@@ -80,20 +80,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### NGINX parameters
 
-| Name                 | Description                                                                                           | Value                   |
-| -------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------- |
-| `image.registry`     | NGINX image registry                                                                                  | `REGISTRY_NAME`         |
-| `image.repository`   | NGINX image repository                                                                                | `REPOSITORY_NAME/nginx` |
-| `image.digest`       | NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `image.pullPolicy`   | NGINX image pull policy                                                                               | `IfNotPresent`          |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                                                      | `[]`                    |
-| `image.debug`        | Set to true if you would like to see extra information on logs                                        | `false`                 |
-| `hostAliases`        | Deployment pod host aliases                                                                           | `[]`                    |
-| `command`            | Override default container command (useful when using custom images)                                  | `[]`                    |
-| `args`               | Override default container args (useful when using custom images)                                     | `[]`                    |
-| `extraEnvVars`       | Extra environment variables to be set on NGINX containers                                             | `[]`                    |
-| `extraEnvVarsCM`     | ConfigMap with extra environment variables                                                            | `""`                    |
-| `extraEnvVarsSecret` | Secret with extra environment variables                                                               | `""`                    |
+| Name                           | Description                                                                                           | Value                   |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------- | ----------------------- |
+| `image.registry`               | NGINX image registry                                                                                  | `REGISTRY_NAME`         |
+| `image.repository`             | NGINX image repository                                                                                | `REPOSITORY_NAME/nginx` |
+| `image.digest`                 | NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `image.pullPolicy`             | NGINX image pull policy                                                                               | `IfNotPresent`          |
+| `image.pullSecrets`            | Specify docker-registry secret names as an array                                                      | `[]`                    |
+| `image.debug`                  | Set to true if you would like to see extra information on logs                                        | `false`                 |
+| `automountServiceAccountToken` | Mount Service Account token in pod                                                                    | `false`                 |
+| `hostAliases`                  | Deployment pod host aliases                                                                           | `[]`                    |
+| `command`                      | Override default container command (useful when using custom images)                                  | `[]`                    |
+| `args`                         | Override default container args (useful when using custom images)                                     | `[]`                    |
+| `extraEnvVars`                 | Extra environment variables to be set on NGINX containers                                             | `[]`                    |
+| `extraEnvVarsCM`               | ConfigMap with extra environment variables                                                            | `""`                    |
+| `extraEnvVarsSecret`           | Secret with extra environment variables                                                               | `""`                    |
 
 ### NGINX deployment parameters
 

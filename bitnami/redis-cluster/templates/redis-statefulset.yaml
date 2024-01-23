@@ -51,6 +51,7 @@ spec:
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "redis-cluster.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.redis.automountServiceAccountToken }}
       {{- if .Values.redis.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.redis.hostAliases "context" $) | nindent 8 }}
       {{- end }}

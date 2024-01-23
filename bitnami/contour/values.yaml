@@ -145,6 +145,9 @@ contour:
   containerPorts:
     xds: 8001
     metrics: 8000
+  ## @param contour.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param contour.hostAliases [array] Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -267,7 +270,7 @@ contour:
   serviceAccount:
     create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
   ## Contour Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -360,11 +363,14 @@ contour:
     serviceAccount:
       create: true
       name: ""
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
       annotations: {}
     ## @param contour.certgen.certificateLifetime Generated certificate lifetime (in days).
     ##
     certificateLifetime: 365
+    ## @param contour.certgen.automountServiceAccountToken Mount Service Account token in pod
+    ##
+    automountServiceAccountToken: true
   ## @param contour.tlsExistingSecret Name of the existingSecret to be use in Contour deployment. If it is not nil `contour.certgen` will be disabled.
   ## It will override `tlsExistingSecret`
   ##
@@ -559,6 +565,9 @@ envoy:
   ## @param envoy.extraArgs [array] Extra arguments passed to Envoy container
   ##
   extraArgs: []
+  ## @param envoy.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param envoy.hostAliases [array] Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

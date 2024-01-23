@@ -154,6 +154,9 @@ extraEnvVarsSecret: ""
 ## @param existingConfigMap Name of an existing ConfigMap with the Fluent Bit config file
 ##
 existingConfigMap: ""
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: true
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -320,7 +323,7 @@ serviceAccount:
   annotations: {}
   ## @param serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
 ## Pod security context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled Fluent Bit pods' Security Context

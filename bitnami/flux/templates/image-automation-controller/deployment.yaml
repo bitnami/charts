@@ -38,6 +38,7 @@ spec:
     spec:
       serviceAccountName: {{ template "flux.image-automation-controller.serviceAccountName" . }}
       {{- include "flux.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.imageAutomationController.automountServiceAccountToken }}
       {{- if .Values.imageAutomationController.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.imageAutomationController.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -92,7 +93,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.imageAutomationController.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - --watch-all-namespaces
+            - --watch-all-namespaces={{ .Values.imageAutomationController.watchAllNamespaces }}
             {{- if .Values.imageAutomationController.image.debug }}
             - --log-level=debug
             {{- else }}

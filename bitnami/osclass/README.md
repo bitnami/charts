@@ -108,6 +108,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                                 | Description                                                                                                     | Value                                    |
 | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| `automountServiceAccountToken`                       | Mount Service Account token in pod                                                                              | `false`                                  |
 | `hostAliases`                                        | Osclass pod host aliases                                                                                        | `[]`                                     |
 | `podSecurityContext.enabled`                         | Enabled Osclass pods' Security Context                                                                          | `true`                                   |
 | `podSecurityContext.fsGroupChangePolicy`             | Set filesystem group change policy                                                                              | `Always`                                 |
@@ -194,6 +195,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `priorityClassName`                                  | Osclass pods' priorityClassName                                                                                 | `""`                                     |
 | `schedulerName`                                      | Name of the k8s scheduler (other than default)                                                                  | `""`                                     |
 | `topologySpreadConstraints`                          | Topology Spread Constraints for pod assignment                                                                  | `[]`                                     |
+| `serviceAccount.create`                              | Enable creation of ServiceAccount for Osclass pod                                                               | `true`                                   |
+| `serviceAccount.name`                                | The name of the ServiceAccount to use.                                                                          | `""`                                     |
+| `serviceAccount.automountServiceAccountToken`        | Allows auto mount of ServiceAccountToken on the serviceAccount created                                          | `false`                                  |
+| `serviceAccount.annotations`                         | Additional custom annotations for the ServiceAccount                                                            | `{}`                                     |
 
 ### Traffic Exposure Parameters
 

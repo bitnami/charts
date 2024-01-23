@@ -35,6 +35,10 @@ spec:
       {{- end }}
     spec:
       {{- include "flink.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.jobmanager.automountServiceAccountToken }}
+      {{- if .Values.jobmanager.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.jobmanager.schedulerName }}
       schedulerName: {{ .Values.jobmanager.schedulerName }}
       {{- end }}

@@ -130,7 +130,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                     | `RuntimeDefault` |
 | `controller.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                 | `true`           |
 | `controller.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                               | `""`             |
-| `controller.serviceAccount.automountServiceAccountToken`       | Automount service account token for the application controller service account                       | `true`           |
+| `controller.serviceAccount.automountServiceAccountToken`       | Automount service account token for the application controller service account                       | `false`          |
 | `controller.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.           | `{}`             |
 | `controller.clusterAdminAccess`                                | Enable K8s cluster admin access for the application controller                                       | `true`           |
 | `controller.clusterRoleRules`                                  | Use custom rules for the application controller's cluster role                                       | `[]`             |
@@ -181,6 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.defaultArgs.selfHealTimeout`                       | Default self heal timeout for Argo CD controller                                                     | `5`              |
 | `controller.args`                                              | Override default container args (useful when using custom images). Overrides the defaultArgs.        | `[]`             |
 | `controller.extraArgs`                                         | Add extra arguments to the default arguments for the Argo CD controller                              | `[]`             |
+| `controller.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                   | `true`           |
 | `controller.hostAliases`                                       | Argo CD pods host aliases                                                                            | `[]`             |
 | `controller.podLabels`                                         | Extra labels for Argo CD pods                                                                        | `{}`             |
 | `controller.podAnnotations`                                    | Annotations for Argo CD pods                                                                         | `{}`             |
@@ -257,7 +258,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `applicationSet.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                     | `{}`             |
 | `applicationSet.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                            | `true`           |
 | `applicationSet.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                          | `""`             |
-| `applicationSet.serviceAccount.automountServiceAccountToken`       | Automount service account token for the applicationSet controller service account                               | `true`           |
+| `applicationSet.serviceAccount.automountServiceAccountToken`       | Automount service account token for the applicationSet controller service account                               | `false`          |
 | `applicationSet.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                      | `{}`             |
 | `applicationSet.podAffinityPreset`                                 | Pod affinity preset. Ignored if `applicationSet.affinity` is set. Allowed values: `soft` or `hard`              | `""`             |
 | `applicationSet.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `applicationSet.affinity` is set. Allowed values: `soft` or `hard`         | `soft`           |
@@ -362,7 +363,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `notifications.service.sessionAffinityConfig`                                | Additional settings for the sessionAffinity                                                                        | `{}`             |
 | `notifications.serviceAccount.create`                                        | Specifies whether a ServiceAccount should be created                                                               | `true`           |
 | `notifications.serviceAccount.name`                                          | The name of the ServiceAccount to use.                                                                             | `""`             |
-| `notifications.serviceAccount.automountServiceAccountToken`                  | Automount service account token for the notifications controller service account                                   | `true`           |
+| `notifications.serviceAccount.automountServiceAccountToken`                  | Automount service account token for the notifications controller service account                                   | `false`          |
 | `notifications.serviceAccount.annotations`                                   | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                         | `{}`             |
 | `notifications.podAffinityPreset`                                            | Pod affinity preset. Ignored if `notifications.affinity` is set. Allowed values: `soft` or `hard`                  | `""`             |
 | `notifications.podAntiAffinityPreset`                                        | Pod anti-affinity preset. Ignored if `notifications.affinity` is set. Allowed values: `soft` or `hard`             | `soft`           |
@@ -445,7 +446,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `notifications.bots.slack.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                        | `{}`             |
 | `notifications.bots.slack.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                               | `true`           |
 | `notifications.bots.slack.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                             | `""`             |
-| `notifications.bots.slack.serviceAccount.automountServiceAccountToken`       | Automount service account token for the notifications controller service account                                   | `true`           |
+| `notifications.bots.slack.serviceAccount.automountServiceAccountToken`       | Automount service account token for the notifications controller service account                                   | `false`          |
 | `notifications.bots.slack.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                         | `{}`             |
 | `notifications.bots.slack.podAffinityPreset`                                 | Pod affinity preset. Ignored if `notifications.bots.slack.affinity` is set. Allowed values: `soft` or `hard`       | `""`             |
 | `notifications.bots.slack.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `notifications.bots.slack.affinity` is set. Allowed values: `soft` or `hard`  | `soft`           |
@@ -622,6 +623,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.command`                                           | Override default container command (useful when using custom images)                                                            | `[]`                     |
 | `server.args`                                              | Override default container args (useful when using custom images)                                                               | `[]`                     |
 | `server.extraArgs`                                         | concat to the default args                                                                                                      | `[]`                     |
+| `server.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                              | `true`                   |
 | `server.hostAliases`                                       | Argo CD server pods host aliases                                                                                                | `[]`                     |
 | `server.podLabels`                                         | Extra labels for Argo CD server pods                                                                                            | `{}`                     |
 | `server.podAnnotations`                                    | Annotations for Argo CD server pods                                                                                             | `{}`                     |
@@ -649,7 +651,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.initContainers`                                    | Add additional init containers to the Argo CD server pod(s)                                                                     | `[]`                     |
 | `server.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                            | `true`                   |
 | `server.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                          | `""`                     |
-| `server.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                  | `true`                   |
+| `server.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                  | `false`                  |
 | `server.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                      | `{}`                     |
 
 ### Argo CD repo server Parameters
@@ -736,11 +738,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `repoServer.autoscaling.targetMemory`                          | Argo CD repo server deployment autoscaling target CPU memory                                         | `50`             |
 | `repoServer.serviceAccount.create`                             | Specifies whether a ServiceAccount for repo server should be created                                 | `true`           |
 | `repoServer.serviceAccount.name`                               | The name of the ServiceAccount for repo server to use.                                               | `""`             |
-| `repoServer.serviceAccount.automountServiceAccountToken`       | Automount service account token for the repo server service account                                  | `true`           |
+| `repoServer.serviceAccount.automountServiceAccountToken`       | Automount service account token for the repo server service account                                  | `false`          |
 | `repoServer.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.           | `{}`             |
 | `repoServer.command`                                           | Override default container command (useful when using custom images)                                 | `[]`             |
 | `repoServer.args`                                              | Override default container args (useful when using custom images)                                    | `[]`             |
 | `repoServer.extraArgs`                                         | Add extra args to the default repo server args                                                       | `[]`             |
+| `repoServer.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                   | `true`           |
 | `repoServer.hostAliases`                                       | Argo CD repo server pods host aliases                                                                | `[]`             |
 | `repoServer.podLabels`                                         | Extra labels for Argo CD repo server pods                                                            | `{}`             |
 | `repoServer.podAnnotations`                                    | Annotations for Argo CD repo server pods                                                             | `{}`             |
@@ -854,11 +857,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dex.metrics.serviceMonitor.honorLabels`                | honorLabels chooses the metric's labels on collisions with target labels                            | `false`               |
 | `dex.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created for Dex                                        | `true`                |
 | `dex.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                              | `""`                  |
-| `dex.serviceAccount.automountServiceAccountToken`       | Automount service account token for the Dex service account                                         | `true`                |
+| `dex.serviceAccount.automountServiceAccountToken`       | Automount service account token for the Dex service account                                         | `false`               |
 | `dex.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.          | `{}`                  |
 | `dex.command`                                           | Override default container command (useful when using custom images)                                | `[]`                  |
 | `dex.args`                                              | Override default container args (useful when using custom images)                                   | `[]`                  |
 | `dex.extraArgs`                                         | Add extra args to the default args for Dex                                                          | `[]`                  |
+| `dex.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                  | `true`                |
 | `dex.hostAliases`                                       | Dex pods host aliases                                                                               | `[]`                  |
 | `dex.podLabels`                                         | Extra labels for Dex pods                                                                           | `{}`                  |
 | `dex.podAnnotations`                                    | Annotations for Dex pods                                                                            | `{}`                  |

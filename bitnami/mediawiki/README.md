@@ -79,33 +79,34 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Mediawiki parameters
 
-| Name                 | Description                                                                                                                                        | Value                       |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `image.registry`     | MediaWiki image registry                                                                                                                           | `REGISTRY_NAME`             |
-| `image.repository`   | MediaWiki image repository                                                                                                                         | `REPOSITORY_NAME/mediawiki` |
-| `image.digest`       | MediaWiki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                          | `""`                        |
-| `image.pullPolicy`   | Image pull policy                                                                                                                                  | `IfNotPresent`              |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                   | `[]`                        |
-| `image.debug`        | Enable MediaWiki image debug mode                                                                                                                  | `false`                     |
-| `hostAliases`        | Deployment pod host aliases                                                                                                                        | `[]`                        |
-| `mediawikiUser`      | User of the application                                                                                                                            | `user`                      |
-| `mediawikiPassword`  | Application password                                                                                                                               | `""`                        |
-| `mediawikiSecret`    | Existing `Secret` containing the password for the `mediawikiUser` user; must contain the key `mediawiki-password` and optional key `smtp-password` | `""`                        |
-| `mediawikiEmail`     | Admin email                                                                                                                                        | `user@example.com`          |
-| `mediawikiName`      | Name for the wiki                                                                                                                                  | `My Wiki`                   |
-| `mediawikiHost`      | Mediawiki host to create application URLs                                                                                                          | `""`                        |
-| `allowEmptyPassword` | Allow DB blank passwords                                                                                                                           | `yes`                       |
-| `smtpHost`           | SMTP host                                                                                                                                          | `""`                        |
-| `smtpPort`           | SMTP port                                                                                                                                          | `""`                        |
-| `smtpHostID`         | SMTP host ID                                                                                                                                       | `""`                        |
-| `smtpUser`           | SMTP user                                                                                                                                          | `""`                        |
-| `smtpPassword`       | SMTP password                                                                                                                                      | `""`                        |
-| `command`            | Override default container command (useful when using custom images)                                                                               | `[]`                        |
-| `args`               | Override default container args (useful when using custom images)                                                                                  | `[]`                        |
-| `lifecycleHooks`     | for the Mediawiki container(s) to automate configuration before or after startup                                                                   | `{}`                        |
-| `extraEnvVars`       | Extra environment variables to be set on Mediawki container                                                                                        | `[]`                        |
-| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                                                                                               | `""`                        |
-| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                                                                                                  | `""`                        |
+| Name                           | Description                                                                                                                                        | Value                       |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `image.registry`               | MediaWiki image registry                                                                                                                           | `REGISTRY_NAME`             |
+| `image.repository`             | MediaWiki image repository                                                                                                                         | `REPOSITORY_NAME/mediawiki` |
+| `image.digest`                 | MediaWiki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                          | `""`                        |
+| `image.pullPolicy`             | Image pull policy                                                                                                                                  | `IfNotPresent`              |
+| `image.pullSecrets`            | Specify docker-registry secret names as an array                                                                                                   | `[]`                        |
+| `image.debug`                  | Enable MediaWiki image debug mode                                                                                                                  | `false`                     |
+| `automountServiceAccountToken` | Mount Service Account token in pod                                                                                                                 | `false`                     |
+| `hostAliases`                  | Deployment pod host aliases                                                                                                                        | `[]`                        |
+| `mediawikiUser`                | User of the application                                                                                                                            | `user`                      |
+| `mediawikiPassword`            | Application password                                                                                                                               | `""`                        |
+| `mediawikiSecret`              | Existing `Secret` containing the password for the `mediawikiUser` user; must contain the key `mediawiki-password` and optional key `smtp-password` | `""`                        |
+| `mediawikiEmail`               | Admin email                                                                                                                                        | `user@example.com`          |
+| `mediawikiName`                | Name for the wiki                                                                                                                                  | `My Wiki`                   |
+| `mediawikiHost`                | Mediawiki host to create application URLs                                                                                                          | `""`                        |
+| `allowEmptyPassword`           | Allow DB blank passwords                                                                                                                           | `yes`                       |
+| `smtpHost`                     | SMTP host                                                                                                                                          | `""`                        |
+| `smtpPort`                     | SMTP port                                                                                                                                          | `""`                        |
+| `smtpHostID`                   | SMTP host ID                                                                                                                                       | `""`                        |
+| `smtpUser`                     | SMTP user                                                                                                                                          | `""`                        |
+| `smtpPassword`                 | SMTP password                                                                                                                                      | `""`                        |
+| `command`                      | Override default container command (useful when using custom images)                                                                               | `[]`                        |
+| `args`                         | Override default container args (useful when using custom images)                                                                                  | `[]`                        |
+| `lifecycleHooks`               | for the Mediawiki container(s) to automate configuration before or after startup                                                                   | `{}`                        |
+| `extraEnvVars`                 | Extra environment variables to be set on Mediawki container                                                                                        | `[]`                        |
+| `extraEnvVarsCM`               | Name of existing ConfigMap containing extra env vars                                                                                               | `""`                        |
+| `extraEnvVarsSecret`           | Name of existing Secret containing extra env vars                                                                                                  | `""`                        |
 
 ### Mediawiki deployment parameters
 
@@ -182,6 +183,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.accessModes`                           | Persistent Volume access modes                                                            | `[]`                                              |
 | `persistence.size`                                  | PVC Storage Request for MediaWiki volume                                                  | `8Gi`                                             |
 | `persistence.annotations`                           | Persistent Volume Claim annotations                                                       | `{}`                                              |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for Dokuwiki pod                                        | `true`                                            |
+| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                    | `""`                                              |
+| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                    | `false`                                           |
+| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                      | `{}`                                              |
 
 ### Traffic Exposure parameters
 

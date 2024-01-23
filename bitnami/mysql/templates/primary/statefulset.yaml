@@ -41,6 +41,7 @@ spec:
       {{- end }}
       serviceAccountName: {{ template "mysql.serviceAccountName" . }}
       {{- include "mysql.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.primary.automountServiceAccountToken }}
       {{- if .Values.primary.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.primary.hostAliases "context" $) | nindent 8 }}
       {{- end }}
