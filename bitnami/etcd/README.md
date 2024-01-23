@@ -370,17 +370,17 @@ Here is an example of the environment configuration bootstrapping an etcd cluste
 | Member  | Variable                         | Value                                                                                                                                                                                                 |
 |---------|----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 0       | ETCD_NAME                        | etcd-0                                                                                                                                                                                                |
-| 0       | ETCD_INITIAL_ADVERTISE_PEER_URLS | http://etcd-0.etcd-headless.default.svc.cluster.local:2380                                                                                                                                            |
+| 0       | ETCD_INITIAL_ADVERTISE_PEER_URLS | <http://etcd-0.etcd-headless.default.svc.cluster.local:2380>                                                                                                                                            |
 |---------|----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 1       | ETCD_NAME                        | etcd-1                                                                                                                                                                                                |
-| 1       | ETCD_INITIAL_ADVERTISE_PEER_URLS | http://etcd-1.etcd-headless.default.svc.cluster.local:2380                                                                                                                                            |
+| 1       | ETCD_INITIAL_ADVERTISE_PEER_URLS | <http://etcd-1.etcd-headless.default.svc.cluster.local:2380>                                                                                                                                            |
 |---------|----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 2       | ETCD_NAME                        | etcd-2                                                                                                                                                                                                |
-| 2       | ETCD_INITIAL_ADVERTISE_PEER_URLS | http://etcd-2.etcd-headless.default.svc.cluster.local:2380                                                                                                                                            |
+| 2       | ETCD_INITIAL_ADVERTISE_PEER_URLS | <http://etcd-2.etcd-headless.default.svc.cluster.local:2380>                                                                                                                                            |
 |---------|----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | *       | ETCD_INITIAL_CLUSTER_STATE       | new                                                                                                                                                                                                   |
 | *       | ETCD_INITIAL_CLUSTER_TOKEN       | etcd-cluster-k8s                                                                                                                                                                                      |
-| *       | ETCD_INITIAL_CLUSTER             | etcd-0=http://etcd-0.etcd-headless.default.svc.cluster.local:2380,etcd-1=http://etcd-1.etcd-headless.default.svc.cluster.local:2380,etcd-2=http://etcd-2.etcd-headless.default.svc.cluster.local:2380 |
+| *       | ETCD_INITIAL_CLUSTER             | etcd-0=<http://etcd-0.etcd-headless.default.svc.cluster.local:2380>,etcd-1=<http://etcd-1.etcd-headless.default.svc.cluster.local:2380>,etcd-2=<http://etcd-2.etcd-headless.default.svc.cluster.local:2380> |
 
 The probes (readiness & liveness) are delayed 60 seconds by default, to give the etcd replicas time to start and find each other. After that period, the *etcdctl endpoint health* command is used to periodically perform health checks on every replica.
 
@@ -494,16 +494,16 @@ If the `startFromSnapshot.*` parameters are used at the same time as the `disast
 
 Two different approaches are available to back up and restore this Helm Chart:
 
-* Back up the data from the source deployment and restore it in a new deployment using etcd's built-in backup/restore tools.
-* Back up the persistent volumes from the source deployment and attach them to a new deployment using Velero, a Kubernetes backup/restore tool.
+- Back up the data from the source deployment and restore it in a new deployment using etcd's built-in backup/restore tools.
+- Back up the persistent volumes from the source deployment and attach them to a new deployment using Velero, a Kubernetes backup/restore tool.
 
 #### Method 1: Backup and restore data using etcd's built-in tools
 
 This method involves the following steps:
 
-* Use the *etcdctl* tool to create a snapshot of the data in the source cluster.
-* Make the snapshot available in a Kubernetes PersistentVolumeClaim (PVC) that supports ReadWriteMany access (for example, a PVC created with the NFS storage class)
-* Restore the data snapshot in a new cluster using the <%= variable :catalog_name, :platform %> etcd Helm chart's *startFromSnapshot.existingClaim* and *startFromSnapshot.snapshotFilename* parameters to define the source PVC and source filename for the snapshot.
+- Use the *etcdctl* tool to create a snapshot of the data in the source cluster.
+- Make the snapshot available in a Kubernetes PersistentVolumeClaim (PVC) that supports ReadWriteMany access (for example, a PVC created with the NFS storage class)
+- Restore the data snapshot in a new cluster using the <%= variable :catalog_name, :platform %> etcd Helm chart's *startFromSnapshot.existingClaim* and *startFromSnapshot.snapshotFilename* parameters to define the source PVC and source filename for the snapshot.
 
 > NOTE: Under this approach, it is important to create the new deployment on the destination cluster using the same credentials as the original deployment on the source cluster.
 
@@ -511,30 +511,30 @@ This method involves the following steps:
 
 This method involves copying the persistent data volumes for the etcd nodes and reusing them in a new deployment with [Velero](https://velero.io/), an open source Kubernetes backup/restore tool. This method is only suitable when:
 
-* The Kubernetes provider is [supported by Velero](https://velero.io/docs/latest/supported-providers/).
-* Both clusters are on the same Kubernetes provider, as this is a requirement of [Velero's native support for migrating persistent volumes](https://velero.io/docs/latest/migration-case/).
-* The restored deployment on the destination cluster will have the same name, namespace, topology and credentials as the original deployment on the source cluster.
+- The Kubernetes provider is [supported by Velero](https://velero.io/docs/latest/supported-providers/).
+- Both clusters are on the same Kubernetes provider, as this is a requirement of [Velero's native support for migrating persistent volumes](https://velero.io/docs/latest/migration-case/).
+- The restored deployment on the destination cluster will have the same name, namespace, topology and credentials as the original deployment on the source cluster.
 
 This method involves the following steps:
 
-* Install Velero on the source and destination clusters.
-* Use Velero to back up the PersistentVolumes (PVs) used by the etcd deployment on the source cluster.
-* Use Velero to restore the backed-up PVs on the destination cluster.
-* Create a new etcd deployment on the destination cluster with the same deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
+- Install Velero on the source and destination clusters.
+- Use Velero to back up the PersistentVolumes (PVs) used by the etcd deployment on the source cluster.
+- Use Velero to restore the backed-up PVs on the destination cluster.
+- Create a new etcd deployment on the destination cluster with the same deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
 
 ### Exposing etcd metrics
 
 The metrics exposed by etcd can be exposed to be scraped by Prometheus. Metrics can be scraped from within the cluster using any of the following approaches:
 
-* Adding the required annotations for Prometheus to discover the metrics endpoints, as in the example below:
+- Adding the required annotations for Prometheus to discover the metrics endpoints, as in the example below:
 
         podAnnotations:
           prometheus.io/scrape: "true"
           prometheus.io/path: "/metrics/cluster"
           prometheus.io/port: "9000"
 
-* Creating a ServiceMonitor or PodMonitor entry (when the Prometheus Operator is available in the cluster)
-* Using something similar to the [example Prometheus scrape configuration](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml).
+- Creating a ServiceMonitor or PodMonitor entry (when the Prometheus Operator is available in the cluster)
+- Using something similar to the [example Prometheus scrape configuration](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml).
 
 If metrics are to be scraped from outside the cluster, the Kubernetes API proxy can be utilized to access the endpoint.
 

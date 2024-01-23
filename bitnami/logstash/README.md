@@ -293,14 +293,14 @@ Here is an example of creating multiple pipelines using a ConfigMap:
 - Deploy the Helm chart with the `enableMultiplePipelines` parameter:
 
   ```bash
-  $ helm install logstash . --set enableMultiplePipelines=true --set existingConfiguration=multipleconfig
+  helm install logstash . --set enableMultiplePipelines=true --set existingConfiguration=multipleconfig
   ```
 
 - Create dummy events in the tracked files and check the result in the Logstash output:
 
   ```bash
-  $ kubectl exec -ti logstash-0 -- bash -c 'echo hi >> /tmp/hello'
-  $ kubectl exec -ti logstash-0 -- bash -c 'echo bye >> /tmp/bye'
+  kubectl exec -ti logstash-0 -- bash -c 'echo hi >> /tmp/hello'
+  kubectl exec -ti logstash-0 -- bash -c 'echo bye >> /tmp/bye'
   ```
 
 ### Add extra environment variables

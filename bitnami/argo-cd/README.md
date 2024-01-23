@@ -981,7 +981,6 @@ Adding the TLS parameter (where available) will cause the chart to generate HTTP
 
 ### TLS secrets
 
-
 This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). Apart from the Ingress TLS certificates, Argo CD repo server will auto-generate a secret named `argocd-repo-server-tls`. This secret contains the TLS configuration for the Argo CD components. The secret will be created only if it does not exist, so if you want to add custom TLS configuration you can create a secret with that name before installing the chart. There are several common use cases for the TLS secrets generation:
 
 - Generate certificate secrets based on chart parameters.
@@ -1098,7 +1097,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as Argo-CD (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. 
+If additional containers are needed in the same pod as Argo-CD (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
 
 ```yaml
 sidecars:
@@ -1178,7 +1177,9 @@ image:
   repository: bitnami/argo-cd
   tag: 2.0.5
 ```
+
 VS
+
 ```yaml
 controller:
   image:

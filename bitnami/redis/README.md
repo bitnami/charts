@@ -871,7 +871,7 @@ To backup and restore Redis deployments on Kubernetes, you will need to create a
 
 ### Step 1: Backup the deployment
 
-* Connect to one of the nodes and start the Redis CLI tool. Then, run the commands below:
+- Connect to one of the nodes and start the Redis CLI tool. Then, run the commands below:
 
         $ kubectl exec -it my-release-master-0 bash
         $ redis-cli
@@ -880,9 +880,9 @@ To backup and restore Redis deployments on Kubernetes, you will need to create a
         127.0.0.1:6379> save
         OK
 
-* Copy the dump file from the Redis node:
+- Copy the dump file from the Redis node:
 
-        $ kubectl cp my-release-master-0:/data/dump.rdb dump.rdb -c redis
+        kubectl cp my-release-master-0:/data/dump.rdb dump.rdb -c redis
 
 ### Step 2: Restore the data on the destination cluster
 
@@ -890,7 +890,7 @@ To restore the data in a new cluster, you will need to create a PVC and then upl
 
 Follow the following steps:
 
-* In the [*values.yaml*](https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml) file set the *appendonly* parameter to *no*. You can skip this step if it is already configured as *no*
+- In the [*values.yaml*](https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml) file set the *appendonly* parameter to *no*. You can skip this step if it is already configured as *no*
 
         commonConfiguration: |-
            # Enable AOF https://redis.io/topics/persistence#append-only-file
@@ -900,11 +900,11 @@ Follow the following steps:
 
     > *Note that the `Enable AOF` comment belongs to the original config file and what you're actually doing is disabling it. This change will only be neccessary for the temporal cluster you're creating to upload the dump.*
 
-* Start the new cluster to create the PVCs. Use the command below as an example:
+- Start the new cluster to create the PVCs. Use the command below as an example:
 
-        $ helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
+        helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
 
-* Now that the PVC were created, stop it and copy the *dump.rdp* file on the persisted data by using a helping pod.
+- Now that the PVC were created, stop it and copy the *dump.rdp* file on the persisted data by using a helping pod.
 
         $ helm delete new-redis
 
@@ -942,11 +942,11 @@ Follow the following steps:
         $ kubectl cp dump.rdb redisvolpod:/mnt/dump.rdb
         $ kubectl delete pod volpod
 
-* Restart the cluster:
+- Restart the cluster:
 
     > **INFO:** The *appendonly* parameter can be safely restored to your desired value.
 
-        $ helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
+        helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
 
 ## NetworkPolicy
 

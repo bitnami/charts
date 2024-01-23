@@ -424,7 +424,6 @@ To upgrade to *19.0.0* from *18.x*, it should be done enabling the "volumePermis
         export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default odoo-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
         export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=odoo,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
 
-
 2. Upgrade your release:
 
         helm upgrade odoo bitnami/odoo \

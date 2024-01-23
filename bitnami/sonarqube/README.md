@@ -518,7 +518,7 @@ If metrics are to be scraped from outside the cluster, the Kubernetes API proxy 
 
 ### Sidecars
 
-If additional containers are needed in the same pod as SonarQube&trade; (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. 
+If additional containers are needed in the same pod as SonarQube&trade; (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
 
 ```yaml
 sidecars:

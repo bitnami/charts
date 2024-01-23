@@ -440,7 +440,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as Milvus (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. 
+If additional containers are needed in the same pod as Milvus (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
 
 ```yaml
 sidecars:

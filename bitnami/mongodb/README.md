@@ -747,7 +747,7 @@ In order to access MongoDB(&reg;) nodes from outside the cluster when using a re
 
 Two alternatives are available to use *LoadBalancer* services:
 
-* Use random load balancer IP addresses using an *initContainer* that waits for the IP addresses to be ready and discovers them automatically. An example deployment configuration is shown below:
+- Use random load balancer IP addresses using an *initContainer* that waits for the IP addresses to be ready and discovers them automatically. An example deployment configuration is shown below:
 
         architecture=replicaset
         replicaCount=2
@@ -760,7 +760,7 @@ Two alternatives are available to use *LoadBalancer* services:
 
     > NOTE: This option requires creating RBAC rules on clusters where RBAC policies are enabled.
 
-* Manually specify the load balancer IP addresses. An example deployment configuration is shown below, with the placeholder EXTERNAL-IP-ADDRESS-X used in place of the load balancer IP addresses:
+- Manually specify the load balancer IP addresses. An example deployment configuration is shown below, with the placeholder EXTERNAL-IP-ADDRESS-X used in place of the load balancer IP addresses:
 
         architecture=replicaset
         replicaCount=2
@@ -814,7 +814,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Use Sidecars and Init Containers
 
-If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter. 
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter.
 
 ```yaml
 sidecars:

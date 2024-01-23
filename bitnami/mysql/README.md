@@ -414,7 +414,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Use a different MySQL version
 
-To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. 
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
 
 ### Customize a new MySQL instance
 

@@ -573,7 +573,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as appsmith (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the `client`, `backend` and `rts` sections. 
+If additional containers are needed in the same pod as appsmith (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the `client`, `backend` and `rts` sections.
 
 ```yaml
 sidecars:

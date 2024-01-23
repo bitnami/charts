@@ -560,27 +560,27 @@ This major update the Redis&reg; subchart to its newest major, 17.0.0, which upd
 
 ### To 7.0.0
 
-This major upgrades the Discourse version to *2.8.0*.
+This major upgrades the Discourse version to _2.8.0_.
 
 #### What changes were introduced in this major version?
 
-This version includes a breaking change in the *lazy-yt* plugin, and the recommendation is to remove it, or manually upgrade it.
+This version includes a breaking change in the _lazy-yt_ plugin, and the recommendation is to remove it, or manually upgrade it.
 
 #### Upgrading Instructions
 
-To upgrade to *7.0.0* from *6.x*, follow these steps below:
+To upgrade to _7.0.0_ from _6.x_, follow these steps below:
 
-1. Upgrade to the latest version of the *bitnami/discourse* chart with Diagnostics mode:
+1. Upgrade to the latest version of the _bitnami/discourse_ chart with Diagnostics mode:
 
-        $ helm upgrade --set diagnosticMode.enabled=true [...] bitnami/discourse
+        helm upgrade --set diagnosticMode.enabled=true [...] bitnami/discourse
 
-2. Remove or upgrade the *lazy-yt* plugin. To remove it, execute the following command inside the *discourse* container's shell:
+2. Remove or upgrade the _lazy-yt_ plugin. To remove it, execute the following command inside the _discourse_ container's shell:
 
-        $ rm -rf /bitnami/discourse/plugins/lazy-yt
+        rm -rf /bitnami/discourse/plugins/lazy-yt
 
 3. Ensure that the initialization scripts work:
 
-        $ /opt/bitnami/scripts/discourse/entrypoint.sh /opt/bitnami/scripts/discourse/setup.sh
+        /opt/bitnami/scripts/discourse/entrypoint.sh /opt/bitnami/scripts/discourse/setup.sh
 
 4. Upgrade the Helm deployment without Diagnostics mode.
 
@@ -590,15 +590,15 @@ This major release renames several values in this chart and adds missing feature
 
 #### What changes were introduced in this major version?
 
-- *discourse.host* and *discourse.siteName* were renamed to *host* and *siteName*, respectively.
-- *discourse.username*, *discourse.email*, *discourse.password* and *discourse.existingSecret* were regrouped under the *discourse.auth* map.
-- *discourse.smtp* map has been renamed to *smtp*.
-- *service.port* and *service.nodePort* were regrouped under the *service.ports* and *service.nodePorts* maps, respectively.
-- *ingress* map is completely redefined.
+- _discourse.host_ and _discourse.siteName_ were renamed to _host_ and _siteName_, respectively.
+- _discourse.username_, _discourse.email_, _discourse.password_ and _discourse.existingSecret_ were regrouped under the _discourse.auth_ map.
+- _discourse.smtp_ map has been renamed to _smtp_.
+- _service.port_ and _service.nodePort_ were regrouped under the _service.ports_ and _service.nodePorts_ maps, respectively.
+- _ingress_ map is completely redefined.
 
 #### Upgrading Instructions
 
-To upgrade to *6.0.0* from *5.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *discourse* and the release namespace *default*):
+To upgrade to _6.0.0_ from _5.x_, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is _discourse_ and the release namespace _default_):
 
 > NOTE: Please, create a backup of your database before running any of those actions.
 
@@ -609,7 +609,7 @@ To upgrade to *6.0.0* from *5.x*, it should be done reusing the PVC(s) used to h
         export REDIS_PASSWORD=$(kubectl get secret --namespace default discourse-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
         export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=discourse,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
 
-2. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+2. Delete the PostgreSQL statefulset (notice the option _--cascade=false_) and secret:
 
         kubectl delete statefulsets.apps --cascade=false discourse-postgresql
         kubectl delete secret postgresql --namespace default
@@ -666,9 +666,9 @@ This major updates the Redis&reg; subchart to it newest major, 14.0.0, which con
 #### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
-- After running *helm dependency update*, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Chart.
+- Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
+- After running _helm dependency update_, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
+- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Chart.
 
 #### Considerations when upgrading to this version
 
@@ -683,7 +683,7 @@ This major updates the Redis&reg; subchart to it newest major, 14.0.0, which con
 
 #### Upgrading Instructions
 
-To upgrade to *2.0.0* from *1.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *discourse* and the release namespace *default*):
+To upgrade to _2.0.0_ from _1.x_, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is _discourse_ and the release namespace _default_):
 
 > NOTE: Please, create a backup of your database before running any of those actions.
 
@@ -696,7 +696,7 @@ To upgrade to *2.0.0* from *1.x*, it should be done reusing the PVC(s) used to h
         export REDIS_PASSWORD=$(kubectl get secret --namespace default discourse-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
         export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=discourse,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
 
-2. Delete the Airflow worker & PostgreSQL statefulset (notice the option *--cascade=false*):
+2. Delete the Airflow worker & PostgreSQL statefulset (notice the option _--cascade=false_):
 
         kubectl delete statefulsets.apps --cascade=false discourse-postgresql
         kubectl delete statefulsets.apps --cascade=false discourse-worker

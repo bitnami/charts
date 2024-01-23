@@ -692,7 +692,7 @@ The Bitnami JupyterHub chart enables NetworkPolicies by default. This restricts 
 
 ### Use sidecars and init containers
 
-If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `proxy.sidecars`, `hub.sidecars` or `singleuser.sidecars` config parameters. 
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `proxy.sidecars`, `hub.sidecars` or `singleuser.sidecars` config parameters.
 
 ```yaml
 sidecars:

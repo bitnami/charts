@@ -38,7 +38,7 @@ There are two different ways to deploy a PostgreSQL cluster, using the PostgreSQ
 
 The following diagram shows you the options you have for using Bitnami's PostgreSQL solutions in your deployments:
 
-![A diagram comparing a PostgreSQL solution versus a PostgreSQL HA with pgpool and repmgr](img/postgresql-ha-topology.png) 
+![A diagram comparing a PostgreSQL solution versus a PostgreSQL HA with pgpool and repmgr](img/postgresql-ha-topology.png)
 
 ## Prerequisites
 
@@ -759,8 +759,8 @@ Next, login to the PostgreSQL server using the `psql` client and add the PAM aut
 
 The chart handles two main flows of traffic information:
 
-- Connections between end-clients and PgPool (sometimes referred to as _frontend_ connections).
-- Internal connections between PgPool and PostgreSQL nodes (sometimes referred to as _backend_ connections).
+- Connections between end-clients and PgPool (sometimes referred to as *frontend* connections).
+- Internal connections between PgPool and PostgreSQL nodes (sometimes referred to as *backend* connections).
 
 The Bitnami postgresql-ha chart allows configuring the securitization of both types of traffic using TLS.
 
@@ -796,7 +796,7 @@ For example:
 
 ##### Enable client certificate authentication
 
-When TLS is configured for _frontend_ connections, the server can be configured to authenticate clients by verifying their provided TLS certificate is valid and trusted. Hence, the client will not be sent a password prompt.
+When TLS is configured for *frontend* connections, the server can be configured to authenticate clients by verifying their provided TLS certificate is valid and trusted. Hence, the client will not be sent a password prompt.
 
 You can enable this authentication feature additionally specifying the following parameter:
 
@@ -843,7 +843,7 @@ For example:
 
 > Note: Certificates permissions: PostgreSQL requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding K8s permissions and the use of `containerSecurityContext.runAsUser`, an init container will adapt the permissions to ensure everything works as expected.
 
-If you want to encrypt both _frontend_ and _backend_ traffics, you may use the same secret for Pgpool and PostgreSQL TLS configuration.
+If you want to encrypt both *frontend* and *backend* traffics, you may use the same secret for Pgpool and PostgreSQL TLS configuration.
 
 ### repmgr.conf / postgresql.conf / pg_hba.conf / pgpool.conf files as configMap
 
