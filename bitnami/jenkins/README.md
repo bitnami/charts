@@ -155,7 +155,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configAsCode.autoReload.extraEnvVarsCM`                                    |                                                                                                         | `""`                            |
 | `configAsCode.autoReload.extraVolumeMounts`                                 |                                                                                                         | `[]`                            |
 | `configAsCode.autoReload.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                    | `true`                          |
-| `configAsCode.autoReload.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `{}`                            |
+| `configAsCode.autoReload.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `nil`                           |
 | `configAsCode.autoReload.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                              | `1001`                          |
 | `configAsCode.autoReload.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                           | `true`                          |
 | `configAsCode.autoReload.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                             | `false`                         |
@@ -183,7 +183,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.resources.limits`                                                    | The resources limits for the Jenkins container                                                          | `{}`                            |
 | `agent.resources.requests`                                                  | The requested resources for the Jenkins container                                                       | `{}`                            |
 | `agent.containerSecurityContext.enabled`                                    | Enable container security context                                                                       | `false`                         |
-| `agent.containerSecurityContext.seLinuxOptions`                             | Set SELinux options in container                                                                        | `{}`                            |
+| `agent.containerSecurityContext.seLinuxOptions`                             | Set SELinux options in container                                                                        | `nil`                           |
 | `agent.containerSecurityContext.runAsUser`                                  | User ID for the agent container                                                                         | `""`                            |
 | `agent.containerSecurityContext.runAsGroup`                                 | User ID for the agent container                                                                         | `""`                            |
 | `agent.containerSecurityContext.privileged`                                 | Decide if the container runs privileged.                                                                | `false`                         |
@@ -224,7 +224,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set Jenkins pod's Security Context fsGroup                                                | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`          |
@@ -317,7 +317,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`              | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
 | `volumePermissions.resources.limits`               | The resources limits for the init container                                                                        | `{}`                       |
 | `volumePermissions.resources.requests`             | The requested resources for the init container                                                                     | `{}`                       |
-| `volumePermissions.securityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `{}`                       |
+| `volumePermissions.securityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `nil`                      |
 | `volumePermissions.securityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                    | `0`                        |
 
 ### Other Parameters
