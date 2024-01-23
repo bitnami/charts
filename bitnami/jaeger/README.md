@@ -150,7 +150,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `query.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `query.podSecurityContext.fsGroup`                        | Set Jaeger pod's Security Context fsGroup                                                 | `1001`           |
 | `query.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`           |
-| `query.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
+| `query.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`            |
 | `query.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`           |
 | `query.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`           |
 | `query.containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`          |
@@ -252,7 +252,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                | `[]`             |
 | `collector.podSecurityContext.fsGroup`                        | Set Jaeger pod's Security Context fsGroup                                                  | `1001`           |
 | `collector.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                       | `true`           |
-| `collector.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                           | `{}`             |
+| `collector.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                           | `nil`            |
 | `collector.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                 | `1001`           |
 | `collector.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                              | `true`           |
 | `collector.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                | `false`          |
@@ -351,7 +351,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.podSecurityContext.supplementalGroups`                 | Set filesystem extra groups                                                                                    | `[]`             |
 | `agent.podSecurityContext.fsGroup`                            | Set Jaeger pod's Security Context fsGroup                                                                      | `1001`           |
 | `agent.containerSecurityContext.enabled`                      | Enabled containers' Security Context                                                                           | `true`           |
-| `agent.containerSecurityContext.seLinuxOptions`               | Set SELinux options in container                                                                               | `{}`             |
+| `agent.containerSecurityContext.seLinuxOptions`               | Set SELinux options in container                                                                               | `nil`            |
 | `agent.containerSecurityContext.runAsUser`                    | Set containers' Security Context runAsUser                                                                     | `1001`           |
 | `agent.containerSecurityContext.runAsNonRoot`                 | Set container's Security Context runAsNonRoot                                                                  | `true`           |
 | `agent.containerSecurityContext.privileged`                   | Set container's Security Context privileged                                                                    | `false`          |
@@ -386,7 +386,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `migration.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                    | `[]`             |
 | `migration.podSecurityContext.fsGroup`                        | Set Jaeger pod's Security Context fsGroup                                                                      | `1001`           |
 | `migration.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                           | `true`           |
-| `migration.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                               | `{}`             |
+| `migration.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                               | `nil`            |
 | `migration.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                     | `1001`           |
 | `migration.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                  | `true`           |
 | `migration.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                    | `false`          |
