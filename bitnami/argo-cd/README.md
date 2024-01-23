@@ -120,7 +120,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                          | `[]`             |
 | `controller.podSecurityContext.fsGroup`                        | Set Argo CD pod's Security Context fsGroup                                                           | `1001`           |
 | `controller.containerSecurityContext.enabled`                  | Enabled Argo CD containers' Security Context                                                         | `true`           |
-| `controller.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                     | `{}`             |
+| `controller.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                     | `nil`            |
 | `controller.containerSecurityContext.runAsUser`                | Set Argo CD containers' Security Context runAsUser                                                   | `1001`           |
 | `controller.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD containers' Security Context allowPrivilegeEscalation                                    | `false`          |
 | `controller.containerSecurityContext.capabilities.drop`        | Set Argo CD containers' Security Context capabilities to be dropped                                  | `["ALL"]`        |
@@ -269,7 +269,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `applicationSet.podAnnotations`                                    | Annotations for Argo CD applicationSet controller pods                                                          | `{}`             |
 | `applicationSet.podLabels`                                         | Extra labels for Argo CD applicationSet controller pods                                                         | `{}`             |
 | `applicationSet.containerSecurityContext.enabled`                  | Enabled Argo CD applicationSet controller containers' Security Context                                          | `true`           |
-| `applicationSet.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `{}`             |
+| `applicationSet.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `nil`            |
 | `applicationSet.containerSecurityContext.runAsUser`                | Set Argo CD applicationSet controller containers' Security Context runAsUser                                    | `1001`           |
 | `applicationSet.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD applicationSet controller containers' Security Context allowPrivilegeEscalation                     | `false`          |
 | `applicationSet.containerSecurityContext.capabilities.drop`        | Set Argo CD applicationSet controller containers' Security Context capabilities to be dropped                   | `["ALL"]`        |
@@ -374,7 +374,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `notifications.podAnnotations`                                               | Annotations for Argo CD notifications controller pods                                                              | `{}`             |
 | `notifications.podLabels`                                                    | Extra labels for Argo CD notifications controller pods                                                             | `{}`             |
 | `notifications.containerSecurityContext.enabled`                             | Enabled Argo CD notifications controller containers' Security Context                                              | `true`           |
-| `notifications.containerSecurityContext.seLinuxOptions`                      | Set SELinux options in container                                                                                   | `{}`             |
+| `notifications.containerSecurityContext.seLinuxOptions`                      | Set SELinux options in container                                                                                   | `nil`            |
 | `notifications.containerSecurityContext.runAsUser`                           | Set Argo CD notifications controller containers' Security Context runAsUser                                        | `1001`           |
 | `notifications.containerSecurityContext.allowPrivilegeEscalation`            | Set Argo CD notifications controller containers' Security Context allowPrivilegeEscalation                         | `false`          |
 | `notifications.containerSecurityContext.capabilities.drop`                   | Set Argo CD notifications controller containers' Security Context capabilities to be dropped                       | `["ALL"]`        |
@@ -479,7 +479,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `notifications.bots.slack.podAnnotations`                                    | Annotations for Argo CD Slack bot pods                                                                             | `{}`             |
 | `notifications.bots.slack.podLabels`                                         | Extra labels for Argo CD Slack bot pods                                                                            | `{}`             |
 | `notifications.bots.slack.containerSecurityContext.enabled`                  | Enabled Argo CD Slack bot containers' Security Context                                                             | `true`           |
-| `notifications.bots.slack.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                   | `{}`             |
+| `notifications.bots.slack.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                   | `nil`            |
 | `notifications.bots.slack.containerSecurityContext.runAsUser`                | Set Argo CD Slack bot containers' Security Context runAsUser                                                       | `1001`           |
 | `notifications.bots.slack.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD Slack bot containers' Security Context allowPrivilegeEscalation                                        | `false`          |
 | `notifications.bots.slack.containerSecurityContext.capabilities.drop`        | Set Argo CD Slack bot containers' Security Context capabilities to be dropped                                      | `["ALL"]`        |
@@ -537,7 +537,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                     | `[]`                     |
 | `server.podSecurityContext.fsGroup`                        | Set Argo CD server pod's Security Context fsGroup                                                                               | `1001`                   |
 | `server.containerSecurityContext.enabled`                  | Enabled Argo CD server containers' Security Context                                                                             | `true`                   |
-| `server.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                | `{}`                     |
+| `server.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                | `nil`                    |
 | `server.containerSecurityContext.runAsUser`                | Set Argo CD server containers' Security Context runAsUser                                                                       | `1001`                   |
 | `server.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD server containers' Security Context allowPrivilegeEscalation                                                        | `false`                  |
 | `server.containerSecurityContext.capabilities.drop`        | Set Argo CD containers' server Security Context capabilities to be dropped                                                      | `["ALL"]`                |
@@ -688,7 +688,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `repoServer.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                          | `[]`             |
 | `repoServer.podSecurityContext.fsGroup`                        | Set Argo CD repo server pod's Security Context fsGroup                                               | `1001`           |
 | `repoServer.containerSecurityContext.enabled`                  | Enabled Argo CD repo server containers' Security Context                                             | `true`           |
-| `repoServer.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                     | `{}`             |
+| `repoServer.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                     | `nil`            |
 | `repoServer.containerSecurityContext.runAsUser`                | Set Argo CD repo server containers' Security Context runAsUser                                       | `1001`           |
 | `repoServer.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD repo server containers' Security Context allowPrivilegeEscalation                        | `false`          |
 | `repoServer.containerSecurityContext.capabilities.drop`        | Set Argo CD containers' repo server Security Context capabilities to be dropped                      | `["ALL"]`        |
@@ -811,7 +811,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dex.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                         | `[]`                  |
 | `dex.podSecurityContext.fsGroup`                        | Set Dex pod's Security Context fsGroup                                                              | `1001`                |
 | `dex.containerSecurityContext.enabled`                  | Enabled Dex containers' Security Context                                                            | `true`                |
-| `dex.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `{}`                  |
+| `dex.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `nil`                 |
 | `dex.containerSecurityContext.runAsUser`                | Set Dex containers' Security Context runAsUser                                                      | `1001`                |
 | `dex.containerSecurityContext.allowPrivilegeEscalation` | Set Dex containers' Security Context allowPrivilegeEscalation                                       | `false`               |
 | `dex.containerSecurityContext.readOnlyRootFilesystem`   | Set Dex containers' server Security Context readOnlyRootFilesystem                                  | `false`               |
@@ -928,7 +928,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
 | `volumePermissions.resources.limits`                        | The resources limits for the init container                                                                        | `{}`                       |
 | `volumePermissions.resources.requests`                      | The requested resources for the init container                                                                     | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                    | `0`                        |
 
 ### Other Parameters
@@ -956,7 +956,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redisWait.enabled`                                           | Enables waiting for redis                                                                             | `true`                  |
 | `redisWait.extraArgs`                                         | Additional arguments for the redis-cli call, such as TLS                                              | `""`                    |
 | `redisWait.containerSecurityContext.enabled`                  | Enabled Argo CD repo server containers' Security Context                                              | `true`                  |
-| `redisWait.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                      | `{}`                    |
+| `redisWait.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                      | `nil`                   |
 | `redisWait.containerSecurityContext.runAsUser`                | Set Argo CD repo server containers' Security Context runAsUser                                        | `1001`                  |
 | `redisWait.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD repo server containers' Security Context allowPrivilegeEscalation                         | `false`                 |
 | `redisWait.containerSecurityContext.capabilities.drop`        | Set Argo CD containers' repo server Security Context capabilities to be dropped                       | `["ALL"]`               |
