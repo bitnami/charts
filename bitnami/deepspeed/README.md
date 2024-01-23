@@ -150,7 +150,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                      | `[]`             |
 | `client.podSecurityContext.fsGroup`                        | Set Client pod's Security Context fsGroup                                                        | `1001`           |
 | `client.containerSecurityContext.enabled`                  | Enabled Client containers' Security Context                                                      | `true`           |
-| `client.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                 | `{}`             |
+| `client.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                 | `nil`            |
 | `client.containerSecurityContext.runAsUser`                | Set Client containers' Security Context runAsUser                                                | `1001`           |
 | `client.containerSecurityContext.runAsGroup`               | Set Client containers' Security Context runAsGroup                                               | `1001`           |
 | `client.containerSecurityContext.runAsNonRoot`             | Set Client containers' Security Context runAsNonRoot                                             | `true`           |
@@ -250,7 +250,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                        | `[]`             |
 | `worker.podSecurityContext.fsGroup`                        | Set Worker pod's Security Context fsGroup                                                          | `1001`           |
 | `worker.containerSecurityContext.enabled`                  | Enabled Worker containers' Security Context                                                        | `true`           |
-| `worker.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                   | `{}`             |
+| `worker.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                   | `nil`            |
 | `worker.containerSecurityContext.runAsUser`                | Set Worker containers' Security Context runAsUser                                                  | `1001`           |
 | `worker.containerSecurityContext.runAsGroup`               | Set Worker containers' Security Context runAsGroup                                                 | `1001`           |
 | `worker.containerSecurityContext.runAsNonRoot`             | Set Worker containers' Security Context runAsNonRoot                                               | `true`           |
