@@ -138,7 +138,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.fsGroup`                        | Set Controller pod's Security Context fsGroup                                                                            | `1001`           |
 | `podSecurityContext.sysctls`                        | sysctl settings of the Schema Registry pods                                                                              | `[]`             |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
