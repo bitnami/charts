@@ -423,7 +423,7 @@ If, for whatever reason, (N-1)/2 members of the cluster fail and the "pre-stop" 
 
 The Bitnami etcd chart solves this problem by optionally offering a Kubernetes cron job that periodically snapshots the keyspace and stores it in a RWX volume. In case the cluster disastrously fails, the pods will automatically try to restore it using the last avalable snapshot.
 
-[Learn how to enable this disaster recovery feature](../../administration/enable-disaster-recovery).
+[Learn how to enable this disaster recovery feature](#enable-disaster-recovery-features).
 
 The chart also sets by default a "soft" Pod AntiAffinity to reduce the risk of the cluster failing disastrously.
 
