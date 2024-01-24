@@ -3,7 +3,7 @@ contour:
   manageCRDs: true
   serviceAccount:
     create: true
-    automountServiceAccountToken: true
+  automountServiceAccountToken: true
   podSecurityContext:
     enabled: true
     fsGroup: 1002
@@ -51,6 +51,15 @@ extraDeploy:
         containers:
         - image: bitnami/apache
           name: apache
+          securityContext:
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: "RuntimeDefault"
+
 - apiVersion: v1
   kind: Service
   metadata:

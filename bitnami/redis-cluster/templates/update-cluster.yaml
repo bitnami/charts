@@ -28,6 +28,7 @@ spec:
       {{- end }}
     spec:
       {{- include "redis-cluster.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.updateJob.automountServiceAccountToken }}
       {{- if .Values.updateJob.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.hostAliases "context" $) | nindent 8 }}
       {{- end }}
