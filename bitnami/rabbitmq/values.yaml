@@ -166,11 +166,15 @@ auth:
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
   erlangCookie: ""
-  ## @param auth.existingErlangSecret Existing secret with RabbitMQ Erlang cookie (must contain a value for `rabbitmq-erlang-cookie` key)
+  ## @param auth.existingErlangSecret Existing secret with RabbitMQ Erlang cookie (must contain a value for `rabbitmq-erlang-cookie` key or override with auth.existingSecretErlangKey)
   ## e.g:
   ## existingErlangSecret: name-of-existing-secret
   ##
   existingErlangSecret: ""
+  ## @param auth.existingSecretErlangKey [default: rabbitmq-erlang-cookie] Erlang cookie key to be retrieved from existing secret
+  ## NOTE: ignored unless `auth.existingErlangSecret` parameter is set
+  ##
+  existingSecretErlangKey: ""
 
   ## Enable encryption to rabbitmq
   ## ref: https://www.rabbitmq.com/ssl.html
