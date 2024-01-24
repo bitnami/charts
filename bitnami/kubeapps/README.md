@@ -932,7 +932,7 @@ Feel free to [open an issue](https://github.com/vmware-tanzu/kubeapps/issues/new
 This major release renames several values in this chart and adds missing features, in order to get aligned with the rest of the assets in the Bitnami charts repository.
 
 Additionally, it updates both the [PostgreSQL](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) and the [Redis](https://github.com/bitnami/charts/tree/main/bitnami/redis) subcharts to their latest major versions, 11.0.0 and 16.0.0 respectively, where similar changes have been also performed.
-Check [PostgreSQL Upgrading Notes](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/#to-1100) and [Redis Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1600) for more information.
+Check [PostgreSQL Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1100) and [Redis Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1600) for more information.
 
 The following values have been renamed:
 

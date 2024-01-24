@@ -378,14 +378,14 @@ compactor:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param compactor.containerSecurityContext.enabled Enabled Compactor containers' Security Context
-  ## @param compactor.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param compactor.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param compactor.containerSecurityContext.runAsUser Set Compactor containers' Security Context runAsUser
   ## @param compactor.containerSecurityContext.runAsNonRoot Set Compactor containers' Security Context runAsNonRoot
   ## @param compactor.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     seccompProfile:
@@ -746,14 +746,14 @@ gateway:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param gateway.containerSecurityContext.enabled Enabled Gateway containers' Security Context
-  ## @param gateway.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param gateway.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param gateway.containerSecurityContext.runAsUser Set Gateway containers' Security Context runAsUser
   ## @param gateway.containerSecurityContext.runAsNonRoot Set Gateway containers' Security Context runAsNonRoot
   ## @param gateway.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     seccompProfile:
@@ -1124,14 +1124,14 @@ indexGateway:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param indexGateway.containerSecurityContext.enabled Enabled index-gateway containers' Security Context
-  ## @param indexGateway.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param indexGateway.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param indexGateway.containerSecurityContext.runAsUser Set index-gateway containers' Security Context runAsUser
   ## @param indexGateway.containerSecurityContext.runAsNonRoot Set index-gateway containers' Security Context runAsNonRoot
   ## @param indexGateway.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     seccompProfile:
@@ -1405,14 +1405,14 @@ distributor:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param distributor.containerSecurityContext.enabled Enabled Distributor containers' Security Context
-  ## @param distributor.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param distributor.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param distributor.containerSecurityContext.runAsUser Set Distributor containers' Security Context runAsUser
   ## @param distributor.containerSecurityContext.runAsNonRoot Set Distributor containers' Security Context runAsNonRoot
   ## @param distributor.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     seccompProfile:
@@ -1689,14 +1689,14 @@ ingester:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param ingester.containerSecurityContext.enabled Enabled Ingester containers' Security Context
-  ## @param ingester.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param ingester.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param ingester.containerSecurityContext.runAsUser Set Ingester containers' Security Context runAsUser
   ## @param ingester.containerSecurityContext.runAsNonRoot Set Ingester containers' Security Context runAsNonRoot
   ## @param ingester.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     seccompProfile:
@@ -2015,14 +2015,14 @@ querier:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param querier.containerSecurityContext.enabled Enabled Querier containers' Security Context
-  ## @param querier.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param querier.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param querier.containerSecurityContext.runAsUser Set Querier containers' Security Context runAsUser
   ## @param querier.containerSecurityContext.runAsNonRoot Set Querier containers' Security Context runAsNonRoot
   ## @param querier.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     seccompProfile:
@@ -2336,14 +2336,14 @@ queryFrontend:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryFrontend.containerSecurityContext.enabled Enabled queryFrontend containers' Security Context
-  ## @param queryFrontend.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param queryFrontend.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param queryFrontend.containerSecurityContext.runAsUser Set queryFrontend containers' Security Context runAsUser
   ## @param queryFrontend.containerSecurityContext.runAsNonRoot Set queryFrontend containers' Security Context runAsNonRoot
   ## @param queryFrontend.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     seccompProfile:
@@ -2627,14 +2627,14 @@ queryScheduler:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryScheduler.containerSecurityContext.enabled Enabled queryScheduler containers' Security Context
-  ## @param queryScheduler.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param queryScheduler.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param queryScheduler.containerSecurityContext.runAsUser Set queryScheduler containers' Security Context runAsUser
   ## @param queryScheduler.containerSecurityContext.runAsNonRoot Set queryScheduler containers' Security Context runAsNonRoot
   ## @param queryScheduler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     seccompProfile:
@@ -2918,14 +2918,14 @@ ruler:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param ruler.containerSecurityContext.enabled Enabled Ruler containers' Security Context
-  ## @param ruler.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param ruler.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param ruler.containerSecurityContext.runAsUser Set Ruler containers' Security Context runAsUser
   ## @param ruler.containerSecurityContext.runAsNonRoot Set Ruler containers' Security Context runAsNonRoot
   ## @param ruler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     seccompProfile:
@@ -3239,14 +3239,14 @@ tableManager:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param tableManager.containerSecurityContext.enabled Enabled table-manager containers' Security Context
-  ## @param tableManager.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param tableManager.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param tableManager.containerSecurityContext.runAsUser Set table-manager containers' Security Context runAsUser
   ## @param tableManager.containerSecurityContext.runAsNonRoot Set table-manager containers' Security Context runAsNonRoot
   ## @param tableManager.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     seccompProfile:
@@ -3557,14 +3557,14 @@ promtail:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param promtail.containerSecurityContext.enabled Enabled Promtail containers' Security Context
-  ## @param promtail.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param promtail.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param promtail.containerSecurityContext.runAsUser Set Promtail containers' Security Context runAsUser
   ## @param promtail.containerSecurityContext.runAsNonRoot Set Promtail containers' Security Context runAsNonRoot
   ## @param promtail.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
     runAsNonRoot: false
     seccompProfile:
@@ -3885,7 +3885,7 @@ volumePermissions:
     requests: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## @param volumePermissions.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
@@ -3893,7 +3893,7 @@ volumePermissions:
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
     seccompProfile:
       type: "RuntimeDefault"

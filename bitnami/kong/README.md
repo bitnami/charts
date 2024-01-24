@@ -556,7 +556,7 @@ This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](h
 
 ### To 6.0.0
 
-The `postgresql` sub-chart was upgraded to `11.x.x`. Several values of the sub-chart were changed, so please check the [upgrade notes](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/).
+The `postgresql` sub-chart was upgraded to `11.x.x`. Several values of the sub-chart were changed, so please check the [upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1100).
 
 No issues are expected during the upgrade.
 
