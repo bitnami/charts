@@ -22,3 +22,5 @@
 .project
 .idea/
 *.tmproj
+# img folder
+img/
