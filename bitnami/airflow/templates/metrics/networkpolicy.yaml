@@ -48,7 +48,7 @@ spec:
       from:
         - podSelector:
             matchLabels:
-              {{ template "appsmith.metrics.fullname" . }}-client: "true"
+              {{ printf "%s-exporter" (include "common.names.fullname" .) }}-client: "true"
         {{- if .Values.metrics.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:

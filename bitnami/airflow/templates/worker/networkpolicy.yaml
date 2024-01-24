@@ -47,7 +47,7 @@ spec:
       from:
         - podSelector:
             matchLabels:
-              {{ template "appsmith.worker.fullname" . }}-client: "true"
+              {{ printf "%s-worker" (include "common.names.fullname" .) }}-client: "true"
         {{- if .Values.worker.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:

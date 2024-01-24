@@ -47,7 +47,7 @@ spec:
       from:
         - podSelector:
             matchLabels:
-              {{ template "appsmith.scheduler.fullname" . }}-client: "true"
+              {{ printf "%s-scheduler" (include "common.names.fullname" .) }}-client: "true"
         {{- if .Values.scheduler.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:

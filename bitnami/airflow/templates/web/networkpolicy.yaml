@@ -47,7 +47,7 @@ spec:
       from:
         - podSelector:
             matchLabels:
-              {{ template "appsmith.web.fullname" . }}-client: "true"
+              {{ printf "%s-web" (include "common.names.fullname" .) }}-client: "true"
         {{- if .Values.web.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
