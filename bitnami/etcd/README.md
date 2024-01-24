@@ -394,9 +394,9 @@ When scaling down, a "pre-stop" lifecycle hook is used to ensure that the `etcdc
 Here is an example to explain how this works:
 
 1. An etcd cluster with three members running on a three-nodes Kubernetes cluster is bootstrapped.
-1. After a few days, the cluster administrator decides to upgrade the kernel on one of the cluster nodes. To do so, the administrator drains the node. Pods running on that node are rescheduled to a different one.
-1. During the pod eviction process, the "pre-stop" hook removes the etcd member from the cluster. Thus, the etcd cluster is scaled down to only two members.
-1. Once the pod is scheduled on another node and initialized, the etcd member is added again to the cluster using the *etcdctl member add* command. Thus, the etcd cluster is scaled up to three replicas.
+2. After a few days, the cluster administrator decides to upgrade the kernel on one of the cluster nodes. To do so, the administrator drains the node. Pods running on that node are rescheduled to a different one.
+3. During the pod eviction process, the "pre-stop" hook removes the etcd member from the cluster. Thus, the etcd cluster is scaled down to only two members.
+4. Once the pod is scheduled on another node and initialized, the etcd member is added again to the cluster using the *etcdctl member add* command. Thus, the etcd cluster is scaled up to three replicas.
 
 If, for whatever reason, the "pre-stop" hook fails at removing the member, the initialization logic is able to detect that something went wrong by checking the `etcdctl member remove` command output that was stored in the persistent volume. It then uses the `etcdctl member update` command to add back the member. In this case, the cluster isn't automatically scaled down/up while the pod is recovered. Therefore, when other members attempt to connect to the pod, it may cause warnings or errors like the one below:
 

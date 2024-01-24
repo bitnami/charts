@@ -1146,41 +1146,41 @@ The upgrade process to *13.x.x* from *12.x.x* should be done by reusing the PVC(
 
 1. Select the namespace where Harbor is deployed:
 
-    ```shell
-    HARBOR_NAMESPACE='default'
-    ```
+```console
+HARBOR_NAMESPACE='default'
+```
 
 1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
 
-    ```shell
-    HARBOR_PASSWORD=$(kubectl get secret --namespace "${HARBOR_NAMESPACE:?}" harbor-core-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
-    POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-    POSTGRESQL_PVC=$(kubectl get pvc --namespace "${HARBOR_NAMESPACE:?}" -l app.kubernetes.io/instance=harbor,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
-    ```
+```console
+HARBOR_PASSWORD=$(kubectl get secret --namespace "${HARBOR_NAMESPACE:?}" harbor-core-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
+POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+POSTGRESQL_PVC=$(kubectl get pvc --namespace "${HARBOR_NAMESPACE:?}" -l app.kubernetes.io/instance=harbor,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
 
 1. Delete the PostgreSQL statefulset (notice the option `--cascade=orphan`) and secret:
 
-    ```shell
-    kubectl delete statefulsets.apps --namespace "${HARBOR_NAMESPACE:?}" --cascade=orphan harbor-postgresql
-    kubectl delete secret --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql
-    ```
+```console
+kubectl delete statefulsets.apps --namespace "${HARBOR_NAMESPACE:?}" --cascade=orphan harbor-postgresql
+kubectl delete secret --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql
+```
 
 1. Upgrade your release using the same PostgreSQL version:
 
-    ```shell
-    CURRENT_PG_VERSION=$(kubectl exec --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0 -c harbor-postgresql -- bash -c 'printenv APP_VERSION')
-    helm --namespace "${HARBOR_NAMESPACE:?}" upgrade harbor bitnami/harbor \
-      --set adminPassword="${HARBOR_PASSWORD:?}" \
-      --set postgresql.image.tag="${CURRENT_PG_VERSION:?}" \
-      --set postgresql.auth.postgresPassword="${POSTGRESQL_PASSWORD:?}" \
-      --set postgresql.primary.persistence.existingClaim="${POSTGRESQL_PVC:?}"
-    ```
+```console
+CURRENT_PG_VERSION=$(kubectl exec --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0 -c harbor-postgresql -- bash -c 'printenv APP_VERSION')
+helm --namespace "${HARBOR_NAMESPACE:?}" upgrade harbor bitnami/harbor \
+  --set adminPassword="${HARBOR_PASSWORD:?}" \
+  --set postgresql.image.tag="${CURRENT_PG_VERSION:?}" \
+  --set postgresql.auth.postgresPassword="${POSTGRESQL_PASSWORD:?}" \
+  --set postgresql.primary.persistence.existingClaim="${POSTGRESQL_PVC:?}"
+```
 
 1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
 
-    ```shell
-    kubectl delete pod --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0
-    ```
+```console
+kubectl delete pod --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0
+```
 
 ### To 12.x.x
 
@@ -1209,41 +1209,41 @@ To upgrade to *12.x.x* from *11.x*, it should be done reusing the PVC(s) used to
 
 1. Select the namespace where Harbor is deployed:
 
-    ```shell
-    HARBOR_NAMESPACE='default'
-    ```
+```console
+HARBOR_NAMESPACE='default'
+```
 
 1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
 
-    ```shell
-    HARBOR_PASSWORD=$(kubectl get secret --namespace "${HARBOR_NAMESPACE:?}" harbor-core-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
-    POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-    POSTGRESQL_PVC=$(kubectl get pvc --namespace "${HARBOR_NAMESPACE:?}" -l app.kubernetes.io/instance=harbor,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
-    ```
+```console
+HARBOR_PASSWORD=$(kubectl get secret --namespace "${HARBOR_NAMESPACE:?}" harbor-core-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
+POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+POSTGRESQL_PVC=$(kubectl get pvc --namespace "${HARBOR_NAMESPACE:?}" -l app.kubernetes.io/instance=harbor,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
 
 1. Delete the PostgreSQL statefulset (notice the option `--cascade=orphan`) and secret:
 
-    ```shell
-    kubectl delete statefulsets.apps --namespace "${HARBOR_NAMESPACE:?}" --cascade=orphan harbor-postgresql
-    kubectl delete secret --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql
-    ```
+```console
+kubectl delete statefulsets.apps --namespace "${HARBOR_NAMESPACE:?}" --cascade=orphan harbor-postgresql
+kubectl delete secret --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql
+```
 
 1. Upgrade your release using the same PostgreSQL version:
 
-    ```shell
-    CURRENT_PG_VERSION=$(kubectl exec --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0 -c harbor-postgresql -- bash -c 'printenv BITNAMI_IMAGE_VERSION')
-    helm --namespace "${HARBOR_NAMESPACE:?}" upgrade harbor bitnami/harbor \
-      --set adminPassword="${HARBOR_PASSWORD:?}" \
-      --set postgresql.image.tag="${CURRENT_PG_VERSION:?}" \
-      --set postgresql.auth.postgresPassword="${POSTGRESQL_PASSWORD:?}" \
-      --set postgresql.primary.persistence.existingClaim="${POSTGRESQL_PVC:?}"
-    ```
+```console
+CURRENT_PG_VERSION=$(kubectl exec --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0 -c harbor-postgresql -- bash -c 'printenv BITNAMI_IMAGE_VERSION')
+helm --namespace "${HARBOR_NAMESPACE:?}" upgrade harbor bitnami/harbor \
+  --set adminPassword="${HARBOR_PASSWORD:?}" \
+  --set postgresql.image.tag="${CURRENT_PG_VERSION:?}" \
+  --set postgresql.auth.postgresPassword="${POSTGRESQL_PASSWORD:?}" \
+  --set postgresql.primary.persistence.existingClaim="${POSTGRESQL_PVC:?}"
+```
 
 1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
 
-    ```shell
-    kubectl delete pod --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0
-    ```
+```console
+kubectl delete pod --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0
+```
 
 > **NOTE:** the instructions above reuse the same PostgreSQL version you were using in your chart release. Otherwise, you will find an error such as the one below when upgrading since the new chart major version also bumps the application version. To workaround this issue you need to upgrade database, please refer to the [official PostgreSQL documentation](https://www.postgresql.org/docs/current/upgrading.html) for more information about this.
 >
