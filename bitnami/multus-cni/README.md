@@ -98,6 +98,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `priorityClassName`                            | Multus CNI pods' priorityClassName                                                                                    | `""`                         |
 | `schedulerName`                                | Name of the k8s scheduler (other than default)                                                                        | `""`                         |
 | `topologySpreadConstraints`                    | Topology Spread Constraints for pod assignment                                                                        | `[]`                         |
+| `automountServiceAccountToken`                 | Mount Service Account token in pod                                                                                    | `true`                       |
 | `hostAliases`                                  | Add deployment host aliases                                                                                           | `[]`                         |
 | `extraEnvVars`                                 | Extra environment variables                                                                                           | `[]`                         |
 | `extraEnvVarsCM`                               | ConfigMap containing extra env vars                                                                                   | `""`                         |
@@ -117,8 +118,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.requests`                           | The requested resources for the init container                                                                        | `{}`                         |
 | `resources.limits`                             | The resources limits for the init container                                                                           | `{}`                         |
 | `podSecurityContext.enabled`                   | Enable Multus CNI pods' Security Context                                                                              | `true`                       |
+| `podSecurityContext.fsGroupChangePolicy`       | Set filesystem group change policy                                                                                    | `Always`                     |
+| `podSecurityContext.sysctls`                   | Set kernel settings using the sysctl interface                                                                        | `[]`                         |
+| `podSecurityContext.supplementalGroups`        | Set filesystem extra groups                                                                                           | `[]`                         |
 | `podSecurityContext.fsGroup`                   | Multus CNI pods' group ID                                                                                             | `0`                          |
 | `containerSecurityContext.enabled`             | Enable Multus CNI containers' Security Context                                                                        | `true`                       |
+| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                      | `{}`                         |
 | `containerSecurityContext.runAsUser`           | Multus CNI containers' Security Context                                                                               | `0`                          |
 | `containerSecurityContext.runAsNonRoot`        | Set Multus CNI container's Security Context runAsNonRoot                                                              | `false`                      |
 | `containerSecurityContext.privileged`          | Set Multus CNI container's Security Context privileged                                                                | `true`                       |
@@ -135,7 +140,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `livenessProbe.timeoutSeconds`                 | Timeout seconds for livenessProbe                                                                                     | `5`                          |
 | `livenessProbe.failureThreshold`               | Failure threshold for livenessProbe                                                                                   | `5`                          |
 | `livenessProbe.successThreshold`               | Success threshold for livenessProbe                                                                                   | `1`                          |
-| `readinessProbe.enabled`                       | Enable readinessProbe                                                                                                 | `false`                      |
+| `readinessProbe.enabled`                       | Enable readinessProbe                                                                                                 | `true`                       |
 | `readinessProbe.initialDelaySeconds`           | Initial delay seconds for readinessProbe                                                                              | `10`                         |
 | `readinessProbe.periodSeconds`                 | Period seconds for readinessProbe                                                                                     | `5`                          |
 | `readinessProbe.timeoutSeconds`                | Timeout seconds for readinessProbe                                                                                    | `1`                          |
@@ -150,13 +155,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                          | Description                                                            | Value  |
-| --------------------------------------------- | ---------------------------------------------------------------------- | ------ |
-| `rbac.create`                                 | Specifies whether RBAC resources should be created                     | `true` |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for Multus CNI pod                   | `true` |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`   |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true` |
-| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
+| Name                                          | Description                                                            | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created                     | `true`  |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for Multus CNI pod                   | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

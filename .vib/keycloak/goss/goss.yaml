@@ -10,7 +10,7 @@ file:
     - /https-port.*{{ .Vars.containerPorts.https }}/
     - /log-console-output.*{{ .Vars.logging.output }}/
 command:
-  {{ if and .Vars.serviceAccount.create .Vars.serviceAccount.automountServiceAccountToken }}
+  {{ if and .Vars.serviceAccount.create .Vars.automountServiceAccountToken }}
   check-sa:
     exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
     exit-status: 0

@@ -301,7 +301,7 @@ Create the name of the service account to use for the Kafka Provisioning client
 */}}
 {{- define "kafka.provisioning.serviceAccountName" -}}
 {{- if .Values.provisioning.serviceAccount.create -}}
-    {{ default (include "common.names.fullname" .) .Values.provisioning.serviceAccount.name }}
+    {{ default (printf "%s-provisioning" (include "common.names.fullname" .)) .Values.provisioning.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.provisioning.serviceAccount.name }}
 {{- end -}}
@@ -1130,6 +1130,20 @@ kafka: rbac.create
     an initContainer will be used to auto-detect the external IPs/ports by querying the
     K8s API. Please note this initContainer requires specific RBAC resources. You can create them
     by specifying "--set rbac.create=true".
+{{- end -}}
+{{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (gt (int .Values.controller.replicaCount) 0) (not .Values.controller.automountServiceAccountToken) }}
+kafka: controller-automountServiceAccountToken
+    By specifying "externalAccess.enabled=true" and "externalAccess.autoDiscovery.enabled=true"
+    an initContainer will be used to auto-detect the external IPs/ports by querying the
+    K8s API. Please note this initContainer requires the service account token. Please set controller.automountServiceAccountToken=true
+    and broker.automountServiceAccountToken=true.
+{{- end -}}
+{{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (gt (int .Values.broker.replicaCount) 0) (not .Values.broker.automountServiceAccountToken) }}
+kafka: broker-automountServiceAccountToken
+    By specifying "externalAccess.enabled=true" and "externalAccess.autoDiscovery.enabled=true"
+    an initContainer will be used to auto-detect the external IPs/ports by querying the
+    K8s API. Please note this initContainer requires the service account token. Please set controller.automountServiceAccountToken=true
+    and broker.automountServiceAccountToken=true.
 {{- end -}}
 {{- end -}}
 

@@ -72,6 +72,9 @@ kustomizeController:
   ## @param kustomizeController.installCRDs Flag to install Kustomize Controller CRDs
   ##
   installCRDs: true
+  ## @param kustomizeController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
   ## Bitnami Kustomize Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-kustomize-controller/tags/
   ## @param kustomizeController.image.registry [default: REGISTRY_NAME] Kustomize Controller image registry
@@ -85,7 +88,7 @@ kustomizeController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-kustomize-controller
-    tag: 1.2.1-debian-11-r2
+    tag: 1.2.1-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -176,14 +179,21 @@ kustomizeController:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param kustomizeController.podSecurityContext.enabled Enabled Kustomize Controller pods' Security Context
+  ## @param kustomizeController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param kustomizeController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param kustomizeController.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param kustomizeController.podSecurityContext.fsGroup Set Kustomize Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param kustomizeController.containerSecurityContext.enabled Enabled Kustomize Controller containers' Security Context
+  ## @param kustomizeController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param kustomizeController.containerSecurityContext.runAsUser Set Kustomize Controller containers' Security Context runAsUser
   ## @param kustomizeController.containerSecurityContext.runAsNonRoot Set Kustomize Controller containers' Security Context runAsNonRoot
   ## @param kustomizeController.containerSecurityContext.privileged Set Kustomize Controller containers' Security Context privileged
@@ -194,6 +204,7 @@ kustomizeController:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -210,6 +221,9 @@ kustomizeController:
   ## @param kustomizeController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param kustomizeController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param kustomizeController.hostAliases Kustomize Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -389,7 +403,7 @@ kustomizeController:
     annotations: {}
     ## @param kustomizeController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Kustomize Controller Metrics Parameters
   ##
@@ -510,6 +524,9 @@ helmController:
   ## @param helmController.installCRDs Flag to install Helm Controller CRDs
   ##
   installCRDs: true
+  ## @param helmController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
   ## Bitnami Helm Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
   ## @param helmController.image.registry [default: REGISTRY_NAME] Helm Controller image registry
@@ -614,14 +631,21 @@ helmController:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param helmController.podSecurityContext.enabled Enabled Helm Controller pods' Security Context
+  ## @param helmController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param helmController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param helmController.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param helmController.podSecurityContext.fsGroup Set Helm Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param helmController.containerSecurityContext.enabled Enabled Helm Controller containers' Security Context
+  ## @param helmController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param helmController.containerSecurityContext.runAsUser Set Helm Controller containers' Security Context runAsUser
   ## @param helmController.containerSecurityContext.runAsNonRoot Set Helm Controller containers' Security Context runAsNonRoot
   ## @param helmController.containerSecurityContext.privileged Set Helm Controller containers' Security Context privileged
@@ -632,6 +656,7 @@ helmController:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -648,6 +673,9 @@ helmController:
   ## @param helmController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param helmController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param helmController.hostAliases Helm Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -827,7 +855,7 @@ helmController:
     annotations: {}
     ## @param helmController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Helm Controller Metrics Parameters
   ##
@@ -948,6 +976,9 @@ sourceController:
   ## @param sourceController.installCRDs Flag to install Source Controller CRDs
   ##
   installCRDs: true
+  ## @param sourceController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
   ## Bitnami Source Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
   ## @param sourceController.image.registry [default: REGISTRY_NAME] Source Controller image registry
@@ -1054,14 +1085,21 @@ sourceController:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param sourceController.podSecurityContext.enabled Enabled Source Controller pods' Security Context
+  ## @param sourceController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param sourceController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param sourceController.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param sourceController.podSecurityContext.fsGroup Set Source Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param sourceController.containerSecurityContext.enabled Enabled Source Controller containers' Security Context
+  ## @param sourceController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param sourceController.containerSecurityContext.runAsUser Set Source Controller containers' Security Context runAsUser
   ## @param sourceController.containerSecurityContext.runAsNonRoot Set Source Controller containers' Security Context runAsNonRoot
   ## @param sourceController.containerSecurityContext.privileged Set Source Controller containers' Security Context privileged
@@ -1072,6 +1110,7 @@ sourceController:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
@@ -1088,6 +1127,9 @@ sourceController:
   ## @param sourceController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param sourceController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param sourceController.hostAliases Source Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1425,7 +1467,7 @@ sourceController:
     annotations: {}
     ## @param sourceController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Source Controller Metrics Parameters
   ##
@@ -1546,6 +1588,9 @@ notificationController:
   ## @param notificationController.installCRDs Flag to install Notification Controller CRDs
   ##
   installCRDs: true
+  ## @param notificationController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
   ## Bitnami Notification Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-notification-controller/tags/
   ## @param notificationController.image.registry [default: REGISTRY_NAME] Notification Controller image registry
@@ -1559,7 +1604,7 @@ notificationController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-notification-controller
-    tag: 1.2.3-debian-11-r0
+    tag: 1.2.3-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1650,14 +1695,21 @@ notificationController:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param notificationController.podSecurityContext.enabled Enabled Notification Controller pods' Security Context
+  ## @param notificationController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param notificationController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param notificationController.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param notificationController.podSecurityContext.fsGroup Set Notification Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param notificationController.containerSecurityContext.enabled Enabled Notification Controller containers' Security Context
+  ## @param notificationController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param notificationController.containerSecurityContext.runAsUser Set Notification Controller containers' Security Context runAsUser
   ## @param notificationController.containerSecurityContext.runAsNonRoot Set Notification Controller containers' Security Context runAsNonRoot
   ## @param notificationController.containerSecurityContext.readOnlyRootFilesystem Set Notification Controller containers' Security Context runAsNonRoot
@@ -1668,6 +1720,7 @@ notificationController:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1684,6 +1737,9 @@ notificationController:
   ## @param notificationController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param notificationController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param notificationController.hostAliases Notification Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1863,7 +1919,7 @@ notificationController:
     annotations: {}
     ## @param notificationController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Notification Controller Metrics Parameters
   ##
@@ -1984,6 +2040,9 @@ imageAutomationController:
   ## @param imageAutomationController.installCRDs Flag to install Image Automation Controller CRDs
   ##
   installCRDs: true
+  ## @param imageAutomationController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
   ## Bitnami Image Automation Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-image-automation-controller/tags/
   ## @param imageAutomationController.image.registry [default: REGISTRY_NAME] Image Automation Controller image registry
@@ -1997,7 +2056,7 @@ imageAutomationController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-image-automation-controller
-    tag: 0.37.0-debian-11-r0
+    tag: 0.37.0-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2088,14 +2147,21 @@ imageAutomationController:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param imageAutomationController.podSecurityContext.enabled Enabled Image Automation Controller pods' Security Context
+  ## @param imageAutomationController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param imageAutomationController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param imageAutomationController.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param imageAutomationController.podSecurityContext.fsGroup Set Image Automation Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param imageAutomationController.containerSecurityContext.enabled Enabled Image Automation Controller containers' Security Context
+  ## @param imageAutomationController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param imageAutomationController.containerSecurityContext.runAsUser Set Image Automation Controller containers' Security Context runAsUser
   ## @param imageAutomationController.containerSecurityContext.runAsNonRoot Set Image Automation Controller containers' Security Context runAsNonRoot
   ## @param imageAutomationController.containerSecurityContext.readOnlyRootFilesystem Set Image Automation Controller containers' Security Context runAsNonRoot
@@ -2106,6 +2172,7 @@ imageAutomationController:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
@@ -2122,6 +2189,9 @@ imageAutomationController:
   ## @param imageAutomationController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param imageAutomationController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param imageAutomationController.hostAliases Image Automation Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2301,7 +2371,7 @@ imageAutomationController:
     annotations: {}
     ## @param imageAutomationController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Image Automation Controller Metrics Parameters
   ##
@@ -2422,6 +2492,9 @@ imageReflectorController:
   ## @param imageReflectorController.installCRDs Flag to install Image Reflector Controller CRDs
   ##
   installCRDs: true
+  ## @param imageReflectorController.watchAllNamespaces Watch for custom resources in all namespaces
+  ##
+  watchAllNamespaces: true
   ## Bitnami Image Reflector Controller image
   ## ref: https://hub.docker.com/r/bitnami/fluxcd-helm-controller/tags/
   ## @param imageReflectorController.image.registry [default: REGISTRY_NAME] Image Reflector Controller image registry
@@ -2435,7 +2508,7 @@ imageReflectorController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-image-reflector-controller
-    tag: 0.31.1-debian-11-r0
+    tag: 0.31.1-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2526,14 +2599,21 @@ imageReflectorController:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param imageReflectorController.podSecurityContext.enabled Enabled Image Reflector Controller pods' Security Context
+  ## @param imageReflectorController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param imageReflectorController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param imageReflectorController.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param imageReflectorController.podSecurityContext.fsGroup Set Image Reflector Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param imageReflectorController.containerSecurityContext.enabled Enabled Image Reflector Controller containers' Security Context
+  ## @param imageReflectorController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param imageReflectorController.containerSecurityContext.runAsUser Set Image Reflector Controller containers' Security Context runAsUser
   ## @param imageReflectorController.containerSecurityContext.runAsNonRoot Set Image Reflector Controller containers' Security Context runAsNonRoot
   ## @param imageReflectorController.containerSecurityContext.privileged Set Image Reflector Controller containers' Security Context privileged
@@ -2544,6 +2624,7 @@ imageReflectorController:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2560,6 +2641,9 @@ imageReflectorController:
   ## @param imageReflectorController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param imageReflectorController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param imageReflectorController.hostAliases Image Reflector Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2782,7 +2866,7 @@ imageReflectorController:
     annotations: {}
     ## @param imageReflectorController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section Image Reflector Controller Metrics Parameters
   ##
@@ -2914,7 +2998,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag:  11-debian-11-r93
+    tag:  11-debian-11-r94
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2936,8 +3020,10 @@ volumePermissions:
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param volumePermissions.containerSecurityContext.enabled Enable init container's Security Context
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 0

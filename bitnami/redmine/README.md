@@ -128,8 +128,12 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redmine --set databa
 | `resources.limits`                             | The resources limits for the Redmine container                                                                           | `{}`             |
 | `resources.requests`                           | The requested resources for the Redmine container                                                                        | `{}`             |
 | `podSecurityContext.enabled`                   | Enabled Redmine pods' Security Context                                                                                   | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`       | Set filesystem group change policy                                                                                       | `Always`         |
+| `podSecurityContext.sysctls`                   | Set kernel settings using the sysctl interface                                                                           | `[]`             |
+| `podSecurityContext.supplementalGroups`        | Set filesystem extra groups                                                                                              | `[]`             |
 | `podSecurityContext.fsGroup`                   | Set Redmine pod's Security Context fsGroup                                                                               | `0`              |
 | `containerSecurityContext.enabled`             | Enabled Redmine containers' Security Context                                                                             | `true`           |
+| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                         | `{}`             |
 | `containerSecurityContext.runAsUser`           | Set Redmine container's Security Context runAsUser                                                                       | `0`              |
 | `containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `livenessProbe.enabled`                        | Enable livenessProbe on Redmine containers                                                                               | `true`           |
@@ -157,6 +161,7 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redmine --set databa
 | `customReadinessProbe`                         | Custom readinessProbe that overrides the default one                                                                     | `{}`             |
 | `customStartupProbe`                           | Custom startupProbe that overrides the default one                                                                       | `{}`             |
 | `lifecycleHooks`                               | LifecycleHooks to set additional configuration at startup                                                                | `{}`             |
+| `automountServiceAccountToken`                 | Mount Service Account token in pod                                                                                       | `false`          |
 | `hostAliases`                                  | Redmine pod host aliases                                                                                                 | `[]`             |
 | `podLabels`                                    | Extra labels for Redmine pods                                                                                            | `{}`             |
 | `podAnnotations`                               | Annotations for Redmine pods                                                                                             | `{}`             |
@@ -211,21 +216,22 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redmine --set databa
 
 ### Persistence Parameters
 
-| Name                                                   | Description                                                                                     | Value   |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ------- |
-| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                               | `true`  |
-| `persistence.storageClass`                             | Persistent Volume storage class                                                                 | `""`    |
-| `persistence.accessModes`                              | Persistent Volume access modes                                                                  | `[]`    |
-| `persistence.size`                                     | Persistent Volume size                                                                          | `8Gi`   |
-| `persistence.dataSource`                               | Custom PVC data source                                                                          | `{}`    |
-| `persistence.annotations`                              | Annotations for the PVC                                                                         | `{}`    |
-| `persistence.selector`                                 | Selector to match an existing Persistent Volume (this value is evaluated as a template)         | `{}`    |
-| `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                              | `""`    |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false` |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`    |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`    |
-| `volumePermissions.containerSecurityContext.enabled`   | Enable init container's Security Context                                                        | `true`  |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`     |
+| Name                                                        | Description                                                                                     | Value   |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------- |
+| `persistence.enabled`                                       | Enable persistence using Persistent Volume Claims                                               | `true`  |
+| `persistence.storageClass`                                  | Persistent Volume storage class                                                                 | `""`    |
+| `persistence.accessModes`                                   | Persistent Volume access modes                                                                  | `[]`    |
+| `persistence.size`                                          | Persistent Volume size                                                                          | `8Gi`   |
+| `persistence.dataSource`                                    | Custom PVC data source                                                                          | `{}`    |
+| `persistence.annotations`                                   | Annotations for the PVC                                                                         | `{}`    |
+| `persistence.selector`                                      | Selector to match an existing Persistent Volume (this value is evaluated as a template)         | `{}`    |
+| `persistence.existingClaim`                                 | The name of an existing PVC to use for persistence                                              | `""`    |
+| `volumePermissions.enabled`                                 | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false` |
+| `volumePermissions.resources.limits`                        | The resources limits for the init container                                                     | `{}`    |
+| `volumePermissions.resources.requests`                      | The requested resources for the init container                                                  | `{}`    |
+| `volumePermissions.containerSecurityContext.enabled`        | Enable init container's Security Context                                                        | `true`  |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `{}`    |
+| `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                 | `0`     |
 
 ### RBAC Parameters
 
@@ -276,58 +282,62 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redmine --set databa
 
 ### Mail Receiver/Cron Job Parameters
 
-| Name                                                 | Description                                                                                                                                   | Value         |
-| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| `mailReceiver.enabled`                               | Whether to enable scheduled mail-to-task CronJob                                                                                              | `false`       |
-| `mailReceiver.schedule`                              | Kubernetes CronJob schedule                                                                                                                   | `*/5 * * * *` |
-| `mailReceiver.suspend`                               | Whether to create suspended CronJob                                                                                                           | `true`        |
-| `mailReceiver.mailProtocol`                          | Mail protocol to use for reading emails. Allowed values: `IMAP` and `POP3`                                                                    | `IMAP`        |
-| `mailReceiver.host`                                  | Server to receive emails from                                                                                                                 | `""`          |
-| `mailReceiver.port`                                  | TCP port on the `host`                                                                                                                        | `993`         |
-| `mailReceiver.username`                              | Login to authenticate on the `host`                                                                                                           | `""`          |
-| `mailReceiver.password`                              | Password to authenticate on the `host`                                                                                                        | `""`          |
-| `mailReceiver.ssl`                                   | Whether use SSL/TLS to connect to the `host`                                                                                                  | `true`        |
-| `mailReceiver.startTLS`                              | Whether use StartTLS to connect to the `host`                                                                                                 | `false`       |
-| `mailReceiver.imapFolder`                            | IMAP only. Folder to read emails from                                                                                                         | `INBOX`       |
-| `mailReceiver.moveOnSuccess`                         | IMAP only. Folder to move processed emails to                                                                                                 | `""`          |
-| `mailReceiver.moveOnFailure`                         | IMAP only. Folder to move emails with processing errors to                                                                                    | `""`          |
-| `mailReceiver.unknownUserAction`                     | Action to perform is an email received from unregistered user                                                                                 | `ignore`      |
-| `mailReceiver.noPermissionCheck`                     | Whether skip permission check during creating a new task                                                                                      | `0`           |
-| `mailReceiver.noAccountNotice`                       | Whether send an email to an unregistered user created during a new task creation                                                              | `1`           |
-| `mailReceiver.defaultGroup`                          | Defines a group list to add created user to                                                                                                   | `""`          |
-| `mailReceiver.project`                               | Defines identifier of the target project for a new task                                                                                       | `""`          |
-| `mailReceiver.projectFromSubaddress`                 | Defines email address to select project from subaddress                                                                                       | `""`          |
-| `mailReceiver.status`                                | Defines a new task status                                                                                                                     | `""`          |
-| `mailReceiver.tracker`                               | Defines a new task tracker                                                                                                                    | `""`          |
-| `mailReceiver.category`                              | Defines a new task category                                                                                                                   | `""`          |
-| `mailReceiver.priority`                              | Defines a new task priority                                                                                                                   | `""`          |
-| `mailReceiver.assignedTo`                            | Defines a new task assignee                                                                                                                   | `""`          |
-| `mailReceiver.allowOverride`                         | Defines if email content is allowed to set attributes values. Values is a comma separated list of attributes or `all` to allow all attributes | `""`          |
-| `mailReceiver.command`                               | Override default container command (useful when using custom images)                                                                          | `[]`          |
-| `mailReceiver.args`                                  | Override default container args (useful when using custom images)                                                                             | `[]`          |
-| `mailReceiver.extraEnvVars`                          | Extra environment variables to be set on mailReceiver container                                                                               | `[]`          |
-| `mailReceiver.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                                                                          | `""`          |
-| `mailReceiver.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                                                                             | `""`          |
-| `mailReceiver.podSecurityContext.enabled`            | Enabled Redmine pods' Security Context                                                                                                        | `true`        |
-| `mailReceiver.podSecurityContext.fsGroup`            | Set Redmine pod's Security Context fsGroup                                                                                                    | `1001`        |
-| `mailReceiver.containerSecurityContext.enabled`      | mailReceiver Container securityContext                                                                                                        | `false`       |
-| `mailReceiver.containerSecurityContext.runAsUser`    | User ID for the mailReceiver container                                                                                                        | `1001`        |
-| `mailReceiver.containerSecurityContext.runAsNonRoot` | Whether to run the mailReceiver container as a non-root user                                                                                  | `true`        |
-| `mailReceiver.podAnnotations`                        | Additional pod annotations                                                                                                                    | `{}`          |
-| `mailReceiver.podLabels`                             | Additional pod labels                                                                                                                         | `{}`          |
-| `mailReceiver.podAffinityPreset`                     | Pod affinity preset. Ignored if `mailReceiver.affinity` is set. Allowed values: `soft` or `hard`                                              | `""`          |
-| `mailReceiver.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `mailReceiver.affinity` is set. Allowed values: `soft` or `hard`                                         | `soft`        |
-| `mailReceiver.nodeAffinityPreset.type`               | Node affinity preset. Ignored if `mailReceiver.affinity` is set. Allowed values: `soft` or `hard`                                             | `""`          |
-| `mailReceiver.nodeAffinityPreset.key`                | Node label key to match. Ignored if `mailReceiver.affinity` is set.                                                                           | `""`          |
-| `mailReceiver.nodeAffinityPreset.values`             | Node label values to match. Ignored if `mailReceiver.affinity` is set.                                                                        | `[]`          |
-| `mailReceiver.affinity`                              | Affinity for pod assignment                                                                                                                   | `{}`          |
-| `mailReceiver.nodeSelector`                          | Node labels for pod assignment                                                                                                                | `{}`          |
-| `mailReceiver.tolerations`                           | Tolerations for pod assignment                                                                                                                | `[]`          |
-| `mailReceiver.priorityClassName`                     | Redmine pods' priority.                                                                                                                       | `""`          |
-| `mailReceiver.initContainers`                        | Add additional init containers to the mailReceiver pods                                                                                       | `[]`          |
-| `mailReceiver.sidecars`                              | Add additional sidecar containers to the mailReceiver pods                                                                                    | `[]`          |
-| `mailReceiver.extraVolumes`                          | Optionally specify extra list of additional volumes for mailReceiver container                                                                | `[]`          |
-| `mailReceiver.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for mailReceiver container                                                           | `[]`          |
+| Name                                                   | Description                                                                                                                                   | Value         |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `mailReceiver.enabled`                                 | Whether to enable scheduled mail-to-task CronJob                                                                                              | `false`       |
+| `mailReceiver.schedule`                                | Kubernetes CronJob schedule                                                                                                                   | `*/5 * * * *` |
+| `mailReceiver.suspend`                                 | Whether to create suspended CronJob                                                                                                           | `true`        |
+| `mailReceiver.mailProtocol`                            | Mail protocol to use for reading emails. Allowed values: `IMAP` and `POP3`                                                                    | `IMAP`        |
+| `mailReceiver.host`                                    | Server to receive emails from                                                                                                                 | `""`          |
+| `mailReceiver.port`                                    | TCP port on the `host`                                                                                                                        | `993`         |
+| `mailReceiver.username`                                | Login to authenticate on the `host`                                                                                                           | `""`          |
+| `mailReceiver.password`                                | Password to authenticate on the `host`                                                                                                        | `""`          |
+| `mailReceiver.ssl`                                     | Whether use SSL/TLS to connect to the `host`                                                                                                  | `true`        |
+| `mailReceiver.startTLS`                                | Whether use StartTLS to connect to the `host`                                                                                                 | `false`       |
+| `mailReceiver.imapFolder`                              | IMAP only. Folder to read emails from                                                                                                         | `INBOX`       |
+| `mailReceiver.moveOnSuccess`                           | IMAP only. Folder to move processed emails to                                                                                                 | `""`          |
+| `mailReceiver.moveOnFailure`                           | IMAP only. Folder to move emails with processing errors to                                                                                    | `""`          |
+| `mailReceiver.unknownUserAction`                       | Action to perform is an email received from unregistered user                                                                                 | `ignore`      |
+| `mailReceiver.noPermissionCheck`                       | Whether skip permission check during creating a new task                                                                                      | `0`           |
+| `mailReceiver.noAccountNotice`                         | Whether send an email to an unregistered user created during a new task creation                                                              | `1`           |
+| `mailReceiver.defaultGroup`                            | Defines a group list to add created user to                                                                                                   | `""`          |
+| `mailReceiver.project`                                 | Defines identifier of the target project for a new task                                                                                       | `""`          |
+| `mailReceiver.projectFromSubaddress`                   | Defines email address to select project from subaddress                                                                                       | `""`          |
+| `mailReceiver.status`                                  | Defines a new task status                                                                                                                     | `""`          |
+| `mailReceiver.tracker`                                 | Defines a new task tracker                                                                                                                    | `""`          |
+| `mailReceiver.category`                                | Defines a new task category                                                                                                                   | `""`          |
+| `mailReceiver.priority`                                | Defines a new task priority                                                                                                                   | `""`          |
+| `mailReceiver.assignedTo`                              | Defines a new task assignee                                                                                                                   | `""`          |
+| `mailReceiver.allowOverride`                           | Defines if email content is allowed to set attributes values. Values is a comma separated list of attributes or `all` to allow all attributes | `""`          |
+| `mailReceiver.command`                                 | Override default container command (useful when using custom images)                                                                          | `[]`          |
+| `mailReceiver.args`                                    | Override default container args (useful when using custom images)                                                                             | `[]`          |
+| `mailReceiver.extraEnvVars`                            | Extra environment variables to be set on mailReceiver container                                                                               | `[]`          |
+| `mailReceiver.extraEnvVarsCM`                          | Name of existing ConfigMap containing extra env vars                                                                                          | `""`          |
+| `mailReceiver.extraEnvVarsSecret`                      | Name of existing Secret containing extra env vars                                                                                             | `""`          |
+| `mailReceiver.podSecurityContext.enabled`              | Enabled Redmine pods' Security Context                                                                                                        | `true`        |
+| `mailReceiver.podSecurityContext.fsGroupChangePolicy`  | Set filesystem group change policy                                                                                                            | `Always`      |
+| `mailReceiver.podSecurityContext.sysctls`              | Set kernel settings using the sysctl interface                                                                                                | `[]`          |
+| `mailReceiver.podSecurityContext.supplementalGroups`   | Set filesystem extra groups                                                                                                                   | `[]`          |
+| `mailReceiver.podSecurityContext.fsGroup`              | Set Redmine pod's Security Context fsGroup                                                                                                    | `1001`        |
+| `mailReceiver.containerSecurityContext.enabled`        | mailReceiver Container securityContext                                                                                                        | `false`       |
+| `mailReceiver.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                              | `{}`          |
+| `mailReceiver.containerSecurityContext.runAsUser`      | User ID for the mailReceiver container                                                                                                        | `1001`        |
+| `mailReceiver.containerSecurityContext.runAsNonRoot`   | Whether to run the mailReceiver container as a non-root user                                                                                  | `true`        |
+| `mailReceiver.podAnnotations`                          | Additional pod annotations                                                                                                                    | `{}`          |
+| `mailReceiver.podLabels`                               | Additional pod labels                                                                                                                         | `{}`          |
+| `mailReceiver.podAffinityPreset`                       | Pod affinity preset. Ignored if `mailReceiver.affinity` is set. Allowed values: `soft` or `hard`                                              | `""`          |
+| `mailReceiver.podAntiAffinityPreset`                   | Pod anti-affinity preset. Ignored if `mailReceiver.affinity` is set. Allowed values: `soft` or `hard`                                         | `soft`        |
+| `mailReceiver.nodeAffinityPreset.type`                 | Node affinity preset. Ignored if `mailReceiver.affinity` is set. Allowed values: `soft` or `hard`                                             | `""`          |
+| `mailReceiver.nodeAffinityPreset.key`                  | Node label key to match. Ignored if `mailReceiver.affinity` is set.                                                                           | `""`          |
+| `mailReceiver.nodeAffinityPreset.values`               | Node label values to match. Ignored if `mailReceiver.affinity` is set.                                                                        | `[]`          |
+| `mailReceiver.affinity`                                | Affinity for pod assignment                                                                                                                   | `{}`          |
+| `mailReceiver.nodeSelector`                            | Node labels for pod assignment                                                                                                                | `{}`          |
+| `mailReceiver.tolerations`                             | Tolerations for pod assignment                                                                                                                | `[]`          |
+| `mailReceiver.priorityClassName`                       | Redmine pods' priority.                                                                                                                       | `""`          |
+| `mailReceiver.initContainers`                          | Add additional init containers to the mailReceiver pods                                                                                       | `[]`          |
+| `mailReceiver.sidecars`                                | Add additional sidecar containers to the mailReceiver pods                                                                                    | `[]`          |
+| `mailReceiver.extraVolumes`                            | Optionally specify extra list of additional volumes for mailReceiver container                                                                | `[]`          |
+| `mailReceiver.extraVolumeMounts`                       | Optionally specify extra list of additional volumeMounts for mailReceiver container                                                           | `[]`          |
 
 ### Custom Certificates parameters
 
@@ -588,9 +598,148 @@ This major release bumps the MariaDB version to 10.11. Follow the [upstream inst
 
 This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
 
-### To any previous version
+### To 20.0.0
 
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/apps/redmine/administration/upgrade/).
+The MariaDB subchart has been updated to the latest version (now it uses 10.6). No major issues are expected during the upgrade.
+
+### To 18.0.0
+
+This major release updates the PostgreSQL subchart to its newest major *11.x.x*, which contain several changes in the supported values (check the [upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1100) to obtain more information).
+
+#### How to upgrade to version 18.0.0
+
+To upgrade to *18.0.0* from *17.x* using PostgreSQL as database, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *redmine* and the release namespace *default*):
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+
+```console
+export REDMINE_PASSWORD=$(kubectl get secret --namespace default redmine -o jsonpath="{.data.redmine-password}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default redmine-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=redmine,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+1. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+
+```console
+kubectl delete statefulsets.apps --cascade=false redmine-postgresql
+kubectl delete secret redmine-postgresql --namespace default
+```
+
+1. Upgrade your release using the same PostgreSQL version:
+
+```console
+CURRENT_PG_VERSION=$(kubectl exec redmine-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+helm upgrade redmine bitnami/redmine \
+  --set databaseType=postgresql \
+  --set redminePassword=$REDMINE_PASSWORD \
+  --set postgresql.image.tag=$CURRENT_PG_VERSION \
+  --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
+
+1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+
+```console
+kubectl delete pod redmine-postgresql-0
+```
+
+### 17.0.0
+
+In this version, the `image` block is defined once and is used in the different templates, while in the previous version, the `image` block was duplicated for the main container and the mail receiver one:
+
+```yaml
+image:
+  registry: docker.io
+  repository: bitnami/redmine
+  tag: 4.2.2
+```
+
+VS
+
+```yaml
+image:
+  registry: docker.io
+  repository: bitnami/redmine
+  tag: 4.2.2
+---
+mailReceiver:
+  image:
+    registry: docker.io
+    repository: bitnami/redmine
+    tag: 4.2.2
+```
+
+See [PR#7114](https://github.com/bitnami/charts/pull/7114) for more info about the implemented changes
+
+### To 16.0.0
+
+The [Bitnami Redmine](https://github.com/bitnami/containers/tree/main/bitnami/redmine) image was refactored and now the source code is published in GitHub in the `rootfs` folder of the container image repository.
+
+#### Upgrading Instructions
+
+To upgrade to *16.0.0* from *15.x*, it should be done enabling the "volumePermissions" init container. To do so, follow the instructions below (the following example assumes that the release name is *redmine* and the release namespace *default*):
+
+1. Obtain the credentials on your current release:
+
+```console
+export REDMINE_PASSWORD=$(kubectl get secret --namespace default redmine -o jsonpath="{.data.redmine-password}" | base64 --decode)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+```
+
+1. Upgrade your release:
+
+```console
+helm upgrade redmine bitnami/redmine \
+  --set redminePassword=$REDMINE_PASSWORD \
+  --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD \
+  --set mariadb.auth.password=$MARIADB_PASSWORD \
+  --set volumePermissions.enabled=true
+```
+
+### To 15.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+#### What changes were introduced in this major version?
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running *helm dependency update*, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Chart.
+- Additionally updates the MariaDB & PostgreSQL subcharts to their newest major *9.x.x* and *10.x.x*, respectively, which contain similar changes.
+
+#### Considerations when upgrading to this version
+
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version does not support Helm v2 anymore.
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3.
+
+#### Useful links
+
+- [Bitnami Tutorial](https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues)
+- [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
+- [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
+
+#### How to upgrade to version 15.0.0
+
+To upgrade to *15.0.0* from *14.x*, it should be done reusing the credentials on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *redmine* and the release namespace *default*):
+
+1. Obtain the credentials on your current release:
+
+```console
+export REDMINE_PASSWORD=$(kubectl get secret --namespace default redmine -o jsonpath="{.data.redmine-password}" | base64 --decode)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+```
+
+1. Upgrade your release:
+
+```console
+helm upgrade redmine bitnami/redmine \
+  --set redminePassword=$REDMINE_PASSWORD \
+  --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD \
+  --set mariadb.auth.password=$MARIADB_PASSWORD
+```
 
 ## License
 

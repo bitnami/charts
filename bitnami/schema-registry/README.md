@@ -88,6 +88,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.debug`                                   | Enable image debug mode                                                                                         | `false`                           |
 | `command`                                       | Override default container command (useful when using custom images)                                            | `[]`                              |
 | `args`                                          | Override default container args (useful when using custom images)                                               | `[]`                              |
+| `automountServiceAccountToken`                  | Mount Service Account token in pod                                                                              | `false`                           |
 | `hostAliases`                                   | Schema Registry pods host aliases                                                                               | `[]`                              |
 | `podLabels`                                     | Extra labels for Schema Registry pods                                                                           | `{}`                              |
 | `configuration`                                 | Specify content for schema-registry.properties. Auto-generated based on other parameters when not specified     | `{}`                              |
@@ -132,9 +133,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `terminationGracePeriodSeconds`                     | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`             |
 | `lifecycleHooks`                                    | for the Schema Registry container(s) to automate configuration before or after startup                                   | `{}`             |
 | `podSecurityContext.enabled`                        | Enabled Controller pods' Security Context                                                                                | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`         |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set Controller pod's Security Context fsGroup                                                                            | `1001`           |
 | `podSecurityContext.sysctls`                        | sysctl settings of the Schema Registry pods                                                                              | `[]`             |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -218,12 +222,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### RBAC parameters
 
-| Name                                          | Description                                                      | Value  |
-| --------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Schema Registry pods | `true` |
-| `serviceAccount.name`                         | Name of the created ServiceAccount to use                        | `""`   |
-| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                          | Description                                                      | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Schema Registry pods | `true`  |
+| `serviceAccount.name`                         | Name of the created ServiceAccount to use                        | `""`    |
+| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Kafka chart parameters
 
@@ -283,7 +287,7 @@ You can configure different authentication protocols for each listener you confi
 | sasl      | Yes (via SASL)               | No                 |
 | sasl_tls  | Yes (via SASL)               | Yes                |
 
-Learn more about how to configure Kafka to use the different authentication protocols in the [chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/kafka/administration/enable-security/).
+Configure the authentication protocols for client and inter-broker communications by setting the *auth.clientProtocol* and *auth.interBrokerProtocol* parameters to the desired ones, respectively.
 
 If you enabled SASL authentication on any listener, you can set the SASL credentials using the parameters below:
 

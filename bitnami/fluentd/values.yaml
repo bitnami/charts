@@ -107,6 +107,9 @@ forwarder:
   ## @param forwarder.daemonGroup Fluentd forwarder daemon system group
   ##
   daemonGroup: root
+  ## @param forwarder.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param forwarder.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -114,14 +117,22 @@ forwarder:
   ## K8s Security Context for forwarder pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param forwarder.podSecurityContext.enabled Enable security context for forwarder pods
+  ## @param forwarder.podSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param forwarder.podSecurityContext.runAsUser User ID for forwarder's containers
   ## @param forwarder.podSecurityContext.runAsGroup Group ID for forwarder's containers
+  ## @param forwarder.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param forwarder.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param forwarder.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param forwarder.podSecurityContext.fsGroup Group ID for forwarder's containers filesystem
   ##
   podSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 0
     runAsGroup: 0
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 0
   ## K8s Security Context for forwarder container
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -548,7 +559,7 @@ forwarder:
     annotations: {}
     ## @param forwarder.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## Role Based Access
   ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
@@ -660,15 +671,26 @@ aggregator:
   ## K8s Security Context for Aggregator pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param aggregator.podSecurityContext.enabled Enable security context for aggregator pods
+  ## @param aggregator.podSecurityContext.seLinuxOptions Set SELinux options in container
   ## @param aggregator.podSecurityContext.runAsUser User ID for aggregator's containers
   ## @param aggregator.podSecurityContext.runAsGroup Group ID for aggregator's containers
+  ## @param aggregator.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param aggregator.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param aggregator.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param aggregator.podSecurityContext.fsGroup Group ID for aggregator's containers filesystem
   ##
   podSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
+  ## @param aggregator.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param aggregator.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1140,7 +1162,7 @@ aggregator:
   serviceAccount:
     ## @param aggregator.serviceAccount.create Specify whether a ServiceAccount should be created
     ##
-    create: false
+    create: true
     ## @param aggregator.serviceAccount.name The name of the ServiceAccount to create
     ## If not set and create is true, a name is generated using the common.names.fullname template
     name: ""
@@ -1149,7 +1171,7 @@ aggregator:
     annotations: {}
     ## @param aggregator.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   ## Autoscaling parameters
   ## This is not recommended in a forwarder+aggregator architecture
   ## @param aggregator.autoscaling.enabled Create an Horizontal Pod Autoscaler

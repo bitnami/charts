@@ -148,8 +148,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.resources.limits`                                  | The resources limits for the Airflow web containers                                                                      | `{}`                      |
 | `web.resources.requests`                                | The requested resources for the Airflow web containers                                                                   | `{}`                      |
 | `web.podSecurityContext.enabled`                        | Enabled Airflow web pods' Security Context                                                                               | `true`                    |
+| `web.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`                  |
+| `web.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`                      |
+| `web.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                      |
 | `web.podSecurityContext.fsGroup`                        | Set Airflow web pod's Security Context fsGroup                                                                           | `1001`                    |
 | `web.containerSecurityContext.enabled`                  | Enabled Airflow web containers' Security Context                                                                         | `true`                    |
+| `web.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`                     |
 | `web.containerSecurityContext.runAsUser`                | Set Airflow web containers' Security Context runAsUser                                                                   | `1001`                    |
 | `web.containerSecurityContext.runAsNonRoot`             | Set Airflow web containers' Security Context runAsNonRoot                                                                | `true`                    |
 | `web.containerSecurityContext.privileged`               | Set web container's Security Context privileged                                                                          | `false`                   |
@@ -157,6 +161,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`                 |
 | `web.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault`          |
 | `web.lifecycleHooks`                                    | for the Airflow web container(s) to automate configuration before or after startup                                       | `{}`                      |
+| `web.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`                   |
 | `web.hostAliases`                                       | Deployment pod host aliases                                                                                              | `[]`                      |
 | `web.podLabels`                                         | Add extra labels to the Airflow web pods                                                                                 | `{}`                      |
 | `web.podAnnotations`                                    | Add extra annotations to the Airflow web pods                                                                            | `{}`                      |
@@ -199,14 +204,30 @@ The command removes all the Kubernetes components associated with the chart and 
 | `scheduler.extraEnvVarsCM`                                    | ConfigMap with extra environment variables                                                                               | `""`                                |
 | `scheduler.extraEnvVarsSecret`                                | Secret with extra environment variables                                                                                  | `""`                                |
 | `scheduler.extraEnvVarsSecrets`                               | List of secrets with extra environment variables for Airflow scheduler pods                                              | `[]`                                |
+| `scheduler.livenessProbe.enabled`                             | Enable livenessProbe on Airflow scheduler containers                                                                     | `true`                              |
+| `scheduler.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `180`                               |
+| `scheduler.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `20`                                |
+| `scheduler.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `5`                                 |
+| `scheduler.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                      | `6`                                 |
+| `scheduler.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                      | `1`                                 |
+| `scheduler.readinessProbe.enabled`                            | Enable readinessProbe on Airflow scheduler containers                                                                    | `true`                              |
+| `scheduler.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                 | `30`                                |
+| `scheduler.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                        | `10`                                |
+| `scheduler.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                       | `5`                                 |
+| `scheduler.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                     | `6`                                 |
+| `scheduler.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                     | `1`                                 |
 | `scheduler.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                      | `{}`                                |
 | `scheduler.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`                                |
 | `scheduler.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`                                |
 | `scheduler.resources.limits`                                  | The resources limits for the Airflow scheduler containers                                                                | `{}`                                |
 | `scheduler.resources.requests`                                | The requested resources for the Airflow scheduler containers                                                             | `{}`                                |
 | `scheduler.podSecurityContext.enabled`                        | Enabled Airflow scheduler pods' Security Context                                                                         | `true`                              |
+| `scheduler.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`                            |
+| `scheduler.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`                                |
+| `scheduler.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                                |
 | `scheduler.podSecurityContext.fsGroup`                        | Set Airflow scheduler pod's Security Context fsGroup                                                                     | `1001`                              |
 | `scheduler.containerSecurityContext.enabled`                  | Enabled Airflow scheduler containers' Security Context                                                                   | `true`                              |
+| `scheduler.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`                               |
 | `scheduler.containerSecurityContext.runAsUser`                | Set Airflow scheduler containers' Security Context runAsUser                                                             | `1001`                              |
 | `scheduler.containerSecurityContext.runAsNonRoot`             | Set Airflow scheduler containers' Security Context runAsNonRoot                                                          | `true`                              |
 | `scheduler.containerSecurityContext.privileged`               | Set scheduler container's Security Context privileged                                                                    | `false`                             |
@@ -214,6 +235,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `scheduler.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`                           |
 | `scheduler.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault`                    |
 | `scheduler.lifecycleHooks`                                    | for the Airflow scheduler container(s) to automate configuration before or after startup                                 | `{}`                                |
+| `scheduler.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`                             |
 | `scheduler.hostAliases`                                       | Deployment pod host aliases                                                                                              | `[]`                                |
 | `scheduler.podLabels`                                         | Add extra labels to the Airflow scheduler pods                                                                           | `{}`                                |
 | `scheduler.podAnnotations`                                    | Add extra annotations to the Airflow scheduler pods                                                                      | `{}`                                |
@@ -281,8 +303,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.resources.limits`                                  | The resources limits for the Airflow worker containers                                                                   | `{}`                             |
 | `worker.resources.requests`                                | The requested resources for the Airflow worker containers                                                                | `{}`                             |
 | `worker.podSecurityContext.enabled`                        | Enabled Airflow worker pods' Security Context                                                                            | `true`                           |
+| `worker.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`                         |
+| `worker.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`                             |
+| `worker.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                             |
 | `worker.podSecurityContext.fsGroup`                        | Set Airflow worker pod's Security Context fsGroup                                                                        | `1001`                           |
 | `worker.containerSecurityContext.enabled`                  | Enabled Airflow worker containers' Security Context                                                                      | `true`                           |
+| `worker.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`                            |
 | `worker.containerSecurityContext.runAsUser`                | Set Airflow worker containers' Security Context runAsUser                                                                | `1001`                           |
 | `worker.containerSecurityContext.runAsNonRoot`             | Set Airflow worker containers' Security Context runAsNonRoot                                                             | `true`                           |
 | `worker.containerSecurityContext.privileged`               | Set worker container's Security Context privileged                                                                       | `false`                          |
@@ -290,6 +316,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`                        |
 | `worker.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault`                 |
 | `worker.lifecycleHooks`                                    | for the Airflow worker container(s) to automate configuration before or after startup                                    | `{}`                             |
+| `worker.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`                          |
 | `worker.hostAliases`                                       | Deployment pod host aliases                                                                                              | `[]`                             |
 | `worker.podLabels`                                         | Add extra labels to the Airflow worker pods                                                                              | `{}`                             |
 | `worker.podAnnotations`                                    | Add extra annotations to the Airflow worker pods                                                                         | `{}`                             |
@@ -405,9 +432,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                          | Description                                                            | Value   |
 | --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for Airflow pods                     | `false` |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for Airflow pods                     | `true`  |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
 | `rbac.create`                                 | Create Role and RoleBinding                                            | `false` |
 | `rbac.rules`                                  | Custom RBAC rules to set                                               | `[]`    |
@@ -429,8 +456,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.resources.limits`                                  | The resources limits for the container                                                                           | `{}`                               |
 | `metrics.resources.requests`                                | The requested resources for the container                                                                        | `{}`                               |
 | `metrics.podSecurityContext.enabled`                        | Enable security context for the pods                                                                             | `true`                             |
+| `metrics.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                               | `Always`                           |
+| `metrics.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                   | `[]`                               |
+| `metrics.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                      | `[]`                               |
 | `metrics.podSecurityContext.fsGroup`                        | Set Airflow exporter pod's Security Context fsGroup                                                              | `1001`                             |
 | `metrics.containerSecurityContext.enabled`                  | Enable Airflow exporter containers' Security Context                                                             | `true`                             |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                 | `nil`                              |
 | `metrics.containerSecurityContext.runAsUser`                | Set Airflow exporter containers' Security Context runAsUser                                                      | `1001`                             |
 | `metrics.containerSecurityContext.runAsNonRoot`             | Set Airflow exporter containers' Security Context runAsNonRoot                                                   | `true`                             |
 | `metrics.containerSecurityContext.privileged`               | Set metrics container's Security Context privileged                                                              | `false`                            |
@@ -438,6 +469,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                               | `["ALL"]`                          |
 | `metrics.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                 | `RuntimeDefault`                   |
 | `metrics.lifecycleHooks`                                    | for the Airflow exporter container(s) to automate configuration before or after startup                          | `{}`                               |
+| `metrics.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                               | `false`                            |
 | `metrics.hostAliases`                                       | Airflow exporter pods host aliases                                                                               | `[]`                               |
 | `metrics.podLabels`                                         | Extra labels for Airflow exporter pods                                                                           | `{}`                               |
 | `metrics.podAnnotations`                                    | Extra annotations for Airflow exporter pods                                                                      | `{}`                               |
@@ -711,9 +743,163 @@ NOTE: Due to an error in our release process, Redis&reg;' chart versions higher 
 
 This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
 
-### To any previous version
+### To 13.0.0
 
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/apache-airflow/administration/upgrade/).
+This major update the Redis&reg; subchart to its newest major, 17.0.0, which updates Redis&reg; from its version 6.2 to the latest 7.0.
+
+### To 12.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository. Additionally updates the PostgreSQL & Redis subcharts to their newest major 11.x.x and 16.x.x, respectively, which contain similar changes.
+
+- *auth.forcePassword* parameter is deprecated. The new version uses Helm's lookup functionalities and forcing passwords isn't required anymore.
+- *config* and *configurationConfigMap* have been renamed to *configuration* and *existingConfigmap*, respectively.
+- *dags.configMap* and *web.configMap* have been renamed to *dags.existingConfigmap* and *web.existingConfigmap*, respectively.
+- *web.containerPort* and *worker.port* have been regrouped under the *web.containerPorts* and *worker.containerPorts* maps, respectively.
+- *web.podDisruptionBudget*, *scheduler.podDisruptionBudget* and *worker.podDisruptionBudget* maps have been renamed to *web.pdb*, *scheduler.pdb* and *worker.pdb*, respectively.
+- *worker.autoscaling.replicas.min*, *worker.autoscaling.replicas.max*, *worker.autoscaling.targets.cpu* and *worker.autoscaling.targets.memory* have been renamed to *worker.autoscaling.minReplicas*, *worker.autoscaling.maxReplicas*, *worker.autoscaling.targetCPU* and *.Values.worker.autoscaling.targetMemory*, respectively.
+- *service.port* and *service.httpsPort* have been regrouped under the *service.ports* map.
+- *ingress* map is completely redefined.
+- *metrics.service.port* has been regrouped under the *metrics.service.ports* map.
+- Support for Network Policies is dropped and it'll be properly added in the future.
+- The secret keys *airflow-fernetKey* and *airflow-secretKey* were renamed to *airflow-fernet-key* and *airflow-secret-key*, respectively.
+
+#### How to upgrade to version 12.0.0
+
+To upgrade to *12.0.0* from *11.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *airflow* and the release namespace *default*):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+
+```console
+        export AIRFLOW_PASSWORD=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-password}" | base64 --decode)
+        export AIRFLOW_FERNET_KEY=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-fernetKey}" | base64 --decode)
+        export AIRFLOW_SECRET_KEY=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-secretKey}" | base64 --decode)
+        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default airflow-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+        export REDIS_PASSWORD=$(kubectl get secret --namespace default airflow-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
+        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=airflow,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+1. Delete the Airflow worker & PostgreSQL statefulset (notice the option *--cascade=false*) and secrets:
+
+```console
+        kubectl delete statefulsets.apps --cascade=false airflow-postgresql
+        kubectl delete statefulsets.apps --cascade=false airflow-worker
+        kubectl delete secret postgresql --namespace default
+        kubectl delete secret airflow --namespace default
+```
+
+1. Upgrade your release using the same PostgreSQL version:
+
+```console
+        CURRENT_PG_VERSION=$(kubectl exec airflow-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+        helm upgrade airflow bitnami/airflow \
+          --set loadExamples=true \
+          --set web.baseUrl=http://127.0.0.1:8080 \
+          --set auth.password=$AIRFLOW_PASSWORD \
+          --set auth.fernetKey=$AIRFLOW_FERNET_KEY \
+          --set auth.secretKey=$AIRFLOW_SECRET_KEY \
+          --set postgresql.image.tag=$CURRENT_VERSION \
+          --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+          --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
+          --set redis.password=$REDIS_PASSWORD \
+          --set redis.cluster.enabled=true
+```
+
+1. Delete the existing Airflow worker & PostgreSQL pods and the new statefulset will create a new one:
+
+```console
+        kubectl delete pod airflow-postgresql-0
+        kubectl delete pod airflow-worker-0
+```
+
+### To 11.0.0
+
+This major update the Redis&reg; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1500) you can find more info about the specific changes.
+
+### To 10.0.0
+
+This major updates the Redis&reg; subchart to it newest major, 14.0.0, which contains breaking changes. For more information on this subchart's major and the steps needed to migrate your data from your previous release, please refer to [Redis&reg; upgrade notes.](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1400).
+
+### To 7.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL. The following changes were introduced in this version:
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running *helm dependency update*, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Chart.
+- Several parameters were renamed or disappeared in favor of new ones on this major version:
+  - The image objects have been moved to its corresponding component object, e.g: *workerImage* now is located at *worker.image*.
+  - The prefix *airflow* has been removed. Therefore, parameters prefixed with *airflow* are now at root level, e.g. *airflow.loadExamples* now is *loadExamples* or *airflow.worker.resources* now is *worker.resources*.
+  - Parameters related to the *git* features has completely been refactored:
+    - They have been regrouped under the *git* map.
+    - *airflow.cloneDagsFromGit* no longer exists, instead you must use *git.dags* and *git.dags.repositories* has been introduced that will add support for multiple repositories.
+    - *airflow.clonePluginsFromGit* no longer exists, instead you must use *git.plugins*. *airflow.clonePluginsFromGit.repository*, *airflow.clonePluginsFromGit.branch* and *airflow.clonePluginsFromGit.path* have been removed in favour of *git.dags.repositories*.
+  - Liveness and readiness probe have been separated by components *airflow.livenessProbe.** and *airflow.readinessProbe* have been removed in favour of *web.livenessProbe*, *worker.livenessProbe*, *web.readinessProbe* and *worker.readinessProbe*.
+  - *airflow.baseUrl* has been moved to *web.baseUrl*.
+  - Security context has been migrated to the bitnami standard way so that *securityContext* has been divided into *podSecurityContext* that will define the **fsGroup** for all the containers in the pod and *containerSecurityContext* that will define the user id that will run the main containers.
+  - *./files/dags/*.py* will not be include in the deployment any more.
+- Additionally updates the PostgreSQL & Redis subcharts to their newest major 10.x.x and 11.x.x, respectively, which contain similar changes.
+
+#### Considerations when upgrading to this version
+
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version does not support Helm v2 anymore.
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3.
+
+#### Useful links
+
+- [Bitnami Tutorial](https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues)
+- [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
+- [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
+
+#### How to upgrade to version 7.0.0
+
+To upgrade to *7.0.0* from *6.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *airflow* and the release namespace *default*):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+
+```console
+        export AIRFLOW_PASSWORD=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-password}" | base64 --decode)
+        export AIRFLOW_FERNET_KEY=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-fernetKey}" | base64 --decode)
+        export AIRFLOW_SECRET_KEY=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-secretKey}" | base64 --decode)
+        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default airflow-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+        export REDIS_PASSWORD=$(kubectl get secret --namespace default airflow-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
+        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=airflow,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+1. Delete the Airflow worker & PostgreSQL statefulset (notice the option *--cascade=false*):
+
+```console
+        kubectl delete statefulsets.apps --cascade=false airflow-postgresql
+        kubectl delete statefulsets.apps --cascade=false airflow-worker
+```
+
+1. Upgrade your release:
+
+> NOTE: Please remember to migrate all the values to its new path following the above notes, e.g: `airflow.loadExamples` -> `loadExamples` or `airflow.baseUrl=http://127.0.0.1:8080` -> `web.baseUrl=http://127.0.0.1:8080`.
+
+```console
+        helm upgrade airflow bitnami/airflow \
+          --set loadExamples=true \
+          --set web.baseUrl=http://127.0.0.1:8080 \
+          --set auth.password=$AIRFLOW_PASSWORD \
+          --set auth.fernetKey=$AIRFLOW_FERNET_KEY \
+          --set auth.secretKey=$AIRFLOW_SECRET_KEY \
+          --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
+          --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
+          --set redis.password=$REDIS_PASSWORD \
+          --set redis.cluster.enabled=true
+```
+
+1. Delete the existing Airflow worker & PostgreSQL pods and the new statefulset will create a new one:
+
+```console
+        kubectl delete pod airflow-postgresql-0
+        kubectl delete pod airflow-worker-0
+```
 
 ## License
 

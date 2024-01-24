@@ -322,6 +322,17 @@ Get the initialization scripts Secret name.
 {{- end -}}
 
 {{/*
+ Create the name of the metrics service account to use
+ */}}
+{{- define "elasticsearch.metrics.serviceAccountName" -}}
+{{- if .Values.metrics.serviceAccount.create -}}
+    {{ default (include "elasticsearch.metrics.fullname" .) .Values.metrics.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.metrics.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the elasticsearch TLS credentials secret for master nodes.
 */}}
 {{- define "elasticsearch.master.tlsSecretName" -}}

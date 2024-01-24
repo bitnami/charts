@@ -99,6 +99,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `priorityClassName`                                 | Gitea pods' priorityClassName                                                                                         | `""`                    |
 | `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                        | `""`                    |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                        | `[]`                    |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                    | `false`                 |
 | `hostAliases`                                       | Add deployment host aliases                                                                                           | `[]`                    |
 | `extraEnvVars`                                      | Extra environment variables                                                                                           | `[]`                    |
 | `extraEnvVarsCM`                                    | ConfigMap containing extra env vars                                                                                   | `""`                    |
@@ -135,8 +136,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.requests`                                | The requested resources for the init container                                                                        | `{}`                    |
 | `resources.limits`                                  | The resources limits for the init container                                                                           | `{}`                    |
 | `podSecurityContext.enabled`                        | Enable Gitea pods' Security Context                                                                                   | `true`                  |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                    | `Always`                |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                        | `[]`                    |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                           | `[]`                    |
 | `podSecurityContext.fsGroup`                        | Gitea pods' group ID                                                                                                  | `1001`                  |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                  | `true`                  |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                      | `{}`                    |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                            | `1001`                  |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                         | `true`                  |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                           | `false`                 |
@@ -205,12 +210,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                          | Description                                                            | Value  |
-| --------------------------------------------- | ---------------------------------------------------------------------- | ------ |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for Gitea pod                        | `true` |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`   |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true` |
-| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
+| Name                                          | Description                                                            | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for Gitea pod                        | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
 
 ### Database parameters
 
