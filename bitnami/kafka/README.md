@@ -762,7 +762,7 @@ You can configure different authentication protocols for each listener you confi
 | sasl      | Yes (via SASL)               | No                 |
 | sasl_tls  | Yes (via SASL)               | Yes                |
 
-Learn more about how to configure Kafka to use the different authentication protocols in the [chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/kafka/administration/enable-security/).
+Configure the authentication protocols for client and inter-broker communications by setting the *auth.clientProtocol* and *auth.interBrokerProtocol* parameters to the desired ones, respectively.
 
 If you enabled SASL authentication on any listener, you can set the SASL credentials using the parameters below:
 
@@ -961,6 +961,31 @@ externalAccess:
   service:
     annotations:
       external-dns.alpha.kubernetes.io/hostname: "{{ .targetPod }}.example.com"
+```
+
+### Enable metrics
+
+The chart can optionally start two metrics exporters:
+
+- Kafka exporter, to expose Kafka metrics. By default, it uses port 9308.
+- JMX exporter, to expose JMX metrics. By default, it uses port 5556.
+
+To create a separate Kafka exporter, use the parameter below:
+
+```text
+metrics.kafka.enabled: true
+```
+
+To expose JMX metrics to Prometheus, use the parameter below:
+
+```text
+metrics.jmx.enabled: true
+```
+
+- To enable Zookeeper chart metrics, use the parameter below:
+
+```text
+zookeeper.metrics.enabled: true
 ```
 
 ### Sidecars

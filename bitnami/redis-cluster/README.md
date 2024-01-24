@@ -388,7 +388,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Use a different Redis&reg; version
 
-To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/redis-cluster/configuration/change-image-version/).
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
 
 ### Cluster topology
 
@@ -632,6 +632,19 @@ OK
 ```
 
 See [#15075](https://github.com/bitnami/charts/issues/15075)
+
+## Backup and restore
+
+To back up and restore Redis Cluster Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool.
+
+These are the steps you will usually follow to back up and restore your Redis Cluster database cluster data:
+
+- Install Velero on the source and destination clusters.
+- Use Velero to back up the PersistentVolumes (PVs) used by the deployment on the source cluster.
+- Use Velero to restore the backed-up PVs on the destination cluster.
+- Create a new deployment on the destination cluster with the same chart, deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
+
+Refer to our detailed [tutorial on backing up and restoring Redis Cluster deployments on Kubernetes](https://docs.bitnami.com/tutorials/backup-restore-data-redis-cluster-kubernetes/) for more information.
 
 ## NetworkPolicy
 

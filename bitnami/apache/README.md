@@ -302,7 +302,17 @@ The Apache chart allows you to deploy a custom web application using one of the 
 - Providing a ConfigMap: Set the `htdocsConfigMap` value to mount a ConfigMap in the Apache htdocs folder.
 - Using an existing PVC: Set the `htdocsPVC` value to mount an PersistentVolumeClaim with the web application content.
 
-Refer to the [chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/apache/get-started/deploy-custom-application/) for more information.
+Here is an example of deploying a web application from a Git repository using the first method:
+
+```text
+cloneHtdocsFromGit.enabled=true
+cloneHtdocsFromGit.repository=https://github.com/mdn/beginner-html-site-styled.git
+cloneHtdocsFromGit.branch=master
+```
+
+To use a custom `httpd.conf` file, mount it using the `httpdConfConfigMap` parameter, which references a Kubernetes ConfigMap with the contents of the `httpd.conf` file. Alternatively, copy the `httpd.conf` file to `files/httpd.conf` in the current working directory to mount it in the container.
+
+To mount different virtual host configurations, use the `vhostsConfigMap` value. This is a pointer to a Kubernetes ConfigMap with the desired Apache virtual host configurations. You can also copy the virtual host configurations under the `files/vhosts/` directory in your current working directory to mount them as a ConfigMap in the container.
 
 ### Setting Pod's affinity
 
@@ -347,8 +357,6 @@ Affected values:
 ### To 8.0.0
 
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/apache/administration/upgrade-helm3/).
 
 ### To 2.0.0
 
