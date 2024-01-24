@@ -31,8 +31,8 @@ spec:
           protocol: TCP
     # Allow outbound connections to other cluster pods
     - ports:
-        - port: {{ coalesce .Values.service.ports.http .Values.service.port}}
-        - port: {{ coalesce .Values.service.ports.https .Values.service.httpsPort}}
+        - port: {{ .Values.service.ports.http }}
+        - port: {{ .Values.service.ports.https }}
         - port: {{ .Values.containerPorts.http }}
         - port: {{ .Values.containerPorts.https }}
         {{- if .Values.metrics.enabled }}
@@ -51,8 +51,8 @@ spec:
         {{- if .Values.metrics.enabled }}
         - port: {{ .Values.metrics.containerPort }}
         {{- end }}
-        - port: {{ coalesce .Values.service.ports.http .Values.service.port}}
-        - port: {{ coalesce .Values.service.ports.https .Values.service.httpsPort}}
+        - port: {{ .Values.service.ports.http }}
+        - port: {{ .Values.service.ports.https }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:

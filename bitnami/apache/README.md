@@ -340,6 +340,10 @@ This release allows you to use your custom static application. In order to do so
 
 ## Upgrading
 
+### To 11.0.0
+
+This major release includes the network policies and the component labels needed to apply the network policies to our pods.
+
 ### To 10.0.0
 
 This major release standardizes the input values and features for the ingress object. Refer to [this section](#traffic-exposure-parameters) for the complete list of parameters accepted.
