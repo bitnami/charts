@@ -254,6 +254,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                    | `false`                           |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                      | `{}`                              |
 
+### Network policies section
+
+| Name                                    | Description                                                | Value  |
+| --------------------------------------- | ---------------------------------------------------------- | ------ |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `true` |
+| `networkPolicy.allowExternal`           | Don't require client label for connections                 | `true` |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolic                | `[]`   |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`   |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`   |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`   |
+
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
