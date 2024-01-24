@@ -146,7 +146,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set etcd pod's Security Context fsGroup                                                   | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled etcd containers' Security Context                                                 | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set etcd containers' Security Context runAsUser                                           | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set Controller container's Security Context runAsNonRoot                                  | `true`           |
 | `containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                       | `false`          |
