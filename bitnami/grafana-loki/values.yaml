@@ -141,8 +141,7 @@ loki:
         index:
           prefix: index_
           period: 24h
-      # New TSDB schema below
-      - from: "2024-01-20" # <---- A date in the future
+      - from: "2024-01-20"
         index:
           period: 24h
           prefix: index_
@@ -172,7 +171,6 @@ loki:
           addresses: dns+{{ include "grafana-loki.memcached-index-queries.host" . }}
           service: http
         {{- end }}
-      # New tsdb-shipper configuration
       tsdb_shipper:
         active_index_directory: {{ .Values.loki.dataDir }}/data/tsdb-index
         cache_location: {{ .Values.loki.dataDir }}/data/tsdb-cache
@@ -183,15 +181,9 @@ loki:
         shared_store: filesystem
 
     query_scheduler:
-      # the TSDB index dispatches many more, but each individually smaller, requests. 
-      # We increase the pending request queue sizes to compensate.
       max_outstanding_requests_per_tenant: 32768
 
     querier:
-      # Each `querier` component process runs a number of parallel workers to process queries simultaneously.
-      # You may want to adjust this up or down depending on your resource usage
-      # (more available cpu and memory can tolerate higher values and vice versa),
-      # but we find the most success running at around `16` with tsdb
       max_concurrent: 16
 
     chunk_store_config:
