@@ -15,7 +15,7 @@ annotations:
       image: docker.io/bitnami/redis:7.2.4-debian-11-r4
       image: docker.io/bitnami/redis:7.2.3-debian-11-r2
     - name: kubectl
-      image: docker.io/bitnami/kubectl:1.29.0
+      image: docker.io/bitnami/kubectl:{{ .Capabilities.KubeVersion }}
 apiVersion: v2
 appVersion: 7.2.4
 dependencies:
