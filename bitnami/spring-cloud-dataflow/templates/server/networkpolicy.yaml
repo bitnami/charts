@@ -1,0 +1,130 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.server.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ include "scdf.server.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: server
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: server
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    - ports:
+        # Allow dns resolution
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+        {{- if .Values.waitForBackends.enabled }}
+        # Allow access to kube-apiserver
+        {{- range $port := .Values.server.networkPolicy.kubeAPIServerPorts }}
+        - port: {{ $port }}
+        {{- end }}
+        {{- end }}
+    {{- if or (.Values.rabbitmq.enabled) (.Values.externalRabbitmq.enabled) }}
+    # Allow connection to RabbitMQ
+    - ports:
+        - port: {{ include "scdf.rabbitmq.port" . }}
+      {{- if .Values.rabbitmq.enabled }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: rabbitmq
+              app.kubernetes.io/instance: {{ .Release.Name }}              
+      {{- end }}
+    {{- end }}
+    {{- if or (.Values.kafka.enabled) (.Values.externalKafka.enabled) }}
+    # Allow connection to RabbitMQ
+    - ports:
+        - port: {{ include "scdf.kafka.port" . | int }}
+      {{- if .Values.kafka.enabled }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: kafka
+              app.kubernetes.io/instance: {{ .Release.Name }}              
+      {{- end }}
+    {{- end }}
+    # Allow connection to MariaDB
+    - ports:
+        - port: {{ include "scdf.database.port" . | int }}
+      {{- if .Values.mariadb.enabled }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: mariadb
+              app.kubernetes.io/instance: {{ .Release.Name }}              
+      {{- end }}
+    # Allow connection to skipper
+    - ports:
+        - port: {{ ternary (coalesce .Values.skipper.service.ports.http .Values.skipper.service.port) .Values.externalSkipper.port .Values.skipper.enabled }}
+      {{- if .Values.skipper.enabled }}
+      to:
+        - podSelector:
+            {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.skipper.image "chart" .Chart ) ) }}
+            {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.skipper.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: skipper
+      {{- end }}
+    {{- if .Values.metrics.enabled }}
+    # Allow connection to prometheus-proxy
+    - ports:
+        - port: {{ .Values.metrics.service.ports.http .Values.metrics.service.httpPort }}
+        - port: {{ .Values.metrics.service.ports.rsocket .Values.metrics.service.rsocketPort }}
+      to:
+        - podSelector:
+            {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.podLabels .Values.commonLabels ) "context" . ) }}
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: prometheus-proxy
+    {{- end }}
+    {{- if .Values.server.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.server.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.server.containerPorts.http }}
+        - port: {{ coalesce .Values.server.service.ports.http .Values.server.service.port }}
+        {{- if .Values.server.jdwp.enabled }}
+        - port: {{ coalesce .Values.server.containerPorts.jdwp .Values.server.jdwp.port }}
+        {{- end }}
+      {{- if not .Values.server.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
+            matchLabels:
+              {{ template "scdf.server.fullname" . }}-client: "true"
+        {{- if .Values.server.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.server.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.server.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.server.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.server.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.server.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}
