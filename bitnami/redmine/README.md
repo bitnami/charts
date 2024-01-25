@@ -133,7 +133,7 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redmine --set databa
 | `podSecurityContext.supplementalGroups`        | Set filesystem extra groups                                                                                              | `[]`             |
 | `podSecurityContext.fsGroup`                   | Set Redmine pod's Security Context fsGroup                                                                               | `0`              |
 | `containerSecurityContext.enabled`             | Enabled Redmine containers' Security Context                                                                             | `true`           |
-| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                         | `{}`             |
+| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                         | `nil`            |
 | `containerSecurityContext.runAsUser`           | Set Redmine container's Security Context runAsUser                                                                       | `0`              |
 | `containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `livenessProbe.enabled`                        | Enable livenessProbe on Redmine containers                                                                               | `true`           |
@@ -230,7 +230,7 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redmine --set databa
 | `volumePermissions.resources.limits`                        | The resources limits for the init container                                                     | `{}`    |
 | `volumePermissions.resources.requests`                      | The requested resources for the init container                                                  | `{}`    |
 | `volumePermissions.containerSecurityContext.enabled`        | Enable init container's Security Context                                                        | `true`  |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `{}`    |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `nil`   |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                 | `0`     |
 
 ### RBAC Parameters
@@ -320,7 +320,7 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redmine --set databa
 | `mailReceiver.podSecurityContext.supplementalGroups`   | Set filesystem extra groups                                                                                                                   | `[]`          |
 | `mailReceiver.podSecurityContext.fsGroup`              | Set Redmine pod's Security Context fsGroup                                                                                                    | `1001`        |
 | `mailReceiver.containerSecurityContext.enabled`        | mailReceiver Container securityContext                                                                                                        | `false`       |
-| `mailReceiver.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                              | `{}`          |
+| `mailReceiver.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                              | `nil`         |
 | `mailReceiver.containerSecurityContext.runAsUser`      | User ID for the mailReceiver container                                                                                                        | `1001`        |
 | `mailReceiver.containerSecurityContext.runAsNonRoot`   | Whether to run the mailReceiver container as a non-root user                                                                                  | `true`        |
 | `mailReceiver.podAnnotations`                          | Additional pod annotations                                                                                                                    | `{}`          |
