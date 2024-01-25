@@ -257,7 +257,7 @@ There are no services load balancing requests between MongoDB(&reg;) nodes; inst
 | `podSecurityContext.fsGroup`                        | Group ID for the volumes of the MongoDB(&reg;) pod(s)                                                           | `1001`           |
 | `podSecurityContext.sysctls`                        | sysctl settings of the MongoDB(&reg;) pod(s)'                                                                   | `[]`             |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                            | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                      | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                   | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                     | `false`          |
@@ -405,7 +405,7 @@ There are no services load balancing requests between MongoDB(&reg;) nodes; inst
 | `backup.cronjob.ttlSecondsAfterFinished`                           | Set the cronjob parameter ttlSecondsAfterFinished                                                                                     | `""`                |
 | `backup.cronjob.restartPolicy`                                     | Set the cronjob parameter restartPolicy                                                                                               | `OnFailure`         |
 | `backup.cronjob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                  | `true`              |
-| `backup.cronjob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                      | `{}`                |
+| `backup.cronjob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                      | `nil`               |
 | `backup.cronjob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                            | `1001`              |
 | `backup.cronjob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                         | `true`              |
 | `backup.cronjob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                           | `false`             |
@@ -453,7 +453,7 @@ There are no services load balancing requests between MongoDB(&reg;) nodes; inst
 | `volumePermissions.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
 | `volumePermissions.resources.limits`               | Init container volume-permissions resource limits                                                                                 | `{}`                       |
 | `volumePermissions.resources.requests`             | Init container volume-permissions resource requests                                                                               | `{}`                       |
-| `volumePermissions.securityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `{}`                       |
+| `volumePermissions.securityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `nil`                      |
 | `volumePermissions.securityContext.runAsUser`      | User ID for the volumePermissions container                                                                                       | `0`                        |
 
 ### Arbiter parameters
@@ -497,7 +497,7 @@ There are no services load balancing requests between MongoDB(&reg;) nodes; inst
 | `arbiter.podSecurityContext.fsGroup`                        | Group ID for the volumes of the Arbiter pod(s)                                                    | `1001`           |
 | `arbiter.podSecurityContext.sysctls`                        | sysctl settings of the Arbiter pod(s)'                                                            | `[]`             |
 | `arbiter.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                              | `true`           |
-| `arbiter.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                  | `{}`             |
+| `arbiter.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                  | `nil`            |
 | `arbiter.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                        | `1001`           |
 | `arbiter.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                     | `true`           |
 | `arbiter.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                       | `false`          |
@@ -584,7 +584,7 @@ There are no services load balancing requests between MongoDB(&reg;) nodes; inst
 | `hidden.podSecurityContext.fsGroup`                        | Group ID for the volumes of the Hidden pod(s)                                                        | `1001`              |
 | `hidden.podSecurityContext.sysctls`                        | sysctl settings of the Hidden pod(s)'                                                                | `[]`                |
 | `hidden.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                 | `true`              |
-| `hidden.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                     | `{}`                |
+| `hidden.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                     | `nil`               |
 | `hidden.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                           | `1001`              |
 | `hidden.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                        | `true`              |
 | `hidden.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                          | `false`             |
