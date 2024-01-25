@@ -186,6 +186,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.pdb.create`                                        | Deploy a pdb object for the Airflow web pods                                                                             | `false`                   |
 | `web.pdb.minAvailable`                                  | Maximum number/percentage of unavailable Airflow web replicas                                                            | `1`                       |
 | `web.pdb.maxUnavailable`                                | Maximum number/percentage of unavailable Airflow web replicas                                                            | `""`                      |
+| `web.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                      | `true`                    |
+| `web.networkPolicy.allowExternal`                       | Don't require client label for connections                                                                               | `true`                    |
+| `web.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                             | `[]`                      |
+| `web.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                             | `[]`                      |
+| `web.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                   | `{}`                      |
+| `web.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                               | `{}`                      |
 
 ### Airflow scheduler parameters
 
@@ -260,6 +266,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `scheduler.pdb.create`                                        | Deploy a pdb object for the Airflow scheduler pods                                                                       | `false`                             |
 | `scheduler.pdb.minAvailable`                                  | Maximum number/percentage of unavailable Airflow scheduler replicas                                                      | `1`                                 |
 | `scheduler.pdb.maxUnavailable`                                | Maximum number/percentage of unavailable Airflow scheduler replicas                                                      | `""`                                |
+| `scheduler.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                      | `true`                              |
+| `scheduler.networkPolicy.allowExternal`                       | Don't require client label for connections                                                                               | `true`                              |
+| `scheduler.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                             | `[]`                                |
+| `scheduler.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                             | `[]`                                |
+| `scheduler.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                   | `{}`                                |
+| `scheduler.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                               | `{}`                                |
 
 ### Airflow worker parameters
 
@@ -348,6 +360,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.autoscaling.maxReplicas`                           | Configure a maximum amount of pods                                                                                       | `3`                              |
 | `worker.autoscaling.targetCPU`                             | Define the CPU target to trigger the scaling actions (utilization percentage)                                            | `80`                             |
 | `worker.autoscaling.targetMemory`                          | Define the memory target to trigger the scaling actions (utilization percentage)                                         | `80`                             |
+| `worker.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                      | `true`                           |
+| `worker.networkPolicy.allowExternal`                       | Don't require client label for connections                                                                               | `true`                           |
+| `worker.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                             | `[]`                             |
+| `worker.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                             | `[]`                             |
+| `worker.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                   | `{}`                             |
+| `worker.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                               | `{}`                             |
 
 ### Airflow git sync parameters
 
@@ -496,6 +514,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.metricRelabelings`                  | MetricRelabelConfigs to apply to samples before ingestion                                                        | `[]`                               |
 | `metrics.serviceMonitor.honorLabels`                        | Specify honorLabels parameter to add the scrape endpoint                                                         | `false`                            |
 | `metrics.serviceMonitor.jobLabel`                           | The name of the label on the target service to use as the job name in prometheus.                                | `""`                               |
+| `metrics.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                              | `true`                             |
+| `metrics.networkPolicy.allowExternal`                       | Don't require client label for connections                                                                       | `true`                             |
+| `metrics.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                     | `[]`                               |
+| `metrics.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                     | `[]`                               |
+| `metrics.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                           | `{}`                               |
+| `metrics.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                       | `{}`                               |
 
 ### Airflow database parameters
 
