@@ -747,7 +747,7 @@ metrics:
     ## @param metrics.serviceMonitor.namespace The namespace in which the ServiceMonitor will be created
     ##
     namespace: ""
-    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus
     ##
     jobLabel: ""
     ## @param metrics.serviceMonitor.interval The interval at which metrics should be scraped
