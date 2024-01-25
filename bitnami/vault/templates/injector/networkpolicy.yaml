@@ -63,6 +63,8 @@ spec:
       {{- if not .Values.injector.networkPolicy.allowExternal }}
       from:
         - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
             matchLabels:
               {{ template "vault.injector.fullname" . }}-client: "true"
         {{- if .Values.injector.networkPolicy.ingressNSMatchLabels }}
