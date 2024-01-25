@@ -60,6 +60,8 @@ spec:
       {{- if not .Values.studio.networkPolicy.allowExternal }}
       from:
         - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
             matchLabels:
               {{ template "supabase.studio.fullname" . }}-client: "true"
         {{- if .Values.studio.networkPolicy.ingressNSMatchLabels }}

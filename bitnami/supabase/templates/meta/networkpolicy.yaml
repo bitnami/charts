@@ -50,6 +50,8 @@ spec:
       {{- if not .Values.meta.networkPolicy.allowExternal }}
       from:
         - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
             matchLabels:
               {{ template "supabase.meta.fullname" . }}-client: "true"
         {{- if .Values.meta.networkPolicy.ingressNSMatchLabels }}
