@@ -107,6 +107,17 @@ SASL_PLAINTEXT
 {{- end -}}
 
 {{/*
+Return proper Zookeeper hosts
+*/}}
+{{- define "schema-registry.kafka.port" -}}
+{{- if .Values.kafka.enabled -}}
+    {{- int .Values.kafka.service.ports.client -}}
+{{- else -}}
+    {{- regexFind ":[0-9]+" .Values.externalKafka.brokers | trimPrefix ":" | default "9092" | int -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "schema-registry.validateValues" -}}
