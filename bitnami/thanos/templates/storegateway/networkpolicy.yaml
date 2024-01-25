@@ -60,6 +60,8 @@ spec:
       {{- if not .Values.storegateway.networkPolicy.allowExternal }}
       from:
         - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
             matchLabels:
               {{ template "thanos.storegateway.fullname" . }}-client: "true"
         {{- if .Values.storegateway.networkPolicy.ingressNSMatchLabels }}

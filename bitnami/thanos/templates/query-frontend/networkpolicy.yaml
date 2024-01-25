@@ -62,6 +62,8 @@ spec:
       {{- if not  .Values.queryFrontend.networkPolicy.allowExternal }}
       from:
         - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
             matchLabels:
               {{ template "thanos.query.fullname" . }}-client: "true"
         {{- if .Values.queryFrontend.networkPolicy.ingressNSMatchLabels }}

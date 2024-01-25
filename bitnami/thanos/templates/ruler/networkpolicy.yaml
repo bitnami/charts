@@ -83,6 +83,8 @@ spec:
       {{- if not .Values.ruler.networkPolicy.allowExternal }}
       from:
         - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
             matchLabels:
               {{ template "thanos.ruler.fullname" . }}-client: "true"
         {{- if .Values.ruler.networkPolicy.ingressNSMatchLabels }}
