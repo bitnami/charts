@@ -171,6 +171,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                      | `{}`             |
 | `master.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`             |
 | `master.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`             |
+| `master.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                      | `true`           |
+| `master.networkPolicy.allowExternal`                       | Don't require client label for connections                                                                               | `true`           |
+| `master.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                             | `[]`             |
+| `master.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                             | `[]`             |
+| `master.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                   | `{}`             |
+| `master.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                               | `{}`             |
 | `master.sidecars`                                          | Add additional sidecar containers to the master pod(s)                                                                   | `[]`             |
 | `master.initContainers`                                    | Add initContainers to the master pods.                                                                                   | `[]`             |
 
@@ -255,6 +261,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                      | `{}`             |
 | `worker.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`             |
 | `worker.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`             |
+| `worker.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                      | `true`           |
+| `worker.networkPolicy.allowExternal`                       | Don't require client label for connections                                                                               | `true`           |
+| `worker.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                             | `[]`             |
+| `worker.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                             | `[]`             |
+| `worker.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                   | `{}`             |
+| `worker.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                               | `{}`             |
 | `worker.sidecars`                                          | Add additional sidecar containers to the worker pod(s)                                                                   | `[]`             |
 | `worker.initContainers`                                    | Add initContainers to the worker pods.                                                                                   | `[]`             |
 | `worker.autoscaling.enabled`                               | Enable replica autoscaling depending on CPU                                                                              | `false`          |
