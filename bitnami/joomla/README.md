@@ -1,5 +1,6 @@
 <!--- app-name: Joomla! -->
 
+<!-- markdownlint-disable-next-line MD026 -->
 # Bitnami package for Joomla!
 
 Joomla! is an award winning open source CMS platform for building websites and applications. It includes page caching, page compression and Let's Encrypt auto-configuration support.
@@ -95,6 +96,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `command`                                           | Override default container command (useful when using custom images)                                                 | `[]`                     |
 | `args`                                              | Override default container args (useful when using custom images)                                                    | `[]`                     |
 | `replicaCount`                                      | Number of replicas (requires ReadWriteMany PVC support)                                                              | `1`                      |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                   | `false`                  |
 | `hostAliases`                                       | Deployment pod host aliases                                                                                          | `[]`                     |
 | `updateStrategy.type`                               | Update strategy - only really applicable for deployments with RWO PVs attached                                       | `RollingUpdate`          |
 | `extraEnvVars`                                      | Extra environment variables                                                                                          | `[]`                     |
@@ -169,6 +171,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `lifecycleHooks`                                    | LifecycleHook to set additional configuration at startup Evaluated as a template                                     | `{}`                     |
 | `podAnnotations`                                    | Pod annotations                                                                                                      | `{}`                     |
 | `podLabels`                                         | Add additional labels to the pod (evaluated as a template)                                                           | `{}`                     |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for pod                                                                            | `true`                   |
+| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                               | `""`                     |
+| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                               | `false`                  |
+| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                 | `{}`                     |
 
 ### Traffic Exposure Parameters
 

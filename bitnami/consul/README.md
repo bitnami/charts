@@ -96,6 +96,7 @@ helm delete --purge my-release
 | `raftMultiplier`                | Multiplier used to scale key Raft timing parameters                                                              | `1`                      |
 | `gossipKey`                     | Gossip key for all members. The key must be base64-encoded, can be generated with $(consul keygen)               | `""`                     |
 | `tlsEncryptionSecretName`       | Name of existing secret with TLS encryption data                                                                 | `""`                     |
+| `automountServiceAccountToken`  | Mount Service Account token in pod                                                                               | `false`                  |
 | `hostAliases`                   | Deployment pod host aliases                                                                                      | `[]`                     |
 | `configuration`                 | HashiCorp Consul configuration to be injected as ConfigMap                                                       | `""`                     |
 | `existingConfigmap`             | ConfigMap with HashiCorp Consul configuration                                                                    | `""`                     |
@@ -178,6 +179,10 @@ helm delete --purge my-release
 | `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                           | `false`          |
 | `pdb.minAvailable`                                  | Minimum number of pods that must still be available after the eviction                    | `1`              |
 | `pdb.maxUnavailable`                                | Max number of pods that can be unavailable after the eviction                             | `""`             |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for WordPress pod                                       | `true`           |
+| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                    | `""`             |
+| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                    | `false`          |
+| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                      | `{}`             |
 
 ### Exposure parameters
 

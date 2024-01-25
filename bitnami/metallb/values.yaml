@@ -130,6 +130,9 @@ controller:
   ##
   updateStrategy:
     type: RollingUpdate
+  ## @param controller.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param controller.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -334,7 +337,7 @@ controller:
   serviceAccount:
     create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
   ## @param controller.revisionHistoryLimit Configure the revisionHistoryLimit of the Controller deployment
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#revision-history-limit
@@ -531,6 +534,9 @@ speaker:
     ## @param speaker.rbac.create create specifies whether to install and use RBAC rules.
     ##
     create: true
+  ## @param speaker.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param speaker.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -699,7 +705,7 @@ speaker:
   serviceAccount:
     create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
   ## Defines a secret to use outside of the auto generate
   ## @param speaker.secretName References a Secret name for the member secret outside of the helm chart

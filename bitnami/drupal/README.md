@@ -100,6 +100,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `priorityClassName`                                 | Drupal pods' priorityClassName                                                                                         | `""`                     |
 | `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                         | `""`                     |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                         | `[]`                     |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                     | `false`                  |
 | `hostAliases`                                       | Add deployment host aliases                                                                                            | `[]`                     |
 | `extraEnvVars`                                      | Extra environment variables                                                                                            | `[]`                     |
 | `extraEnvVarsCM`                                    | ConfigMap containing extra env vars                                                                                    | `""`                     |
@@ -143,7 +144,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                            | `[]`                     |
 | `podSecurityContext.fsGroup`                        | Drupal pods' group ID                                                                                                  | `1001`                   |
 | `containerSecurityContext.enabled`                  | Enabled Drupal containers' Security Context                                                                            | `true`                   |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                       | `{}`                     |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                       | `nil`                    |
 | `containerSecurityContext.runAsUser`                | Set Drupal containers' Security Context runAsUser                                                                      | `1001`                   |
 | `containerSecurityContext.runAsNonRoot`             | Set Controller container's Security Context runAsNonRoot                                                               | `true`                   |
 | `containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                                    | `false`                  |

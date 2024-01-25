@@ -31,6 +31,8 @@ spec:
         app.kubernetes.io/component: image-puller
     spec:
       {{- include "jupyterhub.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "jupyterhub.imagePullerServiceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.imagePuller.automountServiceAccountToken }}
       {{- if .Values.imagePuller.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.hostAliases "context" $) | nindent 8 }}
       {{- end }}

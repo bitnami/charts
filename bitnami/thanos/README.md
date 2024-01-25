@@ -165,7 +165,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                             | `[]`                     |
 | `query.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Thanos Query pods                                                                                   | `1001`                   |
 | `query.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                    | `true`                   |
-| `query.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                        | `{}`                     |
+| `query.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                        | `nil`                    |
 | `query.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                              | `1001`                   |
 | `query.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                           | `true`                   |
 | `query.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                             | `false`                  |
@@ -325,7 +325,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `queryFrontend.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                      | `[]`                     |
 | `queryFrontend.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Thanos Query Frontend pods                                                                   | `1001`                   |
 | `queryFrontend.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                             | `true`                   |
-| `queryFrontend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                 | `{}`                     |
+| `queryFrontend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                 | `nil`                    |
 | `queryFrontend.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                       | `1001`                   |
 | `queryFrontend.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                    | `true`                   |
 | `queryFrontend.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                      | `false`                  |
@@ -442,7 +442,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `bucketweb.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                      | `[]`                     |
 | `bucketweb.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Thanos Bucket Web pods                                                                       | `1001`                   |
 | `bucketweb.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                             | `true`                   |
-| `bucketweb.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                 | `{}`                     |
+| `bucketweb.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                 | `nil`                    |
 | `bucketweb.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                       | `1001`                   |
 | `bucketweb.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                    | `true`                   |
 | `bucketweb.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                      | `false`                  |
@@ -567,7 +567,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `compactor.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                      | `[]`                     |
 | `compactor.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Thanos Compactor pods                                                                        | `1001`                   |
 | `compactor.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                             | `true`                   |
-| `compactor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                 | `{}`                     |
+| `compactor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                 | `nil`                    |
 | `compactor.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                       | `1001`                   |
 | `compactor.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                    | `true`                   |
 | `compactor.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                      | `false`                  |
@@ -687,7 +687,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `storegateway.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                              | `[]`                        |
 | `storegateway.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Thanos Store Gateway pods                                                                            | `1001`                      |
 | `storegateway.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                     | `true`                      |
-| `storegateway.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                         | `{}`                        |
+| `storegateway.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                         | `nil`                       |
 | `storegateway.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                               | `1001`                      |
 | `storegateway.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                            | `true`                      |
 | `storegateway.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                              | `false`                     |
@@ -839,7 +839,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `ruler.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                      | `[]`                     |
 | `ruler.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Thanos Ruler pods                                                                            | `1001`                   |
 | `ruler.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                             | `true`                   |
-| `ruler.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                 | `{}`                     |
+| `ruler.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                 | `nil`                    |
 | `ruler.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                       | `1001`                   |
 | `ruler.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                    | `true`                   |
 | `ruler.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                      | `false`                  |
@@ -973,7 +973,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `receive.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                      | `[]`                     |
 | `receive.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Thanos Receive pods                                                                          | `1001`                   |
 | `receive.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                             | `true`                   |
-| `receive.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                 | `{}`                     |
+| `receive.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                 | `nil`                    |
 | `receive.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                       | `1001`                   |
 | `receive.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                    | `true`                   |
 | `receive.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                      | `false`                  |
@@ -1099,7 +1099,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `receiveDistributor.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                 | `[]`             |
 | `receiveDistributor.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Thanos Receive Distributor pods                                                         | `1001`           |
 | `receiveDistributor.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                        | `true`           |
-| `receiveDistributor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                            | `{}`             |
+| `receiveDistributor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                            | `nil`            |
 | `receiveDistributor.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                  | `1001`           |
 | `receiveDistributor.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                               | `true`           |
 | `receiveDistributor.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                 | `false`          |
@@ -1691,8 +1691,6 @@ querier.ingress.grpc.secrets[0].key           -> query.ingress.grpc.secrets[0].k
 ### To 3.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/mariadb/administration/upgrade-helm3/).
 
 ### To 2.4.0
 
