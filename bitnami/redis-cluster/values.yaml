@@ -171,7 +171,7 @@ minAvailable: ""
 maxUnavailable: ""
 ## Containers Security Context
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
-## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
@@ -182,7 +182,7 @@ maxUnavailable: ""
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false
@@ -388,13 +388,13 @@ volumePermissions:
     pullSecrets: []
   ## Containers Security Context
   ## @param volumePermissions.containerSecurityContext.enabled Enable Containers' Security Context
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the containers.
   ## @param volumePermissions.containerSecurityContext.privileged Run container as privileged
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
     privileged: false
   ## Container resource requests and limits
@@ -1058,13 +1058,13 @@ sysctlImage:
   mountHostSys: false
   ## Containers Security Context
   ## @param sysctlImage.containerSecurityContext.enabled Enable Containers' Security Context
-  ## @param sysctlImage.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param sysctlImage.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param sysctlImage.containerSecurityContext.runAsUser User ID for the containers.
   ## @param sysctlImage.containerSecurityContext.privileged Run privileged as privileged
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
     privileged: true
   ## Container resource requests and limits

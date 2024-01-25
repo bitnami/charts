@@ -108,7 +108,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                           | `[]`                       |
 | `podSecurityContext.fsGroup`                        | Group to configure permissions for volumes                                                                            | `1001`                     |
 | `containerSecurityContext.enabled`                  | Enabled Dokuwiki containers' Security Context                                                                         | `true`                     |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                      | `{}`                       |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                      | `nil`                      |
 | `containerSecurityContext.runAsUser`                | Set Dokuwiki containers' Security Context runAsUser                                                                   | `1001`                     |
 | `containerSecurityContext.runAsNonRoot`             | Set Controller container's Security Context runAsNonRoot                                                              | `true`                     |
 | `containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                                   | `false`                    |
