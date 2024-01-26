@@ -19,4 +19,5 @@
 .project
 .idea/
 *.tmproj
-files/conf/README.md
+files/conf/README.md# img folder
+img/
