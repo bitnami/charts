@@ -140,7 +140,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                     | `[]`                |
 | `primary.podSecurityContext.fsGroup`                        | Group ID for the mounted volumes' filesystem                                                                    | `1001`              |
 | `primary.containerSecurityContext.enabled`                  | MySQL primary container securityContext                                                                         | `true`              |
-| `primary.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `{}`                |
+| `primary.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `nil`               |
 | `primary.containerSecurityContext.runAsUser`                | User ID for the MySQL primary container                                                                         | `1001`              |
 | `primary.containerSecurityContext.runAsNonRoot`             | Set MySQL primary container's Security Context runAsNonRoot                                                     | `true`              |
 | `primary.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                            | `false`             |
@@ -242,7 +242,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                         | `[]`                |
 | `secondary.podSecurityContext.fsGroup`                        | Group ID for the mounted volumes' filesystem                                                                        | `1001`              |
 | `secondary.containerSecurityContext.enabled`                  | MySQL secondary container securityContext                                                                           | `true`              |
-| `secondary.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                    | `{}`                |
+| `secondary.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                    | `nil`               |
 | `secondary.containerSecurityContext.runAsUser`                | User ID for the MySQL secondary container                                                                           | `1001`              |
 | `secondary.containerSecurityContext.runAsNonRoot`             | Set MySQL secondary container's Security Context runAsNonRoot                                                       | `true`              |
 | `secondary.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                | `false`             |
@@ -351,7 +351,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.image.pullPolicy`                        | Exporter image pull policy                                                                                                     | `IfNotPresent`                    |
 | `metrics.image.pullSecrets`                       | Specify docker-registry secret names as an array                                                                               | `[]`                              |
 | `metrics.containerSecurityContext.enabled`        | MySQL metrics container securityContext                                                                                        | `true`                            |
-| `metrics.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                               | `{}`                              |
+| `metrics.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                               | `nil`                             |
 | `metrics.containerSecurityContext.runAsUser`      | User ID for the MySQL metrics container                                                                                        | `1001`                            |
 | `metrics.containerSecurityContext.runAsNonRoot`   | Set MySQL metrics container's Security Context runAsNonRoot                                                                    | `true`                            |
 | `metrics.service.type`                            | Kubernetes service type for MySQL Prometheus Exporter                                                                          | `ClusterIP`                       |
@@ -425,7 +425,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Use a different MySQL version
 
-To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/mysql/configuration/change-image-version/).
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
 
 ### Customize a new MySQL instance
 
@@ -435,7 +435,19 @@ The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
 These scripts are treated differently depending on their extension. While `.sh` scripts are executed on all the nodes, `.sql` and `.sql.gz` scripts are only executed on the primary nodes. This is because `.sh` scripts support conditional tests to identify the type of node they are running on, while such tests are not supported in `.sql` or `sql.gz` files.
 
-Refer to the [chart documentation for more information and a usage example](https://docs.bitnami.com/kubernetes/infrastructure/mysql/configuration/customize-new-instance/).
+When using a `.sh` script, you may wish to perform a "one-time" action like creating a database. This can be achieved by adding a condition in the script to ensure that it is executed only on one node, as shown in the example below:
+
+```yaml
+initdbScripts:
+  my_init_script.sh: |
+    #!/bin/sh
+    if [[ $(hostname) == *master* ]]; then
+      echo "Master node"
+      mysql -P 3306 -uroot -prandompassword -e "create database new_database";
+    else
+      echo "No master node"
+    fi
+```
 
 ### Sidecars and Init Containers
 
@@ -556,8 +568,6 @@ helm install mysql oci://REGISTRY_NAME/REPOSITORY_NAME/mysql --set auth.rootPass
 ### To 7.0.0
 
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/mysql/administration/upgrade-helm3/).
 
 ### To 3.0.0
 

@@ -3,22 +3,22 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.networkPolicy.enabled }}
+{{- if .Values.web.networkPolicy.enabled }}
 kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ printf "%s-web" (include "common.names.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-    app.kubernetes.io/component: apache
+    app.kubernetes.io/component: web
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.web.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
-      app.kubernetes.io/component: apache
+      app.kubernetes.io/component: web
   policyTypes:
     - Ingress
     - Egress
@@ -31,42 +31,39 @@ spec:
           protocol: TCP
     # Allow outbound connections to other cluster pods
     - ports:
-        - port: {{ coalesce .Values.service.ports.http .Values.service.port}}
-        - port: {{ coalesce .Values.service.ports.https .Values.service.httpsPort}}
+        - port: {{ .Values.web.containerPorts.http }}
+        - port: {{ .Values.service.ports.http }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
-    {{- if .Values.networkPolicy.extraEgress }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- if .Values.web.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.web.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.containerPorts.http }}
-        - port: {{ .Values.containerPorts.https }}
-        {{- if .Values.metrics.enabled }}
-        - port: {{ .Values.metrics.containerPort }}
-        {{- end }}
-      {{- if not .Values.networkPolicy.allowExternal }}
+        - port: {{ .Values.web.containerPorts.http }}
+        - port: {{ .Values.service.ports.http }}
+      {{- if not .Values.web.networkPolicy.allowExternal }}
       from:
         - podSelector:
             matchLabels:
-              {{ template "common.names.fullname" . }}-client: "true"
-        {{- if .Values.networkPolicy.ingressNSMatchLabels }}
+              {{ printf "%s-web" (include "common.names.fullname" .) }}-client: "true"
+        {{- if .Values.web.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
-              {{- range $key, $value := .Values.networkPolicy.ingressNSMatchLabels }}
+              {{- range $key, $value := .Values.web.networkPolicy.ingressNSMatchLabels }}
               {{ $key | quote }}: {{ $value | quote }}
               {{- end }}
-          {{- if .Values.networkPolicy.ingressNSPodMatchLabels }}
+          {{- if .Values.web.networkPolicy.ingressNSPodMatchLabels }}
           podSelector:
             matchLabels:
-              {{- range $key, $value := .Values.networkPolicy.ingressNSPodMatchLabels }}
+              {{- range $key, $value := .Values.web.networkPolicy.ingressNSPodMatchLabels }}
               {{ $key | quote }}: {{ $value | quote }}
               {{- end }}
           {{- end }}
         {{- end }}
       {{- end }}
-    {{- if .Values.networkPolicy.extraIngress }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- if .Values.web.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.web.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}
 {{- end }}

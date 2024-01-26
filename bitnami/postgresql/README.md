@@ -213,7 +213,7 @@ kubectl delete pvc -l release=my-release
 | `primary.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                  |
 | `primary.podSecurityContext.fsGroup`                        | Group ID for the pod                                                                                                     | `1001`                |
 | `primary.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`                |
-| `primary.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                  |
+| `primary.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`                 |
 | `primary.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`                |
 | `primary.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`                |
 | `primary.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`               |
@@ -318,7 +318,7 @@ kubectl delete pvc -l release=my-release
 | `readReplicas.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                  |
 | `readReplicas.podSecurityContext.fsGroup`                        | Group ID for the pod                                                                                                     | `1001`                |
 | `readReplicas.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`                |
-| `readReplicas.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                  |
+| `readReplicas.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`                 |
 | `readReplicas.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`                |
 | `readReplicas.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`                |
 | `readReplicas.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`               |
@@ -399,7 +399,7 @@ kubectl delete pvc -l release=my-release
 | `backup.cronjob.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                           | `[]`                                                                                                                                                                                 |
 | `backup.cronjob.podSecurityContext.fsGroup`                        | Group ID for the CronJob                                                                                                              | `1001`                                                                                                                                                                               |
 | `backup.cronjob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                  | `true`                                                                                                                                                                               |
-| `backup.cronjob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                      | `{}`                                                                                                                                                                                 |
+| `backup.cronjob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                      | `nil`                                                                                                                                                                                |
 | `backup.cronjob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                            | `1001`                                                                                                                                                                               |
 | `backup.cronjob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                         | `true`                                                                                                                                                                               |
 | `backup.cronjob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                           | `false`                                                                                                                                                                              |
@@ -452,7 +452,7 @@ kubectl delete pvc -l release=my-release
 | `volumePermissions.image.pullSecrets`                            | Init container volume-permissions image pull secrets                                                                              | `[]`                       |
 | `volumePermissions.resources.limits`                             | Init container volume-permissions resource limits                                                                                 | `{}`                       |
 | `volumePermissions.resources.requests`                           | Init container volume-permissions resource requests                                                                               | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                  | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                  | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`           | User ID for the init container                                                                                                    | `0`                        |
 | `volumePermissions.containerSecurityContext.runAsGroup`          | Group ID for the init container                                                                                                   | `0`                        |
 | `volumePermissions.containerSecurityContext.runAsNonRoot`        | runAsNonRoot for the init container                                                                                               | `false`                    |
@@ -485,7 +485,7 @@ kubectl delete pvc -l release=my-release
 | `metrics.customMetrics`                                     | Define additional custom metrics                                                                           | `{}`                                |
 | `metrics.extraEnvVars`                                      | Extra environment variables to add to PostgreSQL Prometheus exporter                                       | `[]`                                |
 | `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                       | `true`                              |
-| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `{}`                                |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `nil`                               |
 | `metrics.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                 | `1001`                              |
 | `metrics.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                              | `true`                              |
 | `metrics.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                | `false`                             |
@@ -574,7 +574,39 @@ At the top level, there is a service object which defines the services for both 
 
 ### Use a different PostgreSQL version
 
-To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/configuration/change-image-version/).
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
+
+### LDAP
+
+LDAP support can be enabled in the chart by specifying the `ldap.` parameters while creating a release. The following parameters should be configured to properly enable the LDAP support in the chart.
+
+- **ldap.enabled**: Enable LDAP support. Defaults to `false`.
+- **ldap.uri**: LDAP URL beginning in the form `ldap[s]://<hostname>:<port>`. No defaults.
+- **ldap.base**: LDAP base DN. No defaults.
+- **ldap.binddn**: LDAP bind DN. No defaults.
+- **ldap.bindpw**: LDAP bind password. No defaults.
+- **ldap.bslookup**: LDAP base lookup. No defaults.
+- **ldap.nss_initgroups_ignoreusers**: LDAP ignored users. `root,nslcd`.
+- **ldap.scope**: LDAP search scope. No defaults.
+- **ldap.tls_reqcert**: LDAP TLS check on server certificates. No defaults.
+
+For example:
+
+```text
+ldap.enabled="true"
+ldap.uri="ldap://my_ldap_server"
+ldap.base="dc=example\,dc=org"
+ldap.binddn="cn=admin\,dc=example\,dc=org"
+ldap.bindpw="admin"
+ldap.bslookup="ou=group-ok\,dc=example\,dc=org"
+ldap.nss_initgroups_ignoreusers="root\,nslcd"
+ldap.scope="sub"
+ldap.tls_reqcert="demand"
+```
+
+Next, login to the PostgreSQL server using the `psql` client and add the PAM authenticated LDAP users.
+
+> Note: Parameters including commas must be escaped as shown in the above example.
 
 ### postgresql.conf / pg_hba.conf files as configMap
 
@@ -698,7 +730,7 @@ global.postgresql.auth.database=testdb
 
 This way, the credentials will be available in all of the subcharts.
 
-## Persistence
+### Persistence
 
 The [Bitnami PostgreSQL](https://github.com/bitnami/containers/tree/main/bitnami/postgresql) image stores the PostgreSQL data and configurations at the `/bitnami/postgresql` path of the container.
 
@@ -707,7 +739,20 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 If you already have data in it, you will fail to sync to standby nodes for all commits, details can refer to the [code present in the container repository](https://github.com/bitnami/containers/tree/main/bitnami/postgresql). If you need to use those data, please covert them to sql and import after `helm install` finished.
 
-## NetworkPolicy
+### Backup and restore PostgreSQL deployments
+
+To back up and restore Bitnami PostgreSQL Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool.
+
+These are the steps you will usually follow to back up and restore your PostgreSQL cluster data:
+
+- Install Velero on the source and destination clusters.
+- Use Velero to back up the PersistentVolumes (PVs) used by the deployment on the source cluster.
+- Use Velero to restore the backed-up PVs on the destination cluster.
+- Create a new deployment on the destination cluster with the same chart, deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
+
+Refer to our detailed [tutorial on backing up and restoring PostgreSQL deployments on Kubernetes](https://docs.bitnami.com/tutorials/migrate-data-bitnami-velero/) for more information.
+
+### NetworkPolicy
 
 To enable network policy for PostgreSQL, install [a networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy#before-you-begin), and set `networkPolicy.enabled` to `true`.
 
@@ -722,7 +767,7 @@ With NetworkPolicy enabled, traffic will be limited to just port 5432.
 For more precise policy, set `networkPolicy.allowExternal=false`. This will only allow pods with the generated client label to connect to PostgreSQL.
 This label will be displayed in the output of a successful install.
 
-## Differences between Bitnami PostgreSQL image and [Docker Official](https://hub.docker.com/_/postgres) image
+### Differences between Bitnami PostgreSQL image and [Docker Official](https://hub.docker.com/_/postgres) image
 
 - The Docker Official PostgreSQL image does not support replication. If you pass any replication environment variable, this would be ignored. The only environment variables supported by the Docker Official image are POSTGRES_USER, POSTGRES_DB, POSTGRES_PASSWORD, POSTGRES_INITDB_ARGS, POSTGRES_INITDB_WALDIR and PGDATA. All the remaining environment variables are specific to the Bitnami PostgreSQL image.
 - The Bitnami PostgreSQL image is non-root by default. This requires that you run the pod with `securityContext` and updates the permissions of the volume with an `initContainer`. A key benefit of this configuration is that the pod follows security best practices and is prepared to run on Kubernetes distributions with hard security constraints like OpenShift.
@@ -750,9 +795,191 @@ This major version changes the default PostgreSQL image from 15.x to 16.x. Follo
 
 This major version changes the default PostgreSQL image from 14.x to 15.x. Follow the [official instructions](https://www.postgresql.org/docs/15/upgrading.html) to upgrade to 15.x.
 
-### To any previous version
+### To 11.0.0
 
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/).
+In this version the application version was bumped to _14.x_ series. Also, this major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+- _replication.enabled_ parameter is deprecated in favor of _architecture_ parameter that accepts two values: _standalone_ and _replication_.
+- _replication.singleService_ and _replication.uniqueServices_ parameters are deprecated. When using replication, each statefulset (primary and read-only) has its own headless service & service allowing to connect to read-only replicas through the service (round-robin) or individually.
+- _postgresqlPostgresPassword_, _postgresqlUsername_, _postgresqlPassword_, _postgresqlDatabase_, _replication.user_, _replication.password_, and _existingSecret_ parameters have been regrouped under the _auth_ map. The _auth_ map uses a new perspective to configure authentication, so please read carefully each sub-parameter description.
+- _extraEnv_ has been deprecated in favor of _primary.extraEnvVars_ and _readReplicas.extraEnvVars_.
+- _postgresqlConfiguration_, _pgHbaConfiguration_, _configurationConfigMap_, _postgresqlExtendedConf_, and _extendedConfConfigMap_ have been deprecated in favor of _primary.configuration_, _primary.pgHbaConfiguration_, _primary.existingConfigmap_, _primary.extendedConfiguration_, and _primary.existingExtendedConfigmap_.
+- _postgresqlInitdbArgs_, _postgresqlInitdbWalDir_, _initdbScripts_, _initdbScriptsConfigMap_, _initdbScriptsSecret_, _initdbUser_ and _initdbPassword_ have been regrouped under the _primary.initdb_ map.
+- _postgresqlMaxConnections_, _postgresqlPostgresConnectionLimit_, _postgresqlDbUserConnectionLimit_, _postgresqlTcpKeepalivesInterval_, _postgresqlTcpKeepalivesIdle_, _postgresqlTcpKeepalivesCount_, _postgresqlStatementTimeout_ and _postgresqlPghbaRemoveFilters_ parameters are deprecated. Use _XXX.extraEnvVars_ instead.
+- _primaryAsStandBy_ has been deprecated in favor of _primary.standby_.
+- _securityContext_ and _containerSecurityContext_ have been deprecated in favor of _primary.podSecurityContext_, _primary.containerSecurityContext_, _readReplicas.podSecurityContext_, and _readReplicas.containerSecurityContext_.
+- _livenessProbe_ and _readinessProbe_ maps have been deprecated in favor of _primary.livenessProbe_, _primary.readinessProbe_, _readReplicas.livenessProbe_ and _readReplicas.readinessProbe_ maps.
+- _persistence_ map has been deprecated in favor of _primary.persistence_ and _readReplicas.persistence_ maps.
+- _networkPolicy_ map has been completely refactored.
+- _service_ map has been deprecated in favor of _primary.service_ and _readReplicas.service_ maps.
+- _metrics.service.port_ has been regrouped under the _metrics.service.ports_ map.
+- _serviceAccount.enabled_ and _serviceAccount.autoMount_ have been deprecated in favor of _serviceAccount.create_ and _serviceAccount.automountServiceAccountToken_.
+
+#### How to upgrade to version 11.0.0
+
+To upgrade to _11.0.0_ from _10.x_, it should be done reusing the PVC(s) used to hold the PostgreSQL data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is _postgresql_):
+
+> NOTE: Please, create a backup of your database before running any of these actions.
+
+1. Obtain the credentials and the names of the PVCs used to hold the PostgreSQL data on your current release:
+
+```console
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+1. Delete the PostgreSQL statefulset (notice the option _--cascade=false_) and secret:
+
+```console
+kubectl delete statefulsets.apps postgresql-postgresql --namespace default --cascade=false
+kubectl delete secret postgresql --namespace default
+```
+
+1. Upgrade your release using the same PostgreSQL version:
+
+```console
+CURRENT_VERSION=$(kubectl exec postgresql-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+helm upgrade postgresql bitnami/postgresql \
+  --set auth.postgresPassword=$POSTGRESQL_PASSWORD \
+  --set primary.persistence.existingClaim=$POSTGRESQL_PVC \
+  --set image.tag=$CURRENT_VERSION
+```
+
+1. You will have to delete the existing PostgreSQL pod and the new statefulset is going to create a new one
+
+```console
+kubectl delete pod postgresql-postgresql-0
+```
+
+1. Finally, you should see the lines below in PostgreSQL container logs:
+
+```text
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+...
+postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
+...
+```
+
+> NOTE: the instructions above reuse the same PostgreSQL version you were using in your chart release. Otherwise, you will find an error such as the one below when upgrading since the new chart major version also bumps the application version. To workaround this issue you need to upgrade database, please refer to the [official PostgreSQL documentation](https://www.postgresql.org/docs/current/upgrading.html) for more information about this.
+
+```console
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+    ...
+postgresql 08:10:14.72 INFO  ==> ** Starting PostgreSQL **
+2022-02-01 08:10:14.734 GMT [1] FATAL:  database files are incompatible with server
+2022-02-01 08:10:14.734 GMT [1] DETAIL:  The data directory was initialized by PostgreSQL version 11, which is not compatible with this version 14.1.
+```
+
+### To 10.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
+- After running _helm dependency update_, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
+- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Chart.
+- The term _master_ has been replaced with _primary_ and _slave_ with _readReplicas_ throughout the chart. Role names have changed from _master_ and _slave_ to _primary_ and _read_.
+
+#### Considerations when upgrading to this version
+
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version does not support Helm v2 anymore.
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3.
+
+#### Useful links
+
+- [Bitnami Tutorial](https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues)
+- [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
+- [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
+
+#### How to upgrade to version 10.0.0
+
+To upgrade to _10.0.0_ from _9.x_, it should be done reusing the PVC(s) used to hold the PostgreSQL data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is _postgresql_):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+1. Obtain the credentials and the names of the PVCs used to hold the PostgreSQL data on your current release:
+
+```console
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+1. Delete the PostgreSQL statefulset (notice the option _--cascade=false_):
+
+```console
+kubectl delete statefulsets.apps postgresql-postgresql --namespace default --cascade=false
+```
+
+1. Upgrade your release using the same PostgreSQL version:
+
+```console
+helm upgrade postgresql bitnami/postgresql \
+  --set postgresqlPassword=$POSTGRESQL_PASSWORD \
+  --set persistence.existingClaim=$POSTGRESQL_PVC
+```
+
+1. Delete the existing PostgreSQL pod and the new statefulset will create a new one:
+
+```console
+kubectl delete pod postgresql-postgresql-0
+```
+
+1. Finally, you should see the lines below in PostgreSQL container logs:
+
+```text
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+...
+postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
+...
+```
+
+### To 9.0.0
+
+In this version the chart was adapted to follow the [Helm standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
+
+- Some inmutable objects were modified to adopt Helm standard labels introducing backward incompatibilities.
+
+#### How to upgrade to version 9.0.0
+
+To upgrade to _9.0.0_ from _8.x_, it should be done reusing the PVC(s) used to hold the PostgreSQL data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is _postgresql_):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+1. Obtain the credentials and the names of the PVCs used to hold the PostgreSQL data on your current release:
+
+```console
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+```
+
+1. Delete the PostgreSQL statefulset (notice the option _--cascade=false_):
+
+```console
+kubectl delete statefulsets.apps postgresql-postgresql --namespace default --cascade=false
+```
+
+1. Upgrade your release using the same PostgreSQL version:
+
+```console
+helm upgrade postgresql bitnami/postgresql \
+  --set postgresqlPassword=$POSTGRESQL_PASSWORD \
+  --set persistence.existingClaim=$POSTGRESQL_PVC
+```
+
+1. Delete the existing PostgreSQL pod and the new statefulset will create a new one:
+
+```console
+kubectl delete pod postgresql-postgresql-0
+```
+
+1. Finally, you should see the lines below in PostgreSQL container logs:
+
+```text
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+...
+postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
+...
+```
 
 ## License
 

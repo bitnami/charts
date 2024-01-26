@@ -37,4 +37,4 @@ maintainers:
 name: gitea
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/gitea
-version: 1.4.0
+version: 1.4.1

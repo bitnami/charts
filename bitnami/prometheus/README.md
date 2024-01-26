@@ -24,8 +24,6 @@ This chart bootstraps a [Prometheus](https://prometheus.io) Deployment in a [Kub
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/prometheus/get-started/).
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -127,7 +125,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                             | `[]`                            |
 | `alertmanager.podSecurityContext.fsGroup`                        | Set Alertmanager pod's Security Context fsGroup                                                                                                         | `1001`                          |
 | `alertmanager.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                    | `true`                          |
-| `alertmanager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                        | `{}`                            |
+| `alertmanager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                        | `nil`                           |
 | `alertmanager.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                              | `1001`                          |
 | `alertmanager.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                           | `true`                          |
 | `alertmanager.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                             | `false`                         |
@@ -251,7 +249,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.podSecurityContext.supplementalGroups`                    | Set filesystem extra groups                                                                                                                                                                 | `[]`                         |
 | `server.podSecurityContext.fsGroup`                               | Set Prometheus pod's Security Context fsGroup                                                                                                                                               | `1001`                       |
 | `server.containerSecurityContext.enabled`                         | Enabled containers' Security Context                                                                                                                                                        | `true`                       |
-| `server.containerSecurityContext.seLinuxOptions`                  | Set SELinux options in container                                                                                                                                                            | `{}`                         |
+| `server.containerSecurityContext.seLinuxOptions`                  | Set SELinux options in container                                                                                                                                                            | `nil`                        |
 | `server.containerSecurityContext.runAsUser`                       | Set containers' Security Context runAsUser                                                                                                                                                  | `1001`                       |
 | `server.containerSecurityContext.runAsNonRoot`                    | Set container's Security Context runAsNonRoot                                                                                                                                               | `true`                       |
 | `server.containerSecurityContext.privileged`                      | Set container's Security Context privileged                                                                                                                                                 | `false`                      |
@@ -313,7 +311,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.thanos.image.pullPolicy`                                  | Thanos image pull policy                                                                                                                                                                    | `IfNotPresent`               |
 | `server.thanos.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                                                                            | `[]`                         |
 | `server.thanos.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                        | `true`                       |
-| `server.thanos.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                            | `{}`                         |
+| `server.thanos.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                            | `nil`                        |
 | `server.thanos.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                  | `1001`                       |
 | `server.thanos.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                               | `true`                       |
 | `server.thanos.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                 | `false`                      |
@@ -420,7 +418,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                           | `[]`                       |
 | `volumePermissions.resources.limits`                        | The resources limits for the init container                                                     | `{}`                       |
 | `volumePermissions.resources.requests`                      | The requested resources for the init container                                                  | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                 | `0`                        |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

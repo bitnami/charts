@@ -213,7 +213,7 @@ tracking:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param tracking.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param tracking.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param tracking.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param tracking.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param tracking.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param tracking.containerSecurityContext.privileged Set containers' Security Context privileged
@@ -225,7 +225,7 @@ tracking:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -928,7 +928,7 @@ run:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param run.containerSecurityContext.enabled Enabled Run containers' Security Context
-  ## @param run.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param run.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param run.containerSecurityContext.runAsUser Set Run containers' Security Context runAsUser
   ## @param run.containerSecurityContext.runAsGroup Set Run containers' Security Context runAsGroup
   ## @param run.containerSecurityContext.runAsNonRoot Set Run containers' Security Context runAsNonRoot
@@ -940,7 +940,7 @@ run:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -1205,7 +1205,7 @@ volumePermissions:
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param volumePermissions.containerSecurityContext.enabled Set container security context settings
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
@@ -1213,7 +1213,7 @@ volumePermissions:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
 
 waitContainer:
@@ -1243,7 +1243,7 @@ waitContainer:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param waitContainer.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param waitContainer.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param waitContainer.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param waitContainer.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param waitContainer.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
   ## @param waitContainer.containerSecurityContext.privileged Set containers' Security Context privileged
@@ -1254,7 +1254,7 @@ waitContainer:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false

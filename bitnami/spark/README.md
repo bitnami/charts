@@ -434,13 +434,31 @@ In order to enable secure transport between workers and master, deploy the Helm 
 
 It is necessary to create two secrets for the passwords and certificates. The names of the two secrets should be configured using the `security.passwordsSecretName` and `security.ssl.existingSecret` chart parameters.
 
-The keys for the certificate secret must be named `spark-keystore.jks` and `spark-truststore.jks`, and the content must be text in JKS format. Use [this script to generate certificates](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh) for test purposes if required.
+#### Create certificates and the certificate secret
+
+To generate the certificates secret, first generate the two certificates and rename them to `spark-keystore.jks` and `spark-truststore.jks`. Use [this script to generate certificates](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh) for test purposes if required.
+
+Once the certificates are created, create a secret for them with the file names as keys. The keys must be named `spark-keystore.jks` and `spark-truststore.jks`, and the content must be text in JKS format.
+
+#### Create the password secret
 
 The secret for passwords should have three keys: `rpc-authentication-secret`, `ssl-keystore-password` and `ssl-truststore-password`.
 
-Refer to the [chart documentation for more details on configuring security and an example](https://docs.bitnami.com/kubernetes/infrastructure/spark/administration/configure-security/).
+#### Configure the chart
 
-> It is currently not possible to submit an application to a standalone cluster if RPC authentication is configured. [Learn more about this issue](https://issues.apache.org/jira/browse/SPARK-25078).
+Once the secrets are created, configure the chart and set the various security-related parameters, including the `security.certificatesSecretName` and  `security.passwordsSecretName` parameters referencing the secrets created previously. Here is an example configuration for chart deployment:
+
+```text
+security.certificatesSecretName=my-secret
+security.passwordsSecretName=my-passwords-secret
+security.rpc.authenticationEnabled=true
+security.rpc.encryptionEnabled=true
+security.storageEncrytionEnabled=true
+security.ssl.enabled=true
+security.ssl.needClientAuth=true
+```
+
+> NOTE: It is currently not possible to submit an application to a standalone cluster if RPC authentication is configured. [Learn more about this issue](https://issues.apache.org/jira/browse/SPARK-25078).
 
 ### Set Pod affinity
 
@@ -475,8 +493,6 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 ### To 4.0.0
 
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/spark/administration/upgrade-helm3/).
 
 ### To 3.0.0
 
