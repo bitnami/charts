@@ -179,7 +179,7 @@ master:
   ## @param master.podSecurityContext.fsGroup Set master pod's Security Context Group ID
   ## @param master.podSecurityContext.runAsUser Set master pod's Security Context User ID
   ## @param master.podSecurityContext.runAsGroup Set master pod's Security Context Group ID
-  ## @param master.podSecurityContext.seLinuxOptions Set master pod's Security Context SELinux options
+  ## @param master.podSecurityContext.seLinuxOptions [object,nullable] Set master pod's Security Context SELinux options
   ##
   podSecurityContext:
     enabled: true
@@ -189,11 +189,11 @@ master:
     fsGroup: 1001
     runAsUser: 1001
     runAsGroup: 0
-    seLinuxOptions: {}
+    seLinuxOptions: null
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param master.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param master.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param master.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param master.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param master.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param master.containerSecurityContext.privileged Set container's Security Context privileged
@@ -204,7 +204,7 @@ master:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -478,7 +478,7 @@ worker:
   ## @param worker.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param worker.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param worker.podSecurityContext.fsGroup Group ID for the container
-  ## @param worker.podSecurityContext.seLinuxOptions SELinux options for the container
+  ## @param worker.podSecurityContext.seLinuxOptions [object,nullable] SELinux options for the container
   ##
   podSecurityContext:
     enabled: true
@@ -486,11 +486,11 @@ worker:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
-    seLinuxOptions: {}
+    seLinuxOptions: null
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param worker.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param worker.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param worker.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param worker.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param worker.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param worker.containerSecurityContext.privileged Set container's Security Context privileged
@@ -501,7 +501,7 @@ worker:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false

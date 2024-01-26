@@ -129,7 +129,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                            | `[]`                               |
 | `operator.podSecurityContext.fsGroup`                        | Set Kuberay Operator pod's Security Context fsGroup                                                                                                                    | `1001`                             |
 | `operator.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                   | `true`                             |
-| `operator.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                       | `{}`                               |
+| `operator.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                       | `nil`                              |
 | `operator.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                             | `1001`                             |
 | `operator.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                          | `true`                             |
 | `operator.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                            | `false`                            |
@@ -139,6 +139,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                       | `RuntimeDefault`                   |
 | `operator.command`                                           | Override default container command (useful when using custom images)                                                                                                   | `[]`                               |
 | `operator.args`                                              | Override default container args (useful when using custom images)                                                                                                      | `[]`                               |
+| `operator.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                     | `true`                             |
 | `operator.hostAliases`                                       | Kuberay Operator pods host aliases                                                                                                                                     | `[]`                               |
 | `operator.podLabels`                                         | Extra labels for Kuberay Operator pods                                                                                                                                 | `{}`                               |
 | `operator.podAnnotations`                                    | Annotations for Kuberay Operator pods                                                                                                                                  | `{}`                               |
@@ -210,14 +211,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kuberay Operator RBAC Parameters
 
-| Name                                                   | Description                                                      | Value  |
-| ------------------------------------------------------ | ---------------------------------------------------------------- | ------ |
-| `operator.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `operator.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`   |
-| `operator.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `operator.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `operator.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `operator.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                                   | Description                                                      | Value   |
+| ------------------------------------------------------ | ---------------------------------------------------------------- | ------- |
+| `operator.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `operator.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`    |
+| `operator.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `operator.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `operator.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `operator.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Kuberay Operator Metrics Parameters
 
@@ -282,7 +283,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `apiserver.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                            | `[]`                                |
 | `apiserver.podSecurityContext.fsGroup`                        | Set Kuberay API Server pod's Security Context fsGroup                                                                                                                  | `1001`                              |
 | `apiserver.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                   | `true`                              |
-| `apiserver.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                       | `{}`                                |
+| `apiserver.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                       | `nil`                               |
 | `apiserver.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                             | `1001`                              |
 | `apiserver.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                          | `true`                              |
 | `apiserver.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                            | `false`                             |
@@ -292,6 +293,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `apiserver.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                       | `RuntimeDefault`                    |
 | `apiserver.command`                                           | Override default container command (useful when using custom images)                                                                                                   | `[]`                                |
 | `apiserver.args`                                              | Override default container args (useful when using custom images)                                                                                                      | `[]`                                |
+| `apiserver.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                     | `true`                              |
 | `apiserver.hostAliases`                                       | Kuberay API Server pods host aliases                                                                                                                                   | `[]`                                |
 | `apiserver.podLabels`                                         | Extra labels for Kuberay API Server pods                                                                                                                               | `{}`                                |
 | `apiserver.podAnnotations`                                    | Annotations for Kuberay API Server pods                                                                                                                                | `{}`                                |
@@ -365,14 +367,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kuberay API Server RBAC Parameters
 
-| Name                                                    | Description                                                      | Value  |
-| ------------------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `apiserver.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `apiserver.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`   |
-| `apiserver.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `apiserver.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `apiserver.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `apiserver.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                                    | Description                                                      | Value   |
+| ------------------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `apiserver.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `apiserver.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`    |
+| `apiserver.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `apiserver.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `apiserver.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `apiserver.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Kuberay API Server Metrics Parameters
 
@@ -412,7 +414,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.head.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `cluster.head.podSecurityContext.fsGroup`                        | Set Ray Cluster Worker (common) pod's Security Context fsGroup                                                           | `1001`           |
 | `cluster.head.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `cluster.head.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `cluster.head.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `cluster.head.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `cluster.head.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `cluster.head.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -422,6 +424,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.head.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `cluster.head.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `cluster.head.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `cluster.head.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `cluster.head.hostAliases`                                       | Ray Cluster Worker (common) pods host aliases                                                                            | `[]`             |
 | `cluster.head.podLabels`                                         | Extra labels for Ray Cluster Worker (common) pods                                                                        | `{}`             |
 | `cluster.head.podAnnotations`                                    | Annotations for Ray Cluster Worker (common) pods                                                                         | `{}`             |
@@ -466,7 +469,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.worker.common.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `cluster.worker.common.podSecurityContext.fsGroup`                        | Set Ray Cluster Worker (common) pod's Security Context fsGroup                                                           | `1001`           |
 | `cluster.worker.common.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `cluster.worker.common.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `cluster.worker.common.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `cluster.worker.common.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `cluster.worker.common.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `cluster.worker.common.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -476,6 +479,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.worker.common.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `cluster.worker.common.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `cluster.worker.common.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `cluster.worker.common.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `cluster.worker.common.hostAliases`                                       | Ray Cluster Worker (common) pods host aliases                                                                            | `[]`             |
 | `cluster.worker.common.podLabels`                                         | Extra labels for Ray Cluster Worker (common) pods                                                                        | `{}`             |
 | `cluster.worker.common.podAnnotations`                                    | Annotations for Ray Cluster Worker (common) pods                                                                         | `{}`             |
@@ -551,9 +555,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as kuberay (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the `operator`, `apiserver` and `cluster` sections. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/kuberay/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as KubeRay (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the `operator`, `apiserver` and `cluster` sections.
 
-If additional containers are needed in the same pod as kuberay (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the `operator`, `apiserver` and `cluster` sections. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/kuberay/administration/configure-use-sidecars/).
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Deploying Ray Cluster
 

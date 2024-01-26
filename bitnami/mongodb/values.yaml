@@ -296,6 +296,9 @@ tls:
     ##   memory: 128Mi
     ##
     requests: {}
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -555,7 +558,7 @@ podSecurityContext:
 ## MongoDB(&reg;) containers' Security Context (main and metrics container).
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
-## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
@@ -566,7 +569,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false
@@ -1191,7 +1194,7 @@ backup:
     ## backup container's Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param backup.cronjob.containerSecurityContext.enabled Enabled containers' Security Context
-    ## @param backup.cronjob.containerSecurityContext.seLinuxOptions Set SELinux options in container
+    ## @param backup.cronjob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param backup.cronjob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param backup.cronjob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param backup.cronjob.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1202,7 +1205,7 @@ backup:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: {}
+      seLinuxOptions: null
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -1426,11 +1429,11 @@ volumePermissions:
   ## "auto" is especially useful for OpenShift which has scc with dynamic userids (and 0 is not allowed).
   ## You may want to use this volumePermissions.securityContext.runAsUser="auto" in combination with
   ## podSecurityContext.enabled=false,containerSecurityContext.enabled=false and shmVolume.chmod.enabled=false
-  ## @param volumePermissions.securityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.securityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.securityContext.runAsUser User ID for the volumePermissions container
   ##
   securityContext:
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
 
 ## @section Arbiter parameters
@@ -1441,6 +1444,9 @@ arbiter:
   ##   https://docs.mongodb.com/manual/tutorial/add-replica-set-arbiter/
   ##
   enabled: true
+  ## @param arbiter.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param arbiter.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1591,7 +1597,7 @@ arbiter:
   ## MongoDB(&reg;) Arbiter containers' Security Context (only main container).
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param arbiter.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param arbiter.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param arbiter.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param arbiter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param arbiter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param arbiter.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1602,7 +1608,7 @@ arbiter:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1778,6 +1784,9 @@ hidden:
   ##   https://docs.mongodb.com/manual/tutorial/configure-a-hidden-replica-set-member/
   ##
   enabled: false
+  ## @param hidden.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param hidden.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1932,7 +1941,7 @@ hidden:
   ## MongoDB(&reg;) Hidden containers' Security Context (only main container).
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param hidden.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param hidden.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param hidden.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param hidden.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param hidden.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param hidden.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1943,7 +1952,7 @@ hidden:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false

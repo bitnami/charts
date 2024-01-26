@@ -38,6 +38,7 @@ spec:
     spec:
       serviceAccountName: {{ template "flux.image-reflector-controller.serviceAccountName" . }}
       {{- include "flux.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.imageReflectorController.automountServiceAccountToken }}
       {{- if .Values.imageReflectorController.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.hostAliases "context" $) | nindent 8 }}
       {{- end }}

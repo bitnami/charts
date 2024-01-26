@@ -10,7 +10,7 @@ containerPorts:
   http: 8080
 serviceAccount:
   create: true
-  automountServiceAccountToken: true
+automountServiceAccountToken: true
 service:
   type: LoadBalancer
   ports:

@@ -140,7 +140,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set Cassandra pod's Security Context fsGroup                                              | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled Cassandra containers' Security Context                                            | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set Cassandra containers' Security Context runAsUser                                      | `1001`           |
 | `containerSecurityContext.allowPrivilegeEscalation` | Set Cassandra containers' Security Context allowPrivilegeEscalation                       | `false`          |
 | `containerSecurityContext.capabilities.drop`        | Set Cassandra containers' Security Context capabilities to be dropped                     | `["ALL"]`        |
@@ -248,7 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                      | `[]`                       |
 | `volumePermissions.resources.limits`               | The resources limits for the container                                                                                | `{}`                       |
 | `volumePermissions.resources.requests`             | The requested resources for the container                                                                             | `{}`                       |
-| `volumePermissions.securityContext.seLinuxOptions` | Set SELinux options in container                                                                                      | `{}`                       |
+| `volumePermissions.securityContext.seLinuxOptions` | Set SELinux options in container                                                                                      | `nil`                      |
 | `volumePermissions.securityContext.runAsUser`      | User ID for the init container                                                                                        | `0`                        |
 
 ### Metrics parameters
@@ -338,23 +338,52 @@ This chart supports TLS between client and server and between nodes, as explaine
 - For internode cluster encryption, set the `tls.internodeEncryption` chart parameter to a value different from `none`. Available values are `all`, `dc` or `rack`.
 - For client-server encryption, set the `tls.clientEncryption` chart parameter to `true`.
 
-In both cases, it is also necessary to create a secret containing the keystore and truststore certificates and their corresponding protection passwords. This secret is to be passed to the chart via the `tls.existingSecret` parameter at deployment-time.
+In both cases, it is also necessary to create a secret containing the keystore and truststore certificates and their corresponding protection passwords. This secret is to be passed to the chart via the `tls.existingSecret` parameter at deployment-time, as shown below:
 
-Refer to the chart documentation for more [information on creating the secret and a TLS deployment example](https://docs.bitnami.com/kubernetes/infrastructure/cassandra/administration/enable-tls/).
+```text
+tls.internodeEncryption=all
+tls.clientEncryption=true
+tls.existingSecret=my-exisiting-stores
+tls.passwordsSecret=my-stores-password
+```
 
-### Use a custom configuration file
+> TIP: The secret may be created in the standard way with the `--from-file=./keystore`, `--from-file=./truststore`, `--from-literal=keystore-password=KEYSTORE_PASSWORD` and `--from-literal=truststore-password=TRUSTSTORE_PASSWORD` options. This assumes that the stores are in the current working directory and the KEYSTORE_PASSWORD and TRUSTSTORE_PASSWORD placeholders are replaced with the correct keystore and truststore passwords respectively. Example:
 
-This chart also supports mounting custom configuration file(s) for Apache Cassandra. This is achieved by setting the `existingConfiguration` parameter with the name of a ConfigMap that includes the custom configuration file(s).
+```console
+kubectl create secret generic my-exisiting-stores --from-file=./keystore --from-file=./truststore
+kubectl create secret generic my-stores-password --from-literal=keystore-password=KEYSTORE_PASSWORD --from-literal=truststore-password=TRUSTSTORE_PASSWORD
+```
 
-> NOTE: This ConfigMap will override other Apache Cassandra configuration variables set in the chart.
+Keystore and Truststore files can be dinamycally created from the certificates files. In this case a secret with the tls.crt, tls.key and ca.crt in pem format is required. The following example shows how the secret can be created and assumes that all certificate files are in the working directory:
 
-Refer to the chart documentation for more [information on customizing an Apache Cassandra deployment](https://docs.bitnami.com/kubernetes/infrastructure/cassandra/configuration/customize-new-instance/).
+```console
+kubectl create secret tls my-certs --cert ./tls.crt --key ./tls.key
+kubectl patch secret my-certs -p="{\"data\":{\"ca.crt\": \"$(cat ./ca.crt | base64 )\"}}"
+```
+
+To enable this feature `tls.autoGenerated` must be set and the new secret should be set in `tls.certificateSecret`:
+
+```text
+tls.internodeEncryption=all
+tls.clientEncryption=true
+tls.autoGenerated=true
+tls.certificatesSecret=my-certs
+tls.passwordsSecret=my-stores-password
+```
 
 ### Initialize the database
 
-The [Bitnami Apache Cassandra image](https://github.com/bitnami/containers/tree/main/bitnami/cassandra) image supports the use of custom scripts to initialize a fresh instance. This may be done by creating a Kubernetes ConfigMap that includes the necessary *sh* or *cql* scripts and passing this ConfigMap to the chart via the *initDBConfigMap* parameter.
+The [Apache Cassandra](https://github.com/bitnami/containers/tree/main/bitnami/cassandra) image supports the use of custom scripts to initialize a fresh instance. This may be done by creating a Kubernetes ConfigMap that includes the necessary `.sh` or `.cql` scripts and passing this ConfigMap to the chart via the `initDBConfigMap` parameter.
 
-Refer to the chart documentation for more [information on customizing an Apache Cassandra deployment](https://docs.bitnami.com/kubernetes/infrastructure/cassandra/configuration/customize-new-instance/).
+### Use a custom configuration file
+
+This chart also supports mounting custom configuration file(s) for Apache Cassandra. This is achieved by setting the `existingConfiguration` parameter with the name of a ConfigMap that includes the custom configuration file(s). Here is an example of deploying the chart with a custom configuration file stored in a ConfigMap named `cassandra-configuration`:
+
+```text
+existingConfiguration=cassandra-configuration
+```
+
+> NOTE: This ConfigMap will override other Apache Cassandra configuration variables set in the chart.
 
 ### Set pod affinity
 
@@ -425,8 +454,6 @@ For this version, there have been [intensive efforts](https://cwiki.apache.org/c
 ### To 7.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/cassandra/administration/upgrade-helm3/).
 
 ### To 6.0.0
 
