@@ -166,7 +166,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                       | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set ZooKeeper pod's Security Context fsGroup                                                                                                                                                      | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                              | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                  | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                  | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                        | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                     | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                       | `false`          |
@@ -267,7 +267,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`                        | Init container volume-permissions resource limits                                                                                 | `{}`                       |
 | `volumePermissions.resources.requests`                      | Init container volume-permissions resource requests                                                                               | `{}`                       |
 | `volumePermissions.containerSecurityContext.enabled`        | Enabled init container Security Context                                                                                           | `true`                     |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`      | User ID for the init container                                                                                                    | `0`                        |
 
 ### Metrics parameters
@@ -492,8 +492,6 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 ### To 6.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/zookeeper/administration/upgrade-helm3/).
 
 ### To 5.21.0
 

@@ -144,7 +144,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set Solr pod's Security Context fsGroup                                                                                  | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -237,7 +237,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                       | Init container volume-permissions image pull secrets                                                                              | `[]`                       |
 | `volumePermissions.resources.limits`                        | Init container volume-permissions resource limits                                                                                 | `{}`                       |
 | `volumePermissions.resources.requests`                      | Init container volume-permissions resource requests                                                                               | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`      | User ID for the init container                                                                                                    | `0`                        |
 
 ### Other Parameters
@@ -299,7 +299,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.resources.limits`                                  | The resources limits for the container                                                                                         | `{}`                                                                  |
 | `metrics.resources.requests`                                | The requested resources for the container                                                                                      | `{}`                                                                  |
 | `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                           | `true`                                                                |
-| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                               | `{}`                                                                  |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                               | `nil`                                                                 |
 | `metrics.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                     | `1001`                                                                |
 | `metrics.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                  | `true`                                                                |
 | `metrics.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                    | `false`                                                               |
@@ -398,7 +398,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Use a different Apache Solr version
 
-To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/solr/configuration/change-image-version/).
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
 
 ### Add extra environment variables
 
@@ -414,9 +414,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Use Sidecars and Init Containers
 
-If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter. Similarly, extra init containers can be added using the `initContainers` parameter.
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter.
 
-Refer to the chart documentation for more information on, and examples of, configuring and using [sidecars and init containers](https://docs.bitnami.com/kubernetes/infrastructure/solr/configuration/configure-sidecar-init-containers/).
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Set Pod affinity
 

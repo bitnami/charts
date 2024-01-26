@@ -296,7 +296,7 @@ client:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param client.containerSecurityContext.enabled Enabled Client containers' Security Context
-  ## @param client.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param client.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param client.containerSecurityContext.runAsUser Set Client containers' Security Context runAsUser
   ## @param client.containerSecurityContext.runAsGroup Set Client containers' Security Context runAsGroup
   ## @param client.containerSecurityContext.runAsNonRoot Set Client containers' Security Context runAsNonRoot
@@ -308,7 +308,7 @@ client:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -654,7 +654,7 @@ worker:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param worker.containerSecurityContext.enabled Enabled Worker containers' Security Context
-  ## @param worker.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param worker.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param worker.containerSecurityContext.runAsUser Set Worker containers' Security Context runAsUser
   ## @param worker.containerSecurityContext.runAsGroup Set Worker containers' Security Context runAsGroup
   ## @param worker.containerSecurityContext.runAsNonRoot Set Worker containers' Security Context runAsNonRoot
@@ -666,7 +666,7 @@ worker:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
