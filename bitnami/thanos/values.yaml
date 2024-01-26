@@ -213,6 +213,9 @@ query:
   ## @param query.replicaCount Number of Thanos Query replicas to deploy
   ##
   replicaCount: 1
+  ## @param query.revisionHistoryLimit The number of old history to retain to allow rollback
+  ##
+  revisionHistoryLimit: 10
   ## @param query.updateStrategy.type Update strategy type for Thanos Query replicas
   ##
   updateStrategy:
@@ -907,6 +910,9 @@ queryFrontend:
   ## @param queryFrontend.replicaCount Number of Thanos Query Frontend replicas to deploy
   ##
   replicaCount: 1
+  ## @param queryFrontend.revisionHistoryLimit The number of old history to retain to allow rollback
+  ##
+  revisionHistoryLimit: 10
   ## @param queryFrontend.updateStrategy.type Update strategy type for Thanos Query Frontend replicas
   ##
   updateStrategy:
@@ -1370,6 +1376,9 @@ bucketweb:
   ## @param bucketweb.replicaCount Number of Thanos Bucket Web replicas to deploy
   ##
   replicaCount: 1
+  ## @param bucketweb.revisionHistoryLimit The number of old history to retain to allow rollback
+  ##
+  revisionHistoryLimit: 10
   ## @param bucketweb.updateStrategy.type Update strategy type for Thanos Bucket Web replicas
   ##
   updateStrategy:
@@ -1807,6 +1816,9 @@ compactor:
   ## @param compactor.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param compactor.revisionHistoryLimit The number of old history to retain to allow rollback
+  ##
+  revisionHistoryLimit: 10
   ## K8s CronJob configuration
   ## ref: https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/
   ## @param compactor.cronJob.enabled Run compactor as a CronJob rather than a Deployment
@@ -2312,6 +2324,9 @@ storegateway:
   ## @param storegateway.replicaCount Number of Thanos Store Gateway replicas to deploy
   ##
   replicaCount: 1
+  ## @param storegateway.revisionHistoryLimit The number of old history to retain to allow rollback
+  ##
+  revisionHistoryLimit: 10
   ## @param storegateway.updateStrategy.type Update strategy type for Thanos Store Gateway replicas
   ##
   updateStrategy:
@@ -2971,6 +2986,9 @@ ruler:
   ## @param ruler.replicaCount Number of Thanos Ruler replicas to deploy
   ##
   replicaCount: 1
+  ## @param ruler.revisionHistoryLimit The number of old history to retain to allow rollback
+  ##
+  revisionHistoryLimit: 10
   ## @param ruler.updateStrategy.type Update strategy type for Thanos Ruler replicas
   ##
   updateStrategy:
@@ -3490,6 +3508,9 @@ receive:
   ## @param receive.replicaCount Number of Thanos Receive replicas to deploy
   ##
   replicaCount: 1
+  ## @param receive.revisionHistoryLimit The number of old history to retain to allow rollback
+  ##
+  revisionHistoryLimit: 10
   ## @param receive.updateStrategy.type Update strategy type for Thanos Receive replicas
   ##
   updateStrategy:
@@ -3984,6 +4005,9 @@ receiveDistributor:
   ## @param receiveDistributor.replicaCount Number of Thanos Receive Distributor replicas to deploy
   ##
   replicaCount: 1
+  ## @param receiveDistributor.revisionHistoryLimit The number of old history to retain to allow rollback
+  ##
+  revisionHistoryLimit: 10
   ## @param receiveDistributor.updateStrategy.type Update strategy type for Thanos Receive Distributor replicas
   ##
   updateStrategy:

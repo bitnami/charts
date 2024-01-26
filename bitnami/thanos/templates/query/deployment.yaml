@@ -18,6 +18,7 @@ spec:
   {{- if not .Values.query.autoscaling.enabled }}
   replicas: {{ .Values.query.replicaCount }}
   {{- end }}
+  revisionHistoryLimit: {{ .Values.query.revisionHistoryLimit }}
   {{- if .Values.query.updateStrategy }}
   strategy: {{- toYaml .Values.query.updateStrategy | nindent 4 }}
   {{- end }}
