@@ -890,6 +890,24 @@ envoy:
     ## @param envoy.service.name envoy service name
     ##
     name: ""
+    ## The multi az feature renders multiple service, so you could attach different service provider loadbalancer to it.
+    ## This feature is primarily used to achieve a high availability with multiple loadbalancer
+    ## @param envoy.service.multiAz.enabled enables the rendering of the multiple services
+    ## @param envoy.service.multiAz.zones defines different zones their annotations and loadBalancerIPs
+    ##
+    multiAz:
+      enabled: false
+      zones: []
+    ## Example
+    ## - name: "zone1"
+    ##   loadBalancerIP: "1.2.3.4"
+    ##   annotations:
+    ##    service.beta.kubernetes.io/loadbalancer-zone: zone1
+    ## - name: "zone2"
+    ##   loadBalancerIP: "5.6.7.8"
+    ##   annotations:
+    ##    service.beta.kubernetes.io/loadbalancer-zone: zone2
+    ##
     ## @param envoy.service.targetPorts [object] Map the controller service HTTP/HTTPS port
     ##
     targetPorts:
