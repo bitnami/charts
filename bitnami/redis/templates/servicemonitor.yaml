@@ -34,13 +34,31 @@ spec:
       {{- if .Values.metrics.serviceMonitor.metricRelabelings }}
       metricRelabelings: {{- toYaml .Values.metrics.serviceMonitor.metricRelabelings | nindent 6 }}
       {{- end }}
+      {{- range .Values.metrics.serviceMonitor.additionalEndpoints }}
+    - port: {{ .port }}
+      {{- if .interval }}
+      interval: {{ .interval }}
+      {{- end }}
+      {{- if .path }}
+      path: {{ .path }}
+      {{- end }}
+      {{- if .params }}
+      params:
+        {{- range $key, $value := .params }}
+        {{ $key }}:
+          {{- range $value }}
+          - {{ . | quote }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
   {{- if .Values.metrics.serviceMonitor.podTargetLabels }}
   podTargetLabels: {{- toYaml .Values.metrics.serviceMonitor.podTargetLabels | nindent 4 }}
   {{- end }}
-  {{ with .Values.metrics.serviceMonitor.sampleLimit }}
+  {{- with .Values.metrics.serviceMonitor.sampleLimit }}
   sampleLimit: {{ . }}
   {{- end }}
-  {{ with .Values.metrics.serviceMonitor.targetLimit }}
+  {{- with .Values.metrics.serviceMonitor.targetLimit }}
   targetLimit: {{ . }}
   {{- end }}
   namespaceSelector:
