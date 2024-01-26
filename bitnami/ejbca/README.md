@@ -116,6 +116,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.annotations`                           | Persistent Volume Claim annotations                                                                         | `{}`                    |
 | `sidecars`                                          | Attach additional sidecar containers to the pod                                                             | `[]`                    |
 | `initContainers`                                    | Additional init containers to add to the pods                                                               | `[]`                    |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                          | `false`                 |
 | `hostAliases`                                       | Add deployment host aliases                                                                                 | `[]`                    |
 | `priorityClassName`                                 | EJBCA pods' priorityClassName                                                                               | `""`                    |
 | `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                              | `""`                    |
@@ -138,7 +139,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.limits`                                  | The resources limits for Ejbca containers                                                                   | `{}`                    |
 | `resources.requests`                                | The requested resources for Ejbca containers                                                                | `{}`                    |
 | `containerSecurityContext.enabled`                  | Enabled EJBCA containers' Security Context                                                                  | `true`                  |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                            | `{}`                    |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                            | `nil`                   |
 | `containerSecurityContext.runAsUser`                | Set EJBCA containers' Security Context runAsUser                                                            | `1001`                  |
 | `containerSecurityContext.runAsNonRoot`             | Set Controller container's Security Context runAsNonRoot                                                    | `true`                  |
 | `containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                         | `false`                 |
@@ -167,6 +168,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                               | Custom liveness probe to execute (when the main one is disabled)                                            | `{}`                    |
 | `customReadinessProbe`                              | Custom readiness probe to execute (when the main one is disabled)                                           | `{}`                    |
 | `containerPorts`                                    | EJBCA Container ports to open                                                                               | `{}`                    |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for WordPress pod                                                         | `true`                  |
+| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                      | `""`                    |
+| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                      | `false`                 |
+| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                        | `{}`                    |
 
 ### Service parameters
 
@@ -292,15 +297,56 @@ For example, for a release using `secretPassword` and `dbPassword` to scale up t
 
 ### Configure Sidecars and Init Containers
 
-If additional containers are needed in the same pod as EJBCA (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. Similarly, you can add extra init containers using the `initContainers` parameter.
+If additional containers are needed in the same pod as EJBCA (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
 
-[Learn more about configuring and using sidecar and init containers](https://docs.bitnami.com/kubernetes/apps/ejbca/configuration/configure-sidecar-init-containers/).
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Use an external database
 
-Sometimes, you may want to have EJBCA connect to an external database rather than a database within your cluster - for example, when using a managed database service, or when running a single database server for all your applications. To do this, set the `mariadb.enabled` parameter to `false` and specify the credentials for the external database using the `externalDatabase.*` parameters.
+Sometimes, you may want to have EJBCA connect to an external database rather than a database within your cluster - for example, when using a managed database service, or when running a single database server for all your applications. To do this, set the `mariadb.enabled` parameter to `false` and specify the credentials for the external database using the `externalDatabase.*` parameters. Here is an example:
 
-Refer to the [chart documentation on using an external database](https://docs.bitnami.com/kubernetes/apps/ejbca/configuration/use-external-database) for more details and an example.
+```text
+mysql.enabled=false
+externalDatabase.host=myexternalhost
+externalDatabase.user=myuser
+externalDatabase.password=mypassword
+externalDatabase.database=mydatabase
+externalDatabase.port=3306
+```
 
 ### Set Pod affinity
 
@@ -310,7 +356,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Use a different EJBCA version
 
-To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/apps/ejbca/configuration/change-image-version/).
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
 
 ## Persistence
 
@@ -364,8 +410,6 @@ Additionally, updates the MariaDB subchart to it newest major, 10.0.0, which con
 ### To 2.0.0
 
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/apps/ejbca/administration/upgrade-helm3/).
 
 ### To 1.0.0
 

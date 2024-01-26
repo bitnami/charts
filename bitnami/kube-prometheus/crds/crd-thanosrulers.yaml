@@ -1,11 +1,12 @@
-# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.68.0/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml
+# Source: https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v{version}/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml
+# Version: 0.71.2
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.1
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.13.0
+    operator.prometheus.io/version: 0.71.2
   name: thanosrulers.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -3871,8 +3872,14 @@ spec:
                   for deletion will be performed on the underlying objects.
                 type: boolean
               podMetadata:
-                description: PodMetadata contains Labels and Annotations gets propagated
-                  to the thanos ruler pods.
+                description: "PodMetadata configures labels and annotations which
+                  are propagated to the ThanosRuler pods. \n The following items are
+                  reserved and cannot be overridden: * \"app.kubernetes.io/name\"
+                  label, set to \"thanos-ruler\". * \"app.kubernetes.io/managed-by\"
+                  label, set to \"prometheus-operator\". * \"app.kubernetes.io/instance\"
+                  label, set to the name of the ThanosRuler instance. * \"thanos-ruler\"
+                  label, set to the name of the ThanosRuler instance. * \"kubectl.kubernetes.io/default-container\"
+                  annotation, set to \"thanos-ruler\"."
                 properties:
                   annotations:
                     additionalProperties:
@@ -4286,8 +4293,8 @@ spec:
                 description: Storage spec to specify how storage shall be used.
                 properties:
                   disableMountSubPath:
-                    description: '*Deprecated: subPath usage will be removed in a
-                      future release.*'
+                    description: 'Deprecated: subPath usage will be removed in a future
+                      release.'
                     type: boolean
                   emptyDir:
                     description: 'EmptyDirVolumeSource to be used by the StatefulSet.
@@ -4839,7 +4846,7 @@ spec:
                             type: string
                         type: object
                       status:
-                        description: '*Deprecated: this field is never set.*'
+                        description: 'Deprecated: this field is never set.'
                         properties:
                           accessModes:
                             description: 'accessModes contains the actual access modes

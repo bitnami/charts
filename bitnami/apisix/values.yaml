@@ -130,8 +130,7 @@ dataPlane:
   ## @param dataPlane.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
-    # As the user needs to manually unseal the apisix, we don't want Apisix to restart
-    enabled: false
+    enabled: true
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 5
@@ -199,7 +198,7 @@ dataPlane:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param dataPlane.containerSecurityContext.enabled Enabled APISIX containers' Security Context
-  ## @param dataPlane.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param dataPlane.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dataPlane.containerSecurityContext.runAsUser Set APISIX containers' Security Context runAsUser
   ## @param dataPlane.containerSecurityContext.runAsNonRoot Set APISIX containers' Security Context runAsNonRoot
   ## @param dataPlane.containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context runAsNonRoot
@@ -209,7 +208,7 @@ dataPlane:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
@@ -225,6 +224,9 @@ dataPlane:
   ## @param dataPlane.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param dataPlane.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param dataPlane.hostAliases APISIX pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -735,7 +737,7 @@ dataPlane:
     annotations: {}
     ## @param dataPlane.serviceAccount.automountServiceAccountToken Automount service account token for the apisix service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section APISIX Data Plane Metrics Parameters
   ##
@@ -832,8 +834,7 @@ controlPlane:
   ## @param controlPlane.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
-    # As the user needs to manually unseal the apisix, we don't want Apisix to restart
-    enabled: false
+    enabled: true
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 5
@@ -901,7 +902,7 @@ controlPlane:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param controlPlane.containerSecurityContext.enabled Enabled APISIX containers' Security Context
-  ## @param controlPlane.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param controlPlane.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param controlPlane.containerSecurityContext.runAsUser Set APISIX containers' Security Context runAsUser
   ## @param controlPlane.containerSecurityContext.runAsNonRoot Set APISIX containers' Security Context runAsNonRoot
   ## @param controlPlane.containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context runAsNonRoot
@@ -911,7 +912,7 @@ controlPlane:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
@@ -927,6 +928,9 @@ controlPlane:
   ## @param controlPlane.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param controlPlane.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param controlPlane.hostAliases APISIX pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1464,7 +1468,7 @@ controlPlane:
     annotations: {}
     ## @param controlPlane.serviceAccount.automountServiceAccountToken Automount service account token for the apisix service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section APISIX Control Plane Metrics Parameters
   ##
@@ -1548,7 +1552,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/apisix-dashboard
-    tag: 3.0.1-debian-11-r140
+    tag: 3.0.1-debian-11-r141
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1748,6 +1752,9 @@ dashboard:
     ##
     ca: ""
 
+  ## @param dashboard.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param dashboard.hostAliases APISIX Dashboard pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1941,7 +1948,7 @@ dashboard:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param dashboard.containerSecurityContext.enabled Enabled Dashboard container' Security Context
-  ## @param dashboard.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param dashboard.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dashboard.containerSecurityContext.runAsUser Set Dashboard container' Security Context runAsUser
   ## @param dashboard.containerSecurityContext.runAsNonRoot Set Dashboard container' Security Context runAsNonRoot
   ## @param dashboard.containerSecurityContext.privileged Set Dashboard container' Security Context privileged
@@ -1952,7 +1959,7 @@ dashboard:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
@@ -2224,7 +2231,7 @@ ingressController:
   ##
   enabled: true
   ## Bitnami APISIX Ingress Controller image
-  ## ref: https://hub.docker.com/r/bitnami/vault-k8s/tags/
+  ## ref: https://hub.docker.com/r/bitnami/apisix-ingress-controller/tags/
   ## @param ingressController.image.registry [default: REGISTRY_NAME] APISIX Ingress Controller image registry
   ## @param ingressController.image.repository [default: REPOSITORY_NAME/apisix-ingress-controller] APISIX Ingress Controller image repository
   ## @skip ingressController.image.tag APISIX Ingress Controller image tag (immutable tags are recommended)
@@ -2236,7 +2243,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/apisix-ingress-controller
-    tag: 1.7.1-debian-11-r1
+    tag: 1.7.1-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2341,7 +2348,7 @@ ingressController:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param ingressController.containerSecurityContext.enabled Enabled APISIX Ingress Controller containers' Security Context
-  ## @param ingressController.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param ingressController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param ingressController.containerSecurityContext.runAsUser Set APISIX Ingress Controller containers' Security Context runAsUser
   ## @param ingressController.containerSecurityContext.runAsNonRoot Set APISIX Ingress Controller containers' Security Context runAsNonRoot
   ## @param ingressController.containerSecurityContext.privileged Set APISIX Ingress Controller containers' Security Context privileged
@@ -2352,7 +2359,7 @@ ingressController:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2369,6 +2376,9 @@ ingressController:
   ## @param ingressController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param ingressController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param ingressController.hostAliases APISIX Ingress Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2814,7 +2824,7 @@ ingressController:
     annotations: {}
     ## @param ingressController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## Prometheus metrics
   ##
@@ -2883,7 +2893,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r94
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
@@ -2901,7 +2911,7 @@ waitContainer:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param waitContainer.containerSecurityContext.enabled Enabled APISIX containers' Security Context
-  ## @param waitContainer.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param waitContainer.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param waitContainer.containerSecurityContext.runAsUser Set APISIX containers' Security Context runAsUser
   ## @param waitContainer.containerSecurityContext.runAsNonRoot Set APISIX containers' Security Context runAsNonRoot
   ## @param waitContainer.containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context runAsNonRoot
@@ -2912,7 +2922,7 @@ waitContainer:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false

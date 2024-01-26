@@ -95,6 +95,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                                | Description                                                                               | Value            |
 | --------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------- |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                        | `false`          |
 | `hostAliases`                                       | Deployment pod host aliases                                                               | `[]`             |
 | `containerPorts.http`                               | HTTP port to expose at container level                                                    | `8080`           |
 | `containerPorts.https`                              | HTTPS port to expose at container level                                                   | `8443`           |
@@ -105,7 +106,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `podSecurityContext.fsGroup`                        | User ID for the container                                                                 | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`          |

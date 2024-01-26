@@ -187,7 +187,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                      | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set OAuth2 Proxy pod's Security Context fsGroup                                                  | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                             | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                 | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                 | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                       | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                    | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                      | `false`          |
@@ -197,6 +197,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                 | `RuntimeDefault` |
 | `command`                                           | Override default container command (useful when using custom images)                             | `[]`             |
 | `args`                                              | Override default container args (useful when using custom images)                                | `[]`             |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                               | `false`          |
 | `hostAliases`                                       | OAuth2 Proxy pods host aliases                                                                   | `[]`             |
 | `podLabels`                                         | Extra labels for OAuth2 Proxy pods                                                               | `{}`             |
 | `podAnnotations`                                    | Annotations for OAuth2 Proxy pods                                                                | `{}`             |
@@ -317,7 +318,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as OAuth2 Proxy (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/oauth2-proxy/configuration/configure-sidecar-init-containers/).
+If additional containers are needed in the same pod as OAuth2 Proxy (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Pod affinity
 
@@ -337,9 +374,19 @@ This major updates the Redis&reg; subchart to its newest major, 18.0.0. [Here](h
 
 NOTE: Due to an error in our release process, Redis&reg;' chart versions higher or equal than 17.15.4 already use Redis&reg; 7.2 by default.
 
-### To any previous version
+### To 3.0.0
 
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/oauth2-proxy/administration/upgrade/).
+This major update the Redis&reg; subchart to its newest major, 17.0.0, which updates Redis&reg; from its version 6.2 to version 7.0.
+
+### To 2.0.0
+
+This major update the Redis&reg; subchart to its newest major, 16.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1600) you can find more info about the specific changes.
+
+Additionally, this chart has been standardised adding features from other charts.
+
+### To 1.0.0
+
+This major update the Redis&reg; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1500) you can find more info about the specific changes.
 
 ## License
 

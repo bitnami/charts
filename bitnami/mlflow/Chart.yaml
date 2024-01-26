@@ -10,7 +10,7 @@ annotations:
     - name: mlflow
       image: docker.io/bitnami/mlflow:2.9.2-debian-11-r1
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r93
+      image: docker.io/bitnami/os-shell:11-debian-11-r94
 apiVersion: v2
 appVersion: 2.9.2
 dependencies:
@@ -43,4 +43,4 @@ name: mlflow
 sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/mlflow
 - https://github.com/mlflow/mlflow
-version: 0.5.0
+version: 0.6.1

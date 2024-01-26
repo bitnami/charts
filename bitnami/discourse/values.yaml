@@ -153,6 +153,9 @@ podSecurityContext:
   sysctls: []
   supplementalGroups: []
   fsGroup: 0
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -357,14 +360,14 @@ discourse:
   ## Configure Discourse containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param discourse.containerSecurityContext.enabled Enabled Discourse containers' Security Context
-  ## @param discourse.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param discourse.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param discourse.containerSecurityContext.runAsUser Set Discourse containers' Security Context runAsUser
   ## @param discourse.containerSecurityContext.runAsNonRoot Set Discourse containers' Security Context runAsNonRoot
   ## @param discourse.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
     runAsNonRoot: false
     seccompProfile:
@@ -497,14 +500,14 @@ sidekiq:
   ## Configure Sidekiq containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param sidekiq.containerSecurityContext.enabled Enabled Sidekiq containers' Security Context
-  ## @param sidekiq.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param sidekiq.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param sidekiq.containerSecurityContext.runAsUser Set Sidekiq containers' Security Context runAsUser
   ## @param sidekiq.containerSecurityContext.runAsNonRoot Set Sidekiq containers' Security Context runAsNonRoot
   ## @param sidekiq.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
     runAsNonRoot: false
     seccompProfile:
@@ -718,12 +721,12 @@ volumePermissions:
   ## Init container' Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
   ## @param volumePermissions.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
     seccompProfile:
       type: "RuntimeDefault"

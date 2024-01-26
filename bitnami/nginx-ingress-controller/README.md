@@ -85,6 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`                     | Nginx Ingress Controller image pull policy                                                                                                         | `IfNotPresent`                             |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                   | `[]`                                       |
 | `containerPorts`                       | Controller container ports to open                                                                                                                 | `{}`                                       |
+| `automountServiceAccountToken`         | Mount Service Account token in pod                                                                                                                 | `true`                                     |
 | `hostAliases`                          | Deployment pod host aliases                                                                                                                        | `[]`                                       |
 | `config`                               | Custom configuration options for NGINX                                                                                                             | `{}`                                       |
 | `proxySetHeaders`                      | Custom headers before sending traffic to backends                                                                                                  | `{}`                                       |
@@ -135,7 +136,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.fsGroup`                        | Group ID for the container filesystem                                                                                                       | `1001`           |
 | `containerSecurityContext.enabled`                  | Enable Controller containers' Security Context                                                                                              | `true`           |
 | `containerSecurityContext.allowPrivilegeEscalation` | Switch to allow priviledge escalation on the Controller container                                                                           | `false`          |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                            | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                            | `nil`            |
 | `containerSecurityContext.runAsUser`                | User ID for the Controller container                                                                                                        | `1001`           |
 | `containerSecurityContext.capabilities.drop`        | Linux Kernel capabilities that should be dropped                                                                                            | `[]`             |
 | `containerSecurityContext.capabilities.add`         | Linux Kernel capabilities that should be added                                                                                              | `[]`             |
@@ -195,6 +196,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                               | Description                                                                                                     | Value                   |
 | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `defaultBackend.enabled`                                           | Enable a default backend based on NGINX                                                                         | `true`                  |
+| `defaultBackend.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                              | `true`                  |
 | `defaultBackend.hostAliases`                                       | Add deployment host aliases                                                                                     | `[]`                    |
 | `defaultBackend.image.registry`                                    | Default backend image registry                                                                                  | `REGISTRY_NAME`         |
 | `defaultBackend.image.repository`                                  | Default backend image repository                                                                                | `REPOSITORY_NAME/nginx` |
@@ -213,7 +215,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `defaultBackend.containerSecurityContext.enabled`                  | Enable Default backend containers' Security Context                                                             | `true`                  |
 | `defaultBackend.containerSecurityContext.capabilities.drop`        | Linux Kernel capabilities that should be dropped                                                                | `[]`                    |
 | `defaultBackend.containerSecurityContext.allowPrivilegeEscalation` | Switch to allow priviledge escalation on the container                                                          | `false`                 |
-| `defaultBackend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `{}`                    |
+| `defaultBackend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `nil`                   |
 | `defaultBackend.containerSecurityContext.runAsUser`                | User ID for the Default backend container                                                                       | `1001`                  |
 | `defaultBackend.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                   | `true`                  |
 | `defaultBackend.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                | `RuntimeDefault`        |
@@ -295,14 +297,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### RBAC parameters
 
-| Name                                          | Description                                                    | Value  |
-| --------------------------------------------- | -------------------------------------------------------------- | ------ |
-| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Controller pods    | `true` |
-| `serviceAccount.name`                         | Name of the created ServiceAccount                             | `""`   |
-| `serviceAccount.annotations`                  | Annotations for service account.                               | `{}`   |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account | `true` |
-| `rbac.create`                                 | Specifies whether RBAC rules should be created                 | `true` |
-| `rbac.rules`                                  | Custom RBAC rules                                              | `[]`   |
+| Name                                          | Description                                                    | Value   |
+| --------------------------------------------- | -------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Controller pods    | `true`  |
+| `serviceAccount.name`                         | Name of the created ServiceAccount                             | `""`    |
+| `serviceAccount.annotations`                  | Annotations for service account.                               | `{}`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account | `false` |
+| `rbac.create`                                 | Specifies whether RBAC rules should be created                 | `true`  |
+| `rbac.rules`                                  | Custom RBAC rules                                              | `[]`    |
 
 ### Other parameters
 

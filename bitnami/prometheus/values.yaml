@@ -84,7 +84,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.26.0-debian-11-r46
+    tag: 0.26.0-debian-11-r47
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -199,7 +199,7 @@ alertmanager:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param alertmanager.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param alertmanager.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param alertmanager.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param alertmanager.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param alertmanager.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param alertmanager.containerSecurityContext.privileged Set container's Security Context privileged
@@ -210,7 +210,7 @@ alertmanager:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -239,6 +239,9 @@ alertmanager:
   ## - --tsdb.path=/data/
   ##
   extraArgs: []
+  ## @param alertmanager.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param alertmanager.hostAliases Alertmanager pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -757,7 +760,7 @@ server:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param server.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
@@ -768,7 +771,7 @@ server:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -797,6 +800,9 @@ server:
   ## - --tsdb.path=/data/
   ##
   extraArgs: []
+  ## @param server.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param server.hostAliases Prometheus pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1005,7 +1011,7 @@ server:
     ## Thanos Sidecar container's securityContext
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param server.thanos.containerSecurityContext.enabled Enabled containers' Security Context
-    ## @param server.thanos.containerSecurityContext.seLinuxOptions Set SELinux options in container
+    ## @param server.thanos.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param server.thanos.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param server.thanos.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param server.thanos.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1016,7 +1022,7 @@ server:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: {}
+      seLinuxOptions: null
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -1388,7 +1394,7 @@ server:
     annotations: {}
     ## @param server.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## Prometheus service parameters
   ##
@@ -1538,7 +1544,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r94
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1558,12 +1564,12 @@ volumePermissions:
     requests: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0

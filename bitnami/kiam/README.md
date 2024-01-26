@@ -97,6 +97,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.enabled`                                      | Deploy the kiam server                                                                                                                      | `true`           |
 | `server.containerPort`                                | HTTPS port to expose at container level                                                                                                     | `8443`           |
 | `server.resourceType`                                 | Specify how to deploy the server (allowed values: `daemonset` and `deployment`)                                                             | `daemonset`      |
+| `server.automountServiceAccountToken`                 | Mount Service Account token in pod                                                                                                          | `true`           |
 | `server.hostAliases`                                  | Add deployment host aliases                                                                                                                 | `[]`             |
 | `server.useHostNetwork`                               | Use host networking (ports will be directly exposed in the host)                                                                            | `false`          |
 | `server.replicaCount`                                 | Number of replicas to deploy (when `server.resourceType` is `daemonset`)                                                                    | `1`              |
@@ -146,7 +147,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.containerSecurityContext.enabled`             | Enabled kiam server containers' Security Context                                                                                            | `true`           |
 | `server.containerSecurityContext.runAsUser`           | Set kiam server container's Security Context runAsUser                                                                                      | `1001`           |
 | `server.containerSecurityContext.runAsNonRoot`        | Set kiam server container's Security Context runAsNonRoot                                                                                   | `true`           |
-| `server.containerSecurityContext.seLinuxOptions`      | Set kiam server container's Security Context SE Linux options                                                                               | `{}`             |
+| `server.containerSecurityContext.seLinuxOptions`      | Set kiam server container's Security Context SE Linux options                                                                               | `nil`            |
 | `server.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                            | `RuntimeDefault` |
 | `server.podSecurityContext.enabled`                   | Enabled kiam server pods' Security Context                                                                                                  | `true`           |
 | `server.podSecurityContext.fsGroupChangePolicy`       | Set filesystem group change policy                                                                                                          | `Always`         |
@@ -191,12 +192,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### kiam server Service Account parameters
 
-| Name                                                 | Description                                                                                                         | Value  |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------ |
-| `server.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true` |
-| `server.serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
-| `server.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true` |
-| `server.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`   |
+| Name                                                 | Description                                                                                                         | Value   |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
+| `server.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true`  |
+| `server.serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
+| `server.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `false` |
+| `server.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`    |
 
 ### kiam server metrics parameters
 
@@ -228,6 +229,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.schedulerName`                                | Name of the k8s scheduler (other than default)                                                                                              | `""`                      |
 | `agent.topologySpreadConstraints`                    | Topology Spread Constraints for pod assignment                                                                                              | `[]`                      |
 | `agent.allowRouteRegExp`                             | Regexp with the allowed paths for agents to redirect                                                                                        | `""`                      |
+| `agent.automountServiceAccountToken`                 | Mount Service Account token in pod                                                                                                          | `false`                   |
 | `agent.hostAliases`                                  | Add deployment host aliases                                                                                                                 | `[]`                      |
 | `agent.containerPort`                                | HTTPS port to expose at container level                                                                                                     | `8183`                    |
 | `agent.iptables`                                     | Have the agent modify the host iptables rules                                                                                               | `false`                   |
@@ -275,7 +277,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.containerSecurityContext.enabled`             | Enabled agent containers' Security Context                                                                                                  | `true`                    |
 | `agent.containerSecurityContext.runAsUser`           | Set agent container's Security Context runAsUser                                                                                            | `0`                       |
 | `agent.containerSecurityContext.runAsNonRoot`        | Set agent container's Security Context runAsNonRoot                                                                                         | `false`                   |
-| `agent.containerSecurityContext.seLinuxOptions`      | Set agent container's Security Context SE Linux options                                                                                     | `{}`                      |
+| `agent.containerSecurityContext.seLinuxOptions`      | [object] Set agent container's Security Context SE Linux options                                                                            | `nil`                     |
 | `agent.containerSecurityContext.capabilities.add`    | Add capabilities for the securityContext                                                                                                    | `["NET_ADMIN"]`           |
 | `agent.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                            | `RuntimeDefault`          |
 | `agent.podSecurityContext.enabled`                   | Enabled agent pods' Security Context                                                                                                        | `true`                    |
@@ -394,9 +396,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Configure Sidecars and Init Containers
 
-If additional containers are needed in the same pod as Kiam (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. Similarly, you can add extra init containers using the `initContainers` parameter.
+If additional containers are needed in the same pod as Kiam (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
 
-[Learn more about configuring and using sidecar and init containers](https://docs.bitnami.com/kubernetes/infrastructure/kiam/configuration/configure-sidecar-init-containers/).
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Deploy extra resources
 

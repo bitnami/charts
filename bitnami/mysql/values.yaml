@@ -195,6 +195,9 @@ primary:
   ## @param primary.lifecycleHooks for the MySQL Primary container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param primary.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param primary.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -324,7 +327,7 @@ primary:
   ## MySQL primary container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param primary.containerSecurityContext.enabled MySQL primary container securityContext
-  ## @param primary.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param primary.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param primary.containerSecurityContext.runAsUser User ID for the MySQL primary container
   ## @param primary.containerSecurityContext.runAsNonRoot Set MySQL primary container's Security Context runAsNonRoot
   ## @param primary.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
@@ -333,7 +336,7 @@ primary:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
@@ -595,6 +598,9 @@ secondary:
   ## @param secondary.replicaCount Number of MySQL secondary replicas
   ##
   replicaCount: 1
+  ## @param secondary.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param secondary.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -734,7 +740,7 @@ secondary:
   ## MySQL secondary container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param secondary.containerSecurityContext.enabled MySQL secondary container securityContext
-  ## @param secondary.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param secondary.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param secondary.containerSecurityContext.runAsUser User ID for the MySQL secondary container
   ## @param secondary.containerSecurityContext.runAsNonRoot Set MySQL secondary container's Security Context runAsNonRoot
   ## @param secondary.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
@@ -743,7 +749,7 @@ secondary:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
@@ -1135,13 +1141,13 @@ metrics:
   ## MySQL metrics container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled MySQL metrics container securityContext
-  ## @param metrics.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser User ID for the MySQL metrics container
   ## @param metrics.containerSecurityContext.runAsNonRoot Set MySQL metrics container's Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
   ## MySQL Prometheus exporter service parameters

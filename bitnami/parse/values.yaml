@@ -97,6 +97,9 @@ server:
     ## Enable debug mode
     ##
     debug: false
+  ## @param server.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param server.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -126,7 +129,7 @@ server:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param server.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
@@ -137,7 +140,7 @@ server:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -432,7 +435,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/parse-dashboard
-    tag: 5.3.0-debian-11-r2
+    tag: 5.3.0-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -457,6 +460,9 @@ dashboard:
   ##
   containerPorts:
     http: 4040
+  ## @param dashboard.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param dashboard.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -478,7 +484,7 @@ dashboard:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param dashboard.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param dashboard.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param dashboard.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dashboard.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param dashboard.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param dashboard.containerSecurityContext.privileged Set container's Security Context privileged
@@ -489,7 +495,7 @@ dashboard:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -940,7 +946,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r94
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

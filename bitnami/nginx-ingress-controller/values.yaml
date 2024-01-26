@@ -79,6 +79,9 @@ containerPorts:
   http: 8080
   https: 8443
   metrics: 10254
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: true
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -253,7 +256,7 @@ podSecurityContext:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable Controller containers' Security Context
 ## @param containerSecurityContext.allowPrivilegeEscalation Switch to allow priviledge escalation on the Controller container
-## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser User ID for the Controller container
 ## @param containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities that should be dropped
 ## @param containerSecurityContext.capabilities.add [array] Linux Kernel capabilities that should be added
@@ -263,7 +266,7 @@ podSecurityContext:
 containerSecurityContext:
   enabled: true
   allowPrivilegeEscalation: false
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 1001
   capabilities:
     drop: ["ALL"]
@@ -487,6 +490,9 @@ defaultBackend:
   ## @param defaultBackend.enabled Enable a default backend based on NGINX
   ##
   enabled: true
+  ## @param defaultBackend.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param defaultBackend.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -557,7 +563,7 @@ defaultBackend:
   ## @param defaultBackend.containerSecurityContext.enabled Enable Default backend containers' Security Context
   ## @param defaultBackend.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities that should be dropped
   ## @param defaultBackend.containerSecurityContext.allowPrivilegeEscalation Switch to allow priviledge escalation on the container
-  ## @param defaultBackend.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param defaultBackend.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param defaultBackend.containerSecurityContext.runAsUser User ID for the Default backend container
   ## @param defaultBackend.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param defaultBackend.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
@@ -565,7 +571,7 @@ defaultBackend:
   containerSecurityContext:
     enabled: true
     allowPrivilegeEscalation: false
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     capabilities:
       drop: ["ALL"]
@@ -890,7 +896,7 @@ serviceAccount:
   annotations: {}
   ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
 ## Role Based Access
 ## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##

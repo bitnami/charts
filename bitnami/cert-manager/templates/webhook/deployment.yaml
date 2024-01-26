@@ -64,6 +64,7 @@ spec:
       {{- if .Values.webhook.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.webhook.automountServiceAccountToken }}
       {{- if .Values.webhook.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.hostAliases "context" $) | nindent 8 }}
       {{- end }}

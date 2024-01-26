@@ -23,8 +23,6 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 This chart bootstraps a [Supabase](https://www.supabase.com/) deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/supabase/get-started/).
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -109,9 +107,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jwt.autoGenerate.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                                               | `true`                    |
 | `jwt.autoGenerate.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                             | `""`                      |
 | `jwt.autoGenerate.serviceAccount.annotations`                        | Additional Service Account annotations (evaluated as a template)                                                                                   | `{}`                      |
-| `jwt.autoGenerate.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                     | `true`                    |
+| `jwt.autoGenerate.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                     | `false`                   |
 | `jwt.autoGenerate.containerSecurityContext.enabled`                  | Enabled jwt init job containers' Security Context                                                                                                  | `true`                    |
-| `jwt.autoGenerate.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                   | `{}`                      |
+| `jwt.autoGenerate.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                   | `nil`                     |
 | `jwt.autoGenerate.containerSecurityContext.runAsUser`                | Set jwt init job containers' Security Context runAsUser                                                                                            | `1001`                    |
 | `jwt.autoGenerate.containerSecurityContext.runAsNonRoot`             | Set jwt init job container's Security Context runAsNonRoot                                                                                         | `true`                    |
 | `jwt.autoGenerate.containerSecurityContext.privileged`               | Set jwt init job container's Security Context privileged                                                                                           | `false`                   |
@@ -130,6 +128,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jwt.autoGenerate.extraVolumeMounts`                                 | Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`.                          | `[]`                      |
 | `jwt.autoGenerate.resources.limits`                                  | The resources limits for the container                                                                                                             | `{}`                      |
 | `jwt.autoGenerate.resources.requests`                                | The requested resources for the container                                                                                                          | `{}`                      |
+| `jwt.autoGenerate.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                 | `true`                    |
 | `jwt.autoGenerate.hostAliases`                                       | Add deployment host aliases                                                                                                                        | `[]`                      |
 | `jwt.autoGenerate.annotations`                                       | Add annotations to the job                                                                                                                         | `{}`                      |
 | `jwt.autoGenerate.podLabels`                                         | Additional pod labels                                                                                                                              | `{}`                      |
@@ -182,7 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                       | `[]`                     |
 | `auth.podSecurityContext.fsGroup`                        | Set Supabase auth pod's Security Context fsGroup                                                                                                  | `1001`                   |
 | `auth.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                              | `true`                   |
-| `auth.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                  | `{}`                     |
+| `auth.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                  | `nil`                    |
 | `auth.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                        | `1001`                   |
 | `auth.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                     | `true`                   |
 | `auth.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                       | `false`                  |
@@ -192,6 +191,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                  | `RuntimeDefault`         |
 | `auth.command`                                           | Override default container command (useful when using custom images)                                                                              | `[]`                     |
 | `auth.args`                                              | Override default container args (useful when using custom images)                                                                                 | `[]`                     |
+| `auth.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                | `false`                  |
 | `auth.hostAliases`                                       | Supabase auth pods host aliases                                                                                                                   | `[]`                     |
 | `auth.podLabels`                                         | Extra labels for Supabase auth pods                                                                                                               | `{}`                     |
 | `auth.podAnnotations`                                    | Annotations for Supabase auth pods                                                                                                                | `{}`                     |
@@ -278,7 +278,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `meta.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                       | `[]`                                     |
 | `meta.podSecurityContext.fsGroup`                        | Set Supabase Postgres Meta pod's Security Context fsGroup                                                                                                         | `1001`                                   |
 | `meta.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                              | `true`                                   |
-| `meta.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                  | `{}`                                     |
+| `meta.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                  | `nil`                                    |
 | `meta.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                        | `1001`                                   |
 | `meta.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                     | `true`                                   |
 | `meta.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                       | `false`                                  |
@@ -288,6 +288,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `meta.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                  | `RuntimeDefault`                         |
 | `meta.command`                                           | Override default container command (useful when using custom images)                                                                                              | `[]`                                     |
 | `meta.args`                                              | Override default container args (useful when using custom images)                                                                                                 | `[]`                                     |
+| `meta.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                | `false`                                  |
 | `meta.hostAliases`                                       | Supabase Postgres Meta pods host aliases                                                                                                                          | `[]`                                     |
 | `meta.podLabels`                                         | Extra labels for Supabase Postgres Meta pods                                                                                                                      | `{}`                                     |
 | `meta.podAnnotations`                                    | Annotations for Supabase Postgres Meta pods                                                                                                                       | `{}`                                     |
@@ -377,7 +378,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `realtime.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                         | `[]`                                |
 | `realtime.podSecurityContext.fsGroup`                        | Set Supabase realtime pod's Security Context fsGroup                                                                                                | `1001`                              |
 | `realtime.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                | `true`                              |
-| `realtime.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                    | `{}`                                |
+| `realtime.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                    | `nil`                               |
 | `realtime.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                          | `1001`                              |
 | `realtime.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                       | `true`                              |
 | `realtime.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                         | `false`                             |
@@ -387,6 +388,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `realtime.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                    | `RuntimeDefault`                    |
 | `realtime.command`                                           | Override default container command (useful when using custom images)                                                                                | `[]`                                |
 | `realtime.args`                                              | Override default container args (useful when using custom images)                                                                                   | `[]`                                |
+| `realtime.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                  | `false`                             |
 | `realtime.hostAliases`                                       | Supabase realtime pods host aliases                                                                                                                 | `[]`                                |
 | `realtime.podLabels`                                         | Extra labels for Supabase realtime pods                                                                                                             | `{}`                                |
 | `realtime.podAnnotations`                                    | Annotations for Supabase realtime pods                                                                                                              | `{}`                                |
@@ -473,7 +475,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rest.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                          | `[]`                        |
 | `rest.podSecurityContext.fsGroup`                        | Set Supabase rest pod's Security Context fsGroup                                                                                                     | `1001`                      |
 | `rest.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                 | `true`                      |
-| `rest.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                     | `{}`                        |
+| `rest.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                     | `nil`                       |
 | `rest.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                           | `1001`                      |
 | `rest.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                        | `true`                      |
 | `rest.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                          | `false`                     |
@@ -483,6 +485,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rest.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                     | `RuntimeDefault`            |
 | `rest.command`                                           | Override default container command (useful when using custom images)                                                                                 | `[]`                        |
 | `rest.args`                                              | Override default container args (useful when using custom images)                                                                                    | `[]`                        |
+| `rest.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                   | `false`                     |
 | `rest.hostAliases`                                       | Supabase rest pods host aliases                                                                                                                      | `[]`                        |
 | `rest.podLabels`                                         | Extra labels for Supabase rest pods                                                                                                                  | `{}`                        |
 | `rest.podAnnotations`                                    | Annotations for Supabase rest pods                                                                                                                   | `{}`                        |
@@ -569,7 +572,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `storage.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                        | `[]`                               |
 | `storage.podSecurityContext.fsGroup`                        | Set Supabase storage pod's Security Context fsGroup                                                                                                | `1001`                             |
 | `storage.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                               | `true`                             |
-| `storage.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                   | `{}`                               |
+| `storage.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                   | `nil`                              |
 | `storage.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                         | `1001`                             |
 | `storage.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                      | `true`                             |
 | `storage.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                        | `false`                            |
@@ -579,6 +582,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `storage.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                   | `RuntimeDefault`                   |
 | `storage.command`                                           | Override default container command (useful when using custom images)                                                                               | `[]`                               |
 | `storage.args`                                              | Override default container args (useful when using custom images)                                                                                  | `[]`                               |
+| `storage.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                 | `false`                            |
 | `storage.hostAliases`                                       | Supabase storage pods host aliases                                                                                                                 | `[]`                               |
 | `storage.podLabels`                                         | Extra labels for Supabase storage pods                                                                                                             | `{}`                               |
 | `storage.podAnnotations`                                    | Annotations for Supabase storage pods                                                                                                              | `{}`                               |
@@ -681,7 +685,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `studio.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                       | `[]`                              |
 | `studio.podSecurityContext.fsGroup`                        | Set Supabase studio pod's Security Context fsGroup                                                                                                | `1001`                            |
 | `studio.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                              | `true`                            |
-| `studio.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                  | `{}`                              |
+| `studio.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                  | `nil`                             |
 | `studio.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                        | `1001`                            |
 | `studio.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                     | `true`                            |
 | `studio.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                       | `false`                           |
@@ -691,6 +695,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `studio.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                  | `RuntimeDefault`                  |
 | `studio.command`                                           | Override default container command (useful when using custom images)                                                                              | `[]`                              |
 | `studio.args`                                              | Override default container args (useful when using custom images)                                                                                 | `[]`                              |
+| `studio.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                | `false`                           |
 | `studio.hostAliases`                                       | Supabase studio pods host aliases                                                                                                                 | `[]`                              |
 | `studio.podLabels`                                         | Extra labels for Supabase studio pods                                                                                                             | `{}`                              |
 | `studio.podAnnotations`                                    | Annotations for Supabase studio pods                                                                                                              | `{}`                              |
@@ -756,7 +761,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                           | `[]`                                |
 | `volumePermissions.resources.limits`                        | The resources limits for the init container                                                     | `{}`                                |
 | `volumePermissions.resources.requests`                      | The requested resources for the init container                                                  | `{}`                                |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `{}`                                |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `nil`                               |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                 | `0`                                 |
 | `psqlImage.registry`                                        | PostgreSQL client image registry                                                                | `REGISTRY_NAME`                     |
 | `psqlImage.repository`                                      | PostgreSQL client image repository                                                              | `REPOSITORY_NAME/supabase-postgres` |
@@ -869,13 +874,55 @@ externalDatabase.port=5432
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.To enable Ingress integration, set `studio.ingress.enabled` to `true`.
 
-To enable Ingress integration, set `studio.ingress.enabled` to `true`. The `studio.ingress.hostname` property can be used to set the host name. The `studio.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/infrastructure/supabase/configuration/configure-ingress/).
+The most common scenario is to have one host name mapped to the deployment. In this case, the `studio.ingress.hostname` property can be used to set the host name. The `studio.ingress.tls` parameter can be used to add the TLS configuration for this host.
+
+However, it is also possible to have more than one host. To facilitate this, the `studio.ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `studio.ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
+
+> NOTE: For each host specified in the `studio.ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
+
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+
+[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/infrastructure/supabase/administration/enable-tls-ingress/).
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
+
+- Generate certificate secrets based on chart parameters.
+- Enable externally generated certificates.
+- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
+- Create self-signed certificates within the chart (if supported).
+
+In the first two cases, a certificate and a key are needed. Files are expected in `.pem` format.
+
+Here is an example of a certificate file:
+
+> NOTE: There may be more than one certificate if there is a certificate chain.
+
+```text
+-----BEGIN CERTIFICATE-----
+MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+...
+jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+-----END CERTIFICATE-----
+```
+
+Here is an example of a certificate key:
+
+```text
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+...
+wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+-----END RSA PRIVATE KEY-----
+```
+
+- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
+- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
+- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
 
 ## Persistence
 
@@ -898,7 +945,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as supabase (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the component specific sections. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/supabase/configuration/configure-sidecar-init-containers/).
+If additional containers are needed in the same pod as supabase (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the component specific sections.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Pod affinity
 

@@ -39,6 +39,7 @@ spec:
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.trivy.automountServiceAccountToken }}
       {{- if .Values.trivy.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.trivy.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -68,7 +69,6 @@ spec:
       {{- if .Values.trivy.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.trivy.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      automountServiceAccountToken: {{ .Values.trivy.automountServiceAccountToken }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions

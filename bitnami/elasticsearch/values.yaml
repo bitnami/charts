@@ -189,7 +189,7 @@ useIstioLabels: true
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 8.11.4-debian-11-r1
+  tag: 8.12.0-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -543,18 +543,21 @@ master:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param master.containerSecurityContext.enabled Enabled master-elegible containers' Security Context
-  ## @param master.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param master.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param master.containerSecurityContext.runAsUser Set master-elegible containers' Security Context runAsUser
   ## @param master.containerSecurityContext.runAsNonRoot Set master-elegible containers' Security Context runAsNonRoot
   ## @param master.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param master.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param master.hostAliases master-elegible pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -865,18 +868,21 @@ data:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param data.containerSecurityContext.enabled Enabled data containers' Security Context
-  ## @param data.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param data.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param data.containerSecurityContext.runAsUser Set data containers' Security Context runAsUser
   ## @param data.containerSecurityContext.runAsNonRoot Set data containers' Security Context runAsNonRoot
   ## @param data.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param data.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param data.hostAliases data pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1188,18 +1194,21 @@ coordinating:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param coordinating.containerSecurityContext.enabled Enabled coordinating-only containers' Security Context
-  ## @param coordinating.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param coordinating.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param coordinating.containerSecurityContext.runAsUser Set coordinating-only containers' Security Context runAsUser
   ## @param coordinating.containerSecurityContext.runAsNonRoot Set coordinating-only containers' Security Context runAsNonRoot
   ## @param coordinating.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param coordinating.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param coordinating.hostAliases coordinating-only pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1480,18 +1489,21 @@ ingest:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param ingest.containerSecurityContext.enabled Enabled ingest-only containers' Security Context
-  ## @param ingest.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param ingest.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param ingest.containerSecurityContext.runAsUser Set ingest-only containers' Security Context runAsUser
   ## @param ingest.containerSecurityContext.runAsNonRoot Set ingest-only containers' Security Context runAsNonRoot
   ## @param ingest.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param ingest.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param ingest.hostAliases ingest-only pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1908,6 +1920,9 @@ metrics:
   ##   - --es.indices
   ##
   extraArgs: []
+  ## @param metrics.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param metrics.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2081,14 +2096,14 @@ metrics:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param metrics.containerSecurityContext.enabled Enabled Elasticsearch metrics exporter containers' Security Context
-  ## @param metrics.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser Set Elasticsearch metrics exporter containers' Security Context runAsUser
   ## @param metrics.containerSecurityContext.runAsNonRoot Set Elasticsearch metrics exporter container's Security Context runAsNonRoot
   ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     seccompProfile:

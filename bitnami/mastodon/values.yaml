@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mastodon
-  tag: 4.2.3-debian-11-r5
+  tag: 4.2.4-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -328,7 +328,7 @@ web:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param web.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param web.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param web.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param web.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param web.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param web.containerSecurityContext.privileged Set container's Security Context privileged
@@ -339,7 +339,7 @@ web:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -356,6 +356,9 @@ web:
   ## @param web.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param web.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param web.hostAliases Mastodon web pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -614,7 +617,7 @@ sidekiq:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param sidekiq.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param sidekiq.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param sidekiq.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param sidekiq.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param sidekiq.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param sidekiq.containerSecurityContext.privileged Set container's Security Context privileged
@@ -625,7 +628,7 @@ sidekiq:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -642,6 +645,9 @@ sidekiq:
   ## @param sidekiq.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param sidekiq.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param sidekiq.hostAliases Mastodon sidekiq pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -850,7 +856,7 @@ streaming:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param streaming.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param streaming.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param streaming.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param streaming.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param streaming.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param streaming.containerSecurityContext.privileged Set container's Security Context privileged
@@ -861,7 +867,7 @@ streaming:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -878,6 +884,9 @@ streaming:
   ## @param streaming.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param streaming.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param streaming.hostAliases Mastodon streaming pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1114,7 +1123,7 @@ initJob:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param initJob.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param initJob.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param initJob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param initJob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param initJob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param initJob.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1125,7 +1134,7 @@ initJob:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1173,6 +1182,9 @@ initJob:
   resources:
     limits: {}
     requests: {}
+  ## @param initJob.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param initJob.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1262,7 +1274,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r95
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1282,14 +1294,14 @@ volumePermissions:
     requests: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
 
 ## @section Other Parameters

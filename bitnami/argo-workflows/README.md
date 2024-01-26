@@ -118,7 +118,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                         | `[]`                                |
 | `server.podSecurityContext.fsGroup`                        | Set server pod's Security Context fsGroup                                                                           | `1001`                              |
 | `server.containerSecurityContext.enabled`                  | Enabled server containers' Security Context                                                                         | `true`                              |
-| `server.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                    | `{}`                                |
+| `server.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                    | `nil`                               |
 | `server.containerSecurityContext.runAsUser`                | Set server containers' Security Context runAsUser                                                                   | `1001`                              |
 | `server.containerSecurityContext.runAsNonRoot`             | Set server containers' Security Context runAsNonRoot                                                                | `true`                              |
 | `server.containerSecurityContext.readOnlyRootFilesystem`   | Set read only root file system pod's Security Conte                                                                 | `true`                              |
@@ -150,10 +150,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.containerPorts.web`                                | argo Server container port                                                                                          | `2746`                              |
 | `server.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                | `true`                              |
 | `server.serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`                                |
-| `server.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                      | `true`                              |
+| `server.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                      | `false`                             |
 | `server.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`                                |
 | `server.command`                                           | Override default container command (useful when using custom images)                                                | `[]`                                |
 | `server.args`                                              | Override default container args (useful when using custom images)                                                   | `[]`                                |
+| `server.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                  | `true`                              |
 | `server.hostAliases`                                       | server pods host aliases                                                                                            | `[]`                                |
 | `server.podLabels`                                         | Extra labels for server pods                                                                                        | `{}`                                |
 | `server.podAnnotations`                                    | Annotations for server pods                                                                                         | `{}`                                |
@@ -227,7 +228,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                   | `[]`                                       |
 | `controller.podSecurityContext.fsGroup`                        | Set controller pod's Security Context fsGroup                                                                                 | `1001`                                     |
 | `controller.containerSecurityContext.enabled`                  | Enabled controller containers' Security Context                                                                               | `true`                                     |
-| `controller.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                              | `{}`                                       |
+| `controller.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                              | `nil`                                      |
 | `controller.containerSecurityContext.runAsUser`                | Set controller containers' Security Context runAsUser                                                                         | `1001`                                     |
 | `controller.containerSecurityContext.runAsNonRoot`             | Set controller containers' Security Context runAsNonRoot                                                                      | `true`                                     |
 | `controller.containerSecurityContext.readOnlyRootFilesystem`   | Set read only root file system pod's Security Conte                                                                           | `true`                                     |
@@ -261,10 +262,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.pdb.maxUnavailable`                                | Sets the max number of pods unavailable for the Pod Disruption Budget                                                         | `1`                                        |
 | `controller.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                          | `true`                                     |
 | `controller.serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.           | `""`                                       |
-| `controller.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                | `true`                                     |
+| `controller.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                | `false`                                    |
 | `controller.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                    | `{}`                                       |
 | `controller.command`                                           | Override default container command (useful when using custom images)                                                          | `[]`                                       |
 | `controller.args`                                              | Override default container args (useful when using custom images)                                                             | `[]`                                       |
+| `controller.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                            | `true`                                     |
 | `controller.hostAliases`                                       | controller pods host aliases                                                                                                  | `[]`                                       |
 | `controller.podLabels`                                         | Extra labels for controller pods                                                                                              | `{}`                                       |
 | `controller.podAnnotations`                                    | Annotations for controller pods                                                                                               | `{}`                                       |
@@ -313,7 +315,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `executor.resources.requests`                                | The requested resources for the init container                                                           | `{}`                                 |
 | `executor.extraEnvVars`                                      | Array with extra environment variables to add to server nodes                                            | `[]`                                 |
 | `executor.containerSecurityContext.enabled`                  | Enabled executor containers' Security Context                                                            | `true`                               |
-| `executor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                         | `{}`                                 |
+| `executor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                         | `nil`                                |
 | `executor.containerSecurityContext.runAsUser`                | Set executor containers' Security Context runAsUser                                                      | `1001`                               |
 | `executor.containerSecurityContext.runAsNonRoot`             | Set executor containers' Security Context runAsNonRoot                                                   | `true`                               |
 | `executor.containerSecurityContext.readOnlyRootFilesystem`   | Set read only root file system pod's Security Conte                                                      | `true`                               |
@@ -343,13 +345,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Workflows configuration
 
-| Name                                                    | Description                                                                                | Value  |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ------ |
-| `workflows.serviceAccount.create`                       | Whether to create a service account to run workflows                                       | `true` |
-| `workflows.serviceAccount.name`                         | Service account name to run workflows                                                      | `""`   |
-| `workflows.serviceAccount.automountServiceAccountToken` | Automount service account token for the workflows service account                          | `true` |
-| `workflows.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`. | `{}`   |
-| `workflows.rbac.create`                                 | Whether to create RBAC resource to run workflows                                           | `true` |
+| Name                                                    | Description                                                                                | Value   |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ------- |
+| `workflows.serviceAccount.create`                       | Whether to create a service account to run workflows                                       | `true`  |
+| `workflows.serviceAccount.name`                         | Service account name to run workflows                                                      | `""`    |
+| `workflows.serviceAccount.automountServiceAccountToken` | Automount service account token for the workflows service account                          | `false` |
+| `workflows.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`. | `{}`    |
+| `workflows.rbac.create`                                 | Whether to create RBAC resource to run workflows                                           | `true`  |
 
 ### PostgreSQL subchart
 
@@ -445,13 +447,55 @@ externalDatabase.database=bitnami_wordpress
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application. To enable Ingress integration, set `ingress.enabled` to `true`.
 
-To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/infrastructure/argo-workflows//configuration/configure-ingress/).
+The most common scenario is to have one host name mapped to the deployment. In this case, the `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host.
+
+However, it is also possible to have more than one host. To facilitate this, the `ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
+
+> NOTE: For each host specified in the `ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
+
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+
+[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/infrastructure/argo-workflows/administration/enable-tls-ingress/).
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
+
+- Generate certificate secrets based on chart parameters.
+- Enable externally generated certificates.
+- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
+- Create self-signed certificates within the chart (if supported).
+
+In the first two cases, a certificate and a key are needed. Files are expected in `.pem` format.
+
+Here is an example of a certificate file:
+
+> NOTE: There may be more than one certificate if there is a certificate chain.
+
+```text
+-----BEGIN CERTIFICATE-----
+MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+...
+jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+-----END CERTIFICATE-----
+```
+
+Here is an example of a certificate key:
+
+```text
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+...
+wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+-----END RSA PRIVATE KEY-----
+```
+
+- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
+- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
+- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
 
 ### Additional environment variables
 
@@ -468,7 +512,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as argo-workflows (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/argo-workflows/configuration/configure-sidecar-init-containers/).
+If additional containers are needed in the same pod as argo-workflows (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Pod affinity
 
@@ -494,9 +574,47 @@ This major moved the parameters under `server.auth.sso` to `server.auth.sso.conf
 
 This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
 
-### To any previous version
+### To 2.0.0
 
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/argo-workflows/administration/upgrade/).
+This major release updates the MySQL subchart to its newest major *9.x.x*, which contain several changes in the supported values (check the [upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/mysql#to-900) to obtain more information).
+
+### To 1.0.0
+
+This major release updates the PostgreSQL subchart to its newest major *11.x.x*, which contain several changes in the supported values (check the [upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/postgresql#to-1100) to obtain more information).
+
+#### Upgrading Instructions
+
+To upgrade to *1.0.0* from *0.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *argo-workflows* and the release namespace *default*):
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+
+```console
+        export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default argo-workflows-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+        export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=argo-workflows,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+1. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+
+```console
+        kubectl delete statefulsets.apps --cascade=false argo-workflows-postgresql
+        kubectl delete secret argo-workflows-postgresql --namespace default
+```
+
+1. Upgrade your release using the same PostgreSQL version:
+
+```console
+        CURRENT_PG_VERSION=$(kubectl exec argo-workflows-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+        helm upgrade argo-workflows bitnami/argo-workflows \
+          --set postgresql.image.tag=$CURRENT_PG_VERSION \
+          --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+          --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
+
+1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+
+```console
+        kubectl delete pod argo-workflows-postgresql-0
+```
 
 ## License
 

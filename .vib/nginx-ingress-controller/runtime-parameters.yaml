@@ -33,7 +33,7 @@ service:
   type: LoadBalancer
 serviceAccount:
   create: true
-  automountServiceAccountToken: true
+automountServiceAccountToken: true
 rbac:
   create: true
 extraDeploy:

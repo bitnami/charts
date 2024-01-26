@@ -8,11 +8,11 @@ annotations:
     - name: elasticsearch-exporter
       image: docker.io/bitnami/elasticsearch-exporter:1.7.0-debian-11-r1
     - name: elasticsearch
-      image: docker.io/bitnami/elasticsearch:8.11.4-debian-11-r1
+      image: docker.io/bitnami/elasticsearch:8.12.0-debian-11-r1
     - name: os-shell
       image: docker.io/bitnami/os-shell:11-debian-11-r94
 apiVersion: v2
-appVersion: 8.11.4
+appVersion: 8.12.0
 dependencies:
 - condition: global.kibanaEnabled
   name: kibana
@@ -34,4 +34,4 @@ maintainers:
 name: elasticsearch
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch
-version: 19.16.1
+version: 19.17.1

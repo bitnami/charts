@@ -58,7 +58,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/argo-cd
-  tag: 2.9.3-debian-11-r5
+  tag: 2.9.5-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -163,7 +163,7 @@ controller:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.containerSecurityContext.enabled Enabled Argo CD containers' Security Context
-  ## @param controller.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param controller.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param controller.containerSecurityContext.runAsUser Set Argo CD containers' Security Context runAsUser
   ## @param controller.containerSecurityContext.allowPrivilegeEscalation Set Argo CD containers' Security Context allowPrivilegeEscalation
   ## @param controller.containerSecurityContext.capabilities.drop Set Argo CD containers' Security Context capabilities to be dropped
@@ -174,7 +174,7 @@ controller:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -198,7 +198,7 @@ controller:
     name: ""
     ## @param controller.serviceAccount.automountServiceAccountToken Automount service account token for the application controller service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param controller.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -444,6 +444,9 @@ controller:
   ## @param controller.extraArgs Add extra arguments to the default arguments for the Argo CD controller
   ##
   extraArgs: []
+  ## @param controller.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param controller.hostAliases Argo CD pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -772,7 +775,7 @@ applicationSet:
     name: ""
     ## @param applicationSet.serviceAccount.automountServiceAccountToken Automount service account token for the applicationSet controller service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param applicationSet.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -817,7 +820,7 @@ applicationSet:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param applicationSet.containerSecurityContext.enabled Enabled Argo CD applicationSet controller containers' Security Context
-  ## @param applicationSet.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param applicationSet.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param applicationSet.containerSecurityContext.runAsUser Set Argo CD applicationSet controller containers' Security Context runAsUser
   ## @param applicationSet.containerSecurityContext.allowPrivilegeEscalation Set Argo CD applicationSet controller containers' Security Context allowPrivilegeEscalation
   ## @param applicationSet.containerSecurityContext.capabilities.drop Set Argo CD applicationSet controller containers' Security Context capabilities to be dropped
@@ -828,7 +831,7 @@ applicationSet:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -1176,7 +1179,7 @@ notifications:
     name: ""
     ## @param notifications.serviceAccount.automountServiceAccountToken Automount service account token for the notifications controller service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param notifications.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -1221,7 +1224,7 @@ notifications:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param notifications.containerSecurityContext.enabled Enabled Argo CD notifications controller containers' Security Context
-  ## @param notifications.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param notifications.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param notifications.containerSecurityContext.runAsUser Set Argo CD notifications controller containers' Security Context runAsUser
   ## @param notifications.containerSecurityContext.allowPrivilegeEscalation Set Argo CD notifications controller containers' Security Context allowPrivilegeEscalation
   ## @param notifications.containerSecurityContext.capabilities.drop Set Argo CD notifications controller containers' Security Context capabilities to be dropped
@@ -1232,7 +1235,7 @@ notifications:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -1490,7 +1493,7 @@ notifications:
         name: ""
         ## @param notifications.bots.slack.serviceAccount.automountServiceAccountToken Automount service account token for the notifications controller service account
         ##
-        automountServiceAccountToken: true
+        automountServiceAccountToken: false
         ## @param notifications.bots.slack.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
         ##
         annotations: {}
@@ -1596,7 +1599,7 @@ notifications:
       ## Configure Container Security Context
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
       ## @param notifications.bots.slack.containerSecurityContext.enabled Enabled Argo CD Slack bot containers' Security Context
-      ## @param notifications.bots.slack.containerSecurityContext.seLinuxOptions Set SELinux options in container
+      ## @param notifications.bots.slack.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
       ## @param notifications.bots.slack.containerSecurityContext.runAsUser Set Argo CD Slack bot containers' Security Context runAsUser
       ## @param notifications.bots.slack.containerSecurityContext.allowPrivilegeEscalation Set Argo CD Slack bot containers' Security Context allowPrivilegeEscalation
       ## @param notifications.bots.slack.containerSecurityContext.capabilities.drop Set Argo CD Slack bot containers' Security Context capabilities to be dropped
@@ -1607,7 +1610,7 @@ notifications:
       ##
       containerSecurityContext:
         enabled: true
-        seLinuxOptions: {}
+        seLinuxOptions: null
         runAsUser: 1001
         runAsNonRoot: true
         readOnlyRootFilesystem: false
@@ -1757,7 +1760,7 @@ server:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param server.containerSecurityContext.enabled Enabled Argo CD server containers' Security Context
-  ## @param server.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param server.containerSecurityContext.runAsUser Set Argo CD server containers' Security Context runAsUser
   ## @param server.containerSecurityContext.allowPrivilegeEscalation Set Argo CD server containers' Security Context allowPrivilegeEscalation
   ## @param server.containerSecurityContext.capabilities.drop Set Argo CD containers' server Security Context capabilities to be dropped
@@ -1768,7 +1771,7 @@ server:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -2287,6 +2290,9 @@ server:
   ## @param server.extraArgs concat to the default args
   ##
   extraArgs: []
+  ## @param server.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param server.hostAliases Argo CD server pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2425,7 +2431,7 @@ server:
     name: ""
     ## @param server.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param server.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -2516,7 +2522,7 @@ repoServer:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param repoServer.containerSecurityContext.enabled Enabled Argo CD repo server containers' Security Context
-  ## @param repoServer.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param repoServer.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param repoServer.containerSecurityContext.runAsUser Set Argo CD repo server containers' Security Context runAsUser
   ## @param repoServer.containerSecurityContext.allowPrivilegeEscalation Set Argo CD repo server containers' Security Context allowPrivilegeEscalation
   ## @param repoServer.containerSecurityContext.capabilities.drop Set Argo CD containers' repo server Security Context capabilities to be dropped
@@ -2527,7 +2533,7 @@ repoServer:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -2729,7 +2735,7 @@ repoServer:
     name: ""
     ## @param repoServer.serviceAccount.automountServiceAccountToken Automount service account token for the repo server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param repoServer.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -2743,6 +2749,9 @@ repoServer:
   ## @param repoServer.extraArgs Add extra args to the default repo server args
   ##
   extraArgs: []
+  ## @param repoServer.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param repoServer.hostAliases Argo CD repo server pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2887,7 +2896,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.37.0-debian-11-r101
+    tag: 2.37.0-debian-11-r103
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2991,7 +3000,7 @@ dex:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dex.containerSecurityContext.enabled Enabled Dex containers' Security Context
-  ## @param dex.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param dex.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dex.containerSecurityContext.runAsUser Set Dex containers' Security Context runAsUser
   ## @param dex.containerSecurityContext.allowPrivilegeEscalation Set Dex containers' Security Context allowPrivilegeEscalation
   ## @param dex.containerSecurityContext.readOnlyRootFilesystem Set Dex containers' server Security Context readOnlyRootFilesystem
@@ -3002,7 +3011,7 @@ dex:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -3190,7 +3199,7 @@ dex:
     name: ""
     ## @param dex.serviceAccount.automountServiceAccountToken Automount service account token for the Dex service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param dex.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -3204,6 +3213,9 @@ dex:
   ## @param dex.extraArgs Add extra args to the default args for Dex
   ##
   extraArgs: []
+  ## @param dex.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param dex.hostAliases Dex pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -3526,7 +3538,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r95
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3547,14 +3559,14 @@ volumePermissions:
     requests: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
 
 ## @section Other Parameters
@@ -3581,7 +3593,7 @@ redis:
   image:
     registry: docker.io
     repository: bitnami/redis
-    tag: 7.2.4-debian-11-r0
+    tag: 7.2.4-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3666,7 +3678,7 @@ redisWait:
   ##
   extraArgs: ''
   ## @param redisWait.containerSecurityContext.enabled Enabled Argo CD repo server containers' Security Context
-  ## @param redisWait.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param redisWait.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param redisWait.containerSecurityContext.runAsUser Set Argo CD repo server containers' Security Context runAsUser
   ## @param redisWait.containerSecurityContext.allowPrivilegeEscalation Set Argo CD repo server containers' Security Context allowPrivilegeEscalation
   ## @param redisWait.containerSecurityContext.capabilities.drop Set Argo CD containers' repo server Security Context capabilities to be dropped
@@ -3677,7 +3689,7 @@ redisWait:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false

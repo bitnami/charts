@@ -79,6 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                                | Description                                                                                                                                                        | Value                           |
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------- |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                 | `false`                         |
 | `hostAliases`                                       | Deployment pod host aliases                                                                                                                                        | `[]`                            |
 | `rbac.create`                                       | Whether to create and use RBAC resources or not                                                                                                                    | `true`                          |
 | `rbac.pspEnabled`                                   | Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `true`                          |
@@ -109,7 +110,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                        | `[]`                            |
 | `podSecurityContext.fsGroup`                        | Set Node exporter pod's Security Context fsGroup                                                                                                                   | `1001`                          |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                               | `true`                          |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                   | `{}`                            |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                   | `nil`                           |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                         | `1001`                          |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                      | `true`                          |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                        | `false`                         |
@@ -246,8 +247,6 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 ### To 2.0.0
 
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/apps/node-exporter/administration/upgrade-helm3/).
 
 ## License
 

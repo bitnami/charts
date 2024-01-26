@@ -298,7 +298,7 @@ podSecurityContext:
 ## Keycloak containers' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
-## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
@@ -309,7 +309,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false
@@ -384,6 +384,9 @@ customStartupProbe: {}
 ## @param lifecycleHooks LifecycleHooks to set additional configuration at startup
 ##
 lifecycleHooks: {}
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: true
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -714,7 +717,7 @@ serviceAccount:
   name: ""
   ## @param serviceAccount.automountServiceAccountToken Auto-mount the service account token in the pod
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
   ##
   annotations: {}
@@ -918,6 +921,9 @@ keycloakConfigCli:
   ## @param keycloakConfigCli.args Args for running the container (set to default if not set). Use array form
   ##
   args: []
+  ## @param keycloakConfigCli.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param keycloakConfigCli.hostAliases Job pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -933,7 +939,7 @@ keycloakConfigCli:
   ## keycloak-config-cli containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param keycloakConfigCli.containerSecurityContext.enabled Enabled keycloak-config-cli Security Context
-  ## @param keycloakConfigCli.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param keycloakConfigCli.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param keycloakConfigCli.containerSecurityContext.runAsUser Set keycloak-config-cli Security Context runAsUser
   ## @param keycloakConfigCli.containerSecurityContext.runAsNonRoot Set keycloak-config-cli Security Context runAsNonRoot
   ## @param keycloakConfigCli.containerSecurityContext.privileged Set keycloak-config-cli Security Context privileged
@@ -944,7 +950,7 @@ keycloakConfigCli:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false

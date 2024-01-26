@@ -79,7 +79,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 7.0.5-debian-11-r0
+  tag: 7.0.5-debian-11-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -250,7 +250,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r94
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -343,6 +343,9 @@ configsvr:
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
+  ## @param configsvr.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param configsvr.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -565,7 +568,7 @@ configsvr:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param configsvr.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param configsvr.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param configsvr.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param configsvr.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param configsvr.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param configsvr.containerSecurityContext.privileged Set container's Security Context privileged
@@ -576,7 +579,7 @@ configsvr:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -675,6 +678,9 @@ mongos:
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
+  ## @param mongos.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param mongos.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -907,7 +913,7 @@ mongos:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param mongos.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param mongos.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param mongos.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param mongos.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param mongos.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param mongos.containerSecurityContext.privileged Set container's Security Context privileged
@@ -918,7 +924,7 @@ mongos:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1093,6 +1099,9 @@ shardsvr:
     ##
     updateStrategy:
       type: RollingUpdate
+    ## @param shardsvr.dataNode.automountServiceAccountToken Mount Service Account token in pod
+    ##
+    automountServiceAccountToken: false
     ## @param shardsvr.dataNode.hostAliases Deployment pod host aliases
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##
@@ -1201,7 +1210,7 @@ shardsvr:
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param shardsvr.dataNode.containerSecurityContext.enabled Enabled containers' Security Context
-    ## @param shardsvr.dataNode.containerSecurityContext.seLinuxOptions Set SELinux options in container
+    ## @param shardsvr.dataNode.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param shardsvr.dataNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param shardsvr.dataNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param shardsvr.dataNode.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1212,7 +1221,7 @@ shardsvr:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: {}
+      seLinuxOptions: null
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -1346,6 +1355,9 @@ shardsvr:
     ## @param shardsvr.arbiter.replicaCount Number of arbiters in each shard replica set (the first node will be primary)
     ##
     replicaCount: 0
+    ## @param shardsvr.arbiter.automountServiceAccountToken Mount Service Account token in pod
+    ##
+    automountServiceAccountToken: false
     ## @param shardsvr.arbiter.hostAliases Deployment pod host aliases
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##
@@ -1514,7 +1526,7 @@ shardsvr:
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param shardsvr.arbiter.containerSecurityContext.enabled Enabled containers' Security Context
-    ## @param shardsvr.arbiter.containerSecurityContext.seLinuxOptions Set SELinux options in container
+    ## @param shardsvr.arbiter.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param shardsvr.arbiter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param shardsvr.arbiter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param shardsvr.arbiter.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1525,7 +1537,7 @@ shardsvr:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: {}
+      seLinuxOptions: null
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -1624,7 +1636,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.40.0-debian-11-r2
+    tag: 0.40.0-debian-11-r3
     digest: ""
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
@@ -1649,7 +1661,7 @@ metrics:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param metrics.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param metrics.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1660,7 +1672,7 @@ metrics:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false

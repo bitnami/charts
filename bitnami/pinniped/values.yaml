@@ -232,7 +232,7 @@ concierge:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param concierge.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param concierge.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param concierge.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param concierge.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param concierge.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param concierge.containerSecurityContext.privileged Set container's Security Context privileged
@@ -243,7 +243,7 @@ concierge:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -266,6 +266,9 @@ concierge:
   ## @param concierge.deployAPIService Deploy the APIService objects
   ##
   deployAPIService: true
+  ## @param concierge.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param concierge.hostAliases Concierge pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -400,7 +403,7 @@ concierge:
     concierge:
       name: ""
       create: true
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
       annotations: {}
     ## @param concierge.serviceAccount.impersonationProxy.name Name of an existing Service Account for the Concierge Impersonator
     ## @param concierge.serviceAccount.impersonationProxy.create Create a Service Account for the Concierge Impersonator
@@ -410,7 +413,7 @@ concierge:
     impersonationProxy:
       name: ""
       create: true
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
       annotations: {}
     ## @param concierge.serviceAccount.kubeCertAgentService.name Name of an existing Service Account for the Concierge kube-cert-agent-service
     ## @param concierge.serviceAccount.kubeCertAgentService.create Create a Service Account for the Concierge kube-cert-agent-service
@@ -420,7 +423,7 @@ concierge:
     kubeCertAgentService:
       name: ""
       create: true
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
       annotations: {}
 
   ## @section Concierge Traffic Exposure Parameters
@@ -587,7 +590,7 @@ supervisor:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param supervisor.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param supervisor.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param supervisor.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param supervisor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param supervisor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param supervisor.containerSecurityContext.privileged Set container's Security Context privileged
@@ -598,7 +601,7 @@ supervisor:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -618,6 +621,9 @@ supervisor:
   ## @param supervisor.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param supervisor.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param supervisor.hostAliases Supervisor pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -751,7 +757,7 @@ supervisor:
     ##
     name: ""
     create: true
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
 
   ## @section Supervisor Traffic Exposure Parameters

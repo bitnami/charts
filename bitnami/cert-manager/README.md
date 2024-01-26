@@ -102,7 +102,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                | `[]`                           |
 | `controller.podSecurityContext.fsGroup`                        | Set Controller pod's Security Context fsGroup                                                              | `1001`                         |
 | `controller.containerSecurityContext.enabled`                  | Enabled controller containers' Security Context                                                            | `true`                         |
-| `controller.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `{}`                           |
+| `controller.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `nil`                          |
 | `controller.containerSecurityContext.runAsUser`                | Set controller containers' Security Context runAsUser                                                      | `1001`                         |
 | `controller.containerSecurityContext.runAsNonRoot`             | Set controller containers' Security Context runAsNonRoot                                                   | `true`                         |
 | `controller.containerSecurityContext.readOnlyRootFilesystem`   | Set read only root file system pod's Security Conte                                                        | `false`                        |
@@ -124,6 +124,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                             | `""`                           |
 | `controller.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                             | `""`                           |
 | `controller.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                             | `[]`                           |
+| `controller.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                         | `true`                         |
 | `controller.hostAliases`                                       | Custom host aliases for Controller pods                                                                    | `[]`                           |
 | `controller.tolerations`                                       | Tolerations for pod assignment                                                                             | `[]`                           |
 | `controller.podLabels`                                         | Extra labels for Controller pods                                                                           | `{}`                           |
@@ -165,7 +166,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                       | `true`                         |
 | `controller.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                     | `""`                           |
 | `controller.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                       | `{}`                           |
-| `controller.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                             | `true`                         |
+| `controller.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                             | `false`                        |
+| `controller.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                        | `false`                        |
+| `controller.networkPolicy.allowExternal`                       | Don't require client label for connections                                                                 | `true`                         |
+| `controller.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                               | `[]`                           |
+| `controller.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                               | `[]`                           |
+| `controller.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                     | `{}`                           |
+| `controller.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                 | `{}`                           |
 
 ### Webhook deployment parameters
 
@@ -186,7 +193,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                             | `[]`                                   |
 | `webhook.podSecurityContext.fsGroup`                        | Set Webhook pod's Security Context fsGroup                                                              | `1001`                                 |
 | `webhook.containerSecurityContext.enabled`                  | Enabled webhook containers' Security Context                                                            | `true`                                 |
-| `webhook.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `{}`                                   |
+| `webhook.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `nil`                                  |
 | `webhook.containerSecurityContext.runAsUser`                | Set webhook containers' Security Context runAsUser                                                      | `1001`                                 |
 | `webhook.containerSecurityContext.runAsNonRoot`             | Set webhook containers' Security Context runAsNonRoot                                                   | `true`                                 |
 | `webhook.containerSecurityContext.readOnlyRootFilesystem`   | Set read only root file system pod's Security Conte                                                     | `false`                                |
@@ -226,6 +233,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                          | `""`                                   |
 | `webhook.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                          | `""`                                   |
 | `webhook.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                          | `[]`                                   |
+| `webhook.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                      | `true`                                 |
 | `webhook.hostAliases`                                       | Custom host aliases for Webhook pods                                                                    | `[]`                                   |
 | `webhook.tolerations`                                       | Tolerations for pod assignment                                                                          | `[]`                                   |
 | `webhook.podLabels`                                         | Extra labels for Webhook pods                                                                           | `{}`                                   |
@@ -244,8 +252,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                    | `true`                                 |
 | `webhook.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                  | `""`                                   |
 | `webhook.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                    | `{}`                                   |
-| `webhook.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                          | `true`                                 |
+| `webhook.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                          | `false`                                |
 | `webhook.hostNetwork`                                       | Specifies hostNetwork value                                                                             | `false`                                |
+| `webhook.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                     | `false`                                |
+| `webhook.networkPolicy.allowExternal`                       | Don't require client label for connections                                                              | `true`                                 |
+| `webhook.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                            | `[]`                                   |
+| `webhook.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                            | `[]`                                   |
+| `webhook.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                  | `{}`                                   |
+| `webhook.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                              | `{}`                                   |
 
 ### CAInjector deployment parameters
 
@@ -266,7 +280,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                | `[]`                         |
 | `cainjector.podSecurityContext.fsGroup`                        | Set CAInjector pod's Security Context fsGroup                                                              | `1001`                       |
 | `cainjector.containerSecurityContext.enabled`                  | Enabled cainjector containers' Security Context                                                            | `true`                       |
-| `cainjector.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `{}`                         |
+| `cainjector.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `nil`                        |
 | `cainjector.containerSecurityContext.runAsUser`                | Set cainjector containers' Security Context runAsUser                                                      | `1001`                       |
 | `cainjector.containerSecurityContext.runAsNonRoot`             | Set cainjector containers' Security Context runAsNonRoot                                                   | `true`                       |
 | `cainjector.containerSecurityContext.readOnlyRootFilesystem`   | Set read only root file system pod's Security Conte                                                        | `false`                      |
@@ -287,6 +301,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                             | `""`                         |
 | `cainjector.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                             | `""`                         |
 | `cainjector.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                             | `[]`                         |
+| `cainjector.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                         | `true`                       |
 | `cainjector.hostAliases`                                       | Custom host aliases for CAInjector pods                                                                    | `[]`                         |
 | `cainjector.tolerations`                                       | Tolerations for pod assignment                                                                             | `[]`                         |
 | `cainjector.podLabels`                                         | Extra labels for CAInjector pods                                                                           | `{}`                         |
@@ -326,7 +341,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                       | `true`                       |
 | `cainjector.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                     | `""`                         |
 | `cainjector.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                       | `{}`                         |
-| `cainjector.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                             | `true`                       |
+| `cainjector.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                             | `false`                      |
 
 ### Metrics Parameters
 
@@ -417,6 +432,163 @@ initContainers:
       - name: portname
         containerPort: 1234
 ```
+
+### Generate TLS certificates using Self Signed Issuers
+
+Cert Manager supports issuing certificates through different Issuers. For instance, you can use a Self Signed Issuer to issue the certificates.
+
+The Self Signed issuer doesn't represent a certificate authority as such, but instead denotes that certificates will "sign themselves" using a given private key.
+
+> NOTE: Find the list of available Issuers in the [Cert Manager official documentation](https://cert-manager.io/docs/configuration/#supported-issuer-types).
+
+To configure Cert Manager, create an Issuer object. The structure of this object differs depending on the Issuer type. Self Signed issuer are really easy to configure.
+
+To create a self signed issuer to generate a self signed certificate, declare an Issuer, a ClusterIssuer and a Certificate, as shown below:
+
+```yaml
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt-ca
+  namespace: sandbox
+spec:
+  ca:
+    secretName: letsencrypt-ca
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: letsencrypt-ca
+  namespace: sandbox
+spec:
+  isCA: true
+  commonName: osm-system
+  secretName: letsencrypt-ca
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+    group: cert-manager.io
+```
+
+Next, use the ClusterIssuer to generate certificates for the applications in your Kubernetes cluster. [Learn how to secure your Ingress resources](#secure-ingress-resources-with-cert-manager).
+
+After the Ingress resource is ready, Cert Manager will create a secret. This secret contains the generated TLS certificate. This can be checked as shown below:
+
+```text
+$ kubectl get secret --namespace=sandbox
+NAME                  TYPE                                  DATA   AGE
+letsencrypt-ca        kubernetes.io/tls                     3      Xs
+```
+
+### Generate TLS certificates using ACME Issuers
+
+Cert Manager supports issuing certificates through different Issuers. For instance, you can use a public ACME (Automated Certificate Management Environment) server to issue the certificates.
+
+> NOTE: Find the list of available Issuers in the [Cert Manager official documentation](https://cert-manager.io/docs/configuration/#supported-issuer-types).
+
+To configure Cert Manager, create an Issuer object. The structure of this object differs depending on the Issuer type. For ACME, it is necessary to include the information for a single account registered in the ACME Certificate Authority server.
+
+Once Cert Manager is configured to use ACME, it will verify that you are the owner of the domains for which certificates are being requested. Cert Manager uses two different challenges to verify that you are the owner of your domain: HTTP01 or DNS01. [Learn more about ACME challenges](https://cert-manager.io/docs/concepts/acme-orders-challenges/#challenge-scheduling).
+
+> NOTE: Learn more about the process to solve challenges in the [official documentation](https://cert-manager.io/docs/configuration/acme/#solving-challenges).
+
+To create a ACME issuer for use with Let's Encrypt, declare an Issuer as shown below:
+
+```yaml
+apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    # You must replace this email address with your own.
+    # Let's Encrypt will use this to contact you about expiring
+    # certificates, and issues related to your account.
+    # Replace the EMAIL-ADDRESS placeholder with the correct email account
+    email: EMAIL-ADDRESS
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    # Add a single challenge solver, HTTP01 using nginx
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
+```
+
+Next, use the ClusterIssuer to generate certificates for the applications in your Kubernetes cluster. [Learn how to secure your Ingress resources](#secure-ingress-resources-with-cert-manager).
+
+After the Ingress resource is ready, Cert Manager verifies the domain using HTTP01/DNS01 challenges. During this verification process, the controller log can be used to check the status, as shown below:
+
+```text
+$ kubectl get certificates
+NAME                     READY   SECRET                   AGE
+letencrypt-ca            False   letencrypt-ca             X
+```
+
+The status remains *False* whilst verification is in progress. This status will change to *True* when the HTTP01 verification is completed successfully.
+
+```text
+$ kubectl get certificates
+NAME                     READY   SECRET                   AGE
+letencrypt-ca            True    letencrypt-ca             X
+
+$ kubectl get secrets
+NAME                                  TYPE                                  DATA   AGE
+letencrypt-ca                      kubernetes.io/tls                        3      Xm
+```
+
+### Secure Ingress resources with Cert Manager
+
+Once you configure an Issuer for Cert Manager (either [a Self-Signed Issuer](#generate-tls-certificates-using-self-signed-issuers) or [an ACME Issuer](#generate-tls-certificates-using-acme-issuers)), Cert Manager will make use of this Issuer to create a TLS secret containing the certificates. Cert Manager can only create this secret if the application is already exposed. One way to do this is with an Ingress Resource which exposes the application and includes the corresponding annotations for Cert Manager.
+
+There are two options to expose your application through an Ingress Controller using Cert Manager to manage the TLS certificates:
+
+- Deploy another Helm chart which supports exposing the application through an Ingress controller. For instance, use the [Bitnami Helm Chart for WordPress](https://github.com/bitnami/charts/tree/main/bitnami/wordpress) and [configure Ingress for WordPress](https://github.com/bitnami/charts/tree/main/bitnami/wordpress#ingress). To enable the integration with CertManager, add the annotations below to the *ingress.annotations* parameter:
+
+   ```text
+   # Set up your ingress.class below (in this example, we are using nginx ingress controller)
+   kubernetes.io/ingress.class: nginx
+   cert-manager.io/cluster-issuer: letsencrypt-prod
+   ```
+
+- Create your own Ingress resource as shown in the example below:
+
+   ```yaml
+   apiVersion: networking.k8s.io/v1
+   kind: Ingress
+   metadata:
+     name: ingress-test
+     annotations:
+       # Set up your ingress.class below (in this example, we are using nginx ingress controller)
+       kubernetes.io/ingress.class: "nginx"
+       cert-manager.io/issuer: "letsencrypt-prod"
+   spec:
+     tls:
+     # Replace the DOMAIN placeholder with the correct domain name
+     - hosts:
+       - DOMAIN
+       secretName: letsencrypt-ca
+     rules:
+     # Replace the DOMAIN placeholder with the correct domain name
+     - host: DOMAIN
+       http:
+         paths:
+         - path: /
+           pathType: Exact
+           backend:
+             service:
+               name: ingress-test
+               port:
+                 number: 80
+   ```
 
 ### Deploying extra resources
 

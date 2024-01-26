@@ -74,7 +74,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/deepspeed
-  tag: 0.12.3-debian-11-r2
+  tag: 0.12.3-debian-11-r6
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -296,7 +296,7 @@ client:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param client.containerSecurityContext.enabled Enabled Client containers' Security Context
-  ## @param client.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param client.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param client.containerSecurityContext.runAsUser Set Client containers' Security Context runAsUser
   ## @param client.containerSecurityContext.runAsGroup Set Client containers' Security Context runAsGroup
   ## @param client.containerSecurityContext.runAsNonRoot Set Client containers' Security Context runAsNonRoot
@@ -308,7 +308,7 @@ client:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -326,6 +326,9 @@ client:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##https://github.com/microsoft/DeepSpeedExamples
   runtimeClassName: ""
+  ## @param client.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param client.hostAliases client pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -651,7 +654,7 @@ worker:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param worker.containerSecurityContext.enabled Enabled Worker containers' Security Context
-  ## @param worker.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param worker.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param worker.containerSecurityContext.runAsUser Set Worker containers' Security Context runAsUser
   ## @param worker.containerSecurityContext.runAsGroup Set Worker containers' Security Context runAsGroup
   ## @param worker.containerSecurityContext.runAsNonRoot Set Worker containers' Security Context runAsNonRoot
@@ -663,7 +666,7 @@ worker:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -681,6 +684,9 @@ worker:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param worker.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param worker.hostAliases client pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -997,7 +1003,7 @@ worker:
 gitImage:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.43.0-debian-11-r0
+  tag: 2.43.0-debian-11-r4
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1025,7 +1031,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r91
+    tag: 11-debian-11-r93
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

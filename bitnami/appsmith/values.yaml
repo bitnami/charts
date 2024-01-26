@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/appsmith
-  tag: 1.9.58-debian-11-r0
+  tag: 1.9.61-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -184,7 +184,7 @@ client:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param client.containerSecurityContext.enabled Enabled Appsmith client containers' Security Context
-  ## @param client.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param client.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param client.containerSecurityContext.runAsUser Set Appsmith client containers' Security Context runAsUser
   ## @param client.containerSecurityContext.runAsNonRoot Set Appsmith client containers' Security Context runAsNonRoot
   ## @param client.containerSecurityContext.readOnlyRootFilesystem Set Appsmith client containers' Security Context runAsNonRoot
@@ -195,7 +195,7 @@ client:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -212,6 +212,9 @@ client:
   ## @param client.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param client.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param client.hostAliases Appsmith client pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -329,6 +332,59 @@ client:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+
+  ## @section Appsmith Client Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param client.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: false
+    ## @param client.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports AppSmith Client is listening
+    ## on. When true, AppSmith Client will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param client.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param client.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param client.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param client.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 
   ## @section Appsmith Client Traffic Exposure Parameters
   ##
@@ -607,7 +663,7 @@ backend:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param backend.containerSecurityContext.enabled Enabled Appsmith backend containers' Security Context
-  ## @param backend.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param backend.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param backend.containerSecurityContext.runAsUser Set Appsmith backend containers' Security Context runAsUser
   ## @param backend.containerSecurityContext.runAsNonRoot Set Appsmith backend containers' Security Context runAsNonRoot
   ## @param backend.containerSecurityContext.readOnlyRootFilesystem Set Appsmith backend containers' Security Context runAsNonRoot
@@ -618,7 +674,7 @@ backend:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -635,6 +691,9 @@ backend:
   ## @param backend.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param backend.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param backend.hostAliases Appsmith backend pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -752,6 +811,59 @@ backend:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+
+  ## @section Appsmith Backend Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param backend.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: false
+    ## @param backend.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports AppSmith Backend is listening
+    ## on. When true, AppSmith Backend will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param backend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolic
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param backend.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param backend.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param backend.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 
   ## @section Appsmith Backend Traffic Exposure Parameters
   ##
@@ -949,7 +1061,7 @@ rts:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param rts.containerSecurityContext.enabled Enabled Appsmith rts containers' Security Context
-  ## @param rts.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param rts.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param rts.containerSecurityContext.runAsUser Set Appsmith rts containers' Security Context runAsUser
   ## @param rts.containerSecurityContext.runAsNonRoot Set Appsmith rts containers' Security Context runAsNonRoot
   ## @param rts.containerSecurityContext.readOnlyRootFilesystem Set Appsmith rts containers' Security Context runAsNonRoot
@@ -960,7 +1072,7 @@ rts:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -977,6 +1089,9 @@ rts:
   ## @param rts.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param rts.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param rts.hostAliases Appsmith rts pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1095,6 +1210,59 @@ rts:
   ##
   initContainers: []
 
+  ## @section Appsmith RTS Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param rts.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: false
+    ## @param rts.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports AppSmith RTS is listening
+    ## on. When true, AppSmith RTS will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param rts.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param rts.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param rts.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param rts.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+
   ## @section Appsmith RTS Traffic Exposure Parameters
   ##
   service:
@@ -1171,7 +1339,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r94
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1191,14 +1359,14 @@ volumePermissions:
     requests: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
 
 ## @section Other Parameters

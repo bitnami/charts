@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/logstash
-  tag: 8.11.4-debian-11-r0
+  tag: 8.12.0-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -89,6 +89,9 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -157,6 +160,16 @@ output: |-
 ## @param existingConfiguration Name of existing ConfigMap object with the Logstash configuration (`input`, `filter`, and `output` will be ignored).
 ##
 existingConfiguration: ""
+## @param extraConfigurationFiles Extra configuration files to be added to the configuration ConfigMap and mounted at /bitnami/logstash/config. Rendered as a template.
+## NOTE: Mounting logstash.yml may cause other settings to be ignored
+## E.g.:
+## extraConfigurationFiles:
+##   logstash.yml: |
+##     path.data: {{ .Values.persistence.mountPath }}
+##     api.http.host: 0.0.0.0
+##     api.http.port: {{ .Values.monitoringAPIPort | quote }}
+##
+extraConfigurationFiles: {}
 ## @param enableMultiplePipelines Allows user to use multiple pipelines
 ## ref: https://www.elastic.co/guide/en/logstash/master/multiple-pipelines.html
 ##
@@ -328,7 +341,7 @@ podSecurityContext:
 ## Configure Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
-## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
@@ -339,7 +352,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false
@@ -541,11 +554,11 @@ volumePermissions:
   ##
   enabled: false
   ## The security context for the volumePermissions init container
-  ## @param volumePermissions.securityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.securityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.securityContext.runAsUser User ID for the volumePermissions init container
   ##
   securityContext:
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
   ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
   ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
@@ -557,7 +570,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r94
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
