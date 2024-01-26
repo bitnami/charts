@@ -561,8 +561,6 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
-
-
 ## SonarQube&trade; ingress parameters
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
