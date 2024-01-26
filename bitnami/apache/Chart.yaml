@@ -8,7 +8,7 @@ annotations:
     - name: apache-exporter
       image: docker.io/bitnami/apache-exporter:1.0.5-debian-11-r3
     - name: apache
-      image: docker.io/bitnami/apache:2.4.58-debian-11-r6
+      image: docker.io/bitnami/apache:2.4.58-debian-11-r7
     - name: git
       image: docker.io/bitnami/git:2.43.0-debian-11-r6
 apiVersion: v2
@@ -35,4 +35,4 @@ maintainers:
 name: apache
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/apache
-version: 10.5.0
+version: 10.5.1
