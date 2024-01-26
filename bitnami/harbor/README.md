@@ -241,18 +241,19 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 ### Volume Permissions parameters
 
-| Name                                                   | Description                                                                                                                       | Value                      |
-| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                    |
-| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                       |
-| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`                       |
-| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                       |
-| `volumePermissions.containerSecurityContext.enabled`   | Enable init container Security Context                                                                                            | `true`                     |
-| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                        |
+| Name                                                        | Description                                                                                                                       | Value                      |
+| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`                                 | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                    |
+| `volumePermissions.image.registry`                          | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                        | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                            | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`                        | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                       | Init container volume-permissions image pull secrets                                                                              | `[]`                       |
+| `volumePermissions.resources.limits`                        | Init container volume-permissions resource limits                                                                                 | `{}`                       |
+| `volumePermissions.resources.requests`                      | Init container volume-permissions resource requests                                                                               | `{}`                       |
+| `volumePermissions.containerSecurityContext.enabled`        | Enable init container Security Context                                                                                            | `true`                     |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `nil`                      |
+| `volumePermissions.containerSecurityContext.runAsUser`      | User ID for the init container                                                                                                    | `0`                        |
 
 ### NGINX Parameters
 
@@ -300,8 +301,12 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `nginx.resources.limits`                                  | The resources limits for the NGINX containers                                                                            | `{}`                    |
 | `nginx.resources.requests`                                | The requested resources for the NGINX containers                                                                         | `{}`                    |
 | `nginx.podSecurityContext.enabled`                        | Enabled NGINX pods' Security Context                                                                                     | `true`                  |
+| `nginx.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`                |
+| `nginx.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`                    |
+| `nginx.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                    |
 | `nginx.podSecurityContext.fsGroup`                        | Set NGINX pod's Security Context fsGroup                                                                                 | `1001`                  |
 | `nginx.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`                  |
+| `nginx.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`                   |
 | `nginx.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`                  |
 | `nginx.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`                  |
 | `nginx.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`                 |
@@ -311,6 +316,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `nginx.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault`        |
 | `nginx.updateStrategy.type`                               | NGINX deployment strategy type - only really applicable for deployments with RWO PVs attached                            | `RollingUpdate`         |
 | `nginx.lifecycleHooks`                                    | LifecycleHook for the NGINX container(s) to automate configuration before or after startup                               | `{}`                    |
+| `nginx.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`                 |
 | `nginx.hostAliases`                                       | NGINX pods host aliases                                                                                                  | `[]`                    |
 | `nginx.podLabels`                                         | Add additional labels to the NGINX pods (evaluated as a template)                                                        | `{}`                    |
 | `nginx.podAnnotations`                                    | Annotations to add to the NGINX pods (evaluated as a template)                                                           | `{}`                    |
@@ -373,8 +379,12 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `portal.resources.limits`                                  | The resources limits for the Harbor Portal containers                                                                    | `{}`                            |
 | `portal.resources.requests`                                | The requested resources for the Harbor Portal containers                                                                 | `{}`                            |
 | `portal.podSecurityContext.enabled`                        | Enabled Harbor Portal pods' Security Context                                                                             | `true`                          |
+| `portal.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`                        |
+| `portal.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`                            |
+| `portal.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                            |
 | `portal.podSecurityContext.fsGroup`                        | Set Harbor Portal pod's Security Context fsGroup                                                                         | `1001`                          |
 | `portal.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`                          |
+| `portal.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`                           |
 | `portal.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`                          |
 | `portal.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`                          |
 | `portal.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`                         |
@@ -462,8 +472,12 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `core.resources.limits`                                  | The resources limits for the Harbor Core containers                                                                                                                                                                                                                                      | `{}`                          |
 | `core.resources.requests`                                | The requested resources for the Harbor Core containers                                                                                                                                                                                                                                   | `{}`                          |
 | `core.podSecurityContext.enabled`                        | Enabled Harbor Core pods' Security Context                                                                                                                                                                                                                                               | `true`                        |
+| `core.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                                                                       | `Always`                      |
+| `core.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                                                                                                           | `[]`                          |
+| `core.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                                                                              | `[]`                          |
 | `core.podSecurityContext.fsGroup`                        | Set Harbor Core pod's Security Context fsGroup                                                                                                                                                                                                                                           | `1001`                        |
 | `core.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                                                                     | `true`                        |
+| `core.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                                                         | `nil`                         |
 | `core.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                                                               | `1001`                        |
 | `core.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                                                                            | `true`                        |
 | `core.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                                                                              | `false`                       |
@@ -545,8 +559,12 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `jobservice.resources.limits`                                  | The resources limits for the Harbor Jobservice containers                                                                                                    | `{}`                                |
 | `jobservice.resources.requests`                                | The requested resources for the Harbor Jobservice containers                                                                                                 | `{}`                                |
 | `jobservice.podSecurityContext.enabled`                        | Enabled Harbor Jobservice pods' Security Context                                                                                                             | `true`                              |
+| `jobservice.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                           | `Always`                            |
+| `jobservice.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                               | `[]`                                |
+| `jobservice.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                  | `[]`                                |
 | `jobservice.podSecurityContext.fsGroup`                        | Set Harbor Jobservice pod's Security Context fsGroup                                                                                                         | `1001`                              |
 | `jobservice.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                         | `true`                              |
+| `jobservice.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                             | `nil`                               |
 | `jobservice.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                   | `1001`                              |
 | `jobservice.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                | `true`                              |
 | `jobservice.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                  | `false`                             |
@@ -599,6 +617,9 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `registry.tls.existingSecret`                                           | Name of an existing secret with the certificates for internal TLS access                                                                                                                                                                                                  | `""`                                                                                |
 | `registry.replicaCount`                                                 | Number of Harbor Registry replicas                                                                                                                                                                                                                                        | `1`                                                                                 |
 | `registry.podSecurityContext.enabled`                                   | Enabled Harbor Registry pods' Security Context                                                                                                                                                                                                                            | `true`                                                                              |
+| `registry.podSecurityContext.fsGroupChangePolicy`                       | Set filesystem group change policy                                                                                                                                                                                                                                        | `Always`                                                                            |
+| `registry.podSecurityContext.sysctls`                                   | Set kernel settings using the sysctl interface                                                                                                                                                                                                                            | `[]`                                                                                |
+| `registry.podSecurityContext.supplementalGroups`                        | Set filesystem extra groups                                                                                                                                                                                                                                               | `[]`                                                                                |
 | `registry.podSecurityContext.fsGroup`                                   | Set Harbor Registry pod's Security Context fsGroup                                                                                                                                                                                                                        | `1001`                                                                              |
 | `registry.updateStrategy.type`                                          | Harbor Registry deployment strategy type - only really applicable for deployments with RWO PVs attached                                                                                                                                                                   | `RollingUpdate`                                                                     |
 | `registry.hostAliases`                                                  | Harbor Registry pods host aliases                                                                                                                                                                                                                                         | `[]`                                                                                |
@@ -658,6 +679,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `registry.server.resources.limits`                                      | The resources limits for the Harbor Registry main containers                                                                                                                                                                                                              | `{}`                                                                                |
 | `registry.server.resources.requests`                                    | The requested resources for the Harbor Registry main containers                                                                                                                                                                                                           | `{}`                                                                                |
 | `registry.server.containerSecurityContext.enabled`                      | Enabled containers' Security Context                                                                                                                                                                                                                                      | `true`                                                                              |
+| `registry.server.containerSecurityContext.seLinuxOptions`               | Set SELinux options in container                                                                                                                                                                                                                                          | `nil`                                                                               |
 | `registry.server.containerSecurityContext.runAsUser`                    | Set containers' Security Context runAsUser                                                                                                                                                                                                                                | `1001`                                                                              |
 | `registry.server.containerSecurityContext.runAsNonRoot`                 | Set container's Security Context runAsNonRoot                                                                                                                                                                                                                             | `true`                                                                              |
 | `registry.server.containerSecurityContext.privileged`                   | Set container's Security Context privileged                                                                                                                                                                                                                               | `false`                                                                             |
@@ -707,6 +729,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `registry.controller.resources.limits`                                  | The resources limits for the Harbor Registryctl containers                                                                                                                                                                                                                | `{}`                                                                                |
 | `registry.controller.resources.requests`                                | The requested resources for the Harbor Registryctl containers                                                                                                                                                                                                             | `{}`                                                                                |
 | `registry.controller.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                                                      | `true`                                                                              |
+| `registry.controller.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                                          | `nil`                                                                               |
 | `registry.controller.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                                                | `1001`                                                                              |
 | `registry.controller.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                                                             | `true`                                                                              |
 | `registry.controller.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                                                               | `false`                                                                             |
@@ -771,8 +794,12 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `trivy.resources.limits`                                  | The resources limits for the Trivy containers                                                                            | `{}`                                   |
 | `trivy.resources.requests`                                | The requested resources for the Trivy containers                                                                         | `{}`                                   |
 | `trivy.podSecurityContext.enabled`                        | Enabled Trivy pods' Security Context                                                                                     | `true`                                 |
+| `trivy.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`                               |
+| `trivy.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`                                   |
+| `trivy.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                                   |
 | `trivy.podSecurityContext.fsGroup`                        | Set Trivy pod's Security Context fsGroup                                                                                 | `1001`                                 |
 | `trivy.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`                                 |
+| `trivy.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`                                  |
 | `trivy.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`                                 |
 | `trivy.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`                                 |
 | `trivy.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`                                |
@@ -845,8 +872,12 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `exporter.resources.limits`                                  | The resources limits for the Harbor Exporter containers                                                                                         | `{}`                              |
 | `exporter.resources.requests`                                | The requested resources for the Harbor Exporter containers                                                                                      | `{}`                              |
 | `exporter.podSecurityContext.enabled`                        | Enabled Exporter pods' Security Context                                                                                                         | `true`                            |
+| `exporter.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                              | `Always`                          |
+| `exporter.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                  | `[]`                              |
+| `exporter.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                     | `[]`                              |
 | `exporter.podSecurityContext.fsGroup`                        | Set Exporter pod's Security Context fsGroup                                                                                                     | `1001`                            |
 | `exporter.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                            | `true`                            |
+| `exporter.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                | `nil`                             |
 | `exporter.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                      | `1001`                            |
 | `exporter.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                   | `true`                            |
 | `exporter.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                     | `false`                           |
@@ -964,7 +995,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/harbo
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -1095,9 +1126,205 @@ NOTE: Due to an error in our release process, Redis&reg;' chart versions higher 
 
 This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
 
-### To any previous version
+### To 15.0.0
 
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/harbor/administration/upgrade/).
+This major update the Redis&reg; subchart to its newest major, 17.0.0, which updates Redis&reg; from its version 6.2 to the latest 7.0.
+
+### To 14.x.x
+
+The new version of this chart is not longer sopported Clair, who was deprecated by Habor in the [version 2.2.0](https://goharbor.io/blog/harbor-2.2/)
+
+### To 13.x.x
+
+This major release updates the PostgreSQL subchart image to the newest 13.x version.
+
+#### Upgrading Instructions
+
+The upgrade process to *13.x.x* from *12.x.x* should be done by reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `harbor`):
+
+> NOTE: Please, create a backup of your database before running any of these actions.
+
+1. Select the namespace where Harbor is deployed:
+
+```console
+HARBOR_NAMESPACE='default'
+```
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+
+```console
+HARBOR_PASSWORD=$(kubectl get secret --namespace "${HARBOR_NAMESPACE:?}" harbor-core-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
+POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+POSTGRESQL_PVC=$(kubectl get pvc --namespace "${HARBOR_NAMESPACE:?}" -l app.kubernetes.io/instance=harbor,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+1. Delete the PostgreSQL statefulset (notice the option `--cascade=orphan`) and secret:
+
+```console
+kubectl delete statefulsets.apps --namespace "${HARBOR_NAMESPACE:?}" --cascade=orphan harbor-postgresql
+kubectl delete secret --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql
+```
+
+1. Upgrade your release using the same PostgreSQL version:
+
+```console
+CURRENT_PG_VERSION=$(kubectl exec --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0 -c harbor-postgresql -- bash -c 'printenv APP_VERSION')
+helm --namespace "${HARBOR_NAMESPACE:?}" upgrade harbor bitnami/harbor \
+  --set adminPassword="${HARBOR_PASSWORD:?}" \
+  --set postgresql.image.tag="${CURRENT_PG_VERSION:?}" \
+  --set postgresql.auth.postgresPassword="${POSTGRESQL_PASSWORD:?}" \
+  --set postgresql.primary.persistence.existingClaim="${POSTGRESQL_PVC:?}"
+```
+
+1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+
+```console
+kubectl delete pod --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0
+```
+
+### To 12.x.x
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository. Additionally updates the PostgreSQL & Redis subcharts to their newest major 11.x.x and 16.x.x, respectively, which contain similar changes.
+
+- `harborAdminPassword` was renamed to `adminPassword`
+- `forcePassword` was deprecated
+- Traffic exposure was completely redesigned:
+  - The new parameter `exposureType` allows deciding whether to expose Harbor using Ingress or an NGINX proxy
+  - `service.type` doesn't accept `Ingress` as a valid value anymore. To configure traffic exposure through Ingress, set `exposureType` to `ingress`
+  - `service.tls` map has been renamed to `nginx.tls`
+  - To configure TLS termination with Ingress, set the `ingress.core.tls` parameter
+  - `ingress` map is completely redefined
+- `xxxImage` parameters (e.g. `nginxImage`) have been renamed to `xxx.image` (e.g. `nginx.image`)
+- `xxx.replicas` parameters (e.g. `nginx.replicas`) have been renamed to `xxx.replicaCount` (e.g. `nginx.replicaCount`)
+- `persistence.persistentVolumeClaim.xxx.accessMode` parameters (e.g. `persistence.persistentVolumeClaim.registry.accessMode`) have been renamed to `persistence.persistentVolumeClaim.xxx.accessModes` (e.g. `persistence.persistentVolumeClaim.registry.accessModes`) and expect an array instead of a string
+- `caBundleSecretName` was renamed to `internalTLS.caBundleSecret`
+- `persistence.imageChartStorage.caBundleSecretName` was renamed to `persistence.imageChartStorage.caBundleSecret`
+- `core.uaaSecretName` was renamed to `core.uaaSecret`
+
+#### How to upgrade to version 12.0.0
+
+To upgrade to *12.x.x* from *11.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `harbor`):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+1. Select the namespace where Harbor is deployed:
+
+```console
+HARBOR_NAMESPACE='default'
+```
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+
+```console
+HARBOR_PASSWORD=$(kubectl get secret --namespace "${HARBOR_NAMESPACE:?}" harbor-core-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
+POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+POSTGRESQL_PVC=$(kubectl get pvc --namespace "${HARBOR_NAMESPACE:?}" -l app.kubernetes.io/instance=harbor,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+1. Delete the PostgreSQL statefulset (notice the option `--cascade=orphan`) and secret:
+
+```console
+kubectl delete statefulsets.apps --namespace "${HARBOR_NAMESPACE:?}" --cascade=orphan harbor-postgresql
+kubectl delete secret --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql
+```
+
+1. Upgrade your release using the same PostgreSQL version:
+
+```console
+CURRENT_PG_VERSION=$(kubectl exec --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0 -c harbor-postgresql -- bash -c 'printenv BITNAMI_IMAGE_VERSION')
+helm --namespace "${HARBOR_NAMESPACE:?}" upgrade harbor bitnami/harbor \
+  --set adminPassword="${HARBOR_PASSWORD:?}" \
+  --set postgresql.image.tag="${CURRENT_PG_VERSION:?}" \
+  --set postgresql.auth.postgresPassword="${POSTGRESQL_PASSWORD:?}" \
+  --set postgresql.primary.persistence.existingClaim="${POSTGRESQL_PVC:?}"
+```
+
+1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+
+```console
+kubectl delete pod --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0
+```
+
+> **NOTE:** the instructions above reuse the same PostgreSQL version you were using in your chart release. Otherwise, you will find an error such as the one below when upgrading since the new chart major version also bumps the application version. To workaround this issue you need to upgrade database, please refer to the [official PostgreSQL documentation](https://www.postgresql.org/docs/current/upgrading.html) for more information about this.
+>
+> ```console
+> $ kubectl --namespace "${HARBOR_NAMESPACE:?}" logs harbor-postgresql-0 --container harbor-postgresql
+>     ...
+> postgresql 08:10:14.72 INFO  ==> ** Starting PostgreSQL **
+> 2022-02-01 08:10:14.734 GMT [1] FATAL:  database files are incompatible with server
+> 2022-02-01 08:10:14.734 GMT [1] DETAIL:  The data directory was initialized by PostgreSQL version 11, which is not compatible with this version 14.1.
+> ```
+
+### To 11.0.0
+
+This major update the Redis&reg; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1500) you can find more info about the specific changes.
+
+### To 10.0.0
+
+This major updates the Redis&reg; subchart to it newest major, 14.0.0, which contains breaking changes. For more information on this subchart's major and the steps needed to migrate your data from your previous release, please refer to [Redis&reg; upgrade notes.](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1400).
+
+### To 9.7.0
+
+This new version of the chart bumps the version of Harbor to [`2.2.0`](https://github.com/goharbor/harbor/releases/tag/v2.2.0) which deprecates built-in Clair. If you still want to use Clair, you will need to set `clair.enabled` to `true` and Clair scanner and the Harbor adapter will be deployed. Follow [these steps](https://goharbor.io/docs/latest/administration/vulnerability-scanning/pluggable-scanners) to add it as an additional interrogation service for Harbor.
+
+Please note that Clair might be fully deprecated from this chart in following updates.
+
+### To 9.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running *helm dependency update*, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Chart.
+- This chart depends on the **PostgreSQL 10** instead of **PostgreSQL 9**. Apart from the same changes that are described in this section, there are also other major changes due to the master/slave nomenclature was replaced by primary/readReplica. [Here](https://github.com/bitnami/charts/pull/4385) you can find more information about the changes introduced.
+
+#### Considerations when upgrading to this version
+
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version does not support Helm v2 anymore.
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3.
+
+#### Useful links
+
+- [Bitnami Tutorial](https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues)
+- [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
+- [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
+
+#### How to upgrade to version 9.0.0
+
+To upgrade to *9.0.0* from *8.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `harbor` and the release namespace `default`):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+
+```console
+export HARBOR_PASSWORD=$(kubectl get secret --namespace default harbor-core-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default harbor-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=harbor,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+```
+
+1. Delete the PostgreSQL statefulset (notice the option *--cascade=false*)
+
+```console
+kubectl delete statefulsets.apps --cascade=false harbor-postgresql
+```
+
+1. Upgrade your release:
+
+```console
+helm upgrade harbor bitnami/harbor \
+  --set harborAdminPassword=$HARBOR_PASSWORD \
+  --set postgresql.image.tag=$CURRENT_PG_VERSION \
+  --set postgresql.postgresqlPassword$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
+
+1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+
+```console
+kubectl delete pod harbor-postgresql-0
+```
 
 ## License
 

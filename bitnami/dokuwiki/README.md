@@ -85,6 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`                                  | Image pull policy                                                                                                     | `IfNotPresent`             |
 | `image.pullSecrets`                                 | Image pull policy                                                                                                     | `[]`                       |
 | `image.debug`                                       | Enable image debugging                                                                                                | `false`                    |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                    | `false`                    |
 | `hostAliases`                                       | Add deployment host aliases                                                                                           | `[]`                       |
 | `dokuwikiUsername`                                  | User of the application                                                                                               | `user`                     |
 | `dokuwikiPassword`                                  | Application password                                                                                                  | `""`                       |
@@ -102,8 +103,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.existingClaim`                         | Name of an existing PVC to be used                                                                                    | `""`                       |
 | `persistence.annotations`                           | Annotations to add to the PVC                                                                                         | `{}`                       |
 | `podSecurityContext.enabled`                        | Enable securityContext on for DokuWiki deployment                                                                     | `true`                     |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                    | `Always`                   |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                        | `[]`                       |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                           | `[]`                       |
 | `podSecurityContext.fsGroup`                        | Group to configure permissions for volumes                                                                            | `1001`                     |
 | `containerSecurityContext.enabled`                  | Enabled Dokuwiki containers' Security Context                                                                         | `true`                     |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                      | `nil`                      |
 | `containerSecurityContext.runAsUser`                | Set Dokuwiki containers' Security Context runAsUser                                                                   | `1001`                     |
 | `containerSecurityContext.runAsNonRoot`             | Set Controller container's Security Context runAsNonRoot                                                              | `true`                     |
 | `containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                                   | `false`                    |
@@ -159,6 +164,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `terminationGracePeriodSeconds`                     | In seconds, time the given to the pod to terminate gracefully                                                         | `""`                       |
 | `containerPorts.http`                               | Container HTTP port                                                                                                   | `8080`                     |
 | `containerPorts.https`                              | Container HTTPS port                                                                                                  | `8443`                     |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for WordPress pod                                                                   | `true`                     |
+| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                | `""`                       |
+| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                | `false`                    |
+| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                  | `{}`                       |
 
 ### Traffic Exposure Parameters
 
@@ -266,7 +275,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/dokuw
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 

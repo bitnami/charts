@@ -47,7 +47,7 @@ spec:
     {{- if .Values.notifications.bots.slack.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.notifications.bots.slack.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.bots.slack.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.notifications.bots.slack.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: notifications-slack-bot
 {{ end }}

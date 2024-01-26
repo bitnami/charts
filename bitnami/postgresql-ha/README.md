@@ -27,6 +27,19 @@ This Helm chart has been developed based on [bitnami/postgresql](https://github.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+## Differences between the PostgreSQL-HA and PostgreSQL Helm charts
+
+There are two different ways to deploy a PostgreSQL cluster, using the PostgreSQL Helm chart or the PostgreSQL High Availability (HA) Helm chart. Both solutions provide a simply and reliable way to run PostgreSQL in a production environment. Keep reading to discover the differences between them and check which one better suits your needs.
+
+- Both the PostgreSQL HA and the PostgreSQL chart configures a cluster with a master-slave topology. The master node has writing permissions while replication is on the slaves nodes which have reading-only permissions.
+- The PostgreSQL HA Helm chart deploys a cluster with three nodes by default, one for pgpool, and one master and one slave for PostgreSQL. The PostgreSQL chart configures a cluster with two nodes by default (one master and one slave).
+- The PostgreSQL HA Helm chart uses pgpool to handle the connection to the nodes. pgpool is resposible to spread the queries among nodes.
+- The PostgreSQL HA Helm chart includes a repmgr module that ensures high-availability thanks to automatic membership control. If the master is down, any of the slave nodes will be promoted as master to avoid data loss.
+
+The following diagram shows you the options you have for using Bitnami's PostgreSQL solutions in your deployments:
+
+![A diagram comparing a PostgreSQL solution versus a PostgreSQL HA with pgpool and repmgr](img/postgresql-ha-topology.png)
+
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -106,6 +119,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `postgresql.replicaCount`                                      | Number of replicas to deploy. Use an odd number. Having 3 replicas is the minimum to get quorum when promoting a new primary.                                                                                 | `3`                                 |
 | `postgresql.updateStrategy.type`                               | Postgresql statefulset strategy type                                                                                                                                                                          | `RollingUpdate`                     |
 | `postgresql.containerPorts.postgresql`                         | PostgreSQL port                                                                                                                                                                                               | `5432`                              |
+| `postgresql.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                            | `false`                             |
 | `postgresql.hostAliases`                                       | Deployment pod host aliases                                                                                                                                                                                   | `[]`                                |
 | `postgresql.hostNetwork`                                       | Specify if host network should be enabled for PostgreSQL pod                                                                                                                                                  | `false`                             |
 | `postgresql.hostIPC`                                           | Specify if host IPC should be enabled for PostgreSQL pod                                                                                                                                                      | `false`                             |
@@ -123,8 +137,12 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `postgresql.schedulerName`                                     | Use an alternate scheduler, e.g. "stork".                                                                                                                                                                     | `""`                                |
 | `postgresql.terminationGracePeriodSeconds`                     | Seconds PostgreSQL pod needs to terminate gracefully                                                                                                                                                          | `""`                                |
 | `postgresql.podSecurityContext.enabled`                        | Enable security context for PostgreSQL with Repmgr                                                                                                                                                            | `true`                              |
+| `postgresql.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                            | `Always`                            |
+| `postgresql.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                                | `[]`                                |
+| `postgresql.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                   | `[]`                                |
 | `postgresql.podSecurityContext.fsGroup`                        | Group ID for the PostgreSQL with Repmgr filesystem                                                                                                                                                            | `1001`                              |
 | `postgresql.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                          | `true`                              |
+| `postgresql.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                              | `nil`                               |
 | `postgresql.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                    | `1001`                              |
 | `postgresql.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                 | `true`                              |
 | `postgresql.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                   | `false`                             |
@@ -144,6 +162,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `postgresql.sidecars`                                          | Extra sidecar containers to add to the deployment                                                                                                                                                             | `[]`                                |
 | `postgresql.resources.limits`                                  | The resources limits for the container                                                                                                                                                                        | `{}`                                |
 | `postgresql.resources.requests`                                | The requested resources for the container                                                                                                                                                                     | `{}`                                |
+| `postgresql.podManagementPolicy`                               | sets the pod management policy                                                                                                                                                                                | `Parallel`                          |
 | `postgresql.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                                                                                          | `true`                              |
 | `postgresql.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                       | `30`                                |
 | `postgresql.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                              | `10`                                |
@@ -232,6 +251,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `witness.replicaCount`                                         | Number of replicas to deploy.                                                                                                                                                                                 | `1`                                 |
 | `witness.updateStrategy.type`                                  | Postgresql statefulset strategy type                                                                                                                                                                          | `RollingUpdate`                     |
 | `witness.containerPorts.postgresql`                            | PostgreSQL witness port                                                                                                                                                                                       | `5432`                              |
+| `witness.automountServiceAccountToken`                         | Mount Service Account token in pod                                                                                                                                                                            | `false`                             |
 | `witness.hostAliases`                                          | Deployment pod host aliases                                                                                                                                                                                   | `[]`                                |
 | `witness.hostNetwork`                                          | Specify if host network should be enabled for PostgreSQL witness pod                                                                                                                                          | `false`                             |
 | `witness.hostIPC`                                              | Specify if host IPC should be enabled for PostgreSQL witness pod                                                                                                                                              | `false`                             |
@@ -249,8 +269,12 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `witness.schedulerName`                                        | Use an alternate scheduler, e.g. "stork".                                                                                                                                                                     | `""`                                |
 | `witness.terminationGracePeriodSeconds`                        | Seconds PostgreSQL witness pod needs to terminate gracefully                                                                                                                                                  | `""`                                |
 | `witness.podSecurityContext.enabled`                           | Enable security context for PostgreSQL witness with Repmgr                                                                                                                                                    | `true`                              |
+| `witness.podSecurityContext.fsGroupChangePolicy`               | Set filesystem group change policy                                                                                                                                                                            | `Always`                            |
+| `witness.podSecurityContext.sysctls`                           | Set kernel settings using the sysctl interface                                                                                                                                                                | `[]`                                |
+| `witness.podSecurityContext.supplementalGroups`                | Set filesystem extra groups                                                                                                                                                                                   | `[]`                                |
 | `witness.podSecurityContext.fsGroup`                           | Group ID for the PostgreSQL witness with Repmgr filesystem                                                                                                                                                    | `1001`                              |
 | `witness.containerSecurityContext.enabled`                     | Enabled containers' Security Context                                                                                                                                                                          | `true`                              |
+| `witness.containerSecurityContext.seLinuxOptions`              | Set SELinux options in container                                                                                                                                                                              | `nil`                               |
 | `witness.containerSecurityContext.runAsUser`                   | Set containers' Security Context runAsUser                                                                                                                                                                    | `1001`                              |
 | `witness.containerSecurityContext.runAsNonRoot`                | Set container's Security Context runAsNonRoot                                                                                                                                                                 | `true`                              |
 | `witness.containerSecurityContext.privileged`                  | Set container's Security Context privileged                                                                                                                                                                   | `false`                             |
@@ -339,6 +363,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `pgpool.image.debug`                                       | Specify if debug logs should be enabled                                                                                                         | `false`                  |
 | `pgpool.customUsers.usernames`                             | Comma or semicolon separated list of additional users that will be performing connections to the database using pgpool.                         | `""`                     |
 | `pgpool.customUsers.passwords`                             | Comma or semicolon separated list of the associated passwords for the users above. Must have the same number of elements as the usernames list. | `""`                     |
+| `pgpool.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                              | `false`                  |
 | `pgpool.hostAliases`                                       | Deployment pod host aliases                                                                                                                     | `[]`                     |
 | `pgpool.customUsersSecret`                                 | Name of a secret containing the usernames and passwords of accounts that will be added to pgpool_passwd                                         | `""`                     |
 | `pgpool.existingSecret`                                    | Pgpool admin password using existing secret                                                                                                     | `""`                     |
@@ -375,8 +400,12 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `pgpool.nodeSelector`                                      | Node labels for Pgpool pods assignment                                                                                                          | `{}`                     |
 | `pgpool.tolerations`                                       | Tolerations for Pgpool pods assignment                                                                                                          | `[]`                     |
 | `pgpool.podSecurityContext.enabled`                        | Enable security context for Pgpool                                                                                                              | `true`                   |
+| `pgpool.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                              | `Always`                 |
+| `pgpool.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                  | `[]`                     |
+| `pgpool.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                     | `[]`                     |
 | `pgpool.podSecurityContext.fsGroup`                        | Group ID for the Pgpool filesystem                                                                                                              | `1001`                   |
 | `pgpool.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                            | `true`                   |
+| `pgpool.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                | `nil`                    |
 | `pgpool.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                      | `1001`                   |
 | `pgpool.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                   | `true`                   |
 | `pgpool.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                     | `false`                  |
@@ -462,10 +491,10 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `rbac.create`                                 | Create Role and RoleBinding (required for PSP to work)                                                                                      | `false` |
 | `rbac.rules`                                  | Custom RBAC rules to set                                                                                                                    | `[]`    |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for Airflow pods                                                                                          | `false` |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for Airflow pods                                                                                          | `true`  |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                      | `""`    |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                        | `{}`    |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `false` |
 | `psp.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
 
 ### Metrics parameters
@@ -480,6 +509,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.image.pullSecrets`                      | Specify docker-registry secret names as an array                                                                                                          | `[]`                                |
 | `metrics.image.debug`                            | Specify if debug logs should be enabled                                                                                                                   | `false`                             |
 | `metrics.podSecurityContext.enabled`             | Enable security context for PostgreSQL Prometheus exporter                                                                                                | `true`                              |
+| `metrics.podSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                                          | `nil`                               |
 | `metrics.podSecurityContext.runAsUser`           | User ID for the PostgreSQL Prometheus exporter container                                                                                                  | `1001`                              |
 | `metrics.podSecurityContext.runAsGroup`          | Group ID for the PostgreSQL Prometheus exporter container                                                                                                 | `0`                                 |
 | `metrics.podSecurityContext.runAsNonRoot`        | Set PostgreSQL Prometheus exporter container's Security Context runAsNonRoot                                                                              | `true`                              |
@@ -508,6 +538,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.customLivenessProbe`                    | Override default liveness probe                                                                                                                           | `{}`                                |
 | `metrics.customReadinessProbe`                   | Override default readiness probe                                                                                                                          | `{}`                                |
 | `metrics.customStartupProbe`                     | Override default startup probe                                                                                                                            | `{}`                                |
+| `metrics.service.enabled`                        | PostgreSQL Prometheus exporter metrics service enabled                                                                                                    | `true`                              |
 | `metrics.service.type`                           | PostgreSQL Prometheus exporter metrics service type                                                                                                       | `ClusterIP`                         |
 | `metrics.service.ports.metrics`                  | PostgreSQL Prometheus exporter metrics service port                                                                                                       | `9187`                              |
 | `metrics.service.nodePorts.metrics`              | PostgreSQL Prometheus exporter Node Port                                                                                                                  | `""`                                |
@@ -542,6 +573,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `volumePermissions.image.digest`                           | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `volumePermissions.image.pullPolicy`                       | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`                      | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
+| `volumePermissions.podSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                  | `nil`                      |
 | `volumePermissions.podSecurityContext.runAsUser`           | Init container volume-permissions User ID                                                                                         | `0`                        |
 | `volumePermissions.podSecurityContext.runAsGroup`          | Group ID for the init container volume-permissions container                                                                      | `0`                        |
 | `volumePermissions.podSecurityContext.runAsNonRoot`        | Set Security Context runAsNonRoot for the init container volume-permissions container                                             | `false`                    |
@@ -568,26 +600,67 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 ### Traffic Exposure parameters
 
-| Name                                                  | Description                                                                                   | Value        |
-| ----------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------ |
-| `service.type`                                        | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                           | `ClusterIP`  |
-| `service.ports.postgresql`                            | PostgreSQL port                                                                               | `5432`       |
-| `service.portName`                                    | PostgreSQL service port name                                                                  | `postgresql` |
-| `service.nodePorts.postgresql`                        | Kubernetes service nodePort                                                                   | `""`         |
-| `service.loadBalancerIP`                              | Load balancer IP if service type is `LoadBalancer`                                            | `""`         |
-| `service.loadBalancerSourceRanges`                    | Addresses that are allowed when service is LoadBalancer                                       | `[]`         |
-| `service.clusterIP`                                   | Set the Cluster IP to use                                                                     | `""`         |
-| `service.externalTrafficPolicy`                       | Enable client source IP preservation                                                          | `Cluster`    |
-| `service.extraPorts`                                  | Extra ports to expose (normally used with the `sidecar` value)                                | `[]`         |
-| `service.sessionAffinity`                             | Control where client requests go, to the same pod or round-robin                              | `None`       |
-| `service.sessionAffinityConfig`                       | Additional settings for the sessionAffinity                                                   | `{}`         |
-| `service.annotations`                                 | Provide any additional annotations both for PostgreSQL and Pgpool services                    | `{}`         |
-| `service.serviceLabels`                               | Labels for PostgreSQL service                                                                 | `{}`         |
-| `service.headless.annotations`                        | Annotations for the headless service.                                                         | `{}`         |
-| `networkPolicy.enabled`                               | Enable NetworkPolicy                                                                          | `false`      |
-| `networkPolicy.allowExternal`                         | Don't require client label for connections                                                    | `true`       |
-| `networkPolicy.egressRules.denyConnectionsToExternal` | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53) | `false`      |
-| `networkPolicy.egressRules.customRules`               | Custom network policy rule                                                                    | `{}`         |
+| Name                               | Description                                                                | Value        |
+| ---------------------------------- | -------------------------------------------------------------------------- | ------------ |
+| `service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)        | `ClusterIP`  |
+| `service.ports.postgresql`         | PostgreSQL port                                                            | `5432`       |
+| `service.portName`                 | PostgreSQL service port name                                               | `postgresql` |
+| `service.nodePorts.postgresql`     | Kubernetes service nodePort                                                | `""`         |
+| `service.loadBalancerIP`           | Load balancer IP if service type is `LoadBalancer`                         | `""`         |
+| `service.loadBalancerSourceRanges` | Addresses that are allowed when service is LoadBalancer                    | `[]`         |
+| `service.clusterIP`                | Set the Cluster IP to use                                                  | `""`         |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                       | `Cluster`    |
+| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)             | `[]`         |
+| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin           | `None`       |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                | `{}`         |
+| `service.annotations`              | Provide any additional annotations both for PostgreSQL and Pgpool services | `{}`         |
+| `service.serviceLabels`            | Labels for PostgreSQL service                                              | `{}`         |
+| `service.headless.annotations`     | Annotations for the headless service.                                      | `{}`         |
+
+### Backup parameters
+
+| Name                                                               | Description                                                                                                                           | Value                                                                                                                                                                                |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `backup.enabled`                                                   | Enable the logical dump of the database "regularly"                                                                                   | `false`                                                                                                                                                                              |
+| `backup.cronjob.schedule`                                          | Set the cronjob parameter schedule                                                                                                    | `@daily`                                                                                                                                                                             |
+| `backup.cronjob.timeZone`                                          | Set the cronjob parameter timeZone                                                                                                    | `""`                                                                                                                                                                                 |
+| `backup.cronjob.concurrencyPolicy`                                 | Set the cronjob parameter concurrencyPolicy                                                                                           | `Allow`                                                                                                                                                                              |
+| `backup.cronjob.failedJobsHistoryLimit`                            | Set the cronjob parameter failedJobsHistoryLimit                                                                                      | `1`                                                                                                                                                                                  |
+| `backup.cronjob.successfulJobsHistoryLimit`                        | Set the cronjob parameter successfulJobsHistoryLimit                                                                                  | `3`                                                                                                                                                                                  |
+| `backup.cronjob.startingDeadlineSeconds`                           | Set the cronjob parameter startingDeadlineSeconds                                                                                     | `""`                                                                                                                                                                                 |
+| `backup.cronjob.ttlSecondsAfterFinished`                           | Set the cronjob parameter ttlSecondsAfterFinished                                                                                     | `""`                                                                                                                                                                                 |
+| `backup.cronjob.restartPolicy`                                     | Set the cronjob parameter restartPolicy                                                                                               | `OnFailure`                                                                                                                                                                          |
+| `backup.cronjob.podSecurityContext.enabled`                        | Enable PodSecurityContext for CronJob/Backup                                                                                          | `true`                                                                                                                                                                               |
+| `backup.cronjob.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                    | `Always`                                                                                                                                                                             |
+| `backup.cronjob.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                        | `[]`                                                                                                                                                                                 |
+| `backup.cronjob.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                           | `[]`                                                                                                                                                                                 |
+| `backup.cronjob.podSecurityContext.fsGroup`                        | Group ID for the CronJob                                                                                                              | `1001`                                                                                                                                                                               |
+| `backup.cronjob.containerSecurityContext.enabled`                  | Enable container security context                                                                                                     | `true`                                                                                                                                                                               |
+| `backup.cronjob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                      | `nil`                                                                                                                                                                                |
+| `backup.cronjob.containerSecurityContext.runAsUser`                | User ID for the backup container                                                                                                      | `1001`                                                                                                                                                                               |
+| `backup.cronjob.containerSecurityContext.runAsGroup`               | Group ID for the backup container                                                                                                     | `0`                                                                                                                                                                                  |
+| `backup.cronjob.containerSecurityContext.runAsNonRoot`             | Set backup container's Security Context runAsNonRoot                                                                                  | `true`                                                                                                                                                                               |
+| `backup.cronjob.containerSecurityContext.readOnlyRootFilesystem`   | Is the container itself readonly                                                                                                      | `true`                                                                                                                                                                               |
+| `backup.cronjob.containerSecurityContext.allowPrivilegeEscalation` | Is it possible to escalate backup pod(s) privileges                                                                                   | `false`                                                                                                                                                                              |
+| `backup.cronjob.containerSecurityContext.seccompProfile.type`      | Set backup container's Security Context seccompProfile type                                                                           | `RuntimeDefault`                                                                                                                                                                     |
+| `backup.cronjob.containerSecurityContext.capabilities.drop`        | Set backup container's Security Context capabilities to drop                                                                          | `["ALL"]`                                                                                                                                                                            |
+| `backup.cronjob.command`                                           | Set backup container's command to run                                                                                                 | `["/bin/sh","-c","pg_dumpall --clean --if-exists --load-via-partition-root --quote-all-identifiers --no-password --file=${PGDUMP_DIR}/pg_dumpall-$(date '+%Y-%m-%d-%H-%M').pgdump"]` |
+| `backup.cronjob.labels`                                            | Set the cronjob labels                                                                                                                | `{}`                                                                                                                                                                                 |
+| `backup.cronjob.annotations`                                       | Set the cronjob annotations                                                                                                           | `{}`                                                                                                                                                                                 |
+| `backup.cronjob.nodeSelector`                                      | Node labels for PostgreSQL backup CronJob pod assignment                                                                              | `{}`                                                                                                                                                                                 |
+| `backup.cronjob.storage.existingClaim`                             | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)                                                     | `""`                                                                                                                                                                                 |
+| `backup.cronjob.storage.resourcePolicy`                            | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`                                                                                                                                                                                 |
+| `backup.cronjob.storage.storageClass`                              | PVC Storage Class for the backup data volume                                                                                          | `""`                                                                                                                                                                                 |
+| `backup.cronjob.storage.accessModes`                               | PV Access Mode                                                                                                                        | `["ReadWriteOnce"]`                                                                                                                                                                  |
+| `backup.cronjob.storage.size`                                      | PVC Storage Request for the backup data volume                                                                                        | `8Gi`                                                                                                                                                                                |
+| `backup.cronjob.storage.annotations`                               | PVC annotations                                                                                                                       | `{}`                                                                                                                                                                                 |
+| `backup.cronjob.storage.mountPath`                                 | Path to mount the volume at                                                                                                           | `/backup/pgdump`                                                                                                                                                                     |
+| `backup.cronjob.storage.subPath`                                   | Subdirectory of the volume to mount at                                                                                                | `""`                                                                                                                                                                                 |
+| `backup.cronjob.storage.volumeClaimTemplates.selector`             | A label query over volumes to consider for binding (e.g. when using local volumes)                                                    | `{}`                                                                                                                                                                                 |
+| `networkPolicy.enabled`                                            | Enable NetworkPolicy                                                                                                                  | `false`                                                                                                                                                                              |
+| `networkPolicy.allowExternal`                                      | Don't require client label for connections                                                                                            | `true`                                                                                                                                                                               |
+| `networkPolicy.egressRules.denyConnectionsToExternal`              | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53)                                         | `false`                                                                                                                                                                              |
+| `networkPolicy.egressRules.customRules`                            | Custom network policy rule                                                                                                            | `{}`                                                                                                                                                                                 |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -613,7 +686,7 @@ helm install my-release \
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -621,7 +694,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Use a different PostgreSQL version
 
-To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/postgresql-ha/configuration/change-image-version/).
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
 
 ### Use a volume for /dev/shm
 
@@ -685,6 +758,96 @@ ldap.tls_reqcert="demand"
 Next, login to the PostgreSQL server using the `psql` client and add the PAM authenticated LDAP users.
 
 > Note: Parameters including commas must be escaped as shown in the above example.
+
+### Securing traffic using TLS
+
+The chart handles two main flows of traffic information:
+
+- Connections between end-clients and PgPool (sometimes referred to as *frontend* connections).
+- Internal connections between PgPool and PostgreSQL nodes (sometimes referred to as *backend* connections).
+
+The Bitnami postgresql-ha chart allows configuring the securitization of both types of traffic using TLS.
+
+#### Encrypt traffic between clients and Pgpool (frontend)
+
+TLS for end-client connections can be enabled in the chart by specifying the `pgpool.tls.*` parameters when installing a release. Below you can find detailed information about these parameters:
+
+- `pgpool.tls.enabled`: Enable TLS support. Defaults to `false`.
+- `pgpool.tls.certificatesSecret`: Name of an existing secret that contains the certificates. No defaults.
+- `pgpool.tls.certFilename`: Certificate filename. No defaults.
+- `pgpool.tls.certKeyFilename`: Certificate key filename. No defaults.
+
+For example:
+
+- First, create a secret with the certificates files. You will need to generate previously the certificate files:
+
+    ```console
+    kubectl create secret generic pgpool-tls-secret --from-file=./cert.crt --from-file=./cert.key --from-file=./ca.crt
+    ```
+
+> Note: Although certificate generation is out of the scope of this guide, bear in mind that PostgreSQL requires that server TLS certificates specify the actual DNS server name in the CN (Common Name) field.
+
+- Then, install the chart using the following parameters:
+
+    ```console
+    pgpool.tls.enabled=true
+    pgpool.tls.certificatesSecret="pgpool-tls-secret"
+    pgpool.tls.certFilename="cert.crt"
+    pgpool.tls.certKeyFilename="cert.key"
+    ```
+
+> Note: Certificates permissions: PgPool requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding K8s permissions and the use of `containerSecurityContext.runAsUser`, an init container will adapt the permissions to ensure everything works as expected.
+
+##### Enable client certificate authentication
+
+When TLS is configured for *frontend* connections, the server can be configured to authenticate clients by verifying their provided TLS certificate is valid and trusted. Hence, the client will not be sent a password prompt.
+
+You can enable this authentication feature additionally specifying the following parameter:
+
+- `postgresql.tls.certCAFilename`: CA Certificate filename. No defaults.
+
+    ```console
+    $ psql --host postgresql-ha-pgpool -d "dbname=XXXXX user=YYYYYY sslcert=client.crt sslkey=client.key sslmode=require"
+    psql (14.4)
+    SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, bits: 256, compression: off)
+    Type "help" for help.
+
+    postgres=>
+    ```
+
+Clients using this method to authenticate will be required to provide a certificate with the CN (Common Name) field matching the requested database user name. Please, refer to [the official documentation](https://www.postgresql.org/docs/current/auth-cert.html) for further information.
+
+> Note: As with traditional password-based authentication, database users must exist in both PgPool and PostgreSQL nodes and have the correct privileges to connect to a database. You may use the `postgresql.initdbScripts` and `pgpool.customUsers` properties to create them in advance.
+
+#### Encrypt traffic between Pgpool and PostgreSQL nodes (backend)
+
+TLS for backend connections can be enabled in the chart by specifying the `postgresql.tls.*` parameters while creating a release. Below you can find detailed information about these parameters:
+
+- `postgresql.tls.enabled`: Enable TLS support. Defaults to `false`
+- `postgresql.tls.certificatesSecret`: Name of an existing secret that contains the certificates. No defaults.
+- `postgresql.tls.certFilename`: Certificate filename. No defaults.
+- `postgresql.tls.certKeyFilename`: Certificate key filename. No defaults.
+
+For example:
+
+- First, create a secret with the certificates files. You will need to generate previously the certificate files:
+
+    ```console
+    kubectl create secret generic postgresql-tls-secret --from-file=./cert.crt --from-file=./cert.key --from-file=./ca.crt
+    ```
+
+- Then, install the chart using the following parameters:
+
+    ```console
+    postgresql.tls.enabled=true
+    postgresql.tls.certificatesSecret="postgresql-tls-secret"
+    postgresql.tls.certFilename="cert.crt"
+    postgresql.tls.certKeyFilename="cert.key"
+    ```
+
+> Note: Certificates permissions: PostgreSQL requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding K8s permissions and the use of `containerSecurityContext.runAsUser`, an init container will adapt the permissions to ensure everything works as expected.
+
+If you want to encrypt both *frontend* and *backend* traffics, you may use the same secret for Pgpool and PostgreSQL TLS configuration.
 
 ### repmgr.conf / postgresql.conf / pg_hba.conf / pgpool.conf files as configMap
 
@@ -754,7 +917,7 @@ global.postgresql.postgresqlDatabase=db1
 
 This way, the credentials will be available in all of the subcharts.
 
-## Persistence
+### Persistence
 
 The data is persisted by default using PVC templates in the PostgreSQL statefulset. You can disable the persistence setting the `persistence.enabled` parameter to `false`.
 A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `persistence.storageClass` or set `persistence.existingClaim` if you have already existing persistent volumes to use.
@@ -1010,9 +1173,8 @@ In this version, the chart will use PostgreSQL-Repmgr container images with the 
 
 Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](https://docs.bitnami.com/). You can find there the following resources:
 
-- [Documentation for PostgreSQL HA Helm chart](https://docs.bitnami.com/kubernetes/infrastructure/postgresql-ha/)
+- [Documentation for PostgreSQL HA Helm chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha)
 - [Get Started with Kubernetes guides](https://docs.bitnami.com/kubernetes/)
-- [Bitnami Helm charts documentation](https://docs.bitnami.com/kubernetes/apps/)
 - [Kubernetes FAQs](https://docs.bitnami.com/kubernetes/faq/)
 - [Kubernetes Developer guides](https://docs.bitnami.com/tutorials/)
 

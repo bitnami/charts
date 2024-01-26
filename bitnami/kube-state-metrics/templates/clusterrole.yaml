@@ -67,6 +67,12 @@ rules:
       - jobs
     verbs: ["list", "watch"]
   {{- end }}
+  {{- if .Values.kubeResources.leases }}
+  - apiGroups: ["coordination.k8s.io"]
+    resources:
+      - leases
+    verbs: ["list", "watch"]
+  {{- end }}  
   {{- if .Values.kubeResources.limitranges }}
   - apiGroups: [""]
     resources:

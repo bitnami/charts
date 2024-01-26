@@ -80,6 +80,7 @@ helm uninstall my-release
 | `server.image.pullPolicy`                                  | Spring Cloud Dataflow image pull policy                                                                                                    | `IfNotPresent`                                               |
 | `server.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                           | `[]`                                                         |
 | `server.image.debug`                                       | Enable image debug mode                                                                                                                    | `false`                                                      |
+| `server.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                         | `true`                                                       |
 | `server.hostAliases`                                       | Deployment pod host aliases                                                                                                                | `[]`                                                         |
 | `server.composedTaskRunner.image.registry`                 | Spring Cloud Dataflow Composed Task Runner image registry                                                                                  | `REGISTRY_NAME`                                              |
 | `server.composedTaskRunner.image.repository`               | Spring Cloud Dataflow Composed Task Runner image repository                                                                                | `REPOSITORY_NAME/spring-cloud-dataflow-composed-task-runner` |
@@ -116,8 +117,12 @@ helm uninstall my-release
 | `server.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                                             | `""`                                                         |
 | `server.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                                             | `[]`                                                         |
 | `server.podSecurityContext.enabled`                        | Enabled Dataflow Server pods' Security Context                                                                                             | `true`                                                       |
+| `server.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                         | `Always`                                                     |
+| `server.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                             | `[]`                                                         |
+| `server.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                | `[]`                                                         |
 | `server.podSecurityContext.fsGroup`                        | Group ID for the volumes of the pod                                                                                                        | `1001`                                                       |
 | `server.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                       | `true`                                                       |
+| `server.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                           | `nil`                                                        |
 | `server.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                 | `1001`                                                       |
 | `server.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                              | `true`                                                       |
 | `server.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                | `false`                                                      |
@@ -195,6 +200,7 @@ helm uninstall my-release
 | Name                                                        | Description                                                                                                          | Value                                  |
 | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
 | `skipper.enabled`                                           | Enable Spring Cloud Skipper component                                                                                | `true`                                 |
+| `skipper.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                   | `true`                                 |
 | `skipper.hostAliases`                                       | Deployment pod host aliases                                                                                          | `[]`                                   |
 | `skipper.image.registry`                                    | Spring Cloud Skipper image registry                                                                                  | `REGISTRY_NAME`                        |
 | `skipper.image.repository`                                  | Spring Cloud Skipper image repository                                                                                | `REPOSITORY_NAME/spring-cloud-skipper` |
@@ -227,8 +233,12 @@ helm uninstall my-release
 | `skipper.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                       | `""`                                   |
 | `skipper.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                       | `[]`                                   |
 | `skipper.podSecurityContext.enabled`                        | Enabled Skipper pods' Security Context                                                                               | `true`                                 |
+| `skipper.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                   | `Always`                               |
+| `skipper.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                       | `[]`                                   |
+| `skipper.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                          | `[]`                                   |
 | `skipper.podSecurityContext.fsGroup`                        | Group ID for the volumes of the pod                                                                                  | `1001`                                 |
 | `skipper.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                 | `true`                                 |
+| `skipper.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                     | `nil`                                  |
 | `skipper.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                           | `1001`                                 |
 | `skipper.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                        | `true`                                 |
 | `skipper.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                          | `false`                                |
@@ -309,13 +319,13 @@ helm uninstall my-release
 
 ### RBAC parameters
 
-| Name                                          | Description                                                                                                             | Value  |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------ |
-| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Dataflow server and Skipper server pods                                     | `true` |
-| `serviceAccount.name`                         | Name of the created serviceAccount. If not set and create is true, a name is generated using the scdf.fullname template | `""`   |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                          | `true` |
-| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                              | `{}`   |
-| `rbac.create`                                 | Whether to create and use RBAC resources or not                                                                         | `true` |
+| Name                                          | Description                                                                                                             | Value   |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Dataflow server and Skipper server pods                                     | `true`  |
+| `serviceAccount.name`                         | Name of the created serviceAccount. If not set and create is true, a name is generated using the scdf.fullname template | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                          | `false` |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                              | `{}`    |
+| `rbac.create`                                 | Whether to create and use RBAC resources or not                                                                         | `true`  |
 
 ### Metrics parameters
 
@@ -337,13 +347,18 @@ helm uninstall my-release
 | `metrics.nodeAffinityPreset.values`                         | Prometheus Rsocket Proxy node label values to match. Ignored if `metrics.affinity` is set.                                 | `[]`                                       |
 | `metrics.affinity`                                          | Prometheus Rsocket Proxy affinity for pod assignment                                                                       | `{}`                                       |
 | `metrics.nodeSelector`                                      | Prometheus Rsocket Proxy node labels for pod assignment                                                                    | `{}`                                       |
+| `metrics.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                         | `true`                                     |
 | `metrics.hostAliases`                                       | Prometheus Proxy pods host aliases                                                                                         | `[]`                                       |
 | `metrics.tolerations`                                       | Prometheus Rsocket Proxy tolerations for pod assignment                                                                    | `[]`                                       |
 | `metrics.podAnnotations`                                    | Annotations for Prometheus Rsocket Proxy pods                                                                              | `{}`                                       |
 | `metrics.podLabels`                                         | Extra labels for Prometheus Proxy pods                                                                                     | `{}`                                       |
 | `metrics.podSecurityContext.enabled`                        | Enabled Prometheus Proxy pods' Security Context                                                                            | `true`                                     |
+| `metrics.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                         | `Always`                                   |
+| `metrics.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                             | `[]`                                       |
+| `metrics.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                | `[]`                                       |
 | `metrics.podSecurityContext.fsGroup`                        | Set Prometheus Proxy pod's Security Context fsGroup                                                                        | `1001`                                     |
 | `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                       | `true`                                     |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                           | `nil`                                      |
 | `metrics.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                 | `1001`                                     |
 | `metrics.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                              | `true`                                     |
 | `metrics.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                | `false`                                    |
@@ -431,6 +446,7 @@ helm uninstall my-release
 | `waitForBackends.image.pullPolicy`                                  | Init container wait-for-backend image pull policy                                                                               | `IfNotPresent`            |
 | `waitForBackends.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                | `[]`                      |
 | `waitForBackends.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                            | `true`                    |
+| `waitForBackends.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                | `nil`                     |
 | `waitForBackends.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                      | `1001`                    |
 | `waitForBackends.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                   | `true`                    |
 | `waitForBackends.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                     | `false`                   |
@@ -519,7 +535,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/sprin
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -658,7 +674,7 @@ Most likely you will only want to have one hostname that maps to this Spring Clo
 
 For each host indicated at `server.ingress.extraHosts`, please indicate a `name`, `path`, and any `annotations` that you may want the ingress controller to know about.
 
-For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
+For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
 
 #### TLS
 

@@ -5,7 +5,7 @@ file:
   /bitnami/redmine:
     exists: true
     filetype: directory
-    mode: '0775'
+    mode: '2775'
     owner: redmine
   /bitnami/redmine/config/database.yml:
     mode: "0664"

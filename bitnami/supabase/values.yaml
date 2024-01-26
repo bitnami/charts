@@ -107,11 +107,11 @@ jwt:
     image:
       registry: docker.io
       repository: bitnami/jwt-cli
-      tag: 6.0.0-debian-11-r23
+      tag: 6.0.0-debian-11-r24
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -134,11 +134,11 @@ jwt:
       ##
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.29.0-debian-11-r0
+      tag: 1.29.0-debian-11-r2
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -154,9 +154,26 @@ jwt:
     ## @param jwt.autoGenerate.extraVolumes Optionally specify extra list of additional volumes for the jwt init job
     ##
     extraVolumes: []
+    ## ServiceAccount configuration
+    ##
+    serviceAccount:
+      ## @param jwt.autoGenerate.serviceAccount.create Specifies whether a ServiceAccount should be created
+      ##
+      create: true
+      ## @param jwt.autoGenerate.serviceAccount.name The name of the ServiceAccount to use.
+      ## If not set and create is true, a name is generated using the common.names.fullname template
+      ##
+      name: ""
+      ## @param jwt.autoGenerate.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+      ##
+      annotations: {}
+      ## @param jwt.autoGenerate.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+      ##
+      automountServiceAccountToken: false
 
     ## Configure Container Security Context
     ## @param jwt.autoGenerate.containerSecurityContext.enabled Enabled jwt init job containers' Security Context
+    ## @param jwt.autoGenerate.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param jwt.autoGenerate.containerSecurityContext.runAsUser Set jwt init job containers' Security Context runAsUser
     ## @param jwt.autoGenerate.containerSecurityContext.runAsNonRoot Set jwt init job container's Security Context runAsNonRoot
     ## @param jwt.autoGenerate.containerSecurityContext.privileged Set jwt init job container's Security Context privileged
@@ -167,6 +184,7 @@ jwt:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: null
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -179,10 +197,16 @@ jwt:
     ## Configure Pods Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
     ## @param jwt.autoGenerate.podSecurityContext.enabled Enabled jwt init job pods' Security Context
+    ## @param jwt.autoGenerate.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param jwt.autoGenerate.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param jwt.autoGenerate.podSecurityContext.supplementalGroups Set filesystem extra groups
     ## @param jwt.autoGenerate.podSecurityContext.fsGroup Set jwt init job pod's Security Context fsGroup
     ##
     podSecurityContext:
       enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
       fsGroup: 1001
     ## @param jwt.autoGenerate.extraEnvVars Array containing extra env vars to configure the jwt init job
     ## For example:
@@ -201,13 +225,16 @@ jwt:
     ##
     extraVolumeMounts: []
     ## Container resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param jwt.autoGenerate.resources.limits The resources limits for the container
     ## @param jwt.autoGenerate.resources.requests The requested resources for the container
     ##
     resources:
       limits: {}
       requests: {}
+    ## @param jwt.autoGenerate.automountServiceAccountToken Mount Service Account token in pod
+    ##
+    automountServiceAccountToken: true
     ## @param jwt.autoGenerate.hostAliases Add deployment host aliases
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##
@@ -297,11 +324,11 @@ auth:
   image:
     registry: docker.io
     repository: bitnami/gotrue
-    tag: 1.0.1-debian-11-r218
+    tag: 1.0.1-debian-11-r220
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -371,7 +398,7 @@ auth:
   ##
   customStartupProbe: {}
   ## Supabase auth resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param auth.resources.limits The resources limits for the Supabase auth containers
   ## @param auth.resources.requests The requested resources for the Supabase auth containers
   ##
@@ -381,14 +408,21 @@ auth:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param auth.podSecurityContext.enabled Enabled Supabase auth pods' Security Context
+  ## @param auth.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param auth.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param auth.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param auth.podSecurityContext.fsGroup Set Supabase auth pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param auth.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param auth.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param auth.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param auth.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param auth.containerSecurityContext.privileged Set container's Security Context privileged
@@ -399,6 +433,7 @@ auth:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -415,6 +450,9 @@ auth:
   ## @param auth.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param auth.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param auth.hostAliases Supabase auth pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -458,7 +496,7 @@ auth:
   ##
   affinity: {}
   ## @param auth.nodeSelector Node labels for Supabase auth pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param auth.tolerations Tolerations for Supabase auth pods assignment
@@ -577,7 +615,7 @@ auth:
     extraPorts: []
     ## @param auth.service.sessionAffinity Control where auth requests go, to the same pod or round-robin
     ## Values: AuthIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param auth.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -631,11 +669,11 @@ meta:
   image:
     registry: docker.io
     repository: bitnami/supabase-postgres-meta
-    tag: 0.75.0-debian-11-r0
+    tag: 0.75.0-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -705,7 +743,7 @@ meta:
   ##
   customStartupProbe: {}
   ## Supabase Postgres Meta resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param meta.resources.limits The resources limits for the Supabase Postgres Meta containers
   ## @param meta.resources.requests The requested resources for the Supabase Postgres Meta containers
   ##
@@ -715,14 +753,21 @@ meta:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param meta.podSecurityContext.enabled Enabled Supabase Postgres Meta pods' Security Context
+  ## @param meta.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param meta.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param meta.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param meta.podSecurityContext.fsGroup Set Supabase Postgres Meta pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param meta.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param meta.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param meta.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param meta.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param meta.containerSecurityContext.privileged Set container's Security Context privileged
@@ -733,6 +778,7 @@ meta:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -749,6 +795,9 @@ meta:
   ## @param meta.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param meta.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param meta.hostAliases Supabase Postgres Meta pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -792,7 +841,7 @@ meta:
   ##
   affinity: {}
   ## @param meta.nodeSelector Node labels for Supabase Postgres Meta pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param meta.tolerations Tolerations for Supabase Postgres Meta pods assignment
@@ -911,7 +960,7 @@ meta:
     extraPorts: []
     ## @param meta.service.sessionAffinity Control where meta requests go, to the same pod or round-robin
     ## Values: MetaIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param meta.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -984,11 +1033,11 @@ realtime:
   image:
     registry: docker.io
     repository: bitnami/supabase-realtime
-    tag: 2.25.47-debian-11-r0
+    tag: 2.25.56-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1058,7 +1107,7 @@ realtime:
   ##
   customStartupProbe: {}
   ## Supabase realtime resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param realtime.resources.limits The resources limits for the Supabase realtime containers
   ## @param realtime.resources.requests The requested resources for the Supabase realtime containers
   ##
@@ -1068,14 +1117,21 @@ realtime:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param realtime.podSecurityContext.enabled Enabled Supabase realtime pods' Security Context
+  ## @param realtime.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param realtime.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param realtime.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param realtime.podSecurityContext.fsGroup Set Supabase realtime pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param realtime.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param realtime.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param realtime.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param realtime.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param realtime.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1086,6 +1142,7 @@ realtime:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1102,6 +1159,9 @@ realtime:
   ## @param realtime.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param realtime.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param realtime.hostAliases Supabase realtime pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1145,7 +1205,7 @@ realtime:
   ##
   affinity: {}
   ## @param realtime.nodeSelector Node labels for Supabase realtime pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param realtime.tolerations Tolerations for Supabase realtime pods assignment
@@ -1264,7 +1324,7 @@ realtime:
     extraPorts: []
     ## @param realtime.service.sessionAffinity Control where realtime requests go, to the same pod or round-robin
     ## Values: RealtimeIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param realtime.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1316,11 +1376,11 @@ rest:
   image:
     registry: docker.io
     repository: bitnami/postgrest
-    tag: 11.2.2-debian-11-r3
+    tag: 11.2.2-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1390,7 +1450,7 @@ rest:
   ##
   customStartupProbe: {}
   ## Supabase rest resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param rest.resources.limits The resources limits for the Supabase rest containers
   ## @param rest.resources.requests The requested resources for the Supabase rest containers
   ##
@@ -1400,14 +1460,21 @@ rest:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param rest.podSecurityContext.enabled Enabled Supabase rest pods' Security Context
+  ## @param rest.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param rest.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param rest.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param rest.podSecurityContext.fsGroup Set Supabase rest pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param rest.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param rest.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param rest.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param rest.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param rest.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1418,6 +1485,7 @@ rest:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1434,6 +1502,9 @@ rest:
   ## @param rest.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param rest.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param rest.hostAliases Supabase rest pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1477,7 +1548,7 @@ rest:
   ##
   affinity: {}
   ## @param rest.nodeSelector Node labels for Supabase rest pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param rest.tolerations Tolerations for Supabase rest pods assignment
@@ -1596,7 +1667,7 @@ rest:
     extraPorts: []
     ## @param rest.service.sessionAffinity Control where rest requests go, to the same pod or round-robin
     ## Values: RestIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param rest.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1628,6 +1699,7 @@ storage:
     TENANT_ID: "stub"
     REGION: "stub"
     GLOBAL_S3_BUCKET: "stub"
+    DB_INSTALL_ROLES: "false"
     PORT: {{ .Values.storage.containerPorts.http | quote }}
 
   ## @param storage.extraConfig Extra configuration for Supabase storage
@@ -1653,11 +1725,11 @@ storage:
   image:
     registry: docker.io
     repository: bitnami/supabase-storage
-    tag: 0.43.12-debian-11-r0
+    tag: 0.46.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1727,7 +1799,7 @@ storage:
   ##
   customStartupProbe: {}
   ## Supabase storage resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param storage.resources.limits The resources limits for the Supabase storage containers
   ## @param storage.resources.requests The requested resources for the Supabase storage containers
   ##
@@ -1737,14 +1809,21 @@ storage:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param storage.podSecurityContext.enabled Enabled Supabase storage pods' Security Context
+  ## @param storage.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param storage.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param storage.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param storage.podSecurityContext.fsGroup Set Supabase storage pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param storage.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param storage.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param storage.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param storage.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param storage.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1755,6 +1834,7 @@ storage:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1771,6 +1851,9 @@ storage:
   ## @param storage.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param storage.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param storage.hostAliases Supabase storage pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1814,7 +1897,7 @@ storage:
   ##
   affinity: {}
   ## @param storage.nodeSelector Node labels for Supabase storage pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param storage.tolerations Tolerations for Supabase storage pods assignment
@@ -1933,7 +2016,7 @@ storage:
     extraPorts: []
     ## @param storage.service.sessionAffinity Control where storage requests go, to the same pod or round-robin
     ## Values: StorageIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param storage.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1947,7 +2030,7 @@ storage:
   ##
 
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param storage.persistence.enabled Enable persistence using Persistent Volume Claims
@@ -2037,11 +2120,11 @@ studio:
   image:
     registry: docker.io
     repository: bitnami/supabase-studio
-    tag: 0.23.10-debian-11-r1
+    tag: 0.23.11-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2111,7 +2194,7 @@ studio:
   ##
   customStartupProbe: {}
   ## Supabase studio resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param studio.resources.limits The resources limits for the Supabase studio containers
   ## @param studio.resources.requests The requested resources for the Supabase studio containers
   ##
@@ -2121,14 +2204,21 @@ studio:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param studio.podSecurityContext.enabled Enabled Supabase studio pods' Security Context
+  ## @param studio.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param studio.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param studio.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param studio.podSecurityContext.fsGroup Set Supabase studio pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param studio.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param studio.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param studio.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param studio.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param studio.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2139,6 +2229,7 @@ studio:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2155,6 +2246,9 @@ studio:
   ## @param studio.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param studio.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param studio.hostAliases Supabase studio pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2198,7 +2292,7 @@ studio:
   ##
   affinity: {}
   ## @param studio.nodeSelector Node labels for Supabase studio pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param studio.tolerations Tolerations for Supabase studio pods assignment
@@ -2317,7 +2411,7 @@ studio:
     extraPorts: []
     ## @param studio.service.sessionAffinity Control where studio requests go, to the same pod or round-robin
     ## Values: StudioIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param studio.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -2327,7 +2421,7 @@ studio:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param studio.ingress.enabled Enable ingress record generation for Supabase
@@ -2450,7 +2544,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r94
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -2461,7 +2555,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -2470,12 +2564,14 @@ volumePermissions:
     requests: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
+    seLinuxOptions: null
     runAsUser: 0
 
 ## Bitnami PostgreSQL image
@@ -2491,11 +2587,11 @@ volumePermissions:
 psqlImage:
   registry: docker.io
   repository: bitnami/supabase-postgres
-  tag: 15.1.0-debian-11-r194
+  tag: 15.1.1-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -2533,7 +2629,7 @@ serviceAccount:
   annotations: {}
   ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
 
 ## @section Kong sub-chart parameters
 ##
@@ -2658,11 +2754,11 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/supabase-postgres
-    tag: 15.1.0-debian-11-r194
+    tag: 15.1.1-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

@@ -63,7 +63,7 @@ spec:
       securityContext: {{- omit .Values.replica.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "redis.replicaServiceAccountName" . }}
-      automountServiceAccountToken: {{ .Values.replica.serviceAccount.automountServiceAccountToken }}
+      automountServiceAccountToken: {{ .Values.replica.automountServiceAccountToken }}
       {{- if .Values.replica.priorityClassName }}
       priorityClassName: {{ .Values.replica.priorityClassName | quote }}
       {{- end }}

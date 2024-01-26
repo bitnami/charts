@@ -86,7 +86,7 @@ milvus:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -270,7 +270,7 @@ initJob:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -319,6 +319,7 @@ initJob:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param initJob.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param initJob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param initJob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param initJob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param initJob.containerSecurityContext.privileged Set container's Security Context privileged
@@ -329,6 +330,7 @@ initJob:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -341,10 +343,16 @@ initJob:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param initJob.podSecurityContext.enabled Enabled credential init job pods' Security Context
+  ## @param initJob.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param initJob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param initJob.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param initJob.podSecurityContext.fsGroup Set credential init job pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## @param initJob.extraEnvVars Array containing extra env vars to configure the credential init job
   ## For example:
@@ -363,13 +371,16 @@ initJob:
   ##
   extraVolumeMounts: []
   ## Container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param initJob.resources.limits The resources limits for the container
   ## @param initJob.resources.requests The requested resources for the container
   ##
   resources:
     limits: {}
     requests: {}
+  ## @param initJob.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param initJob.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -495,7 +506,7 @@ dataCoord:
   ##
   customStartupProbe: {}
   ## data coordinator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dataCoord.resources.limits The resources limits for the data coordinator containers
   ## @param dataCoord.resources.requests The requested resources for the data coordinator containers
   ##
@@ -505,14 +516,21 @@ dataCoord:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dataCoord.podSecurityContext.enabled Enabled Data Coordinator pods' Security Context
+  ## @param dataCoord.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param dataCoord.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param dataCoord.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param dataCoord.podSecurityContext.fsGroup Set Data Coordinator pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dataCoord.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param dataCoord.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dataCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param dataCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param dataCoord.containerSecurityContext.privileged Set container's Security Context privileged
@@ -523,6 +541,7 @@ dataCoord:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -539,6 +558,9 @@ dataCoord:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param dataCoord.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param dataCoord.hostAliases data coordinator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -582,7 +604,7 @@ dataCoord:
   ##
   affinity: {}
   ## @param dataCoord.nodeSelector Node labels for Data Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dataCoord.tolerations Tolerations for Data Coordinator pods assignment
@@ -643,7 +665,7 @@ dataCoord:
   serviceAccount:
     ## @param dataCoord.serviceAccount.create Enable creation of ServiceAccount for Data Coordinator pods
     ##
-    create: false
+    create: true
     ## @param dataCoord.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -745,7 +767,7 @@ dataCoord:
     sessionAffinityConfig: {}
     ## @param dataCoord.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param dataCoord.service.clusterIP Data Coordinator service Cluster IP
@@ -983,7 +1005,7 @@ rootCoord:
   ##
   customStartupProbe: {}
   ## data coordinator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param rootCoord.resources.limits The resources limits for the data coordinator containers
   ## @param rootCoord.resources.requests The requested resources for the data coordinator containers
   ##
@@ -993,14 +1015,21 @@ rootCoord:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param rootCoord.podSecurityContext.enabled Enabled Root Coordinator pods' Security Context
+  ## @param rootCoord.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param rootCoord.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param rootCoord.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param rootCoord.podSecurityContext.fsGroup Set Root Coordinator pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param rootCoord.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param rootCoord.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param rootCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param rootCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param rootCoord.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1011,6 +1040,7 @@ rootCoord:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1027,6 +1057,9 @@ rootCoord:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param rootCoord.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param rootCoord.hostAliases data coordinator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1070,7 +1103,7 @@ rootCoord:
   ##
   affinity: {}
   ## @param rootCoord.nodeSelector Node labels for Root Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param rootCoord.tolerations Tolerations for Root Coordinator pods assignment
@@ -1131,7 +1164,7 @@ rootCoord:
   serviceAccount:
     ## @param rootCoord.serviceAccount.create Enable creation of ServiceAccount for Root Coordinator pods
     ##
-    create: false
+    create: true
     ## @param rootCoord.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -1233,7 +1266,7 @@ rootCoord:
     sessionAffinityConfig: {}
     ## @param rootCoord.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param rootCoord.service.clusterIP Root Coordinator service Cluster IP
@@ -1470,7 +1503,7 @@ queryCoord:
   ##
   customStartupProbe: {}
   ## data coordinator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param queryCoord.resources.limits The resources limits for the data coordinator containers
   ## @param queryCoord.resources.requests The requested resources for the data coordinator containers
   ##
@@ -1480,14 +1513,21 @@ queryCoord:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryCoord.podSecurityContext.enabled Enabled Query Coordinator pods' Security Context
+  ## @param queryCoord.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param queryCoord.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param queryCoord.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param queryCoord.podSecurityContext.fsGroup Set Query Coordinator pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryCoord.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param queryCoord.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param queryCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param queryCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param queryCoord.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1498,6 +1538,7 @@ queryCoord:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1514,6 +1555,9 @@ queryCoord:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param queryCoord.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param queryCoord.hostAliases data coordinator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1557,7 +1601,7 @@ queryCoord:
   ##
   affinity: {}
   ## @param queryCoord.nodeSelector Node labels for Query Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param queryCoord.tolerations Tolerations for Query Coordinator pods assignment
@@ -1618,7 +1662,7 @@ queryCoord:
   serviceAccount:
     ## @param queryCoord.serviceAccount.create Enable creation of ServiceAccount for Query Coordinator pods
     ##
-    create: false
+    create: true
     ## @param queryCoord.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -1720,7 +1764,7 @@ queryCoord:
     sessionAffinityConfig: {}
     ## @param queryCoord.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param queryCoord.service.clusterIP Query Coordinator service Cluster IP
@@ -1958,7 +2002,7 @@ indexCoord:
   ##
   customStartupProbe: {}
   ## data coordinator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param indexCoord.resources.limits The resources limits for the data coordinator containers
   ## @param indexCoord.resources.requests The requested resources for the data coordinator containers
   ##
@@ -1968,14 +2012,21 @@ indexCoord:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param indexCoord.podSecurityContext.enabled Enabled Index Coordinator pods' Security Context
+  ## @param indexCoord.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param indexCoord.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param indexCoord.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param indexCoord.podSecurityContext.fsGroup Set Index Coordinator pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param indexCoord.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param indexCoord.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param indexCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param indexCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param indexCoord.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1986,6 +2037,7 @@ indexCoord:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2002,6 +2054,9 @@ indexCoord:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param indexCoord.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param indexCoord.hostAliases data coordinator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2045,7 +2100,7 @@ indexCoord:
   ##
   affinity: {}
   ## @param indexCoord.nodeSelector Node labels for Index Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param indexCoord.tolerations Tolerations for Index Coordinator pods assignment
@@ -2106,7 +2161,7 @@ indexCoord:
   serviceAccount:
     ## @param indexCoord.serviceAccount.create Enable creation of ServiceAccount for Index Coordinator pods
     ##
-    create: false
+    create: true
     ## @param indexCoord.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -2208,7 +2263,7 @@ indexCoord:
     sessionAffinityConfig: {}
     ## @param indexCoord.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param indexCoord.service.clusterIP Index Coordinator service Cluster IP
@@ -2446,7 +2501,7 @@ dataNode:
   ##
   customStartupProbe: {}
   ## data node resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dataNode.resources.limits The resources limits for the data node containers
   ## @param dataNode.resources.requests The requested resources for the data node containers
   ##
@@ -2456,14 +2511,21 @@ dataNode:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dataNode.podSecurityContext.enabled Enabled Data Node pods' Security Context
+  ## @param dataNode.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param dataNode.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param dataNode.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param dataNode.podSecurityContext.fsGroup Set Data Node pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dataNode.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param dataNode.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dataNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param dataNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param dataNode.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2474,6 +2536,7 @@ dataNode:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2490,6 +2553,9 @@ dataNode:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param dataNode.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param dataNode.hostAliases data node pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2533,7 +2599,7 @@ dataNode:
   ##
   affinity: {}
   ## @param dataNode.nodeSelector Node labels for Data Node pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dataNode.tolerations Tolerations for Data Node pods assignment
@@ -2594,7 +2660,7 @@ dataNode:
   serviceAccount:
     ## @param dataNode.serviceAccount.create Enable creation of ServiceAccount for Data Node pods
     ##
-    create: false
+    create: true
     ## @param dataNode.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -2696,7 +2762,7 @@ dataNode:
     sessionAffinityConfig: {}
     ## @param dataNode.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param dataNode.service.clusterIP Data Node service Cluster IP
@@ -2934,7 +3000,7 @@ queryNode:
   ##
   customStartupProbe: {}
   ## data node resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param queryNode.resources.limits The resources limits for the data node containers
   ## @param queryNode.resources.requests The requested resources for the data node containers
   ##
@@ -2944,14 +3010,21 @@ queryNode:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryNode.podSecurityContext.enabled Enabled Query Node pods' Security Context
+  ## @param queryNode.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param queryNode.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param queryNode.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param queryNode.podSecurityContext.fsGroup Set Query Node pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryNode.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param queryNode.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param queryNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param queryNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param queryNode.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2962,6 +3035,7 @@ queryNode:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2978,6 +3052,9 @@ queryNode:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param queryNode.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param queryNode.hostAliases data node pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -3021,7 +3098,7 @@ queryNode:
   ##
   affinity: {}
   ## @param queryNode.nodeSelector Node labels for Query Node pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param queryNode.tolerations Tolerations for Query Node pods assignment
@@ -3082,7 +3159,7 @@ queryNode:
   serviceAccount:
     ## @param queryNode.serviceAccount.create Enable creation of ServiceAccount for Query Node pods
     ##
-    create: false
+    create: true
     ## @param queryNode.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -3184,7 +3261,7 @@ queryNode:
     sessionAffinityConfig: {}
     ## @param queryNode.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param queryNode.service.clusterIP Query Node service Cluster IP
@@ -3422,7 +3499,7 @@ indexNode:
   ##
   customStartupProbe: {}
   ## data node resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param indexNode.resources.limits The resources limits for the data node containers
   ## @param indexNode.resources.requests The requested resources for the data node containers
   ##
@@ -3432,14 +3509,21 @@ indexNode:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param indexNode.podSecurityContext.enabled Enabled Index Node pods' Security Context
+  ## @param indexNode.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param indexNode.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param indexNode.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param indexNode.podSecurityContext.fsGroup Set Index Node pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param indexNode.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param indexNode.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param indexNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param indexNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param indexNode.containerSecurityContext.privileged Set container's Security Context privileged
@@ -3450,6 +3534,7 @@ indexNode:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -3466,6 +3551,9 @@ indexNode:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param indexNode.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param indexNode.hostAliases data node pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -3509,7 +3597,7 @@ indexNode:
   ##
   affinity: {}
   ## @param indexNode.nodeSelector Node labels for Index Node pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param indexNode.tolerations Tolerations for Index Node pods assignment
@@ -3570,7 +3658,7 @@ indexNode:
   serviceAccount:
     ## @param indexNode.serviceAccount.create Enable creation of ServiceAccount for Index Node pods
     ##
-    create: false
+    create: true
     ## @param indexNode.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -3672,7 +3760,7 @@ indexNode:
     sessionAffinityConfig: {}
     ## @param indexNode.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param indexNode.service.clusterIP Index Node service Cluster IP
@@ -3939,7 +4027,7 @@ proxy:
   ##
   customStartupProbe: {}
   ## proxy resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param proxy.resources.limits The resources limits for the proxy containers
   ## @param proxy.resources.requests The requested resources for the proxy containers
   ##
@@ -3949,14 +4037,21 @@ proxy:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param proxy.podSecurityContext.enabled Enabled Proxy pods' Security Context
+  ## @param proxy.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param proxy.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param proxy.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param proxy.podSecurityContext.fsGroup Set Proxy pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param proxy.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param proxy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param proxy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param proxy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param proxy.containerSecurityContext.privileged Set container's Security Context privileged
@@ -3967,6 +4062,7 @@ proxy:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -3983,6 +4079,9 @@ proxy:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param proxy.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param proxy.hostAliases proxy pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -4026,7 +4125,7 @@ proxy:
   ##
   affinity: {}
   ## @param proxy.nodeSelector Node labels for Proxy pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param proxy.tolerations Tolerations for Proxy pods assignment
@@ -4087,7 +4186,7 @@ proxy:
   serviceAccount:
     ## @param proxy.serviceAccount.create Enable creation of ServiceAccount for Proxy pods
     ##
-    create: false
+    create: true
     ## @param proxy.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -4189,7 +4288,7 @@ proxy:
     sessionAffinityConfig: {}
     ## @param proxy.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param proxy.service.clusterIP Proxy service Cluster IP
@@ -4346,7 +4445,7 @@ attu:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -4439,7 +4538,7 @@ attu:
   ##
   customStartupProbe: {}
   ## attu resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param attu.resources.limits The resources limits for the attu containers
   ## @param attu.resources.requests The requested resources for the attu containers
   ##
@@ -4449,14 +4548,21 @@ attu:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param attu.podSecurityContext.enabled Enabled Attu pods' Security Context
+  ## @param attu.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param attu.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param attu.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param attu.podSecurityContext.fsGroup Set Attu pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param attu.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param attu.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param attu.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param attu.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param attu.containerSecurityContext.privileged Set container's Security Context privileged
@@ -4467,6 +4573,7 @@ attu:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -4483,6 +4590,9 @@ attu:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param attu.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param attu.hostAliases attu pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -4526,7 +4636,7 @@ attu:
   ##
   affinity: {}
   ## @param attu.nodeSelector Node labels for Attu pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param attu.tolerations Tolerations for Attu pods assignment
@@ -4587,7 +4697,7 @@ attu:
   serviceAccount:
     ## @param attu.serviceAccount.create Enable creation of ServiceAccount for Attu pods
     ##
-    create: false
+    create: true
     ## @param attu.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -4685,7 +4795,7 @@ attu:
     sessionAffinityConfig: {}
     ## @param attu.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param attu.service.clusterIP Attu service Cluster IP
@@ -4715,7 +4825,7 @@ attu:
     ##
     extraPorts: []
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param attu.ingress.enabled Enable ingress record generation for Milvus
@@ -4901,6 +5011,7 @@ waitContainer:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param waitContainer.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param waitContainer.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param waitContainer.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param waitContainer.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param waitContainer.containerSecurityContext.privileged Set container's Security Context privileged
@@ -4911,6 +5022,7 @@ waitContainer:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false

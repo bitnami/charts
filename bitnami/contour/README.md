@@ -105,6 +105,7 @@ helm uninstall my-release
 | `contour.topologySpreadConstraints`                           | Topology Spread Constraints for pod assignment                                                                                     | `[]`                      |
 | `contour.containerPorts.xds`                                  | Set xds port inside Contour pod                                                                                                    | `8001`                    |
 | `contour.containerPorts.metrics`                              | Set metrics port inside Contour pod                                                                                                | `8000`                    |
+| `contour.automountServiceAccountToken`                        | Mount Service Account token in pod                                                                                                 | `true`                    |
 | `contour.hostAliases`                                         | Add deployment host aliases                                                                                                        | `[]`                      |
 | `contour.updateStrategy`                                      | Strategy to use to update Pods                                                                                                     | `{}`                      |
 | `contour.extraArgs`                                           | Extra arguments passed to Contour container                                                                                        | `[]`                      |
@@ -133,11 +134,15 @@ helm uninstall my-release
 | `contour.podAnnotations`                                      | Contour Pod annotations                                                                                                            | `{}`                      |
 | `contour.serviceAccount.create`                               | Create a serviceAccount for the Contour pod                                                                                        | `true`                    |
 | `contour.serviceAccount.name`                                 | Use the serviceAccount with the specified name, a name is generated using the fullname template                                    | `""`                      |
-| `contour.serviceAccount.automountServiceAccountToken`         | Automount service account token for the server service account                                                                     | `true`                    |
+| `contour.serviceAccount.automountServiceAccountToken`         | Automount service account token for the server service account                                                                     | `false`                   |
 | `contour.serviceAccount.annotations`                          | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                         | `{}`                      |
 | `contour.podSecurityContext.enabled`                          | Default backend Pod securityContext                                                                                                | `true`                    |
+| `contour.podSecurityContext.fsGroupChangePolicy`              | Set filesystem group change policy                                                                                                 | `Always`                  |
+| `contour.podSecurityContext.sysctls`                          | Set kernel settings using the sysctl interface                                                                                     | `[]`                      |
+| `contour.podSecurityContext.supplementalGroups`               | Set filesystem extra groups                                                                                                        | `[]`                      |
 | `contour.podSecurityContext.fsGroup`                          | Set Default backend Pod's Security Context fsGroup                                                                                 | `1001`                    |
 | `contour.containerSecurityContext.enabled`                    | Enabled contour containers' Security Context                                                                                       | `true`                    |
+| `contour.containerSecurityContext.seLinuxOptions`             | Set SELinux options in container                                                                                                   | `nil`                     |
 | `contour.containerSecurityContext.runAsUser`                  | Set contour containers' Security Context runAsUser                                                                                 | `1001`                    |
 | `contour.containerSecurityContext.runAsNonRoot`               | Set contour containers' Security Context runAsNonRoot                                                                              | `true`                    |
 | `contour.containerSecurityContext.readOnlyRootFilesystem`     | Set read only root file system pod's Security Conte                                                                                | `false`                   |
@@ -165,9 +170,10 @@ helm uninstall my-release
 | `contour.startupProbe.successThreshold`                       | Minimum consecutive successes for the probe to be considered successful after having failed.                                       | `1`                       |
 | `contour.certgen.serviceAccount.create`                       | Create a serviceAccount for the Contour pod                                                                                        | `true`                    |
 | `contour.certgen.serviceAccount.name`                         | Use the serviceAccount with the specified name, a name is generated using the fullname template                                    | `""`                      |
-| `contour.certgen.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                     | `true`                    |
+| `contour.certgen.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                     | `false`                   |
 | `contour.certgen.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                         | `{}`                      |
 | `contour.certgen.certificateLifetime`                         | Generated certificate lifetime (in days).                                                                                          | `365`                     |
+| `contour.certgen.automountServiceAccountToken`                | Mount Service Account token in pod                                                                                                 | `true`                    |
 | `contour.tlsExistingSecret`                                   | Name of the existingSecret to be use in Contour deployment. If it is not nil `contour.certgen` will be disabled.                   | `""`                      |
 | `contour.service.type`                                        | Service type                                                                                                                       | `ClusterIP`               |
 | `contour.service.ports.xds`                                   | Contour service xds port                                                                                                           | `8001`                    |
@@ -213,6 +219,7 @@ helm uninstall my-release
 | `envoy.schedulerName`                                                     | Name of the k8s scheduler (other than default)                                                                        | `""`                    |
 | `envoy.topologySpreadConstraints`                                         | Topology Spread Constraints for pod assignment                                                                        | `[]`                    |
 | `envoy.extraArgs`                                                         | Extra arguments passed to Envoy container                                                                             | `[]`                    |
+| `envoy.automountServiceAccountToken`                                      | Mount Service Account token in pod                                                                                    | `false`                 |
 | `envoy.hostAliases`                                                       | Add deployment host aliases                                                                                           | `[]`                    |
 | `envoy.resources.limits`                                                  | Specify resource limits which the container is not allowed to succeed.                                                | `{}`                    |
 | `envoy.resources.requests`                                                | Specify resource requests which the container needs to spawn.                                                         | `{}`                    |
@@ -224,6 +231,7 @@ helm uninstall my-release
 | `envoy.shutdownManager.resources.limits`                                  | Specify resource limits which the container is not allowed to succeed.                                                | `{}`                    |
 | `envoy.shutdownManager.resources.requests`                                | Specify resource requests which the container needs to spawn.                                                         | `{}`                    |
 | `envoy.shutdownManager.containerSecurityContext.enabled`                  | Enabled envoy shutdownManager containers' Security Context                                                            | `true`                  |
+| `envoy.shutdownManager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                      | `nil`                   |
 | `envoy.shutdownManager.containerSecurityContext.runAsUser`                | Set envoy shutdownManager containers' Security Context runAsUser                                                      | `1001`                  |
 | `envoy.shutdownManager.containerSecurityContext.runAsNonRoot`             | Set envoy shutdownManager containers' Security Context runAsNonRoot                                                   | `true`                  |
 | `envoy.shutdownManager.containerSecurityContext.readOnlyRootFilesystem`   | Set read only root file system pod's Security Conte                                                                   | `true`                  |
@@ -232,6 +240,7 @@ helm uninstall my-release
 | `envoy.shutdownManager.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                    | `["ALL"]`               |
 | `envoy.shutdownManager.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                      | `RuntimeDefault`        |
 | `envoy.initConfig.containerSecurityContext.enabled`                       | Enabled envoy initConfig containers' Security Context                                                                 | `true`                  |
+| `envoy.initConfig.containerSecurityContext.seLinuxOptions`                | Set SELinux options in container                                                                                      | `nil`                   |
 | `envoy.initConfig.containerSecurityContext.runAsUser`                     | Set envoy initConfig containers' Security Context runAsUser                                                           | `1001`                  |
 | `envoy.initConfig.containerSecurityContext.runAsNonRoot`                  | Set envoy initConfig containers' Security Context runAsNonRoot                                                        | `true`                  |
 | `envoy.initConfig.containerSecurityContext.readOnlyRootFilesystem`        | Set read only root file system pod's Security Conte                                                                   | `false`                 |
@@ -262,9 +271,12 @@ helm uninstall my-release
 | `envoy.podAnnotations`                                                    | Envoy Pod annotations                                                                                                 | `{}`                    |
 | `envoy.podLabels`                                                         | Extra labels for Envoy pods                                                                                           | `{}`                    |
 | `envoy.podSecurityContext.enabled`                                        | Envoy Pod securityContext                                                                                             | `false`                 |
+| `envoy.podSecurityContext.fsGroupChangePolicy`                            | Set filesystem group change policy                                                                                    | `Always`                |
+| `envoy.podSecurityContext.supplementalGroups`                             | Set filesystem extra groups                                                                                           | `[]`                    |
 | `envoy.podSecurityContext.fsGroup`                                        | User ID for the for the mounted volumes                                                                               | `0`                     |
 | `envoy.podSecurityContext.sysctls`                                        | Array of sysctl options to allow                                                                                      | `[]`                    |
 | `envoy.containerSecurityContext.enabled`                                  | Enabled envoy containers' Security Context                                                                            | `true`                  |
+| `envoy.containerSecurityContext.seLinuxOptions`                           | Set SELinux options in container                                                                                      | `nil`                   |
 | `envoy.containerSecurityContext.runAsUser`                                | Set envoy containers' Security Context runAsUser                                                                      | `1001`                  |
 | `envoy.containerSecurityContext.runAsNonRoot`                             | Set envoy containers' Security Context runAsNonRoot                                                                   | `true`                  |
 | `envoy.containerSecurityContext.readOnlyRootFilesystem`                   | Set read only root file system pod's Security Conte                                                                   | `false`                 |
@@ -373,8 +385,12 @@ helm uninstall my-release
 | `defaultBackend.hostAliases`                                       | Add deployment host aliases                                                                                     | `[]`                     |
 | `defaultBackend.replicaCount`                                      | Desired number of default backend pods                                                                          | `1`                      |
 | `defaultBackend.podSecurityContext.enabled`                        | Default backend Pod securityContext                                                                             | `true`                   |
+| `defaultBackend.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                              | `Always`                 |
+| `defaultBackend.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                  | `[]`                     |
+| `defaultBackend.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                     | `[]`                     |
 | `defaultBackend.podSecurityContext.fsGroup`                        | Set Default backend Pod's Security Context fsGroup                                                              | `1001`                   |
 | `defaultBackend.containerSecurityContext.enabled`                  | Enabled defaultBackend containers' Security Context                                                             | `true`                   |
+| `defaultBackend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `nil`                    |
 | `defaultBackend.containerSecurityContext.runAsUser`                | Set defaultBackend containers' Security Context runAsUser                                                       | `1001`                   |
 | `defaultBackend.containerSecurityContext.runAsNonRoot`             | Set defaultBackend containers' Security Context runAsNonRoot                                                    | `true`                   |
 | `defaultBackend.containerSecurityContext.readOnlyRootFilesystem`   | Set read only root file system pod's Security Conte                                                             | `false`                  |
@@ -485,7 +501,7 @@ The above command sets the `envoy.readinessProbe.successThreshold` to `5`.
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 

@@ -35,6 +35,7 @@ spec:
     spec:
       serviceAccountName: {{ template "grafana-tempo.serviceAccountName" . }}
       {{- include "grafana-tempo.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.metricsGenerator.automountServiceAccountToken }}
       {{- if .Values.metricsGenerator.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.hostAliases "context" $) | nindent 8 }}
       {{- end }}

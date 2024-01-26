@@ -94,6 +94,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.image.digest`                               | TensorFlow ResNet image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag  | `""`                                 |
 | `client.image.pullPolicy`                           | TensorFlow ResNet image pull policy                                                                                | `IfNotPresent`                       |
 | `client.image.pullSecrets`                          | Specify docker-registry secret names as an array                                                                   | `[]`                                 |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                 | `false`                              |
 | `hostAliases`                                       | Deployment pod host aliases                                                                                        | `[]`                                 |
 | `containerPorts.server`                             | Tensorflow server port                                                                                             | `8500`                               |
 | `containerPorts.restApi`                            | TensorFlow Serving Rest API Port                                                                                   | `8501`                               |
@@ -109,8 +110,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeSelector`                                      | Node labels for pod assignment. Evaluated as a template.                                                           | `{}`                                 |
 | `tolerations`                                       | Tolerations for pod assignment. Evaluated as a template.                                                           | `[]`                                 |
 | `podSecurityContext.enabled`                        | Enabled pod Security Context                                                                                       | `true`                               |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                 | `Always`                             |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                     | `[]`                                 |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                        | `[]`                                 |
 | `podSecurityContext.fsGroup`                        | Set pod Security Context fsGroup                                                                                   | `1001`                               |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                               | `true`                               |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                   | `nil`                                |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                         | `1001`                               |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                      | `true`                               |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                        | `false`                              |
@@ -155,6 +160,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customStartupProbe`                                | Custom liveness probe                                                                                              | `{}`                                 |
 | `customLivenessProbe`                               | Custom liveness probe                                                                                              | `{}`                                 |
 | `customReadinessProbe`                              | Custom readiness probe                                                                                             | `{}`                                 |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for pod                                                                          | `true`                               |
+| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                             | `""`                                 |
+| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                             | `false`                              |
+| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                               | `{}`                                 |
 | `service.type`                                      | Kubernetes Service type                                                                                            | `LoadBalancer`                       |
 | `service.ports.server`                              | TensorFlow Serving server port                                                                                     | `8500`                               |
 | `service.ports.restApi`                             | TensorFlow Serving Rest API port                                                                                   | `8501`                               |
@@ -190,7 +199,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/tenso
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -221,8 +230,6 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 ### To 3.0.0
 
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/tensorflow-resnet/administration/upgrade-helm3/).
 
 ### To 2.0.0
 

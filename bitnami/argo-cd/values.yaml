@@ -58,11 +58,11 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/argo-cd
-  tag: 2.9.3-debian-11-r0
+  tag: 2.9.5-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -139,7 +139,7 @@ controller:
   ##
   customReadinessProbe: {}
   ## Argo CD resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param controller.resources.limits The resources limits for the Argo CD containers
   ## @param controller.resources.requests The requested resources for the Argo CD containers
   ##
@@ -149,14 +149,21 @@ controller:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.podSecurityContext.enabled Enabled Argo CD pods' Security Context
+  ## @param controller.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param controller.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param controller.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param controller.podSecurityContext.fsGroup Set Argo CD pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.containerSecurityContext.enabled Enabled Argo CD containers' Security Context
+  ## @param controller.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param controller.containerSecurityContext.runAsUser Set Argo CD containers' Security Context runAsUser
   ## @param controller.containerSecurityContext.allowPrivilegeEscalation Set Argo CD containers' Security Context allowPrivilegeEscalation
   ## @param controller.containerSecurityContext.capabilities.drop Set Argo CD containers' Security Context capabilities to be dropped
@@ -167,6 +174,7 @@ controller:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -190,7 +198,7 @@ controller:
     name: ""
     ## @param controller.serviceAccount.automountServiceAccountToken Automount service account token for the application controller service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param controller.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -436,6 +444,9 @@ controller:
   ## @param controller.extraArgs Add extra arguments to the default arguments for the Argo CD controller
   ##
   extraArgs: []
+  ## @param controller.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param controller.hostAliases Argo CD pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -479,7 +490,7 @@ controller:
   ##
   affinity: {}
   ## @param controller.nodeSelector Node labels for Argo CD pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param controller.tolerations Tolerations for Argo CD pods assignment
@@ -764,7 +775,7 @@ applicationSet:
     name: ""
     ## @param applicationSet.serviceAccount.automountServiceAccountToken Automount service account token for the applicationSet controller service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param applicationSet.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -809,6 +820,7 @@ applicationSet:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param applicationSet.containerSecurityContext.enabled Enabled Argo CD applicationSet controller containers' Security Context
+  ## @param applicationSet.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param applicationSet.containerSecurityContext.runAsUser Set Argo CD applicationSet controller containers' Security Context runAsUser
   ## @param applicationSet.containerSecurityContext.allowPrivilegeEscalation Set Argo CD applicationSet controller containers' Security Context allowPrivilegeEscalation
   ## @param applicationSet.containerSecurityContext.capabilities.drop Set Argo CD applicationSet controller containers' Security Context capabilities to be dropped
@@ -819,6 +831,7 @@ applicationSet:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -863,7 +876,7 @@ applicationSet:
   ##
   customReadinessProbe: {}
   ## Argo CD applicationSet controller resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param applicationSet.resources.limits The resources limits for the Argo CD applicationSet controller containers
   ## @param applicationSet.resources.requests The requested resources for the Argo CD applicationSet controller containers
   ##
@@ -873,13 +886,19 @@ applicationSet:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param applicationSet.podSecurityContext.enabled Enabled Argo CD applicationSet controller pods' Security Context
+  ## @param applicationSet.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param applicationSet.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param applicationSet.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param applicationSet.podSecurityContext.fsGroup Set Argo CD applicationSet controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## @param applicationSet.nodeSelector Node labels for Argo CD applicationSet controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param applicationSet.tolerations Tolerations for Argo CD applicationSet controller pods assignment
@@ -1160,7 +1179,7 @@ notifications:
     name: ""
     ## @param notifications.serviceAccount.automountServiceAccountToken Automount service account token for the notifications controller service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param notifications.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -1205,6 +1224,7 @@ notifications:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param notifications.containerSecurityContext.enabled Enabled Argo CD notifications controller containers' Security Context
+  ## @param notifications.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param notifications.containerSecurityContext.runAsUser Set Argo CD notifications controller containers' Security Context runAsUser
   ## @param notifications.containerSecurityContext.allowPrivilegeEscalation Set Argo CD notifications controller containers' Security Context allowPrivilegeEscalation
   ## @param notifications.containerSecurityContext.capabilities.drop Set Argo CD notifications controller containers' Security Context capabilities to be dropped
@@ -1215,6 +1235,7 @@ notifications:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -1225,7 +1246,7 @@ notifications:
     seccompProfile:
       type: "RuntimeDefault"
   ## Argo CD notifications controller resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param notifications.resources.limits The resources limits for the Argo CD notifications controller containers
   ## @param notifications.resources.requests The requested resources for the Argo CD notifications controller containers
   ##
@@ -1235,13 +1256,19 @@ notifications:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param notifications.podSecurityContext.enabled Enabled Argo CD notifications controller pods' Security Context
+  ## @param notifications.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param notifications.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param notifications.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param notifications.podSecurityContext.fsGroup Set Argo CD notifications controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## @param notifications.nodeSelector Node labels for Argo CD notifications controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param notifications.tolerations Tolerations for Argo CD notifications controller pods assignment
@@ -1270,6 +1297,59 @@ notifications:
   ## @param notifications.extraEnvVarsSecret Name of existing Secret containing extra env vars for Argo CD notifications controller nodes
   ##
   extraEnvVarsSecret: ""
+  ## Configure extra options for Notification containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param notifications.startupProbe.enabled Enable startupProbe on Notification nodes
+  ## @param notifications.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param notifications.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param notifications.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param notifications.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param notifications.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param notifications.livenessProbe.enabled Enable livenessProbe on Notification nodes
+  ## @param notifications.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param notifications.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param notifications.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param notifications.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param notifications.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param notifications.readinessProbe.enabled Enable readinessProbe on Notification nodes
+  ## @param notifications.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param notifications.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param notifications.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param notifications.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param notifications.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param notifications.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param notifications.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param notifications.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
   ## Webhook for the Git Generator
   ## Ref: https://argocd-notifications.readthedocs.io/en/master/Generators-Git/#webhook-configuration)
   ##
@@ -1413,7 +1493,7 @@ notifications:
         name: ""
         ## @param notifications.bots.slack.serviceAccount.automountServiceAccountToken Automount service account token for the notifications controller service account
         ##
-        automountServiceAccountToken: true
+        automountServiceAccountToken: false
         ## @param notifications.bots.slack.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
         ##
         annotations: {}
@@ -1443,6 +1523,66 @@ notifications:
         ##   - e2e-az2
         ##
         values: []
+
+      ## Argo CD Slack Bot controller ports
+      ## @param notifications.bots.slack.containerPorts.metrics Slack Bot controller metrics port number
+      ##
+      containerPorts:
+        metrics: 9001
+
+      ## Configure extra options for Slack Bot containers' liveness and readiness probes
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+      ## @param notifications.bots.slack.startupProbe.enabled Enable startupProbe on Slack Bot nodes
+      ## @param notifications.bots.slack.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+      ## @param notifications.bots.slack.startupProbe.periodSeconds Period seconds for startupProbe
+      ## @param notifications.bots.slack.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+      ## @param notifications.bots.slack.startupProbe.failureThreshold Failure threshold for startupProbe
+      ## @param notifications.bots.slack.startupProbe.successThreshold Success threshold for startupProbe
+      ##
+      startupProbe:
+        enabled: false
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        timeoutSeconds: 1
+        failureThreshold: 3
+        successThreshold: 1
+      ## @param notifications.bots.slack.livenessProbe.enabled Enable livenessProbe on Slack Bot nodes
+      ## @param notifications.bots.slack.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+      ## @param notifications.bots.slack.livenessProbe.periodSeconds Period seconds for livenessProbe
+      ## @param notifications.bots.slack.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+      ## @param notifications.bots.slack.livenessProbe.failureThreshold Failure threshold for livenessProbe
+      ## @param notifications.bots.slack.livenessProbe.successThreshold Success threshold for livenessProbe
+      ##
+      livenessProbe:
+        enabled: true
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        timeoutSeconds: 1
+        failureThreshold: 3
+        successThreshold: 1
+      ## @param notifications.bots.slack.readinessProbe.enabled Enable readinessProbe on Slack Bot nodes
+      ## @param notifications.bots.slack.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+      ## @param notifications.bots.slack.readinessProbe.periodSeconds Period seconds for readinessProbe
+      ## @param notifications.bots.slack.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+      ## @param notifications.bots.slack.readinessProbe.failureThreshold Failure threshold for readinessProbe
+      ## @param notifications.bots.slack.readinessProbe.successThreshold Success threshold for readinessProbe
+      ##
+      readinessProbe:
+        enabled: true
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        timeoutSeconds: 1
+        failureThreshold: 3
+        successThreshold: 1
+      ## @param notifications.bots.slack.customStartupProbe Custom startupProbe that overrides the default one
+      ##
+      customStartupProbe: {}
+      ## @param notifications.bots.slack.customLivenessProbe Custom livenessProbe that overrides the default one
+      ##
+      customLivenessProbe: {}
+      ## @param notifications.bots.slack.customReadinessProbe Custom readinessProbe that overrides the default one
+      ##
+      customReadinessProbe: {}
       ## @param notifications.bots.slack.affinity Affinity for Argo CD Slack bot pods assignment
       ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
       ## NOTE: `notifications.bots.slack.podAffinityPreset`, `notifications.bots.slack.podAntiAffinityPreset`, and `notifications.bots.slack.nodeAffinityPreset` will be ignored when it's set
@@ -1459,6 +1599,7 @@ notifications:
       ## Configure Container Security Context
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
       ## @param notifications.bots.slack.containerSecurityContext.enabled Enabled Argo CD Slack bot containers' Security Context
+      ## @param notifications.bots.slack.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
       ## @param notifications.bots.slack.containerSecurityContext.runAsUser Set Argo CD Slack bot containers' Security Context runAsUser
       ## @param notifications.bots.slack.containerSecurityContext.allowPrivilegeEscalation Set Argo CD Slack bot containers' Security Context allowPrivilegeEscalation
       ## @param notifications.bots.slack.containerSecurityContext.capabilities.drop Set Argo CD Slack bot containers' Security Context capabilities to be dropped
@@ -1469,6 +1610,7 @@ notifications:
       ##
       containerSecurityContext:
         enabled: true
+        seLinuxOptions: null
         runAsUser: 1001
         runAsNonRoot: true
         readOnlyRootFilesystem: false
@@ -1479,7 +1621,7 @@ notifications:
         seccompProfile:
           type: "RuntimeDefault"
       ## Argo CD Slack bot resource requests and limits
-      ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+      ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
       ## @param notifications.bots.slack.resources.limits The resources limits for the Argo CD Slack bot containers
       ## @param notifications.bots.slack.resources.requests The requested resources for the Argo CD Slack bot containers
       ##
@@ -1489,13 +1631,19 @@ notifications:
       ## Configure Pods Security Context
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
       ## @param notifications.bots.slack.podSecurityContext.enabled Enabled Argo CD Slack bot pods' Security Context
+      ## @param notifications.bots.slack.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+      ## @param notifications.bots.slack.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+      ## @param notifications.bots.slack.podSecurityContext.supplementalGroups Set filesystem extra groups
       ## @param notifications.bots.slack.podSecurityContext.fsGroup Set Argo CD Slack bot pod's Security Context fsGroup
       ##
       podSecurityContext:
         enabled: true
+        fsGroupChangePolicy: Always
+        sysctls: []
+        supplementalGroups: []
         fsGroup: 1001
       ## @param notifications.bots.slack.nodeSelector Node labels for Argo CD Slack bot pods assignment
-      ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+      ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
       ##
       nodeSelector: {}
       ## @param notifications.bots.slack.tolerations Tolerations for Argo CD Slack bot pods assignment
@@ -1588,7 +1736,7 @@ server:
   ##
   customReadinessProbe: {}
   ## Argo CD server resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param server.resources.limits The resources limits for the Argo CD server containers
   ## @param server.resources.requests The requested resources for the Argo CD server containers
   ##
@@ -1598,14 +1746,21 @@ server:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param server.podSecurityContext.enabled Enabled Argo CD server pods' Security Context
+  ## @param server.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param server.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param server.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param server.podSecurityContext.fsGroup Set Argo CD server pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param server.containerSecurityContext.enabled Enabled Argo CD server containers' Security Context
+  ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param server.containerSecurityContext.runAsUser Set Argo CD server containers' Security Context runAsUser
   ## @param server.containerSecurityContext.allowPrivilegeEscalation Set Argo CD server containers' Security Context allowPrivilegeEscalation
   ## @param server.containerSecurityContext.capabilities.drop Set Argo CD containers' server Security Context capabilities to be dropped
@@ -1616,6 +1771,7 @@ server:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -1717,7 +1873,7 @@ server:
     dex.config: ""
 
   ## Configure the ingress for the Argo CD server
-  ## Ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ## @param server.ingress.enabled Enable the creation of an ingress for the Argo CD server
   ## @param server.ingress.pathType Path type for the Argo CD server ingress
   ## @param server.ingress.apiVersion Ingress API version for the Argo CD server ingress
@@ -1762,7 +1918,7 @@ server:
     path: /
 
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -1935,7 +2091,7 @@ server:
       honorLabels: false
 
   ## Configure the ingress resource that allows you to access the Argo CD gRPC API
-  ## Ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ## Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/
   ## @param server.ingressGrpc.enabled Enable the creation of an ingress for the Argo CD gRPC server
   ## @param server.ingressGrpc.pathType Path type for the Argo CD gRPC server ingress
@@ -1981,7 +2137,7 @@ server:
     path: /
 
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##
@@ -2134,6 +2290,9 @@ server:
   ## @param server.extraArgs concat to the default args
   ##
   extraArgs: []
+  ## @param server.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param server.hostAliases Argo CD server pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2177,7 +2336,7 @@ server:
   ##
   affinity: {}
   ## @param server.nodeSelector Node labels for Argo CD server pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param server.tolerations Tolerations for Argo CD server pods assignment
@@ -2272,7 +2431,7 @@ server:
     name: ""
     ## @param server.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param server.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -2339,7 +2498,7 @@ repoServer:
   ##
   customReadinessProbe: {}
   ## Argo CD repo server resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param repoServer.resources.limits The resources limits for the Argo CD repo server containers
   ## @param repoServer.resources.requests The requested resources for the Argo CD repo server containers
   ##
@@ -2349,14 +2508,21 @@ repoServer:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param repoServer.podSecurityContext.enabled Enabled Argo CD repo server pods' Security Context
+  ## @param repoServer.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param repoServer.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param repoServer.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param repoServer.podSecurityContext.fsGroup Set Argo CD repo server pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param repoServer.containerSecurityContext.enabled Enabled Argo CD repo server containers' Security Context
+  ## @param repoServer.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param repoServer.containerSecurityContext.runAsUser Set Argo CD repo server containers' Security Context runAsUser
   ## @param repoServer.containerSecurityContext.allowPrivilegeEscalation Set Argo CD repo server containers' Security Context allowPrivilegeEscalation
   ## @param repoServer.containerSecurityContext.capabilities.drop Set Argo CD containers' repo server Security Context capabilities to be dropped
@@ -2367,6 +2533,7 @@ repoServer:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -2568,7 +2735,7 @@ repoServer:
     name: ""
     ## @param repoServer.serviceAccount.automountServiceAccountToken Automount service account token for the repo server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param repoServer.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -2582,6 +2749,9 @@ repoServer:
   ## @param repoServer.extraArgs Add extra args to the default repo server args
   ##
   extraArgs: []
+  ## @param repoServer.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param repoServer.hostAliases Argo CD repo server pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2625,7 +2795,7 @@ repoServer:
   ##
   affinity: {}
   ## @param repoServer.nodeSelector Node labels for Argo CD repo server pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param repoServer.tolerations Tolerations for Argo CD repo server pods assignment
@@ -2726,11 +2896,11 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.37.0-debian-11-r100
+    tag: 2.37.0-debian-11-r103
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2806,7 +2976,7 @@ dex:
   ##
   customReadinessProbe: {}
   ## Dex resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dex.resources.limits The resources limits for the Dex containers
   ## @param dex.resources.requests The requested resources for the Dex containers
   ##
@@ -2816,14 +2986,21 @@ dex:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dex.podSecurityContext.enabled Enabled Dex pods' Security Context
+  ## @param dex.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param dex.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param dex.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param dex.podSecurityContext.fsGroup Set Dex pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dex.containerSecurityContext.enabled Enabled Dex containers' Security Context
+  ## @param dex.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dex.containerSecurityContext.runAsUser Set Dex containers' Security Context runAsUser
   ## @param dex.containerSecurityContext.allowPrivilegeEscalation Set Dex containers' Security Context allowPrivilegeEscalation
   ## @param dex.containerSecurityContext.readOnlyRootFilesystem Set Dex containers' server Security Context readOnlyRootFilesystem
@@ -2834,6 +3011,7 @@ dex:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false
@@ -3021,7 +3199,7 @@ dex:
     name: ""
     ## @param dex.serviceAccount.automountServiceAccountToken Automount service account token for the Dex service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param dex.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -3035,6 +3213,9 @@ dex:
   ## @param dex.extraArgs Add extra args to the default args for Dex
   ##
   extraArgs: []
+  ## @param dex.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param dex.hostAliases Dex pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -3078,7 +3259,7 @@ dex:
   ##
   affinity: {}
   ## @param dex.nodeSelector Node labels for Dex pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dex.tolerations Tolerations for Dex pods assignment
@@ -3357,7 +3538,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r95
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3369,7 +3550,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -3378,12 +3559,14 @@ volumePermissions:
     requests: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
+    seLinuxOptions: null
     runAsUser: 0
 
 ## @section Other Parameters
@@ -3410,11 +3593,11 @@ redis:
   image:
     registry: docker.io
     repository: bitnami/redis
-    tag: 7.2.3-debian-11-r2
+    tag: 7.2.4-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3495,6 +3678,7 @@ redisWait:
   ##
   extraArgs: ''
   ## @param redisWait.containerSecurityContext.enabled Enabled Argo CD repo server containers' Security Context
+  ## @param redisWait.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param redisWait.containerSecurityContext.runAsUser Set Argo CD repo server containers' Security Context runAsUser
   ## @param redisWait.containerSecurityContext.allowPrivilegeEscalation Set Argo CD repo server containers' Security Context allowPrivilegeEscalation
   ## @param redisWait.containerSecurityContext.capabilities.drop Set Argo CD containers' repo server Security Context capabilities to be dropped
@@ -3505,6 +3689,7 @@ redisWait:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: false

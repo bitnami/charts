@@ -60,11 +60,11 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/pinniped
-  tag: 0.28.0-debian-11-r0
+  tag: 0.28.0-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -208,7 +208,7 @@ concierge:
   ##
   customStartupProbe: {}
   ## Concierge resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param concierge.resources.limits The resources limits for the Concierge containers
   ## @param concierge.resources.requests The requested resources for the Concierge containers
   ##
@@ -218,14 +218,21 @@ concierge:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param concierge.podSecurityContext.enabled Enabled Concierge pods' Security Context
+  ## @param concierge.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param concierge.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param concierge.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param concierge.podSecurityContext.fsGroup Set Concierge pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param concierge.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param concierge.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param concierge.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param concierge.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param concierge.containerSecurityContext.privileged Set container's Security Context privileged
@@ -236,6 +243,7 @@ concierge:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -258,6 +266,9 @@ concierge:
   ## @param concierge.deployAPIService Deploy the APIService objects
   ##
   deployAPIService: true
+  ## @param concierge.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param concierge.hostAliases Concierge pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -301,7 +312,7 @@ concierge:
   ##
   affinity: {}
   ## @param concierge.nodeSelector Node labels for Concierge pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param concierge.tolerations Tolerations for Concierge pods assignment
@@ -392,7 +403,7 @@ concierge:
     concierge:
       name: ""
       create: true
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
       annotations: {}
     ## @param concierge.serviceAccount.impersonationProxy.name Name of an existing Service Account for the Concierge Impersonator
     ## @param concierge.serviceAccount.impersonationProxy.create Create a Service Account for the Concierge Impersonator
@@ -402,7 +413,7 @@ concierge:
     impersonationProxy:
       name: ""
       create: true
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
       annotations: {}
     ## @param concierge.serviceAccount.kubeCertAgentService.name Name of an existing Service Account for the Concierge kube-cert-agent-service
     ## @param concierge.serviceAccount.kubeCertAgentService.create Create a Service Account for the Concierge kube-cert-agent-service
@@ -412,7 +423,7 @@ concierge:
     kubeCertAgentService:
       name: ""
       create: true
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
       annotations: {}
 
   ## @section Concierge Traffic Exposure Parameters
@@ -464,7 +475,7 @@ concierge:
     extraPorts: []
     ## @param concierge.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param concierge.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -555,7 +566,7 @@ supervisor:
   ##
   customStartupProbe: {}
   ## Supervisor resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param supervisor.resources.limits The resources limits for the Supervisor containers
   ## @param supervisor.resources.requests The requested resources for the Supervisor containers
   ##
@@ -565,14 +576,21 @@ supervisor:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param supervisor.podSecurityContext.enabled Enabled Supervisor pods' Security Context
+  ## @param supervisor.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param supervisor.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param supervisor.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param supervisor.podSecurityContext.fsGroup Set Supervisor pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param supervisor.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param supervisor.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param supervisor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param supervisor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param supervisor.containerSecurityContext.privileged Set container's Security Context privileged
@@ -583,6 +601,7 @@ supervisor:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -602,6 +621,9 @@ supervisor:
   ## @param supervisor.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param supervisor.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param supervisor.hostAliases Supervisor pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -645,7 +667,7 @@ supervisor:
   ##
   affinity: {}
   ## @param supervisor.nodeSelector Node labels for Supervisor pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param supervisor.tolerations Tolerations for Supervisor pods assignment
@@ -735,7 +757,7 @@ supervisor:
     ##
     name: ""
     create: true
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
 
   ## @section Supervisor Traffic Exposure Parameters
@@ -793,7 +815,7 @@ supervisor:
       extraPorts: []
       ## @param supervisor.service.api.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param supervisor.service.api.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -848,7 +870,7 @@ supervisor:
       extraPorts: []
       ## @param supervisor.service.public.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param supervisor.service.public.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -885,7 +907,7 @@ supervisor:
     path: /
     ## @param supervisor.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
     ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
     ## Use this parameter to set the required annotations for cert-manager, see
     ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
     ##

@@ -79,11 +79,11 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mlflow
-  tag: 2.9.2-debian-11-r0
+  tag: 2.9.2-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -110,7 +110,7 @@ image:
 gitImage:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.43.0-debian-11-r1
+  tag: 2.43.0-debian-11-r5
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -189,7 +189,7 @@ tracking:
   ##
   customStartupProbe: {}
   ## mlflow resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
   ## @param tracking.resources.limits The resources limits for the mlflow containers
   ## @param tracking.resources.requests The requested resources for the mlflow containers
   ##
@@ -199,14 +199,21 @@ tracking:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param tracking.podSecurityContext.enabled Enabled mlflow pods' Security Context
+  ## @param tracking.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param tracking.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param tracking.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param tracking.podSecurityContext.fsGroup Set mlflow pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param tracking.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param tracking.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param tracking.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param tracking.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param tracking.containerSecurityContext.privileged Set containers' Security Context privileged
@@ -218,6 +225,7 @@ tracking:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -282,6 +290,9 @@ tracking:
   ## @param tracking.runUpgradeDB Add an init container to run mlflow db upgrade
   ##
   runUpgradeDB: false
+  ## @param tracking.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param tracking.hostAliases mlflow pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -379,7 +390,7 @@ tracking:
   ##
   affinity: {}
   ## @param tracking.nodeSelector Node labels for mlflow pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/
   ##
   nodeSelector: {}
   ## @param tracking.tolerations Tolerations for mlflow pods assignment
@@ -511,7 +522,7 @@ tracking:
     extraPorts: []
     ## @param tracking.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param tracking.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -521,7 +532,7 @@ tracking:
     ##
     sessionAffinityConfig: {}
   ## mlflow ingress parameters
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param tracking.ingress.enabled Enable ingress record generation for mlflow
@@ -678,7 +689,7 @@ tracking:
   ##
 
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param tracking.persistence.enabled Enable persistence using Persistent Volume Claims
@@ -893,7 +904,7 @@ run:
   ##
   customStartupProbe: {}
   ## run resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
   ## @param run.resources.limits The resources limits for the run containers
   ## @param run.resources.requests The requested resources for the run containers
   ##
@@ -903,14 +914,21 @@ run:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param run.podSecurityContext.enabled Enabled Run pods' Security Context
+  ## @param run.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param run.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param run.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param run.podSecurityContext.fsGroup Set Run pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param run.containerSecurityContext.enabled Enabled Run containers' Security Context
+  ## @param run.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param run.containerSecurityContext.runAsUser Set Run containers' Security Context runAsUser
   ## @param run.containerSecurityContext.runAsGroup Set Run containers' Security Context runAsGroup
   ## @param run.containerSecurityContext.runAsNonRoot Set Run containers' Security Context runAsNonRoot
@@ -922,6 +940,7 @@ run:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -939,6 +958,9 @@ run:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##https://github.com/microsoft/MlflowExamples
   runtimeClassName: ""
+  ## @param run.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param run.hostAliases run pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -986,7 +1008,7 @@ run:
   ##
   affinity: {}
   ## @param run.nodeSelector Node labels for Run pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/
   ##
   nodeSelector: {}
   ## @param run.tolerations Tolerations for Run pods assignment
@@ -1078,7 +1100,7 @@ run:
   serviceAccount:
     ## @param run.serviceAccount.create Enable creation of ServiceAccount for Run pods
     ##
-    create: false
+    create: true
     ## @param run.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -1092,7 +1114,7 @@ run:
     annotations: {}
   ## @section Mlflow Run persistence paramaters
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param run.persistence.enabled Use a PVC to persist data
@@ -1162,7 +1184,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r94
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1173,7 +1195,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -1183,6 +1205,7 @@ volumePermissions:
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param volumePermissions.containerSecurityContext.enabled Set container security context settings
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
@@ -1190,6 +1213,7 @@ volumePermissions:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 0
 
 waitContainer:
@@ -1201,7 +1225,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r94
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
@@ -1219,6 +1243,7 @@ waitContainer:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param waitContainer.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param waitContainer.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param waitContainer.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param waitContainer.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
   ## @param waitContainer.containerSecurityContext.privileged Set containers' Security Context privileged
@@ -1229,6 +1254,7 @@ waitContainer:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false

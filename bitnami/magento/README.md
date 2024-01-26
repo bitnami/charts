@@ -90,6 +90,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`                                  | Magento image pull policy                                                                                            | `IfNotPresent`            |
 | `image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                     | `[]`                      |
 | `image.debug`                                       | Specify if debug logs should be enabled                                                                              | `false`                   |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                   | `false`                   |
 | `hostAliases`                                       | Add deployment host aliases                                                                                          | `[]`                      |
 | `replicaCount`                                      | Number of Magento Pods to run                                                                                        | `1`                       |
 | `magentoSkipInstall`                                | Skip Magento installation wizard. Useful for migrations and restoring from SQL dump                                  | `false`                   |
@@ -135,8 +136,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.limits`                                  | The resources limits for the Magento container                                                                       | `{}`                      |
 | `resources.requests`                                | The requested resourcesc for the Magento container                                                                   | `{}`                      |
 | `podSecurityContext.enabled`                        | Enable Magento pods' Security Context                                                                                | `true`                    |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                   | `Always`                  |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                       | `[]`                      |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                          | `[]`                      |
 | `podSecurityContext.fsGroup`                        | Magento pods' group ID                                                                                               | `1001`                    |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                 | `true`                    |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                     | `nil`                     |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                           | `1001`                    |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                        | `true`                    |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                          | `false`                   |
@@ -248,16 +253,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                   | Description                                                                                                                                               | Value                      |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                    |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                       |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                       |
-| `volumePermissions.resources.limits`   | The resources limits for the init container                                                                                                               | `{}`                       |
-| `volumePermissions.resources.requests` | The requested resourcesc for the init container                                                                                                           | `{}`                       |
+| Name                                          | Description                                                                                                                                               | Value                      |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`                   | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                    |
+| `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                                          | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                                        | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                       |
+| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                                          | `[]`                       |
+| `volumePermissions.resources.limits`          | The resources limits for the init container                                                                                                               | `{}`                       |
+| `volumePermissions.resources.requests`        | The requested resourcesc for the init container                                                                                                           | `{}`                       |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for WordPress pod                                                                                                       | `true`                     |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                                    | `""`                       |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                                    | `false`                    |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                                      | `{}`                       |
 
 ### Traffic Exposure Parameters
 
@@ -380,7 +389,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/magen
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -416,7 +425,7 @@ Most likely you will only want to have one hostname that maps to this Magento in
 
 For each host indicated at `ingress.extraHosts`, please indicate a `name`, `path`, and any `annotations` that you may want the ingress controller to know about.
 
-For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
+For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
 
 ### TLS Secrets
 

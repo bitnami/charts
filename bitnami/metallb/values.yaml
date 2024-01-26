@@ -104,11 +104,11 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/metallb-controller
-    tag: 0.13.12-debian-11-r2
+    tag: 0.13.12-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -130,6 +130,9 @@ controller:
   ##
   updateStrategy:
     type: RollingUpdate
+  ## @param controller.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param controller.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -171,7 +174,7 @@ controller:
   ##
   topologySpreadConstraints: []
   ## Controller container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -191,7 +194,7 @@ controller:
     ##    memory: 25Mi
     requests: {}
   ## @param controller.nodeSelector Node labels for controller pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param controller.tolerations Tolerations for controller pod assignment
@@ -241,22 +244,31 @@ controller:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.podSecurityContext.enabled Enabled MetalLB Controller pods' Security Context
+  ## @param controller.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param controller.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param controller.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param controller.podSecurityContext.fsGroup Set MetalLB Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.containerSecurityContext.enabled Enabled MetalLB Controller containers' Security Context
+  ## @param controller.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param controller.containerSecurityContext.runAsUser Set MetalLB Controller containers' Security Context runAsUser
   ## @param controller.containerSecurityContext.runAsNonRoot Set MetalLB Controller container's Security Context runAsNonRoot
   ## @param controller.containerSecurityContext.allowPrivilegeEscalation Enables privilege Escalation context for the pod.
   ## @param controller.containerSecurityContext.readOnlyRootFilesystem Allows the pod to mount the RootFS as ReadOnly
   ## @param controller.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
+  ## @param controller.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
@@ -264,6 +276,8 @@ controller:
     capabilities:
       drop:
         - ALL
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param controller.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -323,7 +337,7 @@ controller:
   serviceAccount:
     create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
   ## @param controller.revisionHistoryLimit Configure the revisionHistoryLimit of the Controller deployment
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#revision-history-limit
@@ -489,11 +503,11 @@ speaker:
   image:
     registry: docker.io
     repository: bitnami/metallb-speaker
-    tag: 0.13.12-debian-11-r1
+    tag: 0.13.12-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -520,6 +534,9 @@ speaker:
     ## @param speaker.rbac.create create specifies whether to install and use RBAC rules.
     ##
     create: true
+  ## @param speaker.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param speaker.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -544,7 +561,7 @@ speaker:
   ##
   terminationGracePeriodSeconds: 2
   ## Speaker container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -564,7 +581,7 @@ speaker:
     ##    memory: 25Mi
     requests: {}
   ## @param speaker.nodeSelector Node labels for speaker pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param speaker.tolerations Tolerations for speaker pod assignment
@@ -611,23 +628,31 @@ speaker:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param speaker.podSecurityContext.enabled Enabled Speaker pods' Security Context
+  ## @param speaker.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param speaker.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param speaker.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param speaker.podSecurityContext.fsGroup Set Speaker pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 0
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param speaker.containerSecurityContext.enabled Enabled Speaker containers' Security Context
+  ## @param speaker.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param speaker.containerSecurityContext.runAsUser Set Speaker containers' Security Context runAsUser
   ## @param speaker.containerSecurityContext.allowPrivilegeEscalation Enables privilege Escalation context for the pod.
   ## @param speaker.containerSecurityContext.readOnlyRootFilesystem Allows the pod to mount the RootFS as ReadOnly
   ## @param speaker.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
   ## @param speaker.containerSecurityContext.capabilities.add [array] Add capabilities for the securityContext
+  ## @param speaker.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
-
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 0
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
@@ -638,6 +663,8 @@ speaker:
         - NET_ADMIN
         - NET_RAW
         - SYS_ADMIN
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param speaker.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -678,7 +705,7 @@ speaker:
   serviceAccount:
     create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
   ## Defines a secret to use outside of the auto generate
   ## @param speaker.secretName References a Secret name for the member secret outside of the helm chart

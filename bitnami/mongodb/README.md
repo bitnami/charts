@@ -61,7 +61,69 @@ architecture="standalone"
 architecture="replicaset"
 ```
 
-Refer to the [chart documentation for more information on each of these architectures](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/get-started/understand-architecture/).
+### Standalone architecture
+
+The *standalone* architecture installs a deployment (or StatefulSet) with one MongoDB&reg; server (it cannot be scaled):
+
+```text
+     ----------------
+    |   MongoDB&reg; |
+    |      svc       |
+     ----------------
+            |
+            v
+       ------------
+      |MongoDB&reg;|
+      |   Server   |
+      |    Pod     |
+       -----------
+```
+
+### Replicaset architecture
+
+The chart also supports the *replicaset* architecture with and without a MongoDB(&reg;) Arbiter:
+
+When the MongoDB(&reg;) Arbiter is enabled, the chart installs two StatefulSets: A StatefulSet with N MongoDB(&reg;) servers (organised with one primary and N-1 secondary nodes), and a StatefulSet with one MongoDB(&reg;) arbiter node (it cannot be scaled).
+
+```text
+     ----------------   ----------------   ----------------      -------------
+    | MongoDB&reg; 0 | | MongoDB&reg; 1 | | MongoDB&reg; N |    |   Arbiter   |
+    |  external svc  | |  external svc  | |  external svc  |    |     svc     |
+     ----------------   ----------------   ----------------      -------------
+            |                  |                  |                    |
+            v                  v                  v                    v
+     ----------------   ----------------   ----------------      --------------
+    | MongoDB&reg; 0 | | MongoDB&reg; 1 | | MongoDB&reg; N |    | MongoDB&reg; |
+    |    Server      | |     Server     | |     Server     |    |    Arbiter   |
+    |     Pod        | |      Pod       | |      Pod       |    |     Pod      |
+     ----------------   ----------------   ----------------      --------------
+          primary           secondary         secondary
+```
+
+The PSA model is useful when the third Availability Zone cannot hold a full MongoDB(&reg;) instance. The MongoDB(&reg;) Arbiter as decision maker is lightweight and can run alongside other workloads.
+
+> NOTE: An update takes your MongoDB(&reg;) replicaset offline if the Arbiter is enabled and the number of MongoDB(&reg;) replicas is two. Helm applies updates to the StatefulSets for the MongoDB(&reg;) instance and the Arbiter at the same time so you lose two out of three quorum votes.
+
+Without the Arbiter, the chart deploys a single statefulset with N MongoDB(&reg;) servers (organised with one primary and N-1 secondary nodes).
+
+```text
+     ----------------   ----------------   ----------------
+    | MongoDB&reg; 0 | | MongoDB&reg; 1 | | MongoDB&reg; N |
+    |  external svc  | |  external svc  | |  external svc  |
+     ----------------   ----------------   ----------------
+            |                  |                  |
+            v                  v                  v
+     ----------------   ----------------   ----------------
+    | MongoDB&reg; 0 | | MongoDB&reg; 1 | | MongoDB&reg; N |
+    |    Server      | |     Server     | |     Server     |
+    |     Pod        | |      Pod       | |      Pod       |
+     ----------------   ----------------   ----------------
+          primary           secondary         secondary
+```
+
+There are no services load balancing requests between MongoDB(&reg;) nodes; instead, each node has an associated service to access them individually.
+
+> NOTE: Although the first replica is initially assigned the primary role, any of the secondary nodes can become the primary if it is down, or during upgrades. Do not make any assumption about what replica has the primary role. Instead, configure your MongoDB(&reg;) client with the list of MongoDB(&reg;) hostnames so it can dynamically choose the node to send requests.
 
 ## Parameters
 
@@ -137,6 +199,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `tls.mode`                       | Allows to set the tls mode which should be used when tls is enabled (options: `allowTLS`, `preferTLS`, `requireTLS`)                                        | `requireTLS`              |
 | `tls.resources.limits`           | Init container generate-tls-certs resource limits                                                                                                           | `{}`                      |
 | `tls.resources.requests`         | Init container generate-tls-certs resource requests                                                                                                         | `{}`                      |
+| `automountServiceAccountToken`   | Mount Service Account token in pod                                                                                                                          | `false`                   |
 | `hostAliases`                    | Add deployment host aliases                                                                                                                                 | `[]`                      |
 | `replicaSetName`                 | Name of the replica set (only when `architecture=replicaset`)                                                                                               | `rs0`                     |
 | `replicaSetHostnames`            | Enable DNS hostnames in the replicaset config (only when `architecture=replicaset`)                                                                         | `true`                    |
@@ -189,9 +252,12 @@ Refer to the [chart documentation for more information on each of these architec
 | `priorityClassName`                                 | Name of the existing priority class to be used by MongoDB(&reg;) pod(s)                                         | `""`             |
 | `runtimeClassName`                                  | Name of the runtime class to be used by MongoDB(&reg;) pod(s)                                                   | `""`             |
 | `podSecurityContext.enabled`                        | Enable MongoDB(&reg;) pod(s)' Security Context                                                                  | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                              | `Always`         |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                     | `[]`             |
 | `podSecurityContext.fsGroup`                        | Group ID for the volumes of the MongoDB(&reg;) pod(s)                                                           | `1001`           |
 | `podSecurityContext.sysctls`                        | sysctl settings of the MongoDB(&reg;) pod(s)'                                                                   | `[]`             |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                            | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                      | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                   | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                     | `false`          |
@@ -309,6 +375,7 @@ Refer to the [chart documentation for more information on each of these architec
 | Name                                               | Description                                                                                                                           | Value               |
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | `persistence.enabled`                              | Enable MongoDB(&reg;) data persistence using PVC                                                                                      | `true`              |
+| `persistence.name`                                 | Name of the PVC and mounted volume                                                                                                    | `datadir`           |
 | `persistence.medium`                               | Provide a medium for `emptyDir` volumes.                                                                                              | `""`                |
 | `persistence.existingClaim`                        | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)                                                     | `""`                |
 | `persistence.resourcePolicy`                       | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`                |
@@ -338,6 +405,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `backup.cronjob.ttlSecondsAfterFinished`                           | Set the cronjob parameter ttlSecondsAfterFinished                                                                                     | `""`                |
 | `backup.cronjob.restartPolicy`                                     | Set the cronjob parameter restartPolicy                                                                                               | `OnFailure`         |
 | `backup.cronjob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                  | `true`              |
+| `backup.cronjob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                      | `nil`               |
 | `backup.cronjob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                            | `1001`              |
 | `backup.cronjob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                         | `true`              |
 | `backup.cronjob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                           | `false`             |
@@ -365,7 +433,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `serviceAccount.create`                       | Enable creation of ServiceAccount for MongoDB(&reg;) pods                                                                                   | `true`  |
 | `serviceAccount.name`                         | Name of the created serviceAccount                                                                                                          | `""`    |
 | `serviceAccount.annotations`                  | Additional Service Account annotations                                                                                                      | `{}`    |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `false` |
 | `rbac.create`                                 | Whether to create & use RBAC resources or not                                                                                               | `false` |
 | `rbac.rules`                                  | Custom rules to create following the role specification                                                                                     | `[]`    |
 | `podSecurityPolicy.create`                    | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
@@ -375,23 +443,25 @@ Refer to the [chart documentation for more information on each of these architec
 
 ### Volume Permissions parameters
 
-| Name                                          | Description                                                                                                                       | Value                      |
-| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                    |
-| `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
-| `volumePermissions.resources.limits`          | Init container volume-permissions resource limits                                                                                 | `{}`                       |
-| `volumePermissions.resources.requests`        | Init container volume-permissions resource requests                                                                               | `{}`                       |
-| `volumePermissions.securityContext.runAsUser` | User ID for the volumePermissions container                                                                                       | `0`                        |
+| Name                                               | Description                                                                                                                       | Value                      |
+| -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`                        | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                    |
+| `volumePermissions.image.registry`                 | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`               | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                   | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`               | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
+| `volumePermissions.resources.limits`               | Init container volume-permissions resource limits                                                                                 | `{}`                       |
+| `volumePermissions.resources.requests`             | Init container volume-permissions resource requests                                                                               | `{}`                       |
+| `volumePermissions.securityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `nil`                      |
+| `volumePermissions.securityContext.runAsUser`      | User ID for the volumePermissions container                                                                                       | `0`                        |
 
 ### Arbiter parameters
 
 | Name                                                        | Description                                                                                       | Value            |
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ---------------- |
 | `arbiter.enabled`                                           | Enable deploying the arbiter                                                                      | `true`           |
+| `arbiter.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                | `false`          |
 | `arbiter.hostAliases`                                       | Add deployment host aliases                                                                       | `[]`             |
 | `arbiter.configuration`                                     | Arbiter configuration file to be used                                                             | `""`             |
 | `arbiter.existingConfigmap`                                 | Name of existing ConfigMap with Arbiter configuration                                             | `""`             |
@@ -422,9 +492,12 @@ Refer to the [chart documentation for more information on each of these architec
 | `arbiter.priorityClassName`                                 | Name of the existing priority class to be used by Arbiter pod(s)                                  | `""`             |
 | `arbiter.runtimeClassName`                                  | Name of the runtime class to be used by Arbiter pod(s)                                            | `""`             |
 | `arbiter.podSecurityContext.enabled`                        | Enable Arbiter pod(s)' Security Context                                                           | `true`           |
+| `arbiter.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                | `Always`         |
+| `arbiter.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                       | `[]`             |
 | `arbiter.podSecurityContext.fsGroup`                        | Group ID for the volumes of the Arbiter pod(s)                                                    | `1001`           |
 | `arbiter.podSecurityContext.sysctls`                        | sysctl settings of the Arbiter pod(s)'                                                            | `[]`             |
 | `arbiter.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                              | `true`           |
+| `arbiter.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                  | `nil`            |
 | `arbiter.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                        | `1001`           |
 | `arbiter.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                     | `true`           |
 | `arbiter.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                       | `false`          |
@@ -474,6 +547,7 @@ Refer to the [chart documentation for more information on each of these architec
 | Name                                                       | Description                                                                                          | Value               |
 | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------- |
 | `hidden.enabled`                                           | Enable deploying the hidden nodes                                                                    | `false`             |
+| `hidden.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                   | `false`             |
 | `hidden.hostAliases`                                       | Add deployment host aliases                                                                          | `[]`                |
 | `hidden.configuration`                                     | Hidden node configuration file to be used                                                            | `""`                |
 | `hidden.existingConfigmap`                                 | Name of existing ConfigMap with Hidden node configuration                                            | `""`                |
@@ -505,9 +579,12 @@ Refer to the [chart documentation for more information on each of these architec
 | `hidden.priorityClassName`                                 | Name of the existing priority class to be used by hidden node pod(s)                                 | `""`                |
 | `hidden.runtimeClassName`                                  | Name of the runtime class to be used by hidden node pod(s)                                           | `""`                |
 | `hidden.podSecurityContext.enabled`                        | Enable Hidden pod(s)' Security Context                                                               | `true`              |
+| `hidden.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                   | `Always`            |
+| `hidden.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                          | `[]`                |
 | `hidden.podSecurityContext.fsGroup`                        | Group ID for the volumes of the Hidden pod(s)                                                        | `1001`              |
 | `hidden.podSecurityContext.sysctls`                        | sysctl settings of the Hidden pod(s)'                                                                | `[]`                |
 | `hidden.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                 | `true`              |
+| `hidden.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                     | `nil`               |
 | `hidden.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                           | `1001`              |
 | `hidden.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                        | `true`              |
 | `hidden.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                          | `false`             |
@@ -658,7 +735,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/mongo
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -680,7 +757,55 @@ In order to access MongoDB(&reg;) nodes from outside the cluster when using a re
 - Using LoadBalancer services
 - Using NodePort services.
 
-Refer to the [chart documentation for more details and configuration examples](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/configuration/configure-external-access-replicaset/).
+#### Use LoadBalancer services
+
+Two alternatives are available to use *LoadBalancer* services:
+
+- Use random load balancer IP addresses using an *initContainer* that waits for the IP addresses to be ready and discovers them automatically. An example deployment configuration is shown below:
+
+    ```text
+    architecture=replicaset
+    replicaCount=2
+    externalAccess.enabled=true
+    externalAccess.service.type=LoadBalancer
+    externalAccess.service.port=27017
+    externalAccess.autoDiscovery.enabled=true
+    serviceAccount.create=true
+    rbac.create=true
+    ```
+
+    > NOTE: This option requires creating RBAC rules on clusters where RBAC policies are enabled.
+
+- Manually specify the load balancer IP addresses. An example deployment configuration is shown below, with the placeholder EXTERNAL-IP-ADDRESS-X used in place of the load balancer IP addresses:
+
+    ```text
+    architecture=replicaset
+    replicaCount=2
+    externalAccess.enabled=true
+    externalAccess.service.type=LoadBalancer
+    externalAccess.service.port=27017
+    externalAccess.service.loadBalancerIPs[0]='EXTERNAL-IP-ADDRESS-1'
+    externalAccess.service.loadBalancerIPs[1]='EXTERNAL-IP-ADDRESS-2'
+    ```
+
+    > NOTE: This option requires knowing the load balancer IP addresses, so that each MongoDB&reg; node's advertised hostname is configured with it.
+
+#### Use NodePort services
+
+Manually specify the node ports to use. An example deployment configuration is shown below, with the placeholder NODE-PORT-X used in place of the node ports:
+
+```text
+architecture=replicaset
+replicaCount=2
+externalAccess.enabled=true
+externalAccess.service.type=NodePort
+externalAccess.service.nodePorts[0]='NODE-PORT-1'
+externalAccess.service.nodePorts[1]='NODE-PORT-2'
+```
+
+> NOTE: This option requires knowing the node ports that will be exposed, so each MongoDB&reg; node's advertised hostname is configured with it.
+
+The pod will try to get the external IP address of the node using the command `curl -s https://ipinfo.io/IP-ADDRESS` unless the `externalAccess.service.domain` parameter is set.
 
 ### Bootstrapping with an External Cluster
 
@@ -709,11 +834,45 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Use Sidecars and Init Containers
 
-If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter. Similarly, extra init containers can be added using the `initContainers` parameter.
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter.
 
-Refer to the chart documentation for more information on, and examples of, configuring and using [sidecars and init containers](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/configuration/configure-sidecar-init-containers/).
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
 
-## Persistence
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
+
+### Persistence
 
 The [Bitnami MongoDB(&reg;)](https://github.com/bitnami/containers/tree/main/bitnami/mongodb) image stores the MongoDB(&reg;) data and configurations at the `/bitnami/mongodb` path of the container.
 
@@ -721,17 +880,88 @@ The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/stora
 
 If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
-## Use custom Prometheus rules
+### Backup and restore MongoDB(R) deployments
 
-Custom Prometheus rules can be defined for the Prometheus Operator by using the `prometheusRule` parameter.
+Two different approaches are available to back up and restore Bitnami MongoDB&reg; Helm chart deployments on Kubernetes:
 
-Refer to the [chart documentation for an example of a custom rule](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/administration/use-prometheus-rules/).
+- Back up the data from the source deployment and restore it in a new deployment using MongoDB&reg; built-in backup/restore tools.
+- Back up the persistent volumes from the source deployment and attach them to a new deployment using Velero, a Kubernetes backup/restore tool.
 
-## Enable SSL/TLS
+#### Method 1: Backup and restore data using MongoDB&reg; built-in tools
+
+This method involves the following steps:
+
+- Use the *mongodump* tool to create a snapshot of the data in the source cluster.
+- Create a new MongoDB&reg; Cluster deployment and forward the MongoDB&reg; Cluster service port for the new deployment.
+- Restore the data using the *mongorestore* tool to import the backup to the new cluster.
+
+> NOTE: Under this approach, it is important to create the new deployment on the destination cluster using the same credentials as the original deployment on the source cluster.
+
+#### Method 2: Back up and restore persistent data volumes
+
+This method involves copying the persistent data volumes for the MongoDB&reg; nodes and reusing them in a new deployment with [Velero](https://velero.io/), an open source Kubernetes backup/restore tool. This method is only suitable when:
+
+- The Kubernetes provider is [supported by Velero](https://velero.io/docs/latest/supported-providers/).
+- Both clusters are on the same Kubernetes provider, as this is a requirement of [Velero's native support for migrating persistent volumes](https://velero.io/docs/latest/migration-case/).
+- The restored deployment on the destination cluster will have the same name, namespace, topology and credentials as the original deployment on the source cluster.
+
+This method involves the following steps:
+
+- Install Velero on the source and destination clusters.
+- Use Velero to back up the PersistentVolumes (PVs) used by the deployment on the source cluster.
+- Use Velero to restore the backed-up PVs on the destination cluster.
+- Create a new deployment on the destination cluster with the same chart, deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
+
+Refer to our detailed [tutorial on backing up and restoring MongoDB&reg; chart deployments on Kubernetes](https://docs.bitnami.com/tutorials/backup-restore-data-mongodb-kubernetes/), which covers both these approaches, for more information.
+
+### Use custom Prometheus rules
+
+Custom Prometheus rules can be defined for the Prometheus Operator by using the `prometheusRule` parameter. A basic configuration example is shown below:
+
+```text
+    metrics:
+      enabled: true
+      prometheusRule:
+        enabled: true
+        rules:
+        - name: rule1
+          rules:
+          - alert: HighRequestLatency
+            expr: job:request_latency_seconds:mean5m{job="myjob"} > 0.5
+            for: 10m
+            labels:
+              severity: page
+            annotations:
+              summary: High request latency
+```
+
+### Enable SSL/TLS
 
 This chart supports enabling SSL/TLS between nodes in the cluster, as well as between MongoDB(&reg;) clients and nodes, by setting the `MONGODB_EXTRA_FLAGS` and `MONGODB_CLIENT_EXTRA_FLAGS` container environment variables, together with the correct `MONGODB_ADVERTISED_HOSTNAME`. To enable full TLS encryption, set the `tls.enabled` parameter to `true`.
 
-Refer to the [chart documentation for more information on enabling TLS](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/administration/enable-tls/).
+#### Generate the self-signed certificates via pre-install Helm hooks
+
+The `secrets-ca.yaml` file utilizes the Helm "pre-install" hook to ensure that the certificates will only be generated on chart install.
+
+The `genCA()` function will create a new self-signed x509 certificate authority. The `genSignedCert()` function creates an object with the certificate and key, which are base64-encoded and used in a YAML-like object. The `genSignedCert()` function is passed the CN, an empty IP list (the nil part), the validity and the CA created previously.
+
+A Kubernetes Secret is used to hold the signed certificate created above, and the `initContainer` sets up the rest. Using Helm's hook annotations ensures that the certificates will only be generated on chart install. This will prevent overriding the certificates if the chart is upgraded.
+
+#### Use your own CA
+
+To use your own CA, set `tls.caCert` and `tls.caKey` with appropriate base64 encoded data. The `secrets-ca.yaml` file will utilize this data to create the Secret.
+
+> NOTE: Currently, only RSA private keys are supported.
+
+#### Access the cluster
+
+To access the cluster, enable the init container which generates the MongoDB(&reg;) server/client PEM key needed to access the cluster. Please be sure to include the `$my_hostname` section with your actual hostname, and the alternative hostnames section should contain the hostnames that should be allowed access to the MongoDB(&reg;) replicaset. Additionally, if external access is enabled, the load balancer IP addresses are added to the alternative names list.
+
+> NOTE: You will be generating self-signed certificates for the MongoDB(&reg;) deployment. The init container generates a new MongoDB(&reg;) private key which will be used to create a Certificate Authority (CA) and the public certificate for the CA. The Certificate Signing Request will be created as well and signed using the private key of the CA previously created. Finally, the PEM bundle will be created using the private key and public certificate. This process will be repeated for each node in the cluster.
+
+#### Start the cluster
+
+After the certificates have been generated and made available to the containers at the correct mount points, the MongoDB(&reg;) server will be started with TLS enabled. The options for the TLS mode will be one of `disabled`, `allowTLS`, `preferTLS`, or `requireTLS`. This value can be changed via the `MONGODB_EXTRA_FLAGS` field using the `tlsMode` parameter. The client should now be able to connect to the TLS-enabled cluster with the provided certificates.
 
 ### Set Pod affinity
 
@@ -780,8 +1010,6 @@ Please visit the release notes from the upstream project at <https://github.com/
 ### To 10.0.0
 
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/administration/upgrade-helm3/).
 
 ### To 9.0.0
 

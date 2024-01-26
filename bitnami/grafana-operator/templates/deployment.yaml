@@ -38,6 +38,7 @@ spec:
       {{- if .Values.operator.schedulerName }}
       schedulerName: {{ .Values.operator.schedulerName | quote }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.operator.automountServiceAccountToken }}
       {{- if .Values.operator.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.operator.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -120,7 +121,9 @@ spec:
             - name: TEMPLATE_PATH
               value: /usr/local/bin/templates
             - name: WATCH_NAMESPACE
-              {{- if .Values.operator.watchNamespace }}
+              {{- if .Values.operator.namespaceScope }}
+              value: {{ include "common.names.namespace" . | quote }}
+              {{- else if .Values.operator.watchNamespace }}
               value: {{ default (include "common.names.namespace" .) .Values.operator.watchNamespace | quote }}
               {{- else }}
               value: ""

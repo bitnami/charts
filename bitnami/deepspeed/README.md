@@ -145,8 +145,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.resources.limits`                                  | The resources limits for the client containers                                                   | `{}`             |
 | `client.resources.requests`                                | The requested resources for the client containers                                                | `{}`             |
 | `client.podSecurityContext.enabled`                        | Enabled Client pods' Security Context                                                            | `true`           |
+| `client.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                               | `Always`         |
+| `client.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                   | `[]`             |
+| `client.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                      | `[]`             |
 | `client.podSecurityContext.fsGroup`                        | Set Client pod's Security Context fsGroup                                                        | `1001`           |
 | `client.containerSecurityContext.enabled`                  | Enabled Client containers' Security Context                                                      | `true`           |
+| `client.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                 | `nil`            |
 | `client.containerSecurityContext.runAsUser`                | Set Client containers' Security Context runAsUser                                                | `1001`           |
 | `client.containerSecurityContext.runAsGroup`               | Set Client containers' Security Context runAsGroup                                               | `1001`           |
 | `client.containerSecurityContext.runAsNonRoot`             | Set Client containers' Security Context runAsNonRoot                                             | `true`           |
@@ -157,6 +161,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.containerSecurityContext.seccompProfile.type`      | Set Client container's Security Context seccomp profile                                          | `RuntimeDefault` |
 | `client.lifecycleHooks`                                    | for the client container(s) to automate configuration before or after startup                    | `{}`             |
 | `client.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                   | `""`             |
+| `client.automountServiceAccountToken`                      | Mount Service Account token in pod                                                               | `false`          |
 | `client.hostAliases`                                       | client pods host aliases                                                                         | `[]`             |
 | `client.labels`                                            | Extra labels for the client deployment                                                           | `{}`             |
 | `client.podLabels`                                         | Extra labels for client pods                                                                     | `{}`             |
@@ -182,7 +187,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources                                                       | `false`          |
 | `client.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                     | `[]`             |
 | `client.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                     | `[]`             |
-| `client.serviceAccount.create`                             | Enable creation of ServiceAccount for Client pods                                                | `false`          |
+| `client.serviceAccount.create`                             | Enable creation of ServiceAccount for Client pods                                                | `true`           |
 | `client.serviceAccount.name`                               | The name of the ServiceAccount to use                                                            | `""`             |
 | `client.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                           | `false`          |
 | `client.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                             | `{}`             |
@@ -240,8 +245,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.resources.limits`                                  | The resources limits for the client containers                                                     | `{}`             |
 | `worker.resources.requests`                                | The requested resources for the client containers                                                  | `{}`             |
 | `worker.podSecurityContext.enabled`                        | Enabled Worker pods' Security Context                                                              | `true`           |
+| `worker.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                 | `Always`         |
+| `worker.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                     | `[]`             |
+| `worker.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                        | `[]`             |
 | `worker.podSecurityContext.fsGroup`                        | Set Worker pod's Security Context fsGroup                                                          | `1001`           |
 | `worker.containerSecurityContext.enabled`                  | Enabled Worker containers' Security Context                                                        | `true`           |
+| `worker.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                   | `nil`            |
 | `worker.containerSecurityContext.runAsUser`                | Set Worker containers' Security Context runAsUser                                                  | `1001`           |
 | `worker.containerSecurityContext.runAsGroup`               | Set Worker containers' Security Context runAsGroup                                                 | `1001`           |
 | `worker.containerSecurityContext.runAsNonRoot`             | Set Worker containers' Security Context runAsNonRoot                                               | `true`           |
@@ -252,6 +261,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.containerSecurityContext.privileged`               | Set Worker container's Security Context privileged                                                 | `false`          |
 | `worker.lifecycleHooks`                                    | for the client container(s) to automate configuration before or after startup                      | `{}`             |
 | `worker.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                     | `""`             |
+| `worker.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                 | `false`          |
 | `worker.hostAliases`                                       | client pods host aliases                                                                           | `[]`             |
 | `worker.labels`                                            | Labels for the worker deployment                                                                   | `{}`             |
 | `worker.annotations`                                       | Annotations for the worker deployment                                                              | `{}`             |
@@ -297,7 +307,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.externalAccess.service.labels`                   | Additional custom labels for Worker service                                                                                               | `{}`        |
 | `worker.externalAccess.service.annotations`              | Additional custom annotations for Worker service                                                                                          | `{}`        |
 | `worker.externalAccess.service.extraPorts`               | Extra ports to expose in the Worker service                                                                                               | `[]`        |
-| `worker.serviceAccount.create`                           | Enable creation of ServiceAccount for Data Coordinator pods                                                                               | `false`     |
+| `worker.serviceAccount.create`                           | Enable creation of ServiceAccount for Data Coordinator pods                                                                               | `true`      |
 | `worker.serviceAccount.name`                             | The name of the ServiceAccount to use                                                                                                     | `""`        |
 | `worker.serviceAccount.automountServiceAccountToken`     | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                    | `false`     |
 | `worker.serviceAccount.annotations`                      | Additional custom annotations for the ServiceAccount                                                                                      | `{}`        |
@@ -359,7 +369,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/deeps
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -432,7 +442,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as milvus (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `client`, `worker`. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/deepspeed/configuration/configure-sidecar-init-containers/).
+If additional containers are needed in the same pod as Milvus (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ## Troubleshooting
 

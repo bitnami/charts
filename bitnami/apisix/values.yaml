@@ -80,7 +80,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -130,8 +130,7 @@ dataPlane:
   ## @param dataPlane.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
-    # As the user needs to manually unseal the apisix, we don't want Apisix to restart
-    enabled: false
+    enabled: true
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 5
@@ -175,7 +174,7 @@ dataPlane:
   ##
   customStartupProbe: {}
   ## APISIX resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dataPlane.resources.limits The resources limits for the APISIX containers
   ## @param dataPlane.resources.requests The requested resources for the APISIX containers
   ##
@@ -185,14 +184,21 @@ dataPlane:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dataPlane.podSecurityContext.enabled Enabled APISIX pods' Security Context
+  ## @param dataPlane.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param dataPlane.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param dataPlane.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param dataPlane.podSecurityContext.fsGroup Set APISIX pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param dataPlane.containerSecurityContext.enabled Enabled APISIX containers' Security Context
+  ## @param dataPlane.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dataPlane.containerSecurityContext.runAsUser Set APISIX containers' Security Context runAsUser
   ## @param dataPlane.containerSecurityContext.runAsNonRoot Set APISIX containers' Security Context runAsNonRoot
   ## @param dataPlane.containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context runAsNonRoot
@@ -202,6 +208,7 @@ dataPlane:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
@@ -217,6 +224,9 @@ dataPlane:
   ## @param dataPlane.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param dataPlane.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param dataPlane.hostAliases APISIX pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -405,7 +415,7 @@ dataPlane:
   ##
   affinity: {}
   ## @param dataPlane.nodeSelector Node labels for APISIX pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dataPlane.tolerations Tolerations for APISIX pods assignment
@@ -532,7 +542,7 @@ dataPlane:
     extraPorts: []
     ## @param dataPlane.service.sessionAffinity Control where web requests go, to the same pod or round-robin
     ## Values: WebIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param dataPlane.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -542,7 +552,7 @@ dataPlane:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param dataPlane.ingress.enabled Enable ingress record generation for Apisix
@@ -727,7 +737,7 @@ dataPlane:
     annotations: {}
     ## @param dataPlane.serviceAccount.automountServiceAccountToken Automount service account token for the apisix service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section APISIX Data Plane Metrics Parameters
   ##
@@ -824,8 +834,7 @@ controlPlane:
   ## @param controlPlane.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
-    # As the user needs to manually unseal the apisix, we don't want Apisix to restart
-    enabled: false
+    enabled: true
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 5
@@ -869,7 +878,7 @@ controlPlane:
   ##
   customStartupProbe: {}
   ## APISIX resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param controlPlane.resources.limits The resources limits for the APISIX containers
   ## @param controlPlane.resources.requests The requested resources for the APISIX containers
   ##
@@ -879,14 +888,21 @@ controlPlane:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controlPlane.podSecurityContext.enabled Enabled APISIX pods' Security Context
+  ## @param controlPlane.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param controlPlane.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param controlPlane.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param controlPlane.podSecurityContext.fsGroup Set APISIX pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param controlPlane.containerSecurityContext.enabled Enabled APISIX containers' Security Context
+  ## @param controlPlane.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param controlPlane.containerSecurityContext.runAsUser Set APISIX containers' Security Context runAsUser
   ## @param controlPlane.containerSecurityContext.runAsNonRoot Set APISIX containers' Security Context runAsNonRoot
   ## @param controlPlane.containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context runAsNonRoot
@@ -896,6 +912,7 @@ controlPlane:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
@@ -911,6 +928,9 @@ controlPlane:
   ## @param controlPlane.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param controlPlane.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param controlPlane.hostAliases APISIX pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1126,7 +1146,7 @@ controlPlane:
   ##
   affinity: {}
   ## @param controlPlane.nodeSelector Node labels for APISIX pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param controlPlane.tolerations Tolerations for APISIX pods assignment
@@ -1253,7 +1273,7 @@ controlPlane:
     extraPorts: []
     ## @param controlPlane.service.sessionAffinity Control where web requests go, to the same pod or round-robin
     ## Values: WebIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param controlPlane.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1263,7 +1283,7 @@ controlPlane:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param controlPlane.ingress.enabled Enable ingress record generation for Apisix
@@ -1448,7 +1468,7 @@ controlPlane:
     annotations: {}
     ## @param controlPlane.serviceAccount.automountServiceAccountToken Automount service account token for the apisix service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## @section APISIX Control Plane Metrics Parameters
   ##
@@ -1532,11 +1552,11 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/apisix-dashboard
-    tag: 3.0.1-debian-11-r140
+    tag: 3.0.1-debian-11-r141
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1732,6 +1752,9 @@ dashboard:
     ##
     ca: ""
 
+  ## @param dashboard.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param dashboard.hostAliases APISIX Dashboard pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1775,7 +1798,7 @@ dashboard:
   ##
   affinity: {}
   ## @param dashboard.nodeSelector Node labels for APISIX Dashboard pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dashboard.tolerations Tolerations for APISIX Dashboard pods assignment
@@ -1843,10 +1866,16 @@ dashboard:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dashboard.podSecurityContext.enabled Enabled Dashboard pods' Security Context
+  ## @param dashboard.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param dashboard.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param dashboard.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param dashboard.podSecurityContext.fsGroup Set Dashboard pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
 
   ## @param dashboard.containerPorts.http Dashboard http container port
@@ -1909,7 +1938,7 @@ dashboard:
   ##
   customStartupProbe: {}
   ## Dashboard resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dashboard.resources.limits The resources limits for the Dashboard container
   ## @param dashboard.resources.requests The requested resources for the Dashboard container
   ##
@@ -1919,6 +1948,7 @@ dashboard:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param dashboard.containerSecurityContext.enabled Enabled Dashboard container' Security Context
+  ## @param dashboard.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dashboard.containerSecurityContext.runAsUser Set Dashboard container' Security Context runAsUser
   ## @param dashboard.containerSecurityContext.runAsNonRoot Set Dashboard container' Security Context runAsNonRoot
   ## @param dashboard.containerSecurityContext.privileged Set Dashboard container' Security Context privileged
@@ -1929,6 +1959,7 @@ dashboard:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
@@ -2015,7 +2046,7 @@ dashboard:
     extraPorts: []
     ## @param dashboard.service.sessionAffinity Control where web requests go, to the same pod or round-robin
     ## Values: WebIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param dashboard.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -2025,7 +2056,7 @@ dashboard:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param dashboard.ingress.enabled Enable ingress record generation for Apisix
@@ -2191,7 +2222,7 @@ dashboard:
     annotations: {}
     ## @param dashboard.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
 ## @section APISIX Ingress Controller Parameters
 ##
@@ -2200,7 +2231,7 @@ ingressController:
   ##
   enabled: true
   ## Bitnami APISIX Ingress Controller image
-  ## ref: https://hub.docker.com/r/bitnami/vault-k8s/tags/
+  ## ref: https://hub.docker.com/r/bitnami/apisix-ingress-controller/tags/
   ## @param ingressController.image.registry [default: REGISTRY_NAME] APISIX Ingress Controller image registry
   ## @param ingressController.image.repository [default: REPOSITORY_NAME/apisix-ingress-controller] APISIX Ingress Controller image repository
   ## @skip ingressController.image.tag APISIX Ingress Controller image tag (immutable tags are recommended)
@@ -2212,11 +2243,11 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/apisix-ingress-controller
-    tag: 1.7.1-debian-11-r1
+    tag: 1.7.1-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2293,7 +2324,7 @@ ingressController:
   ##
   customStartupProbe: {}
   ## APISIX Ingress Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param ingressController.resources.limits The resources limits for the APISIX Ingress Controller containers
   ## @param ingressController.resources.requests The requested resources for the APISIX Ingress Controller containers
   ##
@@ -2303,14 +2334,21 @@ ingressController:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param ingressController.podSecurityContext.enabled Enabled APISIX Ingress Controller pods' Security Context
+  ## @param ingressController.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param ingressController.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param ingressController.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param ingressController.podSecurityContext.fsGroup Set APISIX Ingress Controller pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param ingressController.containerSecurityContext.enabled Enabled APISIX Ingress Controller containers' Security Context
+  ## @param ingressController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param ingressController.containerSecurityContext.runAsUser Set APISIX Ingress Controller containers' Security Context runAsUser
   ## @param ingressController.containerSecurityContext.runAsNonRoot Set APISIX Ingress Controller containers' Security Context runAsNonRoot
   ## @param ingressController.containerSecurityContext.privileged Set APISIX Ingress Controller containers' Security Context privileged
@@ -2321,6 +2359,7 @@ ingressController:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2337,6 +2376,9 @@ ingressController:
   ## @param ingressController.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param ingressController.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param ingressController.hostAliases APISIX Ingress Controller pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2391,7 +2433,7 @@ ingressController:
   ##
   affinity: {}
   ## @param ingressController.nodeSelector Node labels for APISIX Ingress Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param ingressController.tolerations Tolerations for APISIX Ingress Controller pods assignment
@@ -2587,7 +2629,7 @@ ingressController:
     extraPorts: []
     ## @param ingressController.service.sessionAffinity Control where web requests go, to the same pod or round-robin
     ## Values: WebIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param ingressController.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -2597,7 +2639,7 @@ ingressController:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param ingressController.ingress.enabled Enable ingress record generation for Apisix
@@ -2782,7 +2824,7 @@ ingressController:
     annotations: {}
     ## @param ingressController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## Prometheus metrics
   ##
@@ -2851,7 +2893,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r94
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
@@ -2869,6 +2911,7 @@ waitContainer:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param waitContainer.containerSecurityContext.enabled Enabled APISIX containers' Security Context
+  ## @param waitContainer.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param waitContainer.containerSecurityContext.runAsUser Set APISIX containers' Security Context runAsUser
   ## @param waitContainer.containerSecurityContext.runAsNonRoot Set APISIX containers' Security Context runAsNonRoot
   ## @param waitContainer.containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context runAsNonRoot
@@ -2879,6 +2922,7 @@ waitContainer:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false

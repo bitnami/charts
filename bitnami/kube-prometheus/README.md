@@ -105,17 +105,22 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.extraVolumeMounts`                                                          | Optionally specify extra list of additional volumeMounts for the Prometheus Operator container(s)                      | `[]`                                  |
 | `operator.sidecars`                                                                   | Add additional sidecar containers to the Prometheus Operator pod(s)                                                    | `[]`                                  |
 | `operator.initContainers`                                                             | Add additional init containers to the Prometheus Operator pod(s)                                                       | `[]`                                  |
+| `operator.automountServiceAccountToken`                                               | Mount Service Account token in pod                                                                                     | `false`                               |
 | `operator.hostAliases`                                                                | Add deployment host aliases                                                                                            | `[]`                                  |
 | `operator.serviceAccount.create`                                                      | Specify whether to create a ServiceAccount for Prometheus Operator                                                     | `true`                                |
 | `operator.serviceAccount.name`                                                        | The name of the ServiceAccount to create                                                                               | `""`                                  |
-| `operator.serviceAccount.automountServiceAccountToken`                                | Automount service account token for the server service account                                                         | `true`                                |
+| `operator.serviceAccount.automountServiceAccountToken`                                | Automount service account token for the server service account                                                         | `false`                               |
 | `operator.serviceAccount.annotations`                                                 | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                             | `{}`                                  |
 | `operator.schedulerName`                                                              | Name of the Kubernetess scheduler (other than default)                                                                 | `""`                                  |
 | `operator.terminationGracePeriodSeconds`                                              | In seconds, time the given to the Prometheus Operator pod needs to terminate gracefully                                | `""`                                  |
 | `operator.topologySpreadConstraints`                                                  | Topology Spread Constraints for pod assignment                                                                         | `[]`                                  |
 | `operator.podSecurityContext.enabled`                                                 | Enable pod security context                                                                                            | `true`                                |
+| `operator.podSecurityContext.fsGroupChangePolicy`                                     | Set filesystem group change policy                                                                                     | `Always`                              |
+| `operator.podSecurityContext.sysctls`                                                 | Set kernel settings using the sysctl interface                                                                         | `[]`                                  |
+| `operator.podSecurityContext.supplementalGroups`                                      | Set filesystem extra groups                                                                                            | `[]`                                  |
 | `operator.podSecurityContext.fsGroup`                                                 | Group ID for the container filesystem                                                                                  | `1001`                                |
 | `operator.containerSecurityContext.enabled`                                           | Enabled containers' Security Context                                                                                   | `true`                                |
+| `operator.containerSecurityContext.seLinuxOptions`                                    | Set SELinux options in container                                                                                       | `nil`                                 |
 | `operator.containerSecurityContext.runAsUser`                                         | Set containers' Security Context runAsUser                                                                             | `1001`                                |
 | `operator.containerSecurityContext.runAsNonRoot`                                      | Set container's Security Context runAsNonRoot                                                                          | `true`                                |
 | `operator.containerSecurityContext.privileged`                                        | Set container's Security Context privileged                                                                            | `false`                               |
@@ -187,6 +192,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.kubeletService.namespace`                                                   | Namespace to deploy the kubelet service                                                                                | `kube-system`                         |
 | `operator.prometheusConfigReloader.image`                                             | Prometheus Config Reloader image. If not set, the same as `operator.image.registry`                                    | `{}`                                  |
 | `operator.prometheusConfigReloader.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                   | `true`                                |
+| `operator.prometheusConfigReloader.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                       | `nil`                                 |
 | `operator.prometheusConfigReloader.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                             | `1001`                                |
 | `operator.prometheusConfigReloader.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                          | `true`                                |
 | `operator.prometheusConfigReloader.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                            | `false`                               |
@@ -220,10 +226,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.serviceAccount.create`                                    | Specify whether to create a ServiceAccount for Prometheus                                                                        | `true`                       |
 | `prometheus.serviceAccount.name`                                      | The name of the ServiceAccount to create                                                                                         | `""`                         |
 | `prometheus.serviceAccount.annotations`                               | Additional annotations for created Prometheus ServiceAccount                                                                     | `{}`                         |
-| `prometheus.serviceAccount.automountServiceAccountToken`              | Automount service account token for the server service account                                                                   | `true`                       |
+| `prometheus.serviceAccount.automountServiceAccountToken`              | Automount service account token for the server service account                                                                   | `false`                      |
 | `prometheus.podSecurityContext.enabled`                               | Enable security context                                                                                                          | `true`                       |
+| `prometheus.podSecurityContext.fsGroupChangePolicy`                   | Set filesystem group change policy                                                                                               | `Always`                     |
+| `prometheus.podSecurityContext.sysctls`                               | Set kernel settings using the sysctl interface                                                                                   | `[]`                         |
+| `prometheus.podSecurityContext.supplementalGroups`                    | Set filesystem extra groups                                                                                                      | `[]`                         |
 | `prometheus.podSecurityContext.fsGroup`                               | Group ID for the container filesystem                                                                                            | `1001`                       |
 | `prometheus.containerSecurityContext.enabled`                         | Enabled containers' Security Context                                                                                             | `true`                       |
+| `prometheus.containerSecurityContext.seLinuxOptions`                  | Set SELinux options in container                                                                                                 | `nil`                        |
 | `prometheus.containerSecurityContext.runAsUser`                       | Set containers' Security Context runAsUser                                                                                       | `1001`                       |
 | `prometheus.containerSecurityContext.runAsNonRoot`                    | Set container's Security Context runAsNonRoot                                                                                    | `true`                       |
 | `prometheus.containerSecurityContext.privileged`                      | Set container's Security Context privileged                                                                                      | `false`                      |
@@ -374,6 +384,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.thanos.image.pullPolicy`                                  | Thanos image pull policy                                                                                                         | `IfNotPresent`               |
 | `prometheus.thanos.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                 | `[]`                         |
 | `prometheus.thanos.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                             | `true`                       |
+| `prometheus.thanos.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                 | `nil`                        |
 | `prometheus.thanos.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                       | `1001`                       |
 | `prometheus.thanos.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                    | `true`                       |
 | `prometheus.thanos.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                      | `false`                      |
@@ -463,11 +474,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                                                                                                                                                                                           | `[]`                           |
 | `alertmanager.serviceAccount.create`                             | Specify whether to create a ServiceAccount for Alertmanager                                                                                                                                                                                                                                                | `true`                         |
 | `alertmanager.serviceAccount.name`                               | The name of the ServiceAccount to create                                                                                                                                                                                                                                                                   | `""`                           |
-| `alertmanager.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                                                                                                                                                                             | `true`                         |
+| `alertmanager.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                                                                                                                                                                             | `false`                        |
 | `alertmanager.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                                                                                                                                                                 | `{}`                           |
 | `alertmanager.podSecurityContext.enabled`                        | Enable security context                                                                                                                                                                                                                                                                                    | `true`                         |
+| `alertmanager.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                                                                                         | `Always`                       |
+| `alertmanager.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                                                                                                                             | `[]`                           |
+| `alertmanager.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                                                                                                | `[]`                           |
 | `alertmanager.podSecurityContext.fsGroup`                        | Group ID for the container filesystem                                                                                                                                                                                                                                                                      | `1001`                         |
 | `alertmanager.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                                                                                       | `true`                         |
+| `alertmanager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                                                                           | `nil`                          |
 | `alertmanager.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                                                                                 | `1001`                         |
 | `alertmanager.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                                                                                              | `true`                         |
 | `alertmanager.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                                                                                                | `false`                        |
@@ -639,13 +654,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `blackboxExporter.containerPorts.http`                               | Blackbox Exporter HTTP container port                                                                             | `19115`                             |
 | `blackboxExporter.serviceAccount.create`                             | Enable creation of ServiceAccount for WordPress pod                                                               | `true`                              |
 | `blackboxExporter.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                            | `""`                                |
-| `blackboxExporter.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                            | `true`                              |
+| `blackboxExporter.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                            | `false`                             |
 | `blackboxExporter.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                              | `{}`                                |
 | `blackboxExporter.resources.limits`                                  | The resources limits for the blackboxExporter containers                                                          | `{}`                                |
 | `blackboxExporter.resources.requests`                                | The requested resources for the blackboxExporter containers                                                       | `{}`                                |
 | `blackboxExporter.podSecurityContext.enabled`                        | Enabled Blackbox Exporter pods' Security Context                                                                  | `true`                              |
+| `blackboxExporter.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                | `Always`                            |
+| `blackboxExporter.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                    | `[]`                                |
+| `blackboxExporter.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                       | `[]`                                |
 | `blackboxExporter.podSecurityContext.fsGroup`                        | Set Blackbox Exporter pod's Security Context fsGroup                                                              | `1001`                              |
 | `blackboxExporter.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                              | `true`                              |
+| `blackboxExporter.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                  | `nil`                               |
 | `blackboxExporter.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                        | `1001`                              |
 | `blackboxExporter.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                     | `true`                              |
 | `blackboxExporter.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                       | `false`                             |
@@ -654,6 +673,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `blackboxExporter.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                | `["ALL"]`                           |
 | `blackboxExporter.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                  | `RuntimeDefault`                    |
 | `blackboxExporter.lifecycleHooks`                                    | for the blackboxExporter container(s) to automate configuration before or after startup                           | `{}`                                |
+| `blackboxExporter.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                | `false`                             |
 | `blackboxExporter.hostAliases`                                       | blackboxExporter pods host aliases                                                                                | `[]`                                |
 | `blackboxExporter.podLabels`                                         | Extra labels for blackboxExporter pods                                                                            | `{}`                                |
 | `blackboxExporter.podAnnotations`                                    | Annotations for blackboxExporter pods                                                                             | `{}`                                |
@@ -797,7 +817,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/kube-
 
 ## Configuration and installation details
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -815,15 +835,39 @@ prometheus.additionalScrapeConfigsExternal.key
 
 It is possible to inject externally managed scrape configurations via a Secret by setting `prometheus.additionalScrapeConfigs.enabled` to `true` and `prometheus.additionalScrapeConfigs.type` to `external`. The secret must exist in the same namespace as the chart deployment. Set the secret name using the parameter `prometheus.additionalScrapeConfigs.external.name`, and the key containing the additional scrape configuration using the `prometheus.additionalScrapeConfigs.external.key`.
 
+```text
+prometheus.additionalScrapeConfigs.enabled=true
+prometheus.additionalScrapeConfigs.type=external
+prometheus.additionalScrapeConfigs.external.name=kube-prometheus-prometheus-scrape-config
+prometheus.additionalScrapeConfigs.external.key=additional-scrape-configs.yaml
+```
+
 It is also possible to define scrape configuratios to be managed by the Helm chart by setting `prometheus.additionalScrapeConfigs.enabled` to `true` and `prometheus.additionalScrapeConfigs.type` to `internal`. You can then use `prometheus.additionalScrapeConfigs.internal.jobList` to define a list of additional scrape jobs for Prometheus.
 
-Refer to the [chart documentation on customizing scrape configurations](https://docs.bitnami.com/kubernetes/apps/prometheus-operator/configuration/customize-scrape-configurations) for an example.
+```text
+prometheus.additionalScrapeConfigs.enabled=true
+prometheus.additionalScrapeConfigs.type=internal
+prometheus.additionalScrapeConfigs.internal.jobList=
+      - job_name: 'opentelemetry-collector'
+        # metrics_path defaults to '/metrics'
+        # scheme defaults to 'http'.
+        static_configs:
+          - targets: ['opentelemetry-collector:8889']
+```
+
+For more information, see the [additional scrape configuration documentation](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/additional-scrape-config.md).
 
 ### Additional alert relabel configurations
 
-It is possible to inject externally managed Prometheus alert relabel configurations via a Secret by setting `prometheus.additionalAlertRelabelConfigsExternal.enabled` to `true`. The secret must exist in the same namespace as the chart deployment. Set the secret name using the parameter `prometheus.additionalAlertRelabelConfigsExternal.name`, and the key containing the additional alert relabel configuration using the `prometheus.additionalAlertRelabelConfigsExternal.key`.
+It is possible to inject externally managed Prometheus alert relabel configurations via a Secret by setting `prometheus.additionalAlertRelabelConfigsExternal.enabled` to `true`. The secret must exist in the same namespace as the chart deployment.
 
-Refer to the [chart documentation on customizing alert configurations](https://docs.bitnami.com/kubernetes/apps/prometheus-operator/configuration/customize-alert-configurations) for an example.
+Set the secret name using the parameter `prometheus.additionalAlertRelabelConfigsExternal.name`, and the key containing the additional alert relabel configuration using the `prometheus.additionalAlertRelabelConfigsExternal.key`. For instance, if you created a secret named `kube-prometheus-prometheus-alert-relabel-config` and it contains a file named `additional-alert-relabel-configs.yaml`, use the parameters below:
+
+```text
+prometheus.additionalAlertRelabelConfigsExternal.enabled=true
+prometheus.additionalAlertRelabelConfigsExternal.name=kube-prometheus-prometheus-alert-relabel-config
+prometheus.additionalAlertRelabelConfigsExternal.key=additional-alert-relabel-configs.yaml
+```
 
 ### Set Pod affinity
 
@@ -952,8 +996,6 @@ Adapt parameters accordingly if you are setting custom affinity.
 ### To 3.0.0
 
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/apps/prometheus-operator/administration/upgrade-helm3/).
 
 ### To 2.1.0
 

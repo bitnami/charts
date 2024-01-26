@@ -96,6 +96,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `allowEmptyPassword`                                | Allow DB blank passwords                                                                                                                                  | `no`                       |
 | `command`                                           | Override default container command (useful when using custom images)                                                                                      | `[]`                       |
 | `args`                                              | Override default container args (useful when using custom images)                                                                                         | `[]`                       |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                        | `false`                    |
 | `hostAliases`                                       | Add deployment host aliases                                                                                                                               | `[]`                       |
 | `updateStrategy.type`                               | Update strategy - only really applicable for deployments with RWO PVs attached                                                                            | `RollingUpdate`            |
 | `extraEnvVars`                                      | An array to add extra env vars                                                                                                                            | `[]`                       |
@@ -138,8 +139,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.requests`                                | The requested resources for the container                                                                                                                 | `{}`                       |
 | `resources.limits`                                  | The resources limits for the container                                                                                                                    | `{}`                       |
 | `podSecurityContext.enabled`                        | Enable phpBB pods' Security Context                                                                                                                       | `true`                     |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                        | `Always`                   |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                            | `[]`                       |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                               | `[]`                       |
 | `podSecurityContext.fsGroup`                        | phpBB pods' group ID                                                                                                                                      | `1001`                     |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                      | `true`                     |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                          | `nil`                      |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                | `1001`                     |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                             | `true`                     |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                               | `false`                    |
@@ -174,6 +179,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `lifecycleHooks`                                    | LifecycleHook to set additional configuration before or after startup                                                                                     | `{}`                       |
 | `podAnnotations`                                    | Pod annotations                                                                                                                                           | `{}`                       |
 | `podLabels`                                         | Pod extra labels                                                                                                                                          | `{}`                       |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for pod                                                                                                                 | `true`                     |
+| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                                    | `""`                       |
+| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                                    | `false`                    |
+| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                                                      | `{}`                       |
 
 ### Traffic Exposure Parameters
 
@@ -289,7 +298,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/phpbb
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 

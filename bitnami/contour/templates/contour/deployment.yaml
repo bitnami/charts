@@ -46,6 +46,7 @@ spec:
       {{- if .Values.contour.priorityClassName }}
       priorityClassName: {{ .Values.contour.priorityClassName | quote }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.contour.automountServiceAccountToken }}
       {{- if .Values.contour.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.contour.hostAliases "context" $) | nindent 8 }}
       {{- end }}

@@ -109,12 +109,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                                | Description                                                                               | Value                      |
 | --------------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------- |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                        | `false`                    |
 | `hostAliases`                                       | Add deployment host aliases                                                               | `[]`                       |
 | `containerPorts.http`                               | HTTP port to expose at container level                                                    | `8080`                     |
 | `dnsConfig`                                         | Pod DNS configuration.                                                                    | `{}`                       |
 | `podSecurityContext.enabled`                        | Enable pod's Security Context                                                             | `true`                     |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                        | `Always`                   |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                            | `[]`                       |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`                       |
 | `podSecurityContext.fsGroup`                        | Set pod's Security Context fsGroup                                                        | `1001`                     |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`                     |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`                      |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`                     |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`                     |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`                    |
@@ -172,6 +177,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                                  | PVC Storage Request for Jasperreports volume                                              | `8Gi`                      |
 | `persistence.existingClaim`                         | An Existing PVC name for Jasperreports volume                                             | `""`                       |
 | `persistence.annotations`                           | Persistent Volume Claim annotations                                                       | `{}`                       |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for JasperReports pod                                   | `true`                     |
+| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                    | `""`                       |
+| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                    | `false`                    |
+| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                      | `{}`                       |
 
 ### Exposure parameters
 
@@ -270,7 +279,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/jaspe
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 

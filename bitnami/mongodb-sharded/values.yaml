@@ -79,11 +79,11 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 7.0.4-debian-11-r4
+  tag: 7.0.5-debian-11-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -221,7 +221,7 @@ common:
   serviceAccount:
     ## @param common.serviceAccount.create Whether to create a Service Account for all pods automatically
     ##
-    create: false
+    create: true
     ## @param common.serviceAccount.name Name of a Service Account to be used by all Pods
     ## If not set and create is true, a name is generated using the XXX.fullname template
     ##
@@ -231,7 +231,7 @@ common:
     annotations: {}
     ## @param common.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -250,7 +250,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r94
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -340,9 +340,12 @@ configsvr:
   ##
   replicaCount: 1
   ## @param configsvr.resources Configure pod resources
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
+  ## @param configsvr.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param configsvr.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -394,7 +397,7 @@ configsvr:
   ##
   affinity: {}
   ## @param configsvr.nodeSelector Config Server Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param configsvr.tolerations Config Server Tolerations for pod assignment
@@ -481,7 +484,7 @@ configsvr:
     ##
     maxUnavailable: 1
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param configsvr.persistence.enabled Use a PVC to persist data
@@ -522,7 +525,7 @@ configsvr:
   serviceAccount:
     ## @param configsvr.serviceAccount.create Specifies whether a ServiceAccount should be created for Config Server
     ##
-    create: false
+    create: true
     ## @param configsvr.serviceAccount.name Name of a Service Account to be used by Config Server
     ## If not set and create is true, a name is generated using the XXX.fullname template
     ##
@@ -532,7 +535,7 @@ configsvr:
     annotations: {}
     ## @param configsvr.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   ## Use a external config server instead of deploying one
   ##
   external:
@@ -551,14 +554,21 @@ configsvr:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param configsvr.podSecurityContext.enabled Enable security context
+  ## @param configsvr.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param configsvr.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param configsvr.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param configsvr.podSecurityContext.fsGroup Group ID for the container
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param configsvr.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param configsvr.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param configsvr.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param configsvr.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param configsvr.containerSecurityContext.privileged Set container's Security Context privileged
@@ -569,6 +579,7 @@ configsvr:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -664,9 +675,12 @@ mongos:
   ##
   replicaCount: 1
   ## @param mongos.resources Configure pod resources
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
+  ## @param mongos.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param mongos.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -718,7 +732,7 @@ mongos:
   ##
   affinity: {}
   ## @param mongos.nodeSelector Mongos Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param mongos.tolerations Mongos Tolerations for pod assignment
@@ -871,7 +885,7 @@ mongos:
   serviceAccount:
     ## @param mongos.serviceAccount.create Whether to create a Service Account for mongos automatically
     ##
-    create: false
+    create: true
     ## @param mongos.serviceAccount.name Name of a Service Account to be used by mongos
     ## If not set and create is true, a name is generated using the XXX.fullname template
     ##
@@ -881,18 +895,25 @@ mongos:
     annotations: {}
     ## @param mongos.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param mongos.podSecurityContext.enabled Enable security context
+  ## @param mongos.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param mongos.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param mongos.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param mongos.podSecurityContext.fsGroup Group ID for the container
   ##
   podSecurityContext:
     enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param mongos.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param mongos.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param mongos.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param mongos.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param mongos.containerSecurityContext.privileged Set container's Security Context privileged
@@ -903,6 +924,7 @@ mongos:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -998,7 +1020,7 @@ shardsvr:
     ##
     replicaCount: 1
     ## @param shardsvr.dataNode.resources Configure pod resources
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ##
     resources: {}
     ## @param shardsvr.dataNode.mongodbExtraFlags MongoDB&reg; additional command line flags
@@ -1053,7 +1075,7 @@ shardsvr:
     ##
     affinity: {}
     ## @param shardsvr.dataNode.nodeSelector Data nodes Node labels for pod assignment
-    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
     ## You can set dataNodeLoopId (or any other parameter) by setting the below code block under this 'nodeSelector' section:
     ## nodeSelector: { shardId: "{{ .dataNodeLoopId }}" }
     ##
@@ -1077,6 +1099,9 @@ shardsvr:
     ##
     updateStrategy:
       type: RollingUpdate
+    ## @param shardsvr.dataNode.automountServiceAccountToken Mount Service Account token in pod
+    ##
+    automountServiceAccountToken: false
     ## @param shardsvr.dataNode.hostAliases Deployment pod host aliases
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##
@@ -1157,7 +1182,7 @@ shardsvr:
     serviceAccount:
       ## @param shardsvr.dataNode.serviceAccount.create Specifies whether a ServiceAccount should be created for shardsvr
       ##
-      create: false
+      create: true
       ## @param shardsvr.dataNode.serviceAccount.name Name of a Service Account to be used by shardsvr data pods
       ## If not set and create is true, a name is generated using the XXX.fullname template
       ##
@@ -1167,18 +1192,25 @@ shardsvr:
       annotations: {}
       ## @param shardsvr.dataNode.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
       ##
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
     ## Configure Pods Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
     ## @param shardsvr.dataNode.podSecurityContext.enabled Enable security context
+    ## @param shardsvr.dataNode.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param shardsvr.dataNode.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param shardsvr.dataNode.podSecurityContext.supplementalGroups Set filesystem extra groups
     ## @param shardsvr.dataNode.podSecurityContext.fsGroup Group ID for the container
     ##
     podSecurityContext:
       enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
       fsGroup: 1001
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param shardsvr.dataNode.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param shardsvr.dataNode.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param shardsvr.dataNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param shardsvr.dataNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param shardsvr.dataNode.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1189,6 +1221,7 @@ shardsvr:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: null
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -1277,7 +1310,7 @@ shardsvr:
   ##
 
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param shardsvr.persistence.enabled Use a PVC to persist data
@@ -1322,12 +1355,15 @@ shardsvr:
     ## @param shardsvr.arbiter.replicaCount Number of arbiters in each shard replica set (the first node will be primary)
     ##
     replicaCount: 0
+    ## @param shardsvr.arbiter.automountServiceAccountToken Mount Service Account token in pod
+    ##
+    automountServiceAccountToken: false
     ## @param shardsvr.arbiter.hostAliases Deployment pod host aliases
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##
     hostAliases: []
     ## @param shardsvr.arbiter.resources Configure pod resources
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ##
     resources: {}
     ## @param shardsvr.arbiter.mongodbExtraFlags MongoDB&reg; additional command line flags
@@ -1382,7 +1418,7 @@ shardsvr:
     ##
     affinity: {}
     ## @param shardsvr.arbiter.nodeSelector Arbiter's Node labels for pod assignment
-    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
     ##
     nodeSelector: {}
     ## @param shardsvr.arbiter.tolerations Arbiter's Tolerations for pod assignment
@@ -1462,7 +1498,7 @@ shardsvr:
     serviceAccount:
       ## @param shardsvr.arbiter.serviceAccount.create Specifies whether a ServiceAccount should be created for shardsvr arbiter nodes
       ##
-      create: false
+      create: true
       ## @param shardsvr.arbiter.serviceAccount.name Name of a Service Account to be used by shardsvr arbiter pods
       ## If not set and create is true, a name is generated using the XXX.fullname template
       ##
@@ -1472,18 +1508,25 @@ shardsvr:
       annotations: {}
       ## @param shardsvr.arbiter.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
       ##
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
     ## Configure Pods Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
     ## @param shardsvr.arbiter.podSecurityContext.enabled Enable security context
+    ## @param shardsvr.arbiter.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param shardsvr.arbiter.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param shardsvr.arbiter.podSecurityContext.supplementalGroups Set filesystem extra groups
     ## @param shardsvr.arbiter.podSecurityContext.fsGroup Group ID for the container
     ##
     podSecurityContext:
       enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
       fsGroup: 1001
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param shardsvr.arbiter.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param shardsvr.arbiter.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param shardsvr.arbiter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param shardsvr.arbiter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param shardsvr.arbiter.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1494,6 +1537,7 @@ shardsvr:
     ##
     containerSecurityContext:
       enabled: true
+      seLinuxOptions: null
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -1592,7 +1636,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.40.0-debian-11-r1
+    tag: 0.40.0-debian-11-r3
     digest: ""
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
@@ -1611,12 +1655,13 @@ metrics:
   ##
   extraArgs: ""
   ## @param metrics.resources Metrics exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param metrics.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1627,6 +1672,7 @@ metrics:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
