@@ -787,6 +787,11 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 14.0.0
+
+This major version adapts the NetworkPolicy objects to the most recent Bitnami standards. Now there is a separate object for `primary` and for `readReplicas`, being located in their corresponding sections. It is also enabled by default in other to comply with the best security standards.
+
+Check the parameter section for the new value structure.
 ### To 13.0.0
 
 This major version changes the default PostgreSQL image from 15.x to 16.x. Follow the [official instructions](https://www.postgresql.org/docs/16/upgrading.html) to upgrade to 16.x.
