@@ -126,7 +126,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                     |
 | `podSecurityContext.fsGroup`                        | Set Apache Server pod's Security Context fsGroup                                                                         | `1001`                   |
 | `containerSecurityContext.enabled`                  | Enabled Apache Server containers' Security Context                                                                       | `true`                   |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                     |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`                    |
 | `containerSecurityContext.runAsUser`                | Set Apache Server containers' Security Context runAsUser                                                                 | `1001`                   |
 | `containerSecurityContext.runAsNonRoot`             | Set Controller container's Security Context runAsNonRoot                                                                 | `true`                   |
 | `containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                                      | `false`                  |
@@ -254,17 +254,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                    | `false`                           |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                      | `{}`                              |
 
-### Network policies section
-
-| Name                                    | Description                                                | Value   |
-| --------------------------------------- | ---------------------------------------------------------- | ------- |
-| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `false` |
-| `networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
-| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolic                | `[]`    |
-| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
-| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
-| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -302,7 +291,17 @@ The Apache chart allows you to deploy a custom web application using one of the 
 - Providing a ConfigMap: Set the `htdocsConfigMap` value to mount a ConfigMap in the Apache htdocs folder.
 - Using an existing PVC: Set the `htdocsPVC` value to mount an PersistentVolumeClaim with the web application content.
 
-Refer to the [chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/apache/get-started/deploy-custom-application/) for more information.
+Here is an example of deploying a web application from a Git repository using the first method:
+
+```text
+cloneHtdocsFromGit.enabled=true
+cloneHtdocsFromGit.repository=https://github.com/mdn/beginner-html-site-styled.git
+cloneHtdocsFromGit.branch=master
+```
+
+To use a custom `httpd.conf` file, mount it using the `httpdConfConfigMap` parameter, which references a Kubernetes ConfigMap with the contents of the `httpd.conf` file. Alternatively, copy the `httpd.conf` file to `files/httpd.conf` in the current working directory to mount it in the container.
+
+To mount different virtual host configurations, use the `vhostsConfigMap` value. This is a pointer to a Kubernetes ConfigMap with the desired Apache virtual host configurations. You can also copy the virtual host configurations under the `files/vhosts/` directory in your current working directory to mount them as a ConfigMap in the container.
 
 ### Setting Pod's affinity
 
@@ -347,8 +346,6 @@ Affected values:
 ### To 8.0.0
 
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/apache/administration/upgrade-helm3/).
 
 ### To 2.0.0
 
