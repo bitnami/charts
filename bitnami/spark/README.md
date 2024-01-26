@@ -117,9 +117,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.podSecurityContext.fsGroup`                        | Set master pod's Security Context Group ID                                                                               | `1001`           |
 | `master.podSecurityContext.runAsUser`                      | Set master pod's Security Context User ID                                                                                | `1001`           |
 | `master.podSecurityContext.runAsGroup`                     | Set master pod's Security Context Group ID                                                                               | `0`              |
-| `master.podSecurityContext.seLinuxOptions`                 | Set master pod's Security Context SELinux options                                                                        | `{}`             |
+| `master.podSecurityContext.seLinuxOptions`                 | Set master pod's Security Context SELinux options                                                                        | `nil`            |
 | `master.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `master.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `master.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `master.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `master.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `master.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -200,9 +200,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`             |
 | `worker.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `worker.podSecurityContext.fsGroup`                        | Group ID for the container                                                                                               | `1001`           |
-| `worker.podSecurityContext.seLinuxOptions`                 | SELinux options for the container                                                                                        | `{}`             |
+| `worker.podSecurityContext.seLinuxOptions`                 | SELinux options for the container                                                                                        | `nil`            |
 | `worker.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `worker.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `worker.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `worker.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `worker.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `worker.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
