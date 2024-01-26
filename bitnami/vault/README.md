@@ -190,6 +190,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.service.active.extraPorts`                | Extra ports to expose in Vault Server service (normally used with the `sidecars` value)                                          | `[]`                     |
 | `server.service.active.sessionAffinity`           | Control where web requests go, to the same pod or round-robin                                                                    | `None`                   |
 | `server.service.active.sessionAffinityConfig`     | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `server.networkPolicy.enabled`                    | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
+| `server.networkPolicy.kubeAPIServerPorts`         | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                               | `[]`                     |
+| `server.networkPolicy.allowExternal`              | Don't require server label for connections                                                                                       | `true`                   |
+| `server.networkPolicy.extraIngress`               | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                     |
+| `server.networkPolicy.extraEgress`                | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
+| `server.networkPolicy.ingressNSMatchLabels`       | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
+| `server.networkPolicy.ingressNSPodMatchLabels`    | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
 | `server.ingress.enabled`                          | Enable ingress record generation for Vault                                                                                       | `false`                  |
 | `server.ingress.pathType`                         | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `server.ingress.apiVersion`                       | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
@@ -286,6 +293,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `csiProvider.podSecurityContext.sysctls`                                 | Set kernel settings using the sysctl interface                                                                                                                | `[]`                                          |
 | `csiProvider.podSecurityContext.supplementalGroups`                      | Set filesystem extra groups                                                                                                                                   | `[]`                                          |
 | `csiProvider.podSecurityContext.fsGroup`                                 | Set CSI Provider pod's Security Context fsGroup                                                                                                               | `1001`                                        |
+| `csiProvider.networkPolicy.enabled`                                      | Specifies whether a NetworkPolicy should be created                                                                                                           | `true`                                        |
+| `csiProvider.networkPolicy.kubeAPIServerPorts`                           | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                                                            | `[]`                                          |
+| `csiProvider.networkPolicy.extraIngress`                                 | Add extra ingress rules to the NetworkPolice                                                                                                                  | `[]`                                          |
+| `csiProvider.networkPolicy.extraEgress`                                  | Add extra ingress rules to the NetworkPolicy                                                                                                                  | `[]`                                          |
 | `csiProvider.provider.containerPorts.health`                             | CSI Provider health container port                                                                                                                            | `8080`                                        |
 | `csiProvider.provider.livenessProbe.enabled`                             | Enable livenessProbe on CSI Provider container                                                                                                                | `true`                                        |
 | `csiProvider.provider.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                       | `5`                                           |
@@ -466,19 +477,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Vault Kubernetes Injector Traffic Exposure Parameters
 
-| Name                                        | Description                                                                                          | Value       |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ----------- |
-| `injector.service.type`                     | Vault Kubernetes Injector service type                                                               | `ClusterIP` |
-| `injector.service.ports.https`              | Vault Kubernetes Injector service HTTPS port                                                         | `443`       |
-| `injector.service.nodePorts.https`          | Node port for HTTPS                                                                                  | `""`        |
-| `injector.service.clusterIP`                | Vault Kubernetes Injector service Cluster IP                                                         | `""`        |
-| `injector.service.loadBalancerIP`           | Vault Kubernetes Injector service Load Balancer IP                                                   | `""`        |
-| `injector.service.loadBalancerSourceRanges` | Vault Kubernetes Injector service Load Balancer sources                                              | `[]`        |
-| `injector.service.externalTrafficPolicy`    | Vault Kubernetes Injector service external traffic policy                                            | `Cluster`   |
-| `injector.service.annotations`              | Additional custom annotations for Vault Kubernetes Injector service                                  | `{}`        |
-| `injector.service.extraPorts`               | Extra ports to expose in Vault Kubernetes Injector service (normally used with the `sidecars` value) | `[]`        |
-| `injector.service.sessionAffinity`          | Control where web requests go, to the same pod or round-robin                                        | `None`      |
-| `injector.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                          | `{}`        |
+| Name                                             | Description                                                                                          | Value       |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------- | ----------- |
+| `injector.service.type`                          | Vault Kubernetes Injector service type                                                               | `ClusterIP` |
+| `injector.service.ports.https`                   | Vault Kubernetes Injector service HTTPS port                                                         | `443`       |
+| `injector.service.nodePorts.https`               | Node port for HTTPS                                                                                  | `""`        |
+| `injector.service.clusterIP`                     | Vault Kubernetes Injector service Cluster IP                                                         | `""`        |
+| `injector.service.loadBalancerIP`                | Vault Kubernetes Injector service Load Balancer IP                                                   | `""`        |
+| `injector.service.loadBalancerSourceRanges`      | Vault Kubernetes Injector service Load Balancer sources                                              | `[]`        |
+| `injector.service.externalTrafficPolicy`         | Vault Kubernetes Injector service external traffic policy                                            | `Cluster`   |
+| `injector.service.annotations`                   | Additional custom annotations for Vault Kubernetes Injector service                                  | `{}`        |
+| `injector.service.extraPorts`                    | Extra ports to expose in Vault Kubernetes Injector service (normally used with the `sidecars` value) | `[]`        |
+| `injector.service.sessionAffinity`               | Control where web requests go, to the same pod or round-robin                                        | `None`      |
+| `injector.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                          | `{}`        |
+| `injector.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                  | `true`      |
+| `injector.networkPolicy.kubeAPIServerPorts`      | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)   | `[]`        |
+| `injector.networkPolicy.allowExternal`           | Don't require injector label for connections                                                         | `true`      |
+| `injector.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                         | `[]`        |
+| `injector.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                         | `[]`        |
+| `injector.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                               | `{}`        |
+| `injector.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                           | `{}`        |
 
 ### Vault Kubernetes Injector RBAC Parameters
 
