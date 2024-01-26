@@ -225,7 +225,7 @@ operator:
   ## Container securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param operator.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param operator.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param operator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param operator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param operator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param operator.containerSecurityContext.privileged Set container's Security Context privileged
@@ -236,7 +236,7 @@ operator:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -471,7 +471,7 @@ grafana:
   ## Container securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param grafana.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param grafana.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param grafana.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param grafana.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param grafana.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param grafana.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
@@ -483,7 +483,7 @@ grafana:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsGroup: 0
     runAsNonRoot: true
