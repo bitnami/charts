@@ -107,7 +107,7 @@ SASL_PLAINTEXT
 {{- end -}}
 
 {{/*
-Return proper Zookeeper hosts
+Return kafka port
 */}}
 {{- define "schema-registry.kafka.port" -}}
 {{- if .Values.kafka.enabled -}}
