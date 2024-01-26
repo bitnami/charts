@@ -24,8 +24,6 @@ This chart bootstraps a [Milvus](https://github.com/grafana/loki) Deployment in 
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/milvus/get-started/).
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -1642,7 +1640,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as milvus (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `rootCoord`, `dataCoord`, `indexCoord`, `dataNode`, `indexNode`, `attu` and `queryNode` . If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/milvus/configuration/configure-sidecar-init-containers/).
+If additional containers are needed in the same pod as milvus (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `rootCoord`, `dataCoord`, `indexCoord`, `dataNode`, `indexNode`, `attu` and `queryNode` .
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Pod affinity
 
@@ -1687,13 +1721,55 @@ externalS3.accessKeySecret=secret
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.To enable Ingress integration, set `attu.ingress.enabled` to `true`.
 
-To enable Ingress integration, set `attu.ingress.enabled` to `true`. The `attu.ingress.hostname` property can be used to set the host name. The `attu.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/mastodon/configuration/configure-ingress/).
+The most common scenario is to have one host name mapped to the deployment. In this case, the `attu.ingress.hostname` property can be used to set the host name. The `attu.ingress.tls` parameter can be used to add the TLS configuration for this host.
+
+However, it is also possible to have more than one host. To facilitate this, the `attu.ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `attu.ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
+
+> NOTE: For each host specified in the `attu.ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
+
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+
+[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/mastodon/administration/enable-tls-ingress/).
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
+
+- Generate certificate secrets based on chart parameters.
+- Enable externally generated certificates.
+- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
+- Create self-signed certificates within the chart (if supported).
+
+In the first two cases, a certificate and a key are needed. Files are expected in `.pem` format.
+
+Here is an example of a certificate file:
+
+> NOTE: There may be more than one certificate if there is a certificate chain.
+
+```text
+-----BEGIN CERTIFICATE-----
+MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+...
+jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+-----END CERTIFICATE-----
+```
+
+Here is an example of a certificate key:
+
+```text
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+...
+wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+-----END RSA PRIVATE KEY-----
+```
+
+- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
+- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
+- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
 
 ## Upgrading
 

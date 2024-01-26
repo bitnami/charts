@@ -138,7 +138,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.fsGroup`                        | Set Controller pod's Security Context fsGroup                                                                            | `1001`           |
 | `podSecurityContext.sysctls`                        | sysctl settings of the Schema Registry pods                                                                              | `[]`             |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -287,7 +287,7 @@ You can configure different authentication protocols for each listener you confi
 | sasl      | Yes (via SASL)               | No                 |
 | sasl_tls  | Yes (via SASL)               | Yes                |
 
-Learn more about how to configure Kafka to use the different authentication protocols in the [chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/kafka/administration/enable-security/).
+Configure the authentication protocols for client and inter-broker communications by setting the *auth.clientProtocol* and *auth.interBrokerProtocol* parameters to the desired ones, respectively.
 
 If you enabled SASL authentication on any listener, you can set the SASL credentials using the parameters below:
 

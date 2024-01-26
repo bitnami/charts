@@ -96,7 +96,7 @@ helm delete my-release
 | `useDaemonset`                                      | Use a daemonset instead of a deployment. `replicaCount` will not take effect.                                                      | `false`          |
 | `replicaCount`                                      | Number of Kong replicas                                                                                                            | `2`              |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                               | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                   | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                   | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                         | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                      | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                        | `false`          |
@@ -556,7 +556,7 @@ This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](h
 
 ### To 6.0.0
 
-The `postgresql` sub-chart was upgraded to `11.x.x`. Several values of the sub-chart were changed, so please check the [upgrade notes](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/).
+The `postgresql` sub-chart was upgraded to `11.x.x`. Several values of the sub-chart were changed, so please check the [upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1100).
 
 No issues are expected during the upgrade.
 
