@@ -54,6 +54,17 @@ Return  the proper Storage Class
 {{- end -}}
 
 {{/*
+ Create the name of the service account to use
+ */}}
+{{- define "osclass.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Osclass credential secret name
 */}}
 {{- define "osclass.secretName" -}}

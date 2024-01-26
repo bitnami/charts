@@ -237,7 +237,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.podSecurityContext.fsGroup`                        | Set Kafka pod's Security Context fsGroup                                                                                                                                                      | `1001`                    |
 | `controller.podSecurityContext.seccompProfile.type`            | Set Kafka pods's Security Context seccomp profile                                                                                                                                             | `RuntimeDefault`          |
 | `controller.containerSecurityContext.enabled`                  | Enable Kafka containers' Security Context                                                                                                                                                     | `true`                    |
-| `controller.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                              | `{}`                      |
+| `controller.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                              | `nil`                     |
 | `controller.containerSecurityContext.runAsUser`                | Set Kafka containers' Security Context runAsUser                                                                                                                                              | `1001`                    |
 | `controller.containerSecurityContext.runAsNonRoot`             | Set Kafka containers' Security Context runAsNonRoot                                                                                                                                           | `true`                    |
 | `controller.containerSecurityContext.allowPrivilegeEscalation` | Force the child process to be run as non-privileged                                                                                                                                           | `false`                   |
@@ -343,7 +343,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `broker.podSecurityContext.fsGroup`                        | Set Kafka pod's Security Context fsGroup                                                                                                                                                      | `1001`                    |
 | `broker.podSecurityContext.seccompProfile.type`            | Set Kafka pod's Security Context seccomp profile                                                                                                                                              | `RuntimeDefault`          |
 | `broker.containerSecurityContext.enabled`                  | Enable Kafka containers' Security Context                                                                                                                                                     | `true`                    |
-| `broker.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                              | `{}`                      |
+| `broker.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                              | `nil`                     |
 | `broker.containerSecurityContext.runAsUser`                | Set Kafka containers' Security Context runAsUser                                                                                                                                              | `1001`                    |
 | `broker.containerSecurityContext.runAsNonRoot`             | Set Kafka containers' Security Context runAsNonRoot                                                                                                                                           | `true`                    |
 | `broker.containerSecurityContext.allowPrivilegeEscalation` | Force the child process to be run as non-privileged                                                                                                                                           | `false`                   |
@@ -431,7 +431,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalAccess.autoDiscovery.resources.limits`                                  | The resources limits for the auto-discovery init container                                                                                | `{}`                      |
 | `externalAccess.autoDiscovery.resources.requests`                                | The requested resources for the auto-discovery init container                                                                             | `{}`                      |
 | `externalAccess.autoDiscovery.containerSecurityContext.enabled`                  | Enable Kafka auto-discovery containers' Security Context                                                                                  | `true`                    |
-| `externalAccess.autoDiscovery.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                          | `{}`                      |
+| `externalAccess.autoDiscovery.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                          | `nil`                     |
 | `externalAccess.autoDiscovery.containerSecurityContext.runAsUser`                | Set Kafka auto-discovery containers' Security Context runAsUser                                                                           | `1001`                    |
 | `externalAccess.autoDiscovery.containerSecurityContext.runAsNonRoot`             | Set Kafka auto-discovery containers' Security Context runAsNonRoot                                                                        | `true`                    |
 | `externalAccess.autoDiscovery.containerSecurityContext.allowPrivilegeEscalation` | Set Kafka auto-discovery containers' Security Context allowPrivilegeEscalation                                                            | `false`                   |
@@ -489,7 +489,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                       | Init container volume-permissions image pull secrets                                                                              | `[]`                       |
 | `volumePermissions.resources.limits`                        | Init container volume-permissions resource limits                                                                                 | `{}`                       |
 | `volumePermissions.resources.requests`                      | Init container volume-permissions resource requests                                                                               | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`      | User ID for the init container                                                                                                    | `0`                        |
 
 ### Other Parameters
@@ -551,7 +551,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.kafka.podSecurityContext.fsGroup`                        | Set Kafka exporter pod's Security Context fsGroup                                                                                | `1001`                                                                                  |
 | `metrics.kafka.podSecurityContext.seccompProfile.type`            | Set Kafka exporter pod's Security Context seccomp profile                                                                        | `RuntimeDefault`                                                                        |
 | `metrics.kafka.containerSecurityContext.enabled`                  | Enable Kafka exporter containers' Security Context                                                                               | `true`                                                                                  |
-| `metrics.kafka.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                 | `{}`                                                                                    |
+| `metrics.kafka.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                 | `nil`                                                                                   |
 | `metrics.kafka.containerSecurityContext.runAsUser`                | Set Kafka exporter containers' Security Context runAsUser                                                                        | `1001`                                                                                  |
 | `metrics.kafka.containerSecurityContext.runAsNonRoot`             | Set Kafka exporter containers' Security Context runAsNonRoot                                                                     | `true`                                                                                  |
 | `metrics.kafka.containerSecurityContext.allowPrivilegeEscalation` | Set Kafka exporter containers' Security Context allowPrivilegeEscalation                                                         | `false`                                                                                 |
@@ -592,7 +592,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.image.pullPolicy`                                    | JMX exporter image pull policy                                                                                                   | `IfNotPresent`                                                                          |
 | `metrics.jmx.image.pullSecrets`                                   | Specify docker-registry secret names as an array                                                                                 | `[]`                                                                                    |
 | `metrics.jmx.containerSecurityContext.enabled`                    | Enable Prometheus JMX exporter containers' Security Context                                                                      | `true`                                                                                  |
-| `metrics.jmx.containerSecurityContext.seLinuxOptions`             | Set SELinux options in container                                                                                                 | `{}`                                                                                    |
+| `metrics.jmx.containerSecurityContext.seLinuxOptions`             | Set SELinux options in container                                                                                                 | `nil`                                                                                   |
 | `metrics.jmx.containerSecurityContext.runAsUser`                  | Set Prometheus JMX exporter containers' Security Context runAsUser                                                               | `1001`                                                                                  |
 | `metrics.jmx.containerSecurityContext.runAsNonRoot`               | Set Prometheus JMX exporter containers' Security Context runAsNonRoot                                                            | `true`                                                                                  |
 | `metrics.jmx.containerSecurityContext.allowPrivilegeEscalation`   | Set Prometheus JMX exporter containers' Security Context allowPrivilegeEscalation                                                | `false`                                                                                 |
@@ -672,7 +672,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `provisioning.podSecurityContext.fsGroup`                        | Set Kafka provisioning pod's Security Context fsGroup                                                                         | `1001`                |
 | `provisioning.podSecurityContext.seccompProfile.type`            | Set Kafka provisioning pod's Security Context seccomp profile                                                                 | `RuntimeDefault`      |
 | `provisioning.containerSecurityContext.enabled`                  | Enable Kafka provisioning containers' Security Context                                                                        | `true`                |
-| `provisioning.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                              | `{}`                  |
+| `provisioning.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                              | `nil`                 |
 | `provisioning.containerSecurityContext.runAsUser`                | Set Kafka provisioning containers' Security Context runAsUser                                                                 | `1001`                |
 | `provisioning.containerSecurityContext.runAsNonRoot`             | Set Kafka provisioning containers' Security Context runAsNonRoot                                                              | `true`                |
 | `provisioning.containerSecurityContext.allowPrivilegeEscalation` | Set Kafka provisioning containers' Security Context allowPrivilegeEscalation                                                  | `false`               |
@@ -762,7 +762,7 @@ You can configure different authentication protocols for each listener you confi
 | sasl      | Yes (via SASL)               | No                 |
 | sasl_tls  | Yes (via SASL)               | Yes                |
 
-Learn more about how to configure Kafka to use the different authentication protocols in the [chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/kafka/administration/enable-security/).
+Configure the authentication protocols for client and inter-broker communications by setting the *auth.clientProtocol* and *auth.interBrokerProtocol* parameters to the desired ones, respectively.
 
 If you enabled SASL authentication on any listener, you can set the SASL credentials using the parameters below:
 
@@ -961,6 +961,31 @@ externalAccess:
   service:
     annotations:
       external-dns.alpha.kubernetes.io/hostname: "{{ .targetPod }}.example.com"
+```
+
+### Enable metrics
+
+The chart can optionally start two metrics exporters:
+
+- Kafka exporter, to expose Kafka metrics. By default, it uses port 9308.
+- JMX exporter, to expose JMX metrics. By default, it uses port 5556.
+
+To create a separate Kafka exporter, use the parameter below:
+
+```text
+metrics.kafka.enabled: true
+```
+
+To expose JMX metrics to Prometheus, use the parameter below:
+
+```text
+metrics.jmx.enabled: true
+```
+
+- To enable Zookeeper chart metrics, use the parameter below:
+
+```text
+zookeeper.metrics.enabled: true
 ```
 
 ### Sidecars

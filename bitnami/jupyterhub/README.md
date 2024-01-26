@@ -24,8 +24,6 @@ This chart bootstraps a [JupyterHub](https://github.com/jupyterhub/jupyterhub) D
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/get-started/understand-default-configuration/).
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -55,6 +53,62 @@ helm uninstall my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
+
+## Architecture
+
+The JupyterHub chart deploys three basic elements:
+
+- JupyterHub: Central element of the chart. Manages authentication and is responsible for creating the Jupyter Notebook instances (called Single User instances). As a consequence, the Hub requires special RBAC privileges in order to access the Kubernetes API to create and manage Deployments.
+- Proxy: This is the external endpoint for users. It manages the communication with the Hub and the Single User instances.
+- Image Puller: In order to improve the Single User instance boot time, a DaemonSet object is deployed that pre-pulls all the necessary images to run the Single User Notebooks.
+
+The following diagram shows a deployed release of the chart:
+
+```text
+                                                         |
+                                                         |
+                                                         |
+                                                         |
+             ------------------                          |
+             |                |                          |
+             |  Image Puller  |<------Pull images to------
+             |                |         all nodes
+             ------------------
+
+    -------------           ---------------
+    |           |           |             |
+    |   Proxy   |---------->|     Hub     |
+    |           |           |             |
+    -------------           ---------------
+```
+
+After accessing the hub and creating a Single User instance, the deployment looks as follows:
+
+```text
+                                                         |
+                                                         |
+                                                         |
+                                                         |
+              ----------------                           |
+             |                |                          |
+             |  Image Puller  |<------Pull images to-----
+             |                |         all nodes
+              ----------------
+    -----------             -------------
+   |           |           |             |
+   |   Proxy   |---------->|     Hub     |
+   |           |           |             |
+    -----------             -------------
+        |                          |
+        |                          |
+        |                          |
+        |     ---------------      |
+        |     | Single User |      |
+         ---->|  Instance   |<-----
+              ---------------
+```
+
+For more information, check the official [JupyterHub documentation](https://github.com/jupyterhub/jupyterhub).
 
 ## Parameters
 
@@ -127,7 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.resources.limits`                                  | The resources limits for the Hub containers                                                                              | `{}`                         |
 | `hub.resources.requests`                                | The requested resources for the Hub containers                                                                           | `{}`                         |
 | `hub.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`                       |
-| `hub.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                         |
+| `hub.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`                        |
 | `hub.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`                       |
 | `hub.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`                       |
 | `hub.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`                      |
@@ -141,6 +195,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                         |
 | `hub.podSecurityContext.fsGroup`                        | Set Hub pod's Security Context fsGroup                                                                                   | `1001`                       |
 | `hub.lifecycleHooks`                                    | LifecycleHooks for the Hub container to automate configuration before or after startup                                   | `{}`                         |
+| `hub.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `true`                       |
 | `hub.hostAliases`                                       | Add deployment host aliases                                                                                              | `[]`                         |
 | `hub.podLabels`                                         | Add extra labels to the Hub pods                                                                                         | `{}`                         |
 | `hub.podAnnotations`                                    | Add extra annotations to the Hub pods                                                                                    | `{}`                         |
@@ -168,14 +223,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Hub RBAC parameters
 
-| Name                                              | Description                                                            | Value  |
-| ------------------------------------------------- | ---------------------------------------------------------------------- | ------ |
-| `hub.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true` |
-| `hub.serviceAccount.name`                         | Override Hub service account name                                      | `""`   |
-| `hub.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true` |
-| `hub.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
-| `hub.rbac.create`                                 | Specifies whether RBAC resources should be created                     | `true` |
-| `hub.rbac.rules`                                  | Custom RBAC rules to set                                               | `[]`   |
+| Name                                              | Description                                                            | Value   |
+| ------------------------------------------------- | ---------------------------------------------------------------------- | ------- |
+| `hub.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true`  |
+| `hub.serviceAccount.name`                         | Override Hub service account name                                      | `""`    |
+| `hub.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
+| `hub.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
+| `hub.rbac.create`                                 | Specifies whether RBAC resources should be created                     | `true`  |
+| `hub.rbac.rules`                                  | Custom RBAC rules to set                                               | `[]`    |
 
 ### Hub Traffic Exposure Parameters
 
@@ -257,7 +312,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.resources.limits`                                  | The resources limits for the Proxy containers                                                                            | `{}`                                      |
 | `proxy.resources.requests`                                | The requested resources for the Proxy containers                                                                         | `{}`                                      |
 | `proxy.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`                                    |
-| `proxy.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                                      |
+| `proxy.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`                                     |
 | `proxy.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`                                    |
 | `proxy.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`                                    |
 | `proxy.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`                                   |
@@ -271,6 +326,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                                      |
 | `proxy.podSecurityContext.fsGroup`                        | Set Proxy pod's Security Context fsGroup                                                                                 | `1001`                                    |
 | `proxy.lifecycleHooks`                                    | Add lifecycle hooks to the Proxy deployment                                                                              | `{}`                                      |
+| `proxy.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`                                   |
 | `proxy.hostAliases`                                       | Add deployment host aliases                                                                                              | `[]`                                      |
 | `proxy.podLabels`                                         | Add extra labels to the Proxy pods                                                                                       | `{}`                                      |
 | `proxy.podAnnotations`                                    | Add extra annotations to the Proxy pods                                                                                  | `{}`                                      |
@@ -393,7 +449,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `imagePuller.resources.limits`                                  | The resources limits for the ImagePuller containers                                                                      | `{}`             |
 | `imagePuller.resources.requests`                                | The requested resources for the ImagePuller containers                                                                   | `{}`             |
 | `imagePuller.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `imagePuller.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `imagePuller.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `imagePuller.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `imagePuller.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `imagePuller.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -428,6 +484,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `imagePuller.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for ImagePuller container(s)                                    | `[]`             |
 | `imagePuller.initContainers`                                    | Add additional init containers to the ImagePuller pods                                                                   | `[]`             |
 | `imagePuller.sidecars`                                          | Add additional sidecar containers to the ImagePuller pod                                                                 | `[]`             |
+| `imagePuller.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                     | `true`           |
+| `imagePuller.serviceAccount.name`                               | Override image puller service account name                                                                               | `""`             |
+| `imagePuller.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                   | `false`          |
+| `imagePuller.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                     | `{}`             |
 
 ### Singleuser deployment parameters
 
@@ -440,13 +500,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `singleuser.image.pullSecrets`                                 | Single User image pull secrets                                                                              | `[]`                                    |
 | `singleuser.notebookDir`                                       | Notebook directory (it will be the same as the PVC volume mount)                                            | `/opt/bitnami/jupyterhub-singleuser`    |
 | `singleuser.allowPrivilegeEscalation`                          | Controls whether a process can gain more privileges than its parent process                                 | `false`                                 |
+| `singleuser.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                          | `false`                                 |
 | `singleuser.command`                                           | Override Single User default command                                                                        | `[]`                                    |
 | `singleuser.extraEnvVars`                                      | Extra environment variables that should be set for the user pods                                            | `[]`                                    |
 | `singleuser.containerPort`                                     | Single User container port                                                                                  | `8888`                                  |
 | `singleuser.resources.limits`                                  | The resources limits for the Singleuser containers                                                          | `{}`                                    |
 | `singleuser.resources.requests`                                | The requested resources for the Singleuser containers                                                       | `{}`                                    |
 | `singleuser.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                        | `true`                                  |
-| `singleuser.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                            | `{}`                                    |
+| `singleuser.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                            | `nil`                                   |
 | `singleuser.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                  | `1001`                                  |
 | `singleuser.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                               | `true`                                  |
 | `singleuser.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                 | `false`                                 |
@@ -550,6 +611,62 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/jupyt
 
 ## Configuration and installation details
 
+### Understand the default configuration
+
+This chart deploys three basic elements:
+
+- JupyterHub: Central element of the chart. Manages authentication and is responsible for creating the Jupyter Notebook instances (called Single User instances). As a consequence, the Hub requires special RBAC privileges in order to access the Kubernetes API to create and manage Deployments.
+- Proxy: This is the external endpoint for users. It manages the communication with the Hub and the Single User instances.
+- Image Puller: In order to improve the Single User instance boot time, a DaemonSet object is deployed that pre-pulls all the necessary images to run the Single User Notebooks.
+
+The following diagram shows a deployed release of the chart:
+
+```text
+                                                         |
+                                                         |
+                                                         |
+                                                         |
+             ------------------                          |
+             |                |                          |
+             |  Image Puller  |<------Pull images to------
+             |                |         all nodes
+             ------------------
+
+    -------------           ---------------
+    |           |           |             |
+    |   Proxy   |---------->|     Hub     |
+    |           |           |             |
+    -------------           ---------------
+```
+
+After accessing the hub and creating a Single User instance, the deployment looks as follows:
+
+```text
+                                                         |
+                                                         |
+                                                         |
+                                                         |
+              ----------------                           |
+             |                |                          |
+             |  Image Puller  |<------Pull images to-----
+             |                |         all nodes
+              ----------------
+    -----------             -------------
+   |           |           |             |
+   |   Proxy   |---------->|     Hub     |
+   |           |           |             |
+    -----------             -------------
+        |                          |
+        |                          |
+        |                          |
+        |     ---------------      |
+        |     | Single User |      |
+         ---->|  Instance   |<-----
+              ---------------
+```
+
+For more information, check the official [JupyterHub documentation](https://github.com/jupyterhub/jupyterhub).
+
 ### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
@@ -560,13 +677,34 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 The chart configures the Hub [DummyAuthenticator](https://github.com/jupyterhub/dummyauthenticator) by default, with the password set in the `hub.password` (auto-generated if not set) chart parameter and `user` as the administrator user. In order to change the authentication mechanism, change the `hub.config.JupyterHub` section inside the `hub.configuration` value.
 
-Refer to the [chart documentation for a configuration example](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/configuration/configure-authentication).
+The following example sets the [NativeAuthenticator](https://github.com/jupyterhub/nativeauthenticator) authenticator, and configures an admin user called *test*.
+
+```yaml
+hub:
+  configuration: |
+    ...
+    hub:
+      config:
+        JupyterHub:
+          admin_access: true
+          authenticator_class: nativeauthenticator.NativeAuthenticator
+          Authenticator:
+            admin_users:
+              - test
+    ...
+```
+
+When deploying, you will need to sign up to set the password for the `test`` user.
+
+For more information on Authenticators, check the [official JupyterHub documentation](https://jupyterhub.readthedocs.io/en/stable/getting-started/authenticators-users-basics.html).
 
 ### Configure the Single User instances
 
-As explained in the [documentation](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/get-started/understand-default-configuration/), the Hub is responsible for deploying the Single User instances. The configuration of these instances is passed to the Hub instance via the `hub.configuration` chart parameter. The chart's `singleuser` section can be used to generate the `hub.configuration` value.
+As explained in this [section](#understand-the-default-configuration), the Hub is responsible for deploying the Single User instances. The configuration of these instances is passed to the Hub instance via the `hub.configuration` chart parameter.
 
-For more information, including how to provide a secret or a custom ConfigMap, refer to the [chart documentation on configuring Single User instances](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/configuration/configure-single-user-instances/).
+In order to make the chart follow standards and to ease the generation of this configuration file, the chart has a `singleuser` section, which is then used for generating the `hub.configuration` value. This value can be easily overridden by modifying its default value or by providing a secret via the `hub.existingSecret` value. In this case, all the settings in the `singleuser` section will be ignored.
+
+All the settings specified in the `hub.configuration` value are consumed by the `jupyter_config.py` script available in the [templates/hub/configmap.yaml](https://github.com/bitnami/charts/blob/main/bitnami/jupyterhub/templates/hub/configmap.yaml) file. This script can be changed by providing a custom ConfigMap via the `hub.existingConfigmap` value. The [official JupyterHub documentation](https://jupyterhub.readthedocs.io/en/stable/reference/config-examples.html) has more examples of the `jupyter_config.py` script.
 
 ### Restrict traffic using NetworkPolicies
 
@@ -577,32 +715,103 @@ The Bitnami JupyterHub chart enables NetworkPolicies by default. This restricts 
 
 ### Use sidecars and init containers
 
-If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `proxy.sidecars`, `hub.sidecars` or `singleuser.sidecars` config parameters. Similarly, extra init containers can be added using the `hub.initContainers`, `proxy.initContainers` and `singleuser.initContainers` parameters.
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `proxy.sidecars`, `hub.sidecars` or `singleuser.sidecars` config parameters.
 
-Refer to the chart documentation for more information on, and examples of, configuring and using [sidecars and init containers](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/configuration/configure-sidecar-init-containers/).
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+Similarly, extra init containers can be added using the `hub.initContainers`, `proxy.initContainers` and `singleuser.initContainers` parameters.
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Configure Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.To enable Ingress integration, set `proxy.ingress.enabled` to `true`.
 
-To enable Ingress integration, set `proxy.ingress.enabled` to `true`. The `proxy.ingress.hostname` property can be used to set the host name. The `proxy.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host.
+The most common scenario is to have one host name mapped to the deployment. In this case, the `proxy.ingress.hostname` property can be used to set the host name. The `proxy.ingress.tls` parameter can be used to add the TLS configuration for this host.
 
-Learn more about [configuring and using Ingress in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/configuration/configure-ingress/).
+However, it is also possible to have more than one host. To facilitate this, the `proxy.ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `proxy.ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
+
+> NOTE: For each host specified in the `proxy.ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
+
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+
+[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
 ### Configure TLS secrets
 
-This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are four common use cases:
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
 
-- Helm generates/manages certificate secrets based on the parameters.
-- User generates/manages certificates separately.
-- Helm creates self-signed certificates and generates/manages certificate secrets.
-- An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
+- Generate certificate secrets based on chart parameters.
+- Enable externally generated certificates.
+- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
+- Create self-signed certificates within the chart (if supported).
 
-Refer to the [chart documentation for more information on working with TLS](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/administration/enable-tls-ingress/).
+In the first two cases, a certificate and a key are needed. Files are expected in `.pem` format.
+
+Here is an example of a certificate file:
+
+> NOTE: There may be more than one certificate if there is a certificate chain.
+
+```text
+-----BEGIN CERTIFICATE-----
+MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+...
+jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+-----END CERTIFICATE-----
+```
+
+Here is an example of a certificate key:
+
+```text
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+...
+wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+-----END RSA PRIVATE KEY-----
+```
+
+- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
+- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
+- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
 
 ### Set pod affinity
 
-This chart allows you to set your custom affinity using the `hub.affinity` and `proxy.affinity` parameters. Refer to the [chart documentation on pod affinity](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/configuration/configure-pod-affinity).
+This chart allows you to set your custom affinity using the `*.affinity` parameter(s).
+
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available in the `bitnami/common` chart. To do so, set the `*.podAffinityPreset`, `*.podAntiAffinityPreset`, or `*.nodeAffinityPreset` parameters.
+
+[Learn more about pod affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 ### Deploy extra resources
 
@@ -622,9 +831,45 @@ This major updates the PostgreSQL subchart to its newest major, 13.0.0. [Here](h
 
 This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
 
-### To any previous version
+### To 1.0.0
 
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/administration/upgrade/).
+This major release updates the PostgreSQL subchart to its newest major *11.x.x*, which contain several changes in the supported values (check the [upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1100) to obtain more information).
+
+#### Upgrading Instructions
+
+To upgrade to *1.0.0* from *0.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *jupyterhub* and the release namespace *default*):
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+
+```console
+export JUPYTERHUB_PASSWORD=$(kubectl get secret --namespace default jupyterhub-hub -o jsonpath="{.data['values\.yaml']}" | base64 --decode | awk -F: '/password/ {gsub(/[ \t]+/, "", $2);print $2}' | tr -d '"')
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default jupyterhub-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=jupyterhub,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+1. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+
+```console
+kubectl delete statefulsets.apps --cascade=false jupyterhub-postgresql
+kubectl delete secret jupyterhub-postgresql --namespace default
+```
+
+1. Upgrade your release using the same PostgreSQL version:
+
+```console
+CURRENT_PG_VERSION=$(kubectl exec jupyterhub-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+helm upgrade jupyterhub bitnami/jupyterhub \
+  --set hub.password=$JUPYTERHUB_PASSWORD \
+  --set postgresql.image.tag=$CURRENT_PG_VERSION \
+  --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
+
+1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+
+```console
+kubectl delete pod jupyterhub-postgresql-0
+```
 
 ## License
 

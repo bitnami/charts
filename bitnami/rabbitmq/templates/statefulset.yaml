@@ -217,7 +217,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "rabbitmq.secretErlangName" . }}
-                  key: rabbitmq-erlang-cookie
+                  key: {{ template "rabbitmq.secretErlangKey" . }}
             {{- if and .Values.clustering.rebalance (gt (.Values.replicaCount | int) 1) }}
             - name: RABBITMQ_CLUSTER_REBALANCE
               value: "true"
