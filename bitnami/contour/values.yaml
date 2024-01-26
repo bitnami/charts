@@ -534,7 +534,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.27.2-debian-11-r2
+    tag: 1.27.2-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1083,7 +1083,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r3
+    tag: 1.25.3-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
