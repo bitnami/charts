@@ -140,7 +140,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set Cassandra pod's Security Context fsGroup                                              | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled Cassandra containers' Security Context                                            | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set Cassandra containers' Security Context runAsUser                                      | `1001`           |
 | `containerSecurityContext.allowPrivilegeEscalation` | Set Cassandra containers' Security Context allowPrivilegeEscalation                       | `false`          |
 | `containerSecurityContext.capabilities.drop`        | Set Cassandra containers' Security Context capabilities to be dropped                     | `["ALL"]`        |
@@ -248,7 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                      | `[]`                       |
 | `volumePermissions.resources.limits`               | The resources limits for the container                                                                                | `{}`                       |
 | `volumePermissions.resources.requests`             | The requested resources for the container                                                                             | `{}`                       |
-| `volumePermissions.securityContext.seLinuxOptions` | Set SELinux options in container                                                                                      | `{}`                       |
+| `volumePermissions.securityContext.seLinuxOptions` | Set SELinux options in container                                                                                      | `nil`                      |
 | `volumePermissions.securityContext.runAsUser`      | User ID for the init container                                                                                        | `0`                        |
 
 ### Metrics parameters

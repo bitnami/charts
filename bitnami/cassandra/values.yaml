@@ -296,7 +296,7 @@ podSecurityContext:
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled Cassandra containers' Security Context
-## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set Cassandra containers' Security Context runAsUser
 ## @param containerSecurityContext.allowPrivilegeEscalation Set Cassandra containers' Security Context allowPrivilegeEscalation
 ## @param containerSecurityContext.capabilities.drop Set Cassandra containers' Security Context capabilities to be dropped
@@ -307,7 +307,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false
@@ -675,7 +675,7 @@ volumePermissions:
   ## Init container Security Context
   ## Note: the chown of the data folder is done to securityContext.runAsUser
   ## and not the below volumePermissions.securityContext.runAsUser
-  ## @param volumePermissions.securityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.securityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.securityContext.runAsUser User ID for the init container
   ##
   ## When runAsUser is set to special value "auto", init container will try to chwon the
@@ -685,7 +685,7 @@ volumePermissions:
   ## pod securityContext.enabled=false and shmVolume.chmod.enabled=false
   ##
   securityContext:
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
 
 ## @section Metrics parameters

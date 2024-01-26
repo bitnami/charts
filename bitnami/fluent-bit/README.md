@@ -93,7 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------------- |
 | `daemonset.enabled`                                 | Use a daemonset instead of a deployment. `replicaCount` will not take effect.             | `false`                      |
 | `daemonset.podSecurityContext.enabled`              | Enable security context for daemonset pods                                                | `true`                       |
-| `daemonset.podSecurityContext.seLinuxOptions`       | Set SELinux options in container                                                          | `{}`                         |
+| `daemonset.podSecurityContext.seLinuxOptions`       | Set SELinux options in container                                                          | `nil`                        |
 | `daemonset.podSecurityContext.runAsUser`            | User ID for daemonset containers                                                          | `0`                          |
 | `daemonset.podSecurityContext.runAsGroup`           | Group ID for daemonset containers                                                         | `0`                          |
 | `daemonset.podSecurityContext.fsGroupChangePolicy`  | Set filesystem group change policy                                                        | `Always`                     |
@@ -160,7 +160,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`                         |
 | `podSecurityContext.fsGroup`                        | Set Fluent Bit pod's Security Context fsGroup                                             | `1001`                       |
 | `containerSecurityContext.enabled`                  | Enabled Fluent Bit containers' Security Context                                           | `true`                       |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`                         |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`                        |
 | `containerSecurityContext.runAsUser`                | Set Fluent Bit containers' Security Context runAsUser                                     | `1001`                       |
 | `containerSecurityContext.runAsNonRoot`             | Set Fluent Bit container's Security Context runAsNonRoot                                  | `true`                       |
 | `containerSecurityContext.readOnlyRootFilesystem`   | Set Fluent Bit container's Security Context runAsNonRoot                                  | `false`                      |
