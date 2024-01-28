@@ -1079,7 +1079,7 @@ sentinel:
   ## IMPORTANT: this will disable the master and replicas services and
   ## create a single Redis&reg; service exposing both the Redis and Sentinel ports
   ##
-  enabled: false
+  enabled: true
   ## Bitnami Redis&reg; Sentinel image version
   ## ref: https://hub.docker.com/r/bitnami/redis-sentinel/tags/
   ## @param sentinel.image.registry [default: REGISTRY_NAME] Redis&reg; Sentinel image registry
@@ -1565,7 +1565,7 @@ tls:
 metrics:
   ## @param metrics.enabled Start a sidecar prometheus exporter to expose Redis&reg; metrics
   ##
-  enabled: false
+  enabled: true
   ## Bitnami Redis&reg; Exporter image
   ## ref: https://hub.docker.com/r/bitnami/redis-exporter/tags/
   ## @param metrics.image.registry [default: REGISTRY_NAME] Redis&reg; Exporter image registry
@@ -1751,6 +1751,9 @@ metrics:
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
   ##
   serviceMonitor:
+    ## @param metrics.port the service port to scrape metrics from
+    ##
+    port: http-metrics
     ## @param metrics.serviceMonitor.enabled Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator
     ##
     enabled: false
@@ -1787,18 +1790,24 @@ metrics:
     ## @param metrics.serviceMonitor.additionalEndpoints  Additional endpoints to scrape (e.g sentinel)
     ##
     additionalEndpoints: []
-      # uncomment in order to scrape sentinel metrics
-      # - port: http-metrics
-      #   interval: 30s
-      #   path: /scrape
+      # uncomment in order to scrape sentinel metrics, also to in order distinguish between Sentinel and Redis container metrics
+      # add metricRelabelings with label like app=redis to main redis pod-monitor port
+      # - interval: "30s"
+      #   path: "/scrape"
+      #   port: "metrics"
       #   params:
-      #     target:
-      #       - localhost:26379
+      #     target: ["localhost:26379"]
+      #   metricRelabelings:
+      #     - targetLabel: "app"
+      #       replacement: "sentinel"
   ## Prometheus Pod Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#podmonitor
   ##
   podMonitor:
+    ## @param metrics.port the pod port to scrape metrics from
+    ##
+    port: metrics
     ## @param metrics.podMonitor.enabled Create PodMonitor resource(s) for scraping metrics using PrometheusOperator
     ##
     enabled: false
@@ -1817,6 +1826,8 @@ metrics:
     ## @param metrics.podMonitor.metricRelabelings Metrics RelabelConfigs to apply to samples before ingestion.
     ##
     metricRelabelings: []
+      # - targetLabel: "app"
+      #   replacement: "redis"
     ## @param metrics.podMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
     ##
     honorLabels: false
@@ -1835,13 +1846,14 @@ metrics:
     ## @param metrics.podMonitor.additionalEndpoints  Additional endpoints to scrape (e.g sentinel)
     ##
     additionalEndpoints: []
-      # uncomment in order to scrape sentinel metrics
-      # - port: metrics
-      #   interval: 30s
-      #   path: /scrape
+      # - interval: "30s"
+      #   path: "/scrape"
+      #   port: "metrics"
       #   params:
-      #     target:
-      #       - localhost:26379
+      #     target: ["localhost:26379"]
+      #   metricRelabelings:
+      #     - targetLabel: "app"
+      #       replacement: "sentinel"
 
   ## Custom PrometheusRule to be defined
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
