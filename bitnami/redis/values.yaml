@@ -1079,7 +1079,7 @@ sentinel:
   ## IMPORTANT: this will disable the master and replicas services and
   ## create a single Redis&reg; service exposing both the Redis and Sentinel ports
   ##
-  enabled: true
+  enabled: false
   ## Bitnami Redis&reg; Sentinel image version
   ## ref: https://hub.docker.com/r/bitnami/redis-sentinel/tags/
   ## @param sentinel.image.registry [default: REGISTRY_NAME] Redis&reg; Sentinel image registry
@@ -1565,7 +1565,7 @@ tls:
 metrics:
   ## @param metrics.enabled Start a sidecar prometheus exporter to expose Redis&reg; metrics
   ##
-  enabled: true
+  enabled: false
   ## Bitnami Redis&reg; Exporter image
   ## ref: https://hub.docker.com/r/bitnami/redis-exporter/tags/
   ## @param metrics.image.registry [default: REGISTRY_NAME] Redis&reg; Exporter image registry
