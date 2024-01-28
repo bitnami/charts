@@ -392,10 +392,10 @@ primary:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 30
+    initialDelaySeconds: 0
     periodSeconds: 10
     timeoutSeconds: 5
-    failureThreshold: 6
+    failureThreshold: 3
     successThreshold: 1
   ## @param primary.readinessProbe.enabled Enable readinessProbe on PostgreSQL Primary containers
   ## @param primary.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -406,10 +406,10 @@ primary:
   ##
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 5
+    initialDelaySeconds: 0
     periodSeconds: 10
     timeoutSeconds: 5
-    failureThreshold: 6
+    failureThreshold: 3
     successThreshold: 1
   ## @param primary.startupProbe.enabled Enable startupProbe on PostgreSQL Primary containers
   ## @param primary.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
@@ -419,11 +419,11 @@ primary:
   ## @param primary.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
-    enabled: false
-    initialDelaySeconds: 30
+    enabled: true
+    initialDelaySeconds: 0
     periodSeconds: 10
     timeoutSeconds: 1
-    failureThreshold: 15
+    failureThreshold: 18
     successThreshold: 1
   ## @param primary.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
@@ -767,10 +767,10 @@ readReplicas:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 30
+    initialDelaySeconds: 0
     periodSeconds: 10
     timeoutSeconds: 5
-    failureThreshold: 6
+    failureThreshold: 3
     successThreshold: 1
   ## @param readReplicas.readinessProbe.enabled Enable readinessProbe on PostgreSQL read only containers
   ## @param readReplicas.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -781,10 +781,10 @@ readReplicas:
   ##
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 5
+    initialDelaySeconds: 0
     periodSeconds: 10
     timeoutSeconds: 5
-    failureThreshold: 6
+    failureThreshold: 3
     successThreshold: 1
   ## @param readReplicas.startupProbe.enabled Enable startupProbe on PostgreSQL read only containers
   ## @param readReplicas.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
@@ -794,11 +794,11 @@ readReplicas:
   ## @param readReplicas.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
-    enabled: false
-    initialDelaySeconds: 30
+    enabled: true
+    initialDelaySeconds: 0
     periodSeconds: 10
     timeoutSeconds: 1
-    failureThreshold: 15
+    failureThreshold: 18
     successThreshold: 1
   ## @param readReplicas.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
@@ -1507,10 +1507,10 @@ metrics:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 5
+    initialDelaySeconds: 0
     periodSeconds: 10
     timeoutSeconds: 5
-    failureThreshold: 6
+    failureThreshold: 3
     successThreshold: 1
   ## @param metrics.readinessProbe.enabled Enable readinessProbe on PostgreSQL Prometheus exporter containers
   ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -1521,10 +1521,10 @@ metrics:
   ##
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 5
+    initialDelaySeconds: 0
     periodSeconds: 10
     timeoutSeconds: 5
-    failureThreshold: 6
+    failureThreshold: 3
     successThreshold: 1
   ## @param metrics.startupProbe.enabled Enable startupProbe on PostgreSQL Prometheus exporter containers
   ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
@@ -1534,11 +1534,11 @@ metrics:
   ## @param metrics.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
-    enabled: false
-    initialDelaySeconds: 10
+    enabled: true
+    initialDelaySeconds: 0
     periodSeconds: 10
     timeoutSeconds: 1
-    failureThreshold: 15
+    failureThreshold: 18
     successThreshold: 1
   ## @param metrics.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
