@@ -42,6 +42,18 @@ spec:
       {{- if .path }}
       path: {{ .path }}
       {{- end }}
+      {{- if .honorLabels }}
+      honorLabels: {{ .honorLabels }}
+      {{- end }}
+      {{- if .relabellings }}
+      relabelings: {{- toYaml .relabellings | nindent 6 }}
+      {{- end }}
+      {{- if .metricRelabelings }}
+      metricRelabelings: {{- toYaml .metricRelabelings | nindent 6 }}
+      {{- end }}
+      {{- if .scrapeTimeout }}
+      scrapeTimeout: {{ .scrapeTimeout }}
+      {{- end }}
       {{- if .params }}
       params:
         {{- range $key, $value := .params }}

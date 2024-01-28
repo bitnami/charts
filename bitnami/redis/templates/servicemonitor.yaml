@@ -39,6 +39,18 @@ spec:
       {{- if .interval }}
       interval: {{ .interval }}
       {{- end }}
+      {{- if .scrapeTimeout }}
+      scrapeTimeout: {{ .scrapeTimeout }}
+      {{- end }}
+      {{- if .honorLabels }}
+      honorLabels: {{ .honorLabels }}
+      {{- end }}
+      {{- if .relabellings }}
+      relabelings: {{- toYaml .relabellings | nindent 6 }}
+      {{- end }}
+      {{- if .metricRelabelings }}
+      metricRelabelings: {{- toYaml .metricRelabelings | nindent 6 }}
+      {{- end }}
       {{- if .path }}
       path: {{ .path }}
       {{- end }}
