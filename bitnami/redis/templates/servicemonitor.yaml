@@ -18,7 +18,7 @@ metadata:
   {{- end }}
 spec:
   endpoints:
-    - port: {{ .Values.metrics.podMonitor.port }}
+    - port: {{ .Values.metrics.serviceMonitor.port }}
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}
