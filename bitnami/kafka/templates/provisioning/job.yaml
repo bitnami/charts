@@ -28,6 +28,7 @@ spec:
       {{- end }}
     spec:
       serviceAccountName: {{ template "kafka.provisioning.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.provisioning.automountServiceAccountToken }}
       enableServiceLinks: {{ .Values.provisioning.enableServiceLinks }}
       {{- include "kafka.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.provisioning.schedulerName }}

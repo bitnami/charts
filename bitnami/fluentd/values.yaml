@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.16.3-debian-11-r3
+  tag: 1.16.3-debian-11-r5
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -107,6 +107,9 @@ forwarder:
   ## @param forwarder.daemonGroup Fluentd forwarder daemon system group
   ##
   daemonGroup: root
+  ## @param forwarder.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param forwarder.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -114,7 +117,7 @@ forwarder:
   ## K8s Security Context for forwarder pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param forwarder.podSecurityContext.enabled Enable security context for forwarder pods
-  ## @param forwarder.podSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param forwarder.podSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param forwarder.podSecurityContext.runAsUser User ID for forwarder's containers
   ## @param forwarder.podSecurityContext.runAsGroup Group ID for forwarder's containers
   ## @param forwarder.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
@@ -124,7 +127,7 @@ forwarder:
   ##
   podSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
     runAsGroup: 0
     fsGroupChangePolicy: Always
@@ -556,7 +559,7 @@ forwarder:
     annotations: {}
     ## @param forwarder.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
 
   ## Role Based Access
   ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
@@ -668,7 +671,7 @@ aggregator:
   ## K8s Security Context for Aggregator pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param aggregator.podSecurityContext.enabled Enable security context for aggregator pods
-  ## @param aggregator.podSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param aggregator.podSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param aggregator.podSecurityContext.runAsUser User ID for aggregator's containers
   ## @param aggregator.podSecurityContext.runAsGroup Group ID for aggregator's containers
   ## @param aggregator.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
@@ -678,13 +681,16 @@ aggregator:
   ##
   podSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsGroup: 1001
     fsGroupChangePolicy: Always
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
+  ## @param aggregator.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param aggregator.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

@@ -123,7 +123,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`        | Set filesystem extra groups                                                                                           | `[]`                         |
 | `podSecurityContext.fsGroup`                   | Multus CNI pods' group ID                                                                                             | `0`                          |
 | `containerSecurityContext.enabled`             | Enable Multus CNI containers' Security Context                                                                        | `true`                       |
-| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                      | `{}`                         |
+| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                      | `nil`                        |
 | `containerSecurityContext.runAsUser`           | Multus CNI containers' Security Context                                                                               | `0`                          |
 | `containerSecurityContext.runAsNonRoot`        | Set Multus CNI container's Security Context runAsNonRoot                                                              | `false`                      |
 | `containerSecurityContext.privileged`          | Set Multus CNI container's Security Context privileged                                                                | `true`                       |
@@ -140,7 +140,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `livenessProbe.timeoutSeconds`                 | Timeout seconds for livenessProbe                                                                                     | `5`                          |
 | `livenessProbe.failureThreshold`               | Failure threshold for livenessProbe                                                                                   | `5`                          |
 | `livenessProbe.successThreshold`               | Success threshold for livenessProbe                                                                                   | `1`                          |
-| `readinessProbe.enabled`                       | Enable readinessProbe                                                                                                 | `false`                      |
+| `readinessProbe.enabled`                       | Enable readinessProbe                                                                                                 | `true`                       |
 | `readinessProbe.initialDelaySeconds`           | Initial delay seconds for readinessProbe                                                                              | `10`                         |
 | `readinessProbe.periodSeconds`                 | Period seconds for readinessProbe                                                                                     | `5`                          |
 | `readinessProbe.timeoutSeconds`                | Timeout seconds for readinessProbe                                                                                    | `1`                          |

@@ -24,8 +24,6 @@ This chart bootstraps an [Mastodon](https://www.mastodon.com/) Deployment in a [
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/apps/mastodon/get-started/).
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -168,7 +166,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `web.podSecurityContext.fsGroup`                        | Set Mastodon web pod's Security Context fsGroup                                                                          | `1001`           |
 | `web.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `web.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `web.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `web.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `web.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `web.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -178,6 +176,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `web.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `web.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `web.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `web.hostAliases`                                       | Mastodon web pods host aliases                                                                                           | `[]`             |
 | `web.podLabels`                                         | Extra labels for Mastodon web pods                                                                                       | `{}`             |
 | `web.podAnnotations`                                    | Annotations for Mastodon web pods                                                                                        | `{}`             |
@@ -253,7 +252,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidekiq.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `sidekiq.podSecurityContext.fsGroup`                        | Set Mastodon sidekiq pod's Security Context fsGroup                                                                      | `1001`           |
 | `sidekiq.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `sidekiq.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `sidekiq.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `sidekiq.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `sidekiq.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `sidekiq.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -263,6 +262,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidekiq.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `sidekiq.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `sidekiq.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `sidekiq.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `sidekiq.hostAliases`                                       | Mastodon sidekiq pods host aliases                                                                                       | `[]`             |
 | `sidekiq.podLabels`                                         | Extra labels for Mastodon sidekiq pods                                                                                   | `{}`             |
 | `sidekiq.podAnnotations`                                    | Annotations for Mastodon sidekiq pods                                                                                    | `{}`             |
@@ -323,7 +323,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `streaming.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `streaming.podSecurityContext.fsGroup`                        | Set Mastodon streaming pod's Security Context fsGroup                                                                    | `1001`           |
 | `streaming.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `streaming.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `streaming.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `streaming.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `streaming.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `streaming.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -333,6 +333,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `streaming.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `streaming.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `streaming.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `streaming.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `streaming.hostAliases`                                       | Mastodon streaming pods host aliases                                                                                     | `[]`             |
 | `streaming.podLabels`                                         | Extra labels for Mastodon streaming pods                                                                                 | `{}`             |
 | `streaming.podAnnotations`                                    | Annotations for Mastodon streaming pods                                                                                  | `{}`             |
@@ -406,7 +407,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.backoffLimit`                                      | set backoff limit of the job                                                                                                   | `10`             |
 | `initJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Mastodon init job                                                  | `[]`             |
 | `initJob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                           | `true`           |
-| `initJob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                               | `{}`             |
+| `initJob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                               | `nil`            |
 | `initJob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                     | `1001`           |
 | `initJob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                  | `true`           |
 | `initJob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                    | `false`          |
@@ -425,6 +426,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.extraVolumeMounts`                                 | Array of extra volume mounts to be added to the Mastodon Container (evaluated as template). Normally used with `extraVolumes`. | `[]`             |
 | `initJob.resources.limits`                                  | The resources limits for the container                                                                                         | `{}`             |
 | `initJob.resources.requests`                                | The requested resources for the container                                                                                      | `{}`             |
+| `initJob.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                             | `false`          |
 | `initJob.hostAliases`                                       | Add deployment host aliases                                                                                                    | `[]`             |
 | `initJob.annotations`                                       | Add annotations to the job                                                                                                     | `{}`             |
 | `initJob.podLabels`                                         | Additional pod labels                                                                                                          | `{}`             |
@@ -456,7 +458,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                           | `[]`                       |
 | `volumePermissions.resources.limits`                        | The resources limits for the init container                                                     | `{}`                       |
 | `volumePermissions.resources.requests`                      | The requested resources for the init container                                                  | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                 | `0`                        |
 
 ### Other Parameters
@@ -662,13 +664,55 @@ externalS3.accessKeySecret=secret
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.To enable Ingress integration, set `apache.ingress.enabled` to `true`.
 
-To enable Ingress integration, set `apache.ingress.enabled` to `true`. The `apache.ingress.hostname` property can be used to set the host name. The `apache.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/mastodon/configuration/configure-ingress/).
+The most common scenario is to have one host name mapped to the deployment. In this case, the `apache.ingress.hostname` property can be used to set the host name. The `apache.ingress.tls` parameter can be used to add the TLS configuration for this host.
+
+However, it is also possible to have more than one host. To facilitate this, the `apache.ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `apache.ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
+
+> NOTE: For each host specified in the `apache.ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
+
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+
+[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/mastodon/administration/enable-tls-ingress/).
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
+
+- Generate certificate secrets based on chart parameters.
+- Enable externally generated certificates.
+- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
+- Create self-signed certificates within the chart (if supported).
+
+In the first two cases, a certificate and a key are needed. Files are expected in `.pem` format.
+
+Here is an example of a certificate file:
+
+> NOTE: There may be more than one certificate if there is a certificate chain.
+
+```text
+-----BEGIN CERTIFICATE-----
+MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+...
+jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+-----END CERTIFICATE-----
+```
+
+Here is an example of a certificate key:
+
+```text
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+...
+wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+-----END RSA PRIVATE KEY-----
+```
+
+- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
+- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
+- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
 
 ## Persistence
 
@@ -689,7 +733,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as mastodon (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the `web`, `streaming` and `sidekiq` sections. If these sidecars export extra posidekiq, extra port definitions can be added using the `service.extraPosidekiq` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/mastodon/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as mastodon (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the `web`, `streaming` and `sidekiq` sections.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Pod affinity
 

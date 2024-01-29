@@ -40,6 +40,7 @@ spec:
         {{- end }}
     spec:
       {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.aggregator.automountServiceAccountToken }}
       {{- if .Values.aggregator.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -136,7 +137,7 @@ spec:
             - name: FLUENTD_OPT
               value: {{ .Values.aggregator.extraArgs | quote }}
             {{- if .Values.aggregator.extraEnvVars }}
-            {{- toYaml .Values.aggregator.extraEnvVars | nindent 12 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
           envFrom:
             {{- if .Values.aggregator.extraEnvVarsCM }}

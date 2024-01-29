@@ -95,6 +95,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jobmanager.command`                                           | Command for running the container (set to default if not set). Use array form             | `[]`             |
 | `jobmanager.args`                                              | Args for running the container (set to default if not set). Use array form                | `[]`             |
 | `jobmanager.lifecycleHooks`                                    | Override default etcd container hooks                                                     | `{}`             |
+| `jobmanager.automountServiceAccountToken`                      | Mount Service Account token in pod                                                        | `false`          |
+| `jobmanager.hostAliases`                                       | Set pod host aliases                                                                      | `[]`             |
 | `jobmanager.extraEnvVars`                                      | Extra environment variables to be set on flink container                                  | `[]`             |
 | `jobmanager.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars                                      | `""`             |
 | `jobmanager.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars                                         | `""`             |
@@ -151,7 +153,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jobmanager.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `jobmanager.podSecurityContext.fsGroup`                        | Set Apache Flink pod's Security Context fsGroup                                           | `1001`           |
 | `jobmanager.containerSecurityContext.enabled`                  | Enabled Apache Flink containers' Security Context                                         | `true`           |
-| `jobmanager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
+| `jobmanager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`            |
 | `jobmanager.containerSecurityContext.runAsUser`                | Set Apache Flink container's Security Context runAsUser                                   | `1001`           |
 | `jobmanager.containerSecurityContext.runAsNonRoot`             | Force the container to be run as non root                                                 | `true`           |
 | `jobmanager.containerSecurityContext.allowPrivilegeEscalation` | Allows privilege escalation                                                               | `false`          |
@@ -184,6 +186,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `taskmanager.command`                                           | Command for running the container (set to default if not set). Use array form             | `[]`             |
 | `taskmanager.args`                                              | Args for running the container (set to default if not set). Use array form                | `[]`             |
 | `taskmanager.lifecycleHooks`                                    | Override default etcd container hooks                                                     | `{}`             |
+| `taskmanager.automountServiceAccountToken`                      | Mount Service Account token in pod                                                        | `false`          |
+| `taskmanager.hostAliases`                                       | Set pod host aliases                                                                      | `[]`             |
 | `taskmanager.extraEnvVars`                                      | Extra environment variables to be set on flink container                                  | `[]`             |
 | `taskmanager.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars                                      | `""`             |
 | `taskmanager.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars                                         | `""`             |
@@ -237,7 +241,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `taskmanager.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `taskmanager.podSecurityContext.fsGroup`                        | Set Apache Flink pod's Security Context fsGroup                                           | `1001`           |
 | `taskmanager.containerSecurityContext.enabled`                  | Enabled Apache Flink containers' Security Context                                         | `true`           |
-| `taskmanager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
+| `taskmanager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`            |
 | `taskmanager.containerSecurityContext.runAsUser`                | Set Apache Flink container's Security Context runAsUser                                   | `1001`           |
 | `taskmanager.containerSecurityContext.runAsNonRoot`             | Force the container to be run as non root                                                 | `true`           |
 | `taskmanager.containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                       | `false`          |
@@ -294,7 +298,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as flink (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `jobmanager`, `taskmanager` . If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/flink/configuration/configure-sidecar-init-containers/).
+If additional containers are needed in the same pod as flink (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `jobmanager`, `taskmanager` .
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Pod affinity
 

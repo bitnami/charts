@@ -93,6 +93,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------- |
 | `query.command`                                           | Command for running the container (set to default if not set). Use array form             | `[]`             |
 | `query.args`                                              | Args for running the container (set to default if not set). Use array form                | `[]`             |
+| `query.automountServiceAccountToken`                      | Mount Service Account token in pod                                                        | `false`          |
+| `query.hostAliases`                                       | Set pod host aliases                                                                      | `[]`             |
 | `query.lifecycleHooks`                                    | Override default etcd container hooks                                                     | `{}`             |
 | `query.extraEnvVars`                                      | Extra environment variables to be set on jaeger container                                 | `[]`             |
 | `query.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars                                      | `""`             |
@@ -110,7 +112,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `query.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                          | `1`              |
 | `query.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                        | `15`             |
 | `query.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                        | `1`              |
-| `query.readinessProbe.enabled`                            | Enable readinessProbe                                                                     | `false`          |
+| `query.readinessProbe.enabled`                            | Enable readinessProbe                                                                     | `true`           |
 | `query.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                  | `10`             |
 | `query.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                         | `10`             |
 | `query.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                        | `1`              |
@@ -148,7 +150,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `query.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `query.podSecurityContext.fsGroup`                        | Set Jaeger pod's Security Context fsGroup                                                 | `1001`           |
 | `query.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`           |
-| `query.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
+| `query.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`            |
 | `query.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`           |
 | `query.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`           |
 | `query.containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`          |
@@ -181,6 +183,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ---------------- |
 | `collector.command`                                           | Command for running the container (set to default if not set). Use array form              | `[]`             |
 | `collector.args`                                              | Args for running the container (set to default if not set). Use array form                 | `[]`             |
+| `collector.automountServiceAccountToken`                      | Mount Service Account token in pod                                                         | `false`          |
+| `collector.hostAliases`                                       | Set pod host aliases                                                                       | `[]`             |
 | `collector.lifecycleHooks`                                    | Override default etcd container hooks                                                      | `{}`             |
 | `collector.extraEnvVars`                                      | Extra environment variables to be set on jaeger container                                  | `[]`             |
 | `collector.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars                                       | `""`             |
@@ -198,7 +202,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                           | `1`              |
 | `collector.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                         | `15`             |
 | `collector.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                         | `1`              |
-| `collector.readinessProbe.enabled`                            | Enable readinessProbe                                                                      | `false`          |
+| `collector.readinessProbe.enabled`                            | Enable readinessProbe                                                                      | `true`           |
 | `collector.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                   | `10`             |
 | `collector.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                          | `10`             |
 | `collector.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                         | `1`              |
@@ -248,7 +252,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                | `[]`             |
 | `collector.podSecurityContext.fsGroup`                        | Set Jaeger pod's Security Context fsGroup                                                  | `1001`           |
 | `collector.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                       | `true`           |
-| `collector.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                           | `{}`             |
+| `collector.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                           | `nil`            |
 | `collector.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                 | `1001`           |
 | `collector.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                              | `true`           |
 | `collector.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                | `false`          |
@@ -281,6 +285,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `agent.command`                                               | Command for running the container (set to default if not set). Use array form                                  | `[]`             |
 | `agent.args`                                                  | Args for running the container (set to default if not set). Use array form                                     | `[]`             |
+| `agent.automountServiceAccountToken`                          | Mount Service Account token in pod                                                                             | `false`          |
+| `agent.hostAliases`                                           | Set pod host aliases                                                                                           | `[]`             |
 | `agent.lifecycleHooks`                                        | Override default etcd container hooks                                                                          | `{}`             |
 | `agent.extraEnvVars`                                          | Extra environment variables to be set on jaeger container                                                      | `[]`             |
 | `agent.extraEnvVarsCM`                                        | Name of existing ConfigMap containing extra env vars                                                           | `""`             |
@@ -298,7 +304,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.startupProbe.timeoutSeconds`                           | Timeout seconds for startupProbe                                                                               | `1`              |
 | `agent.startupProbe.failureThreshold`                         | Failure threshold for startupProbe                                                                             | `15`             |
 | `agent.startupProbe.successThreshold`                         | Success threshold for startupProbe                                                                             | `1`              |
-| `agent.readinessProbe.enabled`                                | Enable readinessProbe                                                                                          | `false`          |
+| `agent.readinessProbe.enabled`                                | Enable readinessProbe                                                                                          | `true`           |
 | `agent.readinessProbe.initialDelaySeconds`                    | Initial delay seconds for readinessProbe                                                                       | `10`             |
 | `agent.readinessProbe.periodSeconds`                          | Period seconds for readinessProbe                                                                              | `10`             |
 | `agent.readinessProbe.timeoutSeconds`                         | Timeout seconds for readinessProbe                                                                             | `1`              |
@@ -345,7 +351,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.podSecurityContext.supplementalGroups`                 | Set filesystem extra groups                                                                                    | `[]`             |
 | `agent.podSecurityContext.fsGroup`                            | Set Jaeger pod's Security Context fsGroup                                                                      | `1001`           |
 | `agent.containerSecurityContext.enabled`                      | Enabled containers' Security Context                                                                           | `true`           |
-| `agent.containerSecurityContext.seLinuxOptions`               | Set SELinux options in container                                                                               | `{}`             |
+| `agent.containerSecurityContext.seLinuxOptions`               | Set SELinux options in container                                                                               | `nil`            |
 | `agent.containerSecurityContext.runAsUser`                    | Set containers' Security Context runAsUser                                                                     | `1001`           |
 | `agent.containerSecurityContext.runAsNonRoot`                 | Set container's Security Context runAsNonRoot                                                                  | `true`           |
 | `agent.containerSecurityContext.privileged`                   | Set container's Security Context privileged                                                                    | `false`          |
@@ -380,7 +386,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `migration.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                    | `[]`             |
 | `migration.podSecurityContext.fsGroup`                        | Set Jaeger pod's Security Context fsGroup                                                                      | `1001`           |
 | `migration.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                           | `true`           |
-| `migration.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                               | `{}`             |
+| `migration.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                               | `nil`            |
 | `migration.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                     | `1001`           |
 | `migration.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                  | `true`           |
 | `migration.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                    | `false`          |
@@ -465,7 +471,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as jaeger (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `collector`, `agent`, `query` . If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/jaeger/configuration/configure-sidecar-init-containers/).
+If additional containers are needed in the same pod as jaeger (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `collector`, `agent`, `query` .
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Pod affinity
 

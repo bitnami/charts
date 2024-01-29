@@ -98,6 +98,13 @@ query:
   ## @param query.args Args for running the container (set to default if not set). Use array form
   ##
   args: []
+  ## @param query.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param query.hostAliases Set pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## @param query.lifecycleHooks [object] Override default etcd container hooks
   ##
   lifecycleHooks: {}
@@ -154,7 +161,7 @@ query:
   ## @param query.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
-    enabled: false
+    enabled: true
     initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 1
@@ -308,7 +315,7 @@ query:
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param query.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param query.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param query.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param query.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param query.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param query.containerSecurityContext.privileged Set container's Security Context privileged
@@ -319,7 +326,7 @@ query:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -415,6 +422,13 @@ collector:
   ## @param collector.args Args for running the container (set to default if not set). Use array form
   ##
   args: []
+  ## @param collector.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param collector.hostAliases Set pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## @param collector.lifecycleHooks [object] Override default etcd container hooks
   ##
   lifecycleHooks: {}
@@ -471,7 +485,7 @@ collector:
   ## @param collector.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
-    enabled: false
+    enabled: true
     initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 1
@@ -670,7 +684,7 @@ collector:
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param collector.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param collector.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param collector.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param collector.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param collector.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param collector.containerSecurityContext.privileged Set container's Security Context privileged
@@ -681,7 +695,7 @@ collector:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -777,6 +791,13 @@ agent:
   ## @param agent.args Args for running the container (set to default if not set). Use array form
   ##
   args: []
+  ## @param agent.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param agent.hostAliases Set pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## @param agent.lifecycleHooks [object] Override default etcd container hooks
   ##
   lifecycleHooks: {}
@@ -833,7 +854,7 @@ agent:
   ## @param agent.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
-    enabled: false
+    enabled: true
     initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 1
@@ -1014,7 +1035,7 @@ agent:
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param agent.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param agent.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param agent.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param agent.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param agent.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param agent.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1025,7 +1046,7 @@ agent:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1142,7 +1163,7 @@ migration:
     fsGroup: 1001
 
   ## @param migration.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param migration.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param migration.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param migration.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param migration.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param migration.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1152,7 +1173,7 @@ migration:
   ## @param migration.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
