@@ -138,7 +138,7 @@ spec:
             - name: FLUENTD_DAEMON_GROUP
               value: {{ .Values.forwarder.daemonGroup | quote }}
             {{- if .Values.forwarder.extraEnvVars }}
-            {{- toYaml .Values.forwarder.extraEnvVars | nindent 12 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
           envFrom:
             {{- if .Values.forwarder.extraEnvVarsCM }}

@@ -34,6 +34,24 @@ spec:
       {{- if .Values.metrics.podMonitor.metricRelabelings }}
       metricRelabelings: {{- toYaml .Values.metrics.podMonitor.metricRelabelings | nindent 6 }}
       {{- end }}
+    {{- range .Values.metrics.podMonitor.additionalEndpoints }}
+    - port: {{ .port }}
+      {{- if .interval }}
+      interval: {{ .interval }}
+      {{- end }}
+      {{- if .path }}
+      path: {{ .path }}
+      {{- end }}
+      {{- if .params }}
+      params:
+        {{- range $key, $value := .params }}
+        {{ $key }}:
+          {{- range $value }}
+          - {{ . | quote }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
   {{- if .Values.metrics.serviceMonitor.podTargetLabels }}
   podTargetLabels: {{- toYaml .Values.metrics.podMonitor.podTargetLabels | nindent 4 }}
   {{- end }}
@@ -48,5 +66,4 @@ spec:
       - {{ include "common.names.namespace" . | quote }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
-      app.kubernetes.io/component: metrics
 {{- end }}
