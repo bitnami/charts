@@ -2222,6 +2222,9 @@ compactor:
     ## @param compactor.persistence.enabled Enable data persistence using PVC(s) on Thanos Compactor pods
     ##
     enabled: true
+    ## @param compactor.persistence.ephemeral Use ephemeral volume for data persistence using PVC(s) on Thanos Compactor pods
+    ##
+    ephemeral: false
     ## @param compactor.persistence.defaultEmptyDir Defaults to emptyDir if persistence is disabled.
     ##
     defaultEmptyDir: true
