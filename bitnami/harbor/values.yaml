@@ -818,7 +818,7 @@ nginx:
   ## @param nginx.lifecycleHooks LifecycleHook for the NGINX container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param nginx.serviceAccountName Set the service account to be used by the pod, default if left empty
+  ## @param nginx.serviceAccountName Set the service account name for the NGINX pods
   ## 
   serviceAccountName: ""
   ## @param nginx.automountServiceAccountToken Mount Service Account token in pod
@@ -1184,7 +1184,7 @@ portal:
   ## @param portal.extraVolumes Optionally specify extra list of additional volumes for the Harbor Portal pods
   ##
   extraVolumes: []
-  ## @param portal.serviceAccountName Set the service account to be used by the pod, default if left empty
+  ## @param portal.serviceAccountName Set the service account name for the Harbor Portal pods
   ## 
   serviceAccountName: ""
   ## @param portal.automountServiceAccountToken Automount service account token
@@ -1526,7 +1526,7 @@ core:
   ## @param core.extraVolumes Optionally specify extra list of additional volumes for the Harbor Core pods
   ##
   extraVolumes: []
-  ## @param core.serviceAccountName Set the service account to be used by the pod, default if left empty
+  ## @param core.serviceAccountName Set the service account name for the Harbor Core pods
   ## 
   serviceAccountName: ""
   ## @param core.automountServiceAccountToken Automount service account token
@@ -1832,7 +1832,7 @@ jobservice:
   ## @param jobservice.extraVolumes Optionally specify extra list of additional volumes for the Harbor Jobservice pods
   ##
   extraVolumes: []
-  ## @param jobservice.serviceAccountName Set the service account to be used by the pod, default if left empty
+  ## @param jobservice.serviceAccountName Set the service account name for the Harbor Jobservice pods
   ## 
   serviceAccountName: ""
   ## @param jobservice.automountServiceAccountToken Automount service account token
@@ -2026,7 +2026,7 @@ registry:
   ## @param registry.extraVolumes Optionally specify extra list of additional volumes for the Harbor Registry pods
   ##
   extraVolumes: []
-  ## @param registry.serviceAccountName Set the service account to be used by the pod, default if left empty
+  ## @param registry.serviceAccountName Set the service account name for the Registry pods
   ## 
   serviceAccountName: ""
   ## @param registry.automountServiceAccountToken Automount service account token
@@ -2664,7 +2664,7 @@ trivy:
   ## @param trivy.extraVolumes Optionally specify extra list of additional volumes for the Trivy pods
   ##
   extraVolumes: []
-  ## @param trivy.serviceAccountName Set the service account to be used by the pod, default if left empty
+  ## @param trivy.serviceAccountName Set the service account name for the Trivy pods
   ## 
   serviceAccountName: ""
   ## @param trivy.automountServiceAccountToken Automount service account token
