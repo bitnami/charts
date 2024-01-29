@@ -36,15 +36,14 @@ spec:
   loadBalancerIP: {{ .Values.studio.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - name: http
+    - name: http-studio
       port: {{ .Values.studio.service.ports.http }}
       protocol: TCP
+      targetPort: http-studio
       {{- if and (or (eq .Values.studio.service.type "NodePort") (eq .Values.studio.service.type "LoadBalancer")) (not (empty .Values.studio.service.nodePorts.http)) }}
       nodePort: {{ .Values.studio.service.nodePorts.http }}
-      targetPort: http
       {{- else if eq .Values.studio.service.type "ClusterIP" }}
       nodePort: null
-      targetPort: {{ .Values.studio.containerPorts.http }}
       {{- end }}
     {{- if .Values.studio.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.studio.service.extraPorts "context" $) | nindent 4 }}

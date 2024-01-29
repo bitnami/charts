@@ -61,7 +61,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/tomcat
-  tag: 10.1.18-debian-11-r0
+  tag: 10.1.18-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -169,7 +169,7 @@ podSecurityContext:
 ## Tomcat containers' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
-## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
@@ -180,7 +180,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false
@@ -628,7 +628,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r94
+    tag: 11-debian-11-r95
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -688,7 +688,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.20.0-debian-11-r3
+      tag: 0.20.0-debian-11-r4
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -715,7 +715,7 @@ metrics:
     ## Prometheus JMX exporter containers' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param metrics.jmx.containerSecurityContext.enabled Enabled containers' Security Context
-    ## @param metrics.jmx.containerSecurityContext.seLinuxOptions Set SELinux options in container
+    ## @param metrics.jmx.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param metrics.jmx.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param metrics.jmx.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param metrics.jmx.containerSecurityContext.privileged Set container's Security Context privileged
@@ -725,7 +725,7 @@ metrics:
     ## @param metrics.jmx.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: {}
+      seLinuxOptions: null
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false

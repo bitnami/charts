@@ -232,7 +232,7 @@ concierge:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param concierge.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param concierge.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param concierge.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param concierge.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param concierge.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param concierge.containerSecurityContext.privileged Set container's Security Context privileged
@@ -243,7 +243,7 @@ concierge:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -590,7 +590,7 @@ supervisor:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param supervisor.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param supervisor.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param supervisor.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param supervisor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param supervisor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param supervisor.containerSecurityContext.privileged Set container's Security Context privileged
@@ -601,7 +601,7 @@ supervisor:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false

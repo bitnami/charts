@@ -620,12 +620,12 @@ volumePermissions:
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
   ## @param volumePermissions.containerSecurityContext.enabled Enable init container Security Context
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
 
 ## @section NGINX Parameters
@@ -787,7 +787,7 @@ nginx:
   ## Configure NGINX containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param nginx.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param nginx.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param nginx.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param nginx.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param nginx.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param nginx.containerSecurityContext.privileged Set container's Security Context privileged
@@ -798,7 +798,7 @@ nginx:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -818,6 +818,9 @@ nginx:
   ## @param nginx.lifecycleHooks LifecycleHook for the NGINX container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param nginx.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param nginx.hostAliases NGINX pods host aliases
   ##
   hostAliases: []
@@ -1056,7 +1059,7 @@ portal:
   ## Configure Harbor Portal containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param portal.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param portal.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param portal.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param portal.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param portal.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param portal.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1067,7 +1070,7 @@ portal:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1395,7 +1398,7 @@ core:
   ## Configure Harbor Core containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param core.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param core.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param core.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param core.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param core.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param core.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1406,7 +1409,7 @@ core:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1698,7 +1701,7 @@ jobservice:
   ## Configure Harbor Jobservice containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param jobservice.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param jobservice.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param jobservice.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param jobservice.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param jobservice.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param jobservice.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1709,7 +1712,7 @@ jobservice:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2137,7 +2140,7 @@ registry:
     ## Configure Harbor Registry main containers (only main one) Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param registry.server.containerSecurityContext.enabled Enabled containers' Security Context
-    ## @param registry.server.containerSecurityContext.seLinuxOptions Set SELinux options in container
+    ## @param registry.server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param registry.server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param registry.server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param registry.server.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2148,7 +2151,7 @@ registry:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: {}
+      seLinuxOptions: null
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -2294,7 +2297,7 @@ registry:
     ## Configure Harbor Registryctl containers (only main one) Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param registry.controller.containerSecurityContext.enabled Enabled containers' Security Context
-    ## @param registry.controller.containerSecurityContext.seLinuxOptions Set SELinux options in container
+    ## @param registry.controller.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param registry.controller.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param registry.controller.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param registry.controller.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2305,7 +2308,7 @@ registry:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: {}
+      seLinuxOptions: null
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -2524,7 +2527,7 @@ trivy:
   ## Configure Trivy containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param trivy.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param trivy.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param trivy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param trivy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param trivy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param trivy.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2535,7 +2538,7 @@ trivy:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2799,7 +2802,7 @@ exporter:
   ## Configure Exporter containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param exporter.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param exporter.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param exporter.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param exporter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param exporter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param exporter.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2810,7 +2813,7 @@ exporter:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false

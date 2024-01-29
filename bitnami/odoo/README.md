@@ -125,7 +125,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`        | Set filesystem extra groups                                                                                              | `[]`             |
 | `podSecurityContext.fsGroup`                   | Set Odoo pod's Security Context fsGroup                                                                                  | `0`              |
 | `containerSecurityContext.enabled`             | Enabled Odoo containers' Security Context                                                                                | `true`           |
-| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                         | `{}`             |
+| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                         | `nil`            |
 | `containerSecurityContext.runAsUser`           | Set Odoo container's Security Context runAsUser                                                                          | `0`              |
 | `containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `livenessProbe.enabled`                        | Enable livenessProbe                                                                                                     | `true`           |
@@ -153,6 +153,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customReadinessProbe`                         | Custom readinessProbe that overrides the default one                                                                     | `{}`             |
 | `customStartupProbe`                           | Custom startupProbe that overrides the default one                                                                       | `{}`             |
 | `lifecycleHooks`                               | LifecycleHooks to set additional configuration at startup                                                                | `{}`             |
+| `automountServiceAccountToken`                 | Mount Service Account token in pod                                                                                       | `false`          |
 | `hostAliases`                                  | Odoo pod host aliases                                                                                                    | `[]`             |
 | `podLabels`                                    | Extra labels for Odoo pods                                                                                               | `{}`             |
 | `podAnnotations`                               | Annotations for Odoo pods                                                                                                | `{}`             |
@@ -224,7 +225,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`                             | The resources limits for the init container                                                                                           | `{}`             |
 | `volumePermissions.resources.requests`                           | The requested resources for the init container                                                                                        | `{}`             |
 | `volumePermissions.containerSecurityContext.enabled`             | Enable init container's Security Context                                                                                              | `true`           |
-| `volumePermissions.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                      | `{}`             |
+| `volumePermissions.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                      | `nil`            |
 | `volumePermissions.containerSecurityContext.runAsUser`           | Set init container's Security Context runAsUser                                                                                       | `0`              |
 | `volumePermissions.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                      | `RuntimeDefault` |
 
@@ -324,7 +325,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Use a different Odoo version
 
-To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/apps/odoo/configuration/change-image-version/).
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
 
 ### Using an external database
 
@@ -383,9 +384,133 @@ This major updates the PostgreSQL subchart to its newest major, 13.0.0. [Here](h
 
 This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
 
-### To any previous version
+### To 21.0.0
 
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/apps/odoo/administration/upgrade/).
+This major release updates the PostgreSQL subchart to its newest major *11.x.x*, which contain several changes in the supported values (check the [upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1100) to obtain more information).
+
+#### Upgrading Instructions
+
+To upgrade to *21.0.0* from *20.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *odoo* and the release namespace *default*):
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+
+```console
+export ODOO_PASSWORD=$(kubectl get secret --namespace default odoo -o jsonpath="{.data.odoo-password}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default odoo-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=odoo,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+1. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+
+```console
+kubectl delete statefulsets.apps --cascade=false odoo-postgresql
+kubectl delete secret odoo-postgresql --namespace default
+```
+
+1. Upgrade your release using the same PostgreSQL version:
+
+```console
+CURRENT_PG_VERSION=$(kubectl exec odoo-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+helm upgrade odoo bitnami/odoo \
+  --set odooPassword=$ODOO_PASSWORD \
+  --set postgresql.image.tag=$CURRENT_PG_VERSION \
+  --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
+
+1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+
+```console
+kubectl delete pod odoo-postgresql-0
+```
+
+### 19.0.0
+
+The [Bitnami Odoo](https://github.com/bitnami/containers/tree/main/bitnami/odoo) image was refactored and now the source code is published in GitHub in the `rootfs` folder of the container image repository.
+
+#### How to upgrade to version 19.0.0
+
+To upgrade to *19.0.0* from *18.x*, it should be done enabling the "volumePermissions" init container. To do so, follow the instructions below (the following example assumes that the release name is *odoo* and the release namespace *default*):
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+
+```console
+export ODOO_PASSWORD=$(kubectl get secret --namespace default odoo -o jsonpath="{.data.odoo-password}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default odoo-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=odoo,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+1. Upgrade your release:
+
+```console
+helm upgrade odoo bitnami/odoo \
+  --set odooPassword=$ODOO_PASSWORD \
+  --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
+  --set volumePermissions.enabled=true
+```
+
+Full compatibility is not guaranteed due to the amount of involved changes, however no breaking changes are expected aside from the ones mentioned above.
+
+### To 18.0.0
+
+This version standardizes the way of defining Ingress rules. When configuring a single hostname for the Ingress rule, set the `ingress.hostname` value. When defining more than one, set the `ingress.extraHosts` array. Apart from this case, no issues are expected to appear when upgrading.
+
+### To 17.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+#### What changes were introduced in this major version?
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running *helm dependency update*, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Chart.
+- Additionally updates the PostgreSQL subchart to its newest major *10.x.x*, which contains similar changes.
+
+#### Considerations when upgrading to this version
+
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version does not support Helm v2 anymore.
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3.
+
+#### Useful links
+
+- [Bitnami Tutorial](https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues)
+- [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
+- [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
+
+#### How to upgrade to version 17.0.0
+
+To upgrade to *17.0.0* from *16.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *odoo* and the release namespace *default*):
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+
+```console
+export ODOO_PASSWORD=$(kubectl get secret --namespace default odoo -o jsonpath="{.data.odoo-password}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default odoo-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=odoo,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+```
+
+1. Delete the PostgreSQL statefulset (notice the option *--cascade=false*):
+
+```console
+kubectl delete statefulsets.apps --cascade=false odoo-postgresql
+```
+
+1. Upgrade your release:
+
+```console
+helm upgrade odoo bitnami/odoo \
+  --set odooPassword=$ODOO_PASSWORD \
+  --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
+
+1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+
+```console
+kubectl delete pod odoo-postgresql-0
+```
 
 ## License
 

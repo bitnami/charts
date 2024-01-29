@@ -133,7 +133,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                           | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set NATS pod's Security Context fsGroup                                                               | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                  | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                      | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                      | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                            | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                         | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                           | `false`          |
@@ -164,6 +164,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                               | Override default liveness probe                                                                       | `{}`             |
 | `customReadinessProbe`                              | Override default readiness probe                                                                      | `{}`             |
 | `customStartupProbe`                                | Custom startupProbe that overrides the default one                                                    | `{}`             |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                    | `false`          |
 | `hostAliases`                                       | Deployment pod host aliases                                                                           | `[]`             |
 | `podLabels`                                         | Extra labels for NATS pods                                                                            | `{}`             |
 | `podAnnotations`                                    | Annotations for NATS pods                                                                             | `{}`             |
@@ -181,6 +182,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for NATS container(s)                        | `[]`             |
 | `initContainers`                                    | Add additional init containers to the NATS pods                                                       | `[]`             |
 | `sidecars`                                          | Add additional sidecar containers to the NATS pods                                                    | `[]`             |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for WordPress pod                                                   | `true`           |
+| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                | `""`             |
+| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                | `false`          |
+| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                  | `{}`             |
 
 ### Traffic Exposure parameters
 
@@ -312,9 +317,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Use Sidecars and Init Containers
 
-If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter. Similarly, extra init containers can be added using the `initContainers` parameter.
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter.
 
-Refer to the chart documentation for more information on, and examples of, configuring and using [sidecars and init containers](https://docs.bitnami.com/kubernetes/infrastructure/nats/configuration/configure-sidecar-init-containers/).
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Deploy extra resources
 
@@ -375,8 +414,6 @@ Consequences:
 ### To 5.0.0
 
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/nats/administration/upgrade-helm3/).
 
 ### To 1.0.0
 

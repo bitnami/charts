@@ -17,7 +17,9 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+  {{- if not (and .Values.autoscaling.enabled (eq .Values.architecture "high-availability")) }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
   {{- if .Values.podManagementPolicy }}
   podManagementPolicy: {{ .Values.podManagementPolicy | quote }}
   {{- end }}
@@ -40,6 +42,7 @@ spec:
         {{- end }}
     spec:
       {{- include "memcached.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
