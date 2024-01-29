@@ -23,12 +23,16 @@ spec:
     - Ingress
     - Egress
   egress:
-    # Allow dns resolution
     - ports:
+        # Allow dns resolution
         - port: 53
           protocol: UDP
         - port: 53
           protocol: TCP
+        # Allow access to kube-apiserver
+        {{- range $port := .Values.webhook.networkPolicy.kubeAPIServerPorts }}
+        - port: {{ $port }}
+        {{- end }}
     # Allow outbound connections to other cluster pods
     - ports:
         - port: {{ .Values.controller.containerPort }}
