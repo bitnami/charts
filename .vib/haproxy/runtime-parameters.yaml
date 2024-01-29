@@ -41,6 +41,8 @@ sidecars:
     securityContext:
       runAsUser: 1001
       runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: false
       allowPrivilegeEscalation: false
       capabilities:
         drop: ["ALL"]
