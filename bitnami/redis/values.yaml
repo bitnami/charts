@@ -1751,7 +1751,7 @@ metrics:
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
   ##
   serviceMonitor:
-    ## @param metrics.port the service port to scrape metrics from
+    ## @param metrics.serviceMonitor.port the service port to scrape metrics from
     ##
     port: http-metrics
     ## @param metrics.serviceMonitor.enabled Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator
@@ -1805,7 +1805,7 @@ metrics:
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#podmonitor
   ##
   podMonitor:
-    ## @param metrics.port the pod port to scrape metrics from
+    ## @param metrics..podMonitor.port the pod port to scrape metrics from
     ##
     port: metrics
     ## @param metrics.podMonitor.enabled Create PodMonitor resource(s) for scraping metrics using PrometheusOperator
