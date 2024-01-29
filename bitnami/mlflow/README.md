@@ -135,7 +135,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tracking.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                            | `[]`             |
 | `tracking.podSecurityContext.fsGroup`                        | Set mlflow pod's Security Context fsGroup                                                                                                                              | `1001`           |
 | `tracking.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                   | `true`           |
-| `tracking.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                       | `{}`             |
+| `tracking.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                       | `nil`            |
 | `tracking.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                             | `1001`           |
 | `tracking.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                            | `1001`           |
 | `tracking.containerSecurityContext.privileged`               | Set containers' Security Context privileged                                                                                                                            | `false`          |
@@ -162,6 +162,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tracking.args`                                              | Override default container args (useful when using custom images)                                                                                                      | `[]`             |
 | `tracking.extraArgs`                                         | Add extra arguments together with the default ones                                                                                                                     | `[]`             |
 | `tracking.runUpgradeDB`                                      | Add an init container to run mlflow db upgrade                                                                                                                         | `false`          |
+| `tracking.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                     | `false`          |
 | `tracking.hostAliases`                                       | mlflow pods host aliases                                                                                                                                               | `[]`             |
 | `tracking.podLabels`                                         | Extra labels for mlflow pods                                                                                                                                           | `{}`             |
 | `tracking.podAnnotations`                                    | Annotations for mlflow pods                                                                                                                                            | `{}`             |
@@ -327,7 +328,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `run.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                     | `[]`             |
 | `run.podSecurityContext.fsGroup`                        | Set Run pod's Security Context fsGroup                                                          | `1001`           |
 | `run.containerSecurityContext.enabled`                  | Enabled Run containers' Security Context                                                        | `true`           |
-| `run.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                | `{}`             |
+| `run.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                | `nil`            |
 | `run.containerSecurityContext.runAsUser`                | Set Run containers' Security Context runAsUser                                                  | `1001`           |
 | `run.containerSecurityContext.runAsGroup`               | Set Run containers' Security Context runAsGroup                                                 | `1001`           |
 | `run.containerSecurityContext.runAsNonRoot`             | Set Run containers' Security Context runAsNonRoot                                               | `true`           |
@@ -338,6 +339,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `run.containerSecurityContext.seccompProfile.type`      | Set Run container's Security Context seccomp profile                                            | `RuntimeDefault` |
 | `run.lifecycleHooks`                                    | for the run container(s) to automate configuration before or after startup                      | `{}`             |
 | `run.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                  | `""`             |
+| `run.automountServiceAccountToken`                      | Mount Service Account token in pod                                                              | `false`          |
 | `run.hostAliases`                                       | run pods host aliases                                                                           | `[]`             |
 | `run.labels`                                            | Extra labels for the run deployment                                                             | `{}`             |
 | `run.podLabels`                                         | Extra labels for run pods                                                                       | `{}`             |
@@ -400,7 +402,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`                              | The resources limits for the init container                                                                                   | `{}`                       |
 | `volumePermissions.resources.requests`                            | The requested resources for the init container                                                                                | `{}`                       |
 | `volumePermissions.containerSecurityContext.enabled`              | Set container security context settings                                                                                       | `true`                     |
-| `volumePermissions.containerSecurityContext.seLinuxOptions`       | Set SELinux options in container                                                                                              | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions`       | Set SELinux options in container                                                                                              | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`            | Set init container's Security Context runAsUser                                                                               | `0`                        |
 | `waitContainer.image.registry`                                    | Init container wait-container image registry                                                                                  | `REGISTRY_NAME`            |
 | `waitContainer.image.repository`                                  | Init container wait-container image name                                                                                      | `REPOSITORY_NAME/os-shell` |
@@ -408,7 +410,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `waitContainer.image.pullPolicy`                                  | Init container wait-container image pull policy                                                                               | `IfNotPresent`             |
 | `waitContainer.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                              | `[]`                       |
 | `waitContainer.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                          | `true`                     |
-| `waitContainer.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                              | `{}`                       |
+| `waitContainer.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                              | `nil`                      |
 | `waitContainer.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                    | `1001`                     |
 | `waitContainer.containerSecurityContext.runAsNonRoot`             | Set containers' Security Context runAsNonRoot                                                                                 | `true`                     |
 | `waitContainer.containerSecurityContext.privileged`               | Set containers' Security Context privileged                                                                                   | `false`                    |
@@ -466,6 +468,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------- | ------------------------------------------------------------------ | --------------- |
 | `externalS3.host`                         | External S3 host                                                   | `""`            |
 | `externalS3.port`                         | External S3 port number                                            | `443`           |
+| `externalS3.useCredentialsInSecret`       | Whether to use a secret to store the S3 credentials                | `true`          |
 | `externalS3.accessKeyID`                  | External S3 access key ID                                          | `""`            |
 | `externalS3.accessKeySecret`              | External S3 access key secret                                      | `""`            |
 | `externalS3.existingSecret`               | Name of an existing secret resource containing the S3 credentials  | `""`            |

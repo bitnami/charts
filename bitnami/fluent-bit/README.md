@@ -93,7 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------------- |
 | `daemonset.enabled`                                 | Use a daemonset instead of a deployment. `replicaCount` will not take effect.             | `false`                      |
 | `daemonset.podSecurityContext.enabled`              | Enable security context for daemonset pods                                                | `true`                       |
-| `daemonset.podSecurityContext.seLinuxOptions`       | Set SELinux options in container                                                          | `{}`                         |
+| `daemonset.podSecurityContext.seLinuxOptions`       | Set SELinux options in container                                                          | `nil`                        |
 | `daemonset.podSecurityContext.runAsUser`            | User ID for daemonset containers                                                          | `0`                          |
 | `daemonset.podSecurityContext.runAsGroup`           | Group ID for daemonset containers                                                         | `0`                          |
 | `daemonset.podSecurityContext.fsGroupChangePolicy`  | Set filesystem group change policy                                                        | `Always`                     |
@@ -160,7 +160,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`                         |
 | `podSecurityContext.fsGroup`                        | Set Fluent Bit pod's Security Context fsGroup                                             | `1001`                       |
 | `containerSecurityContext.enabled`                  | Enabled Fluent Bit containers' Security Context                                           | `true`                       |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`                         |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`                        |
 | `containerSecurityContext.runAsUser`                | Set Fluent Bit containers' Security Context runAsUser                                     | `1001`                       |
 | `containerSecurityContext.runAsNonRoot`             | Set Fluent Bit container's Security Context runAsNonRoot                                  | `true`                       |
 | `containerSecurityContext.readOnlyRootFilesystem`   | Set Fluent Bit container's Security Context runAsNonRoot                                  | `false`                      |
@@ -276,7 +276,43 @@ In case you want to add extra environment variables (useful for advanced operati
 
 ### Sidecars
 
-If additional containers are needed in the same pod as fluent-bit (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the main section. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/fluent-bit/configuration/configure-sidecar-init-containers/).
+If additional containers are needed in the same pod as fluent-bit (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the main section.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Pod affinity
 

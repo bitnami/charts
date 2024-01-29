@@ -117,7 +117,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                      |
 | `podSecurityContext.fsGroup`                        | Set Pytorch pods' Security Context fsGroup                                                                               | `1001`                    |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`                    |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                      |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`                     |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`                    |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`                    |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`                   |
@@ -130,6 +130,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `entrypoint.file`                                   | Main entrypoint to your application                                                                                      | `""`                      |
 | `entrypoint.args`                                   | Args required by your entrypoint                                                                                         | `[]`                      |
 | `architecture`                                      | Run PyTorch in standalone or distributed mode. Possible values: `standalone`, `distributed`                              | `standalone`              |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`                   |
 | `hostAliases`                                       | Deployment pod host aliases                                                                                              | `[]`                      |
 | `command`                                           | Override default container command (useful when using custom images)                                                     | `[]`                      |
 | `args`                                              | Override default container args (useful when using custom images)                                                        | `[]`                      |
@@ -162,6 +163,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Pytorch container(s)                                    | `[]`                      |
 | `sidecars`                                          | Add additional sidecar containers to the Pytorch pod(s)                                                                  | `[]`                      |
 | `initContainers`                                    | Add additional init containers to the %%MAIN_CONTAINER_NAME%% pod(s)                                                     | `[]`                      |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for Pytorch pod                                                                        | `true`                    |
+| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                   | `""`                      |
+| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                   | `false`                   |
+| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                     | `{}`                      |
 
 ### Traffic Exposure Parameters
 

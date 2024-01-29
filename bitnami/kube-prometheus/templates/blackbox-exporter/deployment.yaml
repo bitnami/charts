@@ -31,6 +31,7 @@ spec:
     spec:
       serviceAccountName: {{ template "kube-prometheus.blackboxExporter.serviceAccountName" . }}
       {{- include "kube-prometheus.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.blackboxExporter.automountServiceAccountToken }}
       {{- if .Values.blackboxExporter.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.hostAliases "context" $) | nindent 8 }}
       {{- end }}

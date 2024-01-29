@@ -99,6 +99,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `schedulerName`                                | Name of the k8s scheduler (other than default)                                            | `""`             |
 | `priorityClassName`                            | ASP.NET Core pod priority class name                                                      | `""`             |
 | `topologySpreadConstraints`                    | Topology Spread Constraints for pod assignment                                            | `[]`             |
+| `automountServiceAccountToken`                 | Mount Service Account token in pod                                                        | `false`          |
 | `hostAliases`                                  | ASP.NET Core pod host aliases                                                             | `[]`             |
 | `extraVolumes`                                 | Optionally specify extra list of additional volumes for ASP.NET Core pods                 | `[]`             |
 | `extraVolumeMounts`                            | Optionally specify extra list of additional volumeMounts for ASP.NET Core container(s)    | `[]`             |
@@ -125,7 +126,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`        | Set filesystem extra groups                                                               | `[]`             |
 | `podSecurityContext.fsGroup`                   | Set Security Context fsGroup                                                              | `0`              |
 | `containerSecurityContext.enabled`             | Enabled ASP.NET Core containers' Security Context                                         | `true`           |
-| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                          | `{}`             |
+| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                          | `nil`            |
 | `containerSecurityContext.runAsUser`           | Set ASP.NET Core container's Security Context runAsUser                                   | `0`              |
 | `containerSecurityContext.runAsNonRoot`        | Set container's Security Context runAsNonRoot                                             | `false`          |
 | `containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                          | `RuntimeDefault` |

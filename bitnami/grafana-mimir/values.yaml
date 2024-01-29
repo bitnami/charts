@@ -79,7 +79,7 @@ mimir:
   image:
     registry: docker.io
     repository: bitnami/grafana-mimir
-    tag: 2.11.0-debian-11-r1
+    tag: 2.11.0-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -445,7 +445,7 @@ alertmanager:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param alertmanager.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param alertmanager.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param alertmanager.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param alertmanager.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param alertmanager.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param alertmanager.containerSecurityContext.privileged Set container's Security Context privileged
@@ -456,7 +456,7 @@ alertmanager:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -815,7 +815,7 @@ compactor:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param compactor.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param compactor.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param compactor.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param compactor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param compactor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param compactor.containerSecurityContext.privileged Set container's Security Context privileged
@@ -826,7 +826,7 @@ compactor:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1159,7 +1159,7 @@ distributor:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param distributor.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param distributor.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param distributor.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param distributor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param distributor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param distributor.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1170,7 +1170,7 @@ distributor:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1384,7 +1384,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r4
+    tag: 1.25.3-debian-11-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1518,7 +1518,7 @@ gateway:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param gateway.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param gateway.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param gateway.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param gateway.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param gateway.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param gateway.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1529,7 +1529,7 @@ gateway:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1914,7 +1914,7 @@ ingester:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param ingester.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param ingester.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param ingester.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param ingester.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param ingester.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param ingester.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1925,7 +1925,7 @@ ingester:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2267,7 +2267,7 @@ overridesExporter:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param overridesExporter.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param overridesExporter.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param overridesExporter.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param overridesExporter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param overridesExporter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param overridesExporter.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2278,7 +2278,7 @@ overridesExporter:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2580,7 +2580,7 @@ querier:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param querier.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param querier.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param querier.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param querier.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param querier.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param querier.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2591,7 +2591,7 @@ querier:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2893,7 +2893,7 @@ queryFrontend:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryFrontend.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param queryFrontend.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param queryFrontend.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param queryFrontend.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param queryFrontend.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param queryFrontend.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2904,7 +2904,7 @@ queryFrontend:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -3209,7 +3209,7 @@ queryScheduler:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryScheduler.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param queryScheduler.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param queryScheduler.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param queryScheduler.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param queryScheduler.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param queryScheduler.containerSecurityContext.privileged Set container's Security Context privileged
@@ -3220,7 +3220,7 @@ queryScheduler:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -3526,7 +3526,7 @@ storeGateway:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param storeGateway.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param storeGateway.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param storeGateway.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param storeGateway.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param storeGateway.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param storeGateway.containerSecurityContext.privileged Set container's Security Context privileged
@@ -3537,7 +3537,7 @@ storeGateway:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -3889,7 +3889,7 @@ ruler:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param ruler.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param ruler.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param ruler.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param ruler.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param ruler.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param ruler.containerSecurityContext.privileged Set container's Security Context privileged
@@ -3900,7 +3900,7 @@ ruler:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -4160,7 +4160,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r94
+    tag: 11-debian-11-r95
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -4180,14 +4180,14 @@ volumePermissions:
     requests: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
 
 ## @section Other Parameters
@@ -4357,7 +4357,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.23-debian-11-r0
+    tag: 1.6.23-debian-11-r1
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -4398,7 +4398,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.23-debian-11-r0
+    tag: 1.6.23-debian-11-r1
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -4440,7 +4440,7 @@ memcachedindex:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.23-debian-11-r0
+    tag: 1.6.23-debian-11-r1
     digest: ""
   ## @param memcachedindex.architecture Memcached architecture
   ##
@@ -4481,7 +4481,7 @@ memcachedmetadata:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.23-debian-11-r0
+    tag: 1.6.23-debian-11-r1
     digest: ""
   ## @param memcachedmetadata.architecture Memcached architecture
   ##

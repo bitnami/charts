@@ -175,9 +175,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.podSecurityContext.supplementalGroups`        | Set filesystem extra groups                                                                                                                 | `[]`                                            |
 | `web.podSecurityContext.fsGroup`                   | Set web pod's Security Context fsGroup                                                                                                      | `1001`                                          |
 | `web.containerSecurityContext.enabled`             | Enabled web containers' Security Context                                                                                                    | `true`                                          |
-| `web.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                            | `{}`                                            |
+| `web.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                            | `nil`                                           |
 | `web.containerSecurityContext.runAsUser`           | Set web containers' Security Context runAsUser                                                                                              | `1001`                                          |
 | `web.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                            | `RuntimeDefault`                                |
+| `web.automountServiceAccountToken`                 | Mount Service Account token in pod                                                                                                          | `true`                                          |
 | `web.hostAliases`                                  | Concourse web pod host aliases                                                                                                              | `[]`                                            |
 | `web.podLabels`                                    | Extra labels for Concourse web pods                                                                                                         | `{}`                                            |
 | `web.podAnnotations`                               | Annotations for Concourse web pods                                                                                                          | `{}`                                            |
@@ -205,7 +206,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.rbac.rules`                                   | Custom RBAC rules to set                                                                                                                    | `[]`                                            |
 | `web.serviceAccount.create`                        | Specifies whether a ServiceAccount should be created                                                                                        | `true`                                          |
 | `web.serviceAccount.name`                          | Override Web service account name                                                                                                           | `""`                                            |
-| `web.serviceAccount.automountServiceAccountToken`  | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`                                          |
+| `web.serviceAccount.automountServiceAccountToken`  | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `false`                                         |
 | `web.serviceAccount.annotations`                   | Additional custom annotations for the ServiceAccount                                                                                        | `{}`                                            |
 
 ### Concourse Worker parameters
@@ -265,9 +266,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.podSecurityContext.fsGroup`                   | Set worker pod's Security Context fsGroup                                                                                                   | `1001`              |
 | `worker.containerSecurityContext.enabled`             | Enabled worker containers' Security Context                                                                                                 | `true`              |
 | `worker.containerSecurityContext.privileged`          | Set worker containers' Security Context with privileged or not                                                                              | `true`              |
-| `worker.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                            | `{}`                |
+| `worker.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                            | `nil`               |
 | `worker.containerSecurityContext.runAsUser`           | Set worker containers' Security Context user                                                                                                | `0`                 |
 | `worker.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                            | `RuntimeDefault`    |
+| `worker.automountServiceAccountToken`                 | Mount Service Account token in pod                                                                                                          | `true`              |
 | `worker.hostAliases`                                  | Concourse worker pod host aliases                                                                                                           | `[]`                |
 | `worker.podLabels`                                    | Custom labels for Concourse worker pods                                                                                                     | `{}`                |
 | `worker.podAnnotations`                               | Annotations for Concourse worker pods                                                                                                       | `{}`                |
@@ -314,7 +316,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.rbac.rules`                                   | Custom RBAC rules to set                                                                                                                    | `[]`                |
 | `worker.serviceAccount.create`                        | Specifies whether a ServiceAccount should be created                                                                                        | `true`              |
 | `worker.serviceAccount.name`                          | Override worker service account name                                                                                                        | `""`                |
-| `worker.serviceAccount.automountServiceAccountToken`  | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`              |
+| `worker.serviceAccount.automountServiceAccountToken`  | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `false`             |
 | `worker.serviceAccount.annotations`                   | Additional custom annotations for the ServiceAccount                                                                                        | `{}`                |
 
 ### Traffic exposure parameters
@@ -373,7 +375,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`                             | Init container volume-permissions resource limits                                                                                 | `{}`                       |
 | `volumePermissions.resources.requests`                           | Init container volume-permissions resource requests                                                                               | `{}`                       |
 | `volumePermissions.containerSecurityContext.enabled`             | Enabled init container Security Context                                                                                           | `true`                     |
-| `volumePermissions.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                  | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                  | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`           | User ID for the init container                                                                                                    | `0`                        |
 | `volumePermissions.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                  | `RuntimeDefault`           |
 
@@ -438,19 +440,68 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Use an external database
 
-Sometimes, you may want to have Concourse connect to an external database rather than a database within your cluster - for example, when using a managed database service, or when running a single database server for all your applications. To do this, set the `mariadb.enabled` parameter to `false` and specify the credentials for the external database using the `externalDatabase.*` parameters.
+Sometimes, you may want to have Concourse connect to an external database rather than a database within your cluster - for example, when using a managed database service, or when running a single database server for all your applications. To do this, set the `postgresql.enabled` parameter to `false` and specify the credentials for the external database using the `externalDatabase.*` parameters. Here is an example:
 
-Refer to the [chart documentation on using an external database](https://docs.bitnami.com/kubernetes/infrastructure/concourse/configuration/use-external-database) for more details and an example.
+```text
+postgresql.enabled=false
+externalDatabase.host=myexternalhost
+externalDatabase.user=myuser
+externalDatabase.password=mypassword
+externalDatabase.database=mydatabase
+externalDatabase.port=5432
+```
 
 ### Configure Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.To enable Ingress integration, set `ingress.enabled` to `true`.
 
-To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/infrastructure/concourse/configuration/configure-ingress/).
+The most common scenario is to have one host name mapped to the deployment. In this case, the `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host.
+
+However, it is also possible to have more than one host. To facilitate this, the `ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
+
+> NOTE: For each host specified in the `ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
+
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+
+[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
 ### Configure TLS Secrets for use with Ingress
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/infrastructure/concourse/administration/enable-tls-ingress/).
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
+
+- Generate certificate secrets based on chart parameters.
+- Enable externally generated certificates.
+- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
+- Create self-signed certificates within the chart (if supported).
+
+In the first two cases, a certificate and a key are needed. Files are expected in `.pem` format.
+
+Here is an example of a certificate file:
+
+> NOTE: There may be more than one certificate if there is a certificate chain.
+
+```text
+-----BEGIN CERTIFICATE-----
+MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+...
+jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+-----END CERTIFICATE-----
+```
+
+Here is an example of a certificate key:
+
+```text
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+...
+wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+-----END RSA PRIVATE KEY-----
+```
+
+- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
+- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
+- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
 
 ## Persistence
 
@@ -470,9 +521,43 @@ Alternatively, use a ConfigMap or a Secret with the environment variables. To do
 
 ### Configure Sidecars and Init Containers
 
-If additional containers are needed in the same pod as Concourse (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. Similarly, you can add extra init containers using the `initContainers` parameter.
+If additional containers are needed in the same pod as Concourse (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
 
-[Learn more about configuring and using sidecar and init containers](https://docs.bitnami.com/kubernetes/infrastructure/concourse/configuration/configure-sidecar-init-containers/).
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Set Pod affinity
 
@@ -493,6 +578,52 @@ This major updates the PostgreSQL subchart to its newest major, 13.0.0. [Here](h
 ### To 2.0.0
 
 This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
+
+### To 1.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository. Additionally updates the PostgreSQL subchart to its newest major 11.x.x which contains similar changes.
+
+#### What changes were introduced in this major version?
+
+- *web.containerPort*, *web.tsa.containerPort*, *web.tsa.debugContainerPort* and *web.tls.containerPort* have been regrouped under the *web.containerPorts*.
+- *worker.containerPort*, *worker.healthCheckContainerPort*, *worker.baggageclaim.containerPort* and *worker.baggageclaim.debugContainerPort* have been regrouped under the *worker.containerPorts*.
+- *service.web.port* and *service.web.tlsPort* have been regrouped under the *web.service.ports* map.
+- *service.workerGateway.port* has been regrouped under the *service.workerGateway.port* map.
+
+#### Upgrading Instructions
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+
+```console
+export CONCOURSE_LOCAL_USERS=$(kubectl get secret --namespace default concourse-web -o jsonpath="{.data.local-users}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default concourse-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=concourse,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+1. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+
+```console
+kubectl delete statefulsets.apps --cascade=false concourse-postgresql
+kubectl delete secret postgresql --namespace default
+```
+
+1. Upgrade your release using the same PostgreSQL version:
+
+```console
+CURRENT_PG_VERSION=$(kubectl exec concourse-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+helm upgrade concourse bitnami/concourse \
+  --set loadExamples=true \
+  --set secrets.localUsers=$CONCOURSE_LOCAL_USERS \
+  --set postgresql.image.tag=$CURRENT_VERSION \
+  --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
+
+1. Delete the existing PostgreSQL pod and the new statefulset will create a new one:
+
+```console
+kubectl delete pod concourse-postgresql-0
+```
 
 ## License
 

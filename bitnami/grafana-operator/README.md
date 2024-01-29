@@ -59,11 +59,83 @@ The Bitnami catalog offers both the `bitnami/grafana` and `bitnami/grafana-opera
 
 - The `bitnami/grafana` chart deploys a single Grafana installation (with Grafana Image Renderer) using a Kubernetes Deployment object (together with Services, PVCs, ConfigMaps, etc.). Its lifecycle is managed using Helm and, at the Grafana container level, the following operations are automated: persistence management, configuration based on environment variables and plugin initialization. The chart also allows deploying dashboards and data sources using ConfigMaps. The Deployments do not require any ServiceAccounts with special RBAC privileges so this solution would fit better in more restricted Kubernetes installations.
 
+```text
+                    +--------------+             +-----+
+                    |              |             |     |
+ Service & Ingress  |    Grafana   +<------------+ PVC |
+<-------------------+              |             |     |
+                    |  Deployment  |             +-----+
+                    |              |
+                    +-----------+--+
+                                ^                +------------+
+                                |                |            |
+                                +----------------+ Configmaps |
+                                                 |   Secrets  |
+                                                 |            |
+                                                 +------------+
+
+```
+
+Its lifecycle is managed using Helm and, at the Grafana container level, the following operations are automated: persistence management, configuration based on environment variables and plugin initialization. The chart also allows deploying dashboards and data sources using ConfigMaps. The Deployments do not require any ServiceAccounts with special RBAC privileges so this solution would fit better in more restricted Kubernetes installations.
+
 - The `bitnami/grafana-operator` chart deploys a Grafana Operator installation using a Kubernetes Deployment. The operator will extend the Kubernetes API with the following objects: `Grafana`, `GrafanaDashboard` and `GrafanaDataSource`. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Grafana instance. Its lifecycle is managed using _kubectl_ on the Grafana, GrafanaDashboard and GrafanaDataSource objects.
+
+```text
++--------------------+
+|                    |      +---------------+
+|  Grafana Operator  |      |               |
+|                    |      |     RBAC      |
+|    Deployment      |      |   Privileges  |
+|                    |      |               |
++-------+------------+      +-------+-------+
+        ^                           |
+        |   +-----------------+     |
+        +---+ Service Account +<----+
+            +-----------------+
+```
+
+The Operator will extend the Kubernetes API with the following objects: _Grafana_, _GrafanaDashboard_ and _GrafanaDataSource_. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Grafana instance. Its lifecycle is managed using _kubectl_ on the Grafana, GrafanaDashboard and GrafanaDataSource objects. The following figure shows the deployed objects after deploying a Grafana object using _kubectl_:
+
+```text
++--------------------+
+|                    |      +---------------+
+|  Grafana Operator  |      |               |
+|                    |      |     RBAC      |
+|    Deployment      |      |   Privileges  |
+|                    |      |               |
++--+----+------------+      +-------+-------+
+   |    ^                           |
+   |    |   +-----------------+     |
+   |    +---+ Service Account +<----+
+   |        +-----------------+
+   |
+   |
+   |
+   |
+   |                                                   Grafana
+   |                     +---------------------------------------------------------------------------+
+   |                     |                                                                           |
+   |                     |                          +--------------+             +-----+             |
+   |                     |                          |              |             |     |             |
+   +-------------------->+       Service & Ingress  |    Grafana   +<------------+ PVC |             |
+                         |      <-------------------+              |             |     |             |
+                         |                          |  Deployment  |             +-----+             |
+                         |                          |              |                                 |
+                         |                          +-----------+--+                                 |
+                         |                                      ^                +------------+      |
+                         |                                      |                |            |      |
+                         |                                      +----------------+ Configmaps |      |
+                         |                                                       |   Secrets  |      |
+                         |                                                       |            |      |
+                         |                                                       +------------+      |
+                         |                                                                           |
+                         +---------------------------------------------------------------------------+
+
+```
 
 > Note: As the operator automatically deploys Grafana installations, the Grafana Operator pods will require a ServiceAccount with privileges to create and destroy multiple Kubernetes objects. This may be problematic for Kubernetes clusters with strict role-based access policies.
 
-For more information, refer to the [documentation on the differences between these charts](https://docs.bitnami.com/kubernetes/infrastructure/grafana-operator/get-started/compare-solutions/), including more information on the differences in the deployment objects.
+[Learn more about managing multiple Grafana instances and dashboards on Kubernetes with the Grafana Operator](https://docs.bitnami.com/tutorials/manage-multiple-grafana-operator).
 
 ## Parameters
 
@@ -127,14 +199,14 @@ For more information, refer to the [documentation on the differences between the
 | `operator.serviceAccount.create`                             | Specifies whether a service account should be created                                                                                     | `true`                             |
 | `operator.serviceAccount.name`                               | The name of the service account to use. If not set and create is true, a name is generated using the fullname template                    | `""`                               |
 | `operator.serviceAccount.annotations`                        | Add annotations                                                                                                                           | `{}`                               |
-| `operator.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                                                                          | `true`                             |
+| `operator.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                                                                          | `false`                            |
 | `operator.podSecurityContext.enabled`                        | Enable pods security context                                                                                                              | `true`                             |
 | `operator.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                        | `Always`                           |
 | `operator.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                            | `[]`                               |
 | `operator.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                               | `[]`                               |
 | `operator.podSecurityContext.fsGroup`                        | Group ID for the pods                                                                                                                     | `1001`                             |
 | `operator.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                      | `true`                             |
-| `operator.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                          | `{}`                               |
+| `operator.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                          | `nil`                              |
 | `operator.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                | `1001`                             |
 | `operator.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                             | `true`                             |
 | `operator.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                               | `false`                            |
@@ -144,6 +216,7 @@ For more information, refer to the [documentation on the differences between the
 | `operator.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                          | `RuntimeDefault`                   |
 | `operator.resources`                                         | Container resource requests and limits                                                                                                    | `{}`                               |
 | `operator.containerPorts.metrics`                            | Grafana Operator container port (used for metrics)                                                                                        | `8080`                             |
+| `operator.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                        | `true`                             |
 | `operator.hostAliases`                                       | Add deployment host aliases                                                                                                               | `[]`                               |
 | `operator.extraEnvVars`                                      | Array with extra environment variables to add to RabbitMQ Cluster Operator nodes                                                          | `[]`                               |
 | `operator.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for RabbitMQ Cluster Operator nodes                                                  | `""`                               |
@@ -203,7 +276,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                             | `[]`                      |
 | `grafana.podSecurityContext.fsGroup`                        | Group ID for the pods                                                                                   | `1001`                    |
 | `grafana.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                    | `true`                    |
-| `grafana.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `{}`                      |
+| `grafana.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `nil`                     |
 | `grafana.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                              | `1001`                    |
 | `grafana.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                             | `0`                       |
 | `grafana.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                           | `true`                    |
@@ -302,7 +375,45 @@ For more details regarding what is possible with those CRDs please have a look a
 
 There are cases where you may want to deploy extra objects, such as custom _Grafana_, _GrafanaDashboard_ or _GrafanaDataSource_ objects. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
 
-Refer to the documentation on deploying extra Grafana resources for an [example of deploying a custom Grafana definition](https://docs.bitnami.com/kubernetes/infrastructure/grafana-operator/configuration/deploy-extra-resources/) or to the [tutorial on managing multiple Grafana instances and dashboards on Kubernetes with the Grafana Operator](https://docs.bitnami.com/tutorials/manage-multiple-grafana-operator).
+For instance, to deploy a custom Grafana definition, install the Grafana Operator chart using the values below:
+
+```yaml
+grafana:
+  enabled: false
+extraDeploy:
+  - apiVersion: integreatly.org/v1alpha1
+    baseImage: docker.io/bitnami/grafana:7
+    kind: Grafana
+    metadata:
+      name: grafana
+    spec:
+      deployment:
+        securityContext:
+          runAsUser: 1001
+          fsGroup: 1001
+        containerSecurityContext:
+          runAsUser: 1001
+          fsGroup: 1001
+          allowPrivilegeEscalation: false
+      service:
+        type: LoadBalancer
+      ingress:
+        enabled: false
+      config:
+        log:
+          mode: "console"
+          level: "warn"
+        security:
+          admin_user: "admin"
+          admin_password: "hello"
+        auth.anonymous:
+          enabled: true
+      dashboardLabelSelector:
+        - matchExpressions:
+            - { key: app, operator: In, values: [grafana] }
+```
+
+[Learn more about managing multiple Grafana instances and dashboards on Kubernetes with the Grafana Operator](https://docs.bitnami.com/tutorials/manage-multiple-grafana-operator).
 
 ## Troubleshooting
 

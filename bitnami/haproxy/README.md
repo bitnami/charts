@@ -24,8 +24,6 @@ This chart bootstraps a [HAProxy](https://github.com/haproxytech/haproxy) Deploy
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/haproxy/get-started/).
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -149,7 +147,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                             | `[]`                      |
 | `podSecurityContext.fsGroup`                        | Set haproxy pod's Security Context fsGroup                                                              | `1001`                    |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                    | `true`                    |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `{}`                      |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `nil`                     |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                              | `1001`                    |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                           | `true`                    |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                             | `false`                   |
@@ -167,6 +165,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                    | `50`                      |
 | `command`                                           | Override default container command (useful when using custom images)                                    | `[]`                      |
 | `args`                                              | Override default container args (useful when using custom images)                                       | `[]`                      |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                      | `false`                   |
 | `hostAliases`                                       | haproxy pods host aliases                                                                               | `[]`                      |
 | `podLabels`                                         | Extra labels for haproxy pods                                                                           | `{}`                      |
 | `podAnnotations`                                    | Annotations for haproxy pods                                                                            | `{}`                      |
@@ -241,9 +240,58 @@ Bitnami will release a new chart updating its containers if a new version of the
 By default, HAProxy is deployed with a sample, non-functional, configuration. You will need to edit the following values to adapt it to your use case:
 
 - Set the configuration to be injected in the `haproxy.cfg` file by changing the `configuration` parameter. Alternatively, you can provide an existing ConfigMap with `haproxy.cfg` by using the `existingConfigmap` parameter.
+
+  The example below configures HAProxy to forward all requests to port 8080 to a service called *service1:8080* (it is assumed that this is accessible from inside the cluster).
+
+  ```yaml
+  configuration: |
+    global
+      log 127.0.0.1 local2
+      maxconn 4096
+
+    defaults
+      mode http
+      log global
+      option httplog
+      option dontlognull
+      option http-server-close
+      option forwardfor except 127.0.0.0/8
+      option redispatch
+      retries 3
+      timeout http-request 20s
+      timeout queue 1m
+      timeout connect 10s
+      timeout client 1m
+      timeout server 1m
+      timeout http-keep-alive 30s
+      timeout check 10s
+      maxconn 3000
+
+    frontend fe_http
+      option forwardfor except 127.0.0.1
+      option httpclose
+      bind *:8080
+      default_backend be_http
+
+    backend be_http
+      balance roundrobin
+      server nginx service:8080 check port 8080
+  ```
+
 - Based on your HAProxy configuration, edit the `containerPorts` and `service.ports` parameters. In the `containerPorts` parameter, set all the ports that the HAProxy configuration uses, and in the `service.ports` parameter, set the ports to be externally exposed.
 
-Refer to the [chart documentation for a more detailed configuration example](https://docs.bitnami.com/kubernetes/infrastructure/haproxy/get-started/configure-proxy).
+  For the example above, the configuration would look like this:
+
+  ```yaml
+  service:
+    - name: http
+      port: 80 # We use port 80 in the service
+      targetPort: http
+
+  containerPorts:
+    - name: http
+      containerPort: 8080
+  ```
 
 ### Add extra environment variables
 
@@ -259,9 +307,43 @@ Alternatively, use a ConfigMap or a Secret with the environment variables. To do
 
 ### Use Sidecars and Init Containers
 
-If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter. Similarly, extra init containers can be added using the `initContainers` parameter.
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter.
 
-Refer to the chart documentation for more information on, and examples of, configuring and using [sidecars and init containers](https://docs.bitnami.com/kubernetes/infrastructure/haproxy/configuration/configure-sidecar-init-containers/).
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Set Pod affinity
 

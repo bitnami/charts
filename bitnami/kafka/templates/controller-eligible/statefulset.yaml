@@ -52,6 +52,7 @@ spec:
         {{- end }}
     spec:
       {{- include "kafka.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.controller.automountServiceAccountToken }}
       {{- if .Values.controller.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.controller.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -435,7 +436,9 @@ spec:
   {{- if or (and .Values.controller.persistence.enabled (not .Values.controller.persistence.existingClaim)) (and .Values.controller.logPersistence.enabled (not .Values.controller.logPersistence.existingClaim)) }}
   volumeClaimTemplates:
     {{- if and .Values.controller.persistence.enabled (not .Values.controller.persistence.existingClaim) }}
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if .Values.controller.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.controller.persistence.annotations "context" $) | nindent 10 }}
@@ -457,7 +460,9 @@ spec:
         {{- end -}}
     {{- end }}
     {{- if and .Values.controller.logPersistence.enabled (not .Values.controller.logPersistence.existingClaim) }}
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: logs
         {{- if .Values.controller.logPersistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.controller.logPersistence.annotations "context" $) | nindent 10 }}

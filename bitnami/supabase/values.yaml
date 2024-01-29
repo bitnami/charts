@@ -169,11 +169,11 @@ jwt:
       annotations: {}
       ## @param jwt.autoGenerate.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
       ##
-      automountServiceAccountToken: true
+      automountServiceAccountToken: false
 
     ## Configure Container Security Context
     ## @param jwt.autoGenerate.containerSecurityContext.enabled Enabled jwt init job containers' Security Context
-    ## @param jwt.autoGenerate.containerSecurityContext.seLinuxOptions Set SELinux options in container
+    ## @param jwt.autoGenerate.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param jwt.autoGenerate.containerSecurityContext.runAsUser Set jwt init job containers' Security Context runAsUser
     ## @param jwt.autoGenerate.containerSecurityContext.runAsNonRoot Set jwt init job container's Security Context runAsNonRoot
     ## @param jwt.autoGenerate.containerSecurityContext.privileged Set jwt init job container's Security Context privileged
@@ -184,7 +184,7 @@ jwt:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: {}
+      seLinuxOptions: null
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -232,6 +232,9 @@ jwt:
     resources:
       limits: {}
       requests: {}
+    ## @param jwt.autoGenerate.automountServiceAccountToken Mount Service Account token in pod
+    ##
+    automountServiceAccountToken: true
     ## @param jwt.autoGenerate.hostAliases Add deployment host aliases
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##
@@ -419,7 +422,7 @@ auth:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param auth.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param auth.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param auth.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param auth.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param auth.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param auth.containerSecurityContext.privileged Set container's Security Context privileged
@@ -430,7 +433,7 @@ auth:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -447,6 +450,9 @@ auth:
   ## @param auth.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param auth.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param auth.hostAliases Supabase auth pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -761,7 +767,7 @@ meta:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param meta.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param meta.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param meta.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param meta.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param meta.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param meta.containerSecurityContext.privileged Set container's Security Context privileged
@@ -772,7 +778,7 @@ meta:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -789,6 +795,9 @@ meta:
   ## @param meta.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param meta.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param meta.hostAliases Supabase Postgres Meta pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1122,7 +1131,7 @@ realtime:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param realtime.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param realtime.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param realtime.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param realtime.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param realtime.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param realtime.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1133,7 +1142,7 @@ realtime:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1150,6 +1159,9 @@ realtime:
   ## @param realtime.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param realtime.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param realtime.hostAliases Supabase realtime pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1364,7 +1376,7 @@ rest:
   image:
     registry: docker.io
     repository: bitnami/postgrest
-    tag: 11.2.2-debian-11-r3
+    tag: 11.2.2-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1462,7 +1474,7 @@ rest:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param rest.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param rest.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param rest.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param rest.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param rest.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param rest.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1473,7 +1485,7 @@ rest:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1490,6 +1502,9 @@ rest:
   ## @param rest.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param rest.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param rest.hostAliases Supabase rest pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1710,7 +1725,7 @@ storage:
   image:
     registry: docker.io
     repository: bitnami/supabase-storage
-    tag: 0.44.1-debian-11-r0
+    tag: 0.46.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1808,7 +1823,7 @@ storage:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param storage.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param storage.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param storage.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param storage.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param storage.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param storage.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1819,7 +1834,7 @@ storage:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1836,6 +1851,9 @@ storage:
   ## @param storage.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param storage.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param storage.hostAliases Supabase storage pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2102,7 +2120,7 @@ studio:
   image:
     registry: docker.io
     repository: bitnami/supabase-studio
-    tag: 0.23.11-debian-11-r0
+    tag: 0.23.11-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2200,7 +2218,7 @@ studio:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param studio.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param studio.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param studio.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param studio.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param studio.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param studio.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2211,7 +2229,7 @@ studio:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2228,6 +2246,9 @@ studio:
   ## @param studio.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param studio.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param studio.hostAliases Supabase studio pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2523,7 +2544,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r94
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -2543,14 +2564,14 @@ volumePermissions:
     requests: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
 
 ## Bitnami PostgreSQL image
@@ -2566,7 +2587,7 @@ volumePermissions:
 psqlImage:
   registry: docker.io
   repository: bitnami/supabase-postgres
-  tag: 15.1.1-debian-11-r1
+  tag: 15.1.1-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2733,7 +2754,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/supabase-postgres
-    tag: 15.1.1-debian-11-r1
+    tag: 15.1.1-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

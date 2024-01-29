@@ -262,7 +262,7 @@ server:
   ## Dataflow Server containers' Security Context (only main container).
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param server.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
@@ -273,7 +273,7 @@ server:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -769,7 +769,7 @@ skipper:
   ## Skipper containers' Security Context (only main container).
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param skipper.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param skipper.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param skipper.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param skipper.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param skipper.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param skipper.containerSecurityContext.privileged Set container's Security Context privileged
@@ -780,7 +780,7 @@ skipper:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1226,7 +1226,7 @@ metrics:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param metrics.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param metrics.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1237,7 +1237,7 @@ metrics:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1547,7 +1547,7 @@ waitForBackends:
   ## waitForBackends containers' Security Context (init container).
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param waitForBackends.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param waitForBackends.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param waitForBackends.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param waitForBackends.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param waitForBackends.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param waitForBackends.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1558,7 +1558,7 @@ waitForBackends:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false

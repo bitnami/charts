@@ -67,6 +67,17 @@ Return the proper image name (for the init container volume-permissions image)
 {{- end -}}
 
 {{/*
+ Create the name of the service account to use
+ */}}
+{{- define "prestashop.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "prestashop.imagePullSecrets" -}}

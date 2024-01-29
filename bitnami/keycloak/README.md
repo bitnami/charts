@@ -141,7 +141,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set Keycloak pod's Security Context fsGroup                                                                              | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -173,6 +173,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customReadinessProbe`                              | Custom Rediness probes Keycloak                                                                                          | `{}`             |
 | `customStartupProbe`                                | Custom Startup probes for Keycloak                                                                                       | `{}`             |
 | `lifecycleHooks`                                    | LifecycleHooks to set additional configuration at startup                                                                | `{}`             |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `true`           |
 | `hostAliases`                                       | Deployment pod host aliases                                                                                              | `[]`             |
 | `podLabels`                                         | Extra labels for Keycloak pods                                                                                           | `{}`             |
 | `podAnnotations`                                    | Annotations for Keycloak pods                                                                                            | `{}`             |
@@ -242,7 +243,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | --------------------------------------------------------- | ------- |
 | `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Keycloak pods | `true`  |
 | `serviceAccount.name`                         | Name of the created ServiceAccount                        | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod           | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod           | `false` |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount      | `{}`    |
 | `serviceAccount.extraLabels`                  | Additional labels for the ServiceAccount                  | `{}`    |
 | `rbac.create`                                 | Whether to create and use RBAC resources or not           | `false` |
@@ -300,11 +301,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.annotations`                                       | Annotations for keycloak-config-cli job                                                                                       | `{}`                                  |
 | `keycloakConfigCli.command`                                           | Command for running the container (set to default if not set). Use array form                                                 | `[]`                                  |
 | `keycloakConfigCli.args`                                              | Args for running the container (set to default if not set). Use array form                                                    | `[]`                                  |
+| `keycloakConfigCli.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                            | `true`                                |
 | `keycloakConfigCli.hostAliases`                                       | Job pod host aliases                                                                                                          | `[]`                                  |
 | `keycloakConfigCli.resources.limits`                                  | The resources limits for the keycloak-config-cli container                                                                    | `{}`                                  |
 | `keycloakConfigCli.resources.requests`                                | The requested resources for the keycloak-config-cli container                                                                 | `{}`                                  |
 | `keycloakConfigCli.containerSecurityContext.enabled`                  | Enabled keycloak-config-cli Security Context                                                                                  | `true`                                |
-| `keycloakConfigCli.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                              | `{}`                                  |
+| `keycloakConfigCli.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                              | `nil`                                 |
 | `keycloakConfigCli.containerSecurityContext.runAsUser`                | Set keycloak-config-cli Security Context runAsUser                                                                            | `1001`                                |
 | `keycloakConfigCli.containerSecurityContext.runAsNonRoot`             | Set keycloak-config-cli Security Context runAsNonRoot                                                                         | `true`                                |
 | `keycloakConfigCli.containerSecurityContext.privileged`               | Set keycloak-config-cli Security Context privileged                                                                           | `false`                               |
@@ -406,9 +408,16 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Use an external database
 
-Sometimes, you may want to have Keycloak connect to an external PostgreSQL database rather than a database within your cluster - for example, when using a managed database service, or when running a single database server for all your applications. To do this, set the `postgresql.enabled` parameter to `false` and specify the credentials for the external database using the `externalDatabase.*` parameters.
+Sometimes, you may want to have Keycloak connect to an external PostgreSQL database rather than a database within your cluster - for example, when using a managed database service, or when running a single database server for all your applications. To do this, set the `postgresql.enabled` parameter to `false` and specify the credentials for the external database using the `externalDatabase.*` parameters. Here is an example:
 
-Refer to the [chart documentation on using an external database](https://docs.bitnami.com/kubernetes/apps/keycloak/configuration/use-external-database) for more details and an example.
+```text
+postgresql.enabled=false
+externalDatabase.host=myexternalhost
+externalDatabase.user=myuser
+externalDatabase.password=mypassword
+externalDatabase.database=mydatabase
+externalDatabase.port=5432
+```
 
 > NOTE: Only PostgreSQL database server is supported as external database
 
@@ -481,9 +490,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Use Sidecars and Init Containers
 
-If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter. Similarly, extra init containers can be added using the `initContainers` parameter.
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter.
 
-Refer to the chart documentation for more information on, and examples of, configuring and using [sidecars and init containers](https://docs.bitnami.com/kubernetes/apps/keycloak/configuration/configure-sidecar-init-containers/).
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Initialize a fresh instance
 
@@ -505,13 +548,55 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Configure Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.To enable Ingress integration, set `ingress.enabled` to `true`.
 
-To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/keycloak/configuration/configure-ingress/).
+The most common scenario is to have one host name mapped to the deployment. In this case, the `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host.
+
+However, it is also possible to have more than one host. To facilitate this, the `ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
+
+> NOTE: For each host specified in the `ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
+
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+
+[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
 ### Configure TLS Secrets for use with Ingress
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/keycloak/administration/enable-tls-ingress/).
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
+
+- Generate certificate secrets based on chart parameters.
+- Enable externally generated certificates.
+- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
+- Create self-signed certificates within the chart (if supported).
+
+In the first two cases, a certificate and a key are needed. Files are expected in `.pem` format.
+
+Here is an example of a certificate file:
+
+> NOTE: There may be more than one certificate if there is a certificate chain.
+
+```text
+-----BEGIN CERTIFICATE-----
+MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+...
+jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+-----END CERTIFICATE-----
+```
+
+Here is an example of a certificate key:
+
+```text
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+...
+wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+-----END RSA PRIVATE KEY-----
+```
+
+- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
+- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
+- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
 
 ### Use with ingress offloading SSL
 
@@ -521,11 +606,17 @@ If your ingress controller has the SSL Termination, you should set `proxy` to `e
 
 This chart provides several ways to manage passwords:
 
-- Values passed to the chart
-- An existing secret with all the passwords (via the `existingSecret` parameter)
-- Multiple existing secrets with all the passwords (via the `existingSecretPerPassword` parameter)
+- Values passed to the chart: In this scenario, a new secret including all the passwords will be created during the chart installation. When upgrading, it is necessary to provide the secrets to the chart as shown below. Replace the KEYCLOAK_ADMIN_PASSWORD, KEYCLOAK_MANAGEMENT_PASSWORD, POSTGRESQL_PASSWORD and POSTGRESQL_PVC placeholders with the correct passwords and PVC name.
 
-Refer to the [chart documentation on managing passwords](https://docs.bitnami.com/kubernetes/apps/keycloak/configuration/manage-passwords/) for examples of each method.
+```console
+helm upgrade keycloak bitnami/keycloak \
+  --set auth.adminPassword=KEYCLOAK_ADMIN_PASSWORD \
+  --set auth.managementPassword=KEYCLOAK_MANAGEMENT_PASSWORD \
+  --set postgresql.postgresqlPassword=POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=POSTGRESQL_PVC
+```
+
+- An existing secret with all the passwords via the `existingSecret` parameter.
 
 ## Troubleshooting
 
@@ -545,9 +636,85 @@ This major updates the default serviceType from `LoadBalancer` to `ClusterIP` to
 
 This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
 
-### To any previous version
+### To 10.0.0
 
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/apps/keycloak/administration/upgrade/).
+This major release updates Keycloak to its major version `19`. Please, refer to the official [Keycloak migration documentation](https://www.keycloak.org/docs/latest/upgrading/index.html#migrating-to-19-0-0) for a complete list of changes and further information.
+
+### To 9.0.0
+
+This major release updates Keycloak to its major version `18`. Please, refer to the official [Keycloak migration documentation](https://www.keycloak.org/docs/latest/upgrading/index.html#migrating-to-18-0-0) for a complete list of changes and further information.
+
+### To 8.0.0
+
+This major release updates Keycloak to its major version `17`. Among other features, this new version has deprecated WildFly in favor of Quarkus, which introduces breaking changes like:
+
+- Removal of `/auth` from the default context path.
+- Changes in the configuration and deployment of custom providers.
+- Significant changes in configuring Keycloak.
+
+Please, refer to the official [Keycloak migration documentation](https://www.keycloak.org/docs/latest/upgrading/index.html#migrating-to-17-0-0) and [Migrating to Quarkus distribution document](https://www.keycloak.org/migration/migrating-to-quarkus) for a complete list of changes and further information.
+
+### To 7.0.0
+
+This major release updates the PostgreSQL subchart to its newest major *11.x.x*, which contain several changes in the supported values (check the [upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1100) to obtain more information).
+
+#### Upgrading Instructions
+
+To upgrade to *7.0.0* from *6.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *keycloak* and the release namespace *default*):
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+
+```console
+export KEYCLOAK_PASSWORD=$(kubectl get secret --namespace default keycloak -o jsonpath="{.data.admin-password}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default keycloak-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=keycloak,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+1. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+
+```console
+kubectl delete statefulsets.apps --cascade=false keycloak-postgresql
+kubectl delete secret keycloak-postgresql --namespace default
+```
+
+1. Upgrade your release using the same PostgreSQL version:
+
+```console
+CURRENT_PG_VERSION=$(kubectl exec keycloak-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+helm upgrade keycloak bitnami/keycloak \
+  --set auth.adminPassword=$KEYCLOAK_PASSWORD \
+  --set postgresql.image.tag=$CURRENT_PG_VERSION \
+  --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
+
+1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+
+```console
+kubectl delete pod keycloak-postgresql-0
+```
+
+### To 1.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+#### What changes were introduced in this major version?
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running *helm dependency update*, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Chart.
+
+#### Considerations when upgrading to this version
+
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version does not support Helm v2 anymore.
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3.
+
+#### Useful links
+
+- [Bitnami Tutorial](https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues)
+- [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
+- [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
 
 ## License
 

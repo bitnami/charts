@@ -97,6 +97,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `priorityClassName`                            | Whereabouts pods' priorityClassName                                                                                   | `""`                          |
 | `schedulerName`                                | Name of the k8s scheduler (other than default)                                                                        | `""`                          |
 | `topologySpreadConstraints`                    | Topology Spread Constraints for pod assignment                                                                        | `[]`                          |
+| `automountServiceAccountToken`                 | Mount Service Account token in pod                                                                                    | `true`                        |
 | `hostAliases`                                  | Add deployment host aliases                                                                                           | `[]`                          |
 | `extraEnvVars`                                 | Extra environment variables                                                                                           | `[]`                          |
 | `extraEnvVarsCM`                               | ConfigMap containing extra env vars                                                                                   | `""`                          |
@@ -121,7 +122,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`        | Set filesystem extra groups                                                                                           | `[]`                          |
 | `podSecurityContext.fsGroup`                   | Whereabouts pods' group ID                                                                                            | `0`                           |
 | `containerSecurityContext.enabled`             | Enable Whereabouts containers' Security Context                                                                       | `true`                        |
-| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                      | `{}`                          |
+| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                      | `nil`                         |
 | `containerSecurityContext.runAsUser`           | Whereabouts containers' Security Context                                                                              | `0`                           |
 | `containerSecurityContext.runAsNonRoot`        | Set Whereabouts container's Security Context runAsNonRoot                                                             | `false`                       |
 | `containerSecurityContext.privileged`          | Set Whereabouts container's Security Context privileged                                                               | `true`                        |
@@ -138,7 +139,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `livenessProbe.timeoutSeconds`                 | Timeout seconds for livenessProbe                                                                                     | `5`                           |
 | `livenessProbe.failureThreshold`               | Failure threshold for livenessProbe                                                                                   | `5`                           |
 | `livenessProbe.successThreshold`               | Success threshold for livenessProbe                                                                                   | `1`                           |
-| `readinessProbe.enabled`                       | Enable readinessProbe                                                                                                 | `false`                       |
+| `readinessProbe.enabled`                       | Enable readinessProbe                                                                                                 | `true`                        |
 | `readinessProbe.initialDelaySeconds`           | Initial delay seconds for readinessProbe                                                                              | `10`                          |
 | `readinessProbe.periodSeconds`                 | Period seconds for readinessProbe                                                                                     | `5`                           |
 | `readinessProbe.timeoutSeconds`                | Timeout seconds for readinessProbe                                                                                    | `1`                           |
@@ -150,16 +151,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `lifecycleHooks`                               | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | `{}`                          |
 | `podAnnotations`                               | Pod annotations                                                                                                       | `{}`                          |
 | `podLabels`                                    | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                          |
+| `networkPolicy.enabled`                        | Specifies whether a NetworkPolicy should be created                                                                   | `true`                        |
+| `networkPolicy.extraIngress`                   | Add extra ingress rules to the NetworkPolice                                                                          | `[]`                          |
+| `networkPolicy.extraEgress`                    | Add extra ingress rules to the NetworkPolicy                                                                          | `[]`                          |
 
 ### Other Parameters
 
-| Name                                          | Description                                                            | Value  |
-| --------------------------------------------- | ---------------------------------------------------------------------- | ------ |
-| `rbac.create`                                 | Specifies whether RBAC resources should be created                     | `true` |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for Whereabouts pod                  | `true` |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`   |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true` |
-| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
+| Name                                          | Description                                                            | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created                     | `true`  |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for Whereabouts pod                  | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
