@@ -162,6 +162,7 @@ containerSecurityContext:
   seccompProfile:
     type: "RuntimeDefault"
 ## phpMyAdmin number of pod replicas
+## @param replicas Number of replicas
 replicas: 1
 ## phpMyAdmin containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
