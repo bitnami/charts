@@ -120,7 +120,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`                                              |
 | `podSecurityContext.fsGroup`                        | Group ID for the volumes of the pod                                                       | `1001`                                            |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`                                            |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`                                              |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`                                             |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`                                            |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`                                            |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`                                           |
@@ -257,6 +257,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.podAnnotations`                   | Additional annotations for Metrics exporter pod                                                                 | `{}`                              |
 | `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                    | `true`                            |
 | `metrics.serviceMonitor.namespace`         | The namespace in which the ServiceMonitor will be created                                                       | `""`                              |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus                                | `""`                              |
 | `metrics.serviceMonitor.interval`          | The interval at which metrics should be scraped                                                                 | `30s`                             |
 | `metrics.serviceMonitor.scrapeTimeout`     | The timeout after which the scrape is ended                                                                     | `""`                              |
 | `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                              | `[]`                              |

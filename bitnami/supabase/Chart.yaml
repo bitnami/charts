@@ -24,7 +24,7 @@ annotations:
     - name: supabase-storage
       image: docker.io/bitnami/supabase-storage:0.46.2-debian-11-r0
     - name: supabase-studio
-      image: docker.io/bitnami/supabase-studio:0.23.11-debian-11-r0
+      image: docker.io/bitnami/supabase-studio:0.23.11-debian-11-r2
 apiVersion: v2
 appVersion: 0.23.11
 dependencies:
@@ -53,4 +53,4 @@ maintainers:
 name: supabase
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/supabase
-version: 2.5.1
+version: 2.5.3

@@ -229,7 +229,7 @@ clusterOperator:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param clusterOperator.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param clusterOperator.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param clusterOperator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param clusterOperator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param clusterOperator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param clusterOperator.containerSecurityContext.privileged Set container's Security Context privileged
@@ -240,7 +240,7 @@ clusterOperator:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -389,6 +389,14 @@ clusterOperator:
       ##   - resources: A list of resource names (e.g., ["configmaps", "pods"]).
       ##   - verbs: A list of allowed access verbs (e.g., ["create", "get", "list"]).
       customRules: []
+      ## @param clusterOperator.rbac.clusterRole.extraRules Define extra access rules for the ClusterRole. This has no effect if customerRules is a non-empty array.
+      ## ref: https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
+      ## e.g:
+      ## extraRules:
+      ##   - apiGroups: A list of API groups (e.g., [""], ["apps"]).
+      ##   - resources: A list of resource names (e.g., ["configmaps", "pods"]).
+      ##   - verbs: A list of allowed access verbs (e.g., ["create", "get", "list"]).
+      extraRules: []
 
   ## ServiceAccount configuration
   ##
@@ -708,7 +716,7 @@ msgTopologyOperator:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param msgTopologyOperator.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param msgTopologyOperator.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param msgTopologyOperator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param msgTopologyOperator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param msgTopologyOperator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param msgTopologyOperator.containerSecurityContext.privileged Set container's Security Context privileged
@@ -719,7 +727,7 @@ msgTopologyOperator:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -914,6 +922,25 @@ msgTopologyOperator:
     ## @param msgTopologyOperator.rbac.create Specifies whether RBAC resources should be created
     ##
     create: true
+    ## ClusterRole parameters
+    ##
+    clusterRole:
+      ## @param msgTopologyOperator.rbac.clusterRole.customRules Define custom access rules for the ClusterRole
+      ## ref: https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
+      ## e.g:
+      ## customRules:
+      ##   - apiGroups: A list of API groups (e.g., [""], ["apps"]).
+      ##   - resources: A list of resource names (e.g., ["configmaps", "pods"]).
+      ##   - verbs: A list of allowed access verbs (e.g., ["create", "get", "list"]).
+      customRules: []
+      ## @param msgTopologyOperator.rbac.clusterRole.extraRules Define extra access rules for the ClusterRole. This has no effect if customerRules is a non-empty array.
+      ## ref: https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
+      ## e.g:
+      ## extraRules:
+      ##   - apiGroups: A list of API groups (e.g., [""], ["apps"]).
+      ##   - resources: A list of resource names (e.g., ["configmaps", "pods"]).
+      ##   - verbs: A list of allowed access verbs (e.g., ["create", "get", "list"]).
+      extraRules: []
 
   ## ServiceAccount configuration
   ##

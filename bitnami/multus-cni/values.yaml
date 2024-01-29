@@ -77,7 +77,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/multus-cni
-  tag: 4.0.2-debian-11-r131
+  tag: 4.0.2-debian-11-r133
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -231,7 +231,7 @@ podSecurityContext:
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable Multus CNI containers' Security Context
-## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Multus CNI containers' Security Context
 ## @param containerSecurityContext.runAsNonRoot Set Multus CNI container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set Multus CNI container's Security Context privileged
@@ -239,7 +239,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 0
   runAsNonRoot: false
   privileged: true
