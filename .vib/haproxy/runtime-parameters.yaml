@@ -38,3 +38,11 @@ sidecars:
     ports:
       - name: web
         containerPort: 8080
+    securityContext:
+      runAsUser: 1001
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
