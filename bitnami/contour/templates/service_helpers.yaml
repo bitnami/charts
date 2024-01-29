@@ -1,0 +1,140 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/* vim: set filetype=mustache: */}}
+
+{{/*
+Create the standalone envoyService
+*/}}
+{{- define "envoy.envoyService" -}}
+{{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.envoy.image "chart" .Chart ) ) }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ default (printf "%s-envoy" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-") .Values.envoy.service.name }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.envoy.service.labels .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: envoy
+  annotations:
+    {{- if (ne (index .Values.envoy.service.annotations "service.beta.kubernetes.io/aws-load-balancer-type" | toString ) "nlb") }}
+    # This annotation puts the AWS ELB into "TCP" mode so that it does not
+    # do HTTP negotiation for HTTPS connections at the ELB edge.
+    # The downside of this is the remote IP address of all connections will
+    # appear to be the internal address of the ELB. See docs/proxy-proto.md
+    # for information about enabling the PROXY protocol on the ELB to recover
+    # the original remote IP address.
+    # We don't set this for nlb, per the contour docs.
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+    {{- end }}
+    {{- if or .Values.envoy.service.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.envoy.service.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if .Values.envoy.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.envoy.service.loadBalancerIP | quote }}
+  {{- end }}
+{{- include "envoy.envoyServiceSpec" . }}
+{{- end -}}
+
+{{/*
+Create the multi az envoyService
+*/}}
+{{- define "envoy.envoyServiceMultiAZ" -}}
+{{- range $azArray := .Values.envoy.service.multiAz.zones }}
+{{- with $ -}}
+{{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.envoy.image "chart" .Chart ) ) }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ default (printf "%s-%s-envoy" (include "common.names.fullname" .) $azArray.name | trunc 63 | trimSuffix "-") .Values.envoy.service.name }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.envoy.service.labels .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: envoy
+  annotations:
+    {{- if (ne (index .Values.envoy.service.annotations "service.beta.kubernetes.io/aws-load-balancer-type" | toString ) "nlb") }}
+    # This annotation puts the AWS ELB into "TCP" mode so that it does not
+    # do HTTP negotiation for HTTPS connections at the ELB edge.
+    # The downside of this is the remote IP address of all connections will
+    # appear to be the internal address of the ELB. See docs/proxy-proto.md
+    # for information about enabling the PROXY protocol on the ELB to recover
+    # the original remote IP address.
+    # We don't set this for nlb, per the contour docs.
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+    {{- end }}
+    {{- if or .Values.envoy.service.annotations .Values.commonAnnotations $azArray.annotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.envoy.service.annotations .Values.commonAnnotations $azArray.annotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if $azArray.loadBalancerIP }}
+  loadBalancerIP: {{ $azArray.loadBalancerIP | quote }}
+  {{- end }}
+{{- include "envoy.envoyServiceSpec" . }}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+The default envoy service spec
+*/}}
+{{- define "envoy.envoyServiceSpec" -}}
+{{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.envoy.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- if .Values.envoy.service.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .Values.envoy.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if not (empty .Values.envoy.service.clusterIP) }}
+  clusterIP: {{ .Values.envoy.service.clusterIP | quote }}
+  {{- end }}
+  {{- if .Values.envoy.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.envoy.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.envoy.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.envoy.service.externalIPs }}
+  externalIPs: {{- toYaml .Values.envoy.service.externalIPs | nindent 4 }}
+  {{- end }}
+  {{- if .Values.envoy.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.envoy.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  {{- if .Values.envoy.service.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ .Values.envoy.service.ipFamilyPolicy }}
+  {{- end }}
+  {{- if .Values.envoy.service.ipFamilies }}
+  ipFamilies: {{ toYaml .Values.envoy.service.ipFamilies | nindent 4 }}
+  {{- end }}
+  {{- if and .Values.envoy.service.loadBalancerClass (eq .Values.envoy.service.type "LoadBalancer") }}
+  loadBalancerClass: {{ .Values.envoy.service.loadBalancerClass }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.envoy.service.ports.http }}
+      protocol: TCP
+      targetPort: {{ .Values.envoy.service.targetPorts.http }}
+      {{- if and (or (eq .Values.envoy.service.type "NodePort") (eq .Values.envoy.service.type "LoadBalancer")) (not (empty .Values.envoy.service.nodePorts.http)) }}
+      nodePort: {{ .Values.envoy.service.nodePorts.http }}
+      {{- else if eq .Values.envoy.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: https
+      port: {{ .Values.envoy.service.ports.https }}
+      protocol: TCP
+      targetPort: {{ .Values.envoy.service.targetPorts.https }}
+      {{- if and (or (eq .Values.envoy.service.type "NodePort") (eq .Values.envoy.service.type "LoadBalancer")) (not (empty .Values.envoy.service.nodePorts.https)) }}
+      nodePort: {{ .Values.envoy.service.nodePorts.https }}
+      {{- else if eq .Values.envoy.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.envoy.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.envoy.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: envoy
+  type: {{ .Values.envoy.service.type }}
+{{- end -}}

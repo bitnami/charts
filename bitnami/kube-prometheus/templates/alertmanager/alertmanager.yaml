@@ -49,6 +49,7 @@ spec:
   {{- if .Values.alertmanager.persistence.enabled }}
   storage:
     volumeClaimTemplate:
+      {{- if or .Values.alertmanager.persistence.annotations .Values.commonAnnotations .Values.commonLabels }}
       metadata:
         {{- if or .Values.alertmanager.persistence.annotations .Values.commonAnnotations }}
         {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
@@ -57,6 +58,7 @@ spec:
         {{- if .Values.commonLabels }}
         labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
         {{- end }}
+      {{- end }}
       spec:
         accessModes:
           {{- range .Values.alertmanager.persistence.accessModes }}

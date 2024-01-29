@@ -258,7 +258,7 @@ controller:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.containerSecurityContext.enabled Enabled MetalLB Controller containers' Security Context
-  ## @param controller.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param controller.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param controller.containerSecurityContext.runAsUser Set MetalLB Controller containers' Security Context runAsUser
   ## @param controller.containerSecurityContext.runAsNonRoot Set MetalLB Controller container's Security Context runAsNonRoot
   ## @param controller.containerSecurityContext.allowPrivilegeEscalation Enables privilege Escalation context for the pod.
@@ -268,7 +268,7 @@ controller:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
@@ -642,7 +642,7 @@ speaker:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param speaker.containerSecurityContext.enabled Enabled Speaker containers' Security Context
-  ## @param speaker.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param speaker.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param speaker.containerSecurityContext.runAsUser Set Speaker containers' Security Context runAsUser
   ## @param speaker.containerSecurityContext.allowPrivilegeEscalation Enables privilege Escalation context for the pod.
   ## @param speaker.containerSecurityContext.readOnlyRootFilesystem Allows the pod to mount the RootFS as ReadOnly
@@ -652,7 +652,7 @@ speaker:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true

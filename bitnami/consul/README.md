@@ -141,7 +141,7 @@ helm delete --purge my-release
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `podSecurityContext.fsGroup`                        | Group ID for the volumes of the pod                                                       | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled Consul containers' Security Context                                               | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set Consul containers' Security Context runAsUser                                         | `1001`           |
 | `containerSecurityContext.allowPrivilegeEscalation` | Set Consul containers' Security Context allowPrivilegeEscalation                          | `false`          |
 | `containerSecurityContext.capabilities.drop`        | Set Argo CD containers' repo server Security Context capabilities to be dropped           | `["ALL"]`        |
@@ -251,7 +251,7 @@ helm delete --purge my-release
 | `metrics.image.pullPolicy`                        | HashiCorp Consul Prometheus Exporter image pull policy                                                                               | `IfNotPresent`                    |
 | `metrics.image.pullSecrets`                       | HashiCorp Consul Prometheus Exporter image pull secrets                                                                              | `[]`                              |
 | `metrics.containerSecurityContext.enabled`        | HashiCorp Consul Prometheus Exporter securityContext                                                                                 | `true`                            |
-| `metrics.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                     | `{}`                              |
+| `metrics.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                     | `nil`                             |
 | `metrics.containerSecurityContext.runAsUser`      | User ID for the HashiCorp Consul Prometheus Exporter                                                                                 | `1001`                            |
 | `metrics.containerSecurityContext.runAsNonRoot`   | Force the container to be run as non root                                                                                            | `true`                            |
 | `metrics.service.type`                            | Kubernetes Service type                                                                                                              | `ClusterIP`                       |

@@ -235,7 +235,7 @@ onlineSchedulers: ""
 memoryHighWatermark:
   ## @param memoryHighWatermark.enabled Enable configuring Memory high watermark on RabbitMQ
   ##
-  enabled: true
+  enabled: false
   ## @param memoryHighWatermark.type Memory high watermark type. Either `absolute` or `relative`
   ##
   type: "relative"
@@ -767,7 +767,7 @@ podSecurityContext:
   fsGroup: 1001
 
 ## @param containerSecurityContext.enabled Enabled RabbitMQ containers' Security Context
-## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set RabbitMQ containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set RabbitMQ container's Security Context runAsNonRoot
 ## @param containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
@@ -782,7 +782,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 1001
   runAsNonRoot: true
   allowPrivilegeEscalation: false
@@ -1490,9 +1490,9 @@ volumePermissions:
   ## Init container' Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
   ##
   containerSecurityContext:
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
