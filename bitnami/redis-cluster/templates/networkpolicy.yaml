@@ -24,6 +24,8 @@ spec:
     # Allow dns resolution
     - ports:
       - port: 53
+        protocol: TCP
+      - port: 53
         protocol: UDP
     # Allow outbound connections to other cluster pods
     - ports:
@@ -37,8 +39,14 @@ spec:
     - ports:
         - port: {{ .Values.redis.containerPorts.redis }}
         - port: {{ .Values.redis.containerPorts.bus }}
+        {{- if .Values.metrics.enabled }}
+        # Allow prometheus scrapes for metrics
+        - port: {{ .Values.metrics.contanierPorts.http }}
+        {{- end }}
+      {{- if not .Values.networkPolicy.allowExternal }}
       from:
-        {{- if not .Values.networkPolicy.allowExternal }}
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
         - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
@@ -58,10 +66,5 @@ spec:
               {{- range $key, $value := .Values.networkPolicy.ingressNSPodMatchLabels }}
               {{ $key | quote }}: {{ $value | quote }}
               {{- end }}
-        {{- end }}
-    {{- if .Values.metrics.enabled }}
-    # Allow prometheus scrapes for metrics
-    - ports:
-        - port: 9121
-    {{- end }}
+      {{- end }}
 {{- end }}
