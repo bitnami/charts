@@ -34,6 +34,8 @@ spec:
     - ports:
         - port: {{ .Values.service.ports.restAPI }}
         - port: {{ .Values.service.ports.transport }}
+        - port: {{ .Values.containerPorts.restAPI }}
+        - port: {{ .Values.containerPorts.transport }}
         - port: {{ .Values.dashboards.service.ports.http }}
       to:
         - podSelector:
@@ -43,8 +45,7 @@ spec:
     {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.service.ports.restAPI }}
-        - port: {{ .Values.service.ports.transport }}
+        - port: {{ .Values.dashboards.containerPorts.http }}
       {{- if not .Values.dashboards.networkPolicy.allowExternal }}
       from:
         - podSelector:
