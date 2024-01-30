@@ -266,7 +266,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataCoord.service.externalTrafficPolicy`         | Data Coordinator service external traffic policy                 | `Cluster`   |
 | `dataCoord.service.annotations`                   | Additional custom annotations for Data Coordinator service       | `{}`        |
 | `dataCoord.service.extraPorts`                    | Extra ports to expose in the Data Coordinator service            | `[]`        |
-| `dataCoord.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `false`     |
+| `dataCoord.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `dataCoord.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
 | `dataCoord.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `dataCoord.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
@@ -411,7 +411,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rootCoord.service.externalTrafficPolicy`         | Root Coordinator service external traffic policy                 | `Cluster`   |
 | `rootCoord.service.annotations`                   | Additional custom annotations for Root Coordinator service       | `{}`        |
 | `rootCoord.service.extraPorts`                    | Extra ports to expose in the Root Coordinator service            | `[]`        |
-| `rootCoord.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `false`     |
+| `rootCoord.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `rootCoord.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
 | `rootCoord.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `rootCoord.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
@@ -556,7 +556,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryCoord.service.externalTrafficPolicy`         | Query Coordinator service external traffic policy                | `Cluster`   |
 | `queryCoord.service.annotations`                   | Additional custom annotations for Query Coordinator service      | `{}`        |
 | `queryCoord.service.extraPorts`                    | Extra ports to expose in the Query Coordinator service           | `[]`        |
-| `queryCoord.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `false`     |
+| `queryCoord.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `queryCoord.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
 | `queryCoord.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `queryCoord.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
@@ -701,7 +701,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexCoord.service.externalTrafficPolicy`         | Index Coordinator service external traffic policy                | `Cluster`   |
 | `indexCoord.service.annotations`                   | Additional custom annotations for Index Coordinator service      | `{}`        |
 | `indexCoord.service.extraPorts`                    | Extra ports to expose in the Index Coordinator service           | `[]`        |
-| `indexCoord.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `false`     |
+| `indexCoord.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `indexCoord.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
 | `indexCoord.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `indexCoord.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
@@ -846,7 +846,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataNode.service.externalTrafficPolicy`         | Data Node service external traffic policy                        | `Cluster`   |
 | `dataNode.service.annotations`                   | Additional custom annotations for Data Node service              | `{}`        |
 | `dataNode.service.extraPorts`                    | Extra ports to expose in the Data Node service                   | `[]`        |
-| `dataNode.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `false`     |
+| `dataNode.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `dataNode.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
 | `dataNode.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `dataNode.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
@@ -991,7 +991,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryNode.service.externalTrafficPolicy`         | Query Node service external traffic policy                       | `Cluster`   |
 | `queryNode.service.annotations`                   | Additional custom annotations for Query Node service             | `{}`        |
 | `queryNode.service.extraPorts`                    | Extra ports to expose in the Query Node service                  | `[]`        |
-| `queryNode.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `false`     |
+| `queryNode.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `queryNode.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
 | `queryNode.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `queryNode.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
@@ -1136,7 +1136,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexNode.service.externalTrafficPolicy`         | Index Node service external traffic policy                       | `Cluster`   |
 | `indexNode.service.annotations`                   | Additional custom annotations for Index Node service             | `{}`        |
 | `indexNode.service.extraPorts`                    | Extra ports to expose in the Index Node service                  | `[]`        |
-| `indexNode.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `false`     |
+| `indexNode.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `indexNode.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
 | `indexNode.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `indexNode.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
@@ -1293,7 +1293,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.service.externalTrafficPolicy`         | Proxy service external traffic policy                            | `Cluster`      |
 | `proxy.service.annotations`                   | Additional custom annotations for Proxy service                  | `{}`           |
 | `proxy.service.extraPorts`                    | Extra ports to expose in the Proxy service                       | `[]`           |
-| `proxy.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `false`        |
+| `proxy.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`         |
 | `proxy.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`         |
 | `proxy.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`           |
 | `proxy.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`           |
@@ -1451,7 +1451,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `attu.ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `attu.ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `attu.ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-| `attu.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                                                                       | `false`                  |
+| `attu.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                                                                       | `true`                   |
 | `attu.networkPolicy.allowExternal`           | The Policy model to apply                                                                                                        | `true`                   |
 | `attu.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `attu.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |

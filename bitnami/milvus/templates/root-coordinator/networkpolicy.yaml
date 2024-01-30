@@ -41,18 +41,54 @@ spec:
         - port: {{ .Values.dataNode.service.ports.grpc }}
         - port: {{ .Values.indexNode.service.ports.grpc }}
         - port: {{ .Values.proxy.service.ports.grpc }}
-        - port: {{ include "milvus.etcd.port" . }}
-        - port: {{ include "milvus.s3.port" . }}
-        - port: {{ include "milvus.kafka.port" . }}
+        - port: {{ .Values.queryCoord.containerPorts.grpc }}
+        - port: {{ .Values.dataCoord.containerPorts.grpc }}
+        - port: {{ .Values.indexCoord.containerPorts.grpc }}
+        - port: {{ .Values.rootCoord.containerPorts.grpc }}
+        - port: {{ .Values.queryNode.containerPorts.grpc }}
+        - port: {{ .Values.dataNode.containerPorts.grpc }}
+        - port: {{ .Values.indexNode.containerPorts.grpc }}
+        - port: {{ .Values.proxy.containerPorts.grpc }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+    # Allow outbound connections to S3
+    - ports:
+        - port: {{ include "milvus.s3.port" . }}
+      {{- if .Values.minio.enabled }}
+        - port: {{ .Values.minio.containerPorts.api }}
+      to: 
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: minio
+              app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- end }}
+    # Allow outbound connections to etcd
+    - ports:
+        - port: {{ include "milvus.etcd.port" . }}
+      to: 
+        {{- if .Values.etcd.enabled }}
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: etcd
+              app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- end }}
+    # Allow outbound connections to kafka
+    - ports:
+        - port: {{ include "milvus.kafka.port" . }}
+      to: 
+        {{- if .Values.kafka.enabled }}
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: kafka
+              app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- end }}
     {{- if .Values.rootCoord.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.rootCoord.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.rootCoord.service.ports.grpc }}
+        - port: {{ .Values.rootCoord.containerPorts.grpc }}
       {{- if not .Values.rootCoord.networkPolicy.allowExternal }}
       from:
         - podSelector:
