@@ -18,11 +18,11 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
-    app.kubernetes.io/component: oauth2-proxy
+      app.kubernetes.io/component: oauth2-proxy
   policyTypes:
     - Ingress
     - Egress
-  {{/* As we cannot easily identify the targets of Oauhh2 Proxy we allow all egress traffic by default */}}
+  {{/* As we cannot easily identify the targets of Oauth2 Proxy we allow all egress traffic by default */}}
   {{- if .Values.networkPolicy.extraEgress }}
   egress: {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
   {{- else }}
