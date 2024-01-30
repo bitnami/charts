@@ -27,12 +27,10 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
-        {{- if .Values.cloneFilesFromGit.enabled }}
-        # Use general ports for cloning from git (http,https and ssh)
+        # Allow these ports to download models
         - port: 443
         - port: 80
         - port: 22
-        {{- end }}
     # Allow internal communications between nodes
     - ports:
         - port: {{ .Values.containerPorts.pytorch }}
