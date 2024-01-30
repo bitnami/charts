@@ -1,15 +1,8 @@
 query:
   sidecars:
     - name: hotrod-example
-      image: davidbhlm/golang:1.19
-      command:
-        - /bin/bash
-        - -ec
-        - |
-          #!/bin/bash
-          git clone https://github.com/jaegertracing/jaeger.git jaeger
-          cd jaeger
-          go run ./examples/hotrod/main.go all
+      image: davidbhlm/hotrod-example:1.53
+      command: all
       env:
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: http://jaeger-collector:4318
