@@ -79,7 +79,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mlflow
-  tag: 2.9.2-debian-11-r1
+  tag: 2.10.0-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -110,7 +110,7 @@ image:
 gitImage:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.43.0-debian-11-r5
+  tag: 2.43.0-debian-11-r8
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1184,7 +1184,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r94
+    tag: 11-debian-11-r95
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1225,7 +1225,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r94
+    tag: 11-debian-11-r95
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
@@ -1368,6 +1368,7 @@ minio:
 ## All of these values are only used when minio.enabled is set to false
 ## @param externalS3.host External S3 host
 ## @param externalS3.port External S3 port number
+## @param externalS3.useCredentialsInSecret Whether to use a secret to store the S3 credentials
 ## @param externalS3.accessKeyID External S3 access key ID
 ## @param externalS3.accessKeySecret External S3 access key secret
 ## @param externalS3.existingSecret Name of an existing secret resource containing the S3 credentials
@@ -1380,6 +1381,7 @@ minio:
 externalS3:
   host: ""
   port: 443
+  useCredentialsInSecret: true
   accessKeyID: ""
   accessKeySecret: ""
   existingSecret: ""

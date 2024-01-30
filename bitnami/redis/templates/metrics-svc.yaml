@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.metrics.enabled }}
+{{- if and .Values.metrics.enabled .Values.metrics.service.enabled }}
 apiVersion: v1
 kind: Service
 metadata:

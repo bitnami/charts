@@ -468,6 +468,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------- | ------------------------------------------------------------------ | --------------- |
 | `externalS3.host`                         | External S3 host                                                   | `""`            |
 | `externalS3.port`                         | External S3 port number                                            | `443`           |
+| `externalS3.useCredentialsInSecret`       | Whether to use a secret to store the S3 credentials                | `true`          |
 | `externalS3.accessKeyID`                  | External S3 access key ID                                          | `""`            |
 | `externalS3.accessKeySecret`              | External S3 access key secret                                      | `""`            |
 | `externalS3.existingSecret`               | Name of an existing secret resource containing the S3 credentials  | `""`            |
