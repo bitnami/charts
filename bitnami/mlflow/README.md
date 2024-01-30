@@ -362,6 +362,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `run.sidecars`                                          | Add additional sidecar containers to the Run pod(s)                                             | `[]`             |
 | `run.enableDefaultInitContainers`                       | Deploy default init containers                                                                  | `true`           |
 | `run.initContainers`                                    | Add additional init containers to the Run pod(s)                                                | `[]`             |
+| `run.networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources                                                      | `false`          |
+| `run.networkPolicy.allowExternal`                       | The Policy model to apply                                                                       | `true`           |
+| `run.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                    | `[]`             |
+| `run.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                    | `[]`             |
+| `run.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                          | `{}`             |
+| `run.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                      | `{}`             |
 | `run.source.type`                                       | Where the source comes from: Possible values: configmap, git, custom                            | `configmap`      |
 | `run.source.launchCommand`                              | deepspeed command to run over the project                                                       | `""`             |
 | `run.source.configMap`                                  | List of files of the project                                                                    | `{}`             |
