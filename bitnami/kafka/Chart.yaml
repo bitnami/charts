@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: jmx-exporter
-      image: docker.io/bitnami/jmx-exporter:0.20.0-debian-11-r4
+      image: docker.io/bitnami/jmx-exporter:0.20.0-debian-11-r5
     - name: kafka-exporter
-      image: docker.io/bitnami/kafka-exporter:1.7.0-debian-11-r137
+      image: docker.io/bitnami/kafka-exporter:1.7.0-debian-11-r138
     - name: kafka
-      image: docker.io/bitnami/kafka:3.6.1-debian-11-r3
+      image: docker.io/bitnami/kafka:3.6.1-debian-11-r4
     - name: kubectl
       image: docker.io/bitnami/kubectl:1.29.1-debian-11-r1
     - name: os-shell
@@ -42,4 +42,4 @@ maintainers:
 name: kafka
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kafka
-version: 26.8.1
+version: 26.8.3

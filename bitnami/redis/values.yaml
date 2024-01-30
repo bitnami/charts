@@ -1469,7 +1469,7 @@ networkPolicy:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-  
+
 ## PodSecurityPolicy configuration
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 ##
@@ -1787,6 +1787,16 @@ metrics:
     ## @param metrics.serviceMonitor.targetLimit Limit of how many targets should be scraped
     ##
     targetLimit: false
+    ## @param metrics.serviceMonitor.additionalEndpoints  Additional endpoints to scrape (e.g sentinel)
+    ##
+    additionalEndpoints: []
+      # uncomment in order to scrape sentinel metrics
+      # - port: http-metrics
+      #   interval: 30s
+      #   path: /scrape
+      #   params:
+      #     target:
+      #       - localhost:26379
   ## Prometheus Pod Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#podmonitor
@@ -1825,6 +1835,16 @@ metrics:
     ## @param metrics.podMonitor.targetLimit Limit of how many targets should be scraped
     ##
     targetLimit: false
+    ## @param metrics.podMonitor.additionalEndpoints  Additional endpoints to scrape (e.g sentinel)
+    ##
+    additionalEndpoints: []
+      # uncomment in order to scrape sentinel metrics
+      # - port: metrics
+      #   interval: 30s
+      #   path: /scrape
+      #   params:
+      #     target:
+      #       - localhost:26379
 
   ## Custom PrometheusRule to be defined
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions

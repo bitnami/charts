@@ -143,10 +143,6 @@ extraDeploy:
         fullnameOverride: vib-dokuwiki
         persistence:
           enabled: false
-        podSecurityContext:
-          enabled: false
-        containerSecurityContext:
-          enabled: false
   # This is for image-notification-controller. We will use the metrics to ensure that it is consumed
   # and therefore RBAC is correct. The values do not need to be correct
   # Source: https://fluxcd.io/flux/components/notification/receiver/
