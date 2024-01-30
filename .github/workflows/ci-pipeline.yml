@@ -174,6 +174,7 @@ jobs:
               # Conditional - Adds a conditional {{if}}/{{end}} to the downloaded upstream CRD
               # VersionOf - Name of a subcomponent, its version will be used for CRD tracking instead of the main component version
               # UseKustomize - If set to true, uses Kustomize to render the CRDs
+              # SplitFile - If set to true, uses yq to filter resources having 'kind: CustomResourceDefinition', useful when using 'install.yaml' file as upstream source
               continue=true
               line_n=2
               extra_headers=""
@@ -192,6 +193,8 @@ jobs:
                     SUBCOMPONENT="$(echo $line | sed -E 's|^# ?VersionOf: ?||')"
                   elif [[ $line =~ ^#\ ?UseKustomize:\ ? ]]; then
                     USE_KUSTOMIZE="$(echo $line | sed -E 's|^# ?UseKustomize: ?||' || true)"
+                  elif [[ $line =~ ^#\ ?SplitFile:\ ? ]]; then
+                    SPLIT_FILE="$(echo $line | sed -E 's|^# ?SplitFile: ?||' || true)"
                   else
                     echo "error=Header ${line} not recognized'"
                     exit 1
