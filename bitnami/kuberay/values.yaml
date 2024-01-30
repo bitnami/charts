@@ -76,7 +76,7 @@ diagnosticMode:
 rayImage:
   registry: docker.io
   repository: bitnami/ray
-  tag: 2.9.0-debian-11-r2
+  tag: 2.9.1-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -114,7 +114,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/kuberay-operator
-    tag: 1.0.0-debian-11-r4
+    tag: 1.0.0-debian-11-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -706,7 +706,7 @@ apiserver:
   image:
     registry: docker.io
     repository: bitnami/kuberay-apiserver
-    tag: 1.0.0-debian-11-r2
+    tag: 1.0.0-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
