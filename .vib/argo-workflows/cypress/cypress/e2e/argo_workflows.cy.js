@@ -23,7 +23,7 @@ it('allows submitting a workflow using a template created from a file', () => {
     cy.get('[type="file"]').selectFile(newWorkflow, { force: true });
     cy.contains('Create').click();
   });
-  cy.get('.top-bar').should('be.visible').within(() => {
+  cy.get('.top-bar').first().should('be.visible').within(() => {
     cy.contains(workflowName);
   });
 
