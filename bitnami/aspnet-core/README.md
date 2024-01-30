@@ -76,20 +76,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### ASP.NET Core parameters
 
-| Name                 | Description                                                                                                  | Value                         |
-| -------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------- |
-| `image.registry`     | ASP.NET Core image registry                                                                                  | `REGISTRY_NAME`               |
-| `image.repository`   | ASP.NET Core image repository                                                                                | `REPOSITORY_NAME/aspnet-core` |
-| `image.digest`       | ASP.NET Core image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
-| `image.pullPolicy`   | ASP.NET Core image pull policy                                                                               | `IfNotPresent`                |
-| `image.pullSecrets`  | ASP.NET Core image pull secrets                                                                              | `[]`                          |
-| `image.debug`        | Enable image debug mode                                                                                      | `false`                       |
-| `command`            | Override default container command (useful when using custom images)                                         | `[]`                          |
-| `args`               | Override default container args (useful when using custom images)                                            | `[]`                          |
-| `bindURLs`           | URLs to bind                                                                                                 | `http://+:8080`               |
-| `extraEnvVars`       | Extra environment variables to be set on ASP.NET Core container                                              | `[]`                          |
-| `extraEnvVarsCM`     | ConfigMap with extra environment variables                                                                   | `""`                          |
-| `extraEnvVarsSecret` | Secret with extra environment variables                                                                      | `""`                          |
+| Name                  | Description                                                                                                  | Value                         |
+| --------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------- |
+| `image.registry`      | ASP.NET Core image registry                                                                                  | `REGISTRY_NAME`               |
+| `image.repository`    | ASP.NET Core image repository                                                                                | `REPOSITORY_NAME/aspnet-core` |
+| `image.digest`        | ASP.NET Core image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
+| `image.pullPolicy`    | ASP.NET Core image pull policy                                                                               | `IfNotPresent`                |
+| `image.pullSecrets`   | ASP.NET Core image pull secrets                                                                              | `[]`                          |
+| `image.debug`         | Enable image debug mode                                                                                      | `false`                       |
+| `useContainerCommand` | Use container command instead of override it (useful when using custom images)                               | `false`                       |
+| `command`             | Override default container command (useful when using custom images)                                         | `[]`                          |
+| `args`                | Override default container args (useful when using custom images)                                            | `[]`                          |
+| `bindURLs`            | URLs to bind                                                                                                 | `http://+:8080`               |
+| `extraEnvVars`        | Extra environment variables to be set on ASP.NET Core container                                              | `[]`                          |
+| `extraEnvVarsCM`      | ConfigMap with extra environment variables                                                                   | `""`                          |
+| `extraEnvVarsSecret`  | Secret with extra environment variables                                                                      | `""`                          |
 
 ### ASP.NET Core deployment parameters
 

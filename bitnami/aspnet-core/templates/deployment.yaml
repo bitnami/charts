@@ -114,12 +114,16 @@ spec:
           {{- if .Values.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.appFromExternalRepo.enabled }}
           workingDir: /app
+          {{- end }}
           command:
           {{- if .Values.command }}
           {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
           {{- else if .Values.appFromExternalRepo.enabled }}
           {{- include "common.tplvalues.render" (dict "value" .Values.appFromExternalRepo.startCommand "context" $) | nindent 12 }}
+          {{- else if .Values.useContainerCommand }}
+            {{- /* left empty if use container command */ -}}
           {{- else }}
             - dotnet
           {{- end }}

@@ -80,6 +80,9 @@ image:
   ##
   pullSecrets: []
   debug: false
+## @param useContainerCommand Use container command instead of override it (useful when using custom images)
+##
+useContainerCommand: false
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
