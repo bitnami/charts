@@ -30,14 +30,13 @@ it('allows creating and deleting a data source', () => {
   cy.fixture('datasources').then((datasource) => {
     cy.contains('button', datasource.newDatasource.type).click({ force: true });
   });
-  cy.get('#basic-settings-name').invoke('attr', 'value').as('datasourceName');
-  cy.visit('/datasources');
-  cy.get('@datasourceName').then((datasourceName) => {
+  cy.get('#basic-settings-name').invoke('attr', 'value').then((datasourceName) => {
+    cy.visit('/datasources');
     cy.contains('a', datasourceName).click({ force: true });
+    cy.contains('button', 'Delete').click();
+    cy.get('[data-testid*="Confirm"]').click();
+    cy.get('[data-testid*="data-testid Alert success"]').should('be.visible');
   });
-  cy.contains('button', 'Delete').click();
-  cy.get('[data-testid*="Confirm"]').click();
-  cy.get('[data-testid*="data-testid Alert success"]').should('be.visible');
 });
 
 it('checks admin settings endpoint', () => {
