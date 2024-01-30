@@ -102,7 +102,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                | `[]`                           |
 | `controller.podSecurityContext.fsGroup`                        | Set Controller pod's Security Context fsGroup                                                              | `1001`                         |
 | `controller.containerSecurityContext.enabled`                  | Enabled controller containers' Security Context                                                            | `true`                         |
-| `controller.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `{}`                           |
+| `controller.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `nil`                          |
 | `controller.containerSecurityContext.runAsUser`                | Set controller containers' Security Context runAsUser                                                      | `1001`                         |
 | `controller.containerSecurityContext.runAsNonRoot`             | Set controller containers' Security Context runAsNonRoot                                                   | `true`                         |
 | `controller.containerSecurityContext.readOnlyRootFilesystem`   | Set read only root file system pod's Security Conte                                                        | `false`                        |
@@ -193,7 +193,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                             | `[]`                                   |
 | `webhook.podSecurityContext.fsGroup`                        | Set Webhook pod's Security Context fsGroup                                                              | `1001`                                 |
 | `webhook.containerSecurityContext.enabled`                  | Enabled webhook containers' Security Context                                                            | `true`                                 |
-| `webhook.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `{}`                                   |
+| `webhook.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `nil`                                  |
 | `webhook.containerSecurityContext.runAsUser`                | Set webhook containers' Security Context runAsUser                                                      | `1001`                                 |
 | `webhook.containerSecurityContext.runAsNonRoot`             | Set webhook containers' Security Context runAsNonRoot                                                   | `true`                                 |
 | `webhook.containerSecurityContext.readOnlyRootFilesystem`   | Set read only root file system pod's Security Conte                                                     | `false`                                |
@@ -280,7 +280,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                | `[]`                         |
 | `cainjector.podSecurityContext.fsGroup`                        | Set CAInjector pod's Security Context fsGroup                                                              | `1001`                       |
 | `cainjector.containerSecurityContext.enabled`                  | Enabled cainjector containers' Security Context                                                            | `true`                       |
-| `cainjector.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `{}`                         |
+| `cainjector.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `nil`                        |
 | `cainjector.containerSecurityContext.runAsUser`                | Set cainjector containers' Security Context runAsUser                                                      | `1001`                       |
 | `cainjector.containerSecurityContext.runAsNonRoot`             | Set cainjector containers' Security Context runAsNonRoot                                                   | `true`                       |
 | `cainjector.containerSecurityContext.readOnlyRootFilesystem`   | Set read only root file system pod's Security Conte                                                        | `false`                      |

@@ -290,7 +290,7 @@ master:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param master.containerSecurityContext.enabled Enabled Redis&reg; master containers' Security Context
-  ## @param master.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param master.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param master.containerSecurityContext.runAsUser Set Redis&reg; master containers' Security Context runAsUser
   ## @param master.containerSecurityContext.runAsGroup Set Redis&reg; master containers' Security Context runAsGroup
   ## @param master.containerSecurityContext.runAsNonRoot Set Redis&reg; master containers' Security Context runAsNonRoot
@@ -300,7 +300,7 @@ master:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsGroup: 0
     runAsNonRoot: true
@@ -752,7 +752,7 @@ replica:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param replica.containerSecurityContext.enabled Enabled Redis&reg; replicas containers' Security Context
-  ## @param replica.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param replica.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param replica.containerSecurityContext.runAsUser Set Redis&reg; replicas containers' Security Context runAsUser
   ## @param replica.containerSecurityContext.runAsGroup Set Redis&reg; replicas containers' Security Context runAsGroup
   ## @param replica.containerSecurityContext.runAsNonRoot Set Redis&reg; replicas containers' Security Context runAsNonRoot
@@ -762,7 +762,7 @@ replica:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsGroup: 0
     runAsNonRoot: true
@@ -1297,7 +1297,7 @@ sentinel:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param sentinel.containerSecurityContext.enabled Enabled Redis&reg; Sentinel containers' Security Context
-  ## @param sentinel.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param sentinel.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param sentinel.containerSecurityContext.runAsUser Set Redis&reg; Sentinel containers' Security Context runAsUser
   ## @param sentinel.containerSecurityContext.runAsGroup Set Redis&reg; Sentinel containers' Security Context runAsGroup
   ## @param sentinel.containerSecurityContext.runAsNonRoot Set Redis&reg; Sentinel containers' Security Context runAsNonRoot
@@ -1307,7 +1307,7 @@ sentinel:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsGroup: 0
     runAsNonRoot: true
@@ -1469,7 +1469,7 @@ networkPolicy:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-  
+
 ## PodSecurityPolicy configuration
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 ##
@@ -1665,7 +1665,7 @@ metrics:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param metrics.containerSecurityContext.enabled Enabled Redis&reg; exporter containers' Security Context
-  ## @param metrics.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser Set Redis&reg; exporter containers' Security Context runAsUser
   ## @param metrics.containerSecurityContext.runAsGroup Set Redis&reg; exporter containers' Security Context runAsGroup
   ## @param metrics.containerSecurityContext.runAsNonRoot Set Redis&reg; exporter containers' Security Context runAsNonRoot
@@ -1675,7 +1675,7 @@ metrics:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsGroup: 0
     runAsNonRoot: true
@@ -1712,6 +1712,9 @@ metrics:
   ## Redis&reg; exporter service parameters
   ##
   service:
+    ## @param metrics.service.enabled Create Service resource(s) for scraping metrics using PrometheusOperator ServiceMonitor, can be disabled when using a PodMonitor
+    ##
+    enabled: true
     ## @param metrics.service.type Redis&reg; exporter service type
     ##
     type: ClusterIP
@@ -1784,6 +1787,16 @@ metrics:
     ## @param metrics.serviceMonitor.targetLimit Limit of how many targets should be scraped
     ##
     targetLimit: false
+    ## @param metrics.serviceMonitor.additionalEndpoints  Additional endpoints to scrape (e.g sentinel)
+    ##
+    additionalEndpoints: []
+      # uncomment in order to scrape sentinel metrics
+      # - port: http-metrics
+      #   interval: 30s
+      #   path: /scrape
+      #   params:
+      #     target:
+      #       - localhost:26379
   ## Prometheus Pod Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#podmonitor
@@ -1822,6 +1835,16 @@ metrics:
     ## @param metrics.podMonitor.targetLimit Limit of how many targets should be scraped
     ##
     targetLimit: false
+    ## @param metrics.podMonitor.additionalEndpoints  Additional endpoints to scrape (e.g sentinel)
+    ##
+    additionalEndpoints: []
+      # uncomment in order to scrape sentinel metrics
+      # - port: metrics
+      #   interval: 30s
+      #   path: /scrape
+      #   params:
+      #     target:
+      #       - localhost:26379
 
   ## Custom PrometheusRule to be defined
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
@@ -1917,14 +1940,14 @@ volumePermissions:
     requests: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
 
 ## init-sysctl container parameters

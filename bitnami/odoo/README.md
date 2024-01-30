@@ -125,7 +125,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`        | Set filesystem extra groups                                                                                              | `[]`             |
 | `podSecurityContext.fsGroup`                   | Set Odoo pod's Security Context fsGroup                                                                                  | `0`              |
 | `containerSecurityContext.enabled`             | Enabled Odoo containers' Security Context                                                                                | `true`           |
-| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                         | `{}`             |
+| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                         | `nil`            |
 | `containerSecurityContext.runAsUser`           | Set Odoo container's Security Context runAsUser                                                                          | `0`              |
 | `containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `livenessProbe.enabled`                        | Enable livenessProbe                                                                                                     | `true`           |
@@ -225,7 +225,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`                             | The resources limits for the init container                                                                                           | `{}`             |
 | `volumePermissions.resources.requests`                           | The requested resources for the init container                                                                                        | `{}`             |
 | `volumePermissions.containerSecurityContext.enabled`             | Enable init container's Security Context                                                                                              | `true`           |
-| `volumePermissions.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                      | `{}`             |
+| `volumePermissions.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                      | `nil`            |
 | `volumePermissions.containerSecurityContext.runAsUser`           | Set init container's Security Context runAsUser                                                                                       | `0`              |
 | `volumePermissions.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                      | `RuntimeDefault` |
 

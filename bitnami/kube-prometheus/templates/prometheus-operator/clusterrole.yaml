@@ -48,6 +48,7 @@ rules:
       - prometheuses/finalizers
       - thanosrulers
       - thanosrulers/finalizers
+      - thanosrulers/status
       - servicemonitors
       - podmonitors
       - probes
@@ -112,4 +113,10 @@ rules:
       - get
       - list
       - watch
+  - apiGroups:
+      - storage.k8s.io
+    resources:
+      - storageclasses
+    verbs:
+      - get
 {{- end }}

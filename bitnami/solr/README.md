@@ -144,7 +144,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set Solr pod's Security Context fsGroup                                                                                  | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -181,34 +181,40 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure parameters
 
-| Name                               | Description                                                                                                                      | Value                    |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes Service type                                                                                                          | `ClusterIP`              |
-| `service.ports.http`               | Solr HTTP service port                                                                                                           | `8983`                   |
-| `service.nodePorts.http`           | Node port for the HTTP service                                                                                                   | `""`                     |
-| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `service.clusterIP`                | Solr service Cluster IP                                                                                                          | `""`                     |
-| `service.loadBalancerIP`           | Solr service Load Balancer IP                                                                                                    | `""`                     |
-| `service.loadBalancerSourceRanges` | Solr service Load Balancer sources                                                                                               | `[]`                     |
-| `service.externalTrafficPolicy`    | Solr service external traffic policy                                                                                             | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for Solr service                                                                                   | `{}`                     |
-| `service.extraPorts`               | Extra ports to expose in the Solr service (normally used with the `sidecar` value)                                               | `[]`                     |
-| `service.headless.annotations`     | Annotations for the headless service.                                                                                            | `{}`                     |
-| `ingress.enabled`                  | Enable ingress record generation for Apache Geode                                                                                | `false`                  |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `solr.local`             |
-| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
-| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
-| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                                    | Description                                                                                                                      | Value                    |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                          | Kubernetes Service type                                                                                                          | `ClusterIP`              |
+| `service.ports.http`                    | Solr HTTP service port                                                                                                           | `8983`                   |
+| `service.nodePorts.http`                | Node port for the HTTP service                                                                                                   | `""`                     |
+| `service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `service.clusterIP`                     | Solr service Cluster IP                                                                                                          | `""`                     |
+| `service.loadBalancerIP`                | Solr service Load Balancer IP                                                                                                    | `""`                     |
+| `service.loadBalancerSourceRanges`      | Solr service Load Balancer sources                                                                                               | `[]`                     |
+| `service.externalTrafficPolicy`         | Solr service external traffic policy                                                                                             | `Cluster`                |
+| `service.annotations`                   | Additional custom annotations for Solr service                                                                                   | `{}`                     |
+| `service.extraPorts`                    | Extra ports to expose in the Solr service (normally used with the `sidecar` value)                                               | `[]`                     |
+| `service.headless.annotations`          | Annotations for the headless service.                                                                                            | `{}`                     |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
+| `networkPolicy.allowExternal`           | Don't require client label for connections                                                                                       | `true`                   |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                     |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
+| `ingress.enabled`                       | Enable ingress record generation for Apache Geode                                                                                | `false`                  |
+| `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`                      | Default host for the ingress record                                                                                              | `solr.local`             |
+| `ingress.path`                          | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                           | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraPaths`                    | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`                      | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                       | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 ### Persistence parameters
 
@@ -237,7 +243,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                       | Init container volume-permissions image pull secrets                                                                              | `[]`                       |
 | `volumePermissions.resources.limits`                        | Init container volume-permissions resource limits                                                                                 | `{}`                       |
 | `volumePermissions.resources.requests`                      | Init container volume-permissions resource requests                                                                               | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`      | User ID for the init container                                                                                                    | `0`                        |
 
 ### Other Parameters
@@ -299,7 +305,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.resources.limits`                                  | The resources limits for the container                                                                                         | `{}`                                                                  |
 | `metrics.resources.requests`                                | The requested resources for the container                                                                                      | `{}`                                                                  |
 | `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                           | `true`                                                                |
-| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                               | `{}`                                                                  |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                               | `nil`                                                                 |
 | `metrics.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                     | `1001`                                                                |
 | `metrics.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                  | `true`                                                                |
 | `metrics.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                    | `false`                                                               |

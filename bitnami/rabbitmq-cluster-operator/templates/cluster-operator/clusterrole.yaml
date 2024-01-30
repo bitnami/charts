@@ -22,6 +22,13 @@ rules:
     verbs: {{ .verbs | toYaml | nindent 6 }}
   {{- end }}
   {{- else }}
+  {{- if .Values.clusterOperator.rbac.clusterRole.extraRules }}
+  {{- range .Values.clusterOperator.rbac.clusterRole.extraRules }}
+  - apiGroups: {{ .apiGroups | toYaml | nindent 6 }}
+    resources: {{ .resources | toYaml | nindent 6 }}
+    verbs: {{ .verbs | toYaml | nindent 6 }}
+  {{- end }}
+  {{- end }}
   - apiGroups:
       - ""
     resources:
