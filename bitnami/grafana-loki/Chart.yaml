@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: grafana-loki
-      image: docker.io/bitnami/grafana-loki:2.9.4-debian-11-r0
+      image: docker.io/bitnami/grafana-loki:2.9.4-debian-11-r1
     - name: memcached
       image: docker.io/bitnami/memcached:1.6.23-debian-11-r1
     - name: nginx
@@ -57,4 +57,4 @@ maintainers:
 name: grafana-loki
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-loki
-version: 2.14.2
+version: 2.14.3
