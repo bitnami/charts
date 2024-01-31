@@ -114,6 +114,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                 | `false`          |
 | `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                        | `["ALL"]`        |
 | `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                          | `RuntimeDefault` |
+| `replicas`                                          | Number of replicas                                                                        | `1`              |
 | `resources.limits`                                  | The resources limits for the PhpMyAdmin container                                         | `{}`             |
 | `resources.requests`                                | The requested resources for the PhpMyAdmin container                                      | `{}`             |
 | `startupProbe.enabled`                              | Enable startupProbe                                                                       | `false`          |
