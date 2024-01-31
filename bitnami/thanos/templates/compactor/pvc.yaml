@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.compactor.persistence.enabled (not .Values.compactor.persistence.existingClaim) .Values.compactor.enabled }}
+{{- if and .Values.compactor.persistence.enabled (not (or .Values.compactor.persistence.existingClaim .Values.compactor.persistence.ephemeral)) .Values.compactor.enabled }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:

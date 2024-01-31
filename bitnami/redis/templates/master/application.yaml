@@ -284,6 +284,8 @@ spec:
           env:
             - name: REDIS_ALIAS
               value: {{ template "common.names.fullname" . }}
+            - name: REDIS_EXPORTER_WEB_LISTEN_ADDRESS
+              value: {{ printf ":%d" .Values.metrics.containerPorts.http }}
             {{- if .Values.auth.enabled }}
             - name: REDIS_USER
               value: default
@@ -312,7 +314,7 @@ spec:
             {{- end }}
           ports:
             - name: metrics
-              containerPort: 9121
+              containerPort: {{ .Values.metrics.containerPorts.http }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}

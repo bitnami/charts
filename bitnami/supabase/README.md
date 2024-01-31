@@ -109,7 +109,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jwt.autoGenerate.serviceAccount.annotations`                        | Additional Service Account annotations (evaluated as a template)                                                                                   | `{}`                      |
 | `jwt.autoGenerate.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                     | `false`                   |
 | `jwt.autoGenerate.containerSecurityContext.enabled`                  | Enabled jwt init job containers' Security Context                                                                                                  | `true`                    |
-| `jwt.autoGenerate.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                   | `{}`                      |
+| `jwt.autoGenerate.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                   | `nil`                     |
 | `jwt.autoGenerate.containerSecurityContext.runAsUser`                | Set jwt init job containers' Security Context runAsUser                                                                                            | `1001`                    |
 | `jwt.autoGenerate.containerSecurityContext.runAsNonRoot`             | Set jwt init job container's Security Context runAsNonRoot                                                                                         | `true`                    |
 | `jwt.autoGenerate.containerSecurityContext.privileged`               | Set jwt init job container's Security Context privileged                                                                                           | `false`                   |
@@ -181,7 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                       | `[]`                     |
 | `auth.podSecurityContext.fsGroup`                        | Set Supabase auth pod's Security Context fsGroup                                                                                                  | `1001`                   |
 | `auth.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                              | `true`                   |
-| `auth.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                  | `{}`                     |
+| `auth.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                  | `nil`                    |
 | `auth.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                        | `1001`                   |
 | `auth.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                     | `true`                   |
 | `auth.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                       | `false`                  |
@@ -219,19 +219,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Supabase Auth Traffic Exposure Parameters
 
-| Name                                    | Description                                                                              | Value       |
-| --------------------------------------- | ---------------------------------------------------------------------------------------- | ----------- |
-| `auth.service.type`                     | Supabase auth service type                                                               | `ClusterIP` |
-| `auth.service.ports.http`               | Supabase auth service HTTP port                                                          | `80`        |
-| `auth.service.nodePorts.http`           | Node port for HTTP                                                                       | `""`        |
-| `auth.service.clusterIP`                | Supabase auth service Cluster IP                                                         | `""`        |
-| `auth.service.loadBalancerIP`           | Supabase auth service Load Balancer IP                                                   | `""`        |
-| `auth.service.loadBalancerSourceRanges` | Supabase auth service Load Balancer sources                                              | `[]`        |
-| `auth.service.externalTrafficPolicy`    | Supabase auth service external traffic policy                                            | `Cluster`   |
-| `auth.service.annotations`              | Additional custom annotations for Supabase auth service                                  | `{}`        |
-| `auth.service.extraPorts`               | Extra ports to expose in Supabase auth service (normally used with the `sidecars` value) | `[]`        |
-| `auth.service.sessionAffinity`          | Control where auth requests go, to the same pod or round-robin                           | `None`      |
-| `auth.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                              | `{}`        |
+| Name                                         | Description                                                                              | Value       |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------- | ----------- |
+| `auth.service.type`                          | Supabase auth service type                                                               | `ClusterIP` |
+| `auth.service.ports.http`                    | Supabase auth service HTTP port                                                          | `80`        |
+| `auth.service.nodePorts.http`                | Node port for HTTP                                                                       | `""`        |
+| `auth.service.clusterIP`                     | Supabase auth service Cluster IP                                                         | `""`        |
+| `auth.service.loadBalancerIP`                | Supabase auth service Load Balancer IP                                                   | `""`        |
+| `auth.service.loadBalancerSourceRanges`      | Supabase auth service Load Balancer sources                                              | `[]`        |
+| `auth.service.externalTrafficPolicy`         | Supabase auth service external traffic policy                                            | `Cluster`   |
+| `auth.service.annotations`                   | Additional custom annotations for Supabase auth service                                  | `{}`        |
+| `auth.service.extraPorts`                    | Extra ports to expose in Supabase auth service (normally used with the `sidecars` value) | `[]`        |
+| `auth.service.sessionAffinity`               | Control where auth requests go, to the same pod or round-robin                           | `None`      |
+| `auth.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                              | `{}`        |
+| `auth.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                      | `true`      |
+| `auth.networkPolicy.allowExternal`           | Don't require client label for connections                                               | `true`      |
+| `auth.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                             | `[]`        |
+| `auth.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                             | `[]`        |
+| `auth.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                   | `{}`        |
+| `auth.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                               | `{}`        |
 
 ### Supabase Meta Parameters
 
@@ -278,7 +284,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `meta.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                       | `[]`                                     |
 | `meta.podSecurityContext.fsGroup`                        | Set Supabase Postgres Meta pod's Security Context fsGroup                                                                                                         | `1001`                                   |
 | `meta.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                              | `true`                                   |
-| `meta.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                  | `{}`                                     |
+| `meta.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                  | `nil`                                    |
 | `meta.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                        | `1001`                                   |
 | `meta.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                     | `true`                                   |
 | `meta.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                       | `false`                                  |
@@ -316,19 +322,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Supabase Meta Traffic Exposure Parameters
 
-| Name                                    | Description                                                                                       | Value       |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------- | ----------- |
-| `meta.service.type`                     | Supabase Postgres Meta service type                                                               | `ClusterIP` |
-| `meta.service.ports.http`               | Supabase Postgres Meta service HTTP port                                                          | `80`        |
-| `meta.service.nodePorts.http`           | Node port for HTTP                                                                                | `""`        |
-| `meta.service.clusterIP`                | Supabase Postgres Meta service Cluster IP                                                         | `""`        |
-| `meta.service.loadBalancerIP`           | Supabase Postgres Meta service Load Balancer IP                                                   | `""`        |
-| `meta.service.loadBalancerSourceRanges` | Supabase Postgres Meta service Load Balancer sources                                              | `[]`        |
-| `meta.service.externalTrafficPolicy`    | Supabase Postgres Meta service external traffic policy                                            | `Cluster`   |
-| `meta.service.annotations`              | Additional custom annotations for Supabase Postgres Meta service                                  | `{}`        |
-| `meta.service.extraPorts`               | Extra ports to expose in Supabase Postgres Meta service (normally used with the `sidecars` value) | `[]`        |
-| `meta.service.sessionAffinity`          | Control where meta requests go, to the same pod or round-robin                                    | `None`      |
-| `meta.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                       | `{}`        |
+| Name                                         | Description                                                                                       | Value       |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------- | ----------- |
+| `meta.service.type`                          | Supabase Postgres Meta service type                                                               | `ClusterIP` |
+| `meta.service.ports.http`                    | Supabase Postgres Meta service HTTP port                                                          | `80`        |
+| `meta.service.nodePorts.http`                | Node port for HTTP                                                                                | `""`        |
+| `meta.service.clusterIP`                     | Supabase Postgres Meta service Cluster IP                                                         | `""`        |
+| `meta.service.loadBalancerIP`                | Supabase Postgres Meta service Load Balancer IP                                                   | `""`        |
+| `meta.service.loadBalancerSourceRanges`      | Supabase Postgres Meta service Load Balancer sources                                              | `[]`        |
+| `meta.service.externalTrafficPolicy`         | Supabase Postgres Meta service external traffic policy                                            | `Cluster`   |
+| `meta.service.annotations`                   | Additional custom annotations for Supabase Postgres Meta service                                  | `{}`        |
+| `meta.service.extraPorts`                    | Extra ports to expose in Supabase Postgres Meta service (normally used with the `sidecars` value) | `[]`        |
+| `meta.service.sessionAffinity`               | Control where meta requests go, to the same pod or round-robin                                    | `None`      |
+| `meta.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                       | `{}`        |
+| `meta.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                               | `true`      |
+| `meta.networkPolicy.allowExternal`           | Don't require client label for connections                                                        | `true`      |
+| `meta.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                      | `[]`        |
+| `meta.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                      | `[]`        |
+| `meta.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                            | `{}`        |
+| `meta.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                        | `{}`        |
 
 ### Supabase Realtime Parameters
 
@@ -378,7 +390,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `realtime.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                         | `[]`                                |
 | `realtime.podSecurityContext.fsGroup`                        | Set Supabase realtime pod's Security Context fsGroup                                                                                                | `1001`                              |
 | `realtime.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                | `true`                              |
-| `realtime.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                    | `{}`                                |
+| `realtime.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                    | `nil`                               |
 | `realtime.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                          | `1001`                              |
 | `realtime.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                       | `true`                              |
 | `realtime.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                         | `false`                             |
@@ -416,19 +428,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Supabase Realtime Traffic Exposure Parameters
 
-| Name                                        | Description                                                                                  | Value       |
-| ------------------------------------------- | -------------------------------------------------------------------------------------------- | ----------- |
-| `realtime.service.type`                     | Supabase realtime service type                                                               | `ClusterIP` |
-| `realtime.service.ports.http`               | Supabase realtime service HTTP port                                                          | `80`        |
-| `realtime.service.nodePorts.http`           | Node port for HTTP                                                                           | `""`        |
-| `realtime.service.clusterIP`                | Supabase realtime service Cluster IP                                                         | `""`        |
-| `realtime.service.loadBalancerIP`           | Supabase realtime service Load Balancer IP                                                   | `""`        |
-| `realtime.service.loadBalancerSourceRanges` | Supabase realtime service Load Balancer sources                                              | `[]`        |
-| `realtime.service.externalTrafficPolicy`    | Supabase realtime service external traffic policy                                            | `Cluster`   |
-| `realtime.service.annotations`              | Additional custom annotations for Supabase realtime service                                  | `{}`        |
-| `realtime.service.extraPorts`               | Extra ports to expose in Supabase realtime service (normally used with the `sidecars` value) | `[]`        |
-| `realtime.service.sessionAffinity`          | Control where realtime requests go, to the same pod or round-robin                           | `None`      |
-| `realtime.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                  | `{}`        |
+| Name                                             | Description                                                                                  | Value       |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------- | ----------- |
+| `realtime.service.type`                          | Supabase realtime service type                                                               | `ClusterIP` |
+| `realtime.service.ports.http`                    | Supabase realtime service HTTP port                                                          | `80`        |
+| `realtime.service.nodePorts.http`                | Node port for HTTP                                                                           | `""`        |
+| `realtime.service.clusterIP`                     | Supabase realtime service Cluster IP                                                         | `""`        |
+| `realtime.service.loadBalancerIP`                | Supabase realtime service Load Balancer IP                                                   | `""`        |
+| `realtime.service.loadBalancerSourceRanges`      | Supabase realtime service Load Balancer sources                                              | `[]`        |
+| `realtime.service.externalTrafficPolicy`         | Supabase realtime service external traffic policy                                            | `Cluster`   |
+| `realtime.service.annotations`                   | Additional custom annotations for Supabase realtime service                                  | `{}`        |
+| `realtime.service.extraPorts`                    | Extra ports to expose in Supabase realtime service (normally used with the `sidecars` value) | `[]`        |
+| `realtime.service.sessionAffinity`               | Control where realtime requests go, to the same pod or round-robin                           | `None`      |
+| `realtime.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                  | `{}`        |
+| `realtime.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                          | `true`      |
+| `realtime.networkPolicy.allowExternal`           | Don't require client label for connections                                                   | `true`      |
+| `realtime.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                 | `[]`        |
+| `realtime.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                 | `[]`        |
+| `realtime.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                       | `{}`        |
+| `realtime.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                   | `{}`        |
 
 ### Supabase Rest Parameters
 
@@ -475,7 +493,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rest.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                          | `[]`                        |
 | `rest.podSecurityContext.fsGroup`                        | Set Supabase rest pod's Security Context fsGroup                                                                                                     | `1001`                      |
 | `rest.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                 | `true`                      |
-| `rest.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                     | `{}`                        |
+| `rest.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                     | `nil`                       |
 | `rest.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                           | `1001`                      |
 | `rest.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                        | `true`                      |
 | `rest.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                          | `false`                     |
@@ -513,19 +531,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Supabase Rest Traffic Exposure Parameters
 
-| Name                                    | Description                                                                              | Value       |
-| --------------------------------------- | ---------------------------------------------------------------------------------------- | ----------- |
-| `rest.service.type`                     | Supabase rest service type                                                               | `ClusterIP` |
-| `rest.service.ports.http`               | Supabase rest service HTTP port                                                          | `80`        |
-| `rest.service.nodePorts.http`           | Node port for HTTP                                                                       | `""`        |
-| `rest.service.clusterIP`                | Supabase rest service Cluster IP                                                         | `""`        |
-| `rest.service.loadBalancerIP`           | Supabase rest service Load Balancer IP                                                   | `""`        |
-| `rest.service.loadBalancerSourceRanges` | Supabase rest service Load Balancer sources                                              | `[]`        |
-| `rest.service.externalTrafficPolicy`    | Supabase rest service external traffic policy                                            | `Cluster`   |
-| `rest.service.annotations`              | Additional custom annotations for Supabase rest service                                  | `{}`        |
-| `rest.service.extraPorts`               | Extra ports to expose in Supabase rest service (normally used with the `sidecars` value) | `[]`        |
-| `rest.service.sessionAffinity`          | Control where rest requests go, to the same pod or round-robin                           | `None`      |
-| `rest.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                              | `{}`        |
+| Name                                         | Description                                                                              | Value       |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------- | ----------- |
+| `rest.service.type`                          | Supabase rest service type                                                               | `ClusterIP` |
+| `rest.service.ports.http`                    | Supabase rest service HTTP port                                                          | `80`        |
+| `rest.service.nodePorts.http`                | Node port for HTTP                                                                       | `""`        |
+| `rest.service.clusterIP`                     | Supabase rest service Cluster IP                                                         | `""`        |
+| `rest.service.loadBalancerIP`                | Supabase rest service Load Balancer IP                                                   | `""`        |
+| `rest.service.loadBalancerSourceRanges`      | Supabase rest service Load Balancer sources                                              | `[]`        |
+| `rest.service.externalTrafficPolicy`         | Supabase rest service external traffic policy                                            | `Cluster`   |
+| `rest.service.annotations`                   | Additional custom annotations for Supabase rest service                                  | `{}`        |
+| `rest.service.extraPorts`                    | Extra ports to expose in Supabase rest service (normally used with the `sidecars` value) | `[]`        |
+| `rest.service.sessionAffinity`               | Control where rest requests go, to the same pod or round-robin                           | `None`      |
+| `rest.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                              | `{}`        |
+| `rest.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                      | `true`      |
+| `rest.networkPolicy.allowExternal`           | Don't require client label for connections                                               | `true`      |
+| `rest.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                             | `[]`        |
+| `rest.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                             | `[]`        |
+| `rest.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                   | `{}`        |
+| `rest.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                               | `{}`        |
 
 ### Supabase Storage Parameters
 
@@ -572,7 +596,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `storage.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                        | `[]`                               |
 | `storage.podSecurityContext.fsGroup`                        | Set Supabase storage pod's Security Context fsGroup                                                                                                | `1001`                             |
 | `storage.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                               | `true`                             |
-| `storage.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                   | `{}`                               |
+| `storage.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                   | `nil`                              |
 | `storage.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                         | `1001`                             |
 | `storage.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                      | `true`                             |
 | `storage.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                        | `false`                            |
@@ -610,19 +634,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Supabase Storage Traffic Exposure Parameters
 
-| Name                                       | Description                                                                                 | Value       |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------- | ----------- |
-| `storage.service.type`                     | Supabase storage service type                                                               | `ClusterIP` |
-| `storage.service.ports.http`               | Supabase storage service HTTP port                                                          | `80`        |
-| `storage.service.nodePorts.http`           | Node port for HTTP                                                                          | `""`        |
-| `storage.service.clusterIP`                | Supabase storage service Cluster IP                                                         | `""`        |
-| `storage.service.loadBalancerIP`           | Supabase storage service Load Balancer IP                                                   | `""`        |
-| `storage.service.loadBalancerSourceRanges` | Supabase storage service Load Balancer sources                                              | `[]`        |
-| `storage.service.externalTrafficPolicy`    | Supabase storage service external traffic policy                                            | `Cluster`   |
-| `storage.service.annotations`              | Additional custom annotations for Supabase storage service                                  | `{}`        |
-| `storage.service.extraPorts`               | Extra ports to expose in Supabase storage service (normally used with the `sidecars` value) | `[]`        |
-| `storage.service.sessionAffinity`          | Control where storage requests go, to the same pod or round-robin                           | `None`      |
-| `storage.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                 | `{}`        |
+| Name                                            | Description                                                                                 | Value       |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------- | ----------- |
+| `storage.service.type`                          | Supabase storage service type                                                               | `ClusterIP` |
+| `storage.service.ports.http`                    | Supabase storage service HTTP port                                                          | `80`        |
+| `storage.service.nodePorts.http`                | Node port for HTTP                                                                          | `""`        |
+| `storage.service.clusterIP`                     | Supabase storage service Cluster IP                                                         | `""`        |
+| `storage.service.loadBalancerIP`                | Supabase storage service Load Balancer IP                                                   | `""`        |
+| `storage.service.loadBalancerSourceRanges`      | Supabase storage service Load Balancer sources                                              | `[]`        |
+| `storage.service.externalTrafficPolicy`         | Supabase storage service external traffic policy                                            | `Cluster`   |
+| `storage.service.annotations`                   | Additional custom annotations for Supabase storage service                                  | `{}`        |
+| `storage.service.extraPorts`                    | Extra ports to expose in Supabase storage service (normally used with the `sidecars` value) | `[]`        |
+| `storage.service.sessionAffinity`               | Control where storage requests go, to the same pod or round-robin                           | `None`      |
+| `storage.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                 | `{}`        |
+| `storage.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                         | `true`      |
+| `storage.networkPolicy.allowExternal`           | Don't require client label for connections                                                  | `true`      |
+| `storage.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                | `[]`        |
+| `storage.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                | `[]`        |
+| `storage.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                      | `{}`        |
+| `storage.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                  | `{}`        |
 
 ### Storage Persistence Parameters
 
@@ -685,7 +715,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `studio.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                       | `[]`                              |
 | `studio.podSecurityContext.fsGroup`                        | Set Supabase studio pod's Security Context fsGroup                                                                                                | `1001`                            |
 | `studio.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                              | `true`                            |
-| `studio.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                  | `{}`                              |
+| `studio.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                  | `nil`                             |
 | `studio.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                        | `1001`                            |
 | `studio.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                     | `true`                            |
 | `studio.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                       | `false`                           |
@@ -723,32 +753,38 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Supabase Studio Traffic Exposure Parameters
 
-| Name                                      | Description                                                                                                                      | Value                    |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `studio.service.type`                     | Supabase studio service type                                                                                                     | `ClusterIP`              |
-| `studio.service.ports.http`               | Supabase studio service HTTP port                                                                                                | `80`                     |
-| `studio.service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
-| `studio.service.clusterIP`                | Supabase studio service Cluster IP                                                                                               | `""`                     |
-| `studio.service.loadBalancerIP`           | Supabase studio service Load Balancer IP                                                                                         | `""`                     |
-| `studio.service.loadBalancerSourceRanges` | Supabase studio service Load Balancer sources                                                                                    | `[]`                     |
-| `studio.service.externalTrafficPolicy`    | Supabase studio service external traffic policy                                                                                  | `Cluster`                |
-| `studio.service.annotations`              | Additional custom annotations for Supabase studio service                                                                        | `{}`                     |
-| `studio.service.extraPorts`               | Extra ports to expose in Supabase studio service (normally used with the `sidecars` value)                                       | `[]`                     |
-| `studio.service.sessionAffinity`          | Control where studio requests go, to the same pod or round-robin                                                                 | `None`                   |
-| `studio.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `studio.ingress.enabled`                  | Enable ingress record generation for Supabase                                                                                    | `false`                  |
-| `studio.ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `studio.ingress.hostname`                 | Default host for the ingress record                                                                                              | `supabase-studio.local`  |
-| `studio.ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `studio.ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
-| `studio.ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `studio.ingress.tls`                      | Enable TLS configuration for the host defined at `studio.ingress.hostname` parameter                                             | `false`                  |
-| `studio.ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `studio.ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `studio.ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `studio.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `studio.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `studio.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                                           | Description                                                                                                                      | Value                    |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `studio.service.type`                          | Supabase studio service type                                                                                                     | `ClusterIP`              |
+| `studio.service.ports.http`                    | Supabase studio service HTTP port                                                                                                | `80`                     |
+| `studio.service.nodePorts.http`                | Node port for HTTP                                                                                                               | `""`                     |
+| `studio.service.clusterIP`                     | Supabase studio service Cluster IP                                                                                               | `""`                     |
+| `studio.service.loadBalancerIP`                | Supabase studio service Load Balancer IP                                                                                         | `""`                     |
+| `studio.service.loadBalancerSourceRanges`      | Supabase studio service Load Balancer sources                                                                                    | `[]`                     |
+| `studio.service.externalTrafficPolicy`         | Supabase studio service external traffic policy                                                                                  | `Cluster`                |
+| `studio.service.annotations`                   | Additional custom annotations for Supabase studio service                                                                        | `{}`                     |
+| `studio.service.extraPorts`                    | Extra ports to expose in Supabase studio service (normally used with the `sidecars` value)                                       | `[]`                     |
+| `studio.service.sessionAffinity`               | Control where studio requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `studio.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `studio.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
+| `studio.networkPolicy.allowExternal`           | Don't require client label for connections                                                                                       | `true`                   |
+| `studio.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                     |
+| `studio.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
+| `studio.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
+| `studio.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
+| `studio.ingress.enabled`                       | Enable ingress record generation for Supabase                                                                                    | `false`                  |
+| `studio.ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `studio.ingress.hostname`                      | Default host for the ingress record                                                                                              | `supabase-studio.local`  |
+| `studio.ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `studio.ingress.path`                          | Default path for the ingress record                                                                                              | `/`                      |
+| `studio.ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `studio.ingress.tls`                           | Enable TLS configuration for the host defined at `studio.ingress.hostname` parameter                                             | `false`                  |
+| `studio.ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `studio.ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `studio.ingress.extraPaths`                    | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `studio.ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `studio.ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `studio.ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 ### Init Container Parameters
 
@@ -761,7 +797,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                           | `[]`                                |
 | `volumePermissions.resources.limits`                        | The resources limits for the init container                                                     | `{}`                                |
 | `volumePermissions.resources.requests`                      | The requested resources for the init container                                                  | `{}`                                |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `{}`                                |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `nil`                               |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                 | `0`                                 |
 | `psqlImage.registry`                                        | PostgreSQL client image registry                                                                | `REGISTRY_NAME`                     |
 | `psqlImage.repository`                                      | PostgreSQL client image repository                                                              | `REPOSITORY_NAME/supabase-postgres` |

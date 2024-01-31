@@ -61,7 +61,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2024.1.18-debian-11-r1
+  tag: 2024.1.29-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -89,7 +89,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2024.1.18-debian-11-r1
+  tag: 2024.1.28-debian-11-r0
   digest: ""
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
@@ -411,7 +411,7 @@ provisioning:
   ## MinIO&reg; container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param provisioning.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param provisioning.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param provisioning.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param provisioning.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param provisioning.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param provisioning.containerSecurityContext.privileged Set container's Security Context privileged
@@ -422,7 +422,7 @@ provisioning:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -474,7 +474,7 @@ podSecurityContext:
 ## MinIO&reg; container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
-## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
@@ -485,7 +485,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false
@@ -550,6 +550,10 @@ topologySpreadConstraints: []
 ## @param priorityClassName MinIO&reg; pods' priorityClassName
 ##
 priorityClassName: ""
+## @param runtimeClassName Name of the runtime class to be used by MinIO&reg; pods'
+## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+##
+runtimeClassName: ""
 ## MinIO&reg; containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1033,11 +1037,11 @@ volumePermissions:
   ## Init container' Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
   ##
   containerSecurityContext:
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
 
 ## @section RBAC parameters

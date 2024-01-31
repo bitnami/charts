@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/jaeger
-  tag: 1.53.0-debian-11-r2
+  tag: 1.53.0-debian-11-r6
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -315,7 +315,7 @@ query:
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param query.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param query.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param query.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param query.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param query.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param query.containerSecurityContext.privileged Set container's Security Context privileged
@@ -326,7 +326,7 @@ query:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -684,7 +684,7 @@ collector:
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param collector.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param collector.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param collector.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param collector.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param collector.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param collector.containerSecurityContext.privileged Set container's Security Context privileged
@@ -695,7 +695,7 @@ collector:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1035,7 +1035,7 @@ agent:
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param agent.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param agent.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param agent.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param agent.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param agent.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param agent.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1046,7 +1046,7 @@ agent:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1163,7 +1163,7 @@ migration:
     fsGroup: 1001
 
   ## @param migration.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param migration.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param migration.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param migration.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param migration.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param migration.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1173,7 +1173,7 @@ migration:
   ## @param migration.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1240,7 +1240,7 @@ migration:
 cqlshImage:
   registry: docker.io
   repository: bitnami/cassandra
-  tag: 4.0.11-debian-11-r87
+  tag: 4.0.12-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
