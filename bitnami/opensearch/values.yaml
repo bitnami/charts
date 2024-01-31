@@ -846,6 +846,9 @@ master:
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param master.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param master.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -1257,6 +1260,9 @@ data:
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param data.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param data.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -1630,6 +1636,9 @@ coordinating:
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param coordinating.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param coordinating.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -2005,6 +2014,9 @@ ingest:
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param ingest.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param ingest.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -2831,6 +2843,9 @@ dashboards:
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param dashboards.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param dashboards.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
