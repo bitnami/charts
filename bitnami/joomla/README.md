@@ -1,6 +1,5 @@
 <!--- app-name: Joomla! -->
 
-<!-- markdownlint-disable-next-line MD026 -->
 # Bitnami package for Joomla!
 
 Joomla! is an award winning open source CMS platform for building websites and applications. It includes page caching, page compression and Let's Encrypt auto-configuration support.
@@ -136,7 +135,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                          | `[]`                     |
 | `podSecurityContext.fsGroup`                        | Joomla! pods' group ID                                                                                               | `1001`                   |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                 | `true`                   |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                     | `{}`                     |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                     | `nil`                    |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                           | `1001`                   |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                        | `true`                   |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                          | `false`                  |

@@ -21,6 +21,7 @@ spec:
   {{- if not .Values.receive.autoscaling.enabled }}
   replicas: {{ .Values.receive.replicaCount }}
   {{- end }}
+  revisionHistoryLimit: {{ .Values.receive.revisionHistoryLimit }}
   podManagementPolicy: {{ .Values.receive.podManagementPolicy }}
   serviceName: {{ include "common.names.fullname" . }}-receive-headless
   {{- if .Values.receive.updateStrategy }}
